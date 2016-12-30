@@ -1,3 +1,8 @@
+language: python
+
+python:
+  - "2.7"
+
 sudo: false
 cache: pip
 
@@ -5,22 +10,19 @@ addons:
   apt:
     packages:
       - expect-dev  # provides unbuffer utility
-      - python-lxml # because pip installation is slow
-
-language: python
-
-python:
-  - "2.7"
+      - python-lxml  # because pip installation is slow
 
 env:
-  - LINT_CHECK="1"
-  - ODOO_REPO="odoo/odoo" TESTS="1"
-  - ODOO_REPO="OCA/OCB" TESTS="1"
-  - TRANSIFEX="1" TRANSIFEX_USER='transbot@odoo-community.org'
   global:
-  - VERSION="8.0" TESTS="0" LINT_CHECK="0" TRANSIFEX="0"
-  # transifex
+  - VERSION="7.0" TESTS="0" LINT_CHECK="0" TRANSIFEX="0"
+  - TRANSIFEX_USER='transbot@odoo-community.org'
   - secure: "HLsfDkckZKfcyIFdLLYI2Q/SKBsI48QoYKJm2WSttlSIp4Bli6rYc/2WLwcKyQmkS0TITYRhKAjzBYYHZCThj77lwQgXFm5Di+MFpDbH5R5llCdQJD+A5gSs/GxzIEXX6YxVajcLe6MrI15pdv3p9Bl8K14owLXZaypvkV1XrBA="
+
+  matrix:
+  - LINT_CHECK="1"
+  - TRANSIFEX="1"
+  - TESTS="1" ODOO_REPO="odoo/odoo"
+  - TESTS="1" ODOO_REPO="OCA/OCB"
 
 virtualenv:
   system_site_packages: true
@@ -34,4 +36,4 @@ script:
   - travis_run_tests
 
 after_success:
-  travis_after_tests_success
+  - travis_after_tests_success

@@ -40,6 +40,7 @@ _logger = logging.getLogger(__name__)
 
 DEFAULT_LIMIT = 1000
 
+
 class QueueJob(orm.Model):
     """ Job status and result """
     _name = 'queue.job'
@@ -253,9 +254,9 @@ class QueueJob(orm.Model):
         deadline_fmt = deadline.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
         while True:
             job_ids = self.search(cr, uid,
-                                [('date_done', '<=', deadline_fmt)],
-                                limit=limit or DEFAULT_LIMIT,
-                                context=context)
+                                  [('date_done', '<=', deadline_fmt)],
+                                  limit=limit or DEFAULT_LIMIT,
+                                  context=context)
             if not job_ids:
                 break
             self.unlink(cr, uid, job_ids, context=context)

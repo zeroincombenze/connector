@@ -46,6 +46,8 @@ def create(self, cr, uid, vals, context=None):
         session = ConnectorSession(cr, uid, context=context)
         on_record_create.fire(session, self._name, record_id, vals)
     return record_id
+
+
 orm.BaseModel.create = create
 
 
@@ -63,6 +65,8 @@ def write(self, cr, uid, ids, vals, context=None):
                 on_record_write.fire(session, self._name,
                                      record_id, vals)
     return result
+
+
 orm.BaseModel.write = write
 
 
@@ -78,4 +82,6 @@ def unlink(self, cr, uid, ids, context=None):
             for record_id in ids:
                 on_record_unlink.fire(session, self._name, record_id)
     return unlink_original(self, cr, uid, ids, context=context)
+
+
 orm.BaseModel.unlink = unlink
