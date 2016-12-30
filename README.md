@@ -10,9 +10,9 @@
 Odoo Connector Modules
 ======================
 
-*OpenERP Connector is a powerful framework to develop any kind of bi-directional connector between OpenERP (Open Source ERP) and any other software or service.*
+*OpenERP Connector is a powerful framework to develop any kind of bi-directional connector between Odoo (formerly OpenERP) and any other software or service, usually called `Backends`.*
 
-This OpenERP add-on has a modular and generic core, with the ability to be extended with additional modules for new features or customizations.
+This Odoo (formerly OpenERP) add-on has a modular and generic core, with the ability to be extended with additional modules for new features or customizations.
 
 Feel free to subscribe on the mailing list (its name is 'Connectors'):
 https://odoo-community.org/groups
