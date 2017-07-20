@@ -3,12 +3,15 @@
 [![Coverage Status](https://coveralls.io/repos/github/zeroincombenze/connector/badge.svg?branch=7.0)](https://coveralls.io/github/zeroincombenze/connector?branch=7.0)
 [![codecov](https://codecov.io/gh/zeroincombenze/connector/branch/7.0/graph/badge.svg)](https://codecov.io/gh/zeroincombenze/connector/branch/7.0)
 [![OCA_project](http://www.zeroincombenze.it/wp-content/uploads/ci-ct/prd/button-oca-7.svg)](https://github.com/OCA/connector/tree/7.0)
-[![Tech Doc](http://www.zeroincombenze.it/wp-content/uploads/ci-ct/prd/button-docs-7.svg)](http://wiki.zeroincombenze.org/en/Odoo/dev/7.0)
-[![Help](http://www.zeroincombenze.it/wp-content/uploads/ci-ct/prd/button-help-7.svg)](http://wiki.zeroincombenze.org/en/Odoo/7.0/)
+[![Tech Doc](http://www.zeroincombenze.it/wp-content/uploads/ci-ct/prd/button-docs-7.svg)](http://wiki.zeroincombenze.org/en/Odoo/7.0/dev)
+[![Help](http://www.zeroincombenze.it/wp-content/uploads/ci-ct/prd/button-help-7.svg)](http://wiki.zeroincombenze.org/en/Odoo/7.0/man/)
 [![try it](http://www.zeroincombenze.it/wp-content/uploads/ci-ct/prd/button-try-it-7.svg)](http://erp7.zeroincombenze.it)
 
+
+[![en](http://www.shs-av.com/wp-content/en_US.png)](http://wiki.zeroincombenze.org/it/Odoo/7.0/man)
+================================================================================================
+
 Odoo Connector Modules
-======================
 
 *Odoo Connector is a powerful framework to develop any kind of bi-directional connector between Odoo (formerly OpenERP) and any other software or service, usually called `Backends`.*
 
@@ -21,7 +24,6 @@ Documentation:
 http://www.odoo-connector.com
 
 Translation Status
-------------------
 [![Transifex Status](https://www.transifex.com/projects/p/OCA-connector-7-0/chart/image_png)](https://www.transifex.com/projects/p/OCA-connector-7-0)
 
 [//]: # (copyright)
