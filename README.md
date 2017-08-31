@@ -44,4 +44,16 @@ is mainly designed for Italian law and markeplace.
 Everytime, every Odoo DB and customized code can be deployed on local server too.
 
 [//]: # (end copyright)
+[//]: # (addons)
+
+
+Available addons
+----------------
+addon | version | OCA version | summary
+--- | --- | --- | ---
+[connector](connector/) | 7.0.2.3.0 |  N/D  | Connector
+[connector_base_product](connector_base_product/) | 1.0 |  N/D  | Connector Base Product
+
+[//]: # (end addons)
+
 [![chat with us](https://www.shs-av.com/wp-content/chat_with_us.gif)](https://tawk.to/85d4f6e06e68dd4e358797643fe5ee67540e408b)
