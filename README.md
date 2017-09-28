@@ -13,6 +13,7 @@
 ================================================================================================
 
 Odoo Connector Modules
+======================
 
 *Odoo Connector is a powerful framework to develop any kind of bi-directional connector between Odoo (formerly OpenERP) and any other software or service, usually called `Backends`.*
 
