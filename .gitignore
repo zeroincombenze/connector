@@ -57,4 +57,7 @@ connector/doc/_build/
 stdout.log
 *.oca
 *.z0i
+<<<<<<< HEAD
 .gitrepname
+=======
+>>>>>>> b559f0b73f8ca951d808b0b9258a81f4a2738218
