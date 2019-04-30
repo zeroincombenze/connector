@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2015-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- "License URL : <https://store.webkul.com/license.html/>" -->
+
+<odoo>
+    <!-- Making the xmlid of menus required by the Magneto Bridge Module tour available in webclient -->
+    <record id="magento_bridge.magento_parent_menu" model="ir.ui.menu">
+        <field name="load_xmlid" eval="True"/>
+    </record>
+
+    <record id="magento_bridge.menu_magento_dash" model="ir.ui.menu">
+        <field name="load_xmlid" eval="True"/>
+    </record>
+</odoo>

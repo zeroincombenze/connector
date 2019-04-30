@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2015-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- "License URL : <https://store.webkul.com/license.html/>" -->
+
+<odoo>
+        <template id="assets_backend" name="mob assets" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/magento_bridge/static/src/js/tour.js"></script>
+                <script type="text/javascript" src="/magento_bridge/static/src/js/mob_dashboard.js"></script>
+                <link rel="stylesheet" href="/magento_bridge/static/src/less/mob_dashboard.less"/>
+                <script type="text/javascript" src="/magento_bridge/static/src/js/mob_dashboard_view.js"></script>
+
+            </xpath>
+        </template>
+</odoo>

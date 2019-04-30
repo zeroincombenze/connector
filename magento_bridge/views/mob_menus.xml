@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2015-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- "License URL : <https://store.webkul.com/license.html/>" -->
+
+<odoo>
+	<data>
+
+		<!--     Bridge Menu      -->
+		<menuitem id="magento_parent_menu" name="Magento Odoo Bridge" groups="group_magento_openerp" web_icon="magento_bridge,static/description/icon.png"/>
+				<menuitem  id="menu_magento_dash" name="Dashboard" parent="magento_bridge.magento_parent_menu" action="magento_bridge.open_mob_dashboard_kanban" sequence="1"/>
+				<menuitem  id="menu_mapping_id" name="Mapping" parent="magento_bridge.magento_parent_menu" sequence="2"/>
+						<menuitem  id="mapping_id1" name="Region Mapping" parent="magento_bridge.menu_mapping_id" action="magento_bridge.magento_region_tree_action" sequence="1"/>
+						<menuitem  id="mapping_id2" name="Category Mapping" parent="magento_bridge.menu_mapping_id" action="magento_bridge.magento_category_tree_action" sequence="2"/>
+						<menuitem  id="mapping_id3" name="Product Attribute" parent="magento_bridge.menu_mapping_id" action="magento_bridge.magento_product_attribute_action" sequence="3"/>
+						<menuitem  id="mapping_id4" name="Product Attribute Value" parent="magento_bridge.menu_mapping_id" action="magento_bridge.magento_product_attribute_value_action" sequence="4"/>
+						<menuitem  id="mapping_id5" name="Product Template Mapping" parent="magento_bridge.menu_mapping_id" action="magento_bridge.magento_product_template_action" sequence="5"/>
+						<menuitem  id="mapping_id6" name="Product Mapping" parent="magento_bridge.menu_mapping_id" action="magento_bridge.magento_product_tree_action" sequence="6"/>
+						<menuitem  id="mapping_id7" name="Customer Mapping" parent="magento_bridge.menu_mapping_id" action="magento_bridge.magento_customer_tree_action" sequence="7"/>
+						<menuitem id="mapping_id8" name="Sales Order Mapping" parent="magento_bridge.menu_mapping_id" action="magento_bridge.magento_order_tree_action" sequence="8"/>
+				<menuitem  id="id_synchro" name="History" parent="magento_bridge.magento_parent_menu" sequence="3" />
+						<menuitem  id="sync_history" name="Synchronisation History" parent="magento_bridge.id_synchro" action="magento_bridge.magento_sync_history_action"/>
+				<menuitem  id="menu_magento_id1" name="Configuration" parent="magento_bridge.magento_parent_menu" sequence="4"/>
+						<menuitem  id="mag_id1" name="Magento Connection" parent="magento_bridge.menu_magento_id1" action="magento_bridge.magento_configure_tree_action" sequence="2"/>
+						<menuitem  id="product_id3" name="Magento Attribute Sets" parent="magento_bridge.menu_magento_id1" action="magento_bridge.magento_attribute_set_action"/>
+						<menuitem id="menu_mob_config" name="Settings" parent="magento_bridge.menu_magento_id1" sequence="1" action="magento_bridge.action_mob_config"/>
+	</data>
+</odoo>
