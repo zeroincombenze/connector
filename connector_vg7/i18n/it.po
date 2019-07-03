@@ -1,0 +1,158 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# * connector_vg7
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo (10.0)\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-07-03 16:25+0000\n"
+"PO-Revision-Date: 2019-07-03 16:25+0000\n"
+"Last-Translator: Antonio M. Vigliotti <antoniomaria.vigliotti@gmail.com>\n"
+"Language-Team: Zeroincombenze (https://www.zeroincombenze.it)\n"
+"Language: it_IT\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 1.3\n"
+
+#. module: connector_vg7
+#: model:ir.model,name:connector_vg7.model_account_account
+msgid "Account"
+msgstr "Conto"
+
+#. module: connector_vg7
+#: model:ir.model,name:connector_vg7.model_account_account_type
+msgid "Account Type"
+msgstr "Tipo conto"
+
+#. module: connector_vg7
+#: model:ir.model.fields,field_description:connector_vg7.field_ir_model_synchro_create_uid
+msgid "Created by"
+msgstr "Creato da"
+
+#. module: connector_vg7
+#: model:ir.model.fields,field_description:connector_vg7.field_ir_model_synchro_create_date
+msgid "Created on"
+msgstr "Data di creazione"
+
+#. module: connector_vg7
+#: model:ir.model.fields,field_description:connector_vg7.field_ir_model_synchro_display_name
+msgid "Display Name"
+msgstr "Nome visualizzato"
+
+#. module: connector_vg7
+#: model:ir.model.fields,field_description:connector_vg7.field_ir_model_synchro_id
+msgid "ID"
+msgstr "ID"
+
+#. module: connector_vg7
+#: model:ir.model,name:connector_vg7.model_account_invoice
+msgid "Invoice"
+msgstr "Fattura"
+
+#. module: connector_vg7
+#: model:ir.model,name:connector_vg7.model_account_invoice_line
+msgid "Invoice Line"
+msgstr "Riga Fattura"
+
+#. module: connector_vg7
+#: model:ir.model.fields,field_description:connector_vg7.field_ir_model_synchro___last_update
+msgid "Last Modified on"
+msgstr "Data ultima modifica"
+
+#. module: connector_vg7
+#: model:ir.model.fields,field_description:connector_vg7.field_ir_model_synchro_write_uid
+msgid "Last Updated by"
+msgstr "Ultima modifica di"
+
+#. module: connector_vg7
+#: model:ir.model.fields,field_description:connector_vg7.field_ir_model_synchro_write_date
+msgid "Last Updated on"
+msgstr "Data ultima modifica"
+
+#. module: connector_vg7
+#: model:ir.model.fields,field_description:connector_vg7.field_account_invoice_original_state
+#: model:ir.model.fields,field_description:connector_vg7.field_sale_order_original_state
+msgid "Original Status"
+msgstr "Original Status"
+
+#. module: connector_vg7
+#: model:ir.model,name:connector_vg7.model_res_partner
+msgid "Partner"
+msgstr "Soggetto"
+
+#. module: connector_vg7
+#: model:ir.model,name:connector_vg7.model_product_product
+msgid "Product"
+msgstr "Prodotto"
+
+#. module: connector_vg7
+#: model:ir.model,name:connector_vg7.model_product_template
+msgid "Product Template"
+msgstr "Modello di prodotto"
+
+#. module: connector_vg7
+#: model:ir.model.fields,field_description:connector_vg7.field_account_invoice_line_to_delete
+#: model:ir.model.fields,field_description:connector_vg7.field_sale_order_line_to_delete
+msgid "Record to delete"
+msgstr "Riga da eliminare"
+
+#. module: connector_vg7
+#: model:ir.model,name:connector_vg7.model_sale_order
+msgid "Sales Order"
+msgstr "Ordine di vendita"
+
+#. module: connector_vg7
+#: model:ir.model,name:connector_vg7.model_sale_order_line
+msgid "Sales Order Line"
+msgstr "Riga d'Ordine di Vendita"
+
+#. module: connector_vg7
+#: model:ir.model.fields,field_description:connector_vg7.field_account_account_dim_name
+#: model:ir.model.fields,field_description:connector_vg7.field_account_account_type_dim_name
+#: model:ir.model.fields,field_description:connector_vg7.field_account_tax_dim_name
+#: model:ir.model.fields,field_description:connector_vg7.field_product_product_dim_name
+#: model:ir.model.fields,field_description:connector_vg7.field_product_template_dim_name
+#: model:ir.model.fields,field_description:connector_vg7.field_res_partner_dim_name
+#: model:ir.model.fields,field_description:connector_vg7.field_res_users_dim_name
+msgid "Search Key"
+msgstr "Chiave di ricerca"
+
+#. module: connector_vg7
+#: model:ir.ui.view,arch_db:connector_vg7.view_invoice_supplier_synchro_form
+#: model:ir.ui.view,arch_db:connector_vg7.view_invoice_synchro_form
+#: model:ir.ui.view,arch_db:connector_vg7.view_partner_synchro_form
+#: model:ir.ui.view,arch_db:connector_vg7.view_product_product_synchro_form
+#: model:ir.ui.view,arch_db:connector_vg7.view_product_template_synchro_form
+#: model:ir.ui.view,arch_db:connector_vg7.view_sale_order_synchro_form
+#: model:ir.ui.view,arch_db:connector_vg7.view_tax_synchro_form
+msgid "Synchronization"
+msgstr "Sincronizzazione"
+
+#. module: connector_vg7
+#: model:ir.model,name:connector_vg7.model_account_tax
+msgid "Tax"
+msgstr "Imposta"
+
+#. module: connector_vg7
+#: model:ir.model.fields,field_description:connector_vg7.field_account_account_type_vg7_id
+#: model:ir.model.fields,field_description:connector_vg7.field_account_account_vg7_id
+#: model:ir.model.fields,field_description:connector_vg7.field_account_invoice_line_vg7_id
+#: model:ir.model.fields,field_description:connector_vg7.field_account_invoice_vg7_id
+#: model:ir.model.fields,field_description:connector_vg7.field_account_tax_vg7_id
+#: model:ir.model.fields,field_description:connector_vg7.field_product_product_vg7_id
+#: model:ir.model.fields,field_description:connector_vg7.field_product_template_vg7_id
+#: model:ir.model.fields,field_description:connector_vg7.field_res_partner_vg7_id
+#: model:ir.model.fields,field_description:connector_vg7.field_res_users_vg7_id
+#: model:ir.model.fields,field_description:connector_vg7.field_sale_order_line_vg7_id
+#: model:ir.model.fields,field_description:connector_vg7.field_sale_order_vg7_id
+msgid "VG7 ID"
+msgstr "VG7 ID"
+
+#. module: connector_vg7
+#: model:ir.model,name:connector_vg7.model_ir_model_synchro
+msgid "ir.model.synchro"
+msgstr "ir.model.synchro"
+
+

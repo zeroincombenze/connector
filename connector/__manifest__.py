@@ -19,5 +19,5 @@
           'setting_view.xml',
           'res_partner_view.xml',
           ],
- 'installable': True,
+ 'installable': False,
  }

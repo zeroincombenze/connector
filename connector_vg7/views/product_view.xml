@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_product_template_synchro_form" model="ir.ui.view">
+        <field name="name">res.product_template.synchro.form</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[last()]" position="after">
+                <page name="synchro" string="Synchronization">
+                    <group>
+                        <field name="vg7_id"/>
+                        <field name="dim_name"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_product_product_synchro_form" model="ir.ui.view">
+        <field name="name">res.product_product.synchro.form</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[last()]" position="after">
+                <page name="synchro" string="Synchronization">
+                    <group>
+                        <field name="vg7_id"/>
+                        <field name="dim_name"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_sale_order_synchro_form" model="ir.ui.view">
+        <field name="name">account.sale.order.synchro.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[last()]" position="after">
+                <page name="synchro" string="Synchronization">
+                    <group>
+                        <field name="vg7_id"/>
+                        <field name="original_state"/>
+                    </group>
+                </page>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/form/field[@name='state']" position="after">
+                <group name="synchro">
+                    <field name="vg7_id"/>
+                    <field name="to_delete"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

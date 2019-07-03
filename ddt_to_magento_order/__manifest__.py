@@ -13,6 +13,7 @@
     'version': '10.0.0.1.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['magento_bridge'],
+    'depends': ['magento_bridge',
+                'l10n_it_ddt'],
     'installable': True
 }

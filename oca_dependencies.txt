@@ -15,3 +15,4 @@
 # sale-workflow https://github.com/OCA/sale-workflow branchname
 
 queue https://github.com/OCA/queue.git
+l10n-italy
