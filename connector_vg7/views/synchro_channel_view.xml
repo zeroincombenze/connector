@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_synchro_channel_tree" model="ir.ui.view">
+        <field name="name">view.synchro.channel.tree</field>
+        <field name="model">synchro.channel</field>
+        <field name="arch" type="xml">
+            <tree string="Synchonization Channel">
+                <field name="name"/>
+                <field name="prefix"/>
+                <field name="identity"/>
+                <field name="company_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_synchro_channel_form" model="ir.ui.view">
+        <field name="name">view.synchro.channel.form</field>
+        <field name="model">synchro.channel</field>
+        <field name="arch" type="xml">
+            <form string="Synchonization Channel">
+                <group>
+                    <field name="name"/>
+                    <field name="prefix"/>
+                    <field name="identity"/>
+                    <field name="company_id"/>
+                    <field name="client_key"/>
+                    <field name="password"  password="True"/>
+                    <field name="counterpart_url"/>
+                    <field name="active"/>
+                    <field name="trace"/>
+                </group>
+                <field name="model_ids">
+                    <tree string="Model mapping" editable="bottom">
+                        <field name="name"/>
+                        <field name="counterpart_name"/>
+                    </tree>
+                </field>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_synchro_channel" model="ir.actions.act_window">
+        <field name="name">Synchonization Channel</field>
+        <field name="res_model">synchro.channel</field>
+        <field name="view_id" ref="view_synchro_channel_tree"/>
+    </record>
+
+
+    <record id="view_synchro_model_tree" model="ir.ui.view">
+        <field name="name">view.synchro.channel.model.tree</field>
+        <field name="model">synchro.channel.model</field>
+        <field name="arch" type="xml">
+            <tree string="Synchonization model">
+                    <field name="name"/>
+                    <field name="counterpart_name"/>
+                    <field name="field_uname"/>
+                    <field name="synchro_channel_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_synchro_model_form" model="ir.ui.view">
+        <field name="name">view.synchro.model.form</field>
+        <field name="model">synchro.channel.model</field>
+        <field name="arch" type="xml">
+            <form string="Synchonization Model">
+                <group>
+                    <field name="name"/>
+                    <field name="counterpart_name"/>
+                    <field name="field_uname"/>
+                    <field name="field_2complete"/>
+                    <field name="synchro_channel_id"/>
+                </group>
+                <field name="field_ids">
+                    <tree string="Field mapping" editable="bottom">
+                        <field name="name"/>
+                        <field name="counterpart_name"/>
+                        <field name="apply"/>
+                    </tree>
+                </field>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_synchro_model" model="ir.actions.act_window">
+        <field name="name">Synchonization Model</field>
+        <field name="res_model">synchro.channel.model</field>
+        <field name="view_id" ref="view_synchro_model_tree"/>
+    </record>
+
+    <menuitem id="menu_synchro_channel" name="Synchonization Channel"
+              action="action_synchro_channel" parent="base.next_id_9"
+              groups="base.group_no_one"/>
+
+    <menuitem id="menu_synchro_model" name="Synchonization Model"
+              action="action_synchro_model" parent="base.next_id_9"
+              groups="base.group_no_one"/>
+
+</odoo>
+

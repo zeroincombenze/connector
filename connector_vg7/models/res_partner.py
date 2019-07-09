@@ -3,7 +3,6 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 import logging
 from odoo import fields, models, api
-from odoo.exceptions import UserError
 _logger = logging.getLogger(__name__)
 
 try:
@@ -23,6 +22,7 @@ class ResPartner(models.Model):
                 'ir.model.synchro'].dim_text(partner.name)
 
     vg7_id = fields.Integer('VG7 ID', copy=False)
+    oe7_id = fields.Integer('Odoo7 ID', copy=False)
     dim_name = fields.Char('Search Key',
                            compute=_set_dim_name,
                            store=True,
@@ -47,12 +47,14 @@ class ResPartner(models.Model):
         'rea_member_type': 'SM',
         'rea_liquidation_state': 'LN',
         'type': 'contact',
-    }
+        }
 
     @api.model_cr_context
     def _auto_init(self):
         res = super(ResPartner, self)._auto_init()
-        self.env['ir.model.synchro']._build_unique_index(self._inherit)
+        for prefix in ('vg7', 'oe7'):
+            self.env['ir.model.synchro']._build_unique_index(self._inherit,
+                                                             prefix)
         return res
 
     def wep_text(self, text):

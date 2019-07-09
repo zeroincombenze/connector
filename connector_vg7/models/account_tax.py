@@ -23,6 +23,7 @@ class AccountTax(models.Model):
                 'ir.model.synchro'].dim_text(partner.name)
 
     vg7_id = fields.Integer('VG7 ID', copy=False)
+    oe7_id = fields.Integer('Odoo7 ID', copy=False)
     dim_name = fields.Char('Search Key',
                            compute=_set_dim_name,
                            store=True,
@@ -40,7 +41,9 @@ class AccountTax(models.Model):
     @api.model_cr_context
     def _auto_init(self):
         res = super(AccountTax, self)._auto_init()
-        self.env['ir.model.synchro']._build_unique_index(self._inherit)
+        for prefix in ('vg7', 'oe7'):
+            self.env['ir.model.synchro']._build_unique_index(self._inherit,
+                                                             prefix)
         return res
 
     def wep_text(self, text):

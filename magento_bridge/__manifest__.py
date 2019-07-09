@@ -1,3 +1,4 @@
+# flake8: noqa
 # -*- coding: utf-8 -*-
 ##########################################################################
 # Author      : Webkul Software Pvt. Ltd. (<https://webkul.com/>)

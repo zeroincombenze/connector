@@ -11,19 +11,20 @@ class SaleOrder(models.Model):
     _inherit = "sale.order"
 
     vg7_id = fields.Integer('VG7 ID', copy=False)
+    oe7_id = fields.Integer('Odoo7 ID', copy=False)
     original_state = fields.Char('Original Status')
 
     SKEYS = (['name'])
     CONTRAINTS = []
     KEEP = []
     DEFAULT = {}
-    LINES = 'order_line'
-    PARENT_ID = 'order_id'
 
     @api.model_cr_context
     def _auto_init(self):
         res = super(SaleOrder, self)._auto_init()
-        self.env['ir.model.synchro']._build_unique_index(self._inherit)
+        for prefix in ('vg7', 'oe7'):
+            self.env['ir.model.synchro']._build_unique_index(self._inherit,
+                                                             prefix)
         return res
 
     @api.model
@@ -39,6 +40,7 @@ class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
     vg7_id = fields.Integer('VG7 ID', copy=False)
+    oe7_id = fields.Integer('Odoo7 ID', copy=False)
     to_delete = fields.Boolean('Record to delete')
 
     SKEYS = (['order_id', 'sequence'])
@@ -51,7 +53,9 @@ class SaleOrderLine(models.Model):
     @api.model_cr_context
     def _auto_init(self):
         res = super(SaleOrderLine, self)._auto_init()
-        self.env['ir.model.synchro']._build_unique_index(self._inherit)
+        for prefix in ('vg7', 'oe7'):
+            self.env['ir.model.synchro']._build_unique_index(self._inherit,
+                                                             prefix)
         return res
 
     @api.model

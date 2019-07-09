@@ -1,6 +1,6 @@
 
 ===============================
-|icon| connector_vg7 10.0.0.1.0
+|icon| connector_vg7 10.0.0.1.1
 ===============================
 
 
@@ -165,12 +165,14 @@ Odoo is a trademark of `Odoo S.A. <https://www.odoo.com/>`__ (formerly OpenERP)
 Authors / Autori
 ----------------
 
-* SHS-AV s.r.l. <https://www.zeroincombenze.it/>
+* `SHS-AV s.r.l. <https://www.zeroincombenze.it/>`__
+
 
 Contributors / Collaboratori
 ----------------------------
 
 * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
+
 
 |
 
@@ -194,7 +196,7 @@ La distribuzione `Zeroincombenze® <https://wiki.zeroincombenze.org/en/Odoo>`__ 
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2019-07-02
+Last Update / Ultimo aggiornamento: 2019-07-09
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Alfa-red.png
     :target: https://odoo-community.org/page/development-status

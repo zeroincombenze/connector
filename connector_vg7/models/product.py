@@ -23,6 +23,7 @@ class ProductTemplate(models.Model):
                 'ir.model.synchro'].dim_text(product.name)
 
     vg7_id = fields.Integer('VG7 ID', copy=False)
+    oe7_id = fields.Integer('Odoo7 ID', copy=False)
     dim_name = fields.Char('Search Key',
                            compute=_set_dim_name,
                            store=True,
@@ -42,12 +43,18 @@ class ProductTemplate(models.Model):
             'property_account_expense_id', 'supplier_taxes_id',
            ]
     DEFAULT = {
+        'type': 'consu',
+        'invoice_policy': 'delivery',
     }
+    LINES_OF_REC = False
+    LINE_MODEL = False
 
     @api.model_cr_context
     def _auto_init(self):
         res = super(ProductTemplate, self)._auto_init()
-        self.env['ir.model.synchro']._build_unique_index(self._inherit)
+        for prefix in ('vg7', 'oe7'):
+            self.env['ir.model.synchro']._build_unique_index(self._inherit,
+                                                             prefix)
         return res
 
     def wep_text(self, text):
@@ -70,7 +77,6 @@ class ProductTemplate(models.Model):
         return self.env['ir.model.synchro'].synchro(self, vals)
 
 
-
 class ProductProduct(models.Model):
     _inherit = "product.product"
 
@@ -82,6 +88,7 @@ class ProductProduct(models.Model):
                 'ir.model.synchro'].dim_text(product.name)
 
     vg7_id = fields.Integer('VG7 ID', copy=False)
+    oe7_id = fields.Integer('Odoo7 ID', copy=False)
     dim_name = fields.Char('Search Key',
                            compute=_set_dim_name,
                            store=True,
@@ -106,7 +113,9 @@ class ProductProduct(models.Model):
     @api.model_cr_context
     def _auto_init(self):
         res = super(ProductProduct, self)._auto_init()
-        self.env['ir.model.synchro']._build_unique_index(self._inherit)
+        for prefix in ('vg7', 'oe7'):
+            self.env['ir.model.synchro']._build_unique_index(self._inherit,
+                                                             prefix)
         return res
 
     def wep_text(self, text):

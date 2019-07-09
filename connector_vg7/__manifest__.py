@@ -4,12 +4,14 @@
 {
     'name': 'connector_vg7',
     'summary': 'Bidirectional connector to/from VG7 software',
-    'version': '10.0.0.1.0',
+    'version': '10.0.0.1.1',
     'category': 'Generic Modules',
     'author': 'SHS-AV s.r.l.',
     'website': 'https://www.zeroincombenze.it/',
-    'depends': ['base',
-                'sale'
+    'depends': [
+        'base',
+        'sale',
+        'account',
     ],
     'data': [
         'security/ir.model.access.csv',
@@ -18,6 +20,9 @@
         'views/account_invoice_view.xml',
         'views/sale_order_view.xml',
         'views/account_tax_view.xml',
+        'views/synchro_channel_view.xml',
+        'data/synchro_channel.xml',
+        'data/ir_cron.xml',
     ],
     'installable': True,
 }

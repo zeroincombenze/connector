@@ -6,7 +6,8 @@ import os
 import logging
 from odoo import models, api
 from odoo.exceptions import UserError
-import urllib2, ssl
+import urllib2
+import ssl
 
 _logger = logging.getLogger(__name__)
 
@@ -36,7 +37,7 @@ class StockPickingPackagePreparation(models.Model):
                 _logger.info('Close Magento Order by %s' % uri)
                 try:
                     # response = urllib2.urlopen(uri).read()
-                     os.system('wget --delete-after %s' % uri)
+                    os.system('wget --delete-after %s' % uri)
                 except urllib2.HTTPError:
                     _logger.error('Magento Order error by <%s>' % uri)
                     raise UserError(

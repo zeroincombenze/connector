@@ -6,7 +6,8 @@ import os
 import logging
 from odoo import models, api
 from odoo.exceptions import UserError
-import urllib2, ssl
+import urllib2
+import ssl
 
 _logger = logging.getLogger(__name__)
 

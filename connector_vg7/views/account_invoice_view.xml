@@ -10,6 +10,7 @@
                 <page name="synchro" string="Synchronization">
                     <group>
                         <field name="vg7_id"/>
+                        <field name="oe7_id"/>
                         <field name="original_state"/>
                     </group>
                 </page>
@@ -26,6 +27,7 @@
                 <page name="synchro" string="Synchronization">
                     <group>
                         <field name="vg7_id"/>
+                        <field name="oe7_id"/>
                         <field name="original_state"/>
                     </group>
                 </page>
@@ -41,6 +43,7 @@
             <xpath expr="//field[@name='invoice_line_tax_ids']" position="after">
                 <group name="synchro">
                     <field name="vg7_id"/>
+                    <field name="oe7_id"/>
                     <field name="to_delete"/>
                 </group>
             </xpath>

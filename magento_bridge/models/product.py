@@ -15,7 +15,6 @@ import requests
 
 from odoo import _, api, fields, models
 from res_partner import _unescape
-import logging
 _logger = logging.getLogger(__name__)
 
 

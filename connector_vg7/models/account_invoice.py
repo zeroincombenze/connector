@@ -3,7 +3,6 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 import logging
 from odoo import fields, models, api
-from odoo.exceptions import UserError
 _logger = logging.getLogger(__name__)
 
 
@@ -11,6 +10,7 @@ class AccountInvoice(models.Model):
     _inherit = "account.invoice"
 
     vg7_id = fields.Integer('VG7 ID', copy=False)
+    oe7_id = fields.Integer('Odoo7 ID', copy=False)
     original_state = fields.Char('Original Status')
 
     SKEYS = (['number'])
@@ -20,13 +20,15 @@ class AccountInvoice(models.Model):
         'journal_id': '',
         'type': 'out_invoice',
     }
-    LINES = 'invoice_line_ids'
-    PARENT_ID = 'invoice_id'
+    LINES_OF_REC = 'invoice_line_ids'
+    LINE_MODEL = 'account.invoice.line'
 
     @api.model_cr_context
     def _auto_init(self):
         res = super(AccountInvoice, self)._auto_init()
-        self.env['ir.model.synchro']._build_unique_index(self._inherit)
+        for prefix in ('vg7', 'oe7'):
+            self.env['ir.model.synchro']._build_unique_index(self._inherit,
+                                                             prefix)
         return res
 
     @api.model
@@ -37,10 +39,12 @@ class AccountInvoice(models.Model):
     def commit(self, id):
         return self.env['ir.model.synchro'].commit(self, id)
 
+
 class AccountInvoiceLine(models.Model):
     _inherit = "account.invoice.line"
 
     vg7_id = fields.Integer('VG7 ID', copy=False)
+    oe7_id = fields.Integer('Odoo7 ID', copy=False)
     to_delete = fields.Boolean('Record to delete')
 
     SKEYS = (['invoice_id', 'sequence'])
@@ -49,12 +53,16 @@ class AccountInvoiceLine(models.Model):
     DEFAULT = {
         'account_id': '',
         'uom_id': '',
+        'invoice_line_tax_ids': '',
     }
+    PARENT_ID = 'invoice_id'
 
     @api.model_cr_context
     def _auto_init(self):
         res = super(AccountInvoiceLine, self)._auto_init()
-        self.env['ir.model.synchro']._build_unique_index(self._inherit)
+        for prefix in ('vg7', 'oe7'):
+            self.env['ir.model.synchro']._build_unique_index(self._inherit,
+                                                             prefix)
         return res
 
     @api.model

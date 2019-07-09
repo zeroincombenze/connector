@@ -8,3 +8,4 @@ from . import account_tax
 from . import product
 from . import res_partner
 from . import sale_order
+from . import synchro_channel

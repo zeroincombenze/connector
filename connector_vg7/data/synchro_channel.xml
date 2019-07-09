@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+
+    <record id="channel_vg7" model="synchro.channel">
+        <field name="name">VG7 print</field>
+        <field name="prefix">vg7</field>
+        <field name="identity">vg7</field>
+        <field name="client_key">54e609f923bc320428b07360c2b95b7c</field>
+        <field name="counterpart_url">https://www.vg7printdemo.it/print/index.php/api/v1</field>
+        <field name="produtc_without_variants" eval="True"/>
+        <field name="active" eval="True"/>
+    </record>
+
+    <record id="channel_odoo7" model="synchro.channel">
+        <field name="name">Odoo 7.0</field>
+        <field name="prefix">oe7</field>
+        <field name="identity">odoo</field>
+        <field name="client_key">zeroadm</field>
+        <field name="counterpart_url">https://dev7.zeroincombenze.it</field>
+        <field name="active" eval="True"/>
+    </record>
+
+
+    <record id="res_partner" model="synchro.channel.model">
+        <field name="name">res.partner</field>
+        <field name="field_uname">name</field>
+        <field name="counterpart_name">customers</field>
+        <field name="synchro_channel_id" ref="channel_vg7"/>
+        <field name="field_2complete">True</field>
+    </record>
+
+    <record id="product_product" model="synchro.channel.model">
+        <field name="name">product.product</field>
+        <field name="field_uname">name</field>
+        <field name="counterpart_name">products</field>
+        <field name="synchro_channel_id" ref="channel_vg7"/>
+        <field name="field_2complete">True</field>
+    </record>
+
+    <record id="product_template" model="synchro.channel.model">
+        <field name="name">product.template</field>
+        <field name="field_uname">name</field>
+        <field name="synchro_channel_id" ref="channel_vg7"/>
+    </record>
+
+    <record id="account_account" model="synchro.channel.model">
+        <field name="name">account.account</field>
+        <field name="field_uname">name</field>
+        <field name="synchro_channel_id" ref="channel_vg7"/>
+    </record>
+
+    <record id="account_invoice" model="synchro.channel.model">
+        <field name="name">account.invoice</field>
+        <field name="field_uname">number</field>
+        <field name="synchro_channel_id" ref="channel_vg7"/>
+    </record>
+
+    <record id="account_invoice_line" model="synchro.channel.model">
+        <field name="name">account.invoice.line</field>
+        <field name="field_uname">name</field>
+        <field name="synchro_channel_id" ref="channel_vg7"/>
+    </record>
+
+    <record id="account_tax" model="synchro.channel.model">
+        <field name="name">account.tax</field>
+        <field name="field_uname">description</field>
+        <field name="synchro_channel_id" ref="channel_vg7"/>
+    </record>
+
+    <record id="sale_order" model="synchro.channel.model">
+        <field name="name">sale.order</field>
+        <field name="field_uname">name</field>
+        <field name="counterpart_name">order</field>
+        <field name="synchro_channel_id" ref="channel_vg7"/>
+    </record>
+
+    <record id="sale_order_line" model="synchro.channel.model">
+        <field name="name">sale.order.line</field>
+        <field name="field_uname">name</field>
+        <field name="synchro_channel_id" ref="channel_vg7"/>
+    </record>
+
+    <record id="res_partner_name" model="synchro.channel.model.fields">
+        <field name="name">name</field>
+        <field name="counterpart_name">name</field>
+        <field name="model_id" ref="res_partner"/>
+    </record>
+
+    <record id="res_partner_vat" model="synchro.channel.model.fields">
+        <field name="name">vat</field>
+        <field name="counterpart_name">piva</field>
+        <field name="apply">vat</field>
+        <field name="model_id" ref="res_partner"/>
+    </record>
+
+    <record id="res_partner_fiscalcode" model="synchro.channel.model.fields">
+        <field name="name">fiscalcode</field>
+        <field name="counterpart_name">cf</field>
+        <field name="model_id" ref="res_partner"/>
+    </record>
+
+
+    <record id="product_product_code" model="synchro.channel.model.fields">
+        <field name="name">default_code</field>
+        <field name="counterpart_name">code</field>
+        <field name="model_id" ref="product_product"/>
+    </record>
+
+    <record id="product_product_name" model="synchro.channel.model.fields">
+        <field name="name">name</field>
+        <field name="counterpart_name">description</field>
+        <field name="model_id" ref="product_product"/>
+    </record>
+
+
+    <record id="sale_order_name" model="synchro.channel.model.fields">
+        <field name="name">name</field>
+        <field name="counterpart_name">order_number</field>
+        <field name="model_id" ref="sale_order"/>
+    </record>
+
+    <record id="sale_order_partner_id" model="synchro.channel.model.fields">
+        <field name="name">partner_id</field>
+        <field name="counterpart_name">customer_id</field>
+        <field name="model_id" ref="sale_order"/>
+    </record>
+
+
+    <record id="sale_order_line_partner_id" model="synchro.channel.model.fields">
+        <field name="name">name</field>
+        <field name="counterpart_name">product_name</field>
+        <field name="model_id" ref="sale_order_line"/>
+    </record>
+
+</odoo>

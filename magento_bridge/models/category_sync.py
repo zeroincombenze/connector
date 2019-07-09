@@ -160,7 +160,7 @@ class MagentoSynchronization(models.TransientModel):
                 if magCategoryId[0] > 0:
                     return magCategoryId[1]
                 else:
-                    False
+                    return False
             else:
                 magCategoryId = mappedCategoryObj[0].mag_category_id
                 return magCategoryId

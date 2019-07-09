@@ -10,6 +10,7 @@
                 <page name="synchro" string="Synchronization">
                     <group>
                         <field name="vg7_id"/>
+                        <field name="oe7_id"/>
                         <field name="dim_name"/>
                     </group>
                 </page>
