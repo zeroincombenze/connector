@@ -6,6 +6,7 @@ from . import account_account
 from . import account_invoice
 from . import account_tax
 from . import product
+from . import res_country
 from . import res_partner
 from . import sale_order
 from . import synchro_channel

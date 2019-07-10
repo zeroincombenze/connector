@@ -9,6 +9,7 @@
                 <field name="name"/>
                 <field name="prefix"/>
                 <field name="identity"/>
+                <field name="sequence"/>
                 <field name="company_id"/>
             </tree>
         </field>
@@ -23,10 +24,13 @@
                     <field name="name"/>
                     <field name="prefix"/>
                     <field name="identity"/>
-                    <field name="company_id"/>
                     <field name="client_key"/>
                     <field name="password"  password="True"/>
                     <field name="counterpart_url"/>
+                </group>
+                <group>
+                    <field name="company_id"/>
+                    <field name="sequence"/>
                     <field name="active"/>
                     <field name="trace"/>
                 </group>
@@ -52,10 +56,11 @@
         <field name="model">synchro.channel.model</field>
         <field name="arch" type="xml">
             <tree string="Synchonization model">
-                    <field name="name"/>
-                    <field name="counterpart_name"/>
-                    <field name="field_uname"/>
-                    <field name="synchro_channel_id"/>
+                <field name="name"/>
+                <field name="counterpart_name"/>
+                <field name="field_uname"/>
+                <field name="sequence"/>
+                <field name="synchro_channel_id"/>
             </tree>
         </field>
     </record>
@@ -70,6 +75,7 @@
                     <field name="counterpart_name"/>
                     <field name="field_uname"/>
                     <field name="field_2complete"/>
+                    <field name="sequence"/>
                     <field name="synchro_channel_id"/>
                 </group>
                 <field name="field_ids">
@@ -98,4 +104,3 @@
               groups="base.group_no_one"/>
 
 </odoo>
-

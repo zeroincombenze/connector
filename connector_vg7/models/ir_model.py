@@ -73,6 +73,17 @@ class IrModelSynchro(models.Model):
             text = res
         return text
 
+    def tnl_2_loc_vat(self, vals, loc_name, ext_ref):
+        if len(vals[ext_ref]) == 11 and vals[ext_ref].isdigit():
+            return 'IT%s' % vals[ext_ref]
+        return vals[ext_ref]
+
+    def tnl_2_loc_upper(self, vals, loc_name, ext_ref):
+        return vals[ext_ref].upper()
+
+    def tnl_2_loc_lower(self, vals, loc_name, ext_ref):
+        return vals[ext_ref].lower()
+
     def get_model_structure(self, model, ignore=None):
         ignore = ignore or []
         if self.STRUCT.get(model, {}) and not ignore:
@@ -162,6 +173,9 @@ class IrModelSynchro(models.Model):
                     model]['LOC_FIELDS'][field.name] = field.counterpart_name
             self.MANAGED_MODELS[channel_id][
                     model]['EXT_FIELDS'][field.counterpart_name] = field.name
+            if field.apply:
+                self.MANAGED_MODELS[channel_id][
+                    model]['APPLY'] = field.apply
 
     @api.model_cr_context
     def _init_self(self, model=None, cls=None):
@@ -462,8 +476,6 @@ class IrModelSynchro(models.Model):
         else:
             company_id =  self.MANAGED_MODELS[channel_from]['COMPANY_ID']
         for ext_ref in vals.copy():
-            if ext_ref == 'company_id':
-                continue
             ext_name, loc_name, is_foreign, loc_ext_ref = get_names_from_ref(
                 model, channel_from, vals, ext_ref, prefix1, prefix2)
             if loc_name not in self.STRUCT[model]:
@@ -471,6 +483,13 @@ class IrModelSynchro(models.Model):
                         'Field <%s> does not exist in model %s' % (ext_ref,
                                                                    model))
                 del vals[ext_ref]
+                continue
+            if (self.STRUCT[model][loc_name]['ttype'] in ('many2one',
+                                                          'integer') and
+                    isinstance(vals[ext_ref], basestring) and
+                    vals[ext_ref].isdigit()):
+                vals[ext_ref] = int(vals[ext_ref])
+            if ext_ref == 'company_id':
                 continue
             if is_foreign:
                 # Field like <vg7_id> with external ID in local DB
@@ -507,7 +526,14 @@ class IrModelSynchro(models.Model):
                 if is_foreign or loc_name != ext_name:
                     del vals[ext_ref]
             elif is_foreign:
-                vals[loc_name] = vals[ext_ref]
+                apply = 'tnl_2_loc_%s' % self.MANAGED_MODELS[
+                    channel_from][model]['APPLY']
+                if hasattr(self, apply):
+                    vals[loc_name] = getattr(self, apply)(vals,
+                                                          loc_name,
+                                                          ext_ref)
+                else:
+                    vals[loc_name] = vals[ext_ref]
                 del vals[ext_ref]
             if (loc_name in vals and
                     vals[loc_name] is False and
@@ -703,14 +729,14 @@ class IrModelSynchro(models.Model):
         return vals
 
     @api.multi
-    def complete_synchro_recs(self):
+    def pull_recs_2_complete(self):
         self._init_self()
         for channel_id in self.MANAGED_MODELS:
             for model in self.MANAGED_MODELS[channel_id]:
                 if not self.STRUCT[model]['MODEL_WITH_NAME']:
                     continue
                 ir_model = self.env[model]
-                recs = ir_model.search([('name', 'like', 'Unknown')])
+                recs = ir_model.search([('name', 'like', 'Unknown ')])
                 for rec in recs:
                     id = False
                     if rec.vg7_id:
@@ -722,33 +748,38 @@ class IrModelSynchro(models.Model):
                     datas = self.get_counterpart_response(channel_id,
                                                           model,
                                                           id=id)
-                    if isinstance(model, (list, tuple)):
-                        for data in datas:
-                            ir_model.synchro(self.prefix_bind(
-                                self.MANAGED_MODELS[channel_id]['PREFIX'],
-                                data))
-                    else:
+                    if not isinstance(datas, (list, tuple)):
+                        datas = [datas]
+                    for data in datas:
                         ir_model.synchro(self.prefix_bind(
                             self.MANAGED_MODELS[channel_id]['PREFIX'],
-                            datas))
+                            data))
+                        self.env.cr.commit()
 
     @api.multi
-    def download_full_table(self):
+    def pull_full_records(self):
         self._init_self()
         for channel_id in self.MANAGED_MODELS:
-            for model in self.MANAGED_MODELS[channel_id]:
+            model_list = [x.name for x in self.env[
+                'synchro.channel.model'].search(
+                    [('synchro_channel_id', '=', channel_id)],
+                    order='sequence')]
+            # for model in self.MANAGED_MODELS[channel_id]:
+            for model in model_list:
+                self._init_self(model=model)
                 if not self.MANAGED_MODELS[
                         channel_id][model].get('2COMPLETE', False):
                     continue
                 ir_model = self.env[model]
                 datas = self.get_counterpart_response(channel_id,
                                                       model)
-                if isinstance(model, (list, tuple)):
-                    for data in datas:
+                if not isinstance(datas, (list, tuple)):
+                    datas = [datas]
+                for data in datas:
+                    id = int(data['id'])
+                    if not ir_model.search([('id', '=', id)]):
                         ir_model.synchro(self.prefix_bind(
                             self.MANAGED_MODELS[channel_id]['PREFIX'],
                             data))
-                else:
-                    ir_model.synchro(self.prefix_bind(
-                        self.MANAGED_MODELS[channel_id]['PREFIX'],
-                        datas))
+                        self.env.cr.commit()
+

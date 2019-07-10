@@ -2,7 +2,7 @@
 
 <odoo noupdate="0">
 
-        <record id="complete_synchronizated_records" model="ir.cron">
+        <record id="action_pull_recs_2_complete" model="ir.cron">
             <field name="name">Complete the synchronized records</field>
             <field name="active" eval="False"/>
             <field name="user_id" ref="base.user_root"/>
@@ -11,11 +11,11 @@
             <field name="numbercall">-1</field>
             <field name="doall" eval="False"/>
             <field name="model" eval="'ir.model.synchro'"/>
-            <field name="function" eval="'complete_synchro_recs'" />
+            <field name="function" eval="'pull_recs_2_complete'" />
             <field name="args" eval="'()'"/>
         </record>
 
-        <record id="download_full_table" model="ir.cron">
+        <record id="action_pull_full_records" model="ir.cron">
             <field name="name">Download full table from counterpart</field>
             <field name="active" eval="False"/>
             <field name="user_id" ref="base.user_root"/>
@@ -24,7 +24,7 @@
             <field name="numbercall">-1</field>
             <field name="doall" eval="False"/>
             <field name="model" eval="'ir.model.synchro'"/>
-            <field name="function" eval="'download_full_table'" />
+            <field name="function" eval="'pull_full_records'" />
             <field name="args" eval="'()'"/>
         </record>
 

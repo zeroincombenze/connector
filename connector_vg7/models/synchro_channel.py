@@ -41,6 +41,7 @@ class SynchroChannel(models.Model):
         'Counterpart url',
         help="3th Party Sender URL to connect")
     produtc_without_variants = fields.Boolean('Products without variants')
+    sequence=fields.Integer('Priority', default=16)
     active = fields.Boolean(string='Active',
                             default=True)
     trace = fields.Boolean(
@@ -69,6 +70,7 @@ class SynchroChannelModel(models.Model):
     )
     counterpart_name = fields.Char('Counterpart model name')
     field_2complete = fields.Char('Model to complete asynchronously')
+    sequence=fields.Integer('Priority', default=16)
     synchro_channel_id = fields.Many2one('synchro.channel')
     field_ids = fields.One2many(
         'synchro.channel.model.fields', 'model_id',
