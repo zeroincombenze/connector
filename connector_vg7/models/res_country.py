@@ -18,7 +18,7 @@ class ResCountry(models.Model):
     vg7_id = fields.Integer('VG7 ID', copy=False)
     oe7_id = fields.Integer('Odoo7 ID', copy=False)
 
-    SKEYS = (['code'])
+    SKEYS = (['code'],)
     CONTRAINTS = []
     KEEP = []
     DEFAULT = {}

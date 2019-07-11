@@ -38,6 +38,8 @@
                     <tree string="Model mapping" editable="bottom">
                         <field name="name"/>
                         <field name="counterpart_name"/>
+                        <field name="field_uname"/>
+                        <field name="sequence"/>
                     </tree>
                 </field>
             </form>
@@ -83,6 +85,7 @@
                         <field name="name"/>
                         <field name="counterpart_name"/>
                         <field name="apply"/>
+                        <field name="protect"/>
                     </tree>
                 </field>
             </form>

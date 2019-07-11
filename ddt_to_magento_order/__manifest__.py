@@ -15,5 +15,5 @@
     # any module necessary for this one to work correctly
     'depends': ['magento_bridge',
                 'l10n_it_ddt'],
-    'installable': True
+    'installable': False
 }

@@ -166,6 +166,8 @@ class IrModelSynchro(models.Model):
         channel_id = model_rec.synchro_channel_id.id
         self.MANAGED_MODELS[channel_id][model]['LOC_FIELDS'] = {}
         self.MANAGED_MODELS[channel_id][model]['EXT_FIELDS'] = {}
+        self.MANAGED_MODELS[channel_id][model]['APPLY'] = {}
+        self.MANAGED_MODELS[channel_id][model]['PROTECT'] = {}
         for field in self.env[
             'synchro.channel.model.fields'].search(
                 [('model_id', '=', model_rec.id)]):
@@ -175,7 +177,10 @@ class IrModelSynchro(models.Model):
                     model]['EXT_FIELDS'][field.counterpart_name] = field.name
             if field.apply:
                 self.MANAGED_MODELS[channel_id][
-                    model]['APPLY'] = field.apply
+                    model]['APPLY'][field.name] = field.apply
+            if field.protect:
+                self.MANAGED_MODELS[channel_id][
+                    model]['PROTECT'][field.name] = field.protect
 
     @api.model_cr_context
     def _init_self(self, model=None, cls=None):
@@ -209,14 +214,17 @@ class IrModelSynchro(models.Model):
             to_delete = list(set(vals.keys()) - set(self.STRUCT[model].keys()))
         return self.drop_fields(model, vals, to_delete)
 
-    def drop_tech_fields(self, rec, vals, keep):
-        for field in keep:
+    def drop_tech_fields(self, rec, vals, model, channel_id):
+        for field in vals:
+            protect = self.MANAGED_MODELS[
+                channel_id][model]['PROTECT'].get(field, 'update')
             if (rec[field] and
-                field in vals and
-                    isinstance(rec[field], basestring) and
-                        self.dim_text(
-                            rec[field]) == self.dim_text(
-                                vals[field])):
+                    field in vals and
+                    (protect == 'protect' or
+                     (protect == 'similar' and
+                      isinstance(rec[field], basestring) and
+                      self.dim_text(
+                          rec[field]) == self.dim_text(vals[field])))):
                 del vals[field]
         return vals
 
@@ -331,7 +339,7 @@ class IrModelSynchro(models.Model):
     def get_rec_by_reference(self, model, key_name, value, company_id):
         ir_model = self.env[model]
         where = [(key_name, '=', value)]
-        if key_name != 'id' and self.STRUCT[model]['MODEL_WITH_COMPANY']:
+        if key_name != 'id' and self.STRUCT[model].get('MODEL_WITH_COMPANY'):
             where.append(('company_id', '=', company_id))
         return ir_model.search(where)
 
@@ -349,7 +357,7 @@ class IrModelSynchro(models.Model):
             new_value = rec[0].id
         if not new_value and model in self.MANAGED_MODELS[channel_id]:
             vals = {key_name: value}
-            if self.STRUCT[model]['MODEL_WITH_COMPANY']:
+            if self.STRUCT[model].get('MODEL_WITH_COMPANY'):
                 vals['company_id'] = company_id
             new_value = self.synchro(ir_model, vals)
         return new_value
@@ -370,7 +378,7 @@ class IrModelSynchro(models.Model):
                 ext_id: value,
                 'name': 'Unknown %d' % value,
             }
-            if self.STRUCT[model]['MODEL_WITH_COMPANY']:
+            if self.STRUCT[model].get('MODEL_WITH_COMPANY'):
                 vals['company_id'] = company_id
             new_value = self.synchro(ir_model, vals)
         return new_value
@@ -527,7 +535,7 @@ class IrModelSynchro(models.Model):
                     del vals[ext_ref]
             elif is_foreign:
                 apply = 'tnl_2_loc_%s' % self.MANAGED_MODELS[
-                    channel_from][model]['APPLY']
+                    channel_from][model]['APPLY'].get(loc_name, '')
                 if hasattr(self, apply):
                     vals[loc_name] = getattr(self, apply)(vals,
                                                           loc_name,
@@ -679,7 +687,7 @@ class IrModelSynchro(models.Model):
         if id > 0:
             try:
                 rec = ir_model.browse(id)
-                rec.write(self.drop_tech_fields(rec, vals, keep))
+                rec.write(self.drop_tech_fields(rec, vals, model, channel_id))
                 _logger.debug('> synchro: %s.write(%s)' % (model, vals))
                 if lines_of_rec and lines_of_rec in rec:
                     for line in rec[lines_of_rec]:
@@ -783,3 +791,14 @@ class IrModelSynchro(models.Model):
                             data))
                         self.env.cr.commit()
 
+
+class IrModelField(models.Model):
+    _inherit = 'ir.model.fields'
+
+    protect_update = fields.Selection(
+        [('update', 'Updatable'),
+         ('similar', 'If similar'),
+         ('protect', 'Protected'),],
+        string='Protect field against update',
+        default='update',
+    )

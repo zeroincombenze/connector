@@ -20,6 +20,7 @@ class SynchroChannel(models.Model):
              "i.e. with prefix='vg7'\n"
              "<partner_id> means ID in Odoo\n"
              "<vg7_partner_id> means ID in counterpart\n",
+        copy=False,
         default='vg7')
     identity = fields.Selection(
         [('generic', 'Generic counterpart'),
@@ -28,15 +29,17 @@ class SynchroChannel(models.Model):
         ],
         'Counterpart identity',
         help="May activate some specific functions",
+        copy=False,
         default='vg7')
     company_id = fields.Many2one(
         'res.company', 'Company',
         help="Set company, if specific company channel",
+        copy=False,
         )
     client_key = fields.Char(
         'Client key',
         help="Client key assigned by 3th Party Sender")
-    password = fields.Char('Password')
+    password = fields.Char('Password', copy=False)
     counterpart_url = fields.Char(
         'Counterpart url',
         help="3th Party Sender URL to connect")
@@ -91,6 +94,14 @@ class SynchroChannelModelFields(models.Model):
         [('none', 'None'),
          ('vat', 'VAT')],
         string='Function to apply for supply value',
+        default='none',
+    )
+    protect = fields.Selection(
+        [('update', 'Updatable'),
+         ('similar', 'If similar'),
+         ('protect', 'Protected'),],
+        string='Protect field against update',
+        default='update',
     )
     model_id = fields.Many2one(
         'synchro.channel.model'
