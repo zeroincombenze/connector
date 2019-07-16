@@ -9,6 +9,7 @@
 # -4: unmodificable record
 # -5: invalid structure header/details
 # -6: unrecognized channel
+# -7: no data supplied
 #
 import os
 from datetime import datetime,timedelta
@@ -33,12 +34,21 @@ class IrModelSynchro(models.Model):
     _name = 'ir.model.synchro'
     _inherit = 'ir.model'
 
-    MAGIC_FIELDS = {'company_id': False,
-                    'is_company': True,
+    CONTEXT_FIELDS = {'company_id': False,
+                      'country_id': False,
+                      'is_company': True,
     }
     STRUCT = {}
     MANAGED_MODELS = {}
     LOGLEVEL = 'info'
+    SKEYS = {
+        'res.country.state': (['country_id', 'code'],),
+        'res.partner': (['name', 'vat'], ['vat'],),
+        'res.company': (['vat'],),
+        'account.account.type': (['type'],),
+        'product.template': (['name', 'default_code'],),
+        'product.product': (['name', 'default_code'],),
+    }
 
     def _build_unique_index(self, model, prefix):
         '''Build unique index on table to <vg7>_id for performance'''
@@ -88,6 +98,30 @@ class IrModelSynchro(models.Model):
             del vals[ext_ref]
         return vals
 
+    def tnl_2_loc_upper(self, vals, loc_name, ext_ref, default=None):
+        vals[loc_name] = vals[ext_ref].upper()
+        if loc_name != ext_ref:
+            del vals[ext_ref]
+        return vals
+
+    def tnl_2_loc_lower(self, vals, loc_name, ext_ref, default=None):
+        vals[loc_name] = vals[ext_ref].lower()
+        if loc_name != ext_ref:
+            del vals[ext_ref]
+        return vals
+
+    def tnl_2_loc_bool(self, vals, loc_name, ext_ref, default=None):
+        vals[loc_name] = os0.str2bool(vals[ext_ref], False)
+        if loc_name != ext_ref:
+            del vals[ext_ref]
+        return vals
+
+    def tnl_2_loc_not(self, vals, loc_name, ext_ref, default=None):
+        vals[loc_name] = not os0.str2bool(vals[ext_ref], True)
+        if loc_name != ext_ref:
+            del vals[ext_ref]
+        return vals
+
     def tnl_2_loc_person(self, vals, loc_name, ext_ref, default=None):
         '''First name and/or last name'''
         if loc_name != ext_ref:
@@ -122,28 +156,10 @@ class IrModelSynchro(models.Model):
         del vals[ext_ref]
         return vals
 
-    def tnl_2_loc_upper(self, vals, loc_name, ext_ref, default=None):
-        vals[loc_name] = vals[ext_ref].upper()
-        if loc_name != ext_ref:
-            del vals[ext_ref]
-        return vals
-
-    def tnl_2_loc_lower(self, vals, loc_name, ext_ref, default=None):
-        vals[loc_name] = vals[ext_ref].lower()
-        if loc_name != ext_ref:
-            del vals[ext_ref]
-        return vals
-
-    def tnl_2_loc_bool(self, vals, loc_name, ext_ref, default=None):
-        vals[loc_name] = os0.str2bool(vals[ext_ref], False)
-        if loc_name != ext_ref:
-            del vals[ext_ref]
-        return vals
-
-    def tnl_2_loc_not(self, vals, loc_name, ext_ref, default=None):
-        vals[loc_name] = not os0.str2bool(vals[ext_ref], True)
-        if loc_name != ext_ref:
-            del vals[ext_ref]
+    def tnl_2_loc_invoice_number(self, vals, loc_name, ext_ref, default=None):
+        '''Invoice number'''
+        if ext_ref in vals:
+            vals['move_name'] = vals[ext_ref]
         return vals
 
     def tnl_2_loc_journal(self, vals, loc_name, ext_ref, default=None):
@@ -232,6 +248,8 @@ class IrModelSynchro(models.Model):
                 self.STRUCT[model]['MODEL_WITH_DIMNAME'] = True
             elif field.name == 'company_id':
                 self.STRUCT[model]['MODEL_WITH_COMPANY'] = True
+            elif field.name == 'country_id':
+                self.STRUCT[model]['MODEL_WITH_COUNTRY'] = True
 
     def get_channels(self):
         self.LOGLEVEL = 'info'
@@ -295,7 +313,10 @@ class IrModelSynchro(models.Model):
             if model:
                 self.get_channel_model_fields(rec)
                 self.get_model_structure(model)
-
+        if model:
+            for channel_id in self.MANAGED_MODELS:
+                if self.MANAGED_MODELS[channel_id]['IDENTITY'] == 'odoo':
+                    self.set_odoo_model(model, channel_id)
 
     def get_channel_model_fields(self, model_rec):
         model = model_rec.name
@@ -339,6 +360,7 @@ class IrModelSynchro(models.Model):
         self.MANAGED_MODELS[channel_id][model]['EXT_FIELDS'] = {}
         self.MANAGED_MODELS[channel_id][model]['APPLY'] = {}
         self.MANAGED_MODELS[channel_id][model]['PROTECT'] = {}
+        skeys = ['name']
         for field in self.STRUCT[model]:
             if field <= 'Z':
                 continue
@@ -348,6 +370,15 @@ class IrModelSynchro(models.Model):
                 model]['EXT_FIELDS'][field] = field
             self.MANAGED_MODELS[channel_id][
                 model]['PROTECT'][field] = self.STRUCT[model][field]['protect']
+            if ((field == 'description' and model == 'account.tax') or
+                    field == 'code'):
+                skeys =[field]
+        if model in self.SKEYS:
+            self.MANAGED_MODELS[channel_id][model][
+                'SKEYS'] = self.SKEYS[model]
+        else:
+            self.MANAGED_MODELS[channel_id][model][
+                'SKEYS'] = [skeys]
 
     @api.model_cr_context
     def _init_self(self, model=None, cls=None):
@@ -396,6 +427,9 @@ class IrModelSynchro(models.Model):
                 int(self.MANAGED_MODELS[channel_id][model]['PROTECT'].get(
                     field, '0')))
             if (protect == 2 or (protect == 1 and rec[field])):
+                del vals[field]
+            elif (isinstance(vals[field], (basestring, int, long, bool)) and
+                    vals[field] == rec[field]):
                 del vals[field]
         return vals
 
@@ -457,16 +491,27 @@ class IrModelSynchro(models.Model):
                     rec.action_cancel()
         return rec.id
 
-    def get_rec_by_reference(self, model, key_name, value, company_id):
+    def get_rec_by_reference(self, model, key_name, value, ctx, ilike=None):
         ir_model = self.env[model]
-        where = [(key_name, '=', value)]
+        if ilike:
+            where = [(key_name, 'ilike', value)]
+        else:
+            where = [(key_name, '=', value)]
         if model not in ('res.partner', 'product.product', 'product.template'):
-            if key_name != 'id' and self.STRUCT[model].get('MODEL_WITH_COMPANY'):
-                where.append(('company_id', '=', company_id))
-        return ir_model.search(where)
+            if (key_name != 'id' and ctx.get('company_id') and
+                    self.STRUCT[model].get('MODEL_WITH_COMPANY')):
+                where.append(('company_id', '=', ctx['company_id']))
+        if (key_name != 'id' and ctx.get('country_id') and
+                self.STRUCT[model].get('MODEL_WITH_COUNTRY')):
+            where.append(('country_id', '=', ctx['country_id']))
+        rec = ir_model.search(where)
+        if not rec and not ilike and key_name == 'name':
+            return self.get_rec_by_reference(model, key_name, value, ctx,
+                                             ilike=True)
+        return rec
 
     def bind_foreign_text(self, model, value, is_foreign,
-                          channel_id, company_id):
+                          channel_id, ctx):
         if value.isdigit():
             return int(value)
         ir_model = self.env[model]
@@ -476,18 +521,22 @@ class IrModelSynchro(models.Model):
         else:
             key_name = 'name'
         new_value = False
-        rec = self.get_rec_by_reference(model, key_name, value, company_id)
+        rec = self.get_rec_by_reference(model, key_name, value, ctx)
         if rec:
             new_value = rec[0].id
         if not new_value and model in self.MANAGED_MODELS[channel_id]:
             vals = {key_name: value}
-            if self.STRUCT[model].get('MODEL_WITH_COMPANY'):
-                vals['company_id'] = company_id
+            if (self.STRUCT[model].get('MODEL_WITH_COMPANY') and
+                    ctx.get('company_id')):
+                vals['company_id'] = ctx['company_id']
+            if (self.STRUCT[model].get('MODEL_WITH_COUNTRY') and
+                    ctx.get('country_id')):
+                vals['country_id'] = ctx['country_id']
             new_value = self.synchro(ir_model, vals)
         return new_value
 
     def bind_foreign_ref(self, model, value, ext_id, is_foreign,
-                         channel_id, company_id):
+                         channel_id, ctx):
         new_value = False
         ir_model = self.env[model]
         if is_foreign:
@@ -503,12 +552,14 @@ class IrModelSynchro(models.Model):
                 'name': 'Unknown %d' % value,
             }
             if self.STRUCT[model].get('MODEL_WITH_COMPANY'):
-                vals['company_id'] = company_id
+                vals['company_id'] = ctx['company_id']
             new_value = self.synchro(ir_model, vals)
         return new_value
 
     def get_foreign_value(self, model, channel_id, value,
-                         is_foreign, ext_id, company_id, tomany=None):
+                         is_foreign, ext_id, ctx, tomany=None):
+        self.logmsg(channel_id, 'get_foreign_value(%s,%s,%s)' % (
+                    model, value, ext_id))
         if not value:
             return value
         self.get_model_structure(model)
@@ -516,49 +567,49 @@ class IrModelSynchro(models.Model):
         new_value = False
         if isinstance(value, basestring):
             new_value = self.bind_foreign_text(
-                model, value, is_foreign, channel_id, company_id)
+                model, value, is_foreign, channel_id, ctx)
             if tomany:
                 new_value = [new_value]
         elif isinstance(model, (list, tuple)):
             new_value = []
             for id in value:
                 new_value.append(self.bind_foreign_ref(
-                    model, id, ext_id, is_foreign, channel_id, company_id))
+                    model, id, ext_id, is_foreign, channel_id, ctx))
         else:
             new_value = self.bind_foreign_ref(
-                model, value, ext_id, is_foreign, channel_id, company_id)
+                model, value, ext_id, is_foreign, channel_id, ctx)
         return new_value
 
     def cvt_m2o_value(self, model, name, value,
-                      channel_id, ext_id, is_foreign, company_id, format=None):
+                      channel_id, ext_id, is_foreign, ctx, format=None):
         relation = self.STRUCT[model][name]['relation']
         if not relation:
             raise RuntimeError('No relation for field %s of %s' % (name,
                                                                    model))
         return self.get_foreign_value(relation, channel_id, value,
-                                    is_foreign, ext_id, company_id)
+                                    is_foreign, ext_id, ctx)
 
     def cvt_m2m_value(self, model, name, value,
-                      channel_id, ext_id, is_foreign, company_id, format=None):
+                      channel_id, ext_id, is_foreign, ctx, format=None):
         relation = self.STRUCT[model][name]['relation']
         if not relation:
             raise RuntimeError('No relation for field %s of %s' % (name,
                                                                    model))
         value = self.get_foreign_value(relation, channel_id, value,
-                                       is_foreign, ext_id, company_id,
+                                       is_foreign, ext_id, ctx,
                                        tomany=True)
         if format == 'cmd' and value:
             value = [(6, 0, value)]
         return value
 
     def cvt_o2m_value(self, model, name, value,
-                      channel_id, ext_id, is_foreign, company_id, format=None):
+                      channel_id, ext_id, is_foreign, ctx, format=None):
         relation = self.STRUCT[model][name]['relation']
         if not relation:
             raise RuntimeError('No relation for field %s of %s' % (name,
                                                                    model))
         value = self.get_foreign_value(relation, channel_id, value,
-                                       is_foreign, ext_id, company_id,
+                                       is_foreign, ext_id, ctx,
                                        tomany=True)
         if format == 'cmd' and value:
             value = [(6, 0, value)]
@@ -608,6 +659,8 @@ class IrModelSynchro(models.Model):
 
     def get_default_n_apply(self, model, channel_from, loc_name, ext_name,
                             ttype=None):
+        if model not in self.MANAGED_MODELS[channel_from]:
+            return '', ''
         default = self.MANAGED_MODELS[
             channel_from][model]['APPLY'].get(loc_name or
                                               '.%s' % ext_name, '')
@@ -638,13 +691,13 @@ class IrModelSynchro(models.Model):
                             ext_ref.startswith(prefix2)):
                         channel_from = channel_id
                         break
-            if not channel_id and odoo_channel:
-                channel_id = odoo_channel
-                prefix1 = '%s_' % self.MANAGED_MODELS[channel_id]['PREFIX']
-                prefix2 = '%s:' % self.MANAGED_MODELS[channel_id]['PREFIX']
+            if not channel_from and odoo_channel is not False:
+                channel_from = odoo_channel
+                prefix1 = '%s_' % self.MANAGED_MODELS[channel_from]['PREFIX']
+                prefix2 = '%s:' % self.MANAGED_MODELS[channel_from]['PREFIX']
             return channel_from, prefix1, prefix2
 
-        def process_fields(model, channel_from, vals, company_id, ext_id,
+        def process_fields(model, channel_from, vals, ext_id, ctx,
                            field_list=None, excl_list=None):
             for ext_ref in vals.copy():
                 ext_name, loc_name, is_foreign, loc_ext_ref = \
@@ -690,7 +743,7 @@ class IrModelSynchro(models.Model):
                             vals[loc_ext_ref] = vals[ext_ref]
                             del vals[ext_ref]
                         rec = self.get_rec_by_reference(
-                            model, loc_ext_ref, vals[loc_ext_ref], company_id)
+                            model, loc_ext_ref, vals[loc_ext_ref], ctx)
                         if rec:
                             vals[loc_name] = rec[0][loc_ext_ref]
                             vals['id'] = rec[0].id
@@ -702,21 +755,21 @@ class IrModelSynchro(models.Model):
                 if self.STRUCT[model][loc_name]['ttype'] == 'one2many':
                     vals[loc_name] = self.cvt_o2m_value(
                         model, loc_name, vals[ext_ref],
-                        channel_from, ext_id, is_foreign, company_id,
+                        channel_from, ext_id, is_foreign, ctx,
                         format='cmd')
                     if is_foreign or loc_name != ext_name:
                         del vals[ext_ref]
                 elif self.STRUCT[model][loc_name]['ttype'] == 'many2many':
                     vals[loc_name] = self.cvt_m2m_value(
                         model, loc_name, vals[ext_ref],
-                        channel_from, ext_id, is_foreign, company_id,
+                        channel_from, ext_id, is_foreign, ctx,
                         format='cmd')
                     if is_foreign or loc_name != ext_name:
                         del vals[ext_ref]
                 elif self.STRUCT[model][loc_name]['ttype'] == 'many2one':
                     vals[loc_name] = self.cvt_m2o_value(
                         model, loc_name, vals[ext_ref],
-                        channel_from, ext_id, is_foreign, company_id,
+                        channel_from, ext_id, is_foreign, ctx,
                         format='cmd')
                     if is_foreign or loc_name != ext_name:
                         del vals[ext_ref]
@@ -735,24 +788,36 @@ class IrModelSynchro(models.Model):
                     else:
                         vals[loc_name] = vals[ext_ref]
                         del vals[ext_ref]
+            for loc_name in ctx:
+                if loc_name not in vals and loc_name in self.STRUCT[model]:
+                    if (loc_name != 'company_id' or
+                            model not in ('res.partner',
+                                          'product.product',
+                                          'product.template')):
+                        vals[loc_name] = ctx[loc_name]
             return vals
 
         channel_from, prefix1, prefix2 = search_4_channel(vals)
         if channel_from is False:
             return vals, False, False
         ext_id = '%s_id' % self.MANAGED_MODELS[channel_from]['PREFIX']
+        ctx = {}
         if 'company_id' in vals:
-            company_id = vals['company_id']
+            ctx['company_id'] = vals['company_id']
         else:
-            company_id =  self.MANAGED_MODELS[channel_from]['COMPANY_ID']
-        vals = process_fields(model, channel_from, vals, company_id, ext_id,
-                              field_list=('company_id',
-                                          'country_id',
-                                          'street'))
-        vals = process_fields(model, channel_from, vals, company_id, ext_id,
-                              excl_list=('company_id',
-                                         'country_id',
-                                         'street'))
+            ctx['company_id'] =  self.MANAGED_MODELS[
+                channel_from]['COMPANY_ID']
+        if ctx['company_id']:
+            ctx['country_id'] = self.env[
+                'res.company'].browse(
+                    ctx['company_id']).partner_id.country_id.id
+        else:
+            ctx['country_id'] = False
+        self.logmsg(channel_from, 'ctx=%s' % ctx)
+        vals = process_fields(model, channel_from, vals, ext_id, ctx,
+                              field_list=(ctx.keys() + ['street']))
+        vals = process_fields(model, channel_from, vals, ext_id, ctx,
+                              excl_list=(ctx.keys() + ['street']))
         if (model == 'product.product' and
                 vals.get('name') and
                 ext_id in vals and
@@ -809,11 +874,11 @@ class IrModelSynchro(models.Model):
                     where.append(('dim_name',
                                   '=',
                                   self.dim_text(vals['name'])))
-                elif key not in vals and key in self.MAGIC_FIELDS:
+                elif key not in vals and key in self.CONTEXT_FIELDS:
                     if key == 'company_id':
                         where.append((key, '=', company_id))
-                    elif self.MAGIC_FIELDS[key]:
-                        where.append((key, '=', self.MAGIC_FIELDS[key]))
+                    elif self.CONTEXT_FIELDS[key]:
+                        where.append((key, '=', self.CONTEXT_FIELDS[key]))
                 elif key not in vals:
                     where = []
                     break
@@ -941,8 +1006,8 @@ class IrModelSynchro(models.Model):
             self.STRUCT = {}
             self.MANAGED_MODELS = {}
             return -6
-        if self.MANAGED_MODELS[channel_id]['IDENTITY'] == 'odoo':
-            self.set_odoo_model(model, channel_id)
+        # if self.MANAGED_MODELS[channel_id]['IDENTITY'] == 'odoo':
+        #     self.set_odoo_model(model, channel_id)
         id = -1
         rec = None
         if 'id' in vals:
@@ -966,10 +1031,11 @@ class IrModelSynchro(models.Model):
         if id > 0:
             try:
                 rec = ir_model.browse(id)
-                rec.write(self.drop_protected_fields(
-                    rec, vals, model, channel_id))
-                self.logmsg(channel_id,
-                            '>>> synchro: %s.write(%s)' % (model, vals))
+                vals = self.drop_protected_fields(rec, vals, model, channel_id)
+                if vals:
+                    rec.write(vals)
+                    self.logmsg(channel_id,
+                                '>>> synchro: %s.write(%s)' % (model, vals))
                 if lines_of_rec and hasattr(rec, lines_of_rec):
                     for line in rec[lines_of_rec]:
                         if not hasattr(line, 'to_delete'):
@@ -981,14 +1047,17 @@ class IrModelSynchro(models.Model):
                 return -2
         else:
             vals = self.set_default_values(model, vals, channel_id)
-            try:
-                id = ir_model.create(vals).id
-                self.logmsg(
-                    channel_id,
-                    '>>> synchro: %d=%s.create(%s)' % (id, model, vals))
-            except BaseException, e:
-                _logger.error('%s creating %s' % (e, model))
-                return -1
+            if vals:
+                try:
+                    id = ir_model.create(vals).id
+                    self.logmsg(
+                        channel_id,
+                        '>>> synchro: %d=%s.create(%s)' % (id, model, vals))
+                except BaseException, e:
+                    _logger.error('%s creating %s' % (e, model))
+                    return -1
+            else:
+                return -7
         return id
 
     @api.model
@@ -1108,9 +1177,23 @@ class IrModelField(models.Model):
     @api.model_cr_context
     def _auto_init(self):
         res = super(IrModelField, self)._auto_init()
+
         self._cr.execute("""UPDATE ir_model_fields set protect_update='2'
         where name not like '____id' and model_id in
         (select id from ir_model where model='res.country');
+        """)
+
+        self._cr.execute("""UPDATE ir_model_fields set protect_update='2'
+        where name not like '____id' and model_id in
+        (select id from ir_model where model='res.country.state');
+        """)
+
+        self._cr.execute("""UPDATE ir_model_fields set protect_update='0'
+        where name not in ('type', 'categ_id', 'uom_id', 'uom_po_id',
+        'purchase_method', 'invoice_policy', 'property_account_income_id',
+        'taxes_id', 'property_account_expense_id', 'supplier_taxes_id')
+        and model_id in
+        (select id from ir_model where model='product_product');
         """)
 
         self._cr.execute("""UPDATE ir_model_fields set protect_update='2'

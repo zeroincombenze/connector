@@ -31,3 +31,24 @@ class ResCountry(models.Model):
     @api.model
     def synchro(self, vals):
         return self.env['ir.model.synchro'].synchro(self, vals)
+
+
+class ResCountryState(models.Model):
+    _inherit = "res.country.state"
+
+    vg7_id = fields.Integer('VG7 ID', copy=False)
+    oe7_id = fields.Integer('Odoo7 ID', copy=False)
+
+    CONTRAINTS = []
+
+    @api.model_cr_context
+    def _auto_init(self):
+        res = super(ResCountryState, self)._auto_init()
+        for prefix in ('vg7', 'oe7'):
+            self.env['ir.model.synchro']._build_unique_index(self._inherit,
+                                                             prefix)
+        return res
+
+    @api.model
+    def synchro(self, vals):
+        return self.env['ir.model.synchro'].synchro(self, vals)

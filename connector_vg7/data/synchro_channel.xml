@@ -30,7 +30,7 @@
     <record forcecreate="1" id="res_country_state" model="synchro.channel.model">
         <field name="name">res.country.state</field>
         <field name="field_uname">name</field>
-        <field name="search_keys">(['name'],['code'],['dim_name'],)</field>
+        <field name="search_keys">(['name'],['code', 'country_id'],['dim_name'],)</field>
         <field name="sequence">8</field>
         <field name="synchro_channel_id" ref="channel_vg7"/>
     </record>
@@ -98,7 +98,7 @@
     <record forcecreate="1" id="account_invoice" model="synchro.channel.model">
         <field name="name">account.invoice</field>
         <field name="field_uname">number</field>
-        <field name="search_keys">(['number'],['account_move'],)</field>
+        <field name="search_keys">(['number'],['move_name'],)</field>
         <field name="synchro_channel_id" ref="channel_vg7"/>
     </record>
 
@@ -191,6 +191,7 @@
 
     <record forcecreate="1" id="res_country_state_name" model="synchro.channel.model.fields">
         <field name="name">name</field>
+        <field name="protect">2</field>
         <field name="model_id" ref="res_country_state"/>
     </record>
 
@@ -469,6 +470,7 @@
 
     <record forcecreate="1" id="account_invoice_number" model="synchro.channel.model.fields">
         <field name="name">number</field>
+        <field name="apply">invoice_number()</field>
         <field name="model_id" ref="account_invoice"/>
     </record>
 
