@@ -29,14 +29,7 @@ class AccountTax(models.Model):
                            store=True,
                            readonly=True)
 
-    SKEYS = (['description'],
-             ['name'],
-             ['dim_name'],)
     CONTRAINTS = []
-    KEEP = []
-    DEFAULT = {
-        'amount': 0,
-    }
 
     @api.model_cr_context
     def _auto_init(self):

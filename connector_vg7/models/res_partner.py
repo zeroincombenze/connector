@@ -28,26 +28,7 @@ class ResPartner(models.Model):
                            store=True,
                            readonly=True)
 
-    SKEYS = (['vat', 'fiscalcode', 'is_company', 'type'],
-             ['vat', 'fiscalcode', 'is_company'],
-             ['rea_code'],
-             ['vat', 'name', 'is_company', 'type'],
-             ['fiscalcode', 'type'],
-             ['vat', 'is_company'],
-             ['name', 'is_company'],
-             ['vat'],
-             ['name'],
-             ['dim_name'],)
     CONTRAINTS = (['id', '!=', 'parent_id'])
-    KEEP = ['customer', 'country_id',
-            'name', 'street', 'zip',
-            'city', 'state_id',
-           ]
-    DEFAULT = {
-        'rea_member_type': 'SM',
-        'rea_liquidation_state': 'LN',
-        'type': 'contact',
-        }
 
     @api.model_cr_context
     def _auto_init(self):

@@ -29,12 +29,7 @@ class AccountAccount(models.Model):
                            store=True,
                            readonly=True)
 
-    SKEYS = (['code'],
-             ['name'],
-             ['dim_name'],)
     CONTRAINTS = []
-    KEEP = []
-    DEFAULT = {}
 
     @api.model_cr_context
     def _auto_init(self):
@@ -82,11 +77,7 @@ class AccountAccountType(models.Model):
                            store=True,
                            readonly=True)
 
-    SKEYS = (['name'],
-             ['dim_name'])
     CONTRAINTS = []
-    KEEP = []
-    DEFAULT = {}
 
     @api.model_cr_context
     def _auto_init(self):

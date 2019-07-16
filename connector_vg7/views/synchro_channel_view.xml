@@ -39,6 +39,7 @@
                         <field name="name"/>
                         <field name="counterpart_name"/>
                         <field name="field_uname"/>
+                        <field name="field_2complete"/>
                         <field name="sequence"/>
                     </tree>
                 </field>
@@ -76,6 +77,7 @@
                     <field name="name"/>
                     <field name="counterpart_name"/>
                     <field name="field_uname"/>
+                    <field name="search_keys"/>
                     <field name="field_2complete"/>
                     <field name="sequence"/>
                     <field name="synchro_channel_id"/>

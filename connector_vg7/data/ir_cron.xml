@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<odoo noupdate="0">
+<odoo noupdate="1">
 
         <record id="action_pull_recs_2_complete" model="ir.cron">
             <field name="name">Complete the synchronized records</field>

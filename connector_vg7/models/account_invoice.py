@@ -13,13 +13,7 @@ class AccountInvoice(models.Model):
     oe7_id = fields.Integer('Odoo7 ID', copy=False)
     original_state = fields.Char('Original Status')
 
-    SKEYS = (['number'])
     CONTRAINTS = []
-    KEEP = []
-    DEFAULT = {
-        'journal_id': '',
-        'type': 'out_invoice',
-    }
     LINES_OF_REC = 'invoice_line_ids'
     LINE_MODEL = 'account.invoice.line'
 
@@ -47,14 +41,7 @@ class AccountInvoiceLine(models.Model):
     oe7_id = fields.Integer('Odoo7 ID', copy=False)
     to_delete = fields.Boolean('Record to delete')
 
-    SKEYS = (['invoice_id', 'sequence'])
     CONTRAINTS = []
-    KEEP = []
-    DEFAULT = {
-        'account_id': '',
-        'uom_id': '',
-        'invoice_line_tax_ids': '',
-    }
     PARENT_ID = 'invoice_id'
 
     @api.model_cr_context

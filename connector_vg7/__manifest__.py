@@ -22,8 +22,14 @@
         'views/sale_order_view.xml',
         'views/account_tax_view.xml',
         'views/synchro_channel_view.xml',
+        'views/model_view.xml',
         'data/synchro_channel.xml',
         'data/ir_cron.xml',
     ],
+    'external_dependencies': {
+        'python': [
+            'os0',
+        ],
+    },
     'installable': True,
 }

@@ -29,23 +29,7 @@ class ProductTemplate(models.Model):
                            store=True,
                            readonly=True)
 
-    SKEYS = (['name', 'default_code'],
-             ['name', 'barcode'],
-             ['name'],
-             ['dim_name'],
-             ['barcode'],
-             ['default_code'])
     CONTRAINTS = ()
-    KEEP = ['type', 'categ_id',
-            'name', 'uom_id', 'uom_po_id',
-            'purchase_method', 'invoice_policy',
-            'property_account_income_id', 'taxes_id',
-            'property_account_expense_id', 'supplier_taxes_id',
-           ]
-    DEFAULT = {
-        'type': 'consu',
-        'invoice_policy': 'delivery',
-    }
     LINES_OF_REC = False
     LINE_MODEL = False
 
@@ -94,21 +78,7 @@ class ProductProduct(models.Model):
                            store=True,
                            readonly=True)
 
-    SKEYS = (['name', 'default_code'],
-             ['name', 'barcode'],
-             ['name'],
-             ['dim_name'],
-             ['barcode'],
-             ['default_code'])
     CONTRAINTS = ()
-    KEEP = ['type', 'categ_id',
-            'name', 'uom_id', 'uom_po_id',
-            'purchase_method', 'invoice_policy',
-            'property_account_income_id', 'taxes_id',
-            'property_account_expense_id', 'supplier_taxes_id',
-           ]
-    DEFAULT = {
-    }
 
     @api.model_cr_context
     def _auto_init(self):

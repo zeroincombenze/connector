@@ -44,7 +44,7 @@ class SynchroChannel(models.Model):
         'Counterpart url',
         help="3th Party Sender URL to connect")
     produtc_without_variants = fields.Boolean('Products without variants')
-    sequence=fields.Integer('Priority', default=16)
+    sequence = fields.Integer('Priority', default=16)
     active = fields.Boolean(string='Active',
                             default=True)
     trace = fields.Boolean(
@@ -67,13 +67,21 @@ class SynchroChannelModel(models.Model):
         'Odoo model name',
         required=True,
     )
-    field_uname = fields.Char(
+    field_uname = fields.Text(
         'Field for search with unique name',
         required=True,
     )
+    search_keys = fields.Char(
+        'Pythonic key search sequence',
+        required=True,
+        help='Sequence to use in search record when not yet synchronized\n'
+             'i.e. (["name","compandy_id"],["name"])\n'
+             'will search for record with name and company keys; if not found'
+             'search for record just with name'
+    )
     counterpart_name = fields.Char('Counterpart model name')
     field_2complete = fields.Char('Model to complete asynchronously')
-    sequence=fields.Integer('Priority', default=16)
+    sequence = fields.Integer('Priority', default=16)
     synchro_channel_id = fields.Many2one('synchro.channel')
     field_ids = fields.One2many(
         'synchro.channel.model.fields', 'model_id',
@@ -85,23 +93,22 @@ class SynchroChannelModelFields(models.Model):
     _name = 'synchro.channel.model.fields'
     _description = "Field mapping for Synchonization"
 
-    name = fields.Char(
-        'Odoo field name',
-        required=True,
-    )
+    name = fields.Char('Odoo field name')
     counterpart_name = fields.Char('Counterpart field name')
-    apply = fields.Selection(
-        [('none', 'None'),
-         ('vat', 'VAT')],
-        string='Function to apply for supply value',
-        default='none',
+    apply = fields.Char(
+        string='Function to apply for supply value or default value.',
+        help='Function are in format "name()".\n'
+             'Avaiable functions are:\n'
+             'vat(), upper(), lower(), street_number(), bool()\n'
+             'person(), journal(), account(), uom(), tax()\n',
+        default='',
     )
     protect = fields.Selection(
-        [('update', 'Updatable'),
-         ('similar', 'If similar'),
-         ('protect', 'Protected'),],
+        [('0', 'Updatable'),
+         ('1', 'If empty'),
+         ('2', 'Protected'),],
         string='Protect field against update',
-        default='update',
+        default='0',
     )
     model_id = fields.Many2one(
         'synchro.channel.model'

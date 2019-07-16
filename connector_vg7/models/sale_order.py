@@ -14,9 +14,7 @@ class SaleOrder(models.Model):
     oe7_id = fields.Integer('Odoo7 ID', copy=False)
     original_state = fields.Char('Original Status')
 
-    SKEYS = (['name'])
     CONTRAINTS = []
-    KEEP = []
     DEFAULT = {}
 
     @api.model_cr_context
@@ -43,12 +41,7 @@ class SaleOrderLine(models.Model):
     oe7_id = fields.Integer('Odoo7 ID', copy=False)
     to_delete = fields.Boolean('Record to delete')
 
-    SKEYS = (['order_id', 'sequence'])
     CONTRAINTS = []
-    KEEP = []
-    DEFAULT = {
-        'product_uom': '',
-    }
 
     @api.model_cr_context
     def _auto_init(self):
