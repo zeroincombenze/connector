@@ -4,7 +4,7 @@
 {
     'name': 'connector_vg7',
     'summary': 'Bidirectional connector to/from VG7 software',
-    'version': '10.0.0.1.4',
+    'version': '10.0.0.1.5',
     'category': 'Generic Modules',
     'author': 'SHS-AV s.r.l.',
     'website': 'https://www.zeroincombenze.it/',

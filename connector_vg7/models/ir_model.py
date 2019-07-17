@@ -799,6 +799,7 @@ class IrModelSynchro(models.Model):
 
         channel_from, prefix1, prefix2 = search_4_channel(vals)
         if channel_from is False:
+            _logger.info('> No valid channel detected')
             return vals, False, False
         ext_id = '%s_id' % self.MANAGED_MODELS[channel_from]['PREFIX']
         ctx = {}
@@ -997,8 +998,8 @@ class IrModelSynchro(models.Model):
         if has_2delete:
             vals['to_delete'] = False
         lines_of_rec = self.STRUCT[model].get('LINES_OF_REC', False)
-        if self.LOGLEVEL == 'debug':
-            self.show_debug(0, model)
+        # if self.LOGLEVEL == 'debug':
+        #     self.show_debug(0, model)
 
         ir_model = self.env[model]
         vals, ext_id, channel_id = self.bind_to_internal(model, vals)
@@ -1095,7 +1096,9 @@ class IrModelSynchro(models.Model):
         self._init_self()
         for channel_id in self.MANAGED_MODELS:
             for model in self.MANAGED_MODELS[channel_id]:
-                if not self.STRUCT[model]['MODEL_WITH_NAME']:
+                if model <= 'Z':
+                    continue
+                if not self.STRUCT[model].get('MODEL_WITH_NAME'):
                     continue
                 ir_model = self.env[model]
                 recs = ir_model.search([('name', 'like', 'Unknown ')])
@@ -1133,6 +1136,8 @@ class IrModelSynchro(models.Model):
                     order='sequence')]
             # for model in self.MANAGED_MODELS[channel_id]:
             for model in model_list:
+                if model <= 'Z':
+                    continue
                 self._init_self(model=model)
                 if not self.MANAGED_MODELS[
                         channel_id][model].get('2PULL', False):
@@ -1151,11 +1156,14 @@ class IrModelSynchro(models.Model):
                         self.logmsg(channel_id,
                                     'Data received of model %s w/o id' %
                                     model)
+                        continue
                     if isinstance(data['id'], (int, long)):
                         id = data['id']
                     else:
                         id = int(data['id'])
-                    if not ir_model.search([('id', '=', id)]):
+                    ext_id = '%s_id' % self.MANAGED_MODELS[
+                        channel_id]['IDENTITY']
+                    if not ir_model.search([(ext_id, '=', id)]):
                         ir_model.synchro(self.prefix_bind(
                             self.MANAGED_MODELS[channel_id]['PREFIX'],
                             data))
