@@ -752,6 +752,7 @@ class IrModelSynchro(models.Model):
                     # Counterpart one can supply both local and external value
                     elif loc_name in vals:
                         del vals[ext_ref]
+                        continue
                 if self.STRUCT[model][loc_name]['ttype'] == 'one2many':
                     vals[loc_name] = self.cvt_o2m_value(
                         model, loc_name, vals[ext_ref],
@@ -1082,7 +1083,7 @@ class IrModelSynchro(models.Model):
         if self.STRUCT[model_line].get('MODEL_2DELETE'):
             for rec in ir_model.search([(parent_id, '=', id),
                                         ('to_delete', '=', True)]):
-                ir_model.unlink(rec.id)
+                rec.unlink()
         return self.set_actual_state(model, rec_2_commit)
 
     def prefix_bind(self, prefix, data):
