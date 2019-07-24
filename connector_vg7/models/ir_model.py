@@ -93,19 +93,26 @@ class IrModelSynchro(models.Model):
             _logger.debug(msg)
 
     def tnl_2_loc_set_value(self, vals, loc_name, ext_ref, default=None):
-        vals[loc_name] = default
+        if default:
+            vals[loc_name] = default
         if loc_name != ext_ref:
             del vals[ext_ref]
         return vals
 
     def tnl_2_loc_upper(self, vals, loc_name, ext_ref, default=None):
-        vals[loc_name] = vals[ext_ref].upper()
+        if isinstance(vals[ext_ref], basestring): 
+            vals[loc_name] = vals[ext_ref].upper()
+        else:
+            vals[loc_name] = vals[ext_ref]
         if loc_name != ext_ref:
             del vals[ext_ref]
         return vals
 
     def tnl_2_loc_lower(self, vals, loc_name, ext_ref, default=None):
-        vals[loc_name] = vals[ext_ref].lower()
+        if isinstance(vals[ext_ref], basestring):
+            vals[loc_name] = vals[ext_ref].lower()
+        else:
+            vals[loc_name] = vals[ext_ref]
         if loc_name != ext_ref:
             del vals[ext_ref]
         return vals
@@ -137,7 +144,9 @@ class IrModelSynchro(models.Model):
 
     def tnl_2_loc_vat(self, vals, loc_name, ext_ref, default=None):
         '''External vat may not contain ISO code'''
-        if len(vals[ext_ref]) == 11 and vals[ext_ref].isdigit():
+        if (isinstance(vals[ext_ref], basestring) and
+                len(vals[ext_ref]) == 11 and
+                vals[ext_ref].isdigit()):
             vals[loc_name] = 'IT%s' % vals[ext_ref]
         else:
             vals[loc_name] = vals[ext_ref]
