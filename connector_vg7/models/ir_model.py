@@ -12,34 +12,32 @@
 # -7: no data supplied
 #
 import os
-from datetime import datetime,timedelta
+from datetime import datetime, timedelta
 import requests
-import json
 import logging
-from os0 import os0
 from odoo import fields, models, api
-from odoo.exceptions import UserError
+# from odoo.exceptions import UserError
 _logger = logging.getLogger(__name__)
-
 try:
     from unidecode import unidecode
 except ImportError as err:
     _logger.debug(err)
-
-
-EXPIRATION_TIME = 3
+try:
+    from os0 import os0
+except ImportError as err:
+    _logger.debug(err)
+import pdb
 
 
 class IrModelSynchro(models.Model):
     _name = 'ir.model.synchro'
     _inherit = 'ir.model'
 
-    CONTEXT_FIELDS = {'company_id': False,
-                      'country_id': False,
-                      'is_company': True,
+    CONTEXT_FIELDS = {
+        'company_id': False,
+        'country_id': False,
+        'is_company': True,
     }
-    STRUCT = {}
-    MANAGED_MODELS = {}
     LOGLEVEL = 'info'
     SKEYS = {
         'res.country.state': (['country_id', 'code'],),
@@ -57,12 +55,12 @@ class IrModelSynchro(models.Model):
         else:
             table = model.replace('.', '_')
         index_name = '%s_unique_%s' % (table, prefix)
-        self._cr.execute(
+        self._cr.execute(                               # pylint: disable=E8103
             "SELECT indexname FROM pg_indexes WHERE indexname = '%s'" %
             index_name
         )
         if not self._cr.fetchone():
-            self._cr.execute(
+            self._cr.execute(                           # pylint: disable=E8103
                 "CREATE UNIQUE INDEX %s on %s (%s_id) where %s_id<>0" %
                 (index_name, table, prefix, prefix)
             )
@@ -83,8 +81,10 @@ class IrModelSynchro(models.Model):
         return text
 
     def logmsg(self, channel_id, msg):
+        cache = self.env['ir.model.synchro.cache']
         if channel_id:
-            loglevel = self.MANAGED_MODELS[channel_id]['LOGLEVEL']
+            loglevel = cache.get_attr(channel_id, 'LOGLEVEL', default='info')
+            self.LOGLEVEL = loglevel
         else:
             loglevel = self.LOGLEVEL
         if loglevel == 'info':
@@ -100,7 +100,7 @@ class IrModelSynchro(models.Model):
         return vals
 
     def tnl_2_loc_upper(self, vals, loc_name, ext_ref, default=None):
-        if isinstance(vals[ext_ref], basestring): 
+        if isinstance(vals[ext_ref], basestring):
             vals[loc_name] = vals[ext_ref].upper()
         else:
             vals[loc_name] = vals[ext_ref]
@@ -217,203 +217,6 @@ class IrModelSynchro(models.Model):
                 vals[loc_name] = [(6, 0, [tax.id])]
         return vals
 
-    def get_model_structure(self, model, ignore=None):
-        '''Store model structure in memory'''
-        ignore = ignore or []
-        if (self.STRUCT.get(model, {}) and
-                datetime.now() < self.STRUCT[model]['EXPIRE']):
-            return
-        self.STRUCT[model] = self.STRUCT.get(model, {})
-        self.STRUCT[model]['EXPIRE'] = datetime.now() + timedelta(
-            minutes=(EXPIRATION_TIME + 3))
-        ir_model = self.env['ir.model.fields']
-        for field in ir_model.search([('model', '=', model)]):
-            required = field.required
-            readonly = field.readonly
-            readonly = readonly or field.ttype in ('binary', 'reference')
-            if field.name in ignore:
-                readonly = True
-            self.STRUCT[model][field.name] = {
-                'ttype': field.ttype,
-                'relation': field.relation,
-                'required': required,
-                'readonly': readonly,
-                'protect': field.protect_update,
-                }
-            if field.relation and field.relation.startswith(model):
-                self.STRUCT[model]['LINES_OF_REC'] = field.name
-                self.STRUCT[model]['LINE_MODEL'] = field.relation
-            elif field.relation and model.startswith(field.relation):
-                self.STRUCT[model]['PARENT_ID'] = field.name
-            if field.name == 'original_state':
-                self.STRUCT[model]['MODEL_STATE'] = True
-            elif field.name == 'to_delete':
-                self.STRUCT[model]['MODEL_2DELETE'] = True
-            elif field.name == 'name':
-                self.STRUCT[model]['MODEL_WITH_NAME'] = True
-            elif field.name == 'active':
-                self.STRUCT[model]['MODEL_WITH_ACTIVE'] = True
-            elif field.name == 'dim_name':
-                self.STRUCT[model]['MODEL_WITH_DIMNAME'] = True
-            elif field.name == 'company_id':
-                self.STRUCT[model]['MODEL_WITH_COMPANY'] = True
-            elif field.name == 'country_id':
-                self.STRUCT[model]['MODEL_WITH_COUNTRY'] = True
-
-    def get_channels(self):
-        self.LOGLEVEL = 'info'
-        for channel in self.env['synchro.channel'].search([]):
-            if (channel.id in self.MANAGED_MODELS):
-                if channel.trace:
-                    self.LOGLEVEL = 'debug'
-                if (datetime.now() < self.MANAGED_MODELS[
-                        channel.id]['EXPIRE']):
-                    continue
-            self.MANAGED_MODELS[channel.id] = {}
-            self.MANAGED_MODELS[channel.id]['EXPIRE'] = datetime.now(
-                ) + timedelta(minutes=EXPIRATION_TIME*10)
-            self.MANAGED_MODELS[channel.id]['PREFIX'] = channel.prefix
-            self.MANAGED_MODELS[channel.id]['IDENTITY'] = channel.identity
-            if channel.company_id:
-                self.MANAGED_MODELS[channel.id][
-                    'COMPANY_ID'] = channel.company_id.id
-            else:
-                self.MANAGED_MODELS[channel.id][
-                    'COMPANY_ID'] = self.env.user.company_id.id
-            self.MANAGED_MODELS[channel.id]['CLIENT_KEY'] = channel.client_key
-            self.MANAGED_MODELS[channel.id][
-                'COUNTERPART_URL'] = channel.counterpart_url
-            self.MANAGED_MODELS[channel.id]['PASSWORD'] = channel.password
-            if channel.produtc_without_variants:
-                self.MANAGED_MODELS[channel.id]['NO_VARIANTS'] = True
-            if channel.trace:
-                self.MANAGED_MODELS[channel.id]['LOGLEVEL'] = 'debug'
-                self.LOGLEVEL = 'debug'
-            else:
-                self.MANAGED_MODELS[channel.id]['LOGLEVEL'] = 'info'
-
-    def get_channel_models(self, model=None):
-        where = [('name', '=', model)] if model else []
-        for rec in self.env['synchro.channel.model'].search(where):
-            if rec.synchro_channel_id.id not in self.MANAGED_MODELS:
-                continue
-            model = rec.name
-            channel_id = rec.synchro_channel_id.id
-            if (model in self.MANAGED_MODELS[channel_id] and
-                    datetime.now() < self.MANAGED_MODELS[
-                    channel_id][model]['EXPIRE']):
-                continue
-            self.MANAGED_MODELS[channel_id][model] = {}
-            if model:
-                self.MANAGED_MODELS[channel_id][model][
-                    'EXPIRE'] = datetime.now() + timedelta(
-                        minutes=EXPIRATION_TIME)
-            else:
-                self.MANAGED_MODELS[channel_id][model][
-                    'EXPIRE'] = datetime.now() + timedelta()
-            if rec.field_2complete:
-                self.MANAGED_MODELS[channel_id][model]['2PULL'] = True
-            self.MANAGED_MODELS[channel_id][model][
-                'MODEL_KEY'] = rec.field_uname
-            self.MANAGED_MODELS[channel_id][model][
-                'SKEYS'] = eval(rec.search_keys)
-            self.MANAGED_MODELS[channel_id][model][
-                'BIND'] = rec.counterpart_name
-            if model:
-                self.get_channel_model_fields(rec)
-                self.get_model_structure(model)
-        if model:
-            for channel_id in self.MANAGED_MODELS:
-                if self.MANAGED_MODELS[channel_id]['IDENTITY'] == 'odoo':
-                    self.set_odoo_model(model, channel_id)
-
-    def get_channel_model_fields(self, model_rec):
-        model = model_rec.name
-        channel_id = model_rec.synchro_channel_id.id
-        self.MANAGED_MODELS[channel_id][model]['LOC_FIELDS'] = {}
-        self.MANAGED_MODELS[channel_id][model]['EXT_FIELDS'] = {}
-        self.MANAGED_MODELS[channel_id][model]['APPLY'] = {}
-        self.MANAGED_MODELS[channel_id][model]['PROTECT'] = {}
-        for field in self.env[
-            'synchro.channel.model.fields'].search(
-                [('model_id', '=', model_rec.id)]):
-            if field.name:
-                loc_name = field.name
-            else:
-                loc_name = '.%s' % field.counterpart_name
-            if field.counterpart_name:
-                ext_name = field.counterpart_name
-            else:
-                ext_name = '.%s' % field.name
-            self.MANAGED_MODELS[channel_id][
-                    model]['LOC_FIELDS'][loc_name] = ext_name
-            self.MANAGED_MODELS[channel_id][
-                    model]['EXT_FIELDS'][ext_name] = loc_name
-            if field.apply and field.apply != 'none':
-                self.MANAGED_MODELS[channel_id][
-                    model]['APPLY'][loc_name] = field.apply
-            if field.protect and field.protect != '0':
-                self.MANAGED_MODELS[channel_id][
-                    model]['PROTECT'][loc_name] = field.protect
-        # special names
-        self.MANAGED_MODELS[channel_id][model]['LOC_FIELDS']['id'] = ''
-        ext_ref = '%s_id' % self.MANAGED_MODELS[channel_id]['IDENTITY']
-        self.MANAGED_MODELS[channel_id][model]['LOC_FIELDS'][ext_ref] = 'id'
-        self.MANAGED_MODELS[channel_id][model]['EXT_FIELDS']['id'] = ext_ref
-
-    def set_odoo_model(self, model, channel_id):
-        if model in self.MANAGED_MODELS[channel_id]:
-            return
-        self.MANAGED_MODELS[channel_id][model] = {}
-        self.MANAGED_MODELS[channel_id][model]['LOC_FIELDS'] = {}
-        self.MANAGED_MODELS[channel_id][model]['EXT_FIELDS'] = {}
-        self.MANAGED_MODELS[channel_id][model]['APPLY'] = {}
-        self.MANAGED_MODELS[channel_id][model]['PROTECT'] = {}
-        skeys = ['name']
-        for field in self.STRUCT[model]:
-            if field <= 'Z':
-                continue
-            self.MANAGED_MODELS[channel_id][
-                model]['LOC_FIELDS'][field] = field
-            self.MANAGED_MODELS[channel_id][
-                model]['EXT_FIELDS'][field] = field
-            self.MANAGED_MODELS[channel_id][
-                model]['PROTECT'][field] = self.STRUCT[model][field]['protect']
-            if ((field == 'description' and model == 'account.tax') or
-                    field == 'code'):
-                skeys =[field]
-        if model in self.SKEYS:
-            self.MANAGED_MODELS[channel_id][model][
-                'SKEYS'] = self.SKEYS[model]
-        else:
-            self.MANAGED_MODELS[channel_id][model][
-                'SKEYS'] = [skeys]
-
-    @api.model_cr_context
-    def _init_self(self, model=None, cls=None):
-        if not self.MANAGED_MODELS:
-            self.get_channels()
-            self.get_channel_models(model=model)
-        elif model:
-            self.get_channels()
-            self.get_channel_models(model=model)
-            self.get_model_structure(model)
-        else:
-            self.get_channels()
-            self.get_channel_models()
-        if cls is not None:
-            if cls.__class__.__name__ != model:
-                raise RuntimeError('Class %s not of declared model %s' % (
-                    cls.__class__.__name__, model))
-            if hasattr(cls, 'LINES_OF_REC'):
-                self.STRUCT[model]['LINES_OF_REC'] = getattr(cls,
-                                                             'LINES_OF_REC')
-            if hasattr(cls, 'LINE_MODEL'):
-                self.STRUCT[model]['LINE_MODEL'] = getattr(cls,
-                                                           'LINE_MODEL')
-            if hasattr(cls, 'PARENT_ID'):
-                self.STRUCT[model]['PARENT_ID'] = getattr(cls, 'PARENT_ID')
-
     def drop_fields(self, model, vals, to_delete):
         for name in to_delete:
             if isinstance(vals, (list, tuple)):
@@ -423,18 +226,23 @@ class IrModelSynchro(models.Model):
         return vals
 
     def drop_invalid_fields(self, model, vals):
+        cache = self.env['ir.model.synchro.cache']
         if isinstance(vals, (list, tuple)):
-            to_delete = list(set(vals) - set(self.STRUCT[model].keys()))
+            to_delete = list(set(vals) - set(
+                cache.get_struct_attr(model).keys()))
         else:
-            to_delete = list(set(vals.keys()) - set(self.STRUCT[model].keys()))
+            to_delete = list(set(vals.keys()) - set(
+                cache.get_struct_attr(model).keys()))
         return self.drop_fields(model, vals, to_delete)
 
     def drop_protected_fields(self, rec, vals, model, channel_id):
+        cache = self.env['ir.model.synchro.cache']
         for field in vals.copy():
             protect = max(
-                int(self.STRUCT[model].get(field, {}).get('protect', '0')),
-                int(self.MANAGED_MODELS[channel_id][model]['PROTECT'].get(
-                    field, '0')))
+                int(cache.get_struct_model_field_attr(
+                    model, field, 'protect', default='0')),
+                int(cache.get_model_field_attr(
+                    channel_id, model, field, 'PROTECT', default='0')))
             if (protect == 2 or (protect == 1 and rec[field])):
                 del vals[field]
             elif (isinstance(vals[field], (basestring, int, long, bool)) and
@@ -478,6 +286,7 @@ class IrModelSynchro(models.Model):
     def set_actual_state(self, model, rec):
         if model == 'account.invoice':
             if rec:
+                rec.set_defaults()
                 rec.compute_taxes()
                 if rec.state == rec.original_state:
                     return rec.id
@@ -489,6 +298,7 @@ class IrModelSynchro(models.Model):
                     rec.action_invoice_cancel()
         elif model == 'sale.order':
             if rec:
+                rec.set_defaults()
                 rec._compute_tax_id()
                 if rec.state == rec.original_state:
                     return rec.id
@@ -501,6 +311,7 @@ class IrModelSynchro(models.Model):
         return rec.id
 
     def get_rec_by_reference(self, model, key_name, value, ctx, ilike=None):
+        cache = self.env['ir.model.synchro.cache']
         ir_model = self.env[model]
         if ilike:
             where = [(key_name, 'ilike', value)]
@@ -508,10 +319,10 @@ class IrModelSynchro(models.Model):
             where = [(key_name, '=', value)]
         if model not in ('res.partner', 'product.product', 'product.template'):
             if (key_name != 'id' and ctx.get('company_id') and
-                    self.STRUCT[model].get('MODEL_WITH_COMPANY')):
+                    cache.get_struct_model_attr(model, 'MODEL_WITH_COMPANY')):
                 where.append(('company_id', '=', ctx['company_id']))
         if (key_name != 'id' and ctx.get('country_id') and
-                self.STRUCT[model].get('MODEL_WITH_COUNTRY')):
+                cache.get_struct_model_attr(model, 'MODEL_WITH_COUNTRY')):
             where.append(('country_id', '=', ctx['country_id']))
         rec = ir_model.search(where)
         if not rec and not ilike and key_name == 'name':
@@ -519,26 +330,25 @@ class IrModelSynchro(models.Model):
                                              ilike=True)
         return rec
 
-    def bind_foreign_text(self, model, value, is_foreign,
-                          channel_id, ctx):
+    def bind_foreign_text(self, model, value, is_foreign, channel_id, ctx):
+        cache = self.env['ir.model.synchro.cache']
         if value.isdigit():
             return int(value)
         ir_model = self.env[model]
-        if model in self.MANAGED_MODELS[channel_id]:
-            key_name = self.MANAGED_MODELS[
-                channel_id][model]['MODEL_KEY']
+        if cache.get_attr(channel_id, model):
+            key_name = cache.get_model_attr(channel_id, model, 'MODEL_KEY')
         else:
             key_name = 'name'
         new_value = False
         rec = self.get_rec_by_reference(model, key_name, value, ctx)
         if rec:
             new_value = rec[0].id
-        if not new_value and model in self.MANAGED_MODELS[channel_id]:
+        if not new_value and cache.get_attr(channel_id, model):
             vals = {key_name: value}
-            if (self.STRUCT[model].get('MODEL_WITH_COMPANY') and
+            if (cache.get_struct_model_attr(model, 'MODEL_WITH_COMPANY') and
                     ctx.get('company_id')):
                 vals['company_id'] = ctx['company_id']
-            if (self.STRUCT[model].get('MODEL_WITH_COUNTRY') and
+            if (cache.get_struct_model_attr(model, 'MODEL_WITH_COUNTRY') and
                     ctx.get('country_id')):
                 vals['country_id'] = ctx['country_id']
             new_value = self.synchro(ir_model, vals)
@@ -546,6 +356,7 @@ class IrModelSynchro(models.Model):
 
     def bind_foreign_ref(self, model, value, ext_id, is_foreign,
                          channel_id, ctx):
+        cache = self.env['ir.model.synchro.cache']
         new_value = False
         ir_model = self.env[model]
         if is_foreign:
@@ -555,24 +366,25 @@ class IrModelSynchro(models.Model):
             rec = False
         if rec:
             new_value = rec[0].id
-        if not new_value and model in self.MANAGED_MODELS[channel_id]:
+        if not new_value and cache.get_attr(channel_id, model):
             vals = {
                 ext_id: value,
                 'name': 'Unknown %d' % value,
             }
-            if self.STRUCT[model].get('MODEL_WITH_COMPANY'):
+            if cache.get_struct_model_attr(model, 'MODEL_WITH_COMPANY'):
                 vals['company_id'] = ctx['company_id']
             new_value = self.synchro(ir_model, vals)
         return new_value
 
     def get_foreign_value(self, model, channel_id, value,
-                         is_foreign, ext_id, ctx, tomany=None):
+                          is_foreign, ext_id, ctx, tomany=None):
         self.logmsg(channel_id, 'get_foreign_value(%s,%s,%s)' % (
                     model, value, ext_id))
         if not value:
             return value
-        self.get_model_structure(model)
-        self.get_channel_models(model=model)
+        cache = self.env['ir.model.synchro.cache']
+        cache.setup_model_structure(model)
+        cache.setup_models_in_channels(model)
         new_value = False
         if isinstance(value, basestring):
             new_value = self.bind_foreign_text(
@@ -591,16 +403,18 @@ class IrModelSynchro(models.Model):
 
     def cvt_m2o_value(self, model, name, value,
                       channel_id, ext_id, is_foreign, ctx, format=None):
-        relation = self.STRUCT[model][name]['relation']
+        cache = self.env['ir.model.synchro.cache']
+        relation = cache.get_struct_model_field_attr(model, name, 'relation')
         if not relation:
             raise RuntimeError('No relation for field %s of %s' % (name,
                                                                    model))
         return self.get_foreign_value(relation, channel_id, value,
-                                    is_foreign, ext_id, ctx)
+                                      is_foreign, ext_id, ctx)
 
     def cvt_m2m_value(self, model, name, value,
                       channel_id, ext_id, is_foreign, ctx, format=None):
-        relation = self.STRUCT[model][name]['relation']
+        cache = self.env['ir.model.synchro.cache']
+        relation = cache.get_struct_model_field_attr(model, name, 'relation')
         if not relation:
             raise RuntimeError('No relation for field %s of %s' % (name,
                                                                    model))
@@ -613,7 +427,8 @@ class IrModelSynchro(models.Model):
 
     def cvt_o2m_value(self, model, name, value,
                       channel_id, ext_id, is_foreign, ctx, format=None):
-        relation = self.STRUCT[model][name]['relation']
+        cache = self.env['ir.model.synchro.cache']
+        relation = cache.get_struct_model_field_attr(model, name, 'relation')
         if not relation:
             raise RuntimeError('No relation for field %s of %s' % (name,
                                                                    model))
@@ -626,38 +441,29 @@ class IrModelSynchro(models.Model):
 
     def names_from_ref(self, model, channel_from, vals, ext_ref,
                        prefix1, prefix2):
+        cache = self.env['ir.model.synchro.cache']
         if ext_ref.startswith(prefix1):
             # Case #1 - field like vg7_oder_id: name is odoo but value id
-            #           id counterpart ref
+            #           is of counterpart ref
             is_foreign = True
             loc_name = ext_ref[4:]
             loc_ext_ref = ext_ref
             if loc_name == 'id':
                 loc_name = ext_name = loc_ext_ref
             else:
-                if (model in self.MANAGED_MODELS[channel_from] and
-                        loc_name in self.MANAGED_MODELS[
-                            channel_from][model]['LOC_FIELDS']):
-                    ext_name = self.MANAGED_MODELS[
-                        channel_from][model]['LOC_FIELDS'][loc_name]
-                    if ext_name[0] == '.':
+                ext_name = cache.get_model_field_attr(
+                    channel_from, model, loc_name, 'LOC_FIELDS', default='')
+                if ext_name.startswith('.'):
                         ext_name = ''
-                else:
-                    ext_name = ''
         elif ext_ref.startswith(prefix2):
             # Case #2 - field like vg7:oder_id: both name and value are
             #           of counterpart refs
             is_foreign = True
             ext_name = ext_ref[4:]
             loc_ext_ref = prefix1 + ext_name
-            if (model in self.MANAGED_MODELS[channel_from] and
-                    ext_name in self.MANAGED_MODELS[
-                        channel_from][model]['EXT_FIELDS']):
-                loc_name = self.MANAGED_MODELS[
-                    channel_from][model]['EXT_FIELDS'][ext_name]
-                if loc_name[0] == '.':
-                    loc_name = ''
-            else:
+            loc_name = cache.get_model_field_attr(
+                channel_from, model, ext_name, 'EXT_FIELDS', default='')
+            if loc_name.startswith('.'):
                 loc_name = ''
         else:
             # Case #3 - field and value are Odoo
@@ -668,11 +474,12 @@ class IrModelSynchro(models.Model):
 
     def get_default_n_apply(self, model, channel_from, loc_name, ext_name,
                             ttype=None):
-        if model not in self.MANAGED_MODELS[channel_from]:
+        cache = self.env['ir.model.synchro.cache']
+        if not cache.get_attr(channel_from, model):
             return '', ''
-        default = self.MANAGED_MODELS[
-            channel_from][model]['APPLY'].get(loc_name or
-                                              '.%s' % ext_name, '')
+        default = cache.get_model_field_attr(
+            channel_from, model, loc_name or '.%s' % ext_name, 'APPLY',
+            default='')
         if default.endswith('()'):
             apply = 'tnl_2_loc_%s' % default[:-2]
             default = False
@@ -687,13 +494,14 @@ class IrModelSynchro(models.Model):
     def bind_to_internal(self, model, vals):
 
         def search_4_channel(vals):
+            cache = self.env['ir.model.synchro.cache']
             odoo_channel = channel_from = prefix1 = prefix2 = False
-            for channel_id in self.MANAGED_MODELS:
+            for channel_id in cache.get_channel_list():
                 if channel_from:
                     break
-                prefix1 = '%s_' % self.MANAGED_MODELS[channel_id]['PREFIX']
-                prefix2 = '%s:' % self.MANAGED_MODELS[channel_id]['PREFIX']
-                if self.MANAGED_MODELS[channel_id]['IDENTITY'] == 'odoo':
+                prefix1 = '%s_' % cache.get_attr(channel_id, 'PREFIX')
+                prefix2 = '%s:' % cache.get_attr(channel_id, 'PREFIX')
+                if cache.get_attr(channel_id, 'IDENTITY') == 'odoo':
                     odoo_channel = channel_id
                 for ext_ref in vals:
                     if (ext_ref.startswith(prefix1) or
@@ -702,19 +510,23 @@ class IrModelSynchro(models.Model):
                         break
             if not channel_from and odoo_channel is not False:
                 channel_from = odoo_channel
-                prefix1 = '%s_' % self.MANAGED_MODELS[channel_from]['PREFIX']
-                prefix2 = '%s:' % self.MANAGED_MODELS[channel_from]['PREFIX']
+                prefix1 = '%s_' % cache.get_attr(channel_id, 'PREFIX')
+                prefix2 = '%s:' % cache.get_attr(channel_id, 'PREFIX')
             return channel_from, prefix1, prefix2
 
         def process_fields(model, channel_from, vals, ext_id, ctx,
                            field_list=None, excl_list=None):
+            cache = self.env['ir.model.synchro.cache']
+            prefix1 = '%s_' % cache.get_attr(channel_from, 'PREFIX')
+            prefix2 = '%s:' % cache.get_attr(channel_from, 'PREFIX')
             for ext_ref in vals.copy():
                 ext_name, loc_name, is_foreign, loc_ext_ref = \
                     self.names_from_ref(model, channel_from, vals,
                                         ext_ref, prefix1, prefix2)
                 default, apply = self.get_default_n_apply(
                     model, channel_from, loc_name, ext_name,
-                    ttype=self.STRUCT[model].get(loc_name, {}).get('ttype'))
+                    ttype=cache.get_struct_model_field_attr(
+                        model, ext_name, 'ttype'))
                 if not loc_name and is_foreign and hasattr(self, apply):
                     self.logmsg(channel_from,
                                 '> Apply %s(%s,%s,%s)' % (
@@ -727,19 +539,23 @@ class IrModelSynchro(models.Model):
                                                 ext_ref,
                                                 default=default)
                     continue
-                if not loc_name or loc_name not in self.STRUCT[model]:
-                    self.logmsg(channel_from,
+                if not loc_name or not cache.get_struct_model_attr(model,
+                                                                   loc_name):
+                    self.logmsg(
+                        channel_from,
                         'Field <%s> does not exist in model %s' % (ext_ref,
                                                                    model))
                     del vals[ext_ref]
                     continue
-                if (self.STRUCT[model][loc_name]['ttype'] in (
-                        'many2one', 'integer') and
+                if (cache.get_struct_model_field_attr(
+                        model, loc_name, 'ttype') in ('many2one',
+                                                      'integer') and
                         isinstance(vals[ext_ref], basestring) and
                         vals[ext_ref].isdigit()):
                     vals[ext_ref] = int(vals[ext_ref])
-                elif (self.STRUCT[model][loc_name]['ttype'] == 'boolean' and
-                         isinstance(vals[ext_ref], basestring)):
+                elif (cache.get_struct_model_field_attr(
+                        model, loc_name, 'ttype') == 'boolean' and
+                        isinstance(vals[ext_ref], basestring)):
                     vals[ext_ref] = os0.str2bool(vals[ext_ref], True)
                 if field_list and loc_name not in field_list:
                     continue
@@ -747,7 +563,7 @@ class IrModelSynchro(models.Model):
                     continue
                 if is_foreign:
                     # Field like <vg7_id> with external ID in local DB
-                    if loc_ext_ref in self.STRUCT[model]:
+                    if loc_ext_ref in cache.get_struct_attr(model):
                         if ext_ref.startswith(prefix2):
                             vals[loc_ext_ref] = vals[ext_ref]
                             del vals[ext_ref]
@@ -762,21 +578,24 @@ class IrModelSynchro(models.Model):
                     elif loc_name in vals:
                         del vals[ext_ref]
                         continue
-                if self.STRUCT[model][loc_name]['ttype'] == 'one2many':
+                if cache.get_struct_model_field_attr(
+                        model, loc_name, 'ttype') == 'one2many':
                     vals[loc_name] = self.cvt_o2m_value(
                         model, loc_name, vals[ext_ref],
                         channel_from, ext_id, is_foreign, ctx,
                         format='cmd')
                     if is_foreign or loc_name != ext_name:
                         del vals[ext_ref]
-                elif self.STRUCT[model][loc_name]['ttype'] == 'many2many':
+                elif cache.get_struct_model_field_attr(
+                        model, loc_name, 'ttype') == 'many2many':
                     vals[loc_name] = self.cvt_m2m_value(
                         model, loc_name, vals[ext_ref],
                         channel_from, ext_id, is_foreign, ctx,
                         format='cmd')
                     if is_foreign or loc_name != ext_name:
                         del vals[ext_ref]
-                elif self.STRUCT[model][loc_name]['ttype'] == 'many2one':
+                elif cache.get_struct_model_field_attr(
+                        model, loc_name, 'ttype') == 'many2one':
                     vals[loc_name] = self.cvt_m2o_value(
                         model, loc_name, vals[ext_ref],
                         channel_from, ext_id, is_foreign, ctx,
@@ -799,7 +618,8 @@ class IrModelSynchro(models.Model):
                         vals[loc_name] = vals[ext_ref]
                         del vals[ext_ref]
             for loc_name in ctx:
-                if loc_name not in vals and loc_name in self.STRUCT[model]:
+                if (loc_name not in vals and
+                        loc_name in cache.get_struct_attr(model)):
                     if (loc_name != 'company_id' or
                             model not in ('res.partner',
                                           'product.product',
@@ -811,19 +631,20 @@ class IrModelSynchro(models.Model):
         if channel_from is False:
             _logger.info('> No valid channel detected')
             return vals, False, False
-        ext_id = '%s_id' % self.MANAGED_MODELS[channel_from]['PREFIX']
+        cache = self.env['ir.model.synchro.cache']
+        ext_id = '%s_id' % cache.get_attr(channel_from, 'PREFIX')
         ctx = {}
         if 'company_id' in vals:
             ctx['company_id'] = vals['company_id']
-        else:
-            ctx['company_id'] =  self.MANAGED_MODELS[
-                channel_from]['COMPANY_ID']
-        if ctx['company_id']:
+        elif cache.get_struct_model_attr(model, 'MODEL_WITH_COMPANY'):
+            ctx['company_id'] = cache.get_attr(channel_from, 'COMPANY_ID')
+        if ctx.get('company_id'):
             ctx['country_id'] = self.env[
                 'res.company'].browse(
                     ctx['company_id']).partner_id.country_id.id
         else:
-            ctx['country_id'] = False
+            ctx['country_id'] = \
+                self.env.user.company_id.partner_id.country_id.id
         self.logmsg(channel_from, 'ctx=%s' % ctx)
         vals = process_fields(model, channel_from, vals, ext_id, ctx,
                               field_list=(ctx.keys() + ['street']))
@@ -832,7 +653,7 @@ class IrModelSynchro(models.Model):
         if (model == 'product.product' and
                 vals.get('name') and
                 ext_id in vals and
-                self.MANAGED_MODELS[channel_from].get('NO_VARIANTS')):
+                cache.get_attr(channel_from, 'NO_VARIANTS')):
             tmpl_vals = vals.copy()
             if 'id' in tmpl_vals:
                 del tmpl_vals['id']
@@ -842,29 +663,30 @@ class IrModelSynchro(models.Model):
         return vals, ext_id, channel_from
 
     def set_default_values(self, model, vals, channel_id):
-        prefix1 = '%s_' % self.MANAGED_MODELS[channel_id]['PREFIX']
-        prefix2 = '%s:' % self.MANAGED_MODELS[channel_id]['PREFIX']
-        for ext_ref in self.MANAGED_MODELS[channel_id][model]['APPLY']:
+        cache = self.env['ir.model.synchro.cache']
+        prefix1 = '%s_' % cache.get_attr(channel_id, 'PREFIX')
+        prefix2 = '%s:' % cache.get_attr(channel_id, 'PREFIX')
+        for ext_ref in cache.get_model_attr(channel_id, model, 'APPLY'):
             ext_name, loc_name, is_foreign, loc_ext_ref = \
                 self.names_from_ref(model, channel_id, vals,
                                     ext_ref, prefix1, prefix2)
             if loc_name not in vals:
-                if (model in self.MANAGED_MODELS[channel_id] and
-                        loc_name in self.MANAGED_MODELS[
-                            channel_id][model]['LOC_FIELDS']):
-                    ext_name = self.MANAGED_MODELS[
-                        channel_id][model]['LOC_FIELDS'][loc_name]
+                if loc_name in cache.get_model_attr(channel_id,
+                                                    model, 'LOC_FIELDS'):
+                    ext_name = cache.get_model_field_attr(
+                        channel_id, model, loc_name, 'LOC_FIELDS')
                     if ext_name[0] == '.':
                         default, apply = self.get_default_n_apply(
                             model, channel_id, loc_name, ext_name,
-                            ttype=self.STRUCT[model][loc_name]['ttype'])
+                            ttype=cache.get_struct_model_field_attr(
+                                model, loc_name, 'ttype'))
                         if hasattr(self, apply):
                             self.logmsg(channel_id,
-                                '> Apply %s(%s,%s,%s)' % (
-                                    apply,
-                                    loc_name,
-                                    ext_ref,
-                                    default))
+                                        '> Apply %s(%s,%s,%s)' % (
+                                            apply,
+                                            loc_name,
+                                            ext_ref,
+                                            default))
                             vals = getattr(self, apply)(vals,
                                                         loc_name,
                                                         ext_ref,
@@ -874,9 +696,11 @@ class IrModelSynchro(models.Model):
     def search4rec(self, model, vals, ext_id,
                    constraints, has_active, channel_id):
         ir_model = self.env[model]
-        company_id =  self.MANAGED_MODELS[channel_id]['COMPANY_ID']
+        cache = self.env['ir.model.synchro.cache']
+        company_id = cache.get_attr(channel_id, 'COMPANY_ID')
+
         id = -1
-        for keys in self.MANAGED_MODELS[channel_id][model]['SKEYS']:
+        for keys in cache.get_model_attr(channel_id, model, 'SKEYS'):
             where = []
             for key in keys:
                 if (key not in vals and
@@ -915,7 +739,7 @@ class IrModelSynchro(models.Model):
                 if rec:
                     id = rec[0].id
                     self.logmsg(channel_id,
-                        '> synchro: found id=%d (%s)' % (id, where))
+                                '> synchro: found id=%d (%s)' % (id, where))
                     break
         if id < 0 and ext_id in vals:
             rec = ir_model.search(
@@ -923,24 +747,27 @@ class IrModelSynchro(models.Model):
             if rec:
                 id = rec[0].id
                 self.logmsg(channel_id,
-                    '> synchro: found unknown id=%d' % id)
+                            '> synchro: found unknown id=%d' % id)
         return id
 
     def get_odoo_response(self, channel_id, model, id=False):
         return {}
 
     def get_vg7_response(self, channel_id, model, id=False):
+        cache = self.env['ir.model.synchro.cache']
         if id:
             url = os.path.join(
-                self.MANAGED_MODELS[channel_id]['COUNTERPART_URL'],
-                self.MANAGED_MODELS[channel_id][model]['BIND'],
+                cache.get_attr(channel_id, 'COUNTERPART_URL'),
+                cache.get_model_attr(channel_id, model, 'BIND'),
                 str(id))
         else:
             url = os.path.join(
-                self.MANAGED_MODELS[channel_id]['COUNTERPART_URL'],
-                self.MANAGED_MODELS[channel_id][model]['BIND'])
+                cache.get_attr(channel_id, 'COUNTERPART_URL'),
+                cache.get_model_attr(channel_id, model, 'BIND'))
         headers = {'Authorization': 'access_token %s' %
-                   self.MANAGED_MODELS[channel_id]['CLIENT_KEY']}
+                   cache.get_attr(channel_id, 'CLIENT_KEY')}
+        self.logmsg(channel_id,
+                    '> vg7_requests(%s,%s)' % (url, headers))
         try:
             response = requests.get(url, headers=headers)
         except BaseException:
@@ -952,73 +779,42 @@ class IrModelSynchro(models.Model):
                     'No response requests(%d,%s,%s,%s)' %
                     (channel_id,
                      url,
-                     self.MANAGED_MODELS[channel_id]['CLIENT_KEY'],
-                     self.MANAGED_MODELS[channel_id]['PREFIX']))
-        self.STRUCT = {}
-        self.MANAGED_MODELS = {}
+                     cache.get_attr(channel_id, 'CLIENT_KEY'),
+                     cache.get_attr(channel_id, 'PREFIX')))
+        cache.clean_cache(channel_id=channel_id, model=model)
         return {}
 
     def get_counterpart_response(self, channel_id, model, id=False):
-        identity = self.MANAGED_MODELS[channel_id]['IDENTITY']
+        cache = self.env['ir.model.synchro.cache']
+        identity = cache.get_attr(channel_id, 'IDENTITY')
         if identity == 'odoo':
             return self.get_odoo_response(channel_id, model, id)
         elif identity == 'vg7':
             return self.get_vg7_response(channel_id, model, id)
 
-    def show_debug(self, channel_id, model):
-        if not channel_id:
-            if not len(self.MANAGED_MODELS):
-                return
-            channel_id = self.MANAGED_MODELS.keys()[0]
-        _logger.info('> channel_id=%d' % channel_id)
-        _logger.info('> model=%s'% model)
-        _logger.info('> model params:(2pull=%s,key=%s,bind=%s' % (
-            self.MANAGED_MODELS[channel_id][model].get('2PULL'),
-            self.MANAGED_MODELS[channel_id][model].get('MODEL_KEY'),
-            self.MANAGED_MODELS[channel_id][model].get('BIND'),
-            ))
-        for field in self.MANAGED_MODELS[channel_id][model]['LOC_FIELDS']:
-            _logger.info('--- %-20.20s=%-20.20s (%s/%s)' % (
-                field,
-                self.MANAGED_MODELS[channel_id][model]['LOC_FIELDS'][field],
-                self.MANAGED_MODELS[channel_id][model]['APPLY'].get(field, 'None'),
-                self.MANAGED_MODELS[channel_id][model]['PROTECT'].get(field, '0'),
-            ))
-        for field in self.MANAGED_MODELS[channel_id][model]['EXT_FIELDS']:
-            loc_field = self.MANAGED_MODELS[channel_id][model]['EXT_FIELDS'][field]
-            if loc_field in self.MANAGED_MODELS[channel_id][model]['LOC_FIELDS']:
-                continue
-            _logger.info('--- %-20.20s=%-20.20s (%s/%s)' % (
-                loc_field,
-                field,
-                self.MANAGED_MODELS[channel_id][model]['APPLY'].get(loc_field, 'None'),
-                self.MANAGED_MODELS[channel_id][model]['PROTECT'].get(loc_field, '0'),
-            ))
-
     @api.model
     def synchro(self, cls, vals, constraints=None):
         model = cls.__class__.__name__
         self.logmsg(0, '> %s.synchro(%s)' % (model, vals))
-        self._init_self(model=model, cls=cls)
+        ir_model = self.env[model]
+        cache = self.env['ir.model.synchro.cache']
+        cache.open(model=model, cls=cls)
         constraints = constraints or cls.CONTRAINTS
-        has_dim_text = self.STRUCT[model].get('MODEL_WITH_DIMNAME', False)
-        has_active = self.STRUCT[model].get('MODEL_WITH_ACTIVE', False) 
-        has_state = self.STRUCT[model].get('MODEL_STATE', False)
-        has_2delete = self.STRUCT[model].get('MODEL_2DELETE', False)
+        has_active = cache.get_struct_model_attr(
+            model, 'MODEL_WITH_ACTIVE', default=False)
+        has_state = cache.get_struct_model_attr(
+            model, 'MODEL_STATE', default=False)
+        has_2delete = cache.get_struct_model_attr(
+            model, 'MODEL_2DELETE', default=False)
         if has_2delete:
             vals['to_delete'] = False
-        lines_of_rec = self.STRUCT[model].get('LINES_OF_REC', False)
-        # if self.LOGLEVEL == 'debug':
-        #     self.show_debug(0, model)
+        lines_of_rec = cache.get_struct_model_attr(
+            model, 'LINES_OF_REC', default=False)
 
-        ir_model = self.env[model]
         vals, ext_id, channel_id = self.bind_to_internal(model, vals)
         if not channel_id:
-            self.STRUCT = {}
-            self.MANAGED_MODELS = {}
+            cache.clean_cache()
             return -6
-        # if self.MANAGED_MODELS[channel_id]['IDENTITY'] == 'odoo':
-        #     self.set_odoo_model(model, channel_id)
         id = -1
         rec = None
         if 'id' in vals:
@@ -1075,13 +871,17 @@ class IrModelSynchro(models.Model):
     def commit(self, cls, id):
         model = cls.__class__.__name__
         self.logmsg(0, '> %s.commit()' % model)
-        self._init_self(model=model, cls=cls)
-        has_state = self.STRUCT[model].get('MODEL_STATE', False)
-        lines_of_rec = self.STRUCT[model].get('LINES_OF_REC', False)
-        model_line =  self.STRUCT[model].get('LINE_MODEL')
+        # self._init_self(model=model, cls=cls)
+        cache = self.env['ir.model.synchro.cache']
+        cache.open(model=model, cls=cls)
+        has_state = cache.get_struct_model_attr(
+            model, 'MODEL_STATE', default=False)
+        lines_of_rec = cache.get_struct_model_attr(
+            model, 'LINES_OF_REC', default=False)
+        model_line = cache.get_struct_model_attr(model, 'LINE_MODEL')
         if not has_state and not lines_of_rec and not model_line:
             return -5
-        parent_id = self.STRUCT[model_line].get('PARENT_ID')
+        parent_id = cache.get_struct_model_attr(model_line, 'PARENT_ID')
         if not parent_id:
             return -5
         rec = self.env[model].search([('id', '=', id)])
@@ -1089,7 +889,7 @@ class IrModelSynchro(models.Model):
             return -3
         rec_2_commit = rec[0]
         ir_model = self.env[model_line]
-        if self.STRUCT[model_line].get('MODEL_2DELETE'):
+        if cache.get_struct_model_attr(model_line, 'MODEL_2DELETE'):
             for rec in ir_model.search([(parent_id, '=', id),
                                         ('to_delete', '=', True)]):
                 rec.unlink()
@@ -1103,12 +903,14 @@ class IrModelSynchro(models.Model):
 
     @api.multi
     def pull_recs_2_complete(self):
-        self._init_self()
-        for channel_id in self.MANAGED_MODELS:
-            for model in self.MANAGED_MODELS[channel_id]:
-                if model <= 'Z':
+        # self._init_self()
+        cache = self.env['ir.model.synchro.cache']
+        cache.open()
+        for channel_id in cache.get_channel_list():
+            for model in cache.get_attr_list(channel_id):
+                if not cache.is_struct(model):
                     continue
-                if not self.STRUCT[model].get('MODEL_WITH_NAME'):
+                if not cache.get_struct_model_attr(model, 'MODEL_WITH_NAME'):
                     continue
                 ir_model = self.env[model]
                 recs = ir_model.search([('name', 'like', 'Unknown ')])
@@ -1131,26 +933,27 @@ class IrModelSynchro(models.Model):
                         if not data:
                             continue
                         ir_model.synchro(self.prefix_bind(
-                            self.MANAGED_MODELS[channel_id]['PREFIX'],
+                            cache.get_attr(channel_id, 'PREFIX'),
                             data))
                         # commit every table to avoid too big transaction
                         self.env.cr.commit()   # pylint: disable=invalid-commit
 
     @api.multi
     def pull_full_records(self):
-        self._init_self()
-        for channel_id in self.MANAGED_MODELS:
+        # self._init_self()
+        cache = self.env['ir.model.synchro.cache']
+        cache.open()
+        for channel_id in cache.get_channel_list():
             model_list = [x.name for x in self.env[
                 'synchro.channel.model'].search(
                     [('synchro_channel_id', '=', channel_id)],
                     order='sequence')]
-            # for model in self.MANAGED_MODELS[channel_id]:
             for model in model_list:
-                if model <= 'Z':
+                if not cache.is_struct(model):
                     continue
-                self._init_self(model=model)
-                if not self.MANAGED_MODELS[
-                        channel_id][model].get('2PULL', False):
+                cache.open(model=model)
+                if not cache.get_model_attr(channel_id, model, '2PULL',
+                                            default=False):
                     continue
                 ir_model = self.env[model]
                 datas = self.get_counterpart_response(channel_id,
@@ -1171,14 +974,370 @@ class IrModelSynchro(models.Model):
                         id = data['id']
                     else:
                         id = int(data['id'])
-                    ext_id = '%s_id' % self.MANAGED_MODELS[
-                        channel_id]['IDENTITY']
+                    ext_id = '%s_id' % cache.get_model_attr(channel_id,
+                                                            'IDENTITY')
                     if not ir_model.search([(ext_id, '=', id)]):
                         ir_model.synchro(self.prefix_bind(
-                            self.MANAGED_MODELS[channel_id]['PREFIX'],
+                            cache.get_model_attr(channel_id, 'PREFIX'),
                             data))
                         # commit every table to avoid too big transaction
                         self.env.cr.commit()   # pylint: disable=invalid-commit
+
+
+class IrModelSynchroCache(models.Model):
+    _name = 'ir.model.synchro.cache'
+    _inherit = 'ir.model.synchro'
+
+    STRUCT = {}
+    MANAGED_MODELS = {}
+    EXPIRATION_TIME = 60
+
+    def lifetime(self, lifetime):
+        if lifetime >= 5 and lifetime <= 3600:
+            self.EXPIRATION_TIME = lifetime
+
+    def clean_cache(self, channel_id=None, model=None, lifetime=None):
+        if model:
+            self.STRUCT[model] = {}
+        else:
+            self.STRUCT = {}
+        if channel_id:
+            if model:
+                self.MANAGED_MODELS[channel_id][model] = {}
+            else:
+                self.MANAGED_MODELS[channel_id] = {}
+        else:
+            self.MANAGED_MODELS = {}
+        if lifetime:
+            self.lifetime(lifetime)
+
+    def set_loglevel(self, loglevel):
+        for channel_id in self.get_channel_list():
+            self.set_attr(channel_id, 'LOGLEVEL', loglevel)
+
+    def is_struct(self, model):
+        return model >= 'a'
+
+    def get_channel_list(self):
+        return self.MANAGED_MODELS
+
+    def get_attr_list(self, channel_id):
+        return self.MANAGED_MODELS.get(channel_id, {})
+
+    def get_attr(self, channel_id, attrib, default=None):
+        return self.MANAGED_MODELS.get(channel_id, {}).get(attrib, default)
+
+    def get_model_attr(self, channel_id, model, attrib, default=None):
+        return self.MANAGED_MODELS.get(
+            channel_id, {}).get(model, {}).get(attrib, default)
+
+    def get_model_field_attr(self, channel_id, model, field, attrib,
+                             default=None):
+        return self.MANAGED_MODELS.get(
+            channel_id, {}).get(model, {}).get(attrib, {}).get(
+                field, default)
+
+    def set_channel(self, channel_id):
+        self.MANAGED_MODELS[channel_id] = self.MANAGED_MODELS.get(
+            channel_id, {})
+
+    def set_model(self, channel_id, model):
+        self.set_channel(channel_id)
+        self.MANAGED_MODELS[channel_id][model] = self.MANAGED_MODELS[
+            channel_id].get(model, {})
+        self.set_model_attr(channel_id, model, 'LOC_FIELDS', {})
+        self.set_model_attr(channel_id, model, 'EXT_FIELDS', {})
+        self.set_model_attr(channel_id, model, 'APPLY', {})
+        self.set_model_attr(channel_id, model, 'PROTECT', {})
+
+    def set_attr(self, channel_id, attrib, value):
+        self.MANAGED_MODELS[channel_id][attrib] = value
+
+    def set_model_attr(self, channel_id, model, attrib, value):
+        self.MANAGED_MODELS[channel_id][model][attrib] = value
+
+    def set_model_field_attr(self, channel_id, model, field, attrib, value):
+        self.MANAGED_MODELS[channel_id][model][attrib][field] = value
+
+    def model_list(self):
+        return self.STRUCT
+
+    def get_struct_attr(self, attrib, default=None):
+        default = default or {}
+        return self.STRUCT.get(attrib, default)
+
+    def get_struct_model_attr(self, model, attrib, default=None):
+        return self.STRUCT.get(model, {}).get(attrib, default)
+
+    def get_struct_model_field_attr(self, model, field, attrib, default=None):
+        return self.STRUCT.get(model, {}).get(field, {}).get(attrib, default)
+
+    def set_struct_model(self, model):
+        self.STRUCT[model] = self.STRUCT.get(model, {})
+
+    def set_struct_model_attr(self, model, attrib, value):
+        self.STRUCT[model][attrib] = value
+
+    def setup_model_structure(self, model, ro_fields=None):
+        '''Store model structure in memory'''
+        if not model:
+            return
+        ro_fields = ro_fields or []
+        if self.get_struct_model_attr(model,
+                                      'EXPIRE',
+                                      default=datetime.now()) > datetime.now():
+            return
+        ir_model = self.env['ir.model.fields']
+        self.set_struct_model(model)
+        self.set_struct_model_attr(model, 'EXPIRE',
+                                   datetime.now() + timedelta(
+                                       seconds=(self.EXPIRATION_TIME)))
+        for field in ir_model.search([('model', '=', model)]):
+            required = field.required
+            readonly = field.readonly
+            readonly = readonly or field.ttype in ('binary', 'reference')
+            if field.name in ro_fields:
+                readonly = True
+            self.set_struct_model_attr(
+                model, field.name, {
+                    'ttype': field.ttype,
+                    'relation': field.relation,
+                    'required': required,
+                    'readonly': readonly,
+                    'protect': field.protect_update,
+                })
+            if field.relation and field.relation.startswith(model):
+                self.set_struct_model_attr(model, 'LINES_OF_REC', field.name)
+                self.set_struct_model_attr(model, 'LINE_MODEL', field.relation)
+            elif field.relation and model.startswith(field.relation):
+                self.set_struct_model_attr(model, 'PARENT_ID', field.name)
+            if field.name == 'original_state':
+                self.set_struct_model_attr(model, 'MODEL_STATE', True)
+            elif field.name == 'to_delete':
+                self.set_struct_model_attr(model, 'MODEL_2DELETE', True)
+            elif field.name == 'name':
+                self.set_struct_model_attr(model, 'MODEL_WITH_NAME', True)
+            elif field.name == 'active':
+                self.set_struct_model_attr(model, 'MODEL_WITH_ACTIVE', True)
+            elif field.name == 'dim_name':
+                self.set_struct_model_attr(model, 'MODEL_WITH_DIMNAME', True)
+            elif field.name == 'company_id':
+                self.set_struct_model_attr(model, 'MODEL_WITH_COMPANY', True)
+            elif field.name == 'country_id':
+                self.set_struct_model_attr(model, 'MODEL_WITH_COUNTRY', True)
+
+    def setup_channels(self):
+        channel_ctr = 0
+        expired = False
+        for channel_id in self.get_channel_list():
+            channel_ctr += 1
+            if self.get_attr(channel_id,
+                             'EXPIRE',
+                             default=datetime.now()) <= datetime.now():
+                expired = True
+                break
+        if not expired and channel_ctr > 0:
+            return
+        for channel in self.env['synchro.channel'].search([]):
+            if self.get_attr(channel.id,
+                             'EXPIRE',
+                             default=datetime.now()) > datetime.now():
+                continue
+            self.set_channel(channel.id)
+            self.set_attr(channel.id, 'EXPIRE',
+                          datetime.now() + timedelta(
+                              seconds=(self.EXPIRATION_TIME * 3)))
+            self.set_attr(channel.id, 'PREFIX', channel.prefix)
+            self.set_attr(channel.id, 'IDENTITY', channel.identity)
+            if channel.company_id:
+                self.set_attr(channel.id,
+                              'COMPANY_ID', channel.company_id.id)
+            else:
+                self.set_attr(channel.id,
+                              'COMPANY_ID', self.env.user.company_id.id)
+            self.set_attr(channel.id, 'CLIENT_KEY', channel.client_key)
+            self.set_attr(channel.id,
+                          'COUNTERPART_URL', channel.counterpart_url)
+            self.set_attr(channel.id, 'PASSWORD', channel.password)
+            if channel.produtc_without_variants:
+                self.set_attr(channel.id, 'NO_VARIANTS', True)
+            if channel.trace:
+                self.set_attr(channel.id, 'LOGLEVEL', 'debug')
+            else:
+                self.set_attr(channel.id, 'LOGLEVEL', 'info')
+
+    def setup_models_in_channels(self, model):
+        if not model:
+            return
+        where = [('name', '=', model)]
+        for rec in self.env['synchro.channel.model'].search(where):
+            if rec.synchro_channel_id.id not in self.get_channel_list():
+                continue
+            model = rec.name
+            channel_id = rec.synchro_channel_id.id
+            if self.get_model_attr(channel_id, model, 'EXPIRE',
+                                   default=datetime.now()) > datetime.now():
+                continue
+            self.set_model(channel_id, model)
+            self.set_model_attr(channel_id, model, 'EXPIRE',
+                                datetime.now() + timedelta(
+                                    seconds=(self.EXPIRATION_TIME) * 2))
+            if rec.field_2complete:
+                self.set_model_attr(channel_id, model, '2PULL', True)
+            self.set_model_attr(
+                channel_id, model, 'MODEL_KEY', rec.field_uname)
+            self.set_model_attr(
+                channel_id, model, 'SKEYS', eval(rec.search_keys))
+            self.set_model_attr(
+                channel_id, model, 'BIND', rec.counterpart_name)
+            self.setup_channel_model_fields(rec)
+        for channel_id in self.get_channel_list():
+            if self.get_attr(channel_id, 'IDENTITY') == 'odoo':
+                self.set_odoo_model(channel_id, model)
+
+    def setup_channel_model_fields(self, model_rec):
+        model = model_rec.name
+        channel_id = model_rec.synchro_channel_id.id
+        self.set_model(channel_id, model)
+        for field in self.env[
+            'synchro.channel.model.fields'].search(
+                [('model_id', '=', model_rec.id)]):
+            if field.name:
+                loc_name = field.name
+            else:
+                loc_name = '.%s' % field.counterpart_name
+            if field.counterpart_name:
+                ext_name = field.counterpart_name
+            else:
+                ext_name = '.%s' % field.name
+            self.set_model_field_attr(
+                channel_id, model, loc_name, 'LOC_FIELDS', ext_name)
+            self.set_model_field_attr(
+                channel_id, model, ext_name, 'EXT_FIELDS', loc_name)
+            if field.apply:
+                self.set_model_field_attr(
+                    channel_id, model, loc_name, 'APPLY', field.apply)
+            if field.protect and field.protect != '0':
+                self.set_model_field_attr(
+                    channel_id, model, loc_name, 'PROTECT', field.protect)
+        # special names
+        ext_ref = '%s_id' % self.get_attr(channel_id, 'IDENTITY')
+        self.set_model_field_attr(
+            channel_id, model, 'id', 'LOC_FIELDS', '')
+        self.set_model_field_attr(
+            channel_id, model, ext_ref, 'LOC_FIELDS', 'id')
+        self.set_model_field_attr(
+            channel_id, model, 'id', 'EXT_FIELDS', ext_ref)
+
+    def set_odoo_model(self, channel_id, model):
+        if model in self.MANAGED_MODELS[channel_id]:
+            return
+        self.set_model(channel_id, model)
+        skeys = ['name']
+        for field in self.get_struct_attr(model):
+            if not self.is_struct(field):
+                continue
+            self.set_model_field_attr(
+                channel_id, model, field, 'LOC_FIELDS', field)
+            self.set_model_field_attr(
+                channel_id, model, field, 'EXT_FIELDS', field)
+            self.set_model_field_attr(
+                channel_id, model, field, 'PROTECT',
+                self.get_struct_model_field_attr(model, field, 'protect'))
+            if ((field == 'description' and model == 'account.tax') or
+                    field == 'code'):
+                skeys = [field]
+        if model in self.SKEYS:
+            self.set_model_attr(channel_id, model, 'SKEYS', self.SKEYS[model])
+        else:
+            self.set_model_attr(channel_id, model, 'SKEYS', [skeys])
+
+    @api.model_cr_context
+    def open(self, model=None, cls=None):
+        self.setup_channels()
+        self.setup_models_in_channels(model)
+        if model:
+            self.setup_model_structure(model)
+        if cls is not None:
+            if cls.__class__.__name__ != model:
+                raise RuntimeError('Class %s not of declared model %s' % (
+                    cls.__class__.__name__, model))
+            if hasattr(cls, 'LINES_OF_REC'):
+                self.STRUCT[model]['LINES_OF_REC'] = getattr(cls,
+                                                             'LINES_OF_REC')
+            if hasattr(cls, 'LINE_MODEL'):
+                self.STRUCT[model]['LINE_MODEL'] = getattr(cls,
+                                                           'LINE_MODEL')
+            if hasattr(cls, 'PARENT_ID'):
+                self.STRUCT[model]['PARENT_ID'] = getattr(cls, 'PARENT_ID')
+
+    def show_debug(self, channel_id, model):
+        if not model:
+            return
+        if channel_id:
+            _logger.info('> channel_id=%d' % channel_id)
+            _logger.info('> model=%s' % model)
+            _logger.info('> model params:(2pull=%s,key=%s,bind=%s)' % (
+                self.get_model_attr(channel_id, model, '2PULL'),
+                self.get_model_attr(channel_id, model, 'MODEL_KEY'),
+                self.get_model_attr(channel_id, model, 'BIND'),
+                )
+            )
+            for field in self.get_model_attr(channel_id,
+                                             model, 'LOC_FIELDS', default={}):
+                if not self.is_struct(field):
+                    continue
+                _logger.info('--- %-20.20s=%-20.20s (%s/"%s")' % (
+                    field,
+                    self.get_model_field_attr(
+                        channel_id, model, field, 'LOC_FIELDS'),
+                    self.get_model_field_attr(
+                        channel_id, model, field, 'APPLY'),
+                    self.get_model_field_attr(
+                        channel_id, model, field, 'PROTECT', default='0'),
+                    )
+                )
+            for field in self.get_model_attr(channel_id,
+                                             model, '', default={}):
+                if not self.is_struct(field):
+                    continue
+                loc_field = self.get_model_field_attr(
+                    channel_id, model, field, 'EXT_FIELDS')
+                if loc_field in self.get_model_field_attr(
+                        channel_id, model, field, 'LOC_FIELDS'):
+                    continue
+                _logger.info('--- %-20.20s=%-20.20s (%s/"%s")' % (
+                    loc_field,
+                    field,
+                    self.get_model_field_attr(
+                        channel_id, model, field, 'APPLY'),
+                    self.get_model_field_attr(
+                        channel_id, model, field, 'PROTECT', default='0'),
+                    )
+                )
+            _logger.info('> ')
+        _logger.info('> model=%s' % model)
+        _logger.info('> model params:(Company=%s,Lines=%s,LnModel=%s,'
+                     'Parent=%s,State=%s)' % (
+                         self.get_struct_model_attr(model,
+                                                    'MODEL_WITH_COMPANY'),
+                         self.get_struct_model_attr(model, 'LINES_OF_REC'),
+                         self.get_struct_model_attr(model, 'LINE_MODEL'),
+                         self.get_struct_model_attr(model, 'PARENT_ID'),
+                         self.get_struct_model_attr(model, 'MODEL_STATE'),
+                         ))
+        for field in self.get_struct_attr(model, default={}):
+            if not self.is_struct(field):
+                continue
+            _logger.info('--- %-20.20s: %s (Req=%s,RO=%s,rel=%s,Prot=%s)' % (
+                self.get_struct_model_attr(model, model, field),
+                self.get_struct_model_field_attr(model, field, 'ttype'),
+                self.get_struct_model_field_attr(model, field, 'required'),
+                self.get_struct_model_field_attr(model, field, 'readonly'),
+                self.get_struct_model_field_attr(model, field, 'relation'),
+                self.get_struct_model_field_attr(model, field, 'protect'),
+                )
+            )
 
 
 class IrModelField(models.Model):
@@ -1187,7 +1346,8 @@ class IrModelField(models.Model):
     protect_update = fields.Selection(
         [('0', 'Updatable'),
          ('1', 'If empty'),
-         ('2', 'Protected'),],
+         ('2', 'Protected'),
+         ],
         string='Protect field against update',
         default='0',
     )

@@ -26,6 +26,23 @@ class AccountInvoice(models.Model):
         return res
 
     @api.model
+    def set_defaults(self):
+        for nm in ('payment_term_id',
+                   'fiscal_position_id'):
+            if nm == 'fiscal_position_id':
+                partner_nm = 'property_account_position_id'
+            else:
+                partner_nm = 'property_%s' % nm
+            if not getattr(self, nm):
+                setattr(self, nm, getattr(self.partner_id, partner_nm))
+        for nm in ('goods_description_id',
+                   'carriage_condition_id',
+                   'transportation_reason_id',
+                   'transportation_method_id'):
+            if hasattr(self, nm) and not getattr(self, nm):
+                setattr(self, nm, getattr(self.partner_id, nm))
+
+    @api.model
     def synchro(self, vals):
         return self.env['ir.model.synchro'].synchro(self, vals)
 

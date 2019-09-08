@@ -7,5 +7,5 @@
 #
 ##########################################################################
 
-import magento_openerp_stock
-import res_config
+from . import magento_openerp_stock
+from . import res_config

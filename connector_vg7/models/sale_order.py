@@ -3,7 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 import logging
 from odoo import fields, models, api
-from odoo.exceptions import UserError
+# from odoo.exceptions import UserError
 _logger = logging.getLogger(__name__)
 
 
@@ -24,6 +24,28 @@ class SaleOrder(models.Model):
             self.env['ir.model.synchro']._build_unique_index(self._inherit,
                                                              prefix)
         return res
+
+    @api.model
+    def set_defaults(self):
+        for nm in ('pricelist_id',
+                   'payment_term_id',
+                   'fiscal_position_id'):
+            if nm == 'fiscal_position_id':
+                partner_nm = 'property_account_position_id'
+            else:
+                partner_nm = 'property_%s' % nm
+            if not getattr(self, nm):
+                setattr(self, nm, getattr(self.partner_id, partner_nm))
+        for nm in ('goods_description_id',
+                   'carriage_condition_id',
+                   'transportation_reason_id',
+                   'transportation_method_id'):
+            if hasattr(self, nm) and not getattr(self, nm):
+                setattr(self, nm, getattr(self.partner_id, nm))
+        nm = 'note'
+        partner_nm = 'sale_note'
+        if not getattr(self, nm):
+            setattr(self, nm, getattr(self.company_id, partner_nm))
 
     @api.model
     def synchro(self, vals):

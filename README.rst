@@ -45,9 +45,9 @@ Avaiable Addons / Moduli disponibili
 +------------------------+------------+------------+----------------------------------------------------------------------------------+
 | connector_base_product | |halt|     | |same|     | Connector Base Product                                                           |
 +------------------------+------------+------------+----------------------------------------------------------------------------------+
-| connector_vg7          | 10.0.0.1.3 | |no_check| | Bidirectional connector to/from VG7 software                                     |
+| connector_vg7          | 10.0.0.1.6 | |no_check| | Bidirectional connector to/from VG7 software                                     |
 +------------------------+------------+------------+----------------------------------------------------------------------------------+
-| ddt_to_magento_order   | 10.0.0.1.1 | |no_check| | Set Magento Order to close when DdT is created                                   |
+| ddt_to_magento_order   | |halt|     | |no_check| | Set Magento Order to close when DdT is created                                   |
 +------------------------+------------+------------+----------------------------------------------------------------------------------+
 | magento_bridge         | 10.0.2.0.0 | |no_check| | Basic MOB                                                                        |
 +------------------------+------------+------------+----------------------------------------------------------------------------------+
@@ -105,11 +105,8 @@ Installation / Installazione
     git clone https://github.com/zeroincombenze/tools.git
     cd ./tools
     ./install_tools.sh -p
-    export PATH=$HOME/dev:$PATH
+    source /opt/odoo/dev/activate_tools
     odoo_install_repository connector -b 10.0 -O zero
-    for pkg in os0 z0lib; do
-        pip install $pkg -U
-    done
     sudo manage_odoo requirements -b 10.0 -vsy -o /opt/odoo/10.0
 
 
@@ -185,7 +182,7 @@ La distribuzione `Zeroincombenze® <https://wiki.zeroincombenze.org/en/Odoo>`__ 
 |
 
 
-Last Update / Ultimo aggiornamento: 2019-07-10
+Last Update / Ultimo aggiornamento: 2019-09-08
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Alfa-red.png
     :target: https://odoo-community.org/page/development-status

@@ -7,11 +7,10 @@
 #
 ##########################################################################
 
-import wk_skeleton
-import invoice_order
-import order_line
-import res_partner
-import sale
-import ship_order
-import wk_order_mapping
-
+from . import wk_skeleton
+from . import invoice_order
+from . import order_line
+from . import res_partner
+from . import sale
+from . import ship_order
+from . import wk_order_mapping

@@ -2,6 +2,7 @@
 <!-- Copyright (c) 2015-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
 <!-- See LICENSE file for full copyright and licensing details. -->
 <!-- "License URL : <https://store.webkul.com/license.html/>" -->
+<!-- pylint:disable=deprecated-data-xml-node -->
 
 <odoo>
     <!-- Making the xmlid of menus required by the Magneto Bridge Module tour available in webclient -->

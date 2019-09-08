@@ -29,6 +29,7 @@
     'external_dependencies': {
         'python': [
             'os0',
+            'unidecode',
         ],
     },
     'installable': True,

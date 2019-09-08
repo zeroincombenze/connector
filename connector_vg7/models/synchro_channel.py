@@ -26,7 +26,7 @@ class SynchroChannel(models.Model):
         [('generic', 'Generic counterpart'),
          ('odoo', 'Odoo instance'),
          ('vg7', 'VG7 instance'),
-        ],
+         ],
         'Counterpart identity',
         help="May activate some specific functions",
         copy=False,
@@ -106,7 +106,8 @@ class SynchroChannelModelFields(models.Model):
     protect = fields.Selection(
         [('0', 'Updatable'),
          ('1', 'If empty'),
-         ('2', 'Protected'),],
+         ('2', 'Protected'),
+         ],
         string='Protect field against update',
         default='0',
     )

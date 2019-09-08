@@ -1,3 +1,4 @@
+# flake8: noqa
 # -*- coding: utf-8 -*-
 ##########################################################################
 #
@@ -89,9 +90,9 @@ class RegionWizard(models.TransientModel):
                         raise UserError(
                             _('Error!\n There is no any region exist for country %s.') %
                             (country_id.name))
-                        return {
-                            'type': 'ir.actions.act_window_close',
-                        }
+                        # return {
+                        #     'type': 'ir.actions.act_window_close',
+                        # }
                     else:
                         text = "%s Region of %s are sucessfully Imported to OpenERP." % (
                             total_regions, country_id.name)

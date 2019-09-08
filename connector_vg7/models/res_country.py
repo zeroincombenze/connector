@@ -3,13 +3,12 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 import logging
 from odoo import fields, models, api
-from odoo.exceptions import UserError
+# from odoo.exceptions import UserError
 _logger = logging.getLogger(__name__)
-
-try:
-    from unidecode import unidecode
-except ImportError as err:
-    _logger.debug(err)
+# try:
+#     from unidecode import unidecode
+# except ImportError as err:
+#     _logger.debug(err)
 
 
 class ResCountry(models.Model):

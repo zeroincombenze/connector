@@ -84,7 +84,7 @@
     <record forcecreate="1" id="account_account" model="synchro.channel.model">
         <field name="name">account.account</field>
         <field name="field_uname">name</field>
-        <field name="search_keys">(['code'],['name'],['dim_name'],)</field>
+        <field name="search_keys">(['code', 'company_id'],['name', 'company_id'],['dim_name', 'company_id'],)</field>
         <field name="synchro_channel_id" ref="channel_vg7"/>
     </record>
 

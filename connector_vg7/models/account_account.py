@@ -3,7 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 import logging
 from odoo import fields, models, api
-from odoo.exceptions import UserError
+# from odoo.exceptions import UserError
 _logger = logging.getLogger(__name__)
 
 try:
@@ -61,7 +61,6 @@ class AccountAccount(models.Model):
 
 class AccountAccountType(models.Model):
     _inherit = "account.account.type"
-
 
     @api.multi
     @api.depends('name')
