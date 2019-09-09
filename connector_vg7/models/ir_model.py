@@ -26,7 +26,7 @@ try:
     from os0 import os0
 except ImportError as err:
     _logger.debug(err)
-import pdb
+# import pdb
 
 
 class IrModelSynchro(models.Model):
@@ -325,6 +325,14 @@ class IrModelSynchro(models.Model):
                 cache.get_struct_model_attr(model, 'MODEL_WITH_COUNTRY')):
             where.append(('country_id', '=', ctx['country_id']))
         rec = ir_model.search(where)
+        if not rec and model == 'res.country.state' and key_name == 'name':
+            if value.find('-') >= 0:
+                value = value[0: value.find('-')]
+                if ilike:
+                    where = [(key_name, 'ilike', value)]
+                else:
+                    where = [(key_name, '=', value)]
+                rec = ir_model.search(where)
         if not rec and not ilike and key_name == 'name':
             return self.get_rec_by_reference(model, key_name, value, ctx,
                                              ilike=True)
@@ -351,6 +359,13 @@ class IrModelSynchro(models.Model):
             if (cache.get_struct_model_attr(model, 'MODEL_WITH_COUNTRY') and
                     ctx.get('country_id')):
                 vals['country_id'] = ctx['country_id']
+            for field in cache.get_struct_attr(model, default={}):
+                if not cache.is_struct(field):
+                    continue
+                if (cache.get_struct_model_field_attr(
+                        model, field, 'required') and field not in vals):
+                    raise KeyError('No enough informatios to create record '
+                                   '%s.%s' % (model, value))
             new_value = self.synchro(ir_model, vals)
         return new_value
 
@@ -903,7 +918,6 @@ class IrModelSynchro(models.Model):
 
     @api.multi
     def pull_recs_2_complete(self):
-        # self._init_self()
         cache = self.env['ir.model.synchro.cache']
         cache.open()
         for channel_id in cache.get_channel_list():
@@ -940,7 +954,6 @@ class IrModelSynchro(models.Model):
 
     @api.multi
     def pull_full_records(self):
-        # self._init_self()
         cache = self.env['ir.model.synchro.cache']
         cache.open()
         for channel_id in cache.get_channel_list():
@@ -974,11 +987,10 @@ class IrModelSynchro(models.Model):
                         id = data['id']
                     else:
                         id = int(data['id'])
-                    ext_id = '%s_id' % cache.get_model_attr(channel_id,
-                                                            'IDENTITY')
+                    ext_id = '%s_id' % cache.get_attr(channel_id, 'IDENTITY')
                     if not ir_model.search([(ext_id, '=', id)]):
                         ir_model.synchro(self.prefix_bind(
-                            cache.get_model_attr(channel_id, 'PREFIX'),
+                            cache.get_attr(channel_id, 'PREFIX'),
                             data))
                         # commit every table to avoid too big transaction
                         self.env.cr.commit()   # pylint: disable=invalid-commit
@@ -997,17 +1009,27 @@ class IrModelSynchroCache(models.Model):
             self.EXPIRATION_TIME = lifetime
 
     def clean_cache(self, channel_id=None, model=None, lifetime=None):
+        dbname = self._cr.dbname
+        self.STRUCT[dbname] = self.STRUCT.get(dbname, {})
+        self.MANAGED_MODELS[dbname] = self.MANAGED_MODELS.get(dbname, {})
         if model:
-            self.STRUCT[model] = {}
+            # self.STRUCT[model] = {}
+            self.STRUCT[dbname][model] = {}
         else:
-            self.STRUCT = {}
+            # self.STRUCT = {}
+            self.STRUCT[dbname] = {}
         if channel_id:
             if model:
-                self.MANAGED_MODELS[channel_id][model] = {}
+                # self.MANAGED_MODELS[channel_id][model] = {}
+                self.MANAGED_MODELS[dbname][channel_id] = self.MANAGED_MODELS[
+                    dbname].get(channel_id, {})
+                self.MANAGED_MODELS[dbname][channel_id][model] = {}
             else:
-                self.MANAGED_MODELS[channel_id] = {}
+                # self.MANAGED_MODELS[channel_id] = {}
+                self.MANAGED_MODELS[dbname][channel_id] = {}
         else:
-            self.MANAGED_MODELS = {}
+            # self.MANAGED_MODELS = {}
+            self.MANAGED_MODELS[dbname] = {}
         if lifetime:
             self.lifetime(lifetime)
 
@@ -1019,64 +1041,96 @@ class IrModelSynchroCache(models.Model):
         return model >= 'a'
 
     def get_channel_list(self):
-        return self.MANAGED_MODELS
+        # return self.MANAGED_MODELS
+        return self.MANAGED_MODELS.get(self._cr.dbname, {})
 
     def get_attr_list(self, channel_id):
-        return self.MANAGED_MODELS.get(channel_id, {})
+        # return self.MANAGED_MODELS.get(channel_id, {})
+        return self.MANAGED_MODELS.get(self._cr.dbname, {}).get(channel_id, {})
 
     def get_attr(self, channel_id, attrib, default=None):
-        return self.MANAGED_MODELS.get(channel_id, {}).get(attrib, default)
+        # return self.MANAGED_MODELS.get(channel_id, {}).get(attrib, default)
+        return self.MANAGED_MODELS.get(self._cr.dbname, {}).get(
+            channel_id, {}).get(attrib, default)
 
     def get_model_attr(self, channel_id, model, attrib, default=None):
-        return self.MANAGED_MODELS.get(
+        # return self.MANAGED_MODELS.get(
+        #     channel_id, {}).get(model, {}).get(attrib, default)
+        return self.MANAGED_MODELS.get(self._cr.dbname, {}).get(
             channel_id, {}).get(model, {}).get(attrib, default)
 
     def get_model_field_attr(self, channel_id, model, field, attrib,
                              default=None):
-        return self.MANAGED_MODELS.get(
+        # return self.MANAGED_MODELS.get(
+        #     channel_id, {}).get(model, {}).get(attrib, {}).get(
+        #         field, default)
+        return self.MANAGED_MODELS.get(self._cr.dbname, {}).get(
             channel_id, {}).get(model, {}).get(attrib, {}).get(
                 field, default)
 
     def set_channel(self, channel_id):
-        self.MANAGED_MODELS[channel_id] = self.MANAGED_MODELS.get(
-            channel_id, {})
+        # self.MANAGED_MODELS[channel_id] = self.MANAGED_MODELS.get(
+        #     channel_id, {})
+        self.MANAGED_MODELS[self._cr.dbname] = self.MANAGED_MODELS.get(
+            self._cr.dbname, {})
+        self.MANAGED_MODELS[self._cr.dbname][
+            channel_id] = self.MANAGED_MODELS.get(self._cr.dbname, {}).get(
+                channel_id, {})
 
     def set_model(self, channel_id, model):
         self.set_channel(channel_id)
-        self.MANAGED_MODELS[channel_id][model] = self.MANAGED_MODELS[
-            channel_id].get(model, {})
+        # self.MANAGED_MODELS[channel_id][model] = self.MANAGED_MODELS[
+        #     channel_id].get(model, {})
+        self.MANAGED_MODELS[self._cr.dbname][channel_id][
+            model] = self.MANAGED_MODELS.get(self._cr.dbname, {})[
+                channel_id].get(model, {})
         self.set_model_attr(channel_id, model, 'LOC_FIELDS', {})
         self.set_model_attr(channel_id, model, 'EXT_FIELDS', {})
         self.set_model_attr(channel_id, model, 'APPLY', {})
         self.set_model_attr(channel_id, model, 'PROTECT', {})
 
     def set_attr(self, channel_id, attrib, value):
-        self.MANAGED_MODELS[channel_id][attrib] = value
+        # self.MANAGED_MODELS[channel_id][attrib] = value
+        self.MANAGED_MODELS[self._cr.dbname][channel_id][attrib] = value
 
     def set_model_attr(self, channel_id, model, attrib, value):
-        self.MANAGED_MODELS[channel_id][model][attrib] = value
+        # self.MANAGED_MODELS[channel_id][model][attrib] = value
+        self.MANAGED_MODELS[self._cr.dbname][channel_id][model][attrib] = value
 
     def set_model_field_attr(self, channel_id, model, field, attrib, value):
-        self.MANAGED_MODELS[channel_id][model][attrib][field] = value
+        # self.MANAGED_MODELS[channel_id][model][attrib][field] = value
+        self.MANAGED_MODELS[self._cr.dbname][channel_id][model][attrib][
+            field] = value
 
     def model_list(self):
-        return self.STRUCT
+        # return self.STRUCT
+        return self.STRUCT.get(self._cr.dbname, {})
 
     def get_struct_attr(self, attrib, default=None):
         default = default or {}
-        return self.STRUCT.get(attrib, default)
+        # return self.STRUCT.get(attrib, default)
+        return self.STRUCT.get(self._cr.dbname, {}).get(attrib, default)
 
     def get_struct_model_attr(self, model, attrib, default=None):
-        return self.STRUCT.get(model, {}).get(attrib, default)
+        # return self.STRUCT.get(model, {}).get(attrib, default)
+        return self.STRUCT.get(self._cr.dbname, {}).get(model, {}).get(
+            attrib, default)
 
     def get_struct_model_field_attr(self, model, field, attrib, default=None):
-        return self.STRUCT.get(model, {}).get(field, {}).get(attrib, default)
+        # return self.STRUCT.get(model, {}).get(field, {}).get(attrib, default)
+        return self.STRUCT.get(self._cr.dbname, {}).get(model, {}).get(
+            field, {}).get(attrib, default)
 
     def set_struct_model(self, model):
-        self.STRUCT[model] = self.STRUCT.get(model, {})
+        # self.STRUCT[model] = self.STRUCT.get(model, {})
+        self.STRUCT[self._cr.dbname] = self.STRUCT.get(
+            self._cr.dbname, {})
+        self.STRUCT[self._cr.dbname][model] = self.STRUCT.get(
+            self._cr.dbname, {}).get(model, {})
 
     def set_struct_model_attr(self, model, attrib, value):
-        self.STRUCT[model][attrib] = value
+        # self.STRUCT[model][attrib] = value
+        self.STRUCT[self._cr.dbname][model][attrib] = value
 
     def setup_model_structure(self, model, ro_fields=None):
         '''Store model structure in memory'''
@@ -1230,7 +1284,7 @@ class IrModelSynchroCache(models.Model):
             channel_id, model, 'id', 'EXT_FIELDS', ext_ref)
 
     def set_odoo_model(self, channel_id, model):
-        if model in self.MANAGED_MODELS[channel_id]:
+        if self.get_attr(channel_id, model):
             return
         self.set_model(channel_id, model)
         skeys = ['name']
@@ -1263,13 +1317,14 @@ class IrModelSynchroCache(models.Model):
                 raise RuntimeError('Class %s not of declared model %s' % (
                     cls.__class__.__name__, model))
             if hasattr(cls, 'LINES_OF_REC'):
-                self.STRUCT[model]['LINES_OF_REC'] = getattr(cls,
-                                                             'LINES_OF_REC')
+                self.set_struct_model_attr(model, 'LINES_OF_REC',
+                                           getattr(cls, 'LINES_OF_REC'))
             if hasattr(cls, 'LINE_MODEL'):
-                self.STRUCT[model]['LINE_MODEL'] = getattr(cls,
-                                                           'LINE_MODEL')
+                self.set_struct_model_attr(model, 'LINE_MODEL',
+                                           getattr(cls, 'LINE_MODEL'))
             if hasattr(cls, 'PARENT_ID'):
-                self.STRUCT[model]['PARENT_ID'] = getattr(cls, 'PARENT_ID')
+                self.set_struct_model_attr(model, 'PARENT_ID',
+                                           getattr(cls, 'PARENT_ID'))
 
     def show_debug(self, channel_id, model):
         if not model:
