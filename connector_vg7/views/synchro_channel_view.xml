@@ -100,12 +100,51 @@
         <field name="view_id" ref="view_synchro_model_tree"/>
     </record>
 
+
+    <record id="view_synchro_tnl_tree" model="ir.ui.view">
+        <field name="name">view.synchro.tnl.tree</field>
+        <field name="model">synchro.channel.domain.translation</field>
+        <field name="arch" type="xml">
+            <tree string="Synchonization Domains">
+                <field name="model"/>
+                <field name="key"/>
+                <field name="odoo_value"/>
+                <field name="ext_value"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_synchro_tnl_form" model="ir.ui.view">
+        <field name="name">view.synchro.tnl.form</field>
+        <field name="model">synchro.channel.domain.translation</field>
+        <field name="arch" type="xml">
+            <form string="Synchonization Domains">
+                <group>
+                    <field name="model"/>
+                    <field name="key"/>
+                    <field name="odoo_value"/>
+                    <field name="ext_value"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_synchro_tnl" model="ir.actions.act_window">
+        <field name="name">Translation Domains</field>
+        <field name="res_model">synchro.channel.domain.translation</field>
+        <field name="view_id" ref="view_synchro_tnl_tree"/>
+    </record>
+
     <menuitem id="menu_synchro_channel" name="Synchonization Channel"
               action="action_synchro_channel" parent="base.next_id_9"
               groups="base.group_no_one"/>
 
     <menuitem id="menu_synchro_model" name="Synchonization Model"
               action="action_synchro_model" parent="base.next_id_9"
+              groups="base.group_no_one"/>
+
+    <menuitem id="menu_synchro_translation" name="Translation Domains"
+              action="action_synchro_tnl" parent="base.next_id_9"
               groups="base.group_no_one"/>
 
 </odoo>

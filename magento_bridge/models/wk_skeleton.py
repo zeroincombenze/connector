@@ -119,7 +119,7 @@ class WkSkeleton(models.TransientModel):
             odooProductId = self.env['product.product'].create(tempDict).id
             irValuesModel.sudo().set_default(
                 'product.product', defProductObj, odooProductId or False, False)
-            self._cr.commit()
+            self._cr.commit()                 # pylint: disable=invalid-commit
         return odooProductId
 
     @api.model

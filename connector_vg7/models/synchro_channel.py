@@ -114,3 +114,13 @@ class SynchroChannelModelFields(models.Model):
     model_id = fields.Many2one(
         'synchro.channel.model'
     )
+
+
+class SynchroChannelDomainTnl(models.Model):
+    _name = 'synchro.channel.domain.translation'
+    _description = "Field translation for field"
+
+    model = fields.Char('Odoo model name')
+    key = fields.Char('Odoo field name')
+    odoo_value = fields.Char('Odoo field value')
+    ext_value = fields.Char('External field value')

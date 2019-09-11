@@ -1,6 +1,6 @@
 
 ===============================
-|icon| connector_vg7 10.0.0.1.6
+|icon| connector_vg7 10.0.0.1.7
 ===============================
 
 
@@ -193,7 +193,7 @@ La distribuzione `Zeroincombenze® <https://wiki.zeroincombenze.org/en/Odoo>`__ 
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2019-09-08
+Last Update / Ultimo aggiornamento: 2019-09-11
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Alfa-red.png
     :target: https://odoo-community.org/page/development-status

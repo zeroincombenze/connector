@@ -54,5 +54,22 @@ class ResPartner(models.Model):
         return text
 
     @api.model
+    def preprocess(self, channel_id, vals):
+        cache = self.env['ir.model.synchro.cache']
+        if cache.get_attr(channel_id, 'IDENTITY') == 'vg7':
+            if vals.get('type') == 'delivery':
+                if vals.get('vg7:id'):
+                    if isinstance(vals['vg7:id'], basestring):
+                        vals['vg7:id'] = int(vals['vg7:id'])
+                    vals['vg7_parent_id'] = vals['vg7:id']
+                    vals['vg7:id'] = vals['vg7:id'] + 100000000
+                elif vals.get('id'):
+                    if isinstance(vals['id'], basestring):
+                        vals['id'] = int(vals['id'])
+                    vals['parent_id'] = vals['id']
+                    del vals['id']
+        return vals
+
+    @api.model
     def synchro(self, vals):
         return self.env['ir.model.synchro'].synchro(self, vals)

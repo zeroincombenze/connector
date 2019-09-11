@@ -12,7 +12,7 @@ class SaleOrder(models.Model):
 
     vg7_id = fields.Integer('VG7 ID', copy=False)
     oe7_id = fields.Integer('Odoo7 ID', copy=False)
-    original_state = fields.Char('Original Status')
+    original_state = fields.Char('Original Status', copy=False)
 
     CONTRAINTS = []
     DEFAULT = {}
@@ -42,6 +42,10 @@ class SaleOrder(models.Model):
                    'transportation_method_id'):
             if hasattr(self, nm) and not getattr(self, nm):
                 setattr(self, nm, getattr(self.partner_id, nm))
+        for nm in ('partner_invoice_id',
+                   'partner_shipping_id'):
+            if not not getattr(self, nm):
+                setattr(self, nm, self.partner_id)
         nm = 'note'
         partner_nm = 'sale_note'
         if not getattr(self, nm):
@@ -49,6 +53,8 @@ class SaleOrder(models.Model):
 
     @api.model
     def synchro(self, vals):
+        # import pdb
+        # pdb.set_trace()
         return self.env['ir.model.synchro'].synchro(self, vals)
 
     @api.model

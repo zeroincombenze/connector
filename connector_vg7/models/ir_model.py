@@ -14,10 +14,15 @@
 import os
 from datetime import datetime, timedelta
 import requests
+# from lxml import etree
 import logging
 from odoo import fields, models, api
 # from odoo.exceptions import UserError
 _logger = logging.getLogger(__name__)
+try:
+    from python_plus import unicodes
+except ImportError as err:
+    _logger.debug(err)
 try:
     from unidecode import unidecode
 except ImportError as err:
@@ -40,12 +45,41 @@ class IrModelSynchro(models.Model):
     }
     LOGLEVEL = 'info'
     SKEYS = {
-        'res.country.state': (['country_id', 'code'],),
-        'res.partner': (['name', 'vat'], ['vat'],),
+        'res.country': (['code'], ['name']),
+        'res.country.state': (['code', 'country_id'], ['name'], ['dim_name']),
+        'res.partner': (['vat', 'fiscalcode', 'is_company', 'type'],
+                        ['vat', 'fiscalcode', 'is_company'],
+                        ['rea_code'],
+                        ['vat', 'name', 'is_company', 'type'],
+                        ['fiscalcode', 'type'],
+                        ['vat', 'is_company'],
+                        ['name', 'is_company'],
+                        ['vat'],
+                        ['name'],
+                        ['dim_name']),
         'res.company': (['vat'],),
-        'account.account.type': (['type'],),
-        'product.template': (['name', 'default_code'],),
-        'product.product': (['name', 'default_code'],),
+        'account.account': (['code', 'company_id'],
+                            ['name', 'company_id'],
+                            ['dim_name', 'company_id']),
+        'account.account.type': (['type'], ['name'], ['dim_name']),
+        'account.tax': (['description'], ['name'], ['dim_name'],),
+        'account.invoice': (['number'], ['move_name']),
+        'account.invoice.line': (['invoice_id', 'sequence'],
+                                 ['invoice_id', 'name']),
+        'product.template': (['name', 'default_code'],
+                             ['name', 'barcode'],
+                             ['name'],
+                             ['default_code'],
+                             ['barcode'],
+                             ['dim_name']),
+        'product.product': (['name', 'default_code'],
+                            ['name', 'barcode'],
+                            ['name'],
+                            ['default_code'],
+                            ['barcode'],
+                            ['dim_name']),
+        'sale.order': (['name']),
+        'sale.order.line': (['order_id', 'sequence'], ['order_id', 'name']),
     }
 
     def _build_unique_index(self, model, prefix):
@@ -93,10 +127,8 @@ class IrModelSynchro(models.Model):
             _logger.debug(msg)
 
     def tnl_2_loc_set_value(self, vals, loc_name, ext_ref, default=None):
-        if default:
+        if not vals.get(ext_ref) and default:
             vals[loc_name] = default
-        if loc_name != ext_ref:
-            del vals[ext_ref]
         return vals
 
     def tnl_2_loc_upper(self, vals, loc_name, ext_ref, default=None):
@@ -104,8 +136,6 @@ class IrModelSynchro(models.Model):
             vals[loc_name] = vals[ext_ref].upper()
         else:
             vals[loc_name] = vals[ext_ref]
-        if loc_name != ext_ref:
-            del vals[ext_ref]
         return vals
 
     def tnl_2_loc_lower(self, vals, loc_name, ext_ref, default=None):
@@ -113,20 +143,14 @@ class IrModelSynchro(models.Model):
             vals[loc_name] = vals[ext_ref].lower()
         else:
             vals[loc_name] = vals[ext_ref]
-        if loc_name != ext_ref:
-            del vals[ext_ref]
         return vals
 
     def tnl_2_loc_bool(self, vals, loc_name, ext_ref, default=None):
         vals[loc_name] = os0.str2bool(vals[ext_ref], False)
-        if loc_name != ext_ref:
-            del vals[ext_ref]
         return vals
 
     def tnl_2_loc_not(self, vals, loc_name, ext_ref, default=None):
         vals[loc_name] = not os0.str2bool(vals[ext_ref], True)
-        if loc_name != ext_ref:
-            del vals[ext_ref]
         return vals
 
     def tnl_2_loc_person(self, vals, loc_name, ext_ref, default=None):
@@ -150,8 +174,8 @@ class IrModelSynchro(models.Model):
             vals[loc_name] = 'IT%s' % vals[ext_ref]
         else:
             vals[loc_name] = vals[ext_ref]
-        if loc_name != ext_ref:
-            del vals[ext_ref]
+        # if loc_name != ext_ref:
+        #     del vals[ext_ref]
         return vals
 
     def tnl_2_loc_street_number(self, vals, loc_name, ext_ref, default=None):
@@ -217,6 +241,29 @@ class IrModelSynchro(models.Model):
                 vals[loc_name] = [(6, 0, [tax.id])]
         return vals
 
+    def tnl_2_loc_agents(self, vals, loc_name, ext_ref, default=None):
+        if vals.get('partner_id'):
+            partner = self.env['res.partner'].browse(vals.get('partner_id'))
+        elif vals.get('order_id'):
+            partner = self.env[
+                'sale.order'].browse(vals['order_id']).partner_id
+        elif vals.get('invoice_id'):
+            partner = self.env[
+                'account.invoice'].browse(vals['invoice_id']).partner_id
+        else:
+            partner = False
+        if not partner:
+            return vals
+        rec = {}
+        for agent in partner.agents:
+            rec = {
+                'agent': agent.id,
+                'commission': agent.commission.id,
+            }
+        if rec:
+            vals[loc_name] = [(0, 0, rec)]
+        return vals
+
     def drop_fields(self, model, vals, to_delete):
         for name in to_delete:
             if isinstance(vals, (list, tuple)):
@@ -245,9 +292,12 @@ class IrModelSynchro(models.Model):
                     channel_id, model, field, 'PROTECT', default='0')))
             if (protect == 2 or (protect == 1 and rec[field])):
                 del vals[field]
-            elif (isinstance(vals[field], (basestring, int, long, bool)) and
-                    vals[field] == rec[field]):
-                del vals[field]
+            elif isinstance(vals[field], (basestring, int, long, bool)):
+                if ((cache.get_struct_model_field_attr(
+                    model, field, 'ttype') == 'many2one' and vals[
+                        field] == rec[field].id) or
+                        vals[field] == rec[field]):
+                    del vals[field]
         return vals
 
     def set_state_to_draft(self, model, rec, vals):
@@ -257,6 +307,9 @@ class IrModelSynchro(models.Model):
             vals['original_state'] = rec.state
         if model == 'account.invoice':
             if rec:
+                rec.set_defaults()
+                rec.compute_taxes()
+                rec.write({})
                 if rec.state == 'paid':
                     return vals, -4
                 elif rec.state == 'open':
@@ -269,6 +322,9 @@ class IrModelSynchro(models.Model):
                 del vals['state']
         elif model == 'sale.order':
             if rec:
+                rec.set_defaults()
+                rec._compute_tax_id()
+                rec.write({})
                 if rec.invoice_count > 0 or rec.ddt_ids:
                     return vals, -4
                 if rec.state == 'done':
@@ -286,8 +342,8 @@ class IrModelSynchro(models.Model):
     def set_actual_state(self, model, rec):
         if model == 'account.invoice':
             if rec:
-                rec.set_defaults()
                 rec.compute_taxes()
+                rec.write({})
                 if rec.state == rec.original_state:
                     return rec.id
                 elif rec.state != 'draft':
@@ -298,8 +354,8 @@ class IrModelSynchro(models.Model):
                     rec.action_invoice_cancel()
         elif model == 'sale.order':
             if rec:
-                rec.set_defaults()
                 rec._compute_tax_id()
+                rec.write({})
                 if rec.state == rec.original_state:
                     return rec.id
                 elif rec.state != 'draft':
@@ -310,13 +366,51 @@ class IrModelSynchro(models.Model):
                     rec.action_cancel()
         return rec.id
 
-    def get_rec_by_reference(self, model, key_name, value, ctx, ilike=None):
+    def create_new_ref(self, model, key_name, value, ctx):
         cache = self.env['ir.model.synchro.cache']
         ir_model = self.env[model]
-        if ilike:
-            where = [(key_name, 'ilike', value)]
-        else:
-            where = [(key_name, '=', value)]
+        vals = {key_name: value}
+        if (key_name != 'company_id' and
+                cache.get_struct_model_attr(model, 'MODEL_WITH_COMPANY') and
+                ctx.get('company_id')):
+            vals['company_id'] = ctx['company_id']
+        if (key_name != 'country_id' and
+                cache.get_struct_model_attr(model, 'MODEL_WITH_COUNTRY') and
+                ctx.get('country_id')):
+            vals['country_id'] = ctx['country_id']
+        if (key_name != 'name' and
+                cache.get_struct_model_attr(model, 'MODEL_WITH_NAME')):
+            if isinstance(value, (int, long)):
+                vals['name'] = 'Unknown %d' % value
+            else:
+                vals['name'] = '%s=%s' % (key_name, value)
+        new_value = self.synchro(ir_model, vals)
+        if new_value <= 0:
+            if key_name == 'company_id' and ctx.get('company_id'):
+                new_value = ctx['company_id']
+            elif key_name == 'country_id' and ctx.get('country_id'):
+                new_value = ctx['country_id']
+            else:
+                new_value = False
+        return new_value
+
+    def get_rec_by_reference(self, model, key_name, value, ctx, mode=None):
+        mode = mode or '='
+        self.logmsg(1, 'get_rec_by_reference(%s,%s %s %s)' % (
+                    model, key_name, mode, value))
+        cache = self.env['ir.model.synchro.cache']
+        ir_model = self.env[model]
+        if mode == 'tnl':
+            translation_model = self.env['synchro.channel.domain.translation']
+            where = [('model', '=',  model),
+                     ('key', '=', key_name),
+                     ('ext_value', 'ilike', self.dim_text(value))]
+            rec = translation_model.search(where)
+            if not rec:
+                return rec
+            value = rec[0].odoo_value
+            mode = 'ilike'
+        where = [(key_name, mode, value)]
         if model not in ('res.partner', 'product.product', 'product.template'):
             if (key_name != 'id' and ctx.get('company_id') and
                     cache.get_struct_model_attr(model, 'MODEL_WITH_COMPANY')):
@@ -325,24 +419,26 @@ class IrModelSynchro(models.Model):
                 cache.get_struct_model_attr(model, 'MODEL_WITH_COUNTRY')):
             where.append(('country_id', '=', ctx['country_id']))
         rec = ir_model.search(where)
-        if not rec and model == 'res.country.state' and key_name == 'name':
-            if value.find('-') >= 0:
-                value = value[0: value.find('-')]
-                if ilike:
-                    where = [(key_name, 'ilike', value)]
-                else:
-                    where = [(key_name, '=', value)]
-                rec = ir_model.search(where)
-        if not rec and not ilike and key_name == 'name':
-            return self.get_rec_by_reference(model, key_name, value, ctx,
-                                             ilike=True)
+        if not rec and mode != 'tnl' and isinstance(value, basestring):
+            rec = self.get_rec_by_reference(model, key_name, value, ctx,
+                                            mode='tnl')
+        if not rec:
+            if mode == '=' and key_name == 'name':
+                return self.get_rec_by_reference(model, key_name, value, ctx,
+                                                 mode='ilike')
+            elif key_name == 'code' and cache.get_struct_model_attr(
+                    model, 'MODEL_WITH_NAME'):
+                return self.get_rec_by_reference(model, 'name', value, ctx,
+                                                 mode=mode)
         return rec
 
     def bind_foreign_text(self, model, value, is_foreign, channel_id, ctx):
+        self.logmsg(channel_id, 'bind_foreign_text(%s,%s,%s)' % (
+                    model, value, is_foreign))
         cache = self.env['ir.model.synchro.cache']
         if value.isdigit():
             return int(value)
-        ir_model = self.env[model]
+        # ir_model = self.env[model]
         if cache.get_attr(channel_id, model):
             key_name = cache.get_model_attr(channel_id, model, 'MODEL_KEY')
         else:
@@ -352,25 +448,13 @@ class IrModelSynchro(models.Model):
         if rec:
             new_value = rec[0].id
         if not new_value and cache.get_attr(channel_id, model):
-            vals = {key_name: value}
-            if (cache.get_struct_model_attr(model, 'MODEL_WITH_COMPANY') and
-                    ctx.get('company_id')):
-                vals['company_id'] = ctx['company_id']
-            if (cache.get_struct_model_attr(model, 'MODEL_WITH_COUNTRY') and
-                    ctx.get('country_id')):
-                vals['country_id'] = ctx['country_id']
-            for field in cache.get_struct_attr(model, default={}):
-                if not cache.is_struct(field):
-                    continue
-                if (cache.get_struct_model_field_attr(
-                        model, field, 'required') and field not in vals):
-                    raise KeyError('No enough informatios to create record '
-                                   '%s.%s' % (model, value))
-            new_value = self.synchro(ir_model, vals)
+            new_value = self.create_new_ref(model, key_name, value, ctx)
         return new_value
 
     def bind_foreign_ref(self, model, value, ext_id, is_foreign,
                          channel_id, ctx):
+        self.logmsg(channel_id, 'bind_foreign_ref(%s,%s,%s,%s)' % (
+                    model, value, ext_id, is_foreign))
         cache = self.env['ir.model.synchro.cache']
         new_value = False
         ir_model = self.env[model]
@@ -382,19 +466,13 @@ class IrModelSynchro(models.Model):
         if rec:
             new_value = rec[0].id
         if not new_value and cache.get_attr(channel_id, model):
-            vals = {
-                ext_id: value,
-                'name': 'Unknown %d' % value,
-            }
-            if cache.get_struct_model_attr(model, 'MODEL_WITH_COMPANY'):
-                vals['company_id'] = ctx['company_id']
-            new_value = self.synchro(ir_model, vals)
+            new_value = self.create_new_ref(model, 'ext_id', value, ctx)
         return new_value
 
     def get_foreign_value(self, model, channel_id, value,
-                          is_foreign, ext_id, ctx, tomany=None):
-        self.logmsg(channel_id, 'get_foreign_value(%s,%s,%s)' % (
-                    model, value, ext_id))
+                          ext_id, is_foreign, ctx, tomany=None):
+        self.logmsg(channel_id, 'get_foreign_value(%s,%s,%s,%s)' % (
+                    model, value, ext_id, is_foreign))
         if not value:
             return value
         cache = self.env['ir.model.synchro.cache']
@@ -404,13 +482,15 @@ class IrModelSynchro(models.Model):
         if isinstance(value, basestring):
             new_value = self.bind_foreign_text(
                 model, value, is_foreign, channel_id, ctx)
-            if tomany:
+            if tomany and new_value:
                 new_value = [new_value]
         elif isinstance(model, (list, tuple)):
             new_value = []
             for id in value:
-                new_value.append(self.bind_foreign_ref(
-                    model, id, ext_id, is_foreign, channel_id, ctx))
+                new_id = self.bind_foreign_ref(
+                    model, id, ext_id, is_foreign, channel_id, ctx)
+                if new_id:
+                    new_value.append(new_id)
         else:
             new_value = self.bind_foreign_ref(
                 model, value, ext_id, is_foreign, channel_id, ctx)
@@ -424,7 +504,7 @@ class IrModelSynchro(models.Model):
             raise RuntimeError('No relation for field %s of %s' % (name,
                                                                    model))
         return self.get_foreign_value(relation, channel_id, value,
-                                      is_foreign, ext_id, ctx)
+                                      ext_id, is_foreign, ctx)
 
     def cvt_m2m_value(self, model, name, value,
                       channel_id, ext_id, is_foreign, ctx, format=None):
@@ -434,7 +514,7 @@ class IrModelSynchro(models.Model):
             raise RuntimeError('No relation for field %s of %s' % (name,
                                                                    model))
         value = self.get_foreign_value(relation, channel_id, value,
-                                       is_foreign, ext_id, ctx,
+                                       ext_id, is_foreign, ctx,
                                        tomany=True)
         if format == 'cmd' and value:
             value = [(6, 0, value)]
@@ -448,7 +528,7 @@ class IrModelSynchro(models.Model):
             raise RuntimeError('No relation for field %s of %s' % (name,
                                                                    model))
         value = self.get_foreign_value(relation, channel_id, value,
-                                       is_foreign, ext_id, ctx,
+                                       ext_id, is_foreign, ctx,
                                        tomany=True)
         if format == 'cmd' and value:
             value = [(6, 0, value)]
@@ -529,7 +609,36 @@ class IrModelSynchro(models.Model):
                 prefix2 = '%s:' % cache.get_attr(channel_id, 'PREFIX')
             return channel_from, prefix1, prefix2
 
-        def process_fields(model, channel_from, vals, ext_id, ctx,
+        def do_apply(channel_from, model, vals, loc_name, ext_name, ext_ref,
+                     apply, default, is_foreign):
+            if hasattr(self, apply):
+                self.logmsg(channel_from,
+                            '> Apply %s(%s,%s,%s)' % (
+                                apply,
+                                loc_name,
+                                ext_ref,
+                                default))
+                vals = getattr(self, apply)(vals,
+                                            loc_name,
+                                            ext_ref,
+                                            default=default)
+            return vals
+
+        def rm_ext_value(vals, loc_name, ext_name, ext_ref, is_foreign):
+            if (is_foreign or loc_name != ext_name) and ext_ref in vals:
+                if loc_name not in vals:
+                    vals[loc_name] = vals[ext_ref]
+                del vals[ext_ref]
+            return vals
+
+        def do_apply_n_clean(channel_from, model, vals, loc_name, ext_name,
+                             ext_ref, apply, default, is_foreign):
+            vals = do_apply(channel_from, model, vals, loc_name, ext_name,
+                            ext_ref, apply, default, is_foreign)
+            vals = rm_ext_value(vals, loc_name, ext_name, ext_ref, is_foreign)
+            return vals
+
+        def process_fields(channel_from, model, vals, ext_id, ctx,
                            field_list=None, excl_list=None):
             cache = self.env['ir.model.synchro.cache']
             prefix1 = '%s_' % cache.get_attr(channel_from, 'PREFIX')
@@ -542,25 +651,19 @@ class IrModelSynchro(models.Model):
                     model, channel_from, loc_name, ext_name,
                     ttype=cache.get_struct_model_field_attr(
                         model, ext_name, 'ttype'))
-                if not loc_name and is_foreign and hasattr(self, apply):
-                    self.logmsg(channel_from,
-                                '> Apply %s(%s,%s,%s)' % (
-                                    apply,
-                                    loc_name,
-                                    ext_ref,
-                                    default))
-                    vals = getattr(self, apply)(vals,
-                                                loc_name,
-                                                ext_ref,
-                                                default=default)
-                    continue
                 if not loc_name or not cache.get_struct_model_attr(model,
                                                                    loc_name):
-                    self.logmsg(
-                        channel_from,
-                        'Field <%s> does not exist in model %s' % (ext_ref,
-                                                                   model))
-                    del vals[ext_ref]
+                    if is_foreign and hasattr(self, apply):
+                        vals = do_apply(channel_from, model, vals,
+                                        loc_name, ext_name, ext_ref,
+                                        apply, default, is_foreign)
+                    else:
+                        self.logmsg(
+                            channel_from,
+                            'Field <%s> does not exist in model %s' % (ext_ref,
+                                                                       model))
+                    vals = rm_ext_value(vals, loc_name, ext_name, ext_ref,
+                                        is_foreign)
                     continue
                 if (cache.get_struct_model_field_attr(
                         model, loc_name, 'ttype') in ('many2one',
@@ -572,9 +675,8 @@ class IrModelSynchro(models.Model):
                         model, loc_name, 'ttype') == 'boolean' and
                         isinstance(vals[ext_ref], basestring)):
                     vals[ext_ref] = os0.str2bool(vals[ext_ref], True)
-                if field_list and loc_name not in field_list:
-                    continue
-                if excl_list and loc_name in excl_list:
+                if ((field_list and loc_name not in field_list) or
+                        (excl_list and loc_name in excl_list)):
                     continue
                 if is_foreign:
                     # Field like <vg7_id> with external ID in local DB
@@ -589,7 +691,8 @@ class IrModelSynchro(models.Model):
                             vals['id'] = rec[0].id
                             ext_id = loc_ext_ref
                         continue
-                    # Counterpart one can supply both local and external value
+                    # If counterpart partner supplies both
+                    # local and external values, just process local value
                     elif loc_name in vals:
                         del vals[ext_ref]
                         continue
@@ -599,39 +702,21 @@ class IrModelSynchro(models.Model):
                         model, loc_name, vals[ext_ref],
                         channel_from, ext_id, is_foreign, ctx,
                         format='cmd')
-                    if is_foreign or loc_name != ext_name:
-                        del vals[ext_ref]
                 elif cache.get_struct_model_field_attr(
                         model, loc_name, 'ttype') == 'many2many':
                     vals[loc_name] = self.cvt_m2m_value(
                         model, loc_name, vals[ext_ref],
                         channel_from, ext_id, is_foreign, ctx,
                         format='cmd')
-                    if is_foreign or loc_name != ext_name:
-                        del vals[ext_ref]
                 elif cache.get_struct_model_field_attr(
                         model, loc_name, 'ttype') == 'many2one':
                     vals[loc_name] = self.cvt_m2o_value(
                         model, loc_name, vals[ext_ref],
                         channel_from, ext_id, is_foreign, ctx,
                         format='cmd')
-                    if is_foreign or loc_name != ext_name:
-                        del vals[ext_ref]
-                elif is_foreign:
-                    if hasattr(self, apply):
-                        self.logmsg(channel_from,
-                                    '> Apply %s(%s,%s,%s)' % (
-                                        apply,
-                                        loc_name,
-                                        ext_ref,
-                                        default))
-                        vals = getattr(self, apply)(vals,
-                                                    loc_name,
-                                                    ext_ref,
-                                                    default=default)
-                    else:
-                        vals[loc_name] = vals[ext_ref]
-                        del vals[ext_ref]
+                vals = do_apply_n_clean(channel_from, model, vals,
+                                        loc_name, ext_name, ext_ref,
+                                        apply, default, is_foreign)
             for loc_name in ctx:
                 if (loc_name not in vals and
                         loc_name in cache.get_struct_attr(model)):
@@ -661,9 +746,11 @@ class IrModelSynchro(models.Model):
             ctx['country_id'] = \
                 self.env.user.company_id.partner_id.country_id.id
         self.logmsg(channel_from, 'ctx=%s' % ctx)
-        vals = process_fields(model, channel_from, vals, ext_id, ctx,
+        if hasattr(self.env[model], 'preprocess'):
+            vals = self.env[model].preprocess(channel_from, vals)
+        vals = process_fields(channel_from, model, vals, ext_id, ctx,
                               field_list=(ctx.keys() + ['street']))
-        vals = process_fields(model, channel_from, vals, ext_id, ctx,
+        vals = process_fields(channel_from, model, vals, ext_id, ctx,
                               excl_list=(ctx.keys() + ['street']))
         if (model == 'product.product' and
                 vals.get('name') and
@@ -809,6 +896,7 @@ class IrModelSynchro(models.Model):
 
     @api.model
     def synchro(self, cls, vals, constraints=None):
+        vals = unicodes(vals)
         model = cls.__class__.__name__
         self.logmsg(0, '> %s.synchro(%s)' % (model, vals))
         ir_model = self.env[model]
@@ -879,7 +967,8 @@ class IrModelSynchro(models.Model):
                     _logger.error('%s creating %s' % (e, model))
                     return -1
             else:
-                return -7
+                self.logmsg(channel_id, 'Record %s.%d not changed' % (model,
+                                                                      id))
         return id
 
     @api.model
@@ -918,6 +1007,7 @@ class IrModelSynchro(models.Model):
 
     @api.multi
     def pull_recs_2_complete(self):
+        self.logmsg(0, '> pull_recs_2_complete()')
         cache = self.env['ir.model.synchro.cache']
         cache.open()
         for channel_id in cache.get_channel_list():
@@ -953,7 +1043,8 @@ class IrModelSynchro(models.Model):
                         self.env.cr.commit()   # pylint: disable=invalid-commit
 
     @api.multi
-    def pull_full_records(self):
+    def pull_full_records(self, force=None):
+        self.logmsg(0, '> pull_full_records(%s)' % force)
         cache = self.env['ir.model.synchro.cache']
         cache.open()
         for channel_id in cache.get_channel_list():
@@ -988,7 +1079,7 @@ class IrModelSynchro(models.Model):
                     else:
                         id = int(data['id'])
                     ext_id = '%s_id' % cache.get_attr(channel_id, 'IDENTITY')
-                    if not ir_model.search([(ext_id, '=', id)]):
+                    if force or not ir_model.search([(ext_id, '=', id)]):
                         ir_model.synchro(self.prefix_bind(
                             cache.get_attr(channel_id, 'PREFIX'),
                             data))
@@ -1253,6 +1344,7 @@ class IrModelSynchroCache(models.Model):
         model = model_rec.name
         channel_id = model_rec.synchro_channel_id.id
         self.set_model(channel_id, model)
+        self.set_odoo_model(channel_id, model, force=True)
         for field in self.env[
             'synchro.channel.model.fields'].search(
                 [('model_id', '=', model_rec.id)]):
@@ -1283,18 +1375,25 @@ class IrModelSynchroCache(models.Model):
         self.set_model_field_attr(
             channel_id, model, 'id', 'EXT_FIELDS', ext_ref)
 
-    def set_odoo_model(self, channel_id, model):
-        if self.get_attr(channel_id, model):
+    def set_odoo_model(self, channel_id, model, force=None):
+        if not force and self.get_attr(channel_id, model):
             return
+        identity = self.get_attr(channel_id, 'IDENTITY')
         self.set_model(channel_id, model)
         skeys = ['name']
         for field in self.get_struct_attr(model):
             if not self.is_struct(field):
                 continue
-            self.set_model_field_attr(
-                channel_id, model, field, 'LOC_FIELDS', field)
-            self.set_model_field_attr(
-                channel_id, model, field, 'EXT_FIELDS', field)
+            if identity == 'odoo':
+                self.set_model_field_attr(
+                    channel_id, model, field, 'LOC_FIELDS', field)
+                self.set_model_field_attr(
+                    channel_id, model, field, 'EXT_FIELDS', field)
+            else:
+                self.set_model_field_attr(
+                    channel_id, model, field, 'LOC_FIELDS', '.%s' % field)
+                self.set_model_field_attr(
+                    channel_id, model, '.%s' % field, 'EXT_FIELDS', field)
             self.set_model_field_attr(
                 channel_id, model, field, 'PROTECT',
                 self.get_struct_model_field_attr(model, field, 'protect'))
@@ -1308,10 +1407,9 @@ class IrModelSynchroCache(models.Model):
 
     @api.model_cr_context
     def open(self, model=None, cls=None):
+        self.setup_model_structure(model)
         self.setup_channels()
         self.setup_models_in_channels(model)
-        if model:
-            self.setup_model_structure(model)
         if cls is not None:
             if cls.__class__.__name__ != model:
                 raise RuntimeError('Class %s not of declared model %s' % (
@@ -1441,3 +1539,40 @@ class IrModelField(models.Model):
         where name like '____id' ;
         """)
         return res
+
+
+# class IrModelFieldSynchroModel(models.Model):
+#     _inherit = 'ir.model.synchro.import'
+
+#     def __init__(self):
+#         _tags = {
+#             'record': self._tag_record,
+#         }
+
+#     def _tag_record(self, rec, mode=None, data_node=None):
+#         pass
+
+#     def parse(self, xml, mode=None):
+#         roots = ['openerp','data','odoo']
+#         if xml.tag not in roots:
+#             raise Exception(
+#                 "Root xml tag must be <openerp>, <odoo> or <data>.")
+#         for rec in xml:
+#             if rec.tag in roots:
+#                 self.parse(rec, mode)
+#             elif rec.tag in self._tags:
+#                 try:
+#                     self._tags[rec.tag](rec, xml, mode=mode)
+#                 except Exception, e:
+#                     raise ParseError
+#         return True
+
+#     def load_xml_file(self):
+#         xmlfile = os.path.abspath(os.path.join(os.path.dirname(__file__),
+#                                                '..',
+#                                                'data',
+#                                                'synchro_channel.xml'))
+#         with open(xmlfile, 'r') as fd:
+#             xmlcontent = fd.read()
+#         # dom = etree.fromstring(xmlcontent)
+#         doc = etree.parse(xmlfile)

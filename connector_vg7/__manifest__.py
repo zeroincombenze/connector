@@ -4,7 +4,7 @@
 {
     'name': 'connector_vg7',
     'summary': 'Bidirectional connector to/from VG7 software',
-    'version': '10.0.0.1.6',
+    'version': '10.0.0.1.7',
     'category': 'Generic Modules',
     'author': 'SHS-AV s.r.l.',
     'website': 'https://www.zeroincombenze.it/',
@@ -24,10 +24,12 @@
         'views/synchro_channel_view.xml',
         'views/model_view.xml',
         'data/synchro_channel.xml',
+        'data/synchro_channel_data.xml',
         'data/ir_cron.xml',
     ],
     'external_dependencies': {
         'python': [
+            'python_plus',
             'os0',
             'unidecode',
         ],
