@@ -53,8 +53,6 @@ class SaleOrder(models.Model):
 
     @api.model
     def synchro(self, vals):
-        # import pdb
-        # pdb.set_trace()
         return self.env['ir.model.synchro'].synchro(self, vals)
 
     @api.model

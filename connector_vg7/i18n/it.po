@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo (10.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-03 16:25+0000\n"
-"PO-Revision-Date: 2019-07-03 16:25+0000\n"
+"POT-Creation-Date: 2019-09-11 20:37+0000\n"
+"PO-Revision-Date: 2019-09-11 20:37+0000\n"
 "Last-Translator: Antonio M. Vigliotti <antoniomaria.vigliotti@gmail.com>\n"
 "Language-Team: Zeroincombenze (https://www.zeroincombenze.it)\n"
 "Language: it_IT\n"
@@ -15,6 +15,11 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
+
+#. module: connector_vg7
+#: model:ir.model.fields,help:connector_vg7.field_synchro_channel_counterpart_url
+msgid "3th Party Sender URL to connect"
+msgstr "3th Party Sender URL to connect"
 
 #. module: connector_vg7
 #: model:ir.model,name:connector_vg7.model_account_account
@@ -27,24 +32,161 @@ msgid "Account Type"
 msgstr "Tipo conto"
 
 #. module: connector_vg7
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_active
+msgid "Active"
+msgstr "Attivo"
+
+#. module: connector_vg7
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_client_key
+msgid "Client key"
+msgstr "Client key"
+
+#. module: connector_vg7
+#: model:ir.model.fields,help:connector_vg7.field_synchro_channel_client_key
+msgid "Client key assigned by 3th Party Sender"
+msgstr "Client key assigned by 3th Party Sender"
+
+#. module: connector_vg7
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_company_id
+msgid "Company"
+msgstr "Azienda"
+
+#. module: connector_vg7
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_model_fields_counterpart_name
+msgid "Counterpart field name"
+msgstr "Counterpart field name"
+
+#. module: connector_vg7
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_identity
+msgid "Counterpart identity"
+msgstr "Counterpart identity"
+
+#. module: connector_vg7
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_model_counterpart_name
+msgid "Counterpart model name"
+msgstr "Counterpart model name"
+
+#. module: connector_vg7
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_counterpart_url
+msgid "Counterpart url"
+msgstr "Counterpart url"
+
+#. module: connector_vg7
+#: model:ir.model,name:connector_vg7.model_res_country
+msgid "Country"
+msgstr "Nazione"
+
+#. module: connector_vg7
+#: model:ir.model,name:connector_vg7.model_res_country_state
+msgid "Country state"
+msgstr "Nazione"
+
+#. module: connector_vg7
+#: model:ir.model.fields,field_description:connector_vg7.field_ir_model_synchro_cache_create_uid
 #: model:ir.model.fields,field_description:connector_vg7.field_ir_model_synchro_create_uid
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_create_uid
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_domain_translation_create_uid
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_model_create_uid
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_model_fields_create_uid
 msgid "Created by"
 msgstr "Creato da"
 
 #. module: connector_vg7
+#: model:ir.model.fields,field_description:connector_vg7.field_ir_model_synchro_cache_create_date
 #: model:ir.model.fields,field_description:connector_vg7.field_ir_model_synchro_create_date
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_create_date
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_domain_translation_create_date
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_model_create_date
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_model_fields_create_date
 msgid "Created on"
 msgstr "Data di creazione"
 
 #. module: connector_vg7
+#: model:ir.model.fields,field_description:connector_vg7.field_ir_model_synchro_cache_display_name
 #: model:ir.model.fields,field_description:connector_vg7.field_ir_model_synchro_display_name
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_display_name
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_domain_translation_display_name
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_model_display_name
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_model_fields_display_name
 msgid "Display Name"
 msgstr "Nome visualizzato"
 
 #. module: connector_vg7
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_domain_translation_ext_value
+msgid "External field value"
+msgstr "External field value"
+
+#. module: connector_vg7
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_model_field_uname
+msgid "Field for search with unique name"
+msgstr "Field for search with unique name"
+
+#. module: connector_vg7
+#: model:ir.ui.view,arch_db:connector_vg7.view_synchro_model_form
+msgid "Field mapping"
+msgstr "Field mapping"
+
+#. module: connector_vg7
+#: model:ir.model,name:connector_vg7.model_synchro_channel_model_fields
+msgid "Field mapping for Synchonization"
+msgstr "Field mapping for Synchonization"
+
+#. module: connector_vg7
+#: model:ir.model,name:connector_vg7.model_synchro_channel_domain_translation
+msgid "Field translation for field"
+msgstr "Field translation for field"
+
+#. module: connector_vg7
+#: model:ir.model,name:connector_vg7.model_ir_model_fields
+msgid "Fields"
+msgstr "Campi"
+
+#. module: connector_vg7
+#: model:ir.model.fields,help:connector_vg7.field_synchro_channel_model_fields_apply
+msgid ""
+"Function are in format \"name()\".\n"
+"Avaiable functions are:\n"
+"vat(), upper(), lower(), street_number(), bool()\n"
+"person(), journal(), account(), uom(), tax()\n"
+msgstr ""
+"Function are in format \"name()\".\n"
+"Avaiable functions are:\n"
+"vat(), upper(), lower(), street_number(), bool()\n"
+"person(), journal(), account(), uom(), tax()\n"
+
+#. module: connector_vg7
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_model_fields_apply
+msgid "Function to apply for supply value or default value."
+msgstr "Function to apply for supply value or default value."
+
+#. module: connector_vg7
+#: selection:synchro.channel,identity:0
+#: selection:synchro.channel,identity:0
+msgid "Generic counterpart"
+msgstr "Generic counterpart"
+
+#. module: connector_vg7
+#: model:ir.model.fields,help:connector_vg7.field_synchro_channel_name
+msgid "Give a unique name for Sychronization Channel"
+msgstr "Give a unique name for Sychronization Channel"
+
+#. module: connector_vg7
+#: model:ir.model.fields,field_description:connector_vg7.field_ir_model_synchro_cache_id
 #: model:ir.model.fields,field_description:connector_vg7.field_ir_model_synchro_id
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_domain_translation_id
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_id
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_model_fields_id
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_model_id
 msgid "ID"
 msgstr "ID"
+
+#. module: connector_vg7
+#: selection:ir.model.fields,protect_update:0
+#: selection:synchro.channel.model.fields,protect:0
+#: selection:ir.model.fields,protect_update:0
+#: selection:synchro.channel.model.fields,protect:0
+msgid "If empty"
+msgstr "If empty"
 
 #. module: connector_vg7
 #: model:ir.model,name:connector_vg7.model_account_invoice
@@ -58,18 +200,101 @@ msgstr "Riga Fattura"
 
 #. module: connector_vg7
 #: model:ir.model.fields,field_description:connector_vg7.field_ir_model_synchro___last_update
+#: model:ir.model.fields,field_description:connector_vg7.field_ir_model_synchro_cache___last_update
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel___last_update
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_domain_translation___last_update
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_model___last_update
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_model_fields___last_update
 msgid "Last Modified on"
 msgstr "Data ultima modifica"
 
 #. module: connector_vg7
+#: model:ir.model.fields,field_description:connector_vg7.field_ir_model_synchro_cache_write_uid
 #: model:ir.model.fields,field_description:connector_vg7.field_ir_model_synchro_write_uid
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_domain_translation_write_uid
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_model_fields_write_uid
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_model_write_uid
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_write_uid
 msgid "Last Updated by"
 msgstr "Ultima modifica di"
 
 #. module: connector_vg7
+#: model:ir.model.fields,field_description:connector_vg7.field_ir_model_synchro_cache_write_date
 #: model:ir.model.fields,field_description:connector_vg7.field_ir_model_synchro_write_date
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_domain_translation_write_date
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_model_fields_write_date
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_model_write_date
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_write_date
 msgid "Last Updated on"
 msgstr "Data ultima modifica"
+
+#. module: connector_vg7
+#: model:ir.model.fields,help:connector_vg7.field_synchro_channel_identity
+msgid "May activate some specific functions"
+msgstr "May activate some specific functions"
+
+#. module: connector_vg7
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_model_fields_model_id
+msgid "Model id"
+msgstr "Model id"
+
+#. module: connector_vg7
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_model_field_ids
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_model_ids
+#: model:ir.ui.view,arch_db:connector_vg7.view_synchro_channel_form
+msgid "Model mapping"
+msgstr "Model mapping"
+
+#. module: connector_vg7
+#: model:ir.model,name:connector_vg7.model_synchro_channel_model
+msgid "Model mapping for Synchonization"
+msgstr "Model mapping for Synchonization"
+
+#. module: connector_vg7
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_model_field_2complete
+msgid "Model to complete asynchronously"
+msgstr "Model to complete asynchronously"
+
+#. module: connector_vg7
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_domain_translation_key
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_model_fields_name
+msgid "Odoo field name"
+msgstr "Odoo field name"
+
+#. module: connector_vg7
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_domain_translation_odoo_value
+msgid "Odoo field value"
+msgstr "Odoo field value"
+
+#. module: connector_vg7
+#: selection:synchro.channel,identity:0
+#: selection:synchro.channel,identity:0
+msgid "Odoo instance"
+msgstr "Odoo instance"
+
+#. module: connector_vg7
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_domain_translation_model
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_model_name
+msgid "Odoo model name"
+msgstr "Odoo model name"
+
+#. module: connector_vg7
+#: model:ir.model.fields,field_description:connector_vg7.field_account_account_oe7_id
+#: model:ir.model.fields,field_description:connector_vg7.field_account_account_type_oe7_id
+#: model:ir.model.fields,field_description:connector_vg7.field_account_invoice_line_oe7_id
+#: model:ir.model.fields,field_description:connector_vg7.field_account_invoice_oe7_id
+#: model:ir.model.fields,field_description:connector_vg7.field_account_tax_oe7_id
+#: model:ir.model.fields,field_description:connector_vg7.field_delivery_carrier_oe7_id
+#: model:ir.model.fields,field_description:connector_vg7.field_product_product_oe7_id
+#: model:ir.model.fields,field_description:connector_vg7.field_product_template_oe7_id
+#: model:ir.model.fields,field_description:connector_vg7.field_res_country_oe7_id
+#: model:ir.model.fields,field_description:connector_vg7.field_res_country_state_oe7_id
+#: model:ir.model.fields,field_description:connector_vg7.field_res_partner_oe7_id
+#: model:ir.model.fields,field_description:connector_vg7.field_res_users_oe7_id
+#: model:ir.model.fields,field_description:connector_vg7.field_sale_order_line_oe7_id
+#: model:ir.model.fields,field_description:connector_vg7.field_sale_order_oe7_id
+msgid "Odoo7 ID"
+msgstr "Odoo7 ID"
 
 #. module: connector_vg7
 #: model:ir.model.fields,field_description:connector_vg7.field_account_invoice_original_state
@@ -83,6 +308,37 @@ msgid "Partner"
 msgstr "Soggetto"
 
 #. module: connector_vg7
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_password
+msgid "Password"
+msgstr "Password"
+
+#. module: connector_vg7
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_prefix
+msgid "Prefix for field names"
+msgstr "Prefix for field names"
+
+#. module: connector_vg7
+#: model:ir.model.fields,help:connector_vg7.field_synchro_channel_prefix
+msgid ""
+"Prefix to add to model field name to recognize counterpart ID.Format must"
+" be [a-zA-Z]{2}[a-zA-Z0-9]\n"
+"i.e. with prefix='vg7'\n"
+"<partner_id> means ID in Odoo\n"
+"<vg7_partner_id> means ID in counterpart\n"
+msgstr ""
+"Prefix to add to model field name to recognize counterpart ID.Format must"
+" be [a-zA-Z]{2}[a-zA-Z0-9]\n"
+"i.e. with prefix='vg7'\n"
+"<partner_id> means ID in Odoo\n"
+"<vg7_partner_id> means ID in counterpart\n"
+
+#. module: connector_vg7
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_model_sequence
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_sequence
+msgid "Priority"
+msgstr "Priorità"
+
+#. module: connector_vg7
 #: model:ir.model,name:connector_vg7.model_product_product
 msgid "Product"
 msgstr "Prodotto"
@@ -90,7 +346,31 @@ msgstr "Prodotto"
 #. module: connector_vg7
 #: model:ir.model,name:connector_vg7.model_product_template
 msgid "Product Template"
-msgstr "Modello di prodotto"
+msgstr "Specifica di prodotto"
+
+#. module: connector_vg7
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_produtc_without_variants
+msgid "Products without variants"
+msgstr "Products without variants"
+
+#. module: connector_vg7
+#: model:ir.model.fields,field_description:connector_vg7.field_ir_model_fields_protect_update
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_model_fields_protect
+msgid "Protect field against update"
+msgstr "Protect field against update"
+
+#. module: connector_vg7
+#: selection:ir.model.fields,protect_update:0
+#: selection:synchro.channel.model.fields,protect:0
+#: selection:ir.model.fields,protect_update:0
+#: selection:synchro.channel.model.fields,protect:0
+msgid "Protected"
+msgstr "Protected"
+
+#. module: connector_vg7
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_model_search_keys
+msgid "Pythonic key search sequence"
+msgstr "Pythonic key search sequence"
 
 #. module: connector_vg7
 #: model:ir.model.fields,field_description:connector_vg7.field_account_invoice_line_to_delete
@@ -112,6 +392,7 @@ msgstr "Riga d'Ordine di Vendita"
 #: model:ir.model.fields,field_description:connector_vg7.field_account_account_dim_name
 #: model:ir.model.fields,field_description:connector_vg7.field_account_account_type_dim_name
 #: model:ir.model.fields,field_description:connector_vg7.field_account_tax_dim_name
+#: model:ir.model.fields,field_description:connector_vg7.field_delivery_carrier_dim_name
 #: model:ir.model.fields,field_description:connector_vg7.field_product_product_dim_name
 #: model:ir.model.fields,field_description:connector_vg7.field_product_template_dim_name
 #: model:ir.model.fields,field_description:connector_vg7.field_res_partner_dim_name
@@ -120,8 +401,65 @@ msgid "Search Key"
 msgstr "Chiave di ricerca"
 
 #. module: connector_vg7
+#: model:ir.model.fields,help:connector_vg7.field_synchro_channel_model_search_keys
+msgid ""
+"Sequence to use in search record when not yet synchronized\n"
+"i.e. ([\"name\",\"compandy_id\"],[\"name\"])\n"
+"will search for record with name and company keys; if not foundsearch for"
+" record just with name"
+msgstr ""
+"Sequence to use in search record when not yet synchronized\n"
+"i.e. ([\"name\",\"compandy_id\"],[\"name\"])\n"
+"will search for record with name and company keys; if not foundsearch for"
+" record just with name"
+
+#. module: connector_vg7
+#: model:ir.model.fields,help:connector_vg7.field_synchro_channel_company_id
+msgid "Set company, if specific company channel"
+msgstr "Set company, if specific company channel"
+
+#. module: connector_vg7
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_name
+msgid "Sychronization Channel Name"
+msgstr "Sychronization Channel Name"
+
+#. module: connector_vg7
+#: model:ir.actions.act_window,name:connector_vg7.action_synchro_channel
+#: model:ir.model,name:connector_vg7.model_synchro_channel
+#: model:ir.ui.menu,name:connector_vg7.menu_synchro_channel
+#: model:ir.ui.view,arch_db:connector_vg7.view_synchro_channel_form
+#: model:ir.ui.view,arch_db:connector_vg7.view_synchro_channel_tree
+msgid "Synchonization Channel"
+msgstr "Synchonization Channel"
+
+#. module: connector_vg7
+#: model:ir.ui.view,arch_db:connector_vg7.view_synchro_tnl_form
+#: model:ir.ui.view,arch_db:connector_vg7.view_synchro_tnl_tree
+msgid "Synchonization Domains"
+msgstr "Synchonization Domains"
+
+#. module: connector_vg7
+#: model:ir.actions.act_window,name:connector_vg7.action_synchro_model
+#: model:ir.ui.menu,name:connector_vg7.menu_synchro_model
+#: model:ir.ui.view,arch_db:connector_vg7.view_synchro_model_form
+msgid "Synchonization Model"
+msgstr "Synchonization Model"
+
+#. module: connector_vg7
+#: model:ir.ui.view,arch_db:connector_vg7.view_synchro_model_tree
+msgid "Synchonization model"
+msgstr "Synchonization model"
+
+#. module: connector_vg7
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_model_synchro_channel_id
+msgid "Synchro channel id"
+msgstr "Synchro channel id"
+
+#. module: connector_vg7
 #: model:ir.ui.view,arch_db:connector_vg7.view_invoice_supplier_synchro_form
 #: model:ir.ui.view,arch_db:connector_vg7.view_invoice_synchro_form
+#: model:ir.ui.view,arch_db:connector_vg7.view_model_fields_synchro_form
+#: model:ir.ui.view,arch_db:connector_vg7.view_model_synchro_form
 #: model:ir.ui.view,arch_db:connector_vg7.view_partner_synchro_form
 #: model:ir.ui.view,arch_db:connector_vg7.view_product_product_synchro_form
 #: model:ir.ui.view,arch_db:connector_vg7.view_product_template_synchro_form
@@ -136,13 +474,46 @@ msgid "Tax"
 msgstr "Imposta"
 
 #. module: connector_vg7
+#: model:ir.model.fields,field_description:connector_vg7.field_synchro_channel_trace
+msgid "Trace"
+msgstr "Trace"
+
+#. module: connector_vg7
+#: model:ir.model.fields,help:connector_vg7.field_synchro_channel_trace
+msgid ""
+"Trace data in log. Warning! Use this feature with caution; all sent data "
+"will be recorded in the log file.This feature must be used only to debug "
+"handshake"
+msgstr ""
+"Trace data in log. Warning! Use this feature with caution; all sent data "
+"will be recorded in the log file.This feature must be used only to debug "
+"handshake"
+
+#. module: connector_vg7
+#: model:ir.actions.act_window,name:connector_vg7.action_synchro_tnl
+#: model:ir.ui.menu,name:connector_vg7.menu_synchro_translation
+msgid "Translation Domains"
+msgstr "Translation Domains"
+
+#. module: connector_vg7
+#: selection:ir.model.fields,protect_update:0
+#: selection:synchro.channel.model.fields,protect:0
+#: selection:ir.model.fields,protect_update:0
+#: selection:synchro.channel.model.fields,protect:0
+msgid "Updatable"
+msgstr "Updatable"
+
+#. module: connector_vg7
 #: model:ir.model.fields,field_description:connector_vg7.field_account_account_type_vg7_id
 #: model:ir.model.fields,field_description:connector_vg7.field_account_account_vg7_id
 #: model:ir.model.fields,field_description:connector_vg7.field_account_invoice_line_vg7_id
 #: model:ir.model.fields,field_description:connector_vg7.field_account_invoice_vg7_id
 #: model:ir.model.fields,field_description:connector_vg7.field_account_tax_vg7_id
+#: model:ir.model.fields,field_description:connector_vg7.field_delivery_carrier_vg7_id
 #: model:ir.model.fields,field_description:connector_vg7.field_product_product_vg7_id
 #: model:ir.model.fields,field_description:connector_vg7.field_product_template_vg7_id
+#: model:ir.model.fields,field_description:connector_vg7.field_res_country_state_vg7_id
+#: model:ir.model.fields,field_description:connector_vg7.field_res_country_vg7_id
 #: model:ir.model.fields,field_description:connector_vg7.field_res_partner_vg7_id
 #: model:ir.model.fields,field_description:connector_vg7.field_res_users_vg7_id
 #: model:ir.model.fields,field_description:connector_vg7.field_sale_order_line_vg7_id
@@ -151,8 +522,19 @@ msgid "VG7 ID"
 msgstr "VG7 ID"
 
 #. module: connector_vg7
+#: selection:synchro.channel,identity:0
+#: selection:synchro.channel,identity:0
+msgid "VG7 instance"
+msgstr "VG7 instance"
+
+#. module: connector_vg7
 #: model:ir.model,name:connector_vg7.model_ir_model_synchro
 msgid "ir.model.synchro"
 msgstr "ir.model.synchro"
+
+#. module: connector_vg7
+#: model:ir.model,name:connector_vg7.model_ir_model_synchro_cache
+msgid "ir.model.synchro.cache"
+msgstr "ir.model.synchro.cache"
 
 

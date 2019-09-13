@@ -127,7 +127,7 @@ class IrModelSynchro(models.Model):
             _logger.debug(msg)
 
     def tnl_2_loc_set_value(self, vals, loc_name, ext_ref, default=None):
-        if not vals.get(ext_ref) and default:
+        if loc_name not in vals and default:
             vals[loc_name] = default
         return vals
 
@@ -146,11 +146,11 @@ class IrModelSynchro(models.Model):
         return vals
 
     def tnl_2_loc_bool(self, vals, loc_name, ext_ref, default=None):
-        vals[loc_name] = os0.str2bool(vals[ext_ref], False)
+        vals[loc_name] = os0.str2bool(vals.get(ext_ref), False)
         return vals
 
     def tnl_2_loc_not(self, vals, loc_name, ext_ref, default=None):
-        vals[loc_name] = not os0.str2bool(vals[ext_ref], True)
+        vals[loc_name] = not os0.str2bool(vals.get(ext_ref), True)
         return vals
 
     def tnl_2_loc_person(self, vals, loc_name, ext_ref, default=None):
@@ -174,8 +174,6 @@ class IrModelSynchro(models.Model):
             vals[loc_name] = 'IT%s' % vals[ext_ref]
         else:
             vals[loc_name] = vals[ext_ref]
-        # if loc_name != ext_ref:
-        #     del vals[ext_ref]
         return vals
 
     def tnl_2_loc_street_number(self, vals, loc_name, ext_ref, default=None):
@@ -242,6 +240,16 @@ class IrModelSynchro(models.Model):
         return vals
 
     def tnl_2_loc_agents(self, vals, loc_name, ext_ref, default=None):
+        def _prepare_line_agents_data(partner):
+            rec = []
+            for agent in partner.agents:
+                rec.append({
+                    'agent': agent.id,
+                    'commission': agent.commission.id,
+                })
+            return rec
+        if loc_name in vals:
+            return vals
         if vals.get('partner_id'):
             partner = self.env['res.partner'].browse(vals.get('partner_id'))
         elif vals.get('order_id'):
@@ -254,14 +262,58 @@ class IrModelSynchro(models.Model):
             partner = False
         if not partner:
             return vals
-        rec = {}
-        for agent in partner.agents:
-            rec = {
-                'agent': agent.id,
-                'commission': agent.commission.id,
-            }
-        if rec:
-            vals[loc_name] = [(0, 0, rec)]
+        if partner.agents:
+            line_agents_data = _prepare_line_agents_data(partner)
+            if line_agents_data:
+                vals[loc_name] = [
+                    (0, 0,
+                     line_agent_data) for line_agent_data in line_agents_data]
+        return vals
+
+    def tnl_2_loc_partner_info(self, vals, loc_name, ext_ref, default=None):
+        if loc_name in vals:
+            return vals
+        if vals.get('partner_id'):
+            partner = self.env['res.partner'].browse(vals.get('partner_id'))
+        elif vals.get('order_id'):
+            partner = self.env[
+                'sale.order'].browse(vals['order_id']).partner_id
+        elif vals.get('invoice_id'):
+            partner = self.env[
+                'account.invoice'].browse(vals['invoice_id']).partner_id
+        else:
+            return vals
+        if loc_name == 'fiscal_position_id':
+            partner_nm = 'property_account_position_id'
+        elif loc_name in ('pricelist_id',
+                          'payment_term_id'):
+            partner_nm = 'property_%s' % loc_name
+        else:
+            partner_nm = loc_name
+        if partner_nm in partner:
+            try:
+                vals[loc_name] = partner[partner_nm].id
+            except BaseException:
+                vals[loc_name] = partner[partner_nm]
+        return vals
+
+    def tnl_2_loc_company_info(self, vals, loc_name, ext_ref, default=None):
+        if loc_name in vals:
+            return vals
+        company_id = vals.get('company_id')
+        if not company_id:
+            return vals
+        company = self.env[
+                'res.company'].browse(company_id)
+        if loc_name == 'note':
+            partner_nm = 'sale_note'
+        else:
+            partner_nm = loc_name
+        if partner_nm in company:
+            try:
+                vals[loc_name] = company[partner_nm].id
+            except:
+                vals[loc_name] = company[partner_nm]
         return vals
 
     def drop_fields(self, model, vals, to_delete):
@@ -340,30 +392,33 @@ class IrModelSynchro(models.Model):
         return vals, 0
 
     def set_actual_state(self, model, rec):
+        if not rec:
+            return -3
+        cache = self.env['ir.model.synchro.cache']
         if model == 'account.invoice':
-            if rec:
-                rec.compute_taxes()
-                rec.write({})
-                if rec.state == rec.original_state:
-                    return rec.id
-                elif rec.state != 'draft':
-                    return -4
-                elif rec.original_state == 'open':
-                    rec.action_invoice_open()
-                elif rec.original_state == 'cancel':
-                    rec.action_invoice_cancel()
+            rec.compute_taxes()
+            # rec.write({})
+            if rec.state == rec.original_state:
+                return rec.id
+            elif rec.state != 'draft':
+                return -4
+            elif rec.original_state == 'open':
+                rec.action_invoice_open()
+            elif rec.original_state == 'cancel':
+                rec.action_invoice_cancel()
         elif model == 'sale.order':
-            if rec:
+            # rec.write({})
+            if rec.state == rec.original_state:
+                return rec.id
+            elif rec.state != 'draft':
+                return -4
+            elif rec.original_state == 'sale':
                 rec._compute_tax_id()
-                rec.write({})
-                if rec.state == rec.original_state:
-                    return rec.id
-                elif rec.state != 'draft':
-                    return -4
-                elif rec.original_state == 'sale':
-                    rec.action_confirm()
-                elif rec.original_state == 'cancel':
-                    rec.action_cancel()
+                if cache.get_struct_model_attr('sale.order.line', 'agents'):
+                    rec._compute_commission_total()
+                rec.action_confirm()
+            elif rec.original_state == 'cancel':
+                rec.action_cancel()
         return rec.id
 
     def create_new_ref(self, model, key_name, value, ctx):
@@ -717,6 +772,12 @@ class IrModelSynchro(models.Model):
                 vals = do_apply_n_clean(channel_from, model, vals,
                                         loc_name, ext_name, ext_ref,
                                         apply, default, is_foreign)
+                if (loc_name in vals and
+                        vals[loc_name] is False and
+                        cache.get_struct_model_field_attr(
+                            model, loc_name, 'ttype') != 'boolean'):
+                    del vals[loc_name]
+
             for loc_name in ctx:
                 if (loc_name not in vals and
                         loc_name in cache.get_struct_attr(model)):
@@ -975,7 +1036,6 @@ class IrModelSynchro(models.Model):
     def commit(self, cls, id):
         model = cls.__class__.__name__
         self.logmsg(0, '> %s.commit()' % model)
-        # self._init_self(model=model, cls=cls)
         cache = self.env['ir.model.synchro.cache']
         cache.open(model=model, cls=cls)
         has_state = cache.get_struct_model_attr(
@@ -988,12 +1048,12 @@ class IrModelSynchro(models.Model):
         parent_id = cache.get_struct_model_attr(model_line, 'PARENT_ID')
         if not parent_id:
             return -5
-        rec = self.env[model].search([('id', '=', id)])
-        if not rec:
+        try:
+            rec_2_commit = self.env[model].browse(id)
+        except:
             return -3
-        rec_2_commit = rec[0]
-        ir_model = self.env[model_line]
         if cache.get_struct_model_attr(model_line, 'MODEL_2DELETE'):
+            ir_model = self.env[model_line]
             for rec in ir_model.search([(parent_id, '=', id),
                                         ('to_delete', '=', True)]):
                 rec.unlink()
