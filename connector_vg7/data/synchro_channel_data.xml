@@ -79,6 +79,15 @@
         <field name="synchro_channel_id" ref="channel_vg7"/>
     </record>
 
+    <record forcecreate="1" id="account_payment_term" model="synchro.channel.model">
+        <field name="name">account.payment.term</field>
+        <field name="counterpart_name">payments</field>
+        <field name="field_uname">name</field>
+        <field name="search_keys">(['name'],)</field>
+        <field name="field_2complete">True</field>
+        <field name="synchro_channel_id" ref="channel_vg7"/>
+    </record>
+
     <record forcecreate="1" id="account_invoice" model="synchro.channel.model">
         <field name="name">account.invoice</field>
         <field name="field_uname">number</field>
@@ -126,7 +135,7 @@
 
     <record forcecreate="1" id="res_country_address_format" model="synchro.channel.model.fields">
         <field name="name">address_format</field>
-        <field name="protect">2</field>
+        <field name="protect">3</field>
         <field name="model_id" ref="res_country"/>
     </record>
 
@@ -139,13 +148,13 @@
 
     <record forcecreate="1" id="res_country_country_group_ids" model="synchro.channel.model.fields">
         <field name="name">country_group_ids</field>
-        <field name="protect">2</field>
+        <field name="protect">3</field>
         <field name="model_id" ref="res_country"/>
     </record>
 
     <record forcecreate="1" id="res_country_currency_id" model="synchro.channel.model.fields">
         <field name="name">currency_id</field>
-        <field name="protect">2</field>
+        <field name="protect">3</field>
         <field name="model_id" ref="res_country"/>
     </record>
 
@@ -157,7 +166,7 @@
 
     <record forcecreate="1" id="res_country_phone_code" model="synchro.channel.model.fields">
         <field name="name">phone_code</field>
-        <field name="protect">2</field>
+        <field name="protect">3</field>
         <field name="model_id" ref="res_country"/>
     </record>
 
@@ -175,7 +184,7 @@
  
     <record forcecreate="1" id="res_country_state_name" model="synchro.channel.model.fields">
         <field name="name">name</field>
-        <field name="protect">2</field>
+        <field name="protect">3</field>
         <field name="model_id" ref="res_country_state"/>
     </record>
 
@@ -381,6 +390,13 @@
         <field name="name">invoice_policy</field>
         <field name="apply">order</field>
         <field name="model_id" ref="product_template"/>
+    </record>
+
+
+    <record forcecreate="1" id="account_payment_term_code" model="synchro.channel.model.fields">
+        <field name="name">name</field>
+        <field name="counterpart_name">description</field>
+        <field name="model_id" ref="account_payment_term"/>
     </record>
 
 
@@ -749,6 +765,13 @@
         <field name="key">name</field>
         <field name="odoo_value">Italy</field>
         <field name="ext_value">Italia</field>
+    </record>
+
+    <record forcecreate="1" id="country_id_US" model="synchro.channel.domain.translation">
+        <field name="model">res.country</field>
+        <field name="key">name</field>
+        <field name="odoo_value">United States</field>
+        <field name="ext_value">Stati Uniti</field>
     </record>
 
 

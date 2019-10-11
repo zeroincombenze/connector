@@ -44,12 +44,13 @@ class SaleOrder(models.Model):
                 setattr(self, nm, getattr(self.partner_id, nm))
         for nm in ('partner_invoice_id',
                    'partner_shipping_id'):
-            if not not getattr(self, nm):
+            if not getattr(self, nm):
                 setattr(self, nm, self.partner_id)
         nm = 'note'
         partner_nm = 'sale_note'
         if not getattr(self, nm):
             setattr(self, nm, getattr(self.company_id, partner_nm))
+
 
     @api.model
     def synchro(self, vals):

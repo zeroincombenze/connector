@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_payment_term_form_vg7" model="ir.ui.view">
+        <field name="name">account.payment.term.vg7</field>
+        <field name="model">account.payment.term</field>
+        <field name="inherit_id" ref="account.view_payment_term_form"/>
+        <field name="arch" type="xml">
+            <field name="line_ids" position="after">
+                <group col="2" colspan="2">
+                    <separator colspan="2" string="Synchronization"/>
+                    <field name="vg7_id"/>
+                    <field name="oe7_id"/>
+                    <field name="dim_name"/>
+                </group>
+            </field>
+        </field>
+    </record>
+
+</odoo>

@@ -43,7 +43,7 @@ class IrModelSynchro(models.Model):
         'country_id': False,
         'is_company': True,
     }
-    LOGLEVEL = 'info'
+    LOGLEVEL = 'debug'
     SKEYS = {
         'res.country': (['code'], ['name']),
         'res.country.state': (['code', 'country_id'], ['name'], ['dim_name']),
@@ -116,12 +116,16 @@ class IrModelSynchro(models.Model):
 
     def logmsg(self, channel_id, msg):
         cache = self.env['ir.model.synchro.cache']
-        if channel_id:
-            loglevel = cache.get_attr(channel_id, 'LOGLEVEL', default='info')
+        if isinstance(channel_id, basestring):
+            loglevel = channel_id
+        elif channel_id:
+            loglevel = cache.get_attr(channel_id, 'LOGLEVEL', default='debug')
             self.LOGLEVEL = loglevel
         else:
             loglevel = self.LOGLEVEL
-        if loglevel == 'info':
+        if loglevel == 'warning':
+            _logger.warning(msg)
+        elif loglevel == 'info':
             _logger.info(msg)
         else:
             _logger.debug(msg)
@@ -342,7 +346,9 @@ class IrModelSynchro(models.Model):
                     model, field, 'protect', default='0')),
                 int(cache.get_model_field_attr(
                     channel_id, model, field, 'PROTECT', default='0')))
-            if (protect == 2 or (protect == 1 and rec[field])):
+            if (protect == 3 or
+                    (protect == 2 and rec[field]) or
+                    (protect == 1 and not vals[field])):
                 del vals[field]
             elif isinstance(vals[field], (basestring, int, long, bool)):
                 if ((cache.get_struct_model_field_attr(
@@ -623,7 +629,7 @@ class IrModelSynchro(models.Model):
         return ext_name, loc_name, is_foreign, loc_ext_ref
 
     def get_default_n_apply(self, model, channel_from, loc_name, ext_name,
-                            ttype=None):
+                            is_foreign, ttype=None):
         cache = self.env['ir.model.synchro.cache']
         if not cache.get_attr(channel_from, model):
             return '', ''
@@ -632,6 +638,8 @@ class IrModelSynchro(models.Model):
             default='')
         if default.endswith('()'):
             apply = 'tnl_2_loc_%s' % default[:-2]
+            if apply == 'not' and not is_foreign:
+                appy = ''
             default = False
         elif default:
             apply = 'tnl_2_loc_set_value'
@@ -703,7 +711,7 @@ class IrModelSynchro(models.Model):
                     self.names_from_ref(model, channel_from, vals,
                                         ext_ref, prefix1, prefix2)
                 default, apply = self.get_default_n_apply(
-                    model, channel_from, loc_name, ext_name,
+                    model, channel_from, loc_name, ext_name, is_foreign,
                     ttype=cache.get_struct_model_field_attr(
                         model, ext_name, 'ttype'))
                 if not loc_name or not cache.get_struct_model_attr(model,
@@ -790,7 +798,7 @@ class IrModelSynchro(models.Model):
 
         channel_from, prefix1, prefix2 = search_4_channel(vals)
         if channel_from is False:
-            _logger.info('> No valid channel detected')
+            _logger.warning('> No valid channel detected')
             return vals, False, False
         cache = self.env['ir.model.synchro.cache']
         ext_id = '%s_id' % cache.get_attr(channel_from, 'PREFIX')
@@ -806,7 +814,7 @@ class IrModelSynchro(models.Model):
         else:
             ctx['country_id'] = \
                 self.env.user.company_id.partner_id.country_id.id
-        self.logmsg(channel_from, 'ctx=%s' % ctx)
+        self.logmsg('debug', 'ctx=%s' % ctx)
         if hasattr(self.env[model], 'preprocess'):
             vals = self.env[model].preprocess(channel_from, vals)
         vals = process_fields(channel_from, model, vals, ext_id, ctx,
@@ -840,7 +848,7 @@ class IrModelSynchro(models.Model):
                         channel_id, model, loc_name, 'LOC_FIELDS')
                     if ext_name[0] == '.':
                         default, apply = self.get_default_n_apply(
-                            model, channel_id, loc_name, ext_name,
+                            model, channel_id, loc_name, ext_name, is_foreign,
                             ttype=cache.get_struct_model_field_attr(
                                 model, loc_name, 'ttype'))
                         if hasattr(self, apply):
@@ -1367,9 +1375,9 @@ class IrModelSynchroCache(models.Model):
             if channel.produtc_without_variants:
                 self.set_attr(channel.id, 'NO_VARIANTS', True)
             if channel.trace:
-                self.set_attr(channel.id, 'LOGLEVEL', 'debug')
-            else:
                 self.set_attr(channel.id, 'LOGLEVEL', 'info')
+            else:
+                self.set_attr(channel.id, 'LOGLEVEL', 'debug')
 
     def setup_models_in_channels(self, model):
         if not model:
@@ -1488,9 +1496,9 @@ class IrModelSynchroCache(models.Model):
         if not model:
             return
         if channel_id:
-            _logger.info('> channel_id=%d' % channel_id)
-            _logger.info('> model=%s' % model)
-            _logger.info('> model params:(2pull=%s,key=%s,bind=%s)' % (
+            _logger.warning('> channel_id=%d' % channel_id)
+            _logger.warning('> model=%s' % model)
+            _logger.warning('> model params:(2pull=%s,key=%s,bind=%s)' % (
                 self.get_model_attr(channel_id, model, '2PULL'),
                 self.get_model_attr(channel_id, model, 'MODEL_KEY'),
                 self.get_model_attr(channel_id, model, 'BIND'),
@@ -1500,7 +1508,7 @@ class IrModelSynchroCache(models.Model):
                                              model, 'LOC_FIELDS', default={}):
                 if not self.is_struct(field):
                     continue
-                _logger.info('--- %-20.20s=%-20.20s (%s/"%s")' % (
+                _logger.warning('--- %-20.20s=%-20.20s (%s/"%s")' % (
                     field,
                     self.get_model_field_attr(
                         channel_id, model, field, 'LOC_FIELDS'),
@@ -1519,7 +1527,7 @@ class IrModelSynchroCache(models.Model):
                 if loc_field in self.get_model_field_attr(
                         channel_id, model, field, 'LOC_FIELDS'):
                     continue
-                _logger.info('--- %-20.20s=%-20.20s (%s/"%s")' % (
+                _logger.warning('--- %-20.20s=%-20.20s (%s/"%s")' % (
                     loc_field,
                     field,
                     self.get_model_field_attr(
@@ -1528,9 +1536,9 @@ class IrModelSynchroCache(models.Model):
                         channel_id, model, field, 'PROTECT', default='0'),
                     )
                 )
-            _logger.info('> ')
-        _logger.info('> model=%s' % model)
-        _logger.info('> model params:(Company=%s,Lines=%s,LnModel=%s,'
+            _logger.warning('> ')
+        _logger.warning('> model=%s' % model)
+        _logger.warning('> model params:(Company=%s,Lines=%s,LnModel=%s,'
                      'Parent=%s,State=%s)' % (
                          self.get_struct_model_attr(model,
                                                     'MODEL_WITH_COMPANY'),
@@ -1542,7 +1550,7 @@ class IrModelSynchroCache(models.Model):
         for field in self.get_struct_attr(model, default={}):
             if not self.is_struct(field):
                 continue
-            _logger.info('--- %-20.20s: %s (Req=%s,RO=%s,rel=%s,Prot=%s)' % (
+            _logger.warning('--- %-20.20s: %s (Req=%s,RO=%s,rel=%s,Prot=%s)' % (
                 self.get_struct_model_attr(model, model, field),
                 self.get_struct_model_field_attr(model, field, 'ttype'),
                 self.get_struct_model_field_attr(model, field, 'required'),
@@ -1557,9 +1565,10 @@ class IrModelField(models.Model):
     _inherit = 'ir.model.fields'
 
     protect_update = fields.Selection(
-        [('0', 'Updatable'),
-         ('1', 'If empty'),
-         ('2', 'Protected'),
+        [('0', 'Always Update'),
+         ('1', 'But new value not empty'),
+         ('2', 'But current value is empty'),
+         ('3', 'Protected field'),
          ],
         string='Protect field against update',
         default='0',
@@ -1569,12 +1578,12 @@ class IrModelField(models.Model):
     def _auto_init(self):
         res = super(IrModelField, self)._auto_init()
 
-        self._cr.execute("""UPDATE ir_model_fields set protect_update='2'
+        self._cr.execute("""UPDATE ir_model_fields set protect_update='3'
         where name not like '____id' and model_id in
         (select id from ir_model where model='res.country');
         """)
 
-        self._cr.execute("""UPDATE ir_model_fields set protect_update='2'
+        self._cr.execute("""UPDATE ir_model_fields set protect_update='3'
         where name not like '____id' and model_id in
         (select id from ir_model where model='res.country.state');
         """)
@@ -1587,7 +1596,7 @@ class IrModelField(models.Model):
         (select id from ir_model where model='product_product');
         """)
 
-        self._cr.execute("""UPDATE ir_model_fields set protect_update='2'
+        self._cr.execute("""UPDATE ir_model_fields set protect_update='3'
         where name in ('type', 'categ_id', 'uom_id', 'uom_po_id',
         'purchase_method', 'invoice_policy', 'property_account_income_id',
         'taxes_id', 'property_account_expense_id', 'supplier_taxes_id')

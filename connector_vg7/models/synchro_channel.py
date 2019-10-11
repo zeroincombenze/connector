@@ -104,9 +104,10 @@ class SynchroChannelModelFields(models.Model):
         default='',
     )
     protect = fields.Selection(
-        [('0', 'Updatable'),
-         ('1', 'If empty'),
-         ('2', 'Protected'),
+        [('0', 'Always Update'),
+         ('1', 'But new value not empty'),
+         ('2', 'But current value is empty'),
+         ('3', 'Protected field'),
          ],
         string='Protect field against update',
         default='0',

@@ -1,6 +1,6 @@
 
 ===============================
-|icon| connector_vg7 10.0.0.1.7
+|icon| connector_vg7 10.0.0.1.8
 ===============================
 
 
@@ -20,7 +20,34 @@ Overview / Panoramica
 |en| Connector to/from VG7
 --------------------------
 
-No yet documented
+This module makes available the synchro function to synchronize external data
+with Odoo data.
+The function sysnchro return th ID of record found or created. Negative values
+are error codes.
+
+The function synchro accepts a data dictionary with field values, like create
+and write functions.
+
+Every field name may be:
+
+* "id" (integer): the Odoo ID of record; if supplied means write specific existent record
+* "vg7_id" (integer): the external partner ID of record
+* Odoo name: same behavior of Odoo write and create; external partner must know the Odoo structure
+* External name as format "vg7:field": external name is translated into Odoo name base on dictionary
+* Prefixed Odoo name ad format "vg7_field":  external partner must know the Odoo structure but pass its local value
+
+Every field value may be:
+
+* Value as is, i.e. partner name; value is acquired as is.
+* Odoo reference: ID of odoo M2O table; external partner must know the Odoo data
+* External references: ID of external reference; field name is prefixed by "vg7:" or "vg7_"
+* Text of reference: key of reference key, i.e. "admin" in user_id field
+
+Behavior:
+
+* If "id" in field names, the function executes a write to specific ID; id record does not exit exception is generated
+* If "vg7_id" in field name, record with vg7_id is searched; if found, the function executes a write
+* Search for record matching value passed; the function execute a fallback search algorithm
 
 
 |
@@ -144,6 +171,16 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 
 |it| Se hai proposte per migliorare questo modulo, puoi inviare una mail a <cc@shs-av.com> per un iniziale contatto.
 
+ChangeLog History / Cronologia modifiche
+----------------------------------------
+
+10.0.0.1.8 (2019-10-09)
+~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] Account Payment Term / Tabella termini di pagamento
+* [IMP] New protection level / Nuovo livello di protezione
+
+
 |
 |
 
@@ -193,7 +230,7 @@ La distribuzione `Zeroincombenze® <https://wiki.zeroincombenze.org/en/Odoo>`__ 
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2019-09-11
+Last Update / Ultimo aggiornamento: 2019-10-11
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Alfa-red.png
     :target: https://odoo-community.org/page/development-status

@@ -4,6 +4,7 @@
 from . import ir_model
 from . import account_account
 from . import account_invoice
+from . import account_payment_term
 from . import account_tax
 from . import product
 from . import res_country
