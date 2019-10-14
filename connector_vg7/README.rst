@@ -1,6 +1,6 @@
 
 ===============================
-|icon| connector_vg7 10.0.0.1.8
+|icon| connector_vg7 10.0.0.1.9
 ===============================
 
 
@@ -174,6 +174,12 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 ChangeLog History / Cronologia modifiche
 ----------------------------------------
 
+10.0.0.1.9 (2019-10-14)
+~~~~~~~~~~~~~~~~~~~~~~~
+
+* [FIX] Not() function applied only to ext. ref. / La funzione not() è applicata solo se nome esterno
+
+
 10.0.0.1.8 (2019-10-09)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -230,7 +236,7 @@ La distribuzione `Zeroincombenze® <https://wiki.zeroincombenze.org/en/Odoo>`__ 
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2019-10-11
+Last Update / Ultimo aggiornamento: 2019-10-14
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Alfa-red.png
     :target: https://odoo-community.org/page/development-status

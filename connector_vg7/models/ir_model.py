@@ -637,9 +637,10 @@ class IrModelSynchro(models.Model):
             channel_from, model, loc_name or '.%s' % ext_name, 'APPLY',
             default='')
         if default.endswith('()'):
-            apply = 'tnl_2_loc_%s' % default[:-2]
-            if apply == 'not' and not is_foreign:
-                appy = ''
+            if default == 'not()' and not is_foreign:
+                apply = ''
+            else:
+                apply = 'tnl_2_loc_%s' % default[:-2]
             default = False
         elif default:
             apply = 'tnl_2_loc_set_value'
