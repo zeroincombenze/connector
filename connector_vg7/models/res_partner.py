@@ -55,21 +55,97 @@ class ResPartner(models.Model):
 
     @api.model
     def preprocess(self, channel_id, vals):
+
+        def set_vg7_id(vals):
+            if vals.get('vg7:id'):
+                nm = 'vg7:id'
+            elif vals.get('vg7_id'):
+                nm = 'vg7_id'
+            else:
+                nm = None
+            if nm:
+                if isinstance(vals[nm], basestring):
+                    vals[nm] = int(vals[nm])
+                if vals[nm] < 100000000:
+                    if vals.get('type') == 'delivery':
+                        vals[nm] = vals[nm] + 100000000
+                    elif vals.get('type') == 'invoice':
+                        vals[nm] = vals[nm] + 200000000
+            return vals
+
+        def rephase_fields(vals, ext_ref):
+            prefix = '%s_' % ext_ref.split(':')[1]
+            for field in vals.copy():
+                name = 'vg7:%s' % field.replace(prefix, '')
+                if name != field:
+                    vals[name] = vals[field]
+                    del vals[field]
+            for nm in ('vg7:company', 'vg7:name', 'vg7:surename'):
+                if nm in vals and not vals[nm].strip():
+                    del vals[nm]
+            return vals
+
         cache = self.env['ir.model.synchro.cache']
+        model = 'res.partner'
         if cache.get_attr(channel_id, 'IDENTITY') == 'vg7':
             if vals.get('type') == 'delivery':
-                if vals.get('vg7:id'):
-                    if isinstance(vals['vg7:id'], basestring):
-                        vals['vg7:id'] = int(vals['vg7:id'])
-                    vals['vg7_parent_id'] = vals['vg7:id']
-                    vals['vg7:id'] = vals['vg7:id'] + 100000000
-                elif vals.get('id'):
-                    if isinstance(vals['id'], basestring):
-                        vals['id'] = int(vals['id'])
-                    vals['parent_id'] = vals['id']
-                    del vals['id']
+                vals = set_vg7_id(vals)
+                for ext_ref in ('vg7:piva', 'electronic_invoice_subjected'):
+                    if ext_ref in vals:
+                        del vals[ext_ref]
+            elif vals.get('type') == 'invoice':
+                vals = set_vg7_id(vals)
+                for ext_ref in ('vg7:piva',):
+                    if ext_ref in vals:
+                        del vals[ext_ref]
+            else:
+                for ext_ref in ('parent_id',):
+                    if ext_ref in vals:
+                        del vals[ext_ref]
+                for ext_ref in ('vg7:shipping', 'vg7:billing'):
+                    if ext_ref in vals:
+                        vals[ext_ref] = rephase_fields(vals[ext_ref], ext_ref)
+                        if ('vg7:company' not in vals[ext_ref] and
+                                'vg7:name' not in vals[ext_ref] and
+                                'vg7:surename' not in vals[ext_ref]):
+                            if 'vg7:company' in vals:
+                                vals[ext_ref]['name'] = vals['vg7:company']
+                            elif ('vg7:name' in vals or
+                                  'vg7:surename' in vals):
+                                vals[ext_ref]['name'] = '%s %s' % (
+                                    vals.get('vg7:name', ''),
+                                    vals.get('vg7:surename', ''))
+                        vals[ext_ref]['vg7_id'] = vals['vg7_id']
+                        if ext_ref == 'vg7:billing':
+                            for nm in ('vg7:piva', 'vg7:esonerato_fe', 'vg7:codice_univoco'):
+                                if nm in vals[ext_ref] and nm not in vals:
+                                    vals[nm] = vals[ext_ref][nm]
+                                    del vals[ext_ref][nm]
+                        cache.set_model_attr(
+                            channel_id, model, ext_ref, vals[ext_ref])
+                        del vals[ext_ref]
+                    else:
+                        cache.set_model_attr(channel_id, model, ext_ref, {})
         return vals
 
     @api.model
-    def synchro(self, vals):
-        return self.env['ir.model.synchro'].synchro(self, vals)
+    def postprocess(self, channel_id, id, vals):
+        cache = self.env['ir.model.synchro.cache']
+        model = 'res.partner'
+        for ext_ref in ('vg7:shipping', 'vg7:billing'):
+            if cache.get_model_attr(channel_id, model, ext_ref):
+                vals = {}
+                for field in cache.get_model_attr(channel_id, model, ext_ref):
+                    vals[field] = cache.get_model_attr(
+                        channel_id, model, ext_ref)[field]
+                vals['parent_id'] = id
+                if ext_ref == 'vg7:shipping':
+                    vals['type'] = 'delivery'
+                elif ext_ref == 'vg7:billing':
+                    vals['type'] = 'invoice'
+                cache.del_model_attr(channel_id, model, ext_ref)
+                self.synchro(vals, disable_post=True)
+
+    @api.model
+    def synchro(self, vals, disable_post=None):
+        return self.env['ir.model.synchro'].synchro(self, vals, disable_post=disable_post)

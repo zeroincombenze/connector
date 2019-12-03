@@ -10,4 +10,5 @@ from . import product
 from . import res_country
 from . import res_partner
 from . import sale_order
+from . import picking
 from . import synchro_channel

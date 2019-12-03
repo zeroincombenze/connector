@@ -104,5 +104,19 @@ class ProductProduct(models.Model):
         return text
 
     @api.model
+    def preprocess(self, channel_id, vals):
+        cache = self.env['ir.model.synchro.cache']
+        if cache.get_attr(channel_id, 'IDENTITY') == 'vg7':
+            if (('vg7_id' in vals or 'vg7:id' in vals) and
+                    cache.get_attr(channel_id, 'NO_VARIANTS')):
+                tmpl_vals = vals.copy()
+                if 'id' in tmpl_vals:
+                    del tmpl_vals['id']
+                id = self.env['product.template'].synchro(tmpl_vals)
+                if id > 0:
+                    vals['product_tmpl_id'] = id
+        return vals
+
+    @api.model
     def synchro(self, vals):
         return self.env['ir.model.synchro'].synchro(self, vals)

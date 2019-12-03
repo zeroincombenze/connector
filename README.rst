@@ -37,15 +37,11 @@ Avaiable Addons / Moduli disponibili
 +------------------------+------------+------------+----------------------------------------------------------------------------------+
 | bridge_skeleton        | 10.0.2.0.0 | |no_check| | Core of Webkul Bridge Modules                                                    |
 +------------------------+------------+------------+----------------------------------------------------------------------------------+
-| component              | |no_check| | 10.0.1.1.0 | Components                                                                       |
+| connector              | 10.0.1.0.0 | |no_check| | Connector                                                                        |
 +------------------------+------------+------------+----------------------------------------------------------------------------------+
-| component_event        | |no_check| | 10.0.1.0.0 | Components Events                                                                |
+| connector_base_product | |halt|     | |no_check| | Connector Base Product                                                           |
 +------------------------+------------+------------+----------------------------------------------------------------------------------+
-| connector              | 10.0.1.0.0 | 10.0.2.0.0 | Connector                                                                        |
-+------------------------+------------+------------+----------------------------------------------------------------------------------+
-| connector_base_product | |halt|     | |same|     | Connector Base Product                                                           |
-+------------------------+------------+------------+----------------------------------------------------------------------------------+
-| connector_vg7          | 10.0.0.1.8 | |no_check| | Bidirectional connector to/from VG7 software                                     |
+| connector_vg7          | 10.0.0.1.1 | |no_check| | Bidirectional connector to/from VG7 software                                     |
 +------------------------+------------+------------+----------------------------------------------------------------------------------+
 | ddt_to_magento_order   | |halt|     | |no_check| | Set Magento Order to close when DdT is created                                   |
 +------------------------+------------+------------+----------------------------------------------------------------------------------+
@@ -55,15 +51,6 @@ Avaiable Addons / Moduli disponibili
 +------------------------+------------+------------+----------------------------------------------------------------------------------+
 
 
-OCA comparation / Confronto con OCA
------------------------------------
-
-
-+-----------------------------------------------------------------+-------------------+----------------+--------------------------------+
-| Description / Descrizione                                       | Zeroincombenze    | OCA            | Notes / Note                   |
-+-----------------------------------------------------------------+-------------------+----------------+--------------------------------+
-| Coverage / Copertura test                                       |  |Codecov Status| | |OCA Codecov|  |                                |
-+-----------------------------------------------------------------+-------------------+----------------+--------------------------------+
 
 
 Getting started / Come iniziare
@@ -182,7 +169,7 @@ La distribuzione `Zeroincombenze® <https://wiki.zeroincombenze.org/en/Odoo>`__ 
 |
 
 
-Last Update / Ultimo aggiornamento: 2019-10-11
+Last Update / Ultimo aggiornamento: 2019-12-03
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Alfa-red.png
     :target: https://odoo-community.org/page/development-status
