@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-# Copyright 2019 Antonio M. Vigliotti <antoniomaria.vigliotti@gmail.com>
-# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+#
+# Copyright 2018-19 - SHS-AV s.r.l. <https://www.zeroincombenze.it>
+#
+# License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 #
 # Return code:
 # -1: error creating record
@@ -11,13 +13,16 @@
 # -6: unrecognized channel
 # -7: no data supplied
 #
-import os
-from datetime import datetime, timedelta
-import time
-import requests
-# from lxml import etree
+from python_plus import bytestr_type
+
 import logging
-from odoo import fields, models, api
+import os
+import time
+from datetime import datetime, timedelta
+
+import requests
+from odoo import api, fields, models
+
 # from odoo.exceptions import UserError
 _logger = logging.getLogger(__name__)
 try:
@@ -435,7 +440,7 @@ class IrModelSynchro(models.Model):
 
     def get_rec_by_reference(self, model, key_name, value, ctx, mode=None):
         mode = mode or '='
-        self.logmsg(1, 'get_rec_by_reference(%s,%s %s %s)' % (
+        self.logmsg(1, '>>> get_rec_by_reference(%s,%s %s %s)' % (
                     model, key_name, mode, value))
         cache = self.env['ir.model.synchro.cache']
         ir_model = self.env[model]
@@ -472,7 +477,7 @@ class IrModelSynchro(models.Model):
         return rec
 
     def bind_foreign_text(self, model, value, is_foreign, channel_id, ctx):
-        self.logmsg(channel_id, 'bind_foreign_text(%s,%s,%s)' % (
+        self.logmsg(channel_id, '>>> bind_foreign_text(%s,%s,%s)' % (
                     model, value, is_foreign))
         cache = self.env['ir.model.synchro.cache']
         if value.isdigit():
@@ -492,7 +497,7 @@ class IrModelSynchro(models.Model):
 
     def bind_foreign_ref(self, model, value, ext_id, is_foreign,
                          channel_id, ctx):
-        self.logmsg(channel_id, 'bind_foreign_ref(%s,%s,%s,%s)' % (
+        self.logmsg(channel_id, '>>> bind_foreign_ref(%s,%s,%s,%s)' % (
                     model, value, ext_id, is_foreign))
         cache = self.env['ir.model.synchro.cache']
         new_value = False
@@ -510,7 +515,7 @@ class IrModelSynchro(models.Model):
 
     def get_foreign_value(self, model, channel_id, value,
                           ext_id, is_foreign, ctx, tomany=None):
-        self.logmsg(channel_id, 'get_foreign_value(%s,%s,%s,%s)' % (
+        self.logmsg(channel_id, '>>> get_foreign_value(%s,%s,%s,%s)' % (
                     model, value, ext_id, is_foreign))
         if not value:
             return value
@@ -655,7 +660,7 @@ class IrModelSynchro(models.Model):
                      apply, default, is_foreign):
             if hasattr(self, apply):
                 self.logmsg(channel_from,
-                            '> Apply %s(%s,%s,%s)' % (
+                            '>>> Apply %s(%s,%s,%s)' % (
                                 apply,
                                 loc_name,
                                 ext_ref,
@@ -702,8 +707,8 @@ class IrModelSynchro(models.Model):
                     else:
                         self.logmsg(
                             channel_from,
-                            'Field <%s> does not exist in model %s' % (ext_ref,
-                                                                       model))
+                            '### Field <%s> does not exist in model %s' % (ext_ref,
+                                                                           model))
                     vals = rm_ext_value(vals, loc_name, ext_name, ext_ref,
                                         is_foreign)
                     continue
@@ -835,7 +840,7 @@ class IrModelSynchro(models.Model):
                                 model, loc_name, 'ttype'))
                         if hasattr(self, apply):
                             self.logmsg(channel_id,
-                                        '> Apply %s(%s,%s,%s)' % (
+                                        '>>> Apply %s(%s,%s,%s)' % (
                                             apply,
                                             loc_name,
                                             ext_ref,
@@ -892,7 +897,7 @@ class IrModelSynchro(models.Model):
                 if rec:
                     id = rec[0].id
                     self.logmsg(channel_id,
-                                '> synchro: found id=%d (%s)' % (id, where))
+                                '### synchro: found id=%d (%s)' % (id, where))
                     break
         if id < 0 and ext_id in vals:
             rec = ir_model.search(
@@ -900,7 +905,7 @@ class IrModelSynchro(models.Model):
             if rec:
                 id = rec[0].id
                 self.logmsg(channel_id,
-                            '> synchro: found unknown id=%d' % id)
+                            '### synchro: found unknown id=%d' % id)
         return id
 
     def get_odoo_response(self, channel_id, model, id=False):
@@ -908,19 +913,19 @@ class IrModelSynchro(models.Model):
 
     def get_vg7_response(self, channel_id, model, id=False):
         cache = self.env['ir.model.synchro.cache']
-        if isinstance(id, (int, long)):
+        if id is False:
+            url = os.path.join(
+                cache.get_attr(channel_id, 'COUNTERPART_URL'),
+                cache.get_model_attr(channel_id, model, 'BIND'))
+        else:
             url = os.path.join(
                 cache.get_attr(channel_id, 'COUNTERPART_URL'),
                 cache.get_model_attr(channel_id, model, 'BIND'),
                 str(id))
-        else:
-            url = os.path.join(
-                cache.get_attr(channel_id, 'COUNTERPART_URL'),
-                cache.get_model_attr(channel_id, model, 'BIND'))
         headers = {'Authorization': 'access_token %s' %
                    cache.get_attr(channel_id, 'CLIENT_KEY')}
         self.logmsg(channel_id,
-                    '> vg7_requests(%s,%s)' % (url, headers))
+                    '>>> vg7_requests(%s,%s)' % (url, headers))
         try:
             response = requests.get(url, headers=headers)
         except BaseException:
@@ -929,8 +934,9 @@ class IrModelSynchro(models.Model):
             datas = response.json()
             return datas
         self.logmsg(channel_id,
-                    'No response requests(%d,%s,%s,%s)' %
-                    (channel_id,
+                    'Response error %s (%d,%s,%s,%s)' %
+                    (response.status_code,
+                     channel_id,
                      url,
                      cache.get_attr(channel_id, 'CLIENT_KEY'),
                      cache.get_attr(channel_id, 'PREFIX')))
@@ -950,8 +956,11 @@ class IrModelSynchro(models.Model):
         # import pdb
         # pdb.set_trace()
         vals = unicodes(vals)
+        if 'vg7:id' in vals and 'vg7_id' not in vals:
+            vals['vg7_id'] = vals['vg7:id']
+            del vals['vg7:id']
         model = cls.__class__.__name__
-        self.logmsg(0, '> %s.synchro(%s)' % (model, vals))
+        _logger.info('> %s.synchro(%s)' % (model, vals))
         ir_model = self.env[model]
         cache = self.env['ir.model.synchro.cache']
         cache.open(model=model, cls=cls)
@@ -982,7 +991,7 @@ class IrModelSynchro(models.Model):
                               (id, model))
                 return -3
             id = rec.id
-            self.logmsg(channel_id, '> synchro: found id=%s.%d' % (model, id))
+            self.logmsg(channel_id, '### synchro: found id=%s.%d' % (model, id))
         if id < 0:
             id = self.search4rec(model, vals, ext_id,
                                  constraints, has_active, channel_id)
@@ -1025,8 +1034,8 @@ class IrModelSynchro(models.Model):
                     _logger.error('%s creating %s' % (e, model))
                     return -1
             else:
-                self.logmsg(channel_id, 'Record %s.%d not changed' % (model,
-                                                                      id))
+                self.logmsg(channel_id, '### Record %s.%d not changed' % (model,
+                                                                          id))
         if (id > 0 and
                 not disable_post and
                 hasattr(self.env[model], 'postprocess')):
@@ -1036,7 +1045,7 @@ class IrModelSynchro(models.Model):
     @api.model
     def commit(self, cls, id):
         model = cls.__class__.__name__
-        self.logmsg(0, '> %s.commit()' % model)
+        _logger.info('> %s.commit()' % model)
         cache = self.env['ir.model.synchro.cache']
         cache.open(model=model, cls=cls)
         has_state = cache.get_struct_model_attr(
@@ -1071,7 +1080,9 @@ class IrModelSynchro(models.Model):
 
     @api.multi
     def pull_recs_2_complete(self):
-        self.logmsg(0, '> pull_recs_2_complete()')
+        _logger.info('> pull_recs_2_complete()')
+        import pdb
+        pdb.set_trace()
         cache = self.env['ir.model.synchro.cache']
         cache.open()
         for channel_id in cache.get_channel_list():
@@ -1080,6 +1091,8 @@ class IrModelSynchro(models.Model):
                     continue
                 if not cache.get_struct_model_attr(model, 'MODEL_WITH_NAME'):
                     continue
+                self.logmsg(channel_id,
+                            '### Pulling %s' % model)
                 ir_model = self.env[model]
                 recs = ir_model.search([('name', 'like', 'Unknown ')])
                 for rec in recs:
@@ -1108,7 +1121,7 @@ class IrModelSynchro(models.Model):
 
     @api.multi
     def pull_full_records(self, force=None):
-        self.logmsg(0, '> pull_full_records(%s)' % force)
+        _logger.info('> pull_full_records(%s)' % force)
         cache = self.env['ir.model.synchro.cache']
         cache.open()
         for channel_id in cache.get_channel_list():
@@ -1122,7 +1135,11 @@ class IrModelSynchro(models.Model):
                 cache.open(model=model)
                 if not cache.get_model_attr(channel_id, model, '2PULL',
                                             default=False):
+                    self.logmsg(channel_id,
+                                '### Model %s not pullable' % model)
                     continue
+                self.logmsg(channel_id,
+                            '### Pulling %s' % model)
                 ir_model = self.env[model]
                 datas = self.get_counterpart_response(channel_id,
                                                       model)

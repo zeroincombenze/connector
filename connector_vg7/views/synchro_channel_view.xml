@@ -25,7 +25,7 @@
                     <field name="prefix"/>
                     <field name="identity"/>
                     <field name="client_key"/>
-                    <field name="password"  password="True"/>
+                    <field name="password" password="True"/>
                     <field name="counterpart_url"/>
                 </group>
                 <group>
@@ -148,3 +148,4 @@
               groups="base.group_no_one"/>
 
 </odoo>
+

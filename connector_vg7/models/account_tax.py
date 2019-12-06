@@ -1,8 +1,13 @@
 # -*- coding: utf-8 -*-
-# Copyright 2019 Antonio M. Vigliotti <antoniomaria.vigliotti@gmail.com>
-# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+#
+# Copyright 2018-19 - SHS-AV s.r.l. <https://www.zeroincombenze.it>
+#
+# License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
+#
 import logging
-from odoo import fields, models, api
+
+from odoo import api, fields, models
+
 # from odoo.exceptions import UserError
 _logger = logging.getLogger(__name__)
 

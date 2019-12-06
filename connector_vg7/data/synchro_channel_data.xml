@@ -25,15 +25,15 @@
         <field name="counterpart_name">customers</field>
         <field name="synchro_channel_id" ref="channel_vg7"/>
         <field name="search_keys">(['vat', 'fiscalcode', 'is_company', 'type'],
-['vat', 'fiscalcode', 'is_company'],
-['rea_code'],
-['vat', 'name', 'is_company', 'type'],
-['fiscalcode', 'type'],
-['vat', 'is_company'],
-['name', 'is_company'],
-['vat'],
-['name'],
-['dim_name'])</field>
+               ['vat', 'fiscalcode', 'is_company'],
+               ['rea_code'],
+               ['vat', 'name', 'is_company', 'type'],
+               ['fiscalcode', 'type'],
+               ['vat', 'is_company'],
+               ['name', 'is_company'],
+               ['vat'],
+               ['name'],
+               ['dim_name'])</field>
         <field name="field_2complete">True</field>
         <field name="sequence">10</field>
     </record>
@@ -43,11 +43,11 @@
         <field name="field_uname">name</field>
         <field name="counterpart_name">products</field>
         <field name="search_keys">(['name', 'default_code'],
-['name', 'barcode'],
-['name'],
-['default_code'],
-['barcode'],
-['dim_name'],)</field>
+               ['name', 'barcode'],
+               ['name'],
+               ['default_code'],
+               ['barcode'],
+               ['dim_name'],)</field>
         <field name="synchro_channel_id" ref="channel_vg7"/>
         <field name="field_2complete">True</field>
         <field name="sequence">10</field>
@@ -57,11 +57,11 @@
         <field name="name">product.template</field>
         <field name="field_uname">name</field>
         <field name="search_keys">(['name', 'default_code'],
-['name', 'barcode'],
-['name'],
-['default_code'],
-['barcode'],
-['dim_name'])</field>
+               ['name', 'barcode'],
+               ['name'],
+               ['default_code'],
+               ['barcode'],
+               ['dim_name'])</field>
         <field name="synchro_channel_id" ref="channel_vg7"/>
     </record>
 
@@ -120,6 +120,7 @@
         <field name="name">account.tax</field>
         <field name="field_uname">description</field>
         <field name="search_keys">(['description'],['name'],['dim_name'])</field>
+        <field name="field_2complete">True</field>
         <field name="synchro_channel_id" ref="channel_vg7"/>
     </record>
 
@@ -195,7 +196,7 @@
         <field name="name">country_id</field>
         <field name="model_id" ref="res_country_state"/>
     </record>
- 
+
     <record forcecreate="1" id="res_country_state_name" model="synchro.channel.model.fields">
         <field name="name">name</field>
         <field name="protect">3</field>
@@ -208,7 +209,7 @@
         <field name="counterpart_name">city</field>
         <field name="model_id" ref="res_partner"/>
     </record>
- 
+
     <record forcecreate="1" id="res_partner_codice_destinatario" model="synchro.channel.model.fields">
         <field name="name">codice_destinatario</field>
         <field name="counterpart_name">codice_univoco</field>
@@ -726,7 +727,7 @@
 
     <record forcecreate="1" id="sale_order_note" model="synchro.channel.model.fields">
         <field name="name">note</field>
-         <field name="apply">company_info()</field>
+        <field name="apply">company_info()</field>
         <field name="model_id" ref="sale_order"/>
     </record>
 
@@ -919,3 +920,4 @@
     </record>
 
 </odoo>
+

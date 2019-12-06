@@ -1,8 +1,13 @@
 # -*- coding: utf-8 -*-
-# Copyright 2019 Antonio M. Vigliotti <antoniomaria.vigliotti@gmail.com>
-# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+#
+# Copyright 2018-19 - SHS-AV s.r.l. <https://www.zeroincombenze.it>
+#
+# License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
+#
 import logging
-from odoo import fields, models, api
+
+from odoo import api, fields, models
+
 _logger = logging.getLogger(__name__)
 
 try:
@@ -81,7 +86,7 @@ class ResPartner(models.Model):
                     vals[name] = vals[field]
                     del vals[field]
             for nm in ('vg7:company', 'vg7:name', 'vg7:surename'):
-                if nm in vals and not vals[nm].strip():
+                if nm in vals and (not isinstance(vals[nm], basestring) or not vals[nm].strip()):
                     del vals[nm]
             return vals
 
