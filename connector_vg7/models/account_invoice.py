@@ -76,4 +76,6 @@ class AccountInvoiceLine(models.Model):
 
     @api.model
     def synchro(self, vals):
+        if 'id' in vals:
+            del vals['id']
         return self.env['ir.model.synchro'].synchro(self, vals)

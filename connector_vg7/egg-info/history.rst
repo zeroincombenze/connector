@@ -1,3 +1,14 @@
+10.0.0.1.12 (2019-12-30)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] Protect against wrong id in invoice lines / Protezione contro ID non validi in dettaglio fatture
+* [IMP] Protect against wrong id in sale order lines / Protezione contro ID non validi in dettaglio ordini
+* [IMP] Import from file csv / Importazione da file csv
+* [IMP] Import address record / Importazioni indirizzi di spedizione e fatturazione
+* [IMP] Synchronizzation button on parters and products / Bottone di sincronizzazione in soggetti e prodotti
+* [IMP] Import uom / Importazione um
+
+
 10.0.0.1.11 (2019-12-03)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 

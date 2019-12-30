@@ -39,6 +39,7 @@
                         <field name="name"/>
                         <field name="counterpart_name"/>
                         <field name="field_uname"/>
+                        <field name="model_spec"/>
                         <field name="field_2complete"/>
                         <field name="sequence"/>
                     </tree>
@@ -62,6 +63,8 @@
                 <field name="name"/>
                 <field name="counterpart_name"/>
                 <field name="field_uname"/>
+                <field name="model_spec"/>
+                <field name="field_2complete"/>
                 <field name="sequence"/>
                 <field name="synchro_channel_id"/>
             </tree>
@@ -78,6 +81,7 @@
                     <field name="counterpart_name"/>
                     <field name="field_uname"/>
                     <field name="search_keys"/>
+                    <field name="model_spec"/>
                     <field name="field_2complete"/>
                     <field name="sequence"/>
                     <field name="synchro_channel_id"/>
@@ -85,6 +89,7 @@
                 <field name="field_ids">
                     <tree string="Field mapping" editable="bottom">
                         <field name="name"/>
+                        <field name="spec"/>
                         <field name="counterpart_name"/>
                         <field name="apply"/>
                         <field name="protect"/>

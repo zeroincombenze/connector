@@ -10,6 +10,7 @@ from openerp import fields, models
 class SynchroChannel(models.Model):
     _name = 'synchro.channel'
     _description = "Synchonization Channel"
+    _order = 'sequence, id'
 
     name = fields.Char(
         'Sychronization Channel Name',
@@ -29,6 +30,7 @@ class SynchroChannel(models.Model):
         [('generic', 'Generic counterpart'),
          ('odoo', 'Odoo instance'),
          ('vg7', 'VG7 instance'),
+         ('csv', 'Read from csv'),
          ],
         'Counterpart identity',
         help="May activate some specific functions",
@@ -44,9 +46,9 @@ class SynchroChannel(models.Model):
         help="Client key assigned by 3th Party Sender")
     password = fields.Char('Password', copy=False)
     counterpart_url = fields.Char(
-        'Counterpart url',
+        'Counterpart endpoint',
         help="3th Party Sender URL to connect")
-    produtc_without_variants = fields.Boolean('Products without variants')
+    product_without_variants = fields.Boolean('Products without variants')
     sequence = fields.Integer('Priority', default=16)
     active = fields.Boolean(string='Active',
                             default=True)
@@ -65,6 +67,7 @@ class SynchroChannel(models.Model):
 class SynchroChannelModel(models.Model):
     _name = 'synchro.channel.model'
     _description = "Model mapping for Synchonization"
+    _order = 'sequence, id'
 
     name = fields.Char(
         'Odoo model name',
@@ -83,6 +86,14 @@ class SynchroChannelModel(models.Model):
              'search for record just with name'
     )
     counterpart_name = fields.Char('Counterpart model name')
+    model_spec = fields.Selection(
+        [('delivery', 'Delivery Address'),
+         ('invoice', 'Invoice Address'),
+         ('customer', 'Customer'),
+         ('supplier', 'Suplier'),
+         ],
+        string='Specific search',
+    )
     field_2complete = fields.Char('Model to complete asynchronously')
     sequence = fields.Integer('Priority', default=16)
     synchro_channel_id = fields.Many2one('synchro.channel')
@@ -105,6 +116,14 @@ class SynchroChannelModelFields(models.Model):
              'vat(), upper(), lower(), street_number(), bool()\n'
              'person(), journal(), account(), uom(), tax()\n',
         default='',
+    )
+    spec = fields.Selection(
+        [('delivery', 'Delivery Address'),
+         ('invoice', 'Invoice Address'),
+         ('customer', 'Customer'),
+         ('supplier', 'Suplier'),
+         ],
+        string='Specific search',
     )
     protect = fields.Selection(
         [('0', 'Always Update'),

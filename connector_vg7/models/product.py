@@ -62,8 +62,13 @@ class ProductTemplate(models.Model):
         return text
 
     @api.model
-    def synchro(self, vals):
+    def synchro(self, vals, disable_post=None):
         return self.env['ir.model.synchro'].synchro(self, vals)
+
+    @api.multi
+    def pull_record(self):
+        for product in self.product_variant_ids:
+            self.env['ir.model.synchro'].pull_record(product)
 
 
 class ProductProduct(models.Model):
@@ -111,17 +116,42 @@ class ProductProduct(models.Model):
     @api.model
     def preprocess(self, channel_id, vals):
         cache = self.env['ir.model.synchro.cache']
-        if cache.get_attr(channel_id, 'IDENTITY') == 'vg7':
-            if (('vg7_id' in vals or 'vg7:id' in vals) and
-                    cache.get_attr(channel_id, 'NO_VARIANTS')):
-                tmpl_vals = vals.copy()
-                if 'id' in tmpl_vals:
-                    del tmpl_vals['id']
-                id = self.env['product.template'].synchro(tmpl_vals)
-                if id > 0:
-                    vals['product_tmpl_id'] = id
+        if (('vg7_id' in vals or 'vg7:id' in vals) and
+                cache.get_attr(channel_id, 'NO_VARIANTS')):
+            tmpl_vals = vals.copy()
+            if 'id' in tmpl_vals:
+                del tmpl_vals['id']
+            id = self.env['product.template'].synchro(tmpl_vals)
+            if id > 0:
+                vals['product_tmpl_id'] = id
         return vals
 
     @api.model
-    def synchro(self, vals):
+    def synchro(self, vals, disable_post=None):
+        return self.env['ir.model.synchro'].synchro(
+            self, vals, disable_post=disable_post)
+
+
+class ProductUom(models.Model):
+    _inherit = "product.uom"
+
+    vg7_id = fields.Integer('VG7 ID', copy=False)
+    oe7_id = fields.Integer('Odoo7 ID', copy=False)
+
+    CONTRAINTS = ()
+
+    @api.model_cr_context
+    def _auto_init(self):
+        res = super(ProductUom, self)._auto_init()
+        for prefix in ('vg7', 'oe7'):
+            self.env['ir.model.synchro']._build_unique_index(self._inherit,
+                                                             prefix)
+        return res
+
+    @api.model
+    def synchro(self, vals, disable_post=None):
         return self.env['ir.model.synchro'].synchro(self, vals)
+
+    @api.multi
+    def pull_record(self):
+        return self.env['ir.model.synchro'].pull_record(self)

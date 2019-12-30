@@ -1,6 +1,6 @@
 
 ================================
-|icon| connector_vg7 10.0.0.1.11
+|icon| connector_vg7 10.0.0.1.12
 ================================
 
 
@@ -162,6 +162,17 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 ChangeLog History / Cronologia modifiche
 ----------------------------------------
 
+10.0.0.1.12 (2019-12-30)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] Protect against wrong id in invoice lines / Protezione contro ID non validi in dettaglio fatture
+* [IMP] Protect against wrong id in sale order lines / Protezione contro ID non validi in dettaglio ordini
+* [IMP] Import from file csv / Importazione da file csv
+* [IMP] Import address record / Importazioni indirizzi di spedizione e fatturazione
+* [IMP] Synchronizzation button on parters and products / Bottone di sincronizzazione in soggetti e prodotti
+* [IMP] Import uom / Importazione um
+
+
 10.0.0.1.11 (2019-12-03)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -240,7 +251,7 @@ La distribuzione `Zeroincombenze® <https://wiki.zeroincombenze.org/en/Odoo>`__ 
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2019-12-06
+Last Update / Ultimo aggiornamento: 2019-12-30
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Alfa-red.png
     :target: https://odoo-community.org/page/development-status

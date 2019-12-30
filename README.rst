@@ -43,6 +43,8 @@ Avaiable Addons / Moduli disponibili
 +------------------------+------------+------------+----------------------------------------------------------------------------------+
 | connector_vg7          | 10.0.0.1.1 | |no_check| | Bidirectional connector to/from VG7 software                                     |
 +------------------------+------------+------------+----------------------------------------------------------------------------------+
+| connector_vg7_conai    | 10.0.0.1.1 | |no_check| | Bidirectional connector to/from VG7 software (CONAI plug-in)                     |
++------------------------+------------+------------+----------------------------------------------------------------------------------+
 | ddt_to_magento_order   | |halt|     | |no_check| | Set Magento Order to close when DdT is created                                   |
 +------------------------+------------+------------+----------------------------------------------------------------------------------+
 | magento_bridge         | 10.0.2.0.0 | |no_check| | Basic MOB                                                                        |
@@ -169,7 +171,7 @@ La distribuzione `Zeroincombenze® <https://wiki.zeroincombenze.org/en/Odoo>`__ 
 |
 
 
-Last Update / Ultimo aggiornamento: 2019-12-06
+Last Update / Ultimo aggiornamento: 2019-12-30
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Alfa-red.png
     :target: https://odoo-community.org/page/development-status
