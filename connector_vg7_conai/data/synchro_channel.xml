@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <record id="channel_vg7" model="synchro.channel">
+        <field name="name">VG7 print</field>
+        <field name="prefix">vg7</field>
+        <field name="identity">vg7</field>
+        <field name="produtc_without_variants" eval="True"/>
+        <field name="trace" eval="True"/>
+        <field name="active" eval="True"/>
+    </record>
+
+    <record id="channel_odoo7" model="synchro.channel">
+        <field name="name">Odoo 7.0</field>
+        <field name="prefix">oe7</field>
+        <field name="identity">odoo</field>
+        <field name="client_key">zeroadm</field>
+        <field name="active" eval="True"/>
+    </record>
+
+</odoo>

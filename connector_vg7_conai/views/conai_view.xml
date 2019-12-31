@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_conai_product_synchro_form" model="ir.ui.view">
+        <field name="name">conai.product.synchro.form</field>
+        <field name="model">italy.conai.product.category</field>
+        <field name="inherit_id" ref="l10n_it_conai.view_conai_product_category_form"/>
+        <field name="arch" type="xml">
+            <field name="active" position="after">
+                <group>
+                    <field name="vg7_id"/>
+                    <field name="oe7_id"/>
+                </group>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_conai_partner_synchro_form" model="ir.ui.view">
+        <field name="name">conai.partner.synchro.form</field>
+        <field name="model">italy.conai.partner.category</field>
+        <field name="inherit_id" ref="l10n_it_conai.view_conai_partner_category_form"/>
+        <field name="arch" type="xml">
+            <field name="active" position="after">
+                <group>
+                    <field name="vg7_id"/>
+                    <field name="oe7_id"/>
+                </group>
+            </field>
+        </field>
+    </record>
+
+</odoo>
+

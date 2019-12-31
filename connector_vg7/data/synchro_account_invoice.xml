@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+
+    <record forcecreate="1" id="account_invoice" model="synchro.channel.model">
+        <field name="name">account.invoice</field>
+        <field name="field_uname">number</field>
+        <field name="search_keys">(['number'],['move_name'],)</field>
+        <field name="synchro_channel_id" ref="channel_vg7"/>
+    </record>
+
+    <record forcecreate="1" id="account_invoice_line" model="synchro.channel.model">
+        <field name="name">account.invoice.line</field>
+        <field name="field_uname">name</field>
+        <field name="search_keys">(['invoice_id', 'sequence'], ['invoice_id', 'name'])</field>
+        <field name="sequence">18</field>
+        <field name="synchro_channel_id" ref="channel_vg7"/>
+    </record>
+
+
+    <record forcecreate="1" id="account_invoice_carriage_condition_id" model="synchro.channel.model.fields">
+        <field name="name">carriage_condition_id</field>
+        <field name="model_id" ref="account_invoice"/>
+    </record>
+
+    <record forcecreate="1" id="account_invoice_carrier_id" model="synchro.channel.model.fields">
+        <field name="name">carrier_id</field>
+        <field name="model_id" ref="account_invoice"/>
+    </record>
+
+    <record forcecreate="1" id="account_invoice_comment" model="synchro.channel.model.fields">
+        <field name="name">comment</field>
+        <field name="model_id" ref="account_invoice"/>
+    </record>
+
+    <record forcecreate="1" id="account_invoice_company_id" model="synchro.channel.model.fields">
+        <field name="name">company_id</field>
+        <field name="apply">set_global()</field>
+        <field name="model_id" ref="account_invoice"/>
+    </record>
+
+    <record forcecreate="1" id="account_invoice_date" model="synchro.channel.model.fields">
+        <field name="name">date</field>
+        <field name="model_id" ref="account_invoice"/>
+    </record>
+
+    <record forcecreate="1" id="account_invoice_date_invoice" model="synchro.channel.model.fields">
+        <field name="name">date_invoice</field>
+        <field name="model_id" ref="account_invoice"/>
+    </record>
+
+    <record forcecreate="1" id="account_invoice_electronic_invoice_subjected" model="synchro.channel.model.fields">
+        <field name="name">electronic_invoice_subjected</field>
+        <field name="apply">true</field>
+        <field name="model_id" ref="account_invoice"/>
+    </record>
+
+    <record forcecreate="1" id="account_invoice_goods_description_id" model="synchro.channel.model.fields">
+        <field name="name">goods_description_id</field>
+        <field name="model_id" ref="account_invoice"/>
+    </record>
+
+    <record forcecreate="1" id="account_invoice_gross_weight" model="synchro.channel.model.fields">
+        <field name="name">gross_weight</field>
+        <field name="model_id" ref="account_invoice"/>
+    </record>
+
+    <record forcecreate="1" id="account_invoice_journal_id" model="synchro.channel.model.fields">
+        <field name="name">journal_id</field>
+        <field name="apply">journal()</field>
+        <field name="model_id" ref="account_invoice"/>
+    </record>
+
+    <record forcecreate="1" id="account_invoice_move_name" model="synchro.channel.model.fields">
+        <field name="name">move_name</field>
+        <field name="model_id" ref="account_invoice"/>
+    </record>
+
+    <record forcecreate="1" id="account_invoice_net_weight" model="synchro.channel.model.fields">
+        <field name="name">net_weight</field>
+        <field name="model_id" ref="account_invoice"/>
+    </record>
+
+    <record forcecreate="1" id="account_invoice_number" model="synchro.channel.model.fields">
+        <field name="name">number</field>
+        <field name="apply">invoice_number()</field>
+        <field name="model_id" ref="account_invoice"/>
+    </record>
+
+    <record forcecreate="1" id="account_invoice_origin" model="synchro.channel.model.fields">
+        <field name="name">origin</field>
+        <field name="model_id" ref="account_invoice"/>
+    </record>
+
+    <record forcecreate="1" id="account_invoice_parcels" model="synchro.channel.model.fields">
+        <field name="name">parcels</field>
+        <field name="model_id" ref="account_invoice"/>
+    </record>
+
+    <record forcecreate="1" id="account_invoice_partner_id" model="synchro.channel.model.fields">
+        <field name="name">partner_id</field>
+        <field name="model_id" ref="account_invoice"/>
+    </record>
+
+    <record forcecreate="1" id="account_invoice_payment_term_id" model="synchro.channel.model.fields">
+        <field name="name">payment_term_id</field>
+        <field name="model_id" ref="account_invoice"/>
+    </record>
+
+    <record forcecreate="1" id="account_invoice_state" model="synchro.channel.model.fields">
+        <field name="name">state</field>
+        <field name="model_id" ref="account_invoice"/>
+    </record>
+
+    <record forcecreate="1" id="account_invoice_tax_stamp" model="synchro.channel.model.fields">
+        <field name="name">tax_stamp</field>
+        <field name="model_id" ref="account_invoice"/>
+    </record>
+
+    <record forcecreate="1" id="account_invoice_type" model="synchro.channel.model.fields">
+        <field name="name">type</field>
+        <field name="apply">out_invoice</field>
+        <field name="model_id" ref="account_invoice"/>
+    </record>
+
+    <record forcecreate="1" id="account_invoice_volume" model="synchro.channel.model.fields">
+        <field name="name">volume</field>
+        <field name="model_id" ref="account_invoice"/>
+    </record>
+
+    <record forcecreate="1" id="account_invoice_weight" model="synchro.channel.model.fields">
+        <field name="name">weight</field>
+        <field name="model_id" ref="account_invoice"/>
+    </record>
+
+
+    <record forcecreate="1" id="account_invoice_line_account_id" model="synchro.channel.model.fields">
+        <field name="name">account_id</field>
+        <field name="apply">account()</field>
+        <field name="model_id" ref="account_invoice_line"/>
+    </record>
+
+    <record forcecreate="1" id="account_invoice_line_agents" model="synchro.channel.model.fields">
+        <field name="name">agents</field>
+        <field name="apply">agents()</field>
+        <field name="model_id" ref="account_invoice_line"/>
+    </record>
+
+    <record forcecreate="1" id="account_invoice_line_commission_free" model="synchro.channel.model.fields">
+        <field name="name">commission_free</field>
+        <field name="model_id" ref="account_invoice_line"/>
+    </record>
+
+    <record forcecreate="1" id="account_invoice_line_discount" model="synchro.channel.model.fields">
+        <field name="name">discount</field>
+        <field name="model_id" ref="account_invoice_line"/>
+    </record>
+
+    <record forcecreate="1" id="account_invoice_line_invoice_id" model="synchro.channel.model.fields">
+        <field name="name">invoice_id</field>
+        <field name="model_id" ref="account_invoice_line"/>
+    </record>
+
+    <record forcecreate="1" id="account_invoice_line_tax_ids" model="synchro.channel.model.fields">
+        <field name="name">invoice_line_tax_ids</field>
+        <field name="apply">tax()</field>
+        <field name="model_id" ref="account_invoice_line"/>
+    </record>
+
+    <record forcecreate="1" id="account_invoice_line_is_stamp_line" model="synchro.channel.model.fields">
+        <field name="name">is_stamp_line</field>
+        <field name="model_id" ref="account_invoice_line"/>
+    </record>
+
+    <record forcecreate="1" id="account_invoice_line_name" model="synchro.channel.model.fields">
+        <field name="name">name</field>
+        <field name="model_id" ref="account_invoice_line"/>
+    </record>
+
+    <record forcecreate="1" id="account_invoice_line_product_id" model="synchro.channel.model.fields">
+        <field name="name">product_id</field>
+        <field name="model_id" ref="account_invoice_line"/>
+    </record>
+
+    <record forcecreate="1" id="account_invoice_line_price_unit" model="synchro.channel.model.fields">
+        <field name="name">price_unit</field>
+        <field name="model_id" ref="account_invoice_line"/>
+    </record>
+
+    <record forcecreate="1" id="account_invoice_line_quantity" model="synchro.channel.model.fields">
+        <field name="name">quantity</field>
+        <field name="model_id" ref="account_invoice_line"/>
+    </record>
+
+    <record forcecreate="1" id="account_invoice_line_sequence" model="synchro.channel.model.fields">
+        <field name="name">sequence</field>
+        <field name="model_id" ref="account_invoice_line"/>
+    </record>
+
+    <record forcecreate="1" id="account_invoice_line_uom_id" model="synchro.channel.model.fields">
+        <field name="name">uom_id</field>
+        <field name="apply">uom()</field>
+        <field name="model_id" ref="account_invoice_line"/>
+    </record>
+
+    <record forcecreate="1" id="account_invoice_line_to_delete" model="synchro.channel.model.fields">
+        <field name="name">to_delete</field>
+        <field name="apply">false</field>
+        <field name="model_id" ref="account_invoice_line"/>
+    </record>
+
+</odoo>

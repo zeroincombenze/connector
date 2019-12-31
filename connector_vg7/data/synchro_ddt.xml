@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+
+    <record forcecreate="1" id="stock_picking_package_preparation" model="synchro.channel.model">
+        <field name="name">stock.picking.package.preparation</field>
+        <field name="field_uname">ddt_number</field>
+        <field name="search_keys">(['ddt_number'],)</field>
+        <field name="counterpart_name">DDT</field>
+        <field name="synchro_channel_id" ref="channel_vg7"/>
+    </record>
+
+    <record forcecreate="1" id="stock_picking_package_preparation_line" model="synchro.channel.model">
+        <field name="name">stock.picking.package.preparation.line</field>
+        <field name="field_uname">name</field>
+        <field name="search_keys">(['ddt_id_id', 'sequence'], ['ddt_id', 'name'])</field>
+        <field name="synchro_channel_id" ref="channel_vg7"/>
+    </record>
+
+
+    <record forcecreate="1" id="stock_picking_package_preparation_ddt_number" model="synchro.channel.model.fields">
+        <field name="name">ddt_number</field>
+        <field name="model_id" ref="stock_picking_package_preparation"/>
+    </record>
+
+    <record forcecreate="1" id="stock_picking_package_preparation_partner_id" model="synchro.channel.model.fields">
+        <field name="name">partner_id</field>
+        <field name="counterpart_name">customer_id</field>
+        <field name="model_id" ref="stock_picking_package_preparation"/>
+    </record>
+
+    <record forcecreate="1" id="stock_picking_package_preparation_partner_shipping_id" model="synchro.channel.model.fields">
+        <field name="name">partner_shipping_id</field>
+        <field name="counterpart_name">customer_shipping_id</field>
+        <field name="model_id" ref="stock_picking_package_preparation"/>
+    </record>
+
+    <record forcecreate="1" id="stock_picking_package_preparation_date" model="synchro.channel.model.fields">
+        <field name="name">date</field>
+        <field name="counterpart_name">data emissione</field>
+        <field name="model_id" ref="stock_picking_package_preparation"/>
+    </record>
+
+
+    <record forcecreate="1" id="stock_picking_package_preparation_line_package_preparation_id" model="synchro.channel.model.fields">
+        <field name="name">package_preparation_id</field>
+        <field name="counterpart_name">ddt_id</field>
+        <field name="model_id" ref="stock_picking_package_preparation_line"/>
+    </record>
+
+    <record forcecreate="1" id="stock_picking_package_preparation_line_sequence" model="synchro.channel.model.fields">
+        <field name="name">sequence</field>
+        <field name="model_id" ref="stock_picking_package_preparation_line"/>
+    </record>
+
+    <record forcecreate="1" id="stock_picking_package_preparation_line_name" model="synchro.channel.model.fields">
+        <field name="name">name</field>
+        <field name="counterpart_name">descrizione</field>
+        <field name="model_id" ref="stock_picking_package_preparation_line"/>
+    </record>
+
+    <record forcecreate="1" id="stock_picking_package_preparation_line_product_id" model="synchro.channel.model.fields">
+        <field name="name">product_id</field>
+        <field name="counterpart_name">product_id</field>
+        <field name="model_id" ref="stock_picking_package_preparation_line"/>
+    </record>
+
+    <record forcecreate="1" id="stock_picking_package_preparation_line_product_uom_qty" model="synchro.channel.model.fields">
+        <field name="name">product_uom_qty</field>
+        <field name="counterpart_name">quantita</field>
+        <field name="model_id" ref="stock_picking_package_preparation_line"/>
+    </record>
+
+    <record forcecreate="1" id="stock_picking_package_preparation_line_price_unit" model="synchro.channel.model.fields">
+        <field name="name">price_unit</field>
+        <field name="counterpart_name">prezzo_unitario</field>
+        <field name="model_id" ref="stock_picking_package_preparation_line"/>
+    </record>
+
+    <record forcecreate="1" id="stock_picking_package_preparation_line_sale_id" model="synchro.channel.model.fields">
+        <field name="name">sale_id</field>
+        <field name="counterpart_name">order_id</field>
+        <field name="model_id" ref="stock_picking_package_preparation_line"/>
+    </record>
+
+    <record forcecreate="1" id="stock_picking_package_preparation_line_to_delete" model="synchro.channel.model.fields">
+        <field name="name">to_delete</field>
+        <field name="apply">false</field>
+        <field name="model_id" ref="stock_picking_package_preparation_line"/>
+    </record>
+
+</odoo>
+

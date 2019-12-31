@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+
+    <record forcecreate="1" id="res_partner_conai_category_id" model="synchro.channel.model.fields">
+        <field name="name">conai_category_id</field>
+        <field name="counterpart_name">esenzione_conai_id</field>
+        <field name="model_id" ref="connector_vg7.res_partner"/>
+    </record>
+
+</odoo>

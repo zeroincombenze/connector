@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+
+    <record forcecreate="1" id="sale_order" model="synchro.channel.model">
+        <field name="name">sale.order</field>
+        <field name="field_uname">name</field>
+        <field name="search_keys">(['name'])</field>
+        <field name="counterpart_name">order</field>
+        <field name="synchro_channel_id" ref="channel_vg7"/>
+    </record>
+
+    <record forcecreate="1" id="sale_order_line" model="synchro.channel.model">
+        <field name="name">sale.order.line</field>
+        <field name="field_uname">name</field>
+        <field name="search_keys">(['order_id', 'sequence'], ['order_id', 'name'])</field>
+        <field name="sequence">18</field>
+        <field name="synchro_channel_id" ref="channel_vg7"/>
+    </record>
+
+
+    <record forcecreate="1" id="sale_order_company_id" model="synchro.channel.model.fields">
+        <field name="name">company_id</field>
+        <field name="apply">set_global()</field>
+        <field name="model_id" ref="sale_order"/>
+    </record>
+
+    <record forcecreate="1" id="sale_order_carriage_condition_id" model="synchro.channel.model.fields">
+        <field name="name">carriage_condition_id</field>
+        <field name="apply">partner_info()</field>
+        <field name="model_id" ref="sale_order"/>
+    </record>
+
+    <record forcecreate="1" id="sale_order_carrier_id" model="synchro.channel.model.fields">
+        <field name="name">carrier_id</field>
+        <field name="model_id" ref="sale_order"/>
+    </record>
+
+    <record forcecreate="1" id="sale_order_client_order_ref" model="synchro.channel.model.fields">
+        <field name="name">client_order_ref</field>
+        <field name="counterpart_name">name</field>
+        <field name="model_id" ref="sale_order"/>
+    </record>
+
+    <record forcecreate="1" id="sale_order_date_order" model="synchro.channel.model.fields">
+        <field name="name">date_order</field>
+        <field name="counterpart_name">date</field>
+        <field name="model_id" ref="sale_order"/>
+    </record>
+
+    <record forcecreate="1" id="sale_order_goods_description_id" model="synchro.channel.model.fields">
+        <field name="name">goods_description_id</field>
+        <field name="apply">partner_info()</field>
+        <field name="model_id" ref="sale_order"/>
+    </record>
+
+    <record forcecreate="1" id="sale_order_gross_weight" model="synchro.channel.model.fields">
+        <field name="name">gross_weight</field>
+        <field name="apply">partner_info()</field>
+        <field name="model_id" ref="sale_order"/>
+    </record>
+
+    <record forcecreate="1" id="sale_order_incoterm" model="synchro.channel.model.fields">
+        <field name="name">incoterm</field>
+        <field name="model_id" ref="sale_order"/>
+    </record>
+
+    <record forcecreate="1" id="sale_order_name" model="synchro.channel.model.fields">
+        <field name="name">name</field>
+        <field name="counterpart_name">order_number</field>
+        <field name="model_id" ref="sale_order"/>
+    </record>
+
+    <record forcecreate="1" id="sale_order_note" model="synchro.channel.model.fields">
+        <field name="name">note</field>
+        <field name="apply">company_info()</field>
+        <field name="model_id" ref="sale_order"/>
+    </record>
+
+    <record forcecreate="1" id="sale_order_parcels" model="synchro.channel.model.fields">
+        <field name="name">parcels</field>
+        <field name="apply">partner_info()</field>
+        <field name="model_id" ref="sale_order"/>
+    </record>
+
+    <record forcecreate="1" id="sale_order_partner_id" model="synchro.channel.model.fields">
+        <field name="name">partner_id</field>
+        <field name="counterpart_name">customer_id</field>
+        <field name="model_id" ref="sale_order"/>
+    </record>
+
+    <record forcecreate="1" id="sale_order_payment_term_id" model="synchro.channel.model.fields">
+        <field name="name">payment_id</field>
+        <field name="apply">partner_info()</field>
+        <field name="model_id" ref="sale_order"/>
+    </record>
+
+    <record forcecreate="1" id="sale_order_pricelist_id" model="synchro.channel.model.fields">
+        <field name="name">pricelist_id</field>
+        <field name="apply">partner_info()</field>
+        <field name="model_id" ref="sale_order"/>
+    </record>
+
+    <record forcecreate="1" id="sale_order_fiscal_position_id" model="synchro.channel.model.fields">
+        <field name="name">fiscal_position_id</field>
+        <field name="apply">partner_info()</field>
+        <field name="model_id" ref="sale_order"/>
+    </record>
+
+    <record forcecreate="1" id="sale_order_transportation_reason_id" model="synchro.channel.model.fields">
+        <field name="name">transportation_reason_id</field>
+        <field name="apply">partner_info()</field>
+        <field name="model_id" ref="sale_order"/>
+    </record>
+
+    <record forcecreate="1" id="sale_order_transportation_method_id" model="synchro.channel.model.fields">
+        <field name="name">transportation_method_id</field>
+        <field name="apply">partner_info()</field>
+        <field name="model_id" ref="sale_order"/>
+    </record>
+
+    <record forcecreate="1" id="sale_order_volume" model="synchro.channel.model.fields">
+        <field name="name">volume</field>
+        <field name="apply">partner_info()</field>
+        <field name="model_id" ref="sale_order"/>
+    </record>
+
+    <record forcecreate="1" id="sale_order_weight" model="synchro.channel.model.fields">
+        <field name="name">weight</field>
+        <field name="apply">partner_info()</field>
+        <field name="model_id" ref="sale_order"/>
+    </record>
+
+
+    <record forcecreate="1" id="sale_order_line_agents" model="synchro.channel.model.fields">
+        <field name="name">agents</field>
+        <field name="apply">agents()</field>
+        <field name="model_id" ref="sale_order_line"/>
+    </record>
+
+    <record forcecreate="1" id="sale_order_line_discount" model="synchro.channel.model.fields">
+        <field name="name">discount</field>
+        <field name="model_id" ref="sale_order_line"/>
+    </record>
+
+    <record forcecreate="1" id="sale_order_line_name" model="synchro.channel.model.fields">
+        <field name="name">name</field>
+        <field name="counterpart_name">product_name</field>
+        <field name="model_id" ref="sale_order_line"/>
+    </record>
+
+    <record forcecreate="1" id="sale_order_line_order_id" model="synchro.channel.model.fields">
+        <field name="name">order_id</field>
+        <field name="counterpart_name">order_id</field>
+        <field name="model_id" ref="sale_order_line"/>
+    </record>
+
+    <record forcecreate="1" id="sale_order_line_price_unit" model="synchro.channel.model.fields">
+        <field name="name">price_unit</field>
+        <field name="counterpart_name">unitary_price</field>
+        <field name="model_id" ref="sale_order_line"/>
+    </record>
+
+    <record forcecreate="1" id="sale_order_line_product_id" model="synchro.channel.model.fields">
+        <field name="name">product_id</field>
+        <field name="model_id" ref="sale_order_line"/>
+    </record>
+
+    <record forcecreate="1" id="sale_order_line_product_uom" model="synchro.channel.model.fields">
+        <field name="name">product_uom</field>
+        <field name="apply">uom()</field>
+        <field name="model_id" ref="sale_order_line"/>
+    </record>
+
+    <record forcecreate="1" id="sale_order_line_product_uom_qty" model="synchro.channel.model.fields">
+        <field name="name">product_uom_qty</field>
+        <field name="counterpart_name">quantity</field>
+        <field name="model_id" ref="sale_order_line"/>
+    </record>
+
+    <record forcecreate="1" id="sale_order_line_sequence" model="synchro.channel.model.fields">
+        <field name="name">sequence</field>
+        <field name="model_id" ref="sale_order_line"/>
+    </record>
+
+    <record forcecreate="1" id="sale_order_line_tax_id" model="synchro.channel.model.fields">
+        <field name="name">tax_id</field>
+        <field name="model_id" ref="sale_order_line"/>
+    </record>
+
+    <record forcecreate="1" id="sale_order_line_to_delete" model="synchro.channel.model.fields">
+        <field name="name">to_delete</field>
+        <field name="apply">false</field>
+        <field name="model_id" ref="sale_order_line"/>
+    </record>
+
+</odoo>
+
