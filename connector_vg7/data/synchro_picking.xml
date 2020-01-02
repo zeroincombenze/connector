@@ -68,7 +68,7 @@
         <field name="name">partner_shipping_id</field>
         <field name="counterpart_name">customer_shipping_id</field>
         <field name="apply">_partner_address()</field>
-        <field name="meta">delivery</field>
+        <field name="spec">delivery</field>
         <field name="model_id" ref="stock_picking_package_preparation"/>
     </record>
 

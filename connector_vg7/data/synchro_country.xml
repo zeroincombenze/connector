@@ -14,7 +14,7 @@
     <record forcecreate="1" id="res_country_state" model="synchro.channel.model">
         <field name="name">res.country.state</field>
         <field name="field_uname">name</field>
-        <field name="counterpart_name">regions</field>
+        <field name="counterpart_name">region</field>
         <field name="search_keys">(['name', 'country_id'],['code', 'country_id'])</field>
         <field name="sequence">8</field>
         <field name="synchro_channel_id" ref="channel_vg7"/>

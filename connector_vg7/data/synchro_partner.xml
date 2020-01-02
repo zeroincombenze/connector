@@ -6,16 +6,16 @@
         <field name="field_uname">name</field>
         <field name="counterpart_name">customers</field>
         <field name="synchro_channel_id" ref="channel_vg7"/>
-        <field name="search_keys">(['vat', 'fiscalcode', 'is_company', 'type'],
-               ['vat', 'fiscalcode', 'is_company'],
-               ['rea_code'],
-               ['vat', 'name', 'is_company', 'type'],
-               ['fiscalcode', 'type'],
-               ['vat', 'is_company'],
-               ['name', 'is_company'],
-               ['vat'],
-               ['name'],
-               ['dim_name'])</field>
+        <field name="search_keys">(['vat', 'fiscalcode', 'type'],
+                        ['vat', 'name', 'type'],
+                        ['vat', 'fiscalcode', 'is_company'],
+                        ['rea_code'],
+                        ['fiscalcode', 'dim_name', 'type'],
+                        ['vat', 'dim_name', 'type'],
+                        ['name', 'is_company'],
+                        ['vat'],
+                        ['name'],
+                        ['dim_name', 'type'])</field>
         <field name="field_2complete">True</field>
         <field name="sequence">10</field>
     </record>
@@ -26,20 +26,26 @@
         <field name="counterpart_name">customers_shipping_addresses</field>
         <field name="model_spec">delivery</field>
         <field name="synchro_channel_id" ref="channel_vg7"/>
-        <field name="search_keys">(['vat', 'fiscalcode', 'is_company', 'type'],
-               ['vat', 'fiscalcode', 'is_company'],
-               ['rea_code'],
-               ['vat', 'name', 'is_company', 'type'],
-               ['fiscalcode', 'type'],
-               ['vat', 'is_company'],
-               ['name', 'is_company'],
-               ['vat'],
-               ['name'],
-               ['dim_name'])</field>
+        <field name="search_keys">(['vat', 'fiscalcode', 'type'],
+                        ['vat', 'name', 'type'],
+                        ['vat', 'fiscalcode', 'is_company'],
+                        ['rea_code'],
+                        ['fiscalcode', 'dim_name', 'type'],
+                        ['vat', 'dim_name', 'type'],
+                        ['name', 'is_company'],
+                        ['vat'],
+                        ['name'],
+                        ['dim_name', 'type'])</field>
         <field name="field_2complete">True</field>
         <field name="sequence">11</field>
     </record>
 
+
+    <record forcecreate="1" id="res_partner_parent_id" model="synchro.channel.model.fields">
+        <field name="name">parent_id</field>
+        <field name="counterpart_name">customer_id</field>
+        <field name="model_id" ref="res_partner"/>
+    </record>
 
     <record forcecreate="1" id="res_partner_city" model="synchro.channel.model.fields">
         <field name="name">city</field>
@@ -131,7 +137,7 @@
 
     <record forcecreate="1" id="res_partner_pec_destinatario" model="synchro.channel.model.fields">
         <field name="name">pec_destinatario</field>
-        <field name="counterpart_name">billing_pec</field>
+        <field name="counterpart_name">pec</field>
         <field name="model_id" ref="res_partner"/>
     </record>
 
@@ -143,7 +149,7 @@
 
     <record forcecreate="1" id="res_partner_state_id" model="synchro.channel.model.fields">
         <field name="name">state_id</field>
-        <field name="counterpart_name">region</field>
+        <field name="counterpart_name">region_id</field>
         <field name="model_id" ref="res_partner"/>
     </record>
 

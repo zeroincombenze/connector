@@ -43,7 +43,9 @@ class StockPickingPackagePreparation(models.Model):
             saved_vals = vals.copy()
         id = self.env['ir.model.synchro'].synchro(self, vals)
         if id > 0 and do_rewrite:
-            id = self.env['ir.model.synchro'].synchro(self, saved_vals)
+            saved_vals['id'] = id
+            id = self.env['ir.model.synchro'].synchro(
+                self, saved_vals, disable_post=True)
         return id
 
     @api.model

@@ -6,7 +6,7 @@
 #
 # Return code:
 # -1: error creating record
-# -2: error writing record
+# -2: error writing/deleting record
 # -3: record with passed id does not exist
 # -4: unmodificable record
 # -5: invalid structure header/details
@@ -348,6 +348,9 @@ class IrModelSynchro(models.Model):
         return vals
 
     def set_state_to_draft(self, model, rec, vals):
+        self.logmsg(1, '>>> set_state_to_draft(%s,%d)' % (
+                    model, (rec and rec.id or -1)))
+        errc = 0
         if 'state' in vals:
             vals['original_state'] = vals['state']
         elif rec:
@@ -386,10 +389,16 @@ class IrModelSynchro(models.Model):
                 del vals['state']
         elif model == 'stock.picking.package.preparation':
             if rec:
-                rec.unlink()
-        return vals, 0
+                self.logmsg(1, '>>> unlink(%s,%d)' % (model, rec.id))
+                try:
+                    rec.unlink()
+                except IOError:
+                    errc = -2
+        return vals, errc
 
     def set_actual_state(self, model, rec):
+        self.logmsg(1, '>>> set_actual_state(%s,%d)' % (
+                    model, (rec and rec.id)))
         if not rec:
             return -3
         cache = self.env['ir.model.synchro.cache']
@@ -426,7 +435,7 @@ class IrModelSynchro(models.Model):
         return rec.id
 
     def create_new_ref(self, model, key_name, value, channel_id, ctx):
-        self.logmsg(1, '>>> create_new_ref(%s,%s %s, %d)' % (
+        self.logmsg(1, '>>> create_new_ref(%s,%s,%s, %d)' % (
                     model, key_name, value, channel_id))
         cache = self.env['ir.model.synchro.cache']
         ir_model = self.get_ir_model(model)
@@ -533,28 +542,28 @@ class IrModelSynchro(models.Model):
         return new_value
 
     def bind_foreign_ref(self, model, value, ext_id, is_foreign,
-                         channel_id, ctx, meta=None):
+                         channel_id, ctx, spec=None):
         self.logmsg(channel_id, '>>> bind_foreign_ref(%s,%s,%s,%s,%s)' % (
-                    model, value, ext_id, is_foreign, meta))
+                    model, value, ext_id, is_foreign, spec))
         cache = self.env['ir.model.synchro.cache']
         new_value = False
         ir_model = self.get_ir_model(model)
         if is_foreign:
             where = [(ext_id, '=', value)]
-            if meta == 'delivery':
+            if spec == 'delivery':
                 if ext_id == 'vg7_id':
                     where = [(ext_id, '=', value + 100000000)]
-                where.append(('type', '=', meta))
-            elif meta == 'invoice':
+                where.append(('type', '=', spec))
+            elif spec == 'invoice':
                 if ext_id == 'vg7_id':
                     where = [(ext_id, '=', value + 200000000)]
-                where.append(('type', '=', meta))
-            elif meta == 'customer':
+                where.append(('type', '=', spec))
+            elif spec == 'customer':
                 where.append(('customer', '=', True))
-            elif meta == 'supplier':
+            elif spec == 'supplier':
                 where.append(('supplier', '=', True))
             rec = ir_model.search(where)
-            if not rec and meta in ('delivery', 'invoice'):
+            if not rec and spec in ('delivery', 'invoice'):
                 where = [(ext_id, '=', value)]
                 rec = ir_model.search(where)
         else:
@@ -572,9 +581,9 @@ class IrModelSynchro(models.Model):
         return new_value
 
     def get_foreign_value(self, model, channel_id, value,
-                          ext_id, is_foreign, ctx, tomany=None, meta=None):
+                          ext_id, is_foreign, ctx, tomany=None, spec=None):
         self.logmsg(channel_id, '>>> get_foreign_value(%s,%s,%s,%s,%s)' % (
-                    model, value, ext_id, is_foreign, meta))
+                    model, value, ext_id, is_foreign, spec))
         if not value:
             return value
         cache = self.env['ir.model.synchro.cache']
@@ -590,12 +599,12 @@ class IrModelSynchro(models.Model):
             new_value = []
             for id in value:
                 new_id = self.bind_foreign_ref(
-                    model, id, ext_id, is_foreign, channel_id, ctx, meta=meta)
+                    model, id, ext_id, is_foreign, channel_id, ctx, spec=spec)
                 if new_id:
                     new_value.append(new_id)
         else:
             new_value = self.bind_foreign_ref(
-                model, value, ext_id, is_foreign, channel_id, ctx, meta=meta)
+                model, value, ext_id, is_foreign, channel_id, ctx, spec=spec)
             if tomany and new_value:
                 new_value = [new_value]
         if not new_value:
@@ -612,17 +621,17 @@ class IrModelSynchro(models.Model):
         return cache.get_struct_model_field_attr(loc_model, name, 'relation')
 
     def cvt_m2o_value(self, model, name, value, channel_id, ext_id, is_foreign,
-                      ctx, format=None, meta=None):
+                      ctx, format=None, spec=None):
         cache = self.env['ir.model.synchro.cache']
         relation = self.get_relation(model, name)
         if not relation:
             raise RuntimeError('No relation for field %s of %s' % (name,
                                                                    model))
         return self.get_foreign_value(relation, channel_id, value,
-                                      ext_id, is_foreign, ctx, meta=meta)
+                                      ext_id, is_foreign, ctx, spec=spec)
 
     def cvt_m2m_value(self, model, name, value, channel_id, ext_id, is_foreign,
-                      ctx, format=None, meta=None):
+                      ctx, format=None, spec=None):
         cache = self.env['ir.model.synchro.cache']
         relation = self.get_relation(model, name)
         if not relation:
@@ -630,13 +639,13 @@ class IrModelSynchro(models.Model):
                                                                    model))
         value = self.get_foreign_value(relation, channel_id, value,
                                        ext_id, is_foreign, ctx,
-                                       tomany=True, meta=meta)
+                                       tomany=True, spec=spec)
         if format == 'cmd' and value:
             value = [(6, 0, value)]
         return value
 
     def cvt_o2m_value(self, model, name, value, channel_id, ext_id, is_foreign,
-                      ctx, format=None, meta=None):
+                      ctx, format=None, spec=None):
         cache = self.env['ir.model.synchro.cache']
         relation = self.get_relation(model, name)
         if not relation:
@@ -644,7 +653,7 @@ class IrModelSynchro(models.Model):
                                                                    model))
         value = self.get_foreign_value(relation, channel_id, value,
                                        ext_id, is_foreign, ctx,
-                                       tomany=True, meta=meta)
+                                       tomany=True, spec=spec)
         if format == 'cmd' and value:
             value = [(6, 0, value)]
         return value
@@ -703,10 +712,10 @@ class IrModelSynchro(models.Model):
             apply = ''
         if ttype == 'boolean':
             default = os0.str2bool(default, True)
-        meta = cache.get_model_field_attr(
-            channel_from, model, loc_name or '.%s' % ext_name, 'META',
+        spec = cache.get_model_field_attr(
+            channel_from, model, loc_name or '.%s' % ext_name, 'SPEC',
             default='')
-        return default, apply, meta
+        return default, apply, spec
 
     def map_to_internal(self, model, vals):
 
@@ -780,17 +789,31 @@ class IrModelSynchro(models.Model):
                     field_list.append(ext_ref)
             return field_list + last_fields
 
+        def check_4_double_field_id(vals):
+            for nm, nm_id in (('vg7:country', 'vg7:country_id'),
+                              ('vg7:region', 'vg7:region_id'),
+                              ('vg7_um', 'vg7:um_id'),
+                              ('vg7:tax_id', 'vg7:tax_code_id')):
+                if (not vals.get(nm_id) and vals.get(nm)):
+                    vals[nm_id] = vals[nm]
+                    self.logmsg(
+                        channel_from,
+                        '### Field <%s> renamed as <%s>' %
+                        (nm, nm_id))
+            return vals
+
         def process_fields(channel_from, model, vals, ext_id, ctx,
                            ena_field_list=None, excl_list=None):
             cache = self.env['ir.model.synchro.cache']
             pfx_depr = '%s_' % cache.get_attr(channel_from, 'PREFIX')
             pfx_ext = '%s:' % cache.get_attr(channel_from, 'PREFIX')
+            vals = check_4_double_field_id(vals)
             field_list = priority_fields(channel_from, vals)
             for ext_ref in field_list:
                 ext_name, loc_name, is_foreign, loc_ext_ref = \
                     self.names_from_ref(model, channel_from, vals,
                                         ext_ref, pfx_depr, pfx_ext)
-                default, apply, meta = self.get_default_n_apply(
+                default, apply, spec = self.get_default_n_apply(
                     model, channel_from, loc_name, ext_name, is_foreign,
                     ttype=cache.get_struct_model_field_attr(
                         model, ext_name, 'ttype'))
@@ -831,12 +854,13 @@ class IrModelSynchro(models.Model):
                         if ext_ref.startswith(pfx_ext):
                             vals[loc_ext_ref] = vals[ext_ref]
                             del vals[ext_ref]
-                        rec = self.get_rec_by_reference(
-                            model, loc_ext_ref, vals[loc_ext_ref], ctx)
-                        if rec:
-                            vals[loc_name] = rec[0][loc_ext_ref]
-                            vals['id'] = rec[0].id
-                            ext_id = loc_ext_ref
+                        # rec = self.get_rec_by_reference(
+                        #     model, loc_ext_ref, vals[loc_ext_ref], ctx)
+                        # if rec:
+                        #     vals[loc_name] = rec[0][loc_ext_ref]
+                        #     vals['id'] = rec[0].id
+                        #     ext_id = loc_ext_ref
+                        ext_id = loc_ext_ref
                         continue
                     # If counterpart partner supplies both
                     # local and external values, just process local value
@@ -848,19 +872,19 @@ class IrModelSynchro(models.Model):
                     vals[loc_name] = self.cvt_o2m_value(
                         model, loc_name, vals[ext_ref],
                         channel_from, ext_id, is_foreign, ctx,
-                        format='cmd', meta=meta)
+                        format='cmd', spec=spec)
                 elif cache.get_struct_model_field_attr(
                         model, loc_name, 'ttype') == 'many2many':
                     vals[loc_name] = self.cvt_m2m_value(
                         model, loc_name, vals[ext_ref],
                         channel_from, ext_id, is_foreign, ctx,
-                        format='cmd', meta=meta)
+                        format='cmd', spec=spec)
                 elif cache.get_struct_model_field_attr(
                         model, loc_name, 'ttype') == 'many2one':
                     vals[loc_name] = self.cvt_m2o_value(
                         model, loc_name, vals[ext_ref],
                         channel_from, ext_id, is_foreign, ctx,
-                        format='cmd', meta=meta)
+                        format='cmd', spec=spec)
                 vals = do_apply_n_clean(channel_from, model, vals,
                                         loc_name, ext_name, ext_ref,
                                         apply, default, is_foreign)
@@ -906,6 +930,8 @@ class IrModelSynchro(models.Model):
         return vals, ext_id, channel_from
 
     def set_default_values(self, model, vals, channel_id):
+        self.logmsg(channel_id,
+                    '>>> %s.set_default_values()' % model)
         cache = self.env['ir.model.synchro.cache']
         pfx_depr = '%s_' % cache.get_attr(channel_id, 'PREFIX')
         pfx_ext = '%s:' % cache.get_attr(channel_id, 'PREFIX')
@@ -918,7 +944,7 @@ class IrModelSynchro(models.Model):
                                                     model, 'LOC_FIELDS'):
                     ext_name = cache.get_model_field_attr(
                         channel_id, model, loc_name, 'LOC_FIELDS')
-                    default, apply, meta = self.get_default_n_apply(
+                    default, apply, spec = self.get_default_n_apply(
                         model, channel_id, loc_name, ext_name, is_foreign,
                         ttype=cache.get_struct_model_field_attr(
                             model, loc_name, 'ttype'))
@@ -938,62 +964,87 @@ class IrModelSynchro(models.Model):
 
     def bind_record(self, model, vals, ext_id,
                    constraints, has_active, channel_id):
+
+        def do_search(channel_id, where, has_active):
+            id = -1
+            maybe_id = False
+            self.logmsg(channel_id,
+                        '>>> %s.search(%s)' % (model, where))
+            rec = ir_model.search(where)
+            if not rec and has_active:
+                where.append(('active', '=', False))
+                self.logmsg(channel_id,
+                            '>>> %s.search(%s)' % (model, where))
+                rec = ir_model.search(where)
+            if rec:
+                if len(rec) == 1:
+                    id = rec[0].id
+                else:
+                    maybe_id = rec[0].id
+            return id, maybe_id
+
         ir_model = self.get_ir_model(model)
         cache = self.env['ir.model.synchro.cache']
         company_id = cache.get_attr(channel_id, 'COMPANY_ID')
-
         id = -1
-        for keys in cache.get_model_attr(channel_id, model, 'SKEYS'):
-            where = []
-            for key in keys:
-                if (key not in vals and
-                        key == 'dim_name' and
-                        vals.get('name')):
-                    where.append(('dim_name',
-                                  '=',
-                                  self.dim_text(vals['name'])))
-                elif key not in vals and key in self.CTX_FLDS:
-                    if key == 'company_id':
-                        where.append((key, '=', company_id))
-                    elif self.CTX_FLDS[key]:
-                        where.append((key, '=', self.CTX_FLDS[key]))
-                elif key not in vals:
-                    where = []
-                    break
-                else:
-                    where.append((key, '=', os0.b(vals[key])))
-            if where:
-                for constr in constraints:
-                    add_where = False
-                    if constr[0] in vals:
-                        constr[0] = vals[constr[0]]
-                        add_where = True
-                    if constr[-1] in vals:
-                        constr[-1] = vals[constr[-1]]
-                        add_where = True
-                    if add_where:
-                        where.append(constr)
-                if ext_id:
-                    where.append('|')
-                    where.append((ext_id, '=', False))
-                    where.append((ext_id, '=', 0))
-                rec = ir_model.search(where)
-                if not rec and has_active:
-                    where.append(('active', '=', False))
-                    rec = ir_model.search(where)
-                if rec:
-                    id = rec[0].id
-                    self.logmsg(channel_id,
-                                '### synchro: found id=%d (%s)' % (id, where))
-                    break
-        if id < 0 and ext_id in vals:
-            rec = ir_model.search(
-                [('name', '=', 'Unknown %d' % vals[ext_id])])
-            if rec:
-                id = rec[0].id
-                self.logmsg(channel_id,
-                            '### synchro: found unknown id=%d' % id)
-        return id
+        candidate = False
+        if ext_id in vals:
+            where = [(ext_id, '=', vals[ext_id])]
+            id, candidate = do_search(channel_id, where, has_active)
+        if id < 0:
+            for keys in cache.get_model_attr(channel_id, model, 'SKEYS'):
+                where = []
+                for key in keys:
+                    if (key not in vals and
+                            key == 'dim_name' and
+                            vals.get('name')):
+                        where.append(('dim_name',
+                                      '=',
+                                      self.dim_text(vals['name'])))
+                    elif key not in vals and key in self.CTX_FLDS:
+                        if key == 'company_id':
+                            where.append((key, '=', company_id))
+                        elif self.CTX_FLDS[key]:
+                            where.append((key, '=', self.CTX_FLDS[key]))
+                    elif key not in vals:
+                        where = []
+                        break
+                    else:
+                        where.append((key, '=', os0.b(vals[key])))
+                if where:
+                    for constr in constraints:
+                        add_where = False
+                        if constr[0] in vals:
+                            constr[0] = vals[constr[0]]
+                            add_where = True
+                        if constr[-1] in vals:
+                            constr[-1] = vals[constr[-1]]
+                            add_where = True
+                        if add_where:
+                            where.append(constr)
+                    if ext_id:
+                        where.append('|')
+                        where.append((ext_id, '=', False))
+                        where.append((ext_id, '=', 0))
+                    id, maybe_id = do_search(channel_id, where, has_active)
+                    if id > 0:
+                        break
+                    if maybe_id and not candidate:
+                        candidate = maybe_id
+        if id < 0 and candidate:
+            id = candidate
+        if id > 0:
+            self.logmsg(channel_id,
+                        '### synchro: found id=%d' % id)
+            return id, ir_model.browse(id)
+        # if id < 0 and ext_id in vals:
+        #     rec = ir_model.search(
+        #         [('name', '=', 'Unknown %d' % vals[ext_id])])
+        #     if rec:
+        #         id = rec[0].id
+        #         self.logmsg(channel_id,
+        #                     '### synchro: found unknown id=%d' % id)
+        return -1, None
 
     def get_odoo_response(self, channel_id, model, id=False):
         return {}
@@ -1135,8 +1186,8 @@ class IrModelSynchro(models.Model):
             self.logmsg(channel_id, '### synchro: found id=%s.%d' % (model,
                                                                      id))
         if id < 0:
-            id = self.bind_record(model, vals, ext_id,
-                                 constraints, has_active, channel_id)
+            id, rec = self.bind_record(model, vals, ext_id,
+                                       constraints, has_active, channel_id)
         if has_state:
             vals, erc = self.set_state_to_draft(model, rec, vals)
             if erc < 0:
@@ -1397,16 +1448,16 @@ class IrModelSynchroCache(models.Model):
         'res.country': (['code'], ['name']),
         'res.country.state': (['name', 'country_id'],
                               ['code', 'country_id'],),
-        'res.partner': (['vat', 'fiscalcode', 'is_company', 'type'],
+        'res.partner': (['vat', 'fiscalcode', 'type'],
+                        ['vat', 'name', 'type'],
                         ['vat', 'fiscalcode', 'is_company'],
                         ['rea_code'],
-                        ['vat', 'name', 'is_company', 'type'],
-                        ['fiscalcode', 'type'],
-                        ['vat', 'is_company'],
+                        ['fiscalcode', 'dim_name', 'type'],
+                        ['vat', 'dim_name', 'type'],
                         ['name', 'is_company'],
                         ['vat'],
                         ['name'],
-                        ['dim_name']),
+                        ['dim_name', 'type']),
         'res.company': (['vat'],),
         'account.account': (['code', 'company_id'],
                             ['name', 'company_id'],

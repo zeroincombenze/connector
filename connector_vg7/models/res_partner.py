@@ -99,7 +99,9 @@ class ResPartner(models.Model):
         model = 'res.partner'
         if cache.get_attr(channel_id, 'PREFIX') == 'vg7':
             if vals.get('type') == 'delivery':
+                vals = set_vg7_id(vals)
                 for ext_ref in ('vg7:piva',
+                                'vg7:cf',
                                 'vg7:esonerato_fe',
                                 'vg7:codice_univoco',
                                 'electronic_invoice_subjected'):
@@ -107,23 +109,25 @@ class ResPartner(models.Model):
                         del vals[ext_ref]
             elif vals.get('type') == 'invoice':
                 vals = set_vg7_id(vals)
-                for ext_ref in ('vg7:piva',):
+            else:
+                for ext_ref in ('parent_id', 'type_inv_addr'):
                     if ext_ref in vals:
                         del vals[ext_ref]
-            else:
-                for ext_ref in ('parent_id',):
-                    if ext_ref in vals:
                         del vals[ext_ref]
                 for ext_ref in ('vg7:shipping', 'vg7:billing'):
                     if ext_ref in vals:
                         vals[ext_ref] = rephase_fields(vals[ext_ref], ext_ref)
                         if ext_ref == 'vg7:shipping':
                             vals[ext_ref]['type'] = 'delivery'
+                            # if 'vg7:customer_shipping_id' in vals[ext_ref]:
+                            #     vals[ext_ref]['vg7:id'] = vals[
+                            #         'vg7:customer_shipping_id']
                         elif ext_ref == 'vg7:billing':
                             vals[ext_ref]['type'] = 'invoice'
-                        if 'vg7:id' not in vals[ext_ref] and 'vg7:id' in vals:
-                            vals[ext_ref]['vg7:id'] = vals['vg7:id']
-                            vals[ext_ref] = set_vg7_id(vals[ext_ref])
+                            if ('vg7:id' not in vals[ext_ref] and
+                                    'vg7:id' in vals):
+                                vals[ext_ref]['vg7:id'] = vals['vg7:id']
+                                vals[ext_ref] = set_vg7_id(vals[ext_ref])
                         if ('vg7:company' not in vals[ext_ref] and
                                 'vg7:name' not in vals[ext_ref] and
                                 'vg7:surename' not in vals[ext_ref]):
@@ -136,16 +140,33 @@ class ResPartner(models.Model):
                                     vals.get('vg7:surename', ''))
                         if ext_ref == 'vg7:billing':
                             for nm in ('vg7:piva',
+                                       'vg7:cf',
                                        'vg7:esonerato_fe',
                                        'vg7:codice_univoco'):
-                                if nm in vals[ext_ref] and nm not in vals:
+                                if (nm in vals[ext_ref] and
+                                        (nm not in vals or
+                                         vals[ext_ref][nm] == vals[nm])):
                                     vals[nm] = vals[ext_ref][nm]
                                     del vals[ext_ref][nm]
+                            for nm in ('vg7:street',
+                                       'vg7:postal_code',
+                                       'vg7:city',
+                                       'vg7:region',
+                                       'vg7:region_id',
+                                       'vg7:mail',
+                                       'vg7:country'
+                                       'vg7:country_id'):
+                                if (nm in vals[ext_ref] and
+                                        (nm not in vals or
+                                         vals[ext_ref][nm] == vals[nm])):
+                                    vals[nm] = vals[ext_ref][nm]
                         cache.set_model_attr(
                             channel_id, model, ext_ref, vals[ext_ref])
                         del vals[ext_ref]
                     else:
                         cache.set_model_attr(channel_id, model, ext_ref, {})
+                _logger.info(
+                    '> %s.synchro(%s,%s)' % (model, vals, True))
         return vals
 
     @api.model

@@ -24,7 +24,7 @@
         <field name="numbercall">-1</field>
         <field name="doall" eval="False"/>
         <field name="model" eval="'ir.model.synchro'"/>
-        <field name="function" eval="'pull_full_records'" />
+        <field name="function" eval="'pull_full_records'"/>
         <field name="args" eval="'()'"/>
     </record>
 
@@ -37,7 +37,7 @@
         <field name="numbercall">-1</field>
         <field name="doall" eval="False"/>
         <field name="model" eval="'ir.model.synchro'"/>
-        <field name="function" eval="'pull_full_records'" />
+        <field name="function" eval="'pull_full_records'"/>
         <field name="args" eval="'(True,)'"/>
     </record>
 
