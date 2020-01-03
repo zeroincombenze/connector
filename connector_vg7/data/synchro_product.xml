@@ -113,8 +113,8 @@
         <field name="model_id" ref="product_uom"/>
     </record>
 
-    <record forcecreate="1" id="product_uom_rounding" model="synchro.channel.model.fields">
-        <field name="name">rounding</field>
+    <record forcecreate="1" id="product_uom_category_id" model="synchro.channel.model.fields">
+        <field name="name">category_id</field>
         <field name="apply" ref="product.product_uom_categ_unit"/>
         <field name="model_id" ref="product_uom"/>
     </record>

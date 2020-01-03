@@ -1,6 +1,6 @@
 
 ================================
-|icon| connector_vg7 10.0.0.1.13
+|icon| connector_vg7 10.0.0.1.12
 ================================
 
 
@@ -85,7 +85,7 @@ Installation / Installazione
 +---------------------------------+------------------------------------------+
 | Suggested deployment is:        | Posizione suggerita per l'installazione: |
 +---------------------------------+------------------------------------------+
-| /opt/odoo/10.0/connector/                                                  |
+| /home/odoo/10.0/connector/                                                 |
 +----------------------------------------------------------------------------+
 
 ::
@@ -251,7 +251,7 @@ La distribuzione `Zeroincombenze® <https://wiki.zeroincombenze.org/en/Odoo>`__ 
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2020-01-02
+Last Update / Ultimo aggiornamento: 2019-12-30
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Alfa-red.png
     :target: https://odoo-community.org/page/development-status
