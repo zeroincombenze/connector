@@ -11,6 +11,7 @@
                     <button name="pull_record" string="Synchronize" type="object"/>
                     <group>
                         <field name="vg7_id"/>
+                        <field name="vg72_id"/>
                         <field name="oe7_id"/>
                         <field name="dim_name"/>
                     </group>

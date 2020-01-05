@@ -1,3 +1,16 @@
+10.0.0.1.14 (2020-01-04)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] Import supplier / Importazione fornitori
+* [IMP] Send/Receive method / Metodo di invio/ricezione dati
+
+
+10.0.0.1.13 (2020-01-02)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] Improvements / Migliorie varie e protezione contro bug VG7
+
+
 10.0.0.1.12 (2019-12-30)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 

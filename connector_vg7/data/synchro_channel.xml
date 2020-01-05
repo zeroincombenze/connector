@@ -14,6 +14,7 @@
         <field name="name">Odoo 7.0</field>
         <field name="prefix">oe7</field>
         <field name="identity">odoo</field>
+        <field name="method">XML</field>
         <field name="client_key">zeroadm</field>
         <field name="active" eval="True"/>
     </record>

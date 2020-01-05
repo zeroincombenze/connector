@@ -27,6 +27,7 @@ class ResPartner(models.Model):
                 'ir.model.synchro'].dim_text(partner.name)
 
     vg7_id = fields.Integer('VG7 ID', copy=False)
+    vg72_id = fields.Integer('VG7 ID (2.nd)', copy=False)
     oe7_id = fields.Integer('Odoo7 ID', copy=False)
     dim_name = fields.Char('Search Key',
                            compute=_set_dim_name,
@@ -220,4 +221,14 @@ class ResPartnerShipping(models.Model):
     def synchro(self, vals, disable_post=None):
         vals = self.rephase_fields(vals, 'vg7:shipping')
         vals['type'] = 'delivery'
+        return self.env['ir.model.synchro'].synchro(self, vals)
+
+
+class ResPartnerSupplier(models.Model):
+    _name = "res.partner.supplier"
+    _inherit = "res.partner"
+
+    @api.model
+    def synchro(self, vals, disable_post=None):
+        vals['supplier'] = True
         return self.env['ir.model.synchro'].synchro(self, vals)

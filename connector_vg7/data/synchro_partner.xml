@@ -40,6 +40,26 @@
         <field name="sequence">11</field>
     </record>
 
+    <record forcecreate="1" id="res_partner_supplier_rec" model="synchro.channel.model">
+        <field name="name">res.partner.supplier</field>
+        <field name="field_uname">name</field>
+        <field name="counterpart_name">suppliers</field>
+        <field name="model_spec">supplier</field>
+        <field name="synchro_channel_id" ref="channel_vg7"/>
+        <field name="search_keys">(['vat', 'fiscalcode', 'type'],
+                        ['vat', 'name', 'type'],
+                        ['vat', 'fiscalcode', 'is_company'],
+                        ['rea_code'],
+                        ['fiscalcode', 'dim_name', 'type'],
+                        ['vat', 'dim_name', 'type'],
+                        ['name', 'is_company'],
+                        ['vat'],
+                        ['name'],
+                        ['dim_name', 'type'])</field>
+        <field name="field_2complete">True</field>
+        <field name="sequence">10</field>
+    </record>
+
 
     <record forcecreate="1" id="res_partner_parent_id" model="synchro.channel.model.fields">
         <field name="name">parent_id</field>
@@ -312,6 +332,111 @@
         <field name="name">zip</field>
         <field name="counterpart_name">postal_code</field>
         <field name="model_id" ref="res_partner_shipping"/>
+    </record>
+
+
+    <record forcecreate="1" id="res_partner_supplier_city" model="synchro.channel.model.fields">
+        <field name="name">city</field>
+        <field name="counterpart_name">city</field>
+        <field name="model_id" ref="res_partner_supplier_rec"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_supplier_company_id" model="synchro.channel.model.fields">
+        <field name="name">company_id</field>
+        <field name="model_id" ref="res_partner_supplier_rec"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_supplier_country_id" model="synchro.channel.model.fields">
+        <field name="name">country_id</field>
+        <field name="counterpart_name">country_id</field>
+        <field name="model_id" ref="res_partner_supplier_rec"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_supplier_email" model="synchro.channel.model.fields">
+        <field name="name">email</field>
+        <field name="counterpart_name">email</field>
+        <field name="model_id" ref="res_partner_supplier_rec"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_supplier_fax" model="synchro.channel.model.fields">
+        <field name="name">fax</field>
+        <field name="counterpart_name">fax</field>
+        <field name="model_id" ref="res_partner_supplier_rec"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_supplier_firstname" model="synchro.channel.model.fields">
+        <field name="name">firstname</field>
+        <field name="counterpart_name">name</field>
+        <field name="apply">person()</field>
+        <field name="model_id" ref="res_partner_supplier_rec"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_supplier_lastname" model="synchro.channel.model.fields">
+        <field name="name">lastname</field>
+        <field name="counterpart_name">surename</field>
+        <field name="apply">person()</field>
+        <field name="model_id" ref="res_partner_supplier_rec"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_supplier_is_company" model="synchro.channel.model.fields">
+        <field name="name">is_company</field>
+        <field name="apply">true</field>
+        <field name="model_id" ref="res_partner_supplier_rec"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_supplier_supplier" model="synchro.channel.model.fields">
+        <field name="name">supplier</field>
+        <field name="apply">true</field>
+        <field name="model_id" ref="res_partner_supplier_rec"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_supplier_mobile" model="synchro.channel.model.fields">
+        <field name="name">mobile</field>
+        <field name="counterpart_name">telephone2</field>
+        <field name="model_id" ref="res_partner_supplier_rec"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_supplier_name" model="synchro.channel.model.fields">
+        <field name="name">name</field>
+        <field name="counterpart_name">company</field>
+        <field name="model_id" ref="res_partner_supplier_rec"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_supplier_phone" model="synchro.channel.model.fields">
+        <field name="name">phone</field>
+        <field name="counterpart_name">telephone</field>
+        <field name="model_id" ref="res_partner_supplier_rec"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_supplier_state_id" model="synchro.channel.model.fields">
+        <field name="name">state_id</field>
+        <field name="counterpart_name">region</field>
+        <field name="model_id" ref="res_partner_supplier_rec"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_supplier_street" model="synchro.channel.model.fields">
+        <field name="name">street</field>
+        <field name="counterpart_name">street</field>
+        <field name="model_id" ref="res_partner_supplier_rec"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_supplier_street2" model="synchro.channel.model.fields">
+        <field name="name"></field>
+        <field name="counterpart_name">street_number</field>
+        <field name="apply">street_number()</field>
+        <field name="model_id" ref="res_partner_supplier_rec"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_supplier_type" model="synchro.channel.model.fields">
+        <field name="name">type</field>
+        <field name="apply">contact</field>
+        <field name="model_id" ref="res_partner_supplier_rec"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_supplier_zip" model="synchro.channel.model.fields">
+        <field name="name">zip</field>
+        <field name="counterpart_name">postal_code</field>
+        <field name="model_id" ref="res_partner_supplier_rec"/>
     </record>
 
 </odoo>

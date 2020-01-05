@@ -6,10 +6,11 @@
         <field name="model">synchro.channel</field>
         <field name="arch" type="xml">
             <tree string="Synchonization Channel">
+                <field name="sequence"/>
                 <field name="name"/>
                 <field name="prefix"/>
                 <field name="identity"/>
-                <field name="sequence"/>
+                <field name="method"/>
                 <field name="company_id"/>
             </tree>
         </field>
@@ -24,12 +25,14 @@
                     <field name="name"/>
                     <field name="prefix"/>
                     <field name="identity"/>
+                    <field name="method"/>
                     <field name="client_key"/>
                     <field name="password" password="True"/>
                     <field name="counterpart_url"/>
                 </group>
                 <group>
                     <field name="company_id"/>
+                    <field name="exchange_path"/>
                     <field name="sequence"/>
                     <field name="active"/>
                     <field name="trace"/>

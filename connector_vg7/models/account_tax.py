@@ -23,9 +23,9 @@ class AccountTax(models.Model):
     @api.multi
     @api.depends('name')
     def _set_dim_name(self):
-        for partner in self:
-            partner.dim_name = self.env[
-                'ir.model.synchro'].dim_text(partner.name)
+        for tax in self:
+            tax.dim_name = self.env[
+                'ir.model.synchro'].dim_text(tax.name)
 
     vg7_id = fields.Integer('VG7 ID', copy=False)
     oe7_id = fields.Integer('Odoo7 ID', copy=False)

@@ -1,6 +1,6 @@
 
 ================================
-|icon| connector_vg7 10.0.0.1.12
+|icon| connector_vg7 10.0.0.1.14
 ================================
 
 
@@ -85,7 +85,7 @@ Installation / Installazione
 +---------------------------------+------------------------------------------+
 | Suggested deployment is:        | Posizione suggerita per l'installazione: |
 +---------------------------------+------------------------------------------+
-| /home/odoo/10.0/connector/                                                 |
+| /opt/odoo/10.0/connector/                                                  |
 +----------------------------------------------------------------------------+
 
 ::
@@ -161,6 +161,19 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 
 ChangeLog History / Cronologia modifiche
 ----------------------------------------
+
+10.0.0.1.14 (2020-01-04)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] Import supplier / Importazione fornitori
+* [IMP] Send/Receive method / Metodo di invio/ricezione dati
+
+
+10.0.0.1.13 (2020-01-02)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] Improvements / Migliorie varie e protezione contro bug VG7
+
 
 10.0.0.1.12 (2019-12-30)
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -251,7 +264,7 @@ La distribuzione `Zeroincombenze® <https://wiki.zeroincombenze.org/en/Odoo>`__ 
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2019-12-30
+Last Update / Ultimo aggiornamento: 2020-01-05
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Alfa-red.png
     :target: https://odoo-community.org/page/development-status

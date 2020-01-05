@@ -7,7 +7,7 @@
 {
     'name': 'connector_vg7',
     'summary': 'Bidirectional connector to/from VG7 software',
-    'version': '10.0.0.1.13',
+    'version': '10.0.0.1.14',
     'category': 'Generic Modules',
     'author': 'SHS-AV s.r.l.',
     'website': 'https://www.zeroincombenze.it/',
@@ -46,6 +46,7 @@
             'python_plus',
             'os0',
             'unidecode',
+            # 'clodoo',
         ],
     },
     'installable': True,

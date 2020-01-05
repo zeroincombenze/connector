@@ -4,8 +4,7 @@
 #
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 #
-from openerp import fields, models
-
+from odoo import api, fields, models
 
 class SynchroChannel(models.Model):
     _name = 'synchro.channel'
@@ -23,17 +22,16 @@ class SynchroChannel(models.Model):
              "counterpart ID.Format must be [a-zA-Z]{2}[a-zA-Z0-9]\n"
              "i.e. with prefix='vg7'\n"
              "<partner_id> means ID in Odoo\n"
-             "<vg7_partner_id> means ID in counterpart\n",
+             "<vg7:partner_id> means counterpart field name and value\n",
         copy=False,
         default='vg7')
     identity = fields.Selection(
         [('generic', 'Generic counterpart'),
          ('odoo', 'Odoo instance'),
          ('vg7', 'VG7 instance'),
-         ('csv', 'Read from csv'),
          ],
         'Counterpart identity',
-        help="May activate some specific functions",
+        help="This value may activate some specific functions",
         copy=False,
         default='vg7')
     company_id = fields.Many2one(
@@ -58,10 +56,29 @@ class SynchroChannel(models.Model):
         help="Trace data in log. Warning! Use this feature with caution; "
              "all sent data will be recorded in the log file."
              "This feature must be used only to debug handshake")
+    method = fields.Selection(
+        [('NO', 'No interchange'),
+         ('JSON', 'By JSON (rpc)'),
+         ('XML', 'By XML (rpc)'),
+         ('PEC', 'By mail PEC'),
+         ('FTP', 'By FTP'),
+         ('CSV', 'By file CSV'),
+        ],
+        'Send/Receive method',
+        default='JSON',
+        help="How data will be sent and received.")
+    exchange_path = fields.Char(
+        'Exchange directory path',
+        help="If method is CSV, path where file will be read and written")
     model_ids = fields.One2many(
         'synchro.channel.model', 'synchro_channel_id',
         string='Model mapping'
     )
+
+    @api.multi
+    def write(self, vals):
+        self.env['ir.model.synchro.cache'].clean_cache()
+        return super(SynchroChannel, self).write(vals)
 
 
 class SynchroChannelModel(models.Model):
@@ -90,7 +107,7 @@ class SynchroChannelModel(models.Model):
         [('delivery', 'Delivery Address'),
          ('invoice', 'Invoice Address'),
          ('customer', 'Customer'),
-         ('supplier', 'Suplier'),
+         ('supplier', 'Supplier'),
          ],
         string='Specific search',
     )
@@ -101,6 +118,11 @@ class SynchroChannelModel(models.Model):
         'synchro.channel.model.fields', 'model_id',
         string='Model mapping'
     )
+
+    @api.multi
+    def write(self, vals):
+        self.env['ir.model.synchro.cache'].clean_cache()
+        return super(SynchroChannelModel, self).write(vals)
 
 
 class SynchroChannelModelFields(models.Model):
@@ -137,6 +159,11 @@ class SynchroChannelModelFields(models.Model):
     model_id = fields.Many2one(
         'synchro.channel.model'
     )
+
+    @api.multi
+    def write(self, vals):
+        self.env['ir.model.synchro.cache'].clean_cache()
+        return super(SynchroChannelModelFields, self).write(vals)
 
 
 class SynchroChannelDomainTnl(models.Model):
