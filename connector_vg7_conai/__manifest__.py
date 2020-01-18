@@ -7,7 +7,7 @@
 {
     'name': 'connector_vg7_conai',
     'summary': 'Bidirectional connector to/from VG7 software (CONAI plug-in)',
-    'version': '10.0.0.1.11',
+    'version': '10.0.0.1.12',
     'category': 'Generic Modules',
     'author': 'SHS-AV s.r.l.',
     'website': 'https://www.zeroincombenze.it/',
@@ -17,12 +17,13 @@
         'account',
         'l10n_it_ddt',
         'l10n_it_conai',
+        'connector_vg7',
     ],
     'data': [
         'security/ir.model.access.csv',
         'views/conai_view.xml',
         'data/synchro_conai.xml',
-        'data/synchro_conai.xml',
+        'data/synchro_picking.xml',
         'data/synchro_partner.xml',
         'data/synchro_product.xml',
     ],

@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright 2018-19 - SHS-AV s.r.l. <https://www.zeroincombenze.it>
+# Copyright 2019-20 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
 #
-# License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
+# Contributions to development, thanks to:
+# * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
+#
+# License LGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 #
 from odoo import api, fields, models
 
@@ -19,7 +22,7 @@ class SynchroChannel(models.Model):
         'Prefix for field names',
         required=True,
         help="Prefix to add to model field name to recognize "
-             "counterpart ID.Format must be [a-zA-Z]{2}[a-zA-Z0-9]\n"
+             "counterpart ID.Format must be [a-zA-Z]{2}[a-zA-Z0-9]+\n"
              "i.e. with prefix='vg7'\n"
              "<partner_id> means ID in Odoo\n"
              "<vg7:partner_id> means counterpart field name and value\n",
@@ -41,11 +44,11 @@ class SynchroChannel(models.Model):
         )
     client_key = fields.Char(
         'Client key',
-        help="Client key assigned by 3th Party Sender")
+        help="Client key assigned by 3th Party Sender or DB name")
     password = fields.Char('Password', copy=False)
     counterpart_url = fields.Char(
         'Counterpart endpoint',
-        help="3th Party Sender URL to connect")
+        help="3th Party Sender URL to connect; may be prefixed by username")
     product_without_variants = fields.Boolean('Products without variants')
     sequence = fields.Integer('Priority', default=16)
     active = fields.Boolean(string='Active',
@@ -134,7 +137,7 @@ class SynchroChannelModelFields(models.Model):
     apply = fields.Char(
         string='Function to apply for supply value or default value.',
         help='Function are in format "name()".\n'
-             'Avaiable functions are:\n'
+             'Some avaiable functions are:\n'
              'vat(), upper(), lower(), street_number(), bool()\n'
              'person(), journal(), account(), uom(), tax()\n',
         default='',
@@ -156,6 +159,8 @@ class SynchroChannelModelFields(models.Model):
         string='Protect field against update',
         default='0',
     )
+    required = fields.Boolean('Required field',
+                              default=False)
     model_id = fields.Many2one(
         'synchro.channel.model'
     )

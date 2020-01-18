@@ -40,6 +40,24 @@
         <field name="sequence">11</field>
     </record>
 
+    <record forcecreate="1" id="res_partner_invoice" model="synchro.channel.model">
+        <field name="name">res.partner.invoice</field>
+        <field name="field_uname">name</field>
+        <field name="model_spec">invoice</field>
+        <field name="synchro_channel_id" ref="channel_vg7"/>
+        <field name="search_keys">(['vat', 'fiscalcode', 'type'],
+                        ['vat', 'name', 'type'],
+                        ['vat', 'fiscalcode', 'is_company'],
+                        ['rea_code'],
+                        ['fiscalcode', 'dim_name', 'type'],
+                        ['vat', 'dim_name', 'type'],
+                        ['name', 'is_company'],
+                        ['vat'],
+                        ['name'],
+                        ['dim_name', 'type'])</field>
+        <field name="sequence">11</field>
+    </record>
+
     <record forcecreate="1" id="res_partner_supplier_rec" model="synchro.channel.model">
         <field name="name">res.partner.supplier</field>
         <field name="field_uname">name</field>
@@ -60,6 +78,18 @@
         <field name="sequence">10</field>
     </record>
 
+    <record forcecreate="1" id="res_partner_bank" model="synchro.channel.model">
+        <field name="name">res.partner.bank</field>
+        <field name="field_uname">acc_number</field>
+        <field name="counterpart_name">banks</field>
+        <field name="synchro_channel_id" ref="channel_vg7"/>
+        <field name="search_keys">(['acc_number'],)</field>
+        <field name="field_2complete">True</field>
+        <field name="sequence">8</field>
+    </record>
+
+
+
 
     <record forcecreate="1" id="res_partner_parent_id" model="synchro.channel.model.fields">
         <field name="name">parent_id</field>
@@ -76,6 +106,14 @@
     <record forcecreate="1" id="res_partner_codice_destinatario" model="synchro.channel.model.fields">
         <field name="name">codice_destinatario</field>
         <field name="counterpart_name">codice_univoco</field>
+        <field name="apply">set_einvoice()</field>
+        <field name="model_id" ref="res_partner"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_ipa_code" model="synchro.channel.model.fields">
+        <field name="name">ipa_code</field>
+        <field name="counterpart_name">codice_ufficio</field>
+        <field name="apply">set_is_pa()</field>
         <field name="model_id" ref="res_partner"/>
     </record>
 
@@ -223,6 +261,26 @@
         <field name="model_id" ref="res_partner"/>
     </record>
 
+    <record forcecreate="1" id="res_partner_property_payment_term_id" model="synchro.channel.model.fields">
+        <field name="name">property_payment_term_id</field>
+        <field name="counterpart_name">payment_id</field>
+        <field name="model_id" ref="res_partner"/>
+    </record>
+
+    <!--
+    <record forcecreate="1" id="res_partner_property_supplier_payment_term_id" model="synchro.channel.model.fields">
+        <field name="name">property_supplier_payment_term_id</field>
+        <field name="counterpart_name">payment_id</field>
+        <field name="model_id" ref="res_partner"/>
+    </record>
+    -->
+
+    <record forcecreate="1" id="res_partner_bank_ids" model="synchro.channel.model.fields">
+        <field name="name">bank_ids</field>
+        <field name="counterpart_name">bank</field>
+        <field name="model_id" ref="res_partner"/>
+    </record>
+
 
     <record forcecreate="1" id="res_partner_shipping_id" model="synchro.channel.model.fields">
         <field name="name">vg7_id</field>
@@ -305,7 +363,7 @@
 
     <record forcecreate="1" id="res_partner_shipping_state_id" model="synchro.channel.model.fields">
         <field name="name">state_id</field>
-        <field name="counterpart_name">region</field>
+        <field name="counterpart_name">region_id</field>
         <field name="model_id" ref="res_partner_shipping"/>
     </record>
 
@@ -332,6 +390,117 @@
         <field name="name">zip</field>
         <field name="counterpart_name">postal_code</field>
         <field name="model_id" ref="res_partner_shipping"/>
+    </record>
+
+
+    <record forcecreate="1" id="res_partner_invoice_id" model="synchro.channel.model.fields">
+        <field name="name">vg7_id</field>
+        <field name="counterpart_name">customer_shipping_id</field>
+        <field name="model_id" ref="res_partner_invoice"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_invoice_parent_id" model="synchro.channel.model.fields">
+        <field name="name">parent_id</field>
+        <field name="counterpart_name">customer_id</field>
+        <field name="model_id" ref="res_partner_invoice"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_invoice_city" model="synchro.channel.model.fields">
+        <field name="name">city</field>
+        <field name="counterpart_name">city</field>
+        <field name="model_id" ref="res_partner_invoice"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_invoice_company_id" model="synchro.channel.model.fields">
+        <field name="name">company_id</field>
+        <field name="model_id" ref="res_partner_invoice"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_invoice_country_id" model="synchro.channel.model.fields">
+        <field name="name">country_id</field>
+        <field name="counterpart_name">country_id</field>
+        <field name="model_id" ref="res_partner_invoice"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_invoice_email" model="synchro.channel.model.fields">
+        <field name="name">email</field>
+        <field name="counterpart_name">email</field>
+        <field name="model_id" ref="res_partner_invoice"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_invoice_fax" model="synchro.channel.model.fields">
+        <field name="name">fax</field>
+        <field name="counterpart_name">fax</field>
+        <field name="model_id" ref="res_partner_invoice"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_invoice_firstname" model="synchro.channel.model.fields">
+        <field name="name">firstname</field>
+        <field name="counterpart_name">name</field>
+        <field name="apply">person()</field>
+        <field name="model_id" ref="res_partner_invoice"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_invoice_is_company" model="synchro.channel.model.fields">
+        <field name="name">is_company</field>
+        <field name="apply">true</field>
+        <field name="model_id" ref="res_partner_invoice"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_invoice_lastname" model="synchro.channel.model.fields">
+        <field name="name">lastname</field>
+        <field name="counterpart_name">surename</field>
+        <field name="apply">person()</field>
+        <field name="model_id" ref="res_partner_invoice"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_invoice_mobile" model="synchro.channel.model.fields">
+        <field name="name">mobile</field>
+        <field name="counterpart_name">telephone2</field>
+        <field name="model_id" ref="res_partner_invoice"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_invoice_name" model="synchro.channel.model.fields">
+        <field name="name">name</field>
+        <field name="counterpart_name">company</field>
+        <field name="model_id" ref="res_partner_invoice"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_invoice_phone" model="synchro.channel.model.fields">
+        <field name="name">phone</field>
+        <field name="counterpart_name">telephone</field>
+        <field name="model_id" ref="res_partner_invoice"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_invoice_state_id" model="synchro.channel.model.fields">
+        <field name="name">state_id</field>
+        <field name="counterpart_name">region_id</field>
+        <field name="model_id" ref="res_partner_invoice"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_invoice_street" model="synchro.channel.model.fields">
+        <field name="name">street</field>
+        <field name="counterpart_name">street</field>
+        <field name="model_id" ref="res_partner_invoice"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_invoice_street2" model="synchro.channel.model.fields">
+        <field name="name"></field>
+        <field name="counterpart_name">street_number</field>
+        <field name="apply">street_number()</field>
+        <field name="model_id" ref="res_partner_invoice"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_invoice_type" model="synchro.channel.model.fields">
+        <field name="name">type</field>
+        <field name="apply">delivery</field>
+        <field name="model_id" ref="res_partner_invoice"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_invoice_zip" model="synchro.channel.model.fields">
+        <field name="name">zip</field>
+        <field name="counterpart_name">postal_code</field>
+        <field name="model_id" ref="res_partner_invoice"/>
     </record>
 
 
@@ -410,7 +579,7 @@
 
     <record forcecreate="1" id="res_partner_supplier_state_id" model="synchro.channel.model.fields">
         <field name="name">state_id</field>
-        <field name="counterpart_name">region</field>
+        <field name="counterpart_name">region_id</field>
         <field name="model_id" ref="res_partner_supplier_rec"/>
     </record>
 
@@ -437,6 +606,27 @@
         <field name="name">zip</field>
         <field name="counterpart_name">postal_code</field>
         <field name="model_id" ref="res_partner_supplier_rec"/>
+    </record>
+
+    <!--
+    <record forcecreate="1" id="res_partner_supplier_property_supplier_payment_term_id" model="synchro.channel.model.fields">
+        <field name="name">property_supplier_payment_term_id</field>
+        <field name="counterpart_name">payment_id</field>
+        <field name="model_id" ref="res_partner_supplier_rec"/>
+    </record>
+    -->
+
+    <record forcecreate="1" id="res_partner_bank_acc_number" model="synchro.channel.model.fields">
+        <field name="name">acc_number</field>
+        <field name="counterpart_name">IBAN</field>
+        <field name="apply">iban()</field>
+        <field name="model_id" ref="res_partner_bank"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_bank_bank_name" model="synchro.channel.model.fields">
+        <field name="name">bank_name</field>
+        <field name="counterpart_name">description</field>
+        <field name="model_id" ref="res_partner_bank"/>
     </record>
 
 </odoo>

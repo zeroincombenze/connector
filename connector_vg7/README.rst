@@ -1,6 +1,6 @@
 
 ================================
-|icon| connector_vg7 10.0.0.1.14
+|icon| connector_vg7 10.0.0.1.15
 ================================
 
 
@@ -85,7 +85,7 @@ Installation / Installazione
 +---------------------------------+------------------------------------------+
 | Suggested deployment is:        | Posizione suggerita per l'installazione: |
 +---------------------------------+------------------------------------------+
-| /opt/odoo/10.0/connector/                                                  |
+| /home/odoo/10.0/connector/                                                 |
 +----------------------------------------------------------------------------+
 
 ::
@@ -161,6 +161,12 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 
 ChangeLog History / Cronologia modifiche
 ----------------------------------------
+
+10.0.0.1.15 (2020-01-07)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] Import banks / Importazione c/c bancari
+
 
 10.0.0.1.14 (2020-01-04)
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -264,7 +270,7 @@ La distribuzione `Zeroincombenze® <https://wiki.zeroincombenze.org/en/Odoo>`__ 
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2020-01-05
+Last Update / Ultimo aggiornamento: 2020-01-18
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Alfa-red.png
     :target: https://odoo-community.org/page/development-status

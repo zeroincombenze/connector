@@ -96,6 +96,7 @@
                         <field name="counterpart_name"/>
                         <field name="apply"/>
                         <field name="protect"/>
+                        <field name="required"/>
                     </tree>
                 </field>
             </form>

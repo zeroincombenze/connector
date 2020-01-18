@@ -954,7 +954,8 @@ class IrModelSynchro(models.Model):
             return rec.id, rec
         return -1, None
 
-    def get_xmlrpc_response(self, channel_id, xmodel, ext_id=False):
+    def get_xmlrpc_response(
+            self, channel_id, xmodel, ext_id=False, rec_list=None):
 
         def cnx(endpoint):
             cnx = cache.get_attr(channel_id, 'CNX')
@@ -1042,7 +1043,8 @@ class IrModelSynchro(models.Model):
             return datas
         return {}
 
-    def get_json_response(self, channel_id, xmodel, ext_id=False):
+    def get_json_response(
+            self, channel_id, xmodel, ext_id=False, rec_list=None):
         cache = self.env['ir.model.synchro.cache']
         endpoint = cache.get_attr(channel_id, 'COUNTERPART_URL')
         if not endpoint:
@@ -1078,7 +1080,8 @@ class IrModelSynchro(models.Model):
         cache.clean_cache(channel_id=channel_id, model=xmodel)
         return {}
 
-    def get_csv_response(self, channel_id, xmodel, ext_id=False):
+    def get_csv_response(
+            self, channel_id, xmodel, ext_id=False, rec_list=None):
         cache = self.env['ir.model.synchro.cache']
         endpoint = cache.get_attr(channel_id, 'EXCHANGE_PATH')
         if not endpoint:
@@ -1143,18 +1146,35 @@ class IrModelSynchro(models.Model):
                     res = row_res
                     break
                 res.append(row_res)
+            if rec_list:
+                pass
         return res
 
-    def get_counterpart_response(self, channel_id, xmodel, ext_id=False):
+    def get_counterpart_response(
+            self, channel_id, xmodel, ext_id=False, rec_list=None):
         cache = self.env['ir.model.synchro.cache']
         cache.open(model=xmodel)
         method = cache.get_attr(channel_id, 'METHOD')
         if method == 'XML':
-            return self.get_xmlrpc_response(channel_id, xmodel, ext_id)
+            return self.get_xmlrpc_response(
+                channel_id, xmodel, ext_id=ext_id, rec_list=rec_list)
         elif method == 'JSON':
-            return self.get_json_response(channel_id, xmodel, ext_id)
+            return self.get_json_response(
+                channel_id, xmodel, ext_id=ext_id, rec_list=rec_list)
         elif method == 'CSV':
-            return self.get_csv_response(channel_id, xmodel, ext_id)
+            return self.get_csv_response(
+                channel_id, xmodel, ext_id=ext_id, rec_list=rec_list)
+
+    def get_counterpart_lines(self, channel_id, model, hdr_rec, loc_id):
+        cache = self.env['ir.model.synchro.cache']
+        lines_of_rec = cache.get_struct_model_attr(
+            model, 'LINES_OF_REC', default=False)
+        lines = hdr_rec[lines_of_rec]
+        if not lines:
+            loc_ext_id = cache.get_loc_ext_id_name(channel_id, model)
+            ext_id = hdr_rec[loc_ext_id]
+            datas = cache.get_counterpart_response(
+                channel_id, model, ext_id=ext_id, rec_list=lines_of_rec)
 
     def assign_channel(self, vals):
         cache = self.env['ir.model.synchro.cache']
@@ -1261,13 +1281,14 @@ class IrModelSynchro(models.Model):
                 vals = self.drop_protected_fields(
                     channel_id, xmodel, vals, rec)
                 if vals:
-                    if (actual_model == 'res.partner' and
-                            vals.get('electronic_invoice_subjected') and
-                            not vals.get('codice_destinatario')):
-                        vals['codice_destinatario'] = rec.codice_destinatario
-                        if not vals['codice_destinatario']:
-                            del vals['electronic_invoice_subjected']
-                            del vals['codice_destinatario']
+                    if (actual_model == 'res.partner'):
+                        for nm in ('electronic_invoice_subjected',
+                                   'codice_destinatario'):
+                            if not vals.get(nm):
+                                vals[nm] = rec[nm]
+                        if (vals['electronic_invoice_subjected'] and
+                                not vals['codice_destinatario']):
+                            vals['electronic_invoice_subjected'] = False
                     rec.write(vals)
                     self.logmsg(channel_id,
                                 '>>> synchro: %s.write(%s)' % (
@@ -1563,6 +1584,25 @@ class IrModelSynchro(models.Model):
                                 cache.open(model=xmodel)
                                 self.synchro_one_record(
                                     channel_id, xmodel, ext_id)
+
+    @api.multi
+    def pull_structurated_document(self, channel_id, model, loc_id):
+        '''Button synchronize at web page'''
+        cache = self.env['ir.model.synchro.cache']
+        model_line = cache.get_struct_model_attr(model, 'LINE_MODEL')
+        if not model_line:
+            return
+        lines_of_rec = cache.get_struct_model_attr(
+            model, 'LINES_OF_REC', default=False)
+        hdr_rec = self.env[model].browse(loc_id)
+        if not hdr_rec:
+            return
+        lines = hdr_rec[lines_of_rec]
+        if not lines:
+            lines = self.get_counterpart_lines(channel_id, model_line, loc_id)
+        for line in self.env[model].browse(loc_id)[lines_of_rec]:
+            pass
+
 
     @api.model
     def trigger_one_record(self, ext_model, vg7_id):
@@ -2027,9 +2067,8 @@ class IrModelSynchroCache(models.Model):
 
     @api.model_cr_context
     def get_struct_attr(self, attrib, default=None):
-        cache = self.CACHE
-        dbname = self._cr.dbname
-        return cache.get_struct_attr(dbname, attrib, default=default)
+        return self.CACHE.get_struct_attr(
+            self._cr.dbname, attrib, default=default)
 
     @api.model_cr_context
     def get_struct_model_attr(self, model, attrib, default=None):
@@ -2047,32 +2086,27 @@ class IrModelSynchroCache(models.Model):
 
     @api.model_cr_context
     def set_struct_model(self, model):
-        cache = self.CACHE
-        dbname = self._cr.dbname
-        return cache.set_struct_model(dbname, model)
+        return self.CACHE.set_struct_model(self._cr.dbname, model)
 
     @api.model_cr_context
     def set_struct_model_attr(self, model, attrib, value):
-        cache = self.CACHE
-        dbname = self._cr.dbname
-        return cache.set_struct_model_attr(dbname, model, attrib, value)
+        return self.CACHE.set_struct_model_attr(
+            self._cr.dbname, model, attrib, value)
 
     @api.model_cr_context
     def setup_model_structure(self, model, actual_model, ro_fields=None):
         '''Store model structure in memory'''
         if not model:
             return
-        cache = self.CACHE
+        # cache = self.CACHE
         ro_fields = ro_fields or []
-        if self.get_struct_model_attr(model,
-                                      'EXPIRE',
-                                      default=datetime.now()) > datetime.now():
+        if self.get_struct_model_attr(model, 'EXPIRE'):
             return
         ir_model = self.env['ir.model.fields']
         self.set_struct_model(model)
-        self.set_struct_model_attr(
-            model, 'EXPIRE', datetime.now() + timedelta(
-                seconds=(self.lifetime(0))))
+        # self.set_struct_model_attr(
+        #     model, 'EXPIRE', datetime.now() + timedelta(
+        #         seconds=(self.lifetime(0))))
         for field in ir_model.search([('model', '=', actual_model)]):
             def_field = self.TABLE_DEF.get(model, {}).get(field.name, {})
             if 'required' in def_field:
@@ -2128,8 +2162,8 @@ class IrModelSynchroCache(models.Model):
 
     @api.model_cr_context
     def setup_channels(self):
-        cache = self.CACHE
-        dbname = self._cr.dbname
+        # cache = self.CACHE
+        # dbname = self._cr.dbname
         channel_ctr = 0
         expired = False
         for channel_id in self.get_channel_list():

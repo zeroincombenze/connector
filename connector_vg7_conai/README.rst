@@ -1,12 +1,12 @@
 
-======================================
-|icon| connector_vg7_conai 10.0.0.1.11
-======================================
+================================
+|icon| connector_vg7 10.0.0.1.11
+================================
 
 
-**Bidirectional connector to/from VG7 software (CONAI plug-in)**
+**Bidirectional connector to/from VG7 software**
 
-.. |icon| image:: https://raw.githubusercontent.com/zeroincombenze/connector/10.0/connector_vg7_conai/static/description/icon.png
+.. |icon| image:: https://raw.githubusercontent.com/zeroincombenze/connector/10.0/connector_vg7/static/description/icon.png
 
 |Maturity| |Build Status| |Codecov Status| |license gpl| |Try Me|
 
@@ -20,14 +20,43 @@ Overview / Panoramica
 |en| Connector to/from VG7
 --------------------------
 
-Plug-in of connector VG for CONAI module.
+This module makes available the synchro function to synchronize external data
+with Odoo data.
+The function sysnchro return th ID of record found or created. Negative values
+are error codes.
+
+The function synchro accepts a data dictionary with field values, like create
+and write functions.
+
+Every field name may be:
+
+* "id" (integer): the Odoo ID of record; if supplied means write specific existent record
+* "vg7_id" (integer): the external partner ID of record
+* Odoo name: same behavior of Odoo write and create; external partner must know the Odoo structure
+* External name as format "vg7:field": external name is translated into Odoo name base on dictionary
+* Prefixed Odoo name ad format "vg7_field":  external partner must know the Odoo structure but pass its local value
+
+Every field value may be:
+
+* Value as is, i.e. partner name; value is acquired as is.
+* Odoo reference: ID of odoo M2O table; external partner must know the Odoo data
+* External references: ID of external reference; field name is prefixed by "vg7:" or "vg7_"
+* Text of reference: key of reference key, i.e. "admin" in user_id field
+
+Behavior:
+
+* If "id" in field names, the function executes a write to specific ID; id record does not exit exception is generated
+* If "vg7_id" in field name, record with vg7_id is searched; if found, the function executes a write
+* Search for record matching value passed; the function execute a fallback search algorithm
+
 
 |
 
 |it| Connettore con VG7
 -----------------------
 
-Plug-in del connettore VG7 per il modulo CONAI.
+Non ancora documentato
+
 
 |
 |
@@ -73,7 +102,7 @@ From UI: go to:
 
 * |menu| Setting > Activate Developer mode 
 * |menu| Apps > Update Apps List
-* |menu| Setting > Apps |right_do| Select **connector_vg7_conai** > Install
+* |menu| Setting > Apps |right_do| Select **connector_vg7** > Install
 
 |
 
@@ -98,7 +127,7 @@ From UI: go to:
 
 * |menu| Setting > Activate Developer mode
 * |menu| Apps > Update Apps List
-* |menu| Setting > Apps |right_do| Select **connector_vg7_conai** > Update
+* |menu| Setting > Apps |right_do| Select **connector_vg7** > Update
 
 |
 
@@ -211,7 +240,7 @@ La distribuzione `Zeroincombenze® <https://wiki.zeroincombenze.org/en/Odoo>`__ 
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2020-01-05
+Last Update / Ultimo aggiornamento: 2019-12-06
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Alfa-red.png
     :target: https://odoo-community.org/page/development-status

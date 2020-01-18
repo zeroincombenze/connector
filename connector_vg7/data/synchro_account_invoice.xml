@@ -103,6 +103,7 @@
 
     <record forcecreate="1" id="account_invoice_payment_term_id" model="synchro.channel.model.fields">
         <field name="name">payment_term_id</field>
+        <field name="counterpart_name">payment_id</field>
         <field name="model_id" ref="account_invoice"/>
     </record>
 

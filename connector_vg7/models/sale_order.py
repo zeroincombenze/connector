@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright 2018-19 - SHS-AV s.r.l. <https://www.zeroincombenze.it>
+# Copyright 2019-20 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
 #
-# License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
+# Contributions to development, thanks to:
+# * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
+#
+# License LGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 #
 import logging
 
 from odoo import api, fields, models
 
-# from odoo.exceptions import UserError
 _logger = logging.getLogger(__name__)
 
 
@@ -17,6 +19,8 @@ class SaleOrder(models.Model):
 
     vg7_id = fields.Integer('VG7 ID', copy=False)
     oe7_id = fields.Integer('Odoo7 ID', copy=False)
+    oe8_id = fields.Integer('Odoo8 ID', copy=False)
+    oe10_id = fields.Integer('Odoo10 ID', copy=False)
     original_state = fields.Char('Original Status', copy=False)
 
     CONTRAINTS = []
@@ -58,7 +62,7 @@ class SaleOrder(models.Model):
 
 
     @api.model
-    def synchro(self, vals):
+    def synchro(self, vals, disable_post=None):
         return self.env['ir.model.synchro'].synchro(self, vals)
 
     @api.model
@@ -71,6 +75,8 @@ class SaleOrderLine(models.Model):
 
     vg7_id = fields.Integer('VG7 ID', copy=False)
     oe7_id = fields.Integer('Odoo7 ID', copy=False)
+    oe8_id = fields.Integer('Odoo8 ID', copy=False)
+    oe10_id = fields.Integer('Odoo10 ID', copy=False)
     to_delete = fields.Boolean('Record to delete')
 
     CONTRAINTS = []
@@ -84,7 +90,7 @@ class SaleOrderLine(models.Model):
         return res
 
     @api.model
-    def synchro(self, vals):
+    def synchro(self, vals, disable_post=None):
         if 'id' in vals:
             del vals['id']
         return self.env['ir.model.synchro'].synchro(self, vals)

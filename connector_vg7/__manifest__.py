@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright 2018-19 - SHS-AV s.r.l. <https://www.zeroincombenze.it>
+# Copyright 2019-20 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
 #
-# License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
+# Contributions to development, thanks to:
+# * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
+#
+# License LGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 #
 {
     'name': 'connector_vg7',
     'summary': 'Bidirectional connector to/from VG7 software',
-    'version': '10.0.0.1.14',
+    'version': '10.0.0.1.15',
     'category': 'Generic Modules',
     'author': 'SHS-AV s.r.l.',
     'website': 'https://www.zeroincombenze.it/',
@@ -18,10 +21,19 @@
         'stock_picking_package_preparation',
         'l10n_it_ddt',
     ],
+    'external_dependencies': {
+        'python': [
+            'python_plus',
+            'os0',
+            'unidecode',
+        ],
+    },
     'data': [
         'security/ir.model.access.csv',
         'views/country_view.xml',
         'views/partner_view.xml',
+        'views/user_view.xml',
+        'views/company_view.xml',
         'views/product_view.xml',
         'views/account_invoice_view.xml',
         'views/sale_order_view.xml',
@@ -41,13 +53,6 @@
         'data/synchro_product.xml',
         'data/ir_cron.xml',
     ],
-    'external_dependencies': {
-        'python': [
-            'python_plus',
-            'os0',
-            'unidecode',
-            # 'clodoo',
-        ],
-    },
     'installable': True,
+    'development_status': 'Alfa',
 }

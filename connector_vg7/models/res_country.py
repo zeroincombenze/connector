@@ -1,19 +1,17 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright 2018-19 - SHS-AV s.r.l. <https://www.zeroincombenze.it>
+# Copyright 2019-20 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
 #
-# License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
+# Contributions to development, thanks to:
+# * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
+#
+# License LGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 #
 import logging
 
 from odoo import api, fields, models
 
-# from odoo.exceptions import UserError
 _logger = logging.getLogger(__name__)
-# try:
-#     from unidecode import unidecode
-# except ImportError as err:
-#     _logger.debug(err)
 
 
 class ResCountry(models.Model):
@@ -21,6 +19,8 @@ class ResCountry(models.Model):
 
     vg7_id = fields.Integer('VG7 ID', copy=False)
     oe7_id = fields.Integer('Odoo7 ID', copy=False)
+    oe8_id = fields.Integer('Odoo8 ID', copy=False)
+    oe10_id = fields.Integer('Odoo10 ID', copy=False)
 
     CONTRAINTS = []
 
@@ -33,7 +33,7 @@ class ResCountry(models.Model):
         return res
 
     @api.model
-    def synchro(self, vals):
+    def synchro(self, vals, disable_post=None):
         return self.env['ir.model.synchro'].synchro(self, vals)
 
 
@@ -42,6 +42,8 @@ class ResCountryState(models.Model):
 
     vg7_id = fields.Integer('VG7 ID', copy=False)
     oe7_id = fields.Integer('Odoo7 ID', copy=False)
+    oe8_id = fields.Integer('Odoo8 ID', copy=False)
+    oe10_id = fields.Integer('Odoo10 ID', copy=False)
 
     CONTRAINTS = []
 
@@ -54,5 +56,5 @@ class ResCountryState(models.Model):
         return res
 
     @api.model
-    def synchro(self, vals):
+    def synchro(self, vals, disable_post=None):
         return self.env['ir.model.synchro'].synchro(self, vals)

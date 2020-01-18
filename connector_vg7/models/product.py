@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright 2018-19 - SHS-AV s.r.l. <https://www.zeroincombenze.it>
+# Copyright 2019-20 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
 #
-# License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
+# Contributions to development, thanks to:
+# * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
+#
+# License LGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 #
 import logging
 
 from odoo import api, fields, models
 
-# from odoo.exceptions import UserError
 _logger = logging.getLogger(__name__)
 
 try:
@@ -29,6 +31,8 @@ class ProductTemplate(models.Model):
 
     vg7_id = fields.Integer('VG7 ID', copy=False)
     oe7_id = fields.Integer('Odoo7 ID', copy=False)
+    oe8_id = fields.Integer('Odoo8 ID', copy=False)
+    oe10_id = fields.Integer('Odoo10 ID', copy=False)
     dim_name = fields.Char('Search Key',
                            compute=_set_dim_name,
                            store=True,
@@ -124,7 +128,7 @@ class ProductProduct(models.Model):
             id = self.env['product.template'].synchro(tmpl_vals)
             if id > 0:
                 vals['product_tmpl_id'] = id
-        return vals
+        return vals, ''
 
     @api.model
     def synchro(self, vals, disable_post=None):
@@ -137,6 +141,8 @@ class ProductUom(models.Model):
 
     vg7_id = fields.Integer('VG7 ID', copy=False)
     oe7_id = fields.Integer('Odoo7 ID', copy=False)
+    oe8_id = fields.Integer('Odoo8 ID', copy=False)
+    oe10_id = fields.Integer('Odoo10 ID', copy=False)
 
     CONTRAINTS = ()
 

@@ -19,7 +19,6 @@
         <field name="active" eval="True"/>
     </record>
 
-    <!--
     <record id="channel_odoo8" model="synchro.channel">
         <field name="name">Odoo 8.0</field>
         <field name="prefix">oe8</field>
@@ -35,6 +34,5 @@
         <field name="client_key">zeroadm</field>
         <field name="active" eval="True"/>
     </record>
-    -->
 
 </odoo>
