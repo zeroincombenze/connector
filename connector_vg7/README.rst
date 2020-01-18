@@ -1,6 +1,6 @@
 
 ================================
-|icon| connector_vg7 10.0.0.1.15
+|icon| connector_vg7 10.0.0.1.16
 ================================
 
 
@@ -161,6 +161,12 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 
 ChangeLog History / Cronologia modifiche
 ----------------------------------------
+
+10.0.0.1.16 (2020-01-18)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] New search algorithm / Nuovo agloritmo di ricerca
+
 
 10.0.0.1.15 (2020-01-07)
 ~~~~~~~~~~~~~~~~~~~~~~~~

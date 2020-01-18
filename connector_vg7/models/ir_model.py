@@ -44,14 +44,15 @@ SKEYS = {
                           ['code', 'country_id'],),
     'res.partner': (['vat', 'fiscalcode', 'type'],
                     ['vat', 'name', 'type'],
-                    ['vat', 'fiscalcode', 'is_company'],
-                    ['rea_code'],
                     ['fiscalcode', 'dim_name', 'type'],
+                    ['rea_code'],
                     ['vat', 'dim_name', 'type'],
-                    ['name', 'is_company'],
+                    ['vat', 'type'],
+                    ['dim_name', 'type'],
+                    ['vat', 'fiscalcode', 'is_company'],
                     ['vat'],
-                    ['name'],
-                    ['dim_name', 'type']),
+                    ['name', 'is_company'],
+                    ['name']),
     'res.company': (['vat'], ['name']),
     'account.account': (['code', 'company_id'],
                         ['name', 'company_id'],
@@ -388,6 +389,8 @@ class IrModelSynchro(models.Model):
                 vals['name'] = 'Unknown %d' % ext_value
             else:
                 vals['code'] = '%s=%s' % (key_name, value)
+        if actual_model == 'res.partner' and spec in ('delivery', 'invoice'):
+            vals['type'] = spec
         try:
             new_value = self.synchro(ir_model, vals, disable_post=True)
             in_queue = cache.get_attr(channel_id, 'IN_QUEUE')
@@ -398,7 +401,8 @@ class IrModelSynchro(models.Model):
             new_value = -1
         return new_value
 
-    def do_search(self, channel_id, actual_model, req_where):
+    def do_search(self, channel_id, actual_model, req_where,
+                  only_id=None, spec=None):
 
         def exec_search(ir_model, where, has_sequence):
             if has_sequence:
@@ -410,12 +414,24 @@ class IrModelSynchro(models.Model):
         maybe_dif = False
         has_sequence = cache.get_struct_model_attr(actual_model, 'sequence')
         ir_model = self.env[actual_model]
-        where = req_where
+        if only_id:
+            self.logmsg(channel_id,
+                        '>>> %s.search(%s)' % (actual_model, req_where))
+            rec = exec_search(ir_model,req_where, has_sequence)
+            return rec, maybe_dif
+        where = [x for x in req_where]
+        if actual_model == 'res.partner' and spec in ('delivery', 'invoice'):
+            where.append(['type', '=', spec])
         self.logmsg(channel_id,
                     '>>> %s.search(%s)' % (actual_model, where))
         rec = exec_search(ir_model, where, has_sequence)
         if not rec and cache.get_struct_model_attr(actual_model, 'active'):
             where.append(('active', '=', False))
+            rec = exec_search(ir_model, where, has_sequence)
+        if not rec and actual_model == 'res.partner':
+            where = [x for x in req_where]
+            self.logmsg(channel_id,
+                        '>>> %s.search(%s)' % (actual_model, where))
             rec = exec_search(ir_model, where, has_sequence)
         if not rec:
             if (actual_model in ('res.partner',
@@ -470,7 +486,8 @@ class IrModelSynchro(models.Model):
                     actual_model, 'MODEL_WITH_COUNTRY') and
                     ctx.get('country_id')):
                 where.append(('country_id', '=', ctx['country_id']))
-        rec, maybe_dif = self.do_search(channel_id, actual_model, where)
+        rec, maybe_dif = self.do_search(
+            channel_id, actual_model, where, spec=spec)
         if not rec and mode != 'tnl' and isinstance(value, basestring):
             rec = self.get_rec_by_reference(
                 channel_id, actual_model, name, value,
@@ -526,13 +543,15 @@ class IrModelSynchro(models.Model):
                         channel_id, actual_model, value_id, spec=spec)
                 where = [(loc_ext_id, '=', value_id)]
                 rec, maybe_dif = self.do_search(
-                    channel_id, actual_model, where)
+                    channel_id, actual_model, where, only_id=True)
         else:
             where = [('id', '=', value_id)]
-            rec, maybe_dif = self.do_search(channel_id, actual_model, where)
+            rec, maybe_dif = self.do_search(
+                channel_id, actual_model, where, only_id=True)
         if not rec and is_foreign and ext_value != value_id:
             where = [(loc_ext_id, '=', ext_value)]
-            rec, maybe_dif = self.do_search(channel_id, actual_model, where)
+            rec, maybe_dif = self.do_search(
+                channel_id, actual_model, where, only_id=True)
         if rec:
             new_value = rec.id
         if not new_value:
@@ -763,7 +782,7 @@ class IrModelSynchro(models.Model):
         }
         for ext_ref in field_list:
             if (isinstance(vals[ext_ref], basestring) and
-                  not vals[ext_ref].strip()):
+                    not vals[ext_ref].strip()):
                 del vals[ext_ref]
                 continue
             ext_name, loc_name, is_foreign = self.names_from_ref(
@@ -903,6 +922,8 @@ class IrModelSynchro(models.Model):
         actual_model = self.get_actual_model(xmodel, only_name=True)
         spec = self.get_spec_from_xmodel(xmodel)
         spec = spec if spec != 'supplier' else ''
+        if actual_model == 'res.partner' and spec in ('delivery' 'invoice'):
+            ctx['type'] = spec
         cache = self.env['ir.model.synchro.cache']
         loc_ext_id = self.get_loc_ext_id_name(channel_id, xmodel)
         use_sync = cache.get_struct_model_attr(actual_model, loc_ext_id)
@@ -913,7 +934,8 @@ class IrModelSynchro(models.Model):
                 (loc_ext_id, '=', self.get_loc_ext_id_value(
                     channel_id, xmodel, vals[loc_ext_id]))]
             # where = add_constraints(where, constraints)
-            rec, maybe_dif = self.do_search(channel_id, actual_model, where)
+            rec, maybe_dif = self.do_search(
+                channel_id, actual_model, where, only_id=True)
         if not rec:
             for keys in cache.get_model_attr(channel_id, xmodel, 'SKEYS'):
                 where = []
@@ -934,14 +956,14 @@ class IrModelSynchro(models.Model):
                         where.append((key, '=', os0.b(vals[key])))
                 if where:
                     where = add_constraints(where, constraints)
-                    if spec:
-                        where.append(('type', '=', spec))
+                    # if spec:
+                    #     where.append(('type', '=', spec))
                     if loc_ext_id and use_sync:
                         where.append('|')
                         where.append((loc_ext_id, '=', False))
                         where.append((loc_ext_id, '=', 0))
                     rec, maybe_dif = self.do_search(
-                        channel_id, actual_model, where)
+                        channel_id, actual_model, where, spec=spec)
                     if rec:
                         break
                     if maybe_dif and not candidate:
