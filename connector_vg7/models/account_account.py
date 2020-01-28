@@ -67,6 +67,10 @@ class AccountAccount(models.Model):
     def synchro(self, vals, disable_post=None):
         return self.env['ir.model.synchro'].synchro(self, vals)
 
+    @api.multi
+    def pull_record(self):
+        self.env['ir.model.synchro'].pull_record(self)
+
 
 class AccountAccountType(models.Model):
     _inherit = "account.account.type"

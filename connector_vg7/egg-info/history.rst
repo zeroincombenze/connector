@@ -1,3 +1,9 @@
+10.0.0.1.17 (2020-01-19)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] Avoid recursive infinite loop / Controllo per evitare cicli ricorsivi infiniti
+
+
 10.0.0.1.16 (2020-01-18)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 

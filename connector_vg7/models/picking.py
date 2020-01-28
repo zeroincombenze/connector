@@ -285,6 +285,4 @@ class StockPickingTransportationMethod(models.Model):
 
     @api.model
     def synchro(self, vals, disable_post=None):
-        if 'id' in vals:
-            del vals['id']
         return self.env['ir.model.synchro'].synchro(self, vals)

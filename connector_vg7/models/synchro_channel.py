@@ -48,7 +48,8 @@ class SynchroChannel(models.Model):
     password = fields.Char('Password', copy=False)
     counterpart_url = fields.Char(
         'Counterpart endpoint',
-        help="3th Party Sender URL to connect; may be prefixed by username")
+        help="3th Party Sender URL to connect;\n"
+             "format is [username@]url[:port]")
     product_without_variants = fields.Boolean('Products without variants')
     sequence = fields.Integer('Priority', default=16)
     active = fields.Boolean(string='Active',
