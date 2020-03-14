@@ -113,13 +113,6 @@
         <field name="model_id" ref="res_partner"/>
     </record>
 
-    <record forcecreate="1" id="res_partner_ipa_code" model="synchro.channel.model.fields">
-        <field name="name">ipa_code</field>
-        <field name="counterpart_name">codice_ufficio</field>
-        <field name="apply">set_is_pa()</field>
-        <field name="model_id" ref="res_partner"/>
-    </record>
-
     <record forcecreate="1" id="res_partner_company_id" model="synchro.channel.model.fields">
         <field name="name">company_id</field>
         <field name="model_id" ref="res_partner"/>
@@ -611,6 +604,19 @@
         <field name="model_id" ref="res_partner_supplier_rec"/>
     </record>
 
+    <record forcecreate="1" id="res_partner_supplier_vat" model="synchro.channel.model.fields">
+        <field name="name">vat</field>
+        <field name="counterpart_name">piva</field>
+        <field name="apply">vat()</field>
+        <field name="model_id" ref="res_partner_supplier_rec"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_supplier_fiscalcode" model="synchro.channel.model.fields">
+        <field name="name">fiscalcode</field>
+        <field name="counterpart_name">cf</field>
+        <field name="apply">upper()</field>
+        <field name="model_id" ref="res_partner_supplier_rec"/>
+    </record>
     <!--
     <record forcecreate="1" id="res_partner_supplier_property_supplier_payment_term_id" model="synchro.channel.model.fields">
         <field name="name">property_supplier_payment_term_id</field>

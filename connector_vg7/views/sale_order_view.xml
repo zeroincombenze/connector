@@ -11,6 +11,8 @@
                     <group>
                         <field name="vg7_id"/>
                         <field name="oe7_id"/>
+                        <field name="oe8_id"/>
+                        <field name="oe10_id"/>
                         <field name="original_state"/>
                     </group>
                 </page>
@@ -19,6 +21,8 @@
                 <group name="synchro">
                     <field name="vg7_id"/>
                     <field name="oe7_id"/>
+                    <field name="oe8_id"/>
+                    <field name="oe10_id"/>
                     <field name="to_delete"/>
                 </group>
             </xpath>

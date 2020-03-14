@@ -6,16 +6,14 @@
         <field name="model">account.account</field>
         <field name="inherit_id" ref="account.view_account_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//page[last()]" position="after">
-                <page name="synchro" string="Synchronization">
-                    <group>
-                        <field name="vg7_id"/>
-                        <field name="oe7_id"/>
-                        <field name="oe8_id"/>
-                        <field name="oe10_id"/>
-                        <field name="dim_name"/>
-                    </group>
-                </page>
+            <xpath expr="/form/*[last()]" position="after">
+                <group>
+                    <field name="vg7_id"/>
+                    <field name="oe7_id"/>
+                    <field name="oe8_id"/>
+                    <field name="oe10_id"/>
+                    <field name="dim_name"/>
+                </group>
             </xpath>
         </field>
     </record>

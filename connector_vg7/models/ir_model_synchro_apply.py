@@ -88,7 +88,7 @@ class IrModelSynchroApply(models.Model):
     def apply_bool(self, channel_id, vals, loc_name,
                        ext_ref, loc_ext_id, default=None, ctx=None):
         if ext_ref in vals:
-            vals[loc_name] = os0.str2bool(vals.get(ext_ref), False)
+            vals[loc_name] = os0.str2bool(vals.get(ext_ref), Fialse)
         return vals
 
     def apply_not(self, channel_id, vals, loc_name,
@@ -103,12 +103,16 @@ class IrModelSynchroApply(models.Model):
         if ext_ref in vals and loc_name != ext_ref:
             vals[loc_name] = vals[ext_ref]
             del vals[ext_ref]
-        if 'lastname' in vals and 'firstname' in vals:
+        if ('lastname' in vals and 'firstname' in vals and
+                (vals['lastname'] or vals['firstname'])):
             if not vals.get('name'):
-                vals['name'] = '%s %s' % (vals['lastname'], vals['firstname'])
+                vals['name'] = '%s %s' % (
+                    vals['lastname'] or '', vals['firstname'] or '')
                 if not vals['name'].strip():
-                    vals['name'] = 'Unknown'
-                vals['is_company'] = False
+                    vals = self.apply_set_tmp_name(
+                        channel_id, vals, 'name', ext_ref, loc_ext_id)
+                vals['is_company'] = True
+                vals['individual'] = True
             del vals['lastname']
             del vals['firstname']
         return vals
@@ -117,11 +121,14 @@ class IrModelSynchroApply(models.Model):
                       ext_ref, loc_ext_id, default=None, ctx=None):
         '''External vat may not contain ISO code'''
         if ext_ref in vals:
-            if (isinstance(vals[ext_ref], basestring) and
-                    len(vals[ext_ref]) == 11 and
-                    vals[ext_ref].isdigit()):
-                vals[loc_name] = 'IT%s' % vals[ext_ref]
-            else:
+            if isinstance(vals[ext_ref], basestring):
+                vals[ext_ref] = vals[ext_ref].strip()
+                if (len(vals[ext_ref]) == 11 and
+                        vals[ext_ref].isdigit()):
+                    vals[loc_name] = 'IT%s' % vals[ext_ref]
+                elif vals[ext_ref]:
+                    vals[loc_name] = vals[ext_ref]
+            elif vals[ext_ref]:
                 vals[loc_name] = vals[ext_ref]
         return vals
 
@@ -182,7 +189,7 @@ class IrModelSynchroApply(models.Model):
             product = self.env['product.product'].browse(vals['product_id'])
             vals[loc_name] = product.uom_id.id
         elif not vals.get(loc_name):
-            vals[loc_name] = self.env.ref('product.product_uom_unit')
+            vals[loc_name] = self.env.ref('product.product_uom_unit').id
         return vals
 
     def apply_tax(self, channel_id, vals, loc_name,
@@ -259,7 +266,9 @@ class IrModelSynchroApply(models.Model):
 
     def apply_partner_address(self, channel_id, vals, loc_name,
                                   ext_ref, loc_ext_id, default=None, ctx=None):
-        if loc_name in vals:
+        if (loc_name in vals and
+                isinstance(vals.get(loc_name), int) and
+                vals[loc_name] > 0):
             return vals
         if 'partner_id' in vals:
             vals[loc_name] = vals['partner_id']
@@ -302,16 +311,18 @@ class IrModelSynchroApply(models.Model):
         if vals.get(ext_ref):
             if len(vals[ext_ref]) == 7:
                 vals['electronic_invoice_subjected'] = True
+                vals['is_pa'] = False
             elif len(vals[ext_ref]) == 6:
-                vals['ipa_code'] = vals[ext_ref]
+                vals['electronic_invoice_subjected'] = False
                 vals['is_pa'] = True
+                vals['ipa_code'] = vals[ext_ref]
                 if loc_name in vals:
                     del vals[loc_name]
         return vals
 
     def apply_set_is_pa(self, channel_id, vals, loc_name,
                             ext_ref, loc_ext_id, default=None, ctx=None):
-        if len(vals.get(ext_ref)) == 6:
+        if len(vals.get(ext_ref, '')) == 6:
             vals['is_pa'] = True
         return vals
 

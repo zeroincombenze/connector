@@ -33,19 +33,20 @@ class StockPickingPackagePreparation(models.Model):
     @api.model_cr_context
     def _auto_init(self):
         res = super(StockPickingPackagePreparation, self)._auto_init()
-        for prefix in ('vg7', 'oe7'):
+        for prefix in ('vg7', 'oe7', 'oe8', 'oe10'):
             self.env['ir.model.synchro']._build_unique_index(self._inherit,
                                                              prefix)
         return res
 
     @api.model
-    def synchro(self, vals):
+    def synchro(self, vals, disable_post=None):
         # TODO: correct workaround!!
         do_rewrite = False
         if 'vg7:ddt_number' in vals:
             do_rewrite = True
             saved_vals = vals.copy()
-        id = self.env['ir.model.synchro'].synchro(self, vals)
+        id = self.env['ir.model.synchro'].synchro(
+            self, vals, disable_post=disable_post)
         if id > 0 and do_rewrite:
             saved_vals['id'] = id
             id = self.env['ir.model.synchro'].synchro(
@@ -71,7 +72,7 @@ class StockPickingPackagePreparationLine(models.Model):
     @api.model_cr_context
     def _auto_init(self):
         res = super(StockPickingPackagePreparationLine, self)._auto_init()
-        for prefix in ('vg7', 'oe7'):
+        for prefix in ('vg7', 'oe7', 'oe8', 'oe10'):
             self.env['ir.model.synchro']._build_unique_index(self._inherit,
                                                              prefix)
         return res
@@ -113,7 +114,7 @@ class StockPickingGoods_description(models.Model):
     @api.model_cr_context
     def _auto_init(self):
         res = super(StockPickingGoods_description, self)._auto_init()
-        for prefix in ('vg7', 'oe7'):
+        for prefix in ('vg7', 'oe7', 'oe8', 'oe10'):
             self.env['ir.model.synchro']._build_unique_index(self._inherit,
                                                              prefix)
         return res
@@ -135,7 +136,8 @@ class StockPickingGoods_description(models.Model):
 
     @api.model
     def synchro(self, vals, disable_post=None):
-        return self.env['ir.model.synchro'].synchro(self, vals)
+        return self.env['ir.model.synchro'].synchro(
+            self, vals, disable_post=disable_post)
 
 
 class StockPickingCarriageCondition(models.Model):
@@ -163,7 +165,7 @@ class StockPickingCarriageCondition(models.Model):
     @api.model_cr_context
     def _auto_init(self):
         res = super(StockPickingCarriageCondition, self)._auto_init()
-        for prefix in ('vg7', 'oe7'):
+        for prefix in ('vg7', 'oe7', 'oe8', 'oe10'):
             self.env['ir.model.synchro']._build_unique_index(self._inherit,
                                                              prefix)
         return res
@@ -185,7 +187,8 @@ class StockPickingCarriageCondition(models.Model):
 
     @api.model
     def synchro(self, vals, disable_post=None):
-        return self.env['ir.model.synchro'].synchro(self, vals)
+        return self.env['ir.model.synchro'].synchro(
+            self, vals, disable_post=disable_post)
 
 
 class StockPickingTransportationReason(models.Model):
@@ -213,7 +216,7 @@ class StockPickingTransportationReason(models.Model):
     @api.model_cr_context
     def _auto_init(self):
         res = super(StockPickingTransportationReason, self)._auto_init()
-        for prefix in ('vg7', 'oe7'):
+        for prefix in ('vg7', 'oe7', 'oe8', 'oe10'):
             self.env['ir.model.synchro']._build_unique_index(self._inherit,
                                                              prefix)
         return res
@@ -235,7 +238,8 @@ class StockPickingTransportationReason(models.Model):
 
     @api.model
     def synchro(self, vals, disable_post=None):
-        return self.env['ir.model.synchro'].synchro(self, vals)
+        return self.env['ir.model.synchro'].synchro(
+            self, vals, disable_post=disable_post)
 
 
 class StockPickingTransportationMethod(models.Model):
@@ -263,7 +267,7 @@ class StockPickingTransportationMethod(models.Model):
     @api.model_cr_context
     def _auto_init(self):
         res = super(StockPickingTransportationMethod, self)._auto_init()
-        for prefix in ('vg7', 'oe7'):
+        for prefix in ('vg7', 'oe7', 'oe8', 'oe10'):
             self.env['ir.model.synchro']._build_unique_index(self._inherit,
                                                              prefix)
         return res
@@ -285,4 +289,5 @@ class StockPickingTransportationMethod(models.Model):
 
     @api.model
     def synchro(self, vals, disable_post=None):
-        return self.env['ir.model.synchro'].synchro(self, vals)
+        return self.env['ir.model.synchro'].synchro(
+            self, vals, disable_post=disable_post)

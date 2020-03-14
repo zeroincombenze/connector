@@ -22,6 +22,8 @@ class ItalyConaiProductCategory(models.Model):
 
     vg7_id = fields.Integer('VG7 ID', copy=False)
     oe7_id = fields.Integer('Odoo7 ID', copy=False)
+    oe8_id = fields.Integer('Odoo7 ID', copy=False)
+    oe10_id = fields.Integer('Odoo7 ID', copy=False)
 
     CONTRAINTS = []
 
@@ -34,8 +36,9 @@ class ItalyConaiProductCategory(models.Model):
         return res
 
     @api.model
-    def synchro(self, vals):
-        return self.env['ir.model.synchro'].synchro(self, vals)
+    def synchro(self, vals, disable_post=None):
+        return self.env['ir.model.synchro'].synchro(
+            self, vals, disable_post=disable_post)
 
 
 class ItalyConaiPartnerCategory(models.Model):
@@ -43,6 +46,8 @@ class ItalyConaiPartnerCategory(models.Model):
 
     vg7_id = fields.Integer('VG7 ID', copy=False)
     oe7_id = fields.Integer('Odoo7 ID', copy=False)
+    oe8_id = fields.Integer('Odoo7 ID', copy=False)
+    oe10_id = fields.Integer('Odoo7 ID', copy=False)
 
     CONTRAINTS = []
 
@@ -55,5 +60,6 @@ class ItalyConaiPartnerCategory(models.Model):
         return res
 
     @api.model
-    def synchro(self, vals):
-        return self.env['ir.model.synchro'].synchro(self, vals)
+    def synchro(self, vals, disable_post=None):
+        return self.env['ir.model.synchro'].synchro(
+            self, vals, disable_post=disable_post)

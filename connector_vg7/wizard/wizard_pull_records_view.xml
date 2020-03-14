@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="wizard_pull_records_form_view" model="ir.ui.view">
+        <field name="name">Pull Records</field>
+        <field name="model">wizard.synchro.pull.records</field>
+        <field name="arch" type="xml">
+            <form string="Pull Records from counterpart">
+                <sheet>
+                    <group>
+                        <separator colspan="2"
+                                   string="Pull (import) record from counterpart"/>
+                        <field name="ir_model_id" string="Model"/>
+                        <field name="sel_rec" string="Record Selection"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="pull_full_records" string="Import"
+                            type="object" class="oe_highlight"/>
+                    <button special="cancel" string="Cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <act_window id="action_wizard_pull_records"
+                key2="client_action_multi"
+                name="Pull Records from counterpart"
+                res_model="wizard.synchro.pull.records"
+                src_model="ir.model.synchro"
+                target="new"
+                view_id="wizard_pull_records_form_view"
+                view_mode="form"/>
+</odoo>

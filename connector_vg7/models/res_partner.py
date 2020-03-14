@@ -26,8 +26,12 @@ class ResPartner(models.Model):
     @api.depends('name')
     def _set_dim_name(self):
         for partner in self:
-            partner.dim_name = self.env[
-                'ir.model.synchro'].dim_text(partner.name)
+            if partner.name:
+                partner.dim_name = self.env[
+                    'ir.model.synchro'].dim_text(partner.name)
+            elif partner.parent_id:
+                partner.dim_name = self.env[
+                    'ir.model.synchro'].dim_text(partner.parent_id.name)
 
     vg7_id = fields.Integer('VG7 ID', copy=False)
     vg72_id = fields.Integer('VG7 ID (2.nd)', copy=False)
@@ -88,8 +92,6 @@ class ResPartner(models.Model):
                     (not isinstance(vals[nm], basestring) or
                      not vals[nm].strip())):
                 del vals[nm]
-        _logger.info(
-            '> return %s' % vals)      # debug
         return vals
 
     @api.model
@@ -147,19 +149,8 @@ class ResPartner(models.Model):
                                     'vg7:id' in vals):
                                 vals[ext_ref]['vg7:id'] = vals['vg7:id']
                                 vals[ext_ref] = set_vg7_id(vals[ext_ref])
-                        if ('vg7:company' not in vals[ext_ref] and
-                                'vg7:name' not in vals[ext_ref] and
-                                'vg7:surename' not in vals[ext_ref]):
-                            if 'vg7:company' in vals:
-                                vals[ext_ref][
-                                    'vg7:company'] = vals['vg7:company']
-                            elif ('vg7:name' in vals or
-                                  'vg7:surename' in vals):
-                                vals[ext_ref]['vg7:company'] = '%s %s' % (
-                                    vals.get('vg7:name', ''),
-                                    vals.get('vg7:surename', ''))
-                        if ext_ref == 'vg7:billing':
-                            for nm in ('vg7:piva',
+                            for nm in ('vg7:type',
+                                       'vg7:piva',
                                        'vg7:cf',
                                        'vg7:esonerato_fe',
                                        'vg7:codice_univoco',
@@ -176,19 +167,25 @@ class ResPartner(models.Model):
                                        'vg7:name',
                                        'vg7:surename',
                                        'vg7:street',
+                                       'vg7:street_number',
                                        'vg7:postal_code',
                                        'vg7:city',
                                        'vg7:region',
                                        'vg7:region_id',
-                                       'vg7:mail',
+                                       'vg7:email',
                                        'vg7:country'
-                                       'vg7:country_id'):
-                                if (nm in vals[ext_ref] and
-                                        (nm not in vals or
-                                         vals[ext_ref][nm] == vals[nm])):
+                                       'vg7:country_id',
+                                       'vg7:telephone',
+                                       'vg7:telephone2'):
+                                if nm in vals[ext_ref] and not vals.get(nm):
                                     vals[nm] = vals[ext_ref][nm]
+                        for nm in ('vg7:company',
+                                   'vg7:name',
+                                   'vg7:surename'):
+                            if vals[ext_ref].get(nm) == vals.get(nm):
+                                vals[ext_ref][nm] = False
                         _logger.info(
-                            '> store(%s,%s)' % (vals[ext_ref], ext_ref))  # debug
+                            '> store(%s,%s)' % (vals[ext_ref], ext_ref)) # debug
                         cache.set_model_attr(
                             channel_id, actual_model, ext_ref, vals[ext_ref])
                         del vals[ext_ref]
@@ -200,9 +197,9 @@ class ResPartner(models.Model):
         return vals, spec
 
     @api.model
-    def postprocess(self, channel_id, id, vals):
+    def postprocess(self, channel_id, parent_id, vals):
         _logger.info(
-            '> postprocess(%d,%s)' % (id, vals))  # debug
+            '> postprocess(%d,%s)' % (parent_id, vals))  # debug
         cache = self.env['ir.model.synchro.cache']
         model = 'res.partner'
         for ext_ref in ('vg7:shipping', 'vg7:billing'):
@@ -211,9 +208,78 @@ class ResPartner(models.Model):
                 for field in cache.get_model_attr(channel_id, model, ext_ref):
                     vals[field] = cache.get_model_attr(
                         channel_id, model, ext_ref)[field]
-                vals['parent_id'] = id
+                vals['parent_id'] = parent_id
                 cache.del_model_attr(channel_id, model, ext_ref)
                 self.synchro(vals, disable_post=True)
+
+    def assure_values(self, vals, rec):
+        actual_model = 'res.partner'
+        actual_cls = self.env[actual_model]
+        if ('codice_destinatario' in vals and
+                not vals['codice_destinatario']):
+            del vals['codice_destinatario']
+        if (vals.get('electronic_invoice_subjected') and
+                not vals.get('codice_destinatario')):
+            if rec:
+                vals['codice_destinatario'] = rec.codice_destinatario.strip()
+            else:
+                del vals['electronic_invoice_subjected']
+            if not vals['codice_destinatario']:
+                del vals['electronic_invoice_subjected']
+                del vals['codice_destinatario']
+        if ('ipa_code' in vals and
+                not vals['ipa_code']):
+            del vals['ipa_code']
+        if (vals.get('is_pa') and
+                not vals.get('ipa_code')):
+            if rec:
+                vals['ipa_code'] = rec.ipa_code.strip()
+            else:
+                del vals['is_pa']
+            if not vals['ipa_code']:
+                del vals['is_pa']
+                del vals['ipa_code']
+        if vals.get('individual'):
+            vals['is_company'] = True
+        if vals.get('rea_code'):
+            ids = actual_cls.search([('rea_code', '=', vals['rea_code'])])
+            if ids:
+                if not rec or ids[0] != rec.id:
+                    _logger.info(
+                        'Duplicate REA Code %s' % vals['rea_code'])
+                    del vals['rea_code']
+        if vals.get('type') in ('delivery', 'invoice'):
+            parent = False
+            if vals.get('parent_id'):
+                parent_id = int(vals['parent_id'])
+                if actual_cls.search([('id', '=', parent_id)]):
+                    parent = actual_cls.browse(parent_id)
+                else:
+                    del vals['parent_id']
+            elif rec and rec.parent_id:
+                parent = rec.parent_id
+            if parent:
+                empty = True
+                for nm in ('name', 'street', 'city', 'vat',
+                           'codice_destinatario', 'phone', 'email'):
+                    if vals.get(nm) and vals[nm] != parent[nm]:
+                        empty = False
+                        break
+                if empty:
+                    for nm in ('state_id',):
+                        if (vals.get(nm) and parent[nm]
+                                and vals[nm] != parent[nm].id):
+                            empty = False
+                            break
+                if empty:
+                    vals = {}
+                elif (vals.get('name') == parent.name or
+                      vals.get('name', '').startswith('Unknown')):
+                    vals['name'] = False
+        else:
+            if not vals.get('name') and not rec:
+                vals['name'] = 'Unknown'
+        return vals
 
     @api.model
     def synchro(self, vals, disable_post=None):
@@ -238,10 +304,11 @@ class ResPartnerShipping(models.Model):
         vals = self.env['res.partner'].rephase_fields(
             vals, 'vg7:shipping')
         vals['type'] = 'delivery'
-        return self.env['ir.model.synchro'].synchro(self, vals)
+        return self.env['ir.model.synchro'].synchro(
+            self, vals, disable_post=disable_post)
 
 
-class ResPartneriNVOICE(models.Model):
+class ResPartnerInvoice(models.Model):
     _name = "res.partner.invoice"
     _inherit = "res.partner"
 
@@ -252,7 +319,8 @@ class ResPartneriNVOICE(models.Model):
         vals = self.env['res.partner'].rephase_fields(
             vals, 'vg7:billing')
         vals['type'] = 'invoice'
-        return self.env['ir.model.synchro'].synchro(self, vals)
+        return self.env['ir.model.synchro'].synchro(
+            self, vals, disable_post=disable_post)
 
 
 class ResPartnerSupplier(models.Model):
@@ -262,4 +330,5 @@ class ResPartnerSupplier(models.Model):
     @api.model
     def synchro(self, vals, disable_post=None):
         vals['supplier'] = True
-        return self.env['ir.model.synchro'].synchro(self, vals)
+        return self.env['ir.model.synchro'].synchro(
+            self, vals, disable_post=disable_post)

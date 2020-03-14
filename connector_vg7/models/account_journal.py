@@ -19,8 +19,8 @@ except ImportError as err:
     _logger.debug(err)
 
 
-class AccountTax(models.Model):
-    _inherit = "account.tax"
+class AccountJournal(models.Model):
+    _inherit = "account.journal"
 
     @api.multi
     @api.depends('name')
@@ -42,7 +42,7 @@ class AccountTax(models.Model):
 
     @api.model_cr_context
     def _auto_init(self):
-        res = super(AccountTax, self)._auto_init()
+        res = super(AccountJournal, self)._auto_init()
         for prefix in ('vg7', 'oe7', 'oe8', 'oe10'):
             self.env['ir.model.synchro']._build_unique_index(self._inherit,
                                                              prefix)
@@ -62,15 +62,6 @@ class AccountTax(models.Model):
                     res += ch.lower()
             text = res
         return text
-
-    def assure_values(self, vals, rec):
-        actual_model = 'account.tax'
-        if not vals.get('amount'):
-            if rec:
-                vals['amount'] = rec.amount
-            else:
-                vals['amount'] = 0
-        return vals
 
     @api.model
     def synchro(self, vals, disable_post=None):

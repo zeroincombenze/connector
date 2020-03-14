@@ -12,6 +12,8 @@
                     <group>
                         <field name="vg7_id"/>
                         <field name="oe7_id"/>
+                        <field name="oe8_id"/>
+                        <field name="oe10_id"/>
                         <field name="dim_name"/>
                     </group>
                 </page>
@@ -30,6 +32,8 @@
                     <group>
                         <field name="vg7_id"/>
                         <field name="oe7_id"/>
+                        <field name="oe8_id"/>
+                        <field name="oe10_id"/>
                         <field name="dim_name"/>
                     </group>
                 </page>
@@ -44,8 +48,10 @@
         <field name="arch" type="xml">
             <xpath expr="//form" position="inside">
                 <group>
-                    <field name="vg7_id"/>
-                    <field name="oe7_id"/>
+                        <field name="vg7_id"/>
+                        <field name="oe7_id"/>
+                        <field name="oe8_id"/>
+                        <field name="oe10_id"/>
                 </group>
             </xpath>
         </field>

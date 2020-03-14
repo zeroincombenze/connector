@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <record id="view_tax_synchro_form" model="ir.ui.view">
-        <field name="name">account.tax.synchro.form</field>
-        <field name="model">account.tax</field>
-        <field name="inherit_id" ref="account.view_tax_form"></field>
+    <record id="view_sequence_synchro_form" model="ir.ui.view">
+        <field name="name">view.sequence.synchro.form</field>
+        <field name="model">ir.sequence</field>
+        <field name="inherit_id" ref="base.sequence_view"/>
         <field name="arch" type="xml">
             <xpath expr="//page[last()]" position="after">
                 <page name="synchro" string="Synchronization">
@@ -13,7 +13,6 @@
                         <field name="oe7_id"/>
                         <field name="oe8_id"/>
                         <field name="oe10_id"/>
-                        <field name="dim_name"/>
                     </group>
                 </page>
             </xpath>
@@ -21,4 +20,3 @@
     </record>
 
 </odoo>
-

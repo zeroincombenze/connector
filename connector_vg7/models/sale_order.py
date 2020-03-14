@@ -29,7 +29,7 @@ class SaleOrder(models.Model):
     @api.model_cr_context
     def _auto_init(self):
         res = super(SaleOrder, self)._auto_init()
-        for prefix in ('vg7', 'oe7'):
+        for prefix in ('vg7', 'oe7', 'oe8', 'oe10'):
             self.env['ir.model.synchro']._build_unique_index(self._inherit,
                                                              prefix)
         return res
@@ -54,16 +54,24 @@ class SaleOrder(models.Model):
         for nm in ('partner_invoice_id',
                    'partner_shipping_id'):
             if not getattr(self, nm):
-                setattr(self, nm, self.partner_id)
+                setattr(self, nm, self.partner_id.id)
         nm = 'note'
         partner_nm = 'sale_note'
         if not getattr(self, nm):
             setattr(self, nm, getattr(self.company_id, partner_nm))
 
+    def assure_values(self, vals, rec):
+        for nm in ('partner_shipping_id', 'partner_invoice_id'):
+            if isinstance(vals.get(nm), int) and vals[nm] <= 0:
+                del vals[nm]
+            if not vals.get(nm) and not rec:
+                vals[nm] = vals['partner_id']
+        return vals
 
     @api.model
     def synchro(self, vals, disable_post=None):
-        return self.env['ir.model.synchro'].synchro(self, vals)
+        return self.env['ir.model.synchro'].synchro(
+            self, vals, disable_post=disable_post)
 
     @api.model
     def commit(self, id):
@@ -84,11 +92,12 @@ class SaleOrderLine(models.Model):
     @api.model_cr_context
     def _auto_init(self):
         res = super(SaleOrderLine, self)._auto_init()
-        for prefix in ('vg7', 'oe7'):
+        for prefix in ('vg7', 'oe7', 'oe8', 'oe10'):
             self.env['ir.model.synchro']._build_unique_index(self._inherit,
                                                              prefix)
         return res
 
     @api.model
     def synchro(self, vals, disable_post=None):
-        return self.env['ir.model.synchro'].synchro(self, vals)
+        return self.env['ir.model.synchro'].synchro(
+            self, vals, disable_post=disable_post)

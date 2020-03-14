@@ -11,6 +11,8 @@
                     <group>
                         <field name="vg7_id"/>
                         <field name="oe7_id"/>
+                        <field name="oe8_id"/>
+                        <field name="oe10_id"/>
                         <field name="original_state"/>
                     </group>
                 </page>
@@ -43,7 +45,8 @@
         <field name="model">account.invoice.line</field>
         <field name="inherit_id" ref="account.view_invoice_line_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='invoice_line_tax_ids']" position="after">
+            <field name="name" position="after">
+                <separator string="Syncronization"/>
                 <group name="synchro">
                     <field name="vg7_id"/>
                     <field name="oe7_id"/>
@@ -51,9 +54,8 @@
                     <field name="oe10_id"/>
                     <field name="to_delete"/>
                 </group>
-            </xpath>
+            </field>
         </field>
     </record>
 
 </odoo>
-

@@ -10,6 +10,8 @@
                 <group>
                     <field name="vg7_id"/>
                     <field name="oe7_id"/>
+                    <field name="oe8_id"/>
+                    <field name="oe10_id"/>
                 </group>
             </field>
         </field>
@@ -24,6 +26,8 @@
                 <group>
                     <field name="vg7_id"/>
                     <field name="oe7_id"/>
+                    <field name="oe8_id"/>
+                    <field name="oe10_id"/>
                 </group>
             </field>
         </field>

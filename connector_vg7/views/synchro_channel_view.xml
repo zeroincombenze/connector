@@ -21,6 +21,11 @@
         <field name="model">synchro.channel</field>
         <field name="arch" type="xml">
             <form string="Synchonization Channel">
+                <header>
+                    <button name="%(action_wizard_pull_records)d"
+                        type="action"
+                        string="Pull Records" class="oe_highlight"/>
+                </header>
                 <group>
                     <field name="name"/>
                     <field name="prefix"/>

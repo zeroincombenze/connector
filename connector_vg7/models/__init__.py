@@ -7,8 +7,8 @@
 #
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 #
-from . import (account_account, account_invoice, account_payment_term,
-               account_tax, ir_model, ir_model_synchro_apply,
-               ir_model_synchro_cache, picking, product, res_company,
-               res_country, res_partner, res_users, sale_order,
-               synchro_channel)
+from . import (account_account, account_fiscal_position, account_invoice,
+               account_journal, account_payment_term, account_tax, ir_model,
+               ir_model_synchro_apply, ir_model_synchro_cache, ir_sequence,
+               picking, product, res_company, res_currency, res_country,
+               res_partner, res_users, sale_order, synchro_channel)

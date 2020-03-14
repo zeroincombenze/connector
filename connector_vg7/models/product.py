@@ -45,9 +45,9 @@ class ProductTemplate(models.Model):
     @api.model_cr_context
     def _auto_init(self):
         res = super(ProductTemplate, self)._auto_init()
-        for prefix in ('vg7', 'oe7'):
-            self.env['ir.model.synchro']._build_unique_index(self._inherit,
-                                                             prefix)
+        for prefix in ('vg7', 'oe7', 'oe8', 'oe10'):
+            self.env['ir.model.synchro']._build_unique_index(
+                self._inherit, prefix)
         return res
 
     def wep_text(self, text):
@@ -67,7 +67,8 @@ class ProductTemplate(models.Model):
 
     @api.model
     def synchro(self, vals, disable_post=None):
-        return self.env['ir.model.synchro'].synchro(self, vals)
+        return self.env['ir.model.synchro'].synchro(
+            self, vals, disable_post=disable_post)
 
     @api.multi
     def pull_record(self):
@@ -87,6 +88,8 @@ class ProductProduct(models.Model):
 
     vg7_id = fields.Integer('VG7 ID', copy=False)
     oe7_id = fields.Integer('Odoo7 ID', copy=False)
+    oe8_id = fields.Integer('Odoo8 ID', copy=False)
+    oe10_id = fields.Integer('Odoo10 ID', copy=False)
     dim_name = fields.Char('Search Key',
                            compute=_set_dim_name,
                            store=True,
@@ -97,9 +100,9 @@ class ProductProduct(models.Model):
     @api.model_cr_context
     def _auto_init(self):
         res = super(ProductProduct, self)._auto_init()
-        for prefix in ('vg7', 'oe7'):
-            self.env['ir.model.synchro']._build_unique_index(self._inherit,
-                                                             prefix)
+        for prefix in ('vg7', 'oe7', 'oe8', 'oe10'):
+            self.env['ir.model.synchro']._build_unique_index(
+                self._inherit, prefix)
         return res
 
     def wep_text(self, text):
@@ -149,14 +152,15 @@ class ProductUom(models.Model):
     @api.model_cr_context
     def _auto_init(self):
         res = super(ProductUom, self)._auto_init()
-        for prefix in ('vg7', 'oe7'):
-            self.env['ir.model.synchro']._build_unique_index(self._inherit,
-                                                             prefix)
+        for prefix in ('vg7', 'oe7', 'oe8', 'oe10'):
+            self.env['ir.model.synchro']._build_unique_index(
+                self._inherit, prefix)
         return res
 
     @api.model
     def synchro(self, vals, disable_post=None):
-        return self.env['ir.model.synchro'].synchro(self, vals)
+        return self.env['ir.model.synchro'].synchro(
+            self, vals, disable_post=disable_post)
 
     @api.multi
     def pull_record(self):

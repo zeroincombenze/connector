@@ -28,22 +28,20 @@ addons:
 #    Search your sources alias here:
 #      https://github.com/travis-ci/apt-source-whitelist/blob/master/ubuntu.json
     packages:
-      - python-dev
-      - libxml2-dev
-      - libxslt1-dev
-      - zlib1g-dev
-      - python-simplejson
-      - python-ldap
-      - python-psycopg2
+      # - curl                            # Already in TravisCI
+      # - nodejs                          # Already in TravisCI
+      # - npm                             # Already in TravisCI
+      - zlib1g
+      # - build-essential                 # Already in TravisCI
       - expect-dev
       - libffi-dev
       - libssl-dev
-      - python-setuptools
+      - python-dev
 
 before_install:
 # Use Zeroincombenze(R) tools
   - git clone https://github.com/zeroincombenze/tools.git ${HOME}/tools --single-branch --depth=1
-  # - mv ${HOME}/tools/maintainer-quality-tools ${HOME}
+  # - mv ${HOME}/tools ${HOME}
   - export PATH=${HOME}/tools/maintainer-quality-tools/travis:${PATH}
   - export PYTHONPATH=${HOME}/tools
 
@@ -61,13 +59,13 @@ install:
 
 env:
   global:
-  - TRAVIS_DEBUG_MODE="2"
+  - export TRAVIS_DEBUG_MODE="1"
   - WKHTMLTOPDF_VERSION="0.12.4"
   - VERSION="10.0" TESTS="0" LINT_CHECK="0" ODOO_TNLBOT="0"
 
 
   matrix:
-  - LINT_CHECK="1" LINT_CHECK_LEVEL="MINIMAL"
+  # - LINT_CHECK="1" LINT_CHECK_LEVEL="MINIMAL"
   - TESTS="1" ODOO_TEST_SELECT="NO-CORE" ODOO_REPO="odoo/odoo"
   - TESTS="1" ODOO_TEST_SELECT="NO-CORE" ODOO_REPO="OCA/OCB"
   - TESTS="1" ODOO_REPO="zeroincombenze/OCB"

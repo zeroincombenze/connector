@@ -7,5 +7,4 @@
 #
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 #
-from . import models
-from . import wizard
+from . import wizard_pull_records

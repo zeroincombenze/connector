@@ -11,6 +11,8 @@
                     <separator colspan="2" string="Synchronization"/>
                     <field name="vg7_id"/>
                     <field name="oe7_id"/>
+                    <field name="oe8_id"/>
+                    <field name="oe10_id"/>
                     <field name="dim_name"/>
                 </group>
             </field>
