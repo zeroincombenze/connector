@@ -1,6 +1,6 @@
 
 ================================
-|icon| connector_vg7 10.0.0.1.26
+|icon| connector_vg7 10.0.0.1.27
 ================================
 
 
@@ -17,10 +17,7 @@
 Overview / Panoramica
 =====================
 
-|en| Connector to/from VG7
---------------------------
-
-This module makes available the synchro function to synchronize external data
+|en| This module makes available the synchro function to synchronize external data
 with Odoo data.
 The function sysnchro return th ID of record found or created. Negative values
 are error codes.
@@ -53,7 +50,6 @@ Behavior:
 |
 
 |it| Connettore con VG7
------------------------
 
 Non ancora documentato
 
@@ -71,6 +67,7 @@ Getting started / Come iniziare
 
 Installation / Installazione
 ----------------------------
+
 
 +---------------------------------+------------------------------------------+
 | |en|                            | |it|                                     |
@@ -96,7 +93,7 @@ Installation / Installazione
     ./install_tools.sh -p
     source /opt/odoo/dev/activate_tools
     odoo_install_repository connector -b 10.0 -O zero
-    sudo manage_odoo requirements -b 10.0 -vsy -o /opt/odoo/10.0
+    venv_mgr create /opt/odoo/VENV-10.0 -O 10.0 -DI
 
 From UI: go to:
 
@@ -109,6 +106,7 @@ From UI: go to:
 Upgrade / Aggiornamento
 -----------------------
 
+
 +---------------------------------+------------------------------------------+
 | |en|                            | |it|                                     |
 +---------------------------------+------------------------------------------+
@@ -120,6 +118,7 @@ Upgrade / Aggiornamento
 ::
 
     odoo_install_repository connector -b 10.0 -O zero -U
+    venv_mgr amend /opt/odoo/VENV-10.0 -O 10.0 -DI
     # Adjust following statements as per your system
     sudo systemctl restart odoo
 
@@ -161,6 +160,12 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 
 ChangeLog History / Cronologia modifiche
 ----------------------------------------
+
+10.0.0.1.27 (2020-03-20)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [FIX] Import country_id / Importazione nazione
+
 
 10.0.0.1.26 (2020-03-11)
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -288,7 +293,7 @@ La distribuzione `Zeroincombenze® <https://wiki.zeroincombenze.org/en/Odoo>`__ 
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2020-03-12
+Last Update / Ultimo aggiornamento: 2020-04-01
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Alfa-red.png
     :target: https://odoo-community.org/page/development-status

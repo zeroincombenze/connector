@@ -11,4 +11,5 @@ from . import (account_account, account_fiscal_position, account_invoice,
                account_journal, account_payment_term, account_tax, ir_model,
                ir_model_synchro_apply, ir_model_synchro_cache, ir_sequence,
                picking, product, res_company, res_currency, res_country,
-               res_partner, res_users, sale_order, synchro_channel)
+               res_partner, res_partner_bank, res_users, sale_order,
+               synchro_channel)

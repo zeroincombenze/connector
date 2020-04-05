@@ -1,6 +1,3 @@
-Connector to/from VG7
----------------------
-
 This module makes available the synchro function to synchronize external data
 with Odoo data.
 The function sysnchro return th ID of record found or created. Negative values

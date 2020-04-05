@@ -160,6 +160,9 @@ class IrModelSynchro(models.Model):
                 xmodel = 'res.partner.invoice'
             elif spec == 'supplier':
                 xmodel = 'res.partner.supplier'
+        elif model == 'res.partner.bank':
+            if spec == 'id_odoo':
+                xmodel = 'res.partner.bank.company'
         return xmodel
 
     @api.model
@@ -169,6 +172,8 @@ class IrModelSynchro(models.Model):
                      'res.partner.invoice',
                      'res.partner.supplier'):
             actual_model = 'res.partner'
+        elif model == 'res.partner.bank.company':
+            actual_model = 'res.partner.bank'
         if only_name:
             return actual_model
         return self.env[actual_model]
@@ -181,6 +186,8 @@ class IrModelSynchro(models.Model):
             return 'invoice'
         elif xmodel == 'res.partner.supplier':
             return 'supplier'
+        elif xmodel == 'res.partner.bank.company':
+            return 'id_odoo'
         return ''
 
     @api.model
@@ -320,7 +327,7 @@ class IrModelSynchro(models.Model):
                 return -4
             elif rec.original_state == 'open':
                 rec.action_invoice_open()
-                if rec.name.startswith('Unknown'):
+                if rec.name and rec.name.startswith('Unknown'):
                     rec.write({'name': rec.number})
             elif rec.original_state == 'cancel':
                 rec.action_invoice_cancel()
@@ -573,7 +580,7 @@ class IrModelSynchro(models.Model):
                 self.logmsg(channel_id,
                             '### NO SINGLETON %s.%d' % (actual_model,
                                                         value_id))
-                new_value = rec[0].id
+            new_value = rec[0].id
         xmodel = self.get_xmodel(actual_model, spec)
         if not new_value:
             if xmodel:
@@ -892,17 +899,6 @@ class IrModelSynchro(models.Model):
                         else:
                             cache.push_id(channel_id, xmodel, actual_model,
                                     ext_id=vals[loc_name])
-                            # self.logmsg(channel_id,
-                            #             '$$$ push_id(%s,ext_id=%d)' % (
-                            #                 xmodel, vals[loc_name] or -1))
-                            # self.logmsg(channel_id,
-                            #             '$$$ CACHE->%s/%s' % (
-                            #                 cache.CACHE.MANAGED_MODELS[
-                            #                     self._cr.dbname][channel_id][
-                            #                     '_queue'],
-                            #                 cache.CACHE.STRUCT[self._cr.dbname][
-                            #                     '_queue']
-                            #             ))
                     continue
                 # If counterpart partner supplies both
                 # local and external values, just process local value
@@ -914,26 +910,12 @@ class IrModelSynchro(models.Model):
                     if cache.id_is_in_cache(
                             channel_id, xmodel, actual_model,
                             loc_id=vals[ext_ref]):
-                        # self.logmsg(channel_id,
-                        #             '$$$ id_is_cache(%s,loc_id=%d)' % (
-                        #                 xmodel, vals[ext_ref] or -1))
                         ref_in_queue = True
                         self.logmsg(channel_id,
                                     'Found current id in queue!')
                     else:
                         cache.push_id(channel_id, xmodel, actual_model,
                                       loc_id=vals[ext_ref])
-                        # self.logmsg(channel_id,
-                        #             '$$$ push_id(%s,loc_id=%d)' % (
-                        #                 xmodel, vals[ext_ref] or -1))
-                        # self.logmsg(channel_id,
-                        #             '$$$ CACHE->%s/%s' % (
-                        #                 cache.CACHE.MANAGED_MODELS[
-                        #                     self._cr.dbname][channel_id][
-                        #                     '_queue'],
-                        #                 cache.CACHE.STRUCT[self._cr.dbname][
-                        #                     '_queue']
-                        #             ))
                 continue
             if cache.get_struct_model_field_attr(
                     actual_model, loc_name, 'ttype') in (
@@ -1386,11 +1368,15 @@ class IrModelSynchro(models.Model):
                 row_billing = {}
                 row_shipping = {}
                 row_contact = {}
-                for ix,value in enumerate(row):
+                for ix, value in enumerate(row):
                     if (isinstance(value, basestring) and
                             value.isdigit() and
                             not value.startswith('0')):
                         value = int(value)
+                    elif (isinstance(value, basestring) and
+                            value.startswith('[') and
+                            value.endswith(']')):
+                        value = eval(value)
                     if hdr[ix] == ext_key_id:
                         if not value:
                             continue
@@ -1724,13 +1710,14 @@ class IrModelSynchro(models.Model):
 
         # commit to avoid lost data in recursive write
         self.env.cr.commit()   # pylint: disable=invalid-commit
+        done_post = False
         if id > 0 and not disable_post and xmodel == actual_model:
             if hasattr(cls, 'postprocess'):
-                cls.postprocess(channel_id, id, vals)
+                done_post = cls.postprocess(channel_id, id, vals)
             elif do_auto_process:
-                self.postprocess(channel_id, xmodel, id, vals)
+                done_post = self.postprocess(channel_id, xmodel, id, vals)
             self.synchro_queue(channel_id)
-        if lines_of_rec:
+        if lines_of_rec and not done_post:
             self.synchro_details(channel_id, xmodel, actual_model, id, ext_id)
         pop_ref(channel_id, xmodel, actual_model, id, ext_id)
         _logger.info('!%d! Returned ID of %s' % (id, xmodel))
@@ -1859,10 +1846,13 @@ class IrModelSynchro(models.Model):
         cache.open(model=model)
         cls = self.env[model]
         stored_field = '__%s' % model
+        done = False
         if cache.get_model_attr(channel_id, model, stored_field):
             vals = cache.get_model_attr(channel_id, model, stored_field)
             cache.del_model_attr(channel_id, model, stored_field)
             self.internal_synchro(cls, vals, disable_post=True)
+            done = True
+        return done
 
     @api.model
     def synchro_queue(self, channel_id):

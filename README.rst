@@ -35,21 +35,25 @@ Avaiable Addons / Moduli disponibili
 +------------------------+------------+------------+----------------------------------------------------------------------------------+
 | Name / Nome            | Version    | OCA Ver.   | Description / Descrizione                                                        |
 +------------------------+------------+------------+----------------------------------------------------------------------------------+
-| bridge_skeleton        | 10.0.2.0.0 | |same|     | Core of Webkul Bridge Modules                                                    |
+| bridge_skeleton        | 10.0.2.0.0 | |no_check| | Core of Webkul Bridge Modules                                                    |
 +------------------------+------------+------------+----------------------------------------------------------------------------------+
-| connector              | 10.0.1.0.0 | |same|     | Connector                                                                        |
+| component              | |no_check| | 10.0.1.1.0 | Components                                                                       |
 +------------------------+------------+------------+----------------------------------------------------------------------------------+
-| connector_base_product | |halt|     | |halt|     | Connector Base Product                                                           |
+| component_event        | |no_check| | 10.0.1.0.0 | Components Events                                                                |
 +------------------------+------------+------------+----------------------------------------------------------------------------------+
-| connector_vg7          | 10.0.0.1.2 | 10.0.0.1.1 | Connector to/from VG7 software                                                   |
+| connector              | 10.0.1.0.0 | 10.0.2.0.0 | Connector                                                                        |
 +------------------------+------------+------------+----------------------------------------------------------------------------------+
-| connector_vg7_conai    | 10.0.0.1.1 | 10.0.0.1.1 | Bidirectional connector to/from VG7 software (CONAI plug-in)                     |
+| connector_base_product | |halt|     | |same|     | Connector Base Product                                                           |
 +------------------------+------------+------------+----------------------------------------------------------------------------------+
-| ddt_to_magento_order   | |halt|     | |halt|     | Set Magento Order to close when DdT is created                                   |
+| connector_vg7          | 10.0.0.1.2 | |no_check| | Connector to/from VG7 software                                                   |
 +------------------------+------------+------------+----------------------------------------------------------------------------------+
-| magento_bridge         | 10.0.2.0.0 | |same|     | Basic MOB                                                                        |
+| connector_vg7_conai    | 10.0.0.1.1 | |no_check| | Bidirectional connector to/from VG7 software (CONAI plug-in)                     |
 +------------------------+------------+------------+----------------------------------------------------------------------------------+
-| magento_openerp_stock  | 10.0.1.0.2 | |same|     | MOB Stock Extension                                                              |
+| ddt_to_magento_order   | |halt|     | |no_check| | Set Magento Order to close when DdT is created                                   |
++------------------------+------------+------------+----------------------------------------------------------------------------------+
+| magento_bridge         | 10.0.2.0.0 | |no_check| | Basic MOB                                                                        |
++------------------------+------------+------------+----------------------------------------------------------------------------------+
+| magento_openerp_stock  | 10.0.1.0.2 | |no_check| | MOB Stock Extension                                                              |
 +------------------------+------------+------------+----------------------------------------------------------------------------------+
 
 
@@ -71,6 +75,7 @@ Prerequisites / Prerequisiti
 
 Installation / Installazione
 ----------------------------
+
 
 +---------------------------------+------------------------------------------+
 | |en|                            | |it|                                     |
@@ -96,11 +101,12 @@ Installation / Installazione
     ./install_tools.sh -p
     source /opt/odoo/dev/activate_tools
     odoo_install_repository connector -b 10.0 -O zero
-    sudo manage_odoo requirements -b 10.0 -vsy -o /opt/odoo/10.0
+    venv_mgr create /opt/odoo/VENV-10.0 -O 10.0 -DI
 
 
 Upgrade / Aggiornamento
 -----------------------
+
 
 +---------------------------------+------------------------------------------+
 | |en|                            | |it|                                     |
@@ -113,6 +119,7 @@ Upgrade / Aggiornamento
 ::
 
     odoo_install_repository connector -b 10.0 -O zero -U
+    venv_mgr amend /opt/odoo/VENV-10.0 -O 10.0 -DI
     # Adjust following statements as per your system
     sudo systemctl restart odoo
 
@@ -171,7 +178,7 @@ La distribuzione `Zeroincombenze® <https://wiki.zeroincombenze.org/en/Odoo>`__ 
 |
 
 
-Last Update / Ultimo aggiornamento: 2020-03-14
+Last Update / Ultimo aggiornamento: 2020-04-05
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Alfa-red.png
     :target: https://odoo-community.org/page/development-status

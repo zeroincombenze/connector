@@ -610,6 +610,10 @@ class IrModelSynchroCache(models.Model):
             self.set_model_attr(
                 channel_id, model, 'EXT_ID',
                 '%s2_id' % self.get_attr(channel_id, 'PREFIX'))
+        elif model == 'res.partner.bank.company':
+            self.set_model_attr(
+                channel_id, model, 'EXT_ID',
+                '%s2_id' % self.get_attr(channel_id, 'PREFIX'))
         else:
             self.set_model_attr(
                 channel_id, model, 'EXT_ID',

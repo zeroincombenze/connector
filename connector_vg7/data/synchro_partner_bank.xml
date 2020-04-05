@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+
+    <record forcecreate="1" id="res_partner_bank" model="synchro.channel.model">
+        <field name="name">res.partner.bank</field>
+        <field name="field_uname">acc_number</field>
+        <field name="counterpart_name">bank_id</field>
+        <field name="synchro_channel_id" ref="channel_vg7"/>
+        <field name="search_keys">(['acc_name', 'company_id'])</field>
+        <field name="field_2complete">True</field>
+        <field name="sequence">8</field>
+    </record>
+
+    <record forcecreate="1" id="res_partner_bank_company" model="synchro.channel.model">
+        <field name="name">res.partner.bank.company</field>
+        <field name="field_uname">acc_number</field>
+        <field name="counterpart_name">bank_accounts</field>
+        <field name="synchro_channel_id" ref="channel_vg7"/>
+        <field name="search_keys">(['acc_name', 'company_id'])</field>
+        <field name="field_2complete">True</field>
+        <field name="sequence">8</field>
+    </record>
+
+
+    <record forcecreate="1" id="res_partner_bank_acc_number" model="synchro.channel.model.fields">
+        <field name="name">acc_number</field>
+        <field name="counterpart_name">IBAN</field>
+        <field name="apply">iban()</field>
+        <field name="model_id" ref="res_partner_bank"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_bank_bank_name" model="synchro.channel.model.fields">
+        <field name="name">bank_name</field>
+        <field name="counterpart_name">description</field>
+        <field name="model_id" ref="res_partner_bank"/>
+    </record>
+
+
+    <record forcecreate="1" id="res_partner_bank_company_acc_number" model="synchro.channel.model.fields">
+        <field name="name">acc_number</field>
+        <field name="counterpart_name">iban</field>
+        <field name="model_id" ref="res_partner_bank_company"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_bank_company_bank_name" model="synchro.channel.model.fields">
+        <field name="name">bank_name</field>
+        <field name="counterpart_name">bank</field>
+        <field name="model_id" ref="res_partner_bank_company"/>
+    </record>
+
+</odoo>
+

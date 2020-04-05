@@ -27,11 +27,49 @@
         <field name="synchro_channel_id" ref="channel_vg7"/>
     </record>
 
+    <record forcecreate="1" id="account_payment_term_line" model="synchro.channel.model">
+        <field name="name">account.payment.term.line</field>
+        <field name="field_uname">sequence</field>
+        <field name="search_keys">(['sequence', 'payment_id'],)</field>
+        <field name="sequence">18</field>
+        <field name="synchro_channel_id" ref="channel_vg7"/>
+    </record>
+
 
     <record forcecreate="1" id="account_payment_term_code" model="synchro.channel.model.fields">
         <field name="name">name</field>
         <field name="counterpart_name">description</field>
         <field name="model_id" ref="account_payment_term"/>
+    </record>
+
+
+    <record forcecreate="1" id="account_payment_term_line_payment_id" model="synchro.channel.model.fields">
+        <field name="name">payment_id</field>
+        <field name="model_id" ref="account_payment_term_line"/>
+    </record>
+
+    <record forcecreate="1" id="account_payment_term_line_sequence" model="synchro.channel.model.fields">
+        <field name="name">sequence</field>
+        <field name="model_id" ref="account_payment_term_line"/>
+    </record>
+
+    <record forcecreate="1" id="account_payment_term_line_days" model="synchro.channel.model.fields">
+        <field name="name">days</field>
+        <field name="counterpart_name">scadenza</field>
+        <field name="model_id" ref="account_payment_term_line"/>
+    </record>
+
+    <record forcecreate="1" id="account_payment_term_line_option" model="synchro.channel.model.fields">
+        <field name="name">option</field>
+        <field name="counterpart_name">finemese</field>
+        <field name="apply">eom()</field>
+        <field name="model_id" ref="account_payment_term_line"/>
+    </record>
+
+    <record forcecreate="1" id="account_payment_term_line_to_delete" model="synchro.channel.model.fields">
+        <field name="name">to_delete</field>
+        <field name="apply">false</field>
+        <field name="model_id" ref="account_payment_term_line"/>
     </record>
 
 </odoo>

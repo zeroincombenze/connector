@@ -157,7 +157,8 @@ class ResPartner(models.Model):
                                        'vg7:bank',
                                        'vg7:payment',
                                        'vg7:payment_id',
-                                       'vg7:pec',):
+                                       'vg7:pec',
+                                       'bank_account_id'):
                                 if (nm in vals[ext_ref] and
                                         (nm not in vals or
                                          vals[ext_ref][nm] == vals[nm])):
@@ -173,7 +174,7 @@ class ResPartner(models.Model):
                                        'vg7:region',
                                        'vg7:region_id',
                                        'vg7:email',
-                                       'vg7:country'
+                                       'vg7:country',
                                        'vg7:country_id',
                                        'vg7:telephone',
                                        'vg7:telephone2'):
@@ -202,6 +203,7 @@ class ResPartner(models.Model):
             '> postprocess(%d,%s)' % (parent_id, vals))  # debug
         cache = self.env['ir.model.synchro.cache']
         model = 'res.partner'
+        done = False
         for ext_ref in ('vg7:shipping', 'vg7:billing'):
             if cache.get_model_attr(channel_id, model, ext_ref):
                 vals = {}
@@ -211,6 +213,8 @@ class ResPartner(models.Model):
                 vals['parent_id'] = parent_id
                 cache.del_model_attr(channel_id, model, ext_ref)
                 self.synchro(vals, disable_post=True)
+                done = True
+        return done
 
     def assure_values(self, vals, rec):
         actual_model = 'res.partner'
@@ -330,5 +334,6 @@ class ResPartnerSupplier(models.Model):
     @api.model
     def synchro(self, vals, disable_post=None):
         vals['supplier'] = True
+        vals['type'] = 'contact'
         return self.env['ir.model.synchro'].synchro(
             self, vals, disable_post=disable_post)

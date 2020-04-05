@@ -17,6 +17,10 @@ try:
     from unidecode import unidecode
 except ImportError as err:
     _logger.debug(err)
+try:
+    from os0 import os0
+except ImportError as err:
+    _logger.error(err)
 
 
 class AccountPaymentTerm(models.Model):
@@ -69,14 +73,20 @@ class AccountPaymentTerm(models.Model):
             '> preprocess(%s)' % vals)
         cache = self.env['ir.model.synchro.cache']
         if 'vg7:date_scadenza' in vals:
+            num_dues = len(vals['vg7:date_scadenza'])
+            if num_dues:
+                rate = 100.0 / num_dues
+            else:
+                rate = 100.0
             for num, line in enumerate(vals['vg7:date_scadenza']):
                 line_vals = {}
                 for item in line:
                     line_vals['vg7:%s' % item] = line[item]
-                if (line_vals.get('vg7:scadenza') and
-                        int(line_vals.get('vg7:fine_mese'))):
-                    if (int(line_vals['vg7:scadenza']) % 30) == 0:
-                        line_vals['vg7:scadenza'] = int(line_vals['vg7:scadenza']) - 2
+                if num == (num_dues - 1):
+                    line_vals['type'] = 'balance'
+                else:
+                    line_vals['type'] = 'percent'
+                    line_vals['value_amount'] = rate
                 cache.set_model_attr(
                     channel_id, 'account.payment.term.line', '%d' % num,
                     line_vals)
@@ -103,6 +113,33 @@ class AccountPaymentTerm(models.Model):
             self.env['ir.model.synchro'].synchro(
                 cls, vals, disable_post=True)
             num += 1
+        return (num > 0)
+
+    @api.model
+    def synchro(self, vals, disable_post=None):
+        return self.env['ir.model.synchro'].synchro(
+            self, vals, disable_post=disable_post)
+
+
+class AccountPaymentTermLine(models.Model):
+    _inherit = "account.payment.term.line"
+
+    vg7_id = fields.Integer('VG7 ID', copy=False)
+    oe7_id = fields.Integer('Odoo7 ID', copy=False)
+    oe8_id = fields.Integer('Odoo8 ID', copy=False)
+    oe10_id = fields.Integer('Odoo10 ID', copy=False)
+    to_delete = fields.Boolean('Record to delete')
+
+    CONTRAINTS = []
+    PARENT_ID = 'invoice_id'
+
+    @api.model_cr_context
+    def _auto_init(self):
+        res = super(AccountPaymentTermLine, self)._auto_init()
+        for prefix in ('vg7', 'oe7', 'oe8', 'oe10'):
+            self.env['ir.model.synchro']._build_unique_index(self._inherit,
+                                                             prefix)
+        return res
 
     @api.model
     def synchro(self, vals, disable_post=None):

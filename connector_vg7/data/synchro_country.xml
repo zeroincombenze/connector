@@ -16,7 +16,7 @@
         <field name="field_uname">name</field>
         <field name="counterpart_name">regions</field>
         <field name="search_keys">(['name', 'country_id'],['code', 'country_id'])</field>
-        <field name="sequence">8</field>
+        <field name="sequence">7</field>
         <field name="synchro_channel_id" ref="channel_vg7"/>
     </record>
 

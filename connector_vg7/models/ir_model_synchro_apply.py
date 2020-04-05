@@ -299,8 +299,6 @@ class IrModelSynchroApply(models.Model):
                              ext_ref, loc_ext_id, default=None, ctx=None):
         if loc_name in vals:
             return vals
-        cache = self.env['ir.model.synchro.cache']
-        # ctx = cache.get_attr(channel_id, 'CTX')
         ctx = ctx or {}
         if loc_name in ctx:
             vals[loc_name] = ctx[loc_name]
@@ -326,17 +324,37 @@ class IrModelSynchroApply(models.Model):
             vals['is_pa'] = True
         return vals
 
-    def apply_set_iban(self, channel_id, vals, loc_name,
-                           ext_ref, loc_ext_id, default=None, ctx=None):
+    def apply_iban(self, channel_id, vals, loc_name,
+                   ext_ref, loc_ext_id, default=None, ctx=None):
         if vals.get(ext_ref):
             vals[loc_name] = vals[ext_ref].replace(' ', '')
-        elif vals.get('vg7:description'):
-            vals[loc_name] = vals['vg7:description']
-        elif vals.get('bank_name'):
-            vals[loc_name] = vals['bank_name']
+        elif vals.get('vg7:ABI') and vals.get('vg7:CAB'):
+            vals[loc_name] = 'IT00A%s%s000000000000' % (vals['ABI'],
+                                                        vals['CAB'])
+        return vals
+
+    def apply_eom(self, channel_id, vals, loc_name,
+                   ext_ref, loc_ext_id, default=None, ctx=None):
+        if vals.get(ext_ref):
+            eom = os0.str2bool(vals[ext_ref], False)
+            if eom:
+                vals['option'] = 'day_after_invoice_date'
+            else:
+                vals['option'] = 'fix_day_following_month'
+            del vals[ext_ref]
+        if vals.get('vg7:scadenza', '').isdigit():
+            num_days = int(vals['vg7:scadenza'])
+            cache = self.env['ir.model.synchro.cache']
+            if cache.get_struct_model_attr(
+                    'account.payment.term.line', 'months'):
+                vals['months'] = num_days / 30
+                vals['days'] = 0
+            else:
+                vals['days'] = num_days - 2
         return vals
 
     def apply_acc_user_type(self, channel_id, vals, loc_name,
                            ext_ref, loc_ext_id, default=None, ctx=None):
         vals[loc_name] = self.env['account.account.type'].search([])[0].id
         return vals
+
