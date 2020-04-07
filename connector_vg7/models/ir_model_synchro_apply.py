@@ -60,9 +60,9 @@ class IrModelSynchroApply(models.Model):
             if not isinstance(vals[loc_ext_id], (int, long)):
                 vals[loc_ext_id] = int(vals[loc_ext_id])
             if loc_name == 'code':
-                vals[loc_name] = '%d' % vals[loc_ext_id]
+                vals[loc_name] = '%s' % vals[loc_ext_id]
             else:
-                vals[loc_name] = 'Unknown %d' % vals[loc_ext_id]
+                vals[loc_name] = 'Unknown %s' % vals[loc_ext_id]
         else:
             vals[loc_name] = 'Unknown'
         return vals
@@ -342,15 +342,22 @@ class IrModelSynchroApply(models.Model):
             else:
                 vals['option'] = 'fix_day_following_month'
             del vals[ext_ref]
-        if vals.get('vg7:scadenza', '').isdigit():
-            num_days = int(vals['vg7:scadenza'])
-            cache = self.env['ir.model.synchro.cache']
-            if cache.get_struct_model_attr(
-                    'account.payment.term.line', 'months'):
-                vals['months'] = num_days / 30
-                vals['days'] = 0
+        if vals.get('vg7:scadenza'):
+            if (isinstance(vals['vg7:scadenza'], basestring) and
+                    vals['vg7:scadenza'].isdigit()):
+                num_days = int(vals['vg7:scadenza'])
+            elif isinstance(vals['vg7:scadenza'], (int, long)):
+                num_days = vals['vg7:scadenza']
             else:
-                vals['days'] = num_days - 2
+                num_days = False
+            if num_days:
+                cache = self.env['ir.model.synchro.cache']
+                if cache.get_struct_model_attr(
+                        'account.payment.term.line', 'months'):
+                    vals['months'] = num_days / 30
+                    vals['days'] = 0
+                else:
+                    vals['days'] = num_days - 2
         return vals
 
     def apply_acc_user_type(self, channel_id, vals, loc_name,

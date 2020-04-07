@@ -12,4 +12,4 @@ from . import (account_account, account_fiscal_position, account_invoice,
                ir_model_synchro_apply, ir_model_synchro_cache, ir_sequence,
                picking, product, res_company, res_currency, res_country,
                res_partner, res_partner_bank, res_users, sale_order,
-               synchro_channel)
+               stock, synchro_channel)

@@ -165,3 +165,51 @@ class ProductUom(models.Model):
     @api.multi
     def pull_record(self):
         return self.env['ir.model.synchro'].pull_record(self)
+
+
+class ProductCategory(models.Model):
+    _inherit = "product.category"
+
+    vg7_id = fields.Integer('VG7 ID', copy=False)
+    oe7_id = fields.Integer('Odoo7 ID', copy=False)
+    oe8_id = fields.Integer('Odoo8 ID', copy=False)
+    oe10_id = fields.Integer('Odoo10 ID', copy=False)
+
+    CONTRAINTS = ()
+
+    @api.model_cr_context
+    def _auto_init(self):
+        res = super(ProductCategory, self)._auto_init()
+        for prefix in ('vg7', 'oe7', 'oe8', 'oe10'):
+            self.env['ir.model.synchro']._build_unique_index(
+                self._inherit, prefix)
+        return res
+
+    @api.model
+    def synchro(self, vals, disable_post=None):
+        return self.env['ir.model.synchro'].synchro(
+            self, vals, disable_post=disable_post)
+
+
+class ProductPricelist(models.Model):
+    _inherit = "product.pricelist"
+
+    vg7_id = fields.Integer('VG7 ID', copy=False)
+    oe7_id = fields.Integer('Odoo7 ID', copy=False)
+    oe8_id = fields.Integer('Odoo8 ID', copy=False)
+    oe10_id = fields.Integer('Odoo10 ID', copy=False)
+
+    CONTRAINTS = ()
+
+    @api.model_cr_context
+    def _auto_init(self):
+        res = super(ProductPricelist, self)._auto_init()
+        for prefix in ('vg7', 'oe7', 'oe8', 'oe10'):
+            self.env['ir.model.synchro']._build_unique_index(
+                self._inherit, prefix)
+        return res
+
+    @api.model
+    def synchro(self, vals, disable_post=None):
+        return self.env['ir.model.synchro'].synchro(
+            self, vals, disable_post=disable_post)

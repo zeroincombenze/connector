@@ -167,6 +167,7 @@ class IrModelSynchroCache(models.Model):
             'user_id': {'readonly': False},
         },
         'account.payment.term': {},
+        'product.category': {},
         'product.product': {
             'company_id': {'readonly': True},
         },
@@ -735,9 +736,9 @@ class IrModelSynchroCache(models.Model):
                 if field.relation and field.relation == (
                         '%s.line' % actual_model):
                     self.set_struct_model_attr(
-                        actual_model, 'LINES_OF_REC', field.name)
+                        actual_model, 'CHILD_IDS', field.name)
                     self.set_struct_model_attr(
-                        actual_model, 'LINE_MODEL', field.relation)
+                        actual_model, 'MODEL_CHILD', field.relation)
                 elif field.relation and actual_model.startswith(
                         field.relation):
                     self.set_struct_model_attr(
@@ -804,12 +805,12 @@ class IrModelSynchroCache(models.Model):
             if cls.__class__.__name__ != model:
                 raise RuntimeError('Class %s not of declared model %s' % (
                     cls.__class__.__name__, model))
-            if hasattr(cls, 'LINES_OF_REC'):
-                self.set_struct_model_attr(actual_model, 'LINES_OF_REC',
-                                           getattr(cls, 'LINES_OF_REC'))
-            if hasattr(cls, 'LINE_MODEL'):
-                self.set_struct_model_attr(actual_model, 'LINE_MODEL',
-                                           getattr(cls, 'LINE_MODEL'))
+            if hasattr(cls, 'CHILD_IDS'):
+                self.set_struct_model_attr(actual_model, 'CHILD_IDS',
+                                           getattr(cls, 'CHILD_IDS'))
+            if hasattr(cls, 'MODEL_CHILD'):
+                self.set_struct_model_attr(actual_model, 'MODEL_CHILD',
+                                           getattr(cls, 'MODEL_CHILD'))
             if hasattr(cls, 'PARENT_ID'):
                 self.set_struct_model_attr(actual_model, 'PARENT_ID',
                                            getattr(cls, 'PARENT_ID'))

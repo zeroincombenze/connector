@@ -8,31 +8,64 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 #
 """
+INTRODUCTION
+
 This software provides to ability of exchange records with different
-counterpart partners.
-On Odoo record is stored external id to link external record. External is a
-unique key to avoid synchronization troubles.
-Odoo models and counterpart tables can have different relationships:
+external partners we call counterparts. The synchro function returns the Odoo
+id record or a error code (read below).
 
-* One to one: require only field mapping
-* Many (Odoo) to one (partner): managed like previous case because external id
-  never conflict
-* One (Odoo) to many (partner): require sub models and more external id
-  on record.
+Synchro runs 3 steps:
+1. Counterpart names are translated into local Odoo names, and the <*2many>
+   records are mapped into local records.
+   During the mapping process, a new synchro function on <*2many> relation
+   model to bind or create a linked record. So synchro is recursive function.
+2. After translation and mapping, data is used to binding local record.
+   The searching is mainly based on counterpart id (read below) when matched;
+   otherwise a complex finding process is engaged depending on the specific
+   model structure.
+3. If local Odoo record is found, the <write> is engaged otherwise the
+   <create> is executed. Because counterpart can ignore the Odoo structure,
+   it can issue incomplete or wrong data so the <create> can fail and breaks
+   recursive chain. In order to minimize the errors, the <create> is splitted
+   into a simple create followed by a write function. The <create> uses the
+   minimal data required by Odoo while the <write> uses the full data supplied
+   by the counterpart. In this way, the <create> should terminate quite ever
+   with success and return a valid id.
 
-Imagine this scenario: Odoo exchanges res.partner with external partner called
-vg7 which have 2 tables, called customer and supplier. To link one external
-partner record on every res.partner record must exit 2 external id field,
-called vg7_id and vg72_id. Also imagine that external customer table contains
-shipping data which in Odoo is a separate record. We need link shipping record
-with external id but we cannot use the same id, due unique key of external id.
 
-We can assign res.partner to external customer table; then need to create a
-sub-model res.partner.supplier to manage external table supplier.
-We need of a preprocessing function to recognize customer record from supplier
-record and to extract shipping data from customer record.
+EXTERNAL REFERENCE
 
-We use follow term:
+On every Odoo record there is an id field to link external record, which is
+a unique key to avoid synchronization troubles.
+Odoo's models and counterpart tables can have different relationships:
+
+* One to one: this relationship just requires the field mapping
+* Many (Odoo) to one (partner): it managed like previous case because
+  external ids never conflicts
+* One (Odoo) to many (partner): it requires sub models (w/o records) and/or
+  more external id on the actual record.
+
+Imagine this scenario: Odoo exchanges "res.partner" with a counterpart called
+vg7 which have 2 tables, named "customer" and "supplier". A one Odoo record
+may have to link to customer record and/or the supplier record.
+Also imagine that the external customer table contains shipping data which
+are in a separate "res.partner" records of Odoo.
+So we meet some conflicts. The first one when both "customer" and "supplier"
+can have the same id (because on the counterpart there are 2 different tables)
+or when a partner is both customer and supplier at the same time.
+We can solve this conflict adding a new field on the actual "res.partner"
+record, and we use a "res.partner.supplier" sub-model.
+We meet another conflict when we write two "res.partner" records, one with the
+customer data and the other one with the shipping data. Both records refer to
+the same id of counterpart record, but we cannot use the same id due unique key
+constraint.
+We solve this conflict adding a bias value (default is 1000000000) to the
+shipping Odoo's record.
+At the last but no least we need of a preprocessing function to recognize
+a customer record from a supplier record and to extract shipping data from the
+customer record.
+
+In this software we use the follow terms and structures:
 +---------------+-------------+----------------------+----------------------+
 | prefix     (1)| vg7         | vg7                  | vg7                  |
 | bind       (2)| customer    |                      | supplier             |
@@ -42,12 +75,49 @@ We use follow term:
 | ext_key_id (5)| id          | id                   | id                   |
 | offset     (6)| 0           | 100000000            | 0                    |
 +---------------+-------------+----------------------+----------------------+
-(1) Prefix of every field supplied by partner (this is just an example)
-(2) Name of external partner table
+(1) Prefix of every field supplied by the counterpart (this is just an example)
+(2) Name of external counterpart table
 (3) Odoo model, sub model of actual model
 (4) Odoo field, unique key, with external partner id; default is "{prefix}_id"
-(5) External partner field with external id; default is "id"
-(6) Offset to store external id, when does not exist external partner table
+(5) External partner field with the external id; default is "id"
+(6) Offset to store external id, when does not exist external counterpart table
+
+During the pre-processing to extract the shipping data from the customer data,
+the shipping data is stored in the cache and then retrieved after the customer
+record is written.
+
+
+EXCHANGE MODE AND STRUCTURED MODELS
+
+Data may be exchanged with counterpart in two ways:
+1. Push mode: counterpart sends data to Odoo. It prefixes its dictionary name
+2. Pull mode: Odoo gets data from the counterpart.
+
+Parent/child models like invoice and sale order are managed in 3 ways:
+A. Parent without child reference. After the parent record is written, children
+   must be sent by the counterpart (push mode) or must be get from the
+   counterpart (pull mode).
+B. Parent contains "line_ids" field with list of children ids. In this case
+   "line _ids" is extracted from the parent record during pre-processing and
+   the list of children is stored in the cache.
+   After the parent record is written, "line_ids" is retrieved and every id in
+   the list is used to get data from the counterpart (only pull mode).
+C. Header contains "line_ids" with dictionary data and operation is <create>.
+   In this case data are enough to create children records too. "line_ids"
+   field is changed adding "(0, 0" prefix that is the way used by Odoo itself
+   to create new parent/child records.
+
+
+CACHE
+
+Data stored in cache:
+- 'vg7:shipping': sub-model res.partner.shipping
+- 'vg7:billing': sub-model res.partner.invoice
+- '_queue': queue reocrds
+- '__{{model}}': full data of model to write the created record (read above)
+
+
+RETURN CODES
 
 Return code:
     -1: error creating record
@@ -263,7 +333,7 @@ class IrModelSynchro(models.Model):
         return vals
 
     def set_state_to_draft(self, model, rec, vals):
-        self.logmsg(1, '>>> set_state_to_draft(%s,%d)' % (
+        self.logmsg(1, '>>> set_state_to_draft(%s,%s)' % (
                     model, (rec and rec.id or -1)))
         errc = 0
         if 'state' in vals:
@@ -302,7 +372,7 @@ class IrModelSynchro(models.Model):
                 del vals['state']
         elif model == 'stock.picking.package.preparation':
             if rec:
-                self.logmsg(1, '>>> unlink(%s,%d)' % (model, rec.id))
+                self.logmsg(1, '>>> unlink(%s,%s)' % (model, rec.id))
                 try:
                     rec.unlink()
                 except IOError:
@@ -310,7 +380,7 @@ class IrModelSynchro(models.Model):
         return vals, errc
 
     def set_actual_state(self, model, rec):
-        self.logmsg(1, '>>> set_actual_state(%s,%d)' % (
+        self.logmsg(1, '>>> set_actual_state(%s,%s)' % (
                     model, (rec and rec.id)))
         if not rec:
             return -3
@@ -322,7 +392,7 @@ class IrModelSynchro(models.Model):
             if rec.state == rec.original_state:
                 return rec.id
             elif rec.state != 'draft':
-                _logger.error('Unauthorized state change of %s.%d' % (
+                _logger.error('Unauthorized state change of %s.%s' % (
                     model, rec.id))
                 return -4
             elif rec.original_state == 'open':
@@ -337,7 +407,7 @@ class IrModelSynchro(models.Model):
             if rec.state == rec.original_state:
                 return rec.id
             elif rec.state != 'draft':
-                _logger.error('Unauthorized state change of %s.%d' % (
+                _logger.error('Unauthorized state change of %s.%s' % (
                     model, rec.id))
                 return -4
             elif rec.original_state == 'sale':
@@ -371,7 +441,7 @@ class IrModelSynchro(models.Model):
     def create_new_ref(
             self, channel_id, actual_model, key_name, value, ext_value,
             ctx=None, spec=None):
-        self.logmsg(1, '>>> create_new_ref(%s,%s,%s,%d)' % (
+        self.logmsg(1, '>>> create_new_ref(%s,%s,%s,%s)' % (
                     actual_model, key_name, value, (ext_value or -1)))
         ctx = ctx or {}
         cache = self.env['ir.model.synchro.cache']
@@ -395,13 +465,13 @@ class IrModelSynchro(models.Model):
         if (key_name != 'name' and
                 cache.get_struct_model_attr(actual_model, 'name')):
             if ext_value:
-                vals['name'] = 'Unknown %d' % ext_value
+                vals['name'] = 'Unknown %s' % ext_value
             else:
                 vals['name'] = '%s=%s' % (key_name, value)
         elif (key_name != 'code' and
               cache.get_struct_model_attr(actual_model, 'code')):
             if ext_value:
-                vals['name'] = 'Unknown %d' % ext_value
+                vals['name'] = 'Unknown %s' % ext_value
             else:
                 vals['code'] = '%s=%s' % (key_name, value)
         if actual_model == 'res.partner' and spec in ('delivery', 'invoice'):
@@ -475,8 +545,6 @@ class IrModelSynchro(models.Model):
             ctx=None, mode=None, spec=None):
         mode = mode or '='
         ctx = ctx or {}
-        # self.logmsg(1, '>>> get_rec_by_reference(%s,%s %s %s)' % (
-        #             actual_model, name, mode, value))
         cache = self.env['ir.model.synchro.cache']
         ext_key_id = cache.get_model_attr(
             channel_id, actual_model, 'KEY_ID', default='id')
@@ -527,8 +595,6 @@ class IrModelSynchro(models.Model):
 
     def get_foreign_text(self, channel_id, actual_model, value, is_foreign,
                          ctx=None, spec=None):
-        # self.logmsg(channel_id, '>>> get_foreign_text(%s,%s,%s,%s)' % (
-        #             actual_model, value, is_foreign, spec))
         if len(value.split('.')) == 2:
             try:
                 return self.env.ref(value).id
@@ -551,7 +617,7 @@ class IrModelSynchro(models.Model):
         if not new_value:
             _logger.error('>>> return %s # get_foreign_text()' % new_value)
         else:
-            _logger.info('>>> return %d # get_foreign_text()' % new_value)
+            _logger.info('>>> return %s # get_foreign_text()' % new_value)
         return new_value
 
     def get_foreign_ref(self, channel_id, actual_model, value_id, is_foreign,
@@ -578,7 +644,7 @@ class IrModelSynchro(models.Model):
         if rec:
             if len(rec) > 1:
                 self.logmsg(channel_id,
-                            '### NO SINGLETON %s.%d' % (actual_model,
+                            '### NO SINGLETON %s.%s' % (actual_model,
                                                         value_id))
             new_value = rec[0].id
         xmodel = self.get_xmodel(actual_model, spec)
@@ -593,7 +659,7 @@ class IrModelSynchro(models.Model):
         if not new_value:
             _logger.error('>>> return %s # get_foreign_ref()' % new_value)
         else:
-            _logger.info('>>> return %d # get_foreign_ref())' % new_value)
+            _logger.info('>>> return %s # get_foreign_ref())' % new_value)
         return new_value
 
     def get_foreign_value(self, channel_id, xmodel, value, name, is_foreign,
@@ -641,7 +707,7 @@ class IrModelSynchro(models.Model):
             _logger.info('>>> return %s # get_foreign_value(%s)' % (
                 new_value, relation))
         else:
-            _logger.info('>>> return %d # get_foreign_value(%s)' % (
+            _logger.info('>>> return %s # get_foreign_value(%s)' % (
                 new_value, relation))
         return new_value
 
@@ -762,13 +828,9 @@ class IrModelSynchro(models.Model):
 
         def priority_fields(channel_id, vals, loc_ext_id, xmodel):
             cache = self.env['ir.model.synchro.cache']
-            prefix = cache.get_attr(channel_id, 'PREFIX')
-            fields = []
-            # for loc_name in cache.get_model_attr(
-            #         channel_id, xmodel, 'APPLY').keys():
-            #     fields.append('%s:%s' % (prefix, cache.get_model_attr(
-            #         channel_id, xmodel, 'LOC_FIELDS')[loc_name]))
-            # fields = list(set(vals.keys()) | set(fields))
+            child_ids = cache.get_struct_model_attr(
+                actual_model, 'CHILD_IDS', default=False)
+            # prefix = cache.get_attr(channel_id, 'PREFIX')
             fields = vals.keys()
             list_1 = []
             list_2 = []
@@ -782,7 +844,7 @@ class IrModelSynchro(models.Model):
                     list_1.append(ext_ref)
                 elif loc_name in ('country_id', 'company_id'):
                     list_2.append(ext_ref)
-                elif loc_name in ('partner_id', 'street'):
+                elif loc_name in ('partner_id', 'street', child_ids):
                     list_3.insert(0, ext_ref)
                 elif loc_name in ('is_company',
                                   'product_uom',
@@ -815,12 +877,14 @@ class IrModelSynchro(models.Model):
             return vals
 
         cache = self.env['ir.model.synchro.cache']
+        actual_model = self.get_actual_model(xmodel, only_name=True)
         loc_ext_id = self.get_loc_ext_id_name(channel_id, xmodel)
         ext_key_id = cache.get_model_attr(
             channel_id, xmodel, 'KEY_ID', default='id')
+        child_ids = cache.get_struct_model_attr(
+            actual_model, 'CHILD_IDS', default=False)
         vals = check_4_double_field_id(vals)
         field_list = priority_fields(channel_id, vals, loc_ext_id, xmodel)
-        actual_model = self.get_actual_model(xmodel, only_name=True)
         ctx = cache.get_attr(channel_id, 'CTX')
         ctx['ext_key_id'] = ext_key_id
         ref_in_queue = False
@@ -882,7 +946,11 @@ class IrModelSynchro(models.Model):
                     actual_model, loc_name, 'ttype') == 'boolean' and
                     isinstance(vals[ext_ref], basestring)):
                 vals[ext_ref] = os0.str2bool(vals[ext_ref], True)
-            if is_foreign:
+            if loc_name == child_ids:
+                vals = rm_ext_value(vals, loc_name, ext_name, ext_ref,
+                                    is_foreign)
+                continue
+            elif is_foreign:
                 # Field like <vg7_id> with external ID in local DB
                 if loc_name == loc_ext_id:
                     vals[ext_ref] = self.get_loc_ext_id_value(
@@ -1098,7 +1166,7 @@ class IrModelSynchro(models.Model):
                 return rec[0].id, rec[0]
             else:
                 self.logmsg(channel_id,
-                            '%d=%s.bind(%d)' % (rec.id, xmodel, channel_id))
+                            '%s=%s.bind(%s)' % (rec.id, xmodel, channel_id))
             return rec.id, rec
         return -1, None
 
@@ -1181,7 +1249,7 @@ class IrModelSynchro(models.Model):
             prot, endpoint, port, db, login, passwd = connect_params()
             if not endpoint:
                 _logger.error(
-                    'Channel %d without connection parameters!' % channel_id)
+                    'Channel %s without connection parameters!' % channel_id)
                 return False, False, tnl
             cnx, session = xml_login(
                 xml_connect(endpoint, protocol=prot, port=port),
@@ -1269,7 +1337,7 @@ class IrModelSynchro(models.Model):
             return vals
 
         self.logmsg(channel_id,
-                    '%s.get_xmlrpc_response(%d,ext_id=%d,sel=%s):' % (
+                    '%s.get_xmlrpc_response(%s,ext_id=%s,sel=%s):' % (
                         xmodel, channel_id, ext_id or -1, select
                     ))
         cache = self.env['ir.model.synchro.cache']
@@ -1290,14 +1358,14 @@ class IrModelSynchro(models.Model):
 
     def get_json_response(self, channel_id, xmodel, ext_id=False, mode=None):
         self.logmsg(channel_id,
-                    '%s.get_json_response(%d, ext_id=%d):' % (
+                    '%s.get_json_response(%s, ext_id=%s):' % (
                         xmodel, channel_id, ext_id or -1
                     ))
         cache = self.env['ir.model.synchro.cache']
         endpoint = cache.get_attr(channel_id, 'COUNTERPART_URL')
         if not endpoint:
             _logger.error(
-                'Channel %d without connection parameters!' % channel_id)
+                'Channel %s without connection parameters!' % channel_id)
             return False
         ext_model = cache.get_model_attr(channel_id, xmodel, 'BIND')
         if not ext_model:
@@ -1319,7 +1387,7 @@ class IrModelSynchro(models.Model):
             datas = response.json()
             return datas
         self.logmsg(channel_id,
-                    'Response error %s (%d,%s,%s,%s)' %
+                    'Response error %s (%s,%s,%s,%s)' %
                     (getattr(response, 'status_code', 'N/A'),
                      channel_id,
                      url,
@@ -1330,14 +1398,14 @@ class IrModelSynchro(models.Model):
 
     def get_csv_response(self, channel_id, xmodel, ext_id=False, mode=None):
         self.logmsg(channel_id,
-                    '%s.get_csv_response(%d, ext_id=%d):' % (
+                    '%s.get_csv_response(%s, ext_id=%s):' % (
                         xmodel, channel_id, ext_id or -1
                     ))
         cache = self.env['ir.model.synchro.cache']
         endpoint = cache.get_attr(channel_id, 'EXCHANGE_PATH')
         if not endpoint:
             _logger.error(
-                'Channel %d without connection parameters!' % channel_id)
+                'Channel %s without connection parameters!' % channel_id)
             return False
         ext_model = cache.get_model_attr(channel_id, xmodel, 'BIND')
         ext_key_id = cache.get_model_attr(
@@ -1462,38 +1530,46 @@ class IrModelSynchro(models.Model):
         return channel_from
 
     @api.model
-    def synchro_details(self, channel_id, xmodel, actual_model, parent_id, ext_id):
+    def synchro_childs(
+            self, channel_id, xmodel, actual_model, parent_id, ext_id):
         cache = self.env['ir.model.synchro.cache']
-        lines_of_rec = cache.get_struct_model_attr(
-            actual_model, 'LINES_OF_REC', default=False)
-        model_line = cache.get_struct_model_attr(actual_model, 'LINE_MODEL')
-        if not lines_of_rec and not model_line:
+        child_ids = cache.get_struct_model_attr(
+            actual_model, 'CHILD_IDS', default=False)
+        model_child = cache.get_struct_model_attr(actual_model, 'MODEL_CHILD')
+        if not child_ids and not model_child:
             _logger.error('!-5! Invalid structure of %s!' % xmodel)
             return -5
-        cache.open(model=model_line)
+        cache.open(model=model_child)
         # Retrieve header id field
-        parent_id_name = cache.get_struct_model_attr(model_line, 'PARENT_ID')
+        parent_id_name = cache.get_struct_model_attr(model_child, 'PARENT_ID')
         if not parent_id_name:
             _logger.error('!-5! Invalid structure of %s!' % xmodel)
             return -5
-
-        cls = self.get_actual_model(model_line)
-        rec_ids = self.get_counterpart_response(channel_id,
-                                                model_line,
-                                                ext_id=ext_id,
-                                                mode=parent_id_name)
+        cls = self.get_actual_model(model_child)
+        rec_ids = cache.get_model_attr(channel_id, xmodel,
+                                 '__%s_ids' % actual_model)
+        cache.del_model_attr(channel_id, xmodel, '__%s_ids' % actual_model)
+        if not rec_ids:
+            rec_ids = self.get_counterpart_response(channel_id,
+                                                    model_child,
+                                                    ext_id=ext_id,
+                                                    mode=parent_id_name)
         if not rec_ids:
             return ext_id
         ext_key_id = cache.get_model_attr(
-            channel_id, model_line, 'KEY_ID', default='id')
-        for line_ext_id in rec_ids:
-            vals = self.get_counterpart_response(
-                channel_id, model_line, ext_id=line_ext_id)
-            if ext_key_id not in vals:
-                self.logmsg(channel_id,
-                            'Data received of model %s w/o id' %
-                            model_line)
-                continue
+            channel_id, model_child, 'KEY_ID', default='id')
+        for item in rec_ids:
+            if isinstance(item, (int, long)):
+                vals = self.get_counterpart_response(
+                    channel_id, model_child, ext_id=line_ext_id)
+                if ext_key_id not in vals:
+                    self.logmsg(channel_id,
+                                'Data received of model %s w/o id' %
+                                model_child)
+                    continue
+            else:
+                vals = item
+                vals[':%s' % parent_id_name] = parent_id
             try:
                 id = self.internal_synchro(cls,
                                            vals,
@@ -1502,15 +1578,15 @@ class IrModelSynchro(models.Model):
                 if id < 0:
                     self.logmsg(
                         channel_id,
-                        'External id %d error pulling from %s' %
-                        (line_ext_id, model_line))
+                        'External id %s error pulling from %s' %
+                        (item, model_child))
                     return id
                 # commit every table to avoid too big transaction
                 self.env.cr.commit()       # pylint: disable=invalid-commit
             except BaseException:
                 self.logmsg(channel_id,
-                            'External id %d error pulling from %s' %
-                            (line_ext_id, model_line))
+                            'External id %s error pulling from %s' %
+                            (item, model_child))
                 return -1
         has_state = cache.get_struct_model_attr(
             actual_model, 'MODEL_STATE', default=False)
@@ -1524,17 +1600,6 @@ class IrModelSynchro(models.Model):
         def pop_ref(channel_id, xmodel, actual_model, id, ext_id):
             cache.pop_id(channel_id, xmodel, actual_model,
                          loc_id=id, ext_id=ext_id)
-            # self.logmsg(channel_id,
-            #             '$$$ pop_id(%s,loc_id=%d, ext_id=%d)' % (
-            #                 xmodel, id or -1, ext_id or -1))
-            # self.logmsg(channel_id,
-            #             '$$$ CACHE->%s/%s' % (
-            #                 cache.CACHE.MANAGED_MODELS[
-            #                     self._cr.dbname][channel_id][
-            #                     '_queue'],
-            #                 cache.CACHE.STRUCT[self._cr.dbname][
-            #                     '_queue']
-            #             ))
 
         vals = unicodes(vals)
         xmodel = cls.__class__.__name__
@@ -1543,13 +1608,12 @@ class IrModelSynchro(models.Model):
         actual_cls = self.get_actual_model(xmodel)
         cache = self.env['ir.model.synchro.cache']
         cache.open(model=xmodel, cls=cls)
-
         channel_id = self.assign_channel(vals)
         if not channel_id:
             cache.clean_cache()
             _logger.error('!-6! No channel found!')
             return -6
-        self.logmsg(channel_id, '### assigned channel is %d' % channel_id)
+        self.logmsg(channel_id, '### assigned channel is %s' % channel_id)
 
         if hasattr(actual_cls, 'CONTRAINTS'):
             constraints = actual_cls.CONTRAINTS
@@ -1559,13 +1623,17 @@ class IrModelSynchro(models.Model):
             actual_model, 'MODEL_STATE', default=False)
         has_2delete = cache.get_struct_model_attr(
             actual_model, 'MODEL_2DELETE', default=False)
-        lines_of_rec = cache.get_struct_model_attr(
-            actual_model, 'LINES_OF_REC', default=False)
+        child_ids = cache.get_struct_model_attr(
+            actual_model, 'CHILD_IDS', default=False)
+        model_child = cache.get_struct_model_attr(actual_model, 'MODEL_CHILD')
+        if child_ids and model_child:
+            parent_child_mode = 'A'
+        else:
+            parent_child_mode = ''
         do_auto_process = True
         if has_2delete or (cache.get_model_attr(channel_id, xmodel, 'BIND') and
                            cache.get_attr(channel_id, 'IDENTITY') == 'vg7'):
             do_auto_process = False
-
         # Protect against VG7 mistakes
         if cache.get_attr(channel_id, 'IDENTITY') == 'vg7':
             if 'vg7_id' in vals and 'vg7:id' not in vals:
@@ -1597,6 +1665,29 @@ class IrModelSynchro(models.Model):
                 vals, spec = self.preprocess(channel_id, xmodel, vals)
         vals, ref_in_queue = self.map_to_internal(
             channel_id, xmodel, vals, disable_post)
+        if child_ids and model_child and child_ids in vals:
+            # TODO parent_child_mode = 'C'
+            # if isinstance(vals[child_ids], dict):
+            #     parent_child_mode = 'C'
+            #     for x in vals[child_ids].keys():
+            #         if x.find(':') >= 0:
+            #             parent_child_mode = 'B'
+            #             break
+            # elif (isinstance(vals[child_ids], (list, tuple)) and
+            #       len(vals[child_ids]) == 1 and
+            #       len(vals[child_ids][0] >= 3) and
+            #       vals[child_ids][0][0] == 0 and
+            #       vals[child_ids][0][1] == 0):
+            #     parent_child_mode = 'C'
+            #     vals[child_ids] = vals[child_ids][0][2:]
+            # else:
+            #     parent_child_mode = 'B'
+            parent_child_mode = 'B'
+            if parent_child_mode == 'B':
+                cache.set_model_attr(channel_id, xmodel,
+                                     '__%s_ids' % actual_model,
+                                     vals[child_ids])
+                del vals[child_ids]
         loc_ext_id = self.get_loc_ext_id_name(channel_id, xmodel)
         ext_id = vals.get(loc_ext_id)
 
@@ -1606,19 +1697,19 @@ class IrModelSynchro(models.Model):
             id = vals.pop('id')
             rec = actual_cls.search([('id', '=', id)])
             if not rec or rec.id != id:
-                _logger.error('!-3! ID %d does not exist in %s' %
+                _logger.error('!-3! ID %s does not exist in %s' %
                               (id, xmodel))
                 pop_ref(channel_id, xmodel, actual_model, id, ext_id)
                 return -3
             id = rec.id
-            self.logmsg(channel_id, '### synchro: found id=%s.%d' % (
+            self.logmsg(channel_id, '### synchro: found id=%s.%s' % (
                 actual_model, id))
         if id < 0:
             id, rec = self.bind_record(channel_id, xmodel, vals, constraints)
         if has_state:
             vals, erc = self.set_state_to_draft(xmodel, rec, vals)
             if erc < 0:
-                _logger.error('!%d! Returned error code!' % erc)
+                _logger.error('!%s! Returned error code!' % erc)
                 pop_ref(channel_id, xmodel, actual_model, id, ext_id)
                 return erc
             # TODO: Workaround
@@ -1628,15 +1719,18 @@ class IrModelSynchro(models.Model):
             vals['to_delete'] = False
         self.drop_invalid_fields(xmodel, vals)
         do_write = True
+        if id > 0 and parent_child_mode == 'C':
+            parent_child_mode = 'B'
+            cache.set_model_attr(channel_id, xmodel,
+                                 '__%s_ids' % actual_model,
+                                 vals[child_ids])
+            del vals[child_ids]
         if id < 1:
-            if has_state or has_2delete or not ext_id:
+            if (has_state or has_2delete or not ext_id or
+                    parent_child_mode == 'C'):
                 min_vals = vals
                 do_write = False
             else:
-                # Counterpart does not know Odoo and can issue wrong data
-                # so create can fail and breaks communication chain
-                # To solve, system create a minimal record and then try to
-                # write all counterpart data
                 min_vals = {loc_ext_id: ext_id}
                 for nm in ('name', 'type', 'parent_id'):
                     if vals.get(nm):
@@ -1654,11 +1748,11 @@ class IrModelSynchro(models.Model):
                     id = actual_cls.create(min_vals).id
                     if not do_write and min_vals != vals:
                         self.logmsg(channel_id,
-                                    '>>> %d=%s.min_create(%s)' % (
+                                    '>>> %s=%s.min_create(%s)' % (
                                         id, actual_model, min_vals))
                     else:
                         self.logmsg(channel_id,
-                            '>>> %d=%s.create(%s)' % (id, actual_model, vals))
+                            '>>> %s=%s.create(%s)' % (id, actual_model, vals))
                 except BaseException, e:
                     _logger.error('!-1! %s creating %s' % (e, xmodel))
                     pop_ref(channel_id, xmodel, actual_model, id, ext_id)
@@ -1670,7 +1764,7 @@ class IrModelSynchro(models.Model):
                 rec = actual_cls.with_context(
                     {'lang': self.env.user.lang}).browse(id)
             except IOError:
-                _logger.error('Error reading %s ID=%d' %
+                _logger.error('Error reading %s ID=%s' %
                               (actual_model, id))
                 rec = None
             if rec:
@@ -1686,7 +1780,7 @@ class IrModelSynchro(models.Model):
                                     '>>> synchro: %s.write(%s)' % (
                                         actual_model, vals))
                     except BaseException, e:
-                        _logger.error('%s writing %s ID=%d' %
+                        _logger.error('%s writing %s ID=%s' %
                                       (e, actual_model, id))
                         pop_ref(channel_id, xmodel, actual_model, id, ext_id)
                         # Try to open new transaction
@@ -1694,19 +1788,25 @@ class IrModelSynchro(models.Model):
                         return -2
                 elif do_write:
                     self.logmsg(channel_id,
-                                '### Nothing to update(%s.%d)' % (
+                                '### Nothing to update(%s.%s)' % (
                                     actual_model, id))
                 if (do_write and
-                        rec and lines_of_rec and
-                        hasattr(rec, lines_of_rec)):
-                    for line in rec[lines_of_rec]:
+                        rec and child_ids and
+                        hasattr(rec, child_ids)):
+                    for num, line in enumerate(rec[child_ids]):
+                        seq = num + 1
                         if not hasattr(line, 'to_delete'):
-                            break
-                        try:
-                            line.write({'to_delete': True})
-                        except BaseException:
-                            # Try to open new transaction
-                            self.env.cr.rollback() # pylint: disable=invalid-commit
+                            child_vals = {}
+                        else:
+                            child_vals = {'to_delete': True}
+                        if actual_model == 'account.payment.term':
+                            vals['sequence'] = seq
+                        if child_vals:
+                            try:
+                                line.write(child_vals)
+                            except BaseException:
+                                # Try to open new transaction
+                                self.env.cr.rollback() # pylint: disable=invalid-commit
 
         # commit to avoid lost data in recursive write
         self.env.cr.commit()   # pylint: disable=invalid-commit
@@ -1717,31 +1817,31 @@ class IrModelSynchro(models.Model):
             elif do_auto_process:
                 done_post = self.postprocess(channel_id, xmodel, id, vals)
             self.synchro_queue(channel_id)
-        if lines_of_rec and not done_post:
-            self.synchro_details(channel_id, xmodel, actual_model, id, ext_id)
+        if parent_child_mode == 'B' and not done_post:
+            self.synchro_childs(channel_id, xmodel, actual_model, id, ext_id)
         pop_ref(channel_id, xmodel, actual_model, id, ext_id)
-        _logger.info('!%d! Returned ID of %s' % (id, xmodel))
+        _logger.info('!%s! Returned ID of %s' % (id, xmodel))
         return id
 
     @api.model
     def commit(self, cls, loc_id, ext_id=None):
         xmodel = cls.__class__.__name__
         actual_model = self.get_actual_model(xmodel, only_name=True)
-        _logger.info('> %s.commit(%d,%d)' % (xmodel, loc_id, ext_id or -1))
+        _logger.info('> %s.commit(%s,%s)' % (xmodel, loc_id, ext_id or -1))
         cache = self.env['ir.model.synchro.cache']
         _logger.info('>>> cache.open(model=%s, cls=%s)' % (xmodel, cls))    ##debug
         cache.open(model=xmodel, cls=cls)
         has_state = cache.get_struct_model_attr(
             actual_model, 'MODEL_STATE', default=False)
-        lines_of_rec = cache.get_struct_model_attr(
-            actual_model, 'LINES_OF_REC', default=False)
-        model_line = cache.get_struct_model_attr(actual_model, 'LINE_MODEL')
-        if not has_state and not lines_of_rec and not model_line:
+        child_ids = cache.get_struct_model_attr(
+            actual_model, 'CHILD_IDS', default=False)
+        model_child = cache.get_struct_model_attr(actual_model, 'MODEL_CHILD')
+        if not has_state and not child_ids and not model_child:
             _logger.error('!-5! Invalid structure of %s!' % xmodel)
             return -5
-        cache.open(model=model_line)
+        cache.open(model=model_child)
         # Retrieve header id field
-        parent_id = cache.get_struct_model_attr(model_line, 'PARENT_ID')
+        parent_id = cache.get_struct_model_attr(model_child, 'PARENT_ID')
         if not parent_id:
             _logger.error('!-5! Invalid structure of %s!' % xmodel)
             return -5
@@ -1754,18 +1854,18 @@ class IrModelSynchro(models.Model):
         try:
             rec_2_commit = self.get_actual_model(xmodel).browse(loc_id)
         except:
-            _logger.error('!-3! Errore retriving %s.%d!' % (xmodel, loc_id))
+            _logger.error('!-3! Errore retriving %s.%s!' % (xmodel, loc_id))
             return -3
-        if cache.get_struct_model_attr(model_line, 'MODEL_2DELETE'):
-            cls = self.get_actual_model(model_line)
+        if cache.get_struct_model_attr(model_child, 'MODEL_2DELETE'):
+            cls = self.get_actual_model(model_child)
             for rec in cls.search([(parent_id, '=', loc_id),
                                         ('to_delete', '=', True)]):
                 rec.unlink()
         loc_id = self.set_actual_state(xmodel, rec_2_commit)
         if loc_id < 0:
-            _logger.error('!%d! Committed ID' % loc_id)
+            _logger.error('!%s! Committed ID' % loc_id)
         else:
-            _logger.info('!%d! Committed ID' % loc_id)
+            _logger.info('!%s! Committed ID' % loc_id)
         return loc_id
 
     @api.model
@@ -1793,6 +1893,8 @@ class IrModelSynchro(models.Model):
         for name in vals:
             if name.startswith(prefix):
                 jvals[name] = vals[name]
+            elif name.startswith(':'):
+                jvals[name[1:]] = vals[name]
             else:
                 jvals['%s:%s' % (prefix, name)] = vals[name]
         return jvals
@@ -1804,8 +1906,8 @@ class IrModelSynchro(models.Model):
         actual_model = self.get_actual_model(xmodel, only_name=True)
         cache = self.env['ir.model.synchro.cache']
         cache.open(model=xmodel)
-        lines_of_rec = cache.get_struct_model_attr(
-            actual_model, 'LINES_OF_REC', default=False)
+        child_ids = cache.get_struct_model_attr(
+            actual_model, 'CHILD_IDS', default=False)
         min_vals = {}
         loc_id = False
         ext_id = False
@@ -1819,7 +1921,7 @@ class IrModelSynchro(models.Model):
                 loc_ext_id = loc_name
             elif loc_id == 'id':
                 loc_id = vals[ext_ref]
-            if ext_ref == lines_of_rec:
+            if ext_ref == child_ids:
                 pass
             elif (not cache.get_struct_model_field_attr(
                     actual_model, loc_name, 'ttype') in (
@@ -1841,7 +1943,7 @@ class IrModelSynchro(models.Model):
     @api.model
     def postprocess(self, channel_id, model, parent_id, vals):
         _logger.info(
-            '> postprocess(%d,%s,%s)' % (parent_id, model, vals))  # debug
+            '> postprocess(%s,%s,%s)' % (parent_id, model, vals))  # debug
         cache = self.env['ir.model.synchro.cache']
         cache.open(model=model)
         cls = self.env[model]
@@ -1867,9 +1969,9 @@ class IrModelSynchro(models.Model):
             xmodel = item[0]
             loc_id = item[1]
             if not loc_id or loc_id < 1:
-                _logger.errore('> invalid queue(%s,%d)?' % (xmodel, loc_id))
+                _logger.errore('> invalid queue(%s,%s)?' % (xmodel, loc_id))
                 return
-            _logger.info('> queued_pull(%s,%d)?' % (xmodel, loc_id))
+            _logger.info('> queued_pull(%s,%s)?' % (xmodel, loc_id))
             rec = self.get_actual_model(xmodel).browse(loc_id)
             loc_ext_id = self.get_loc_ext_id_name(channel_id, xmodel)
             if hasattr(rec, loc_ext_id):
@@ -1922,7 +2024,7 @@ class IrModelSynchro(models.Model):
                             vals))
                         # commit every table to avoid too big transaction
                         # self.env.cr.commit()   # pylint: disable=invalid-commit
-            _logger.info('Channel %d successfuly pulled' % channel_id)
+            _logger.info('Channel %s successfuly pulled' % channel_id)
 
     @api.multi
     def pull_full_records(self, force=None, only_model=None,
@@ -2025,7 +2127,7 @@ class IrModelSynchro(models.Model):
                         if id < 0:
                             self.logmsg(
                                 channel_id,
-                                'External id %d error pulling from %s' %
+                                'External id %s error pulling from %s' %
                                 (ext_id, xmodel))
                             continue
                         # commit every table to avoid too big transaction
@@ -2035,16 +2137,16 @@ class IrModelSynchro(models.Model):
                         # cache.set_loglevel('debug')
                     except BaseException:
                         self.logmsg(channel_id,
-                                    'External id %d error pulling from %s' %
+                                    'External id %s error pulling from %s' %
                                     (ext_id, xmodel))
-            _logger.info('%d record successfuly pulled from channel %d' % (
+            _logger.info('%s record successfuly pulled from channel %s' % (
                 ctr, channel_id))
         return local_ids
 
     @api.model
     def synchro_one_record(self, channel_id, xmodel, ext_id,
                            disable_post=None):
-        _logger.info('> synchro_one_record(%d,%s,%d)' % (
+        _logger.info('> synchro_one_record(%s,%s,%s)' % (
             channel_id, xmodel, ext_id))
         vals = self.get_counterpart_response(channel_id, xmodel, ext_id)
         if not vals:
@@ -2114,18 +2216,18 @@ class IrModelSynchro(models.Model):
     def pull_structurated_document(self, channel_id, model, loc_id):
         '''Button synchronize at web page'''
         cache = self.env['ir.model.synchro.cache']
-        model_line = cache.get_struct_model_attr(model, 'LINE_MODEL')
-        if not model_line:
+        model_child = cache.get_struct_model_attr(model, 'MODEL_CHILD')
+        if not model_child:
             return
-        lines_of_rec = cache.get_struct_model_attr(
-            model, 'LINES_OF_REC', default=False)
+        child_ids = cache.get_struct_model_attr(
+            model, 'CHILD_IDS', default=False)
         hdr_rec = self.env[model].browse(loc_id)
         if not hdr_rec:
             return
-        lines = hdr_rec[lines_of_rec]
+        lines = hdr_rec[child_ids]
         if not lines:
-            lines = self.get_counterpart_lines(channel_id, model_line, loc_id)
-        for line in self.env[model].browse(loc_id)[lines_of_rec]:
+            lines = self.get_counterpart_lines(channel_id, model_child, loc_id)
+        for line in self.env[model].browse(loc_id)[child_ids]:
             pass
 
     @api.model
@@ -2141,7 +2243,7 @@ class IrModelSynchro(models.Model):
             cache.clean_cache()
             _logger.error('!-6! No channel found!')
             return -6
-        self.logmsg(channel_id, '### assigned channel is %d' % channel_id)
+        self.logmsg(channel_id, '### assigned channel is %s' % channel_id)
         cache.open(channel_id=channel_id, ext_model=ext_model)
         # identity = cache.get_attr(channel_id, 'IDENTITY')
         for model in cache.get_channel_models(channel_id):
@@ -2150,7 +2252,7 @@ class IrModelSynchro(models.Model):
             if ext_model != cache.get_model_attr(channel_id, model, 'BIND'):
                 continue
             self.logmsg(
-                channel_id, '### Pulling %s.%d' % (model, ext_id))
+                channel_id, '### Pulling %s.%s' % (model, ext_id))
             return self.synchro_one_record(channel_id, model, ext_id)
         return -8
 

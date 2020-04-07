@@ -42,6 +42,12 @@
         <field name="model_id" ref="account_payment_term"/>
     </record>
 
+    <record forcecreate="1" id="account_payment_term_line_ids" model="synchro.channel.model.fields">
+        <field name="name">line_ids</field>
+        <field name="counterpart_name">date_scadenza</field>
+        <field name="model_id" ref="account_payment_term"/>
+    </record>
+
 
     <record forcecreate="1" id="account_payment_term_line_payment_id" model="synchro.channel.model.fields">
         <field name="name">payment_id</field>
@@ -61,8 +67,14 @@
 
     <record forcecreate="1" id="account_payment_term_line_option" model="synchro.channel.model.fields">
         <field name="name">option</field>
-        <field name="counterpart_name">finemese</field>
+        <field name="counterpart_name">fine_mese</field>
         <field name="apply">eom()</field>
+        <field name="model_id" ref="account_payment_term_line"/>
+    </record>
+
+    <record forcecreate="1" id="account_payment_term_line_payment_days" model="synchro.channel.model.fields">
+        <field name="name">payment_days</field>
+        <field name="counterpart_name">giorni_fine_mese</field>
         <field name="model_id" ref="account_payment_term_line"/>
     </record>
 
