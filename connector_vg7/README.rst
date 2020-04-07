@@ -1,6 +1,6 @@
 
 ================================
-|icon| connector_vg7 10.0.0.1.28
+|icon| connector_vg7 10.0.0.1.29
 ================================
 
 
@@ -160,6 +160,12 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 
 ChangeLog History / Cronologia modifiche
 ----------------------------------------
+
+10.0.0.1.29 (2020-04-07)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [FIX] Sale order / Ordini di vendita
+
 
 10.0.0.1.28 (2020-04-06)
 ~~~~~~~~~~~~~~~~~~~~~~~~

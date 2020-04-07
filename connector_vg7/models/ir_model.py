@@ -1561,7 +1561,7 @@ class IrModelSynchro(models.Model):
         for item in rec_ids:
             if isinstance(item, (int, long)):
                 vals = self.get_counterpart_response(
-                    channel_id, model_child, ext_id=line_ext_id)
+                    channel_id, model_child, ext_id=item)
                 if ext_key_id not in vals:
                     self.logmsg(channel_id,
                                 'Data received of model %s w/o id' %
@@ -1590,8 +1590,6 @@ class IrModelSynchro(models.Model):
                 return -1
         has_state = cache.get_struct_model_attr(
             actual_model, 'MODEL_STATE', default=False)
-        if has_state:
-            self.commit(self.env[actual_model], parent_id)
         return ext_id
 
     @api.model

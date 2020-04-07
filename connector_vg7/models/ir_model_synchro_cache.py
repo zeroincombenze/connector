@@ -213,7 +213,7 @@ class IrModelSynchroCache(models.Model):
             'opt_out': {'readonly': True},
         },
         'sale.order': {
-            'name': {'required': False},
+            'name': {'readonly': False, 'required': False},
         },
         'stock.picking.package.preparation': {
             'ddt_number': {'required': False},
