@@ -261,7 +261,7 @@
 
     <record forcecreate="1" id="res_partner_bank_ids" model="synchro.channel.model.fields">
         <field name="name">bank_ids</field>
-        <field name="counterpart_name">bank</field>
+        <field name="counterpart_name">bank_id</field>
         <field name="model_id" ref="res_partner"/>
     </record>
 

@@ -10,7 +10,7 @@
 {
     'name': 'connector_vg7',
     'summary': 'Connector to/from VG7 software',
-    'version': '10.0.0.1.29',
+    'version': '10.0.0.1.30',
     'category': 'Generic Modules',
     'author': 'SHS-AV s.r.l.',
     'website': 'https://www.zeroincombenze.it/',
@@ -63,5 +63,5 @@
         'data/ir_cron.xml',
     ],
     'installable': True,
-    'development_status': 'Alfa',
+    'development_status': 'Beta',
 }

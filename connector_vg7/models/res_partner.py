@@ -155,6 +155,7 @@ class ResPartner(models.Model):
                                        'vg7:esonerato_fe',
                                        'vg7:codice_univoco',
                                        'vg7:bank',
+                                       'vg7:bank_id',
                                        'vg7:payment',
                                        'vg7:payment_id',
                                        'vg7:pec',

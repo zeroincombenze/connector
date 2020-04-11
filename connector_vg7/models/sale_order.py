@@ -77,6 +77,10 @@ class SaleOrder(models.Model):
     def commit(self, id):
         return self.env['ir.model.synchro'].commit(self, id)
 
+    @api.multi
+    def pull_record(self):
+        self.env['ir.model.synchro'].pull_record(self)
+
 
 class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"

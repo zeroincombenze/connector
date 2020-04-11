@@ -1,3 +1,10 @@
+10.0.0.1.30 (2020-04-10)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [FIX] Account invoice / Fatture
+* [FIX] Payment term / Termini di pagamento
+
+
 10.0.0.1.29 (2020-04-07)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 

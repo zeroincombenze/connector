@@ -86,9 +86,9 @@ class AccountPaymentTerm(models.Model):
                     line_vals['vg7:%s' % item] = line[item]
                 line_vals[':sequence'] = seq
                 if seq == num_dues:
-                    line_vals[':type'] = 'balance'
+                    line_vals[':value'] = 'balance'
                 else:
-                    line_vals[':type'] = 'percent'
+                    line_vals[':value'] = 'percent'
                     line_vals[':value_amount'] = rate
                 child_vals.append(line_vals)
                 # cache.set_model_attr(

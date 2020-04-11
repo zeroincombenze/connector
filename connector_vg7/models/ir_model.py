@@ -291,6 +291,25 @@ class IrModelSynchro(models.Model):
             return ext_id - offset
         return ext_id
 
+    def get_tnldict(self, channel_id):
+        cache = self.env['ir.model.synchro.cache']
+        tnldict = cache.get_attr(channel_id, 'TNL')
+        if not tnldict:
+            tnldict = {}
+            transodoo.read_stored_dict(tnldict)
+            cache.set_attr(channel_id, 'TNL', tnldict)
+        return tnldict
+
+    def get_ext_odoo_ver(self, prefix):
+        return {
+            'oe7': '7.0',
+            'oe8': '8.0',
+            'oe10': '10.0',
+            'oe7:': '7.0',
+            'oe8:': '8.0',
+            'oe10:': '10.0',
+        }.get(prefix, '')
+
     def drop_fields(self, model, vals, to_delete):
         for name in to_delete:
             if isinstance(vals, (list, tuple)):
@@ -433,7 +452,7 @@ class IrModelSynchro(models.Model):
         if not vals:
             return False
         cls = self.env[model]
-        return self.internal_synchro(cls,
+        return self.generic_synchro(cls,
                                      vals,
                                      channel_id=channel_id,
                                      jacket=True)
@@ -715,6 +734,12 @@ class IrModelSynchro(models.Model):
         cache = self.env['ir.model.synchro.cache']
         pfx_depr = '%s_' % cache.get_attr(channel_id, 'PREFIX')
         pfx_ext = '%s:' % cache.get_attr(channel_id, 'PREFIX')
+        identity = cache.get_attr(channel_id, 'IDENTITY')
+        ext_odoo_ver = self.get_ext_odoo_ver(pfx_ext)
+        if identity == 'odoo':
+            tnldict = self.get_tnldict(channel_id)
+        else:
+            tnldict = {}
         loc_ext_id = self.get_loc_ext_id_name(channel_id, xmodel)
         ext_key_id = cache.get_model_attr(
             channel_id, xmodel, 'KEY_ID', default='id')
@@ -742,6 +767,10 @@ class IrModelSynchro(models.Model):
             ext_name = ext_ref[len(pfx_ext):]
             if ext_name == ext_key_id:
                 loc_name = loc_ext_id
+            elif identity == 'odoo':
+                loc_name = transodoo.translate_from_to(
+                    tnldict, xmodel, ext_name,
+                    ext_odoo_ver, release.major_version)
             else:
                 loc_name = cache.get_model_field_attr(
                     channel_id, xmodel, ext_name, 'EXT_FIELDS', default='')
@@ -830,7 +859,6 @@ class IrModelSynchro(models.Model):
             cache = self.env['ir.model.synchro.cache']
             child_ids = cache.get_struct_model_attr(
                 actual_model, 'CHILD_IDS', default=False)
-            # prefix = cache.get_attr(channel_id, 'PREFIX')
             fields = vals.keys()
             list_1 = []
             list_2 = []
@@ -938,6 +966,8 @@ class IrModelSynchro(models.Model):
                 continue
             if (cache.get_struct_model_field_attr(
                     actual_model, loc_name, 'ttype') in ('many2one',
+                                                         'one2many',
+                                                         'many2many'
                                                          'integer') and
                     isinstance(vals[ext_ref], basestring) and (
                             vals[ext_ref].isdigit() or vals[ext_ref] == '-1')):
@@ -1239,18 +1269,14 @@ class IrModelSynchro(models.Model):
         def rpc_session():
             cnx = cache.get_attr(channel_id, 'CNX')
             session = cache.get_attr(channel_id, 'SESSION')
-            tnl = cache.get_attr(channel_id, 'TNL')
-            if not tnl:
-                tnl = {}
-                transodoo.read_stored_dict(tnl)
-                cache.set_attr(channel_id, 'TNL', tnl)
+            tnldict = self.get_tnldict(channel_id)
             if cnx and session:
-                return cnx, session, tnl
+                return cnx, session, tnldict
             prot, endpoint, port, db, login, passwd = connect_params()
             if not endpoint:
                 _logger.error(
                     'Channel %s without connection parameters!' % channel_id)
-                return False, False, tnl
+                return False, False, tnldict
             cnx, session = xml_login(
                 xml_connect(endpoint, protocol=prot, port=port),
                 endpoint,
@@ -1264,74 +1290,47 @@ class IrModelSynchro(models.Model):
                 self.logmsg(channel_id,
                             'Login response error (%s,%s,%s)' %
                             (db, login, passwd))
-            return cnx, session, tnl
+            return cnx, session, tnldict
 
-        def browse_rec(cache, actual_model, ext_id, tnl):
+        def browse_rec(cache, actual_model, ext_id, tnldict):
             try:
                 rec = cnx.browse(actual_model, ext_id)
             except:
                 rec = False
             prefix = cache.get_attr(channel_id, 'PREFIX')
-            ext_ver = {
-                'oe7': '7.0',
-                'oe8': '8.0',
-                'oe10': '10.0',
-            }.get(prefix, '')
+            ext_odoo_ver = self.get_ext_odoo_ver(prefix)
             vals = {}
             if rec:
                 for field in cache.get_struct_attr(actual_model):
                     ext_field = transodoo.translate_from_to(
-                        tnl, actual_model, field,
-                        release.major_version, ext_ver)
+                        tnldict, actual_model, field,
+                        release.major_version, ext_odoo_ver)
                     if (field in ('id', 'state') or (
                             hasattr(rec, ext_field) and
                             cache.is_struct(field) and
                             not cache.get_struct_model_field_attr(
                                 actual_model, field, 'readonly'))):
-                        if actual_model == 'account.tax' and field == 'amount':
-                            vals['%s:%s' % (
-                                prefix, field)] = transodoo.translate_from_to(
-                                tnl, actual_model, rec[ext_field],
-                                ext_ver, release.major_version,
-                                type='value', fld_name='amount')
-                        elif (actual_model == 'account.account.type' and
-                              field == 'name'):
-                            vals['%s:%s' % (
-                                prefix, field)] = transodoo.translate_from_to(
-                                tnl, actual_model, rec[ext_field],
-                                ext_ver, release.major_version,
-                                type='value', fld_name='report_type')
-                        elif (actual_model == 'account.account' and
-                              ext_field == 'type'):
-                                if rec[ext_field] == 'view':
-                                    vals['%s:%s' % (prefix, field)] = 'other'
-                                else:
-                                    vals['%s:%s' % (prefix, field)] = rec[
-                                        ext_field]
-                        elif isinstance(rec[ext_field], (bool, int, long)):
-                            vals['%s:%s' % (prefix, field)] = rec[ext_field]
+                        if isinstance(rec[ext_field], (bool, int, long)):
+                            vals[ext_field] = rec[ext_field]
                         elif cache.get_struct_model_field_attr(
                                 actual_model, field, 'ttype') == 'many2one':
                             try:
-                                vals['%s:%s' % (prefix, field)] = rec[
-                                    ext_field].id
+                                vals[ext_field] = rec[ext_field].id
                             except:
-                                vals['%s:%s' % (prefix, field)] = rec[
-                                    ext_field]
+                                vals[ext_field] = rec[ext_field]
                         elif cache.get_struct_model_field_attr(
                                     actual_model, field, 'ttype') in (
                                     'one2many', 'many2many'):
-                            value = [x.id for x in rec[ext_field]]
-                            vals['%s:%s' % (prefix, field)] = value
+                            vals[ext_field] = [x.id for x in rec[ext_field]]
                         elif isinstance(rec[ext_field], basestring):
-                            vals['%s:%s' % (prefix, field)] = rec[
-                                ext_field].encode('utf-8').decode('utf-8')
+                            vals[ext_field] = rec[ext_field].encode(
+                                'utf-8').decode('utf-8')
                         else:
-                            vals['%s:%s' % (prefix, field)] = rec[ext_field]
-                if actual_model == 'account.account.type':
-                    vals['%s:type' % prefix] = self.env[
-                        actual_model].cvt_acct_type(
-                        vals, rec, ext_ver, release.version)
+                            vals[ext_field] = rec[ext_field]
+                # if actual_model == 'account.account.type':
+                #     vals['%s:type' % prefix] = self.env[
+                #         actual_model].cvt_acct_type(
+                #         vals, rec, ext_odoo_ver, release.version)
                 if vals:
                     vals['id'] = ext_id
             return vals
@@ -1341,13 +1340,13 @@ class IrModelSynchro(models.Model):
                         xmodel, channel_id, ext_id or -1, select
                     ))
         cache = self.env['ir.model.synchro.cache']
-        cnx, session, tnl = rpc_session()
+        cnx, session, tnldict = rpc_session()
         prefix = cache.get_attr(channel_id, 'PREFIX')
         actual_model = self.get_actual_model(xmodel, only_name=True)
         if ext_id:
             if mode:
                 return cnx.search(actual_model, [(mode, '=', ext_id)])
-            return browse_rec(cache, actual_model, ext_id, tnl)
+            return browse_rec(cache, actual_model, ext_id, tnldict)
         else:
             try:
                 ids = cnx.search(actual_model, [])
@@ -1482,6 +1481,7 @@ class IrModelSynchro(models.Model):
 
     def get_counterpart_response(
             self, channel_id, xmodel, ext_id=False, mode=None):
+        """Get data from counterpart"""
         cache = self.env['ir.model.synchro.cache']
         cache.open(channel_id=channel_id, model=xmodel)
         method = cache.get_attr(channel_id, 'METHOD')
@@ -1571,7 +1571,7 @@ class IrModelSynchro(models.Model):
                 vals = item
                 vals[':%s' % parent_id_name] = parent_id
             try:
-                id = self.internal_synchro(cls,
+                id = self.generic_synchro(cls,
                                            vals,
                                            channel_id=channel_id,
                                            jacket=True)
@@ -1588,8 +1588,7 @@ class IrModelSynchro(models.Model):
                             'External id %s error pulling from %s' %
                             (item, model_child))
                 return -1
-        has_state = cache.get_struct_model_attr(
-            actual_model, 'MODEL_STATE', default=False)
+        self.commit(self.env[actual_model], parent_id)
         return ext_id
 
     @api.model
@@ -1815,7 +1814,7 @@ class IrModelSynchro(models.Model):
             elif do_auto_process:
                 done_post = self.postprocess(channel_id, xmodel, id, vals)
             self.synchro_queue(channel_id)
-        if parent_child_mode == 'B' and not done_post:
+        if parent_child_mode in ('A', 'B') and not done_post:
             self.synchro_childs(channel_id, xmodel, actual_model, id, ext_id)
         pop_ref(channel_id, xmodel, actual_model, id, ext_id)
         _logger.info('!%s! Returned ID of %s' % (id, xmodel))
@@ -1867,8 +1866,8 @@ class IrModelSynchro(models.Model):
         return loc_id
 
     @api.model
-    def internal_synchro(self, cls, vals, disable_post=None, jacket=None,
-                         channel_id=None):
+    def generic_synchro(self, cls, vals, disable_post=None, jacket=None,
+                        channel_id=None):
         cache = self.env['ir.model.synchro.cache']
         if hasattr(cls, 'synchro'):
             if jacket:
@@ -1950,7 +1949,7 @@ class IrModelSynchro(models.Model):
         if cache.get_model_attr(channel_id, model, stored_field):
             vals = cache.get_model_attr(channel_id, model, stored_field)
             cache.del_model_attr(channel_id, model, stored_field)
-            self.internal_synchro(cls, vals, disable_post=True)
+            self.generic_synchro(cls, vals, disable_post=True)
             done = True
         return done
 
@@ -1975,7 +1974,7 @@ class IrModelSynchro(models.Model):
             if hasattr(rec, loc_ext_id):
                 # commit previous record
                 # self.env.cr.commit()  # pylint: disable=invalid-commit
-                self.synchro_one_record(
+                self.pull_1_record(
                     channel_id, xmodel, getattr(rec, loc_ext_id))
 
     @api.multi
@@ -2061,7 +2060,6 @@ class IrModelSynchro(models.Model):
                 model_list = [x.name for x in self.env[
                     'synchro.channel.model'].search(domain,
                         order='sequence')]
-            # prefix = cache.get_attr(channel_id, 'PREFIX')
             ctr = 0
             for xmodel in model_list:
                 cache.open(model=xmodel)
@@ -2118,7 +2116,7 @@ class IrModelSynchro(models.Model):
                         continue
                     try:
                         ctr += 1
-                        id = self.internal_synchro(cls,
+                        id = self.generic_synchro(cls,
                                                    vals,
                                                    channel_id=channel_id,
                                                    jacket=True)
@@ -2142,9 +2140,8 @@ class IrModelSynchro(models.Model):
         return local_ids
 
     @api.model
-    def synchro_one_record(self, channel_id, xmodel, ext_id,
-                           disable_post=None):
-        _logger.info('> synchro_one_record(%s,%s,%s)' % (
+    def pull_1_record(self, channel_id, xmodel, ext_id, disable_post=None):
+        _logger.info('> pull_1_record(%s,%s,%s)' % (
             channel_id, xmodel, ext_id))
         vals = self.get_counterpart_response(channel_id, xmodel, ext_id)
         if not vals:
@@ -2160,18 +2157,12 @@ class IrModelSynchro(models.Model):
                         xmodel)
             return
         cls = self.env[xmodel]
-        if hasattr(cls, 'synchro'):
-            return cls.synchro(self.jacket_vals(
-                cache.get_attr(channel_id, 'PREFIX'),
-                vals), disable_post=disable_post)
-        else:
-            return self.synchro(cls, self.jacket_vals(
-                cache.get_attr(channel_id, 'PREFIX'),
-                vals), disable_post=disable_post)
+        return self.generic_synchro(cls, vals, disable_post=disable_post,
+                                    jacket=True, channel_id=channel_id)
 
     @api.multi
     def pull_record(self, cls, channel_id=None):
-        '''Button synchronize at web page'''
+        """Button synchronize at record UI page"""
         cache = self.env['ir.model.synchro.cache']
         for rec in cls:
             model = cls.__class__.__name__
@@ -2196,7 +2187,7 @@ class IrModelSynchro(models.Model):
                                 channel_id, xmodel, ext_id)
                     if ext_id and (identity != 'vg7' or
                                    xmodel != 'res.partner.invoice'):
-                        self.synchro_one_record(channel_id, xmodel, ext_id)
+                        self.pull_1_record(channel_id, xmodel, ext_id)
                     if identity == 'vg7' and model == 'res.partner':
                         xmodel = 'res.partner.supplier'
                         loc_ext_id = self.get_loc_ext_id_name(
@@ -2207,26 +2198,8 @@ class IrModelSynchro(models.Model):
                                 channel_id, xmodel, ext_id)
                             if ext_id:
                                 cache.open(model=xmodel)
-                                self.synchro_one_record(
+                                self.pull_1_record(
                                     channel_id, xmodel, ext_id)
-
-    @api.multi
-    def pull_structurated_document(self, channel_id, model, loc_id):
-        '''Button synchronize at web page'''
-        cache = self.env['ir.model.synchro.cache']
-        model_child = cache.get_struct_model_attr(model, 'MODEL_CHILD')
-        if not model_child:
-            return
-        child_ids = cache.get_struct_model_attr(
-            model, 'CHILD_IDS', default=False)
-        hdr_rec = self.env[model].browse(loc_id)
-        if not hdr_rec:
-            return
-        lines = hdr_rec[child_ids]
-        if not lines:
-            lines = self.get_counterpart_lines(channel_id, model_child, loc_id)
-        for line in self.env[model].browse(loc_id)[child_ids]:
-            pass
 
     @api.model
     def trigger_one_record(self, ext_model, prefix, ext_id):
@@ -2251,7 +2224,7 @@ class IrModelSynchro(models.Model):
                 continue
             self.logmsg(
                 channel_id, '### Pulling %s.%s' % (model, ext_id))
-            return self.synchro_one_record(channel_id, model, ext_id)
+            return self.pull_1_record(channel_id, model, ext_id)
         return -8
 
 

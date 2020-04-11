@@ -10,6 +10,7 @@
 import logging
 
 from odoo import api, fields, models
+from odoo import release
 
 _logger = logging.getLogger(__name__)
 try:
@@ -26,6 +27,10 @@ except ImportError as err:
     _logger.error(err)
 try:
     from os0 import os0
+except ImportError as err:
+    _logger.error(err)
+try:
+    from clodoo import transodoo
 except ImportError as err:
     _logger.error(err)
 try:
@@ -365,3 +370,37 @@ class IrModelSynchroApply(models.Model):
         vals[loc_name] = self.env['account.account.type'].search([])[0].id
         return vals
 
+    ############################
+    # ODOO MIGRATION FUNCTIONS #
+    ############################
+    def apply_oe_account_tax_amount(self, channel_id, vals, loc_name, ext_ref,
+                                    loc_ext_id, default=None, ctx=None):
+        synchro_model = self.env['ir.model.synchro']
+        tnldict = synchro_model.get_tnldict(channel_id)
+        ext_odoo_ver = synchro_model.get_ext_odoo_ver(ext_ref.split(':')[0])
+        vals[loc_name] = transodoo.translate_from_to(
+            tnldict, 'account.tax', vals[ext_ref],
+            ext_odoo_ver, release.major_version,
+            type='value', fld_name='amount')
+        return vals
+
+    def apply_oe_account_account_type_name(
+            self, channel_id, vals, loc_name, ext_ref, loc_ext_id,
+            default=None, ctx=None):
+        synchro_model = self.env['ir.model.synchro']
+        tnldict = synchro_model.get_tnldict(channel_id)
+        ext_odoo_ver = synchro_model.get_ext_odoo_ver(ext_ref.split(':')[0])
+        vals[loc_name] = transodoo.translate_from_to(
+            tnldict, 'account.account.type', vals[ext_ref],
+            ext_odoo_ver, release.major_version,
+            type='value', fld_name='report_type')
+        return vals
+
+    def apply_oe_account_account_type(
+            self, channel_id, vals, loc_name, ext_ref, loc_ext_id,
+            default=None, ctx=None):
+        if vals[ext_ref] == 'view':
+            vals[loc_name] = 'other'
+        else:
+            vals[loc_name] = vals[ext_ref]
+        return vals

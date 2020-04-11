@@ -90,4 +90,3 @@ class AccountInvoiceLine(models.Model):
     def synchro(self, vals, disable_post=None):
         return self.env['ir.model.synchro'].synchro(
             self, vals, disable_post=disable_post)
-
