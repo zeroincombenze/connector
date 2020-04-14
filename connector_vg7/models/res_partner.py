@@ -289,7 +289,7 @@ class ResPartner(models.Model):
     @api.model
     def synchro(self, vals, disable_post=None):
         if not disable_post:
-            vals['type'] = 'contact'
+            vals[':type'] = 'contact'
         return self.env['ir.model.synchro'].synchro(
             self, vals, disable_post=disable_post)
 
@@ -308,7 +308,7 @@ class ResPartnerShipping(models.Model):
     def synchro(self, vals, disable_post=None):
         vals = self.env['res.partner'].rephase_fields(
             vals, 'vg7:shipping')
-        vals['type'] = 'delivery'
+        vals[':type'] = 'delivery'
         return self.env['ir.model.synchro'].synchro(
             self, vals, disable_post=disable_post)
 
@@ -323,7 +323,7 @@ class ResPartnerInvoice(models.Model):
     def synchro(self, vals, disable_post=None):
         vals = self.env['res.partner'].rephase_fields(
             vals, 'vg7:billing')
-        vals['type'] = 'invoice'
+        vals[':type'] = 'invoice'
         return self.env['ir.model.synchro'].synchro(
             self, vals, disable_post=disable_post)
 
@@ -335,6 +335,6 @@ class ResPartnerSupplier(models.Model):
     @api.model
     def synchro(self, vals, disable_post=None):
         vals['supplier'] = True
-        vals['type'] = 'contact'
+        vals[':type'] = 'contact'
         return self.env['ir.model.synchro'].synchro(
             self, vals, disable_post=disable_post)

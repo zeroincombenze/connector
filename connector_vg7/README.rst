@@ -1,6 +1,6 @@
 
 ================================
-|icon| connector_vg7 10.0.0.1.30
+|icon| connector_vg7 10.0.0.1.31
 ================================
 
 
@@ -161,6 +161,12 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 ChangeLog History / Cronologia modifiche
 ----------------------------------------
 
+10.0.0.1.31 (2020-04-14)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [FIX] Banks / Conti bancari
+
+
 10.0.0.1.30 (2020-04-10)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -312,7 +318,7 @@ La distribuzione `Zeroincombenze® <https://wiki.zeroincombenze.org/en/Odoo>`__ 
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2020-04-11
+Last Update / Ultimo aggiornamento: 2020-04-14
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status

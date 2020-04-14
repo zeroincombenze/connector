@@ -226,12 +226,10 @@ class IrModelSynchro(models.Model):
         if model == 'res.partner':
             if spec == 'delivery':
                 xmodel = 'res.partner.shipping'
-            elif spec == 'invoice':
-                xmodel = 'res.partner.invoice'
-            elif spec == 'supplier':
-                xmodel = 'res.partner.supplier'
+            elif spec in ('invoice', 'supplier'):
+                xmodel = '%s.%s' % (model, spec)
         elif model == 'res.partner.bank':
-            if spec == 'id_odoo':
+            if spec == 'company':
                 xmodel = 'res.partner.bank.company'
         return xmodel
 
@@ -240,10 +238,9 @@ class IrModelSynchro(models.Model):
         actual_model = model
         if model in ('res.partner.shipping',
                      'res.partner.invoice',
-                     'res.partner.supplier'):
-            actual_model = 'res.partner'
-        elif model == 'res.partner.bank.company':
-            actual_model = 'res.partner.bank'
+                     'res.partner.supplier',
+                     'res.partner.bank.company'):
+            actual_model = '.'.join([x for x in model.split('.')[:-1]])
         if only_name:
             return actual_model
         return self.env[actual_model]
@@ -252,19 +249,19 @@ class IrModelSynchro(models.Model):
     def get_spec_from_xmodel(self, xmodel):
         if xmodel == 'res.partner.shipping':
             return 'delivery'
-        elif xmodel == 'res.partner.invoice':
-            return 'invoice'
-        elif xmodel == 'res.partner.supplier':
-            return 'supplier'
-        elif xmodel == 'res.partner.bank.company':
-            return 'id_odoo'
+        elif xmodel in ('res.partner.invoice',
+                        'res.partner.supplier',
+                        'res.partner.bank.company'):
+            return xmodel.split('.')[-1]
         return ''
 
     @api.model
     def get_loc_ext_id_name(self, channel_id, model, spec=None):
         cache = self.env['ir.model.synchro.cache']
-        xmodel = self.get_xmodel(model, spec) if spec else model
+        # xmodel = self.get_xmodel(model, spec) if spec else model
+        xmodel = self.get_xmodel(model, spec)
         cache.open(model=xmodel)
+        # FIX
         return cache.get_model_attr(
             channel_id, xmodel, 'EXT_ID',
             default='%s_id' % cache.get_attr(channel_id, 'PREFIX'))
@@ -272,7 +269,8 @@ class IrModelSynchro(models.Model):
     @api.model
     def get_loc_ext_id_value(self, channel_id, model, ext_id, spec=None):
         cache = self.env['ir.model.synchro.cache']
-        xmodel = self.get_xmodel(model, spec) if spec else model
+        # xmodel = self.get_xmodel(model, spec) if spec else model
+        xmodel = self.get_xmodel(model, spec)
         cache.open(model=xmodel)
         offset = cache.get_model_attr(
             channel_id, xmodel, 'ID_OFFSET', default=0)
@@ -283,7 +281,8 @@ class IrModelSynchro(models.Model):
     @api.model
     def get_actual_ext_id_value(self, channel_id, model, ext_id, spec=None):
         cache = self.env['ir.model.synchro.cache']
-        xmodel = self.get_xmodel(model, spec) if spec else model
+        # xmodel = self.get_xmodel(model, spec) if spec else model
+        xmodel = self.get_xmodel(model, spec)
         cache.open(model=xmodel)
         offset = cache.get_model_attr(
             channel_id, xmodel, 'ID_OFFSET', default=0)
@@ -453,9 +452,9 @@ class IrModelSynchro(models.Model):
             return False
         cls = self.env[model]
         return self.generic_synchro(cls,
-                                     vals,
-                                     channel_id=channel_id,
-                                     jacket=True)
+                                    vals,
+                                    channel_id=channel_id,
+                                    jacket=True)
 
     def create_new_ref(
             self, channel_id, actual_model, key_name, value, ext_value,
@@ -642,7 +641,8 @@ class IrModelSynchro(models.Model):
     def get_foreign_ref(self, channel_id, actual_model, value_id, is_foreign,
                         ctx=None, spec=None):
         cache = self.env['ir.model.synchro.cache']
-        loc_ext_id = self.get_loc_ext_id_name(channel_id, actual_model)
+        loc_ext_id = self.get_loc_ext_id_name(
+            channel_id, actual_model, spec=spec)
         new_value = False
         rec = False
         ext_value = value_id
@@ -1341,7 +1341,7 @@ class IrModelSynchro(models.Model):
                     ))
         cache = self.env['ir.model.synchro.cache']
         cnx, session, tnldict = rpc_session()
-        prefix = cache.get_attr(channel_id, 'PREFIX')
+        # prefix = cache.get_attr(channel_id, 'PREFIX')
         actual_model = self.get_actual_model(xmodel, only_name=True)
         if ext_id:
             if mode:

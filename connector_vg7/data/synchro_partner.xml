@@ -265,6 +265,13 @@
         <field name="model_id" ref="res_partner"/>
     </record>
 
+    <record forcecreate="1" id="res_partner_assigned_bank" model="synchro.channel.model.fields">
+        <field name="name">assigned_bank</field>
+        <field name="counterpart_name">bank_account_id</field>
+        <field name="spec">company</field>
+        <field name="model_id" ref="res_partner"/>
+    </record>
+
 
     <record forcecreate="1" id="res_partner_shipping_id" model="synchro.channel.model.fields">
         <field name="name">vg7_id</field>

@@ -205,6 +205,9 @@ class IrModelSynchroCache(models.Model):
             'property_stock_supplier': {'readonly': True},
             'title': {'readonly': True},
         },
+        'res.partner.bank': {
+            'bank_name': {'readonly': False},
+        },
         'res.users': {
             'action_id': {'readonly': True},
             'category_id': {'readonly': True},
@@ -453,6 +456,8 @@ class IrModelSynchroCache(models.Model):
     def store_model_field(
             self, channel_id, model, loc_name, ext_name, apply, protect, spec,
             required):
+        if model == 'res.partner' and loc_name == 'assigned_bank':
+            pass
         self.set_model_field_attr(
             channel_id, model, loc_name, 'LOC_FIELDS', ext_name)
         self.set_model_field_attr(

@@ -40,11 +40,11 @@ class ResPartnerBank(models.Model):
     def preprocess(self, channel_id, vals):
         """
         Odoo                      Counterpart   Fields
-        res.partner.bank          bank          description
+        res.partner.bank          bank          description, IBAN, customer_id
         res.partner.bank.company  bank_accounts bank, iban, id_odoo
         """
         if 'id_odoo' in vals:
-            return vals, 'id_odoo'
+            return vals, 'company'
         return vals, ''
 
     @api.model
@@ -64,7 +64,7 @@ class ResPartnerBankCompany(models.Model):
     @api.model
     def synchro(self, vals, disable_post=None):
         if not disable_post:
-            vals['type'] = 'company'
+            vals[':type'] = 'company'
         return self.env['ir.model.synchro'].synchro(
             self, vals, disable_post=disable_post)
 

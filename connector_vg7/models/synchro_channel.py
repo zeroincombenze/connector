@@ -112,6 +112,7 @@ class SynchroChannelModel(models.Model):
          ('invoice', 'Invoice Address'),
          ('customer', 'Customer'),
          ('supplier', 'Supplier'),
+         ('company', 'Company'),
          ],
         string='Specific search',
     )
@@ -148,6 +149,7 @@ class SynchroChannelModelFields(models.Model):
          ('invoice', 'Invoice Address'),
          ('customer', 'Customer'),
          ('supplier', 'Suplier'),
+         ('company', 'Company'),
          ],
         string='Specific search',
     )
