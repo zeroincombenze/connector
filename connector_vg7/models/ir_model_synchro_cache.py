@@ -132,6 +132,7 @@ class IrModelSynchroCache(models.Model):
     ]
     TABLE_DEF = {
         'base': {
+            # 'company_id': {'required': True},
             'create_date': {'readonly': True},
             'create_uid': {'readonly': True},
             'message_ids': {'readonly': True},
@@ -321,7 +322,7 @@ class IrModelSynchroCache(models.Model):
 
     @api.model_cr_context
     def is_struct(self, model):
-        return model >= 'a'
+        return model < 'A' or model > '['
 
     # ------------------
     # Channel primitives

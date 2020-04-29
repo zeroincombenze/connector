@@ -272,6 +272,13 @@
         <field name="model_id" ref="res_partner"/>
     </record>
 
+    <record forcecreate="1" id="res_partner_invoice_warn_msg" model="synchro.channel.model.fields">
+        <field name="name">invoice_warn_msg</field>
+        <field name="counterpart_name">note</field>
+        <field name="apply">set_inv_warn()</field>
+        <field name="model_id" ref="res_partner"/>
+    </record>
+
 
     <record forcecreate="1" id="res_partner_shipping_id" model="synchro.channel.model.fields">
         <field name="name">vg7_id</field>

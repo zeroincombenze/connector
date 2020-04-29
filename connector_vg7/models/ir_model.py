@@ -675,10 +675,7 @@ class IrModelSynchro(models.Model):
             new_value = self.create_new_ref(
                 channel_id, xmodel, loc_ext_id, new_value, ext_value,
                 ctx=ctx, spec=spec)
-        if not new_value:
-            _logger.error('>>> return %s # get_foreign_ref()' % new_value)
-        else:
-            _logger.info('>>> return %s # get_foreign_ref())' % new_value)
+        _logger.info('>>> return %s # get_foreign_ref())' % new_value)
         return new_value
 
     def get_foreign_value(self, channel_id, xmodel, value, name, is_foreign,
@@ -779,7 +776,10 @@ class IrModelSynchro(models.Model):
         else:
             # Case #4 - field and value are Odoo
             is_foreign = False
-            ext_name = loc_name = ext_ref
+            if ext_ref.startswith(':'):
+                ext_name = loc_name = ext_ref[1:]
+            else:
+                ext_name = loc_name = ext_ref
         return ext_name, loc_name, is_foreign
 
     def get_default_n_apply(self, channel_id, xmodel, loc_name, ext_name,
@@ -818,7 +818,8 @@ class IrModelSynchro(models.Model):
     def map_to_internal(self, channel_id, xmodel, vals, disable_post):
 
         def rm_ext_value(vals, loc_name, ext_name, ext_ref, is_foreign):
-            if (is_foreign or loc_name != ext_name) and ext_ref in vals:
+            if (is_foreign or loc_name != ext_name or
+                    ext_ref.startswith(':')) and ext_ref in vals:
                 if loc_name and loc_name not in vals and vals[ext_ref]:
                     vals[loc_name] = vals[ext_ref]
                 del vals[ext_ref]
@@ -904,6 +905,8 @@ class IrModelSynchro(models.Model):
                     del vals[nm]
             return vals
 
+        _logger.info('> %s.synchro(%s,%s,%s)' % (
+            xmodel, channel_id, vals, disable_post))    # debug
         cache = self.env['ir.model.synchro.cache']
         actual_model = self.get_actual_model(xmodel, only_name=True)
         loc_ext_id = self.get_loc_ext_id_name(channel_id, xmodel)
@@ -917,6 +920,7 @@ class IrModelSynchro(models.Model):
         ctx['ext_key_id'] = ext_key_id
         ref_in_queue = False
         for ext_ref in field_list:
+            _logger.info('>>> for %s in field_list' % ext_ref)  # debug
             if not cache.is_struct(ext_ref):
                 continue
             ext_name, loc_name, is_foreign = self.name_from_ref(
@@ -967,7 +971,7 @@ class IrModelSynchro(models.Model):
             if (cache.get_struct_model_field_attr(
                     actual_model, loc_name, 'ttype') in ('many2one',
                                                          'one2many',
-                                                         'many2many'
+                                                         'many2many',
                                                          'integer') and
                     isinstance(vals[ext_ref], basestring) and (
                             vals[ext_ref].isdigit() or vals[ext_ref] == '-1')):
@@ -1055,8 +1059,6 @@ class IrModelSynchro(models.Model):
         return vals, ref_in_queue
 
     def set_default_values(self, cls, channel_id, xmodel, vals):
-        # self.logmsg(channel_id,
-        #             '>>> %s.set_default_values()' % xmodel)
         actual_model = self.get_actual_model(xmodel, only_name=True)
         ir_apply = self.env['ir.model.synchro.apply']
         cache = self.env['ir.model.synchro.cache']
@@ -1177,7 +1179,7 @@ class IrModelSynchro(models.Model):
                         domain.append((key, '=', os0.b(vals[key])))
                 if domain:
                     domain = add_constraints(domain, constraints)
-                    if loc_ext_id and use_sync:
+                    if loc_ext_id and loc_ext_id in vals and use_sync:
                         domain.append('|')
                         domain.append((loc_ext_id, '=', False))
                         domain.append((loc_ext_id, '=', 0))
@@ -1532,6 +1534,8 @@ class IrModelSynchro(models.Model):
     @api.model
     def synchro_childs(
             self, channel_id, xmodel, actual_model, parent_id, ext_id):
+        _logger.info('> %s.synchro_childs(%s,%s,%s,%s)' % (
+            xmodel, channel_id, actual_model, parent_id, ext_id))
         cache = self.env['ir.model.synchro.cache']
         child_ids = cache.get_struct_model_attr(
             actual_model, 'CHILD_IDS', default=False)
@@ -1729,7 +1733,7 @@ class IrModelSynchro(models.Model):
                 do_write = False
             else:
                 min_vals = {loc_ext_id: ext_id}
-                for nm in ('name', 'type', 'parent_id'):
+                for nm in ('name', 'type', 'parent_id', 'company_id'):
                     if vals.get(nm):
                         min_vals[nm] = vals[nm]
                 do_write = True
@@ -1741,6 +1745,8 @@ class IrModelSynchro(models.Model):
             if not do_write:
                 vals = self.set_default_values(cls, channel_id, xmodel, vals)
             if vals:
+                if actual_model == 'account.payment.term':
+                    vals[child_ids] = {'sequence': 1, 'value': 'balance'}
                 try:
                     id = actual_cls.create(min_vals).id
                     if not do_write and min_vals != vals:
@@ -1791,6 +1797,9 @@ class IrModelSynchro(models.Model):
                         rec and child_ids and
                         hasattr(rec, child_ids)):
                     for num, line in enumerate(rec[child_ids]):
+                        _logger.info(
+                            '>>> for %s,%s in enumerate(rec[child_ids])' % (
+                                num, line))  # debug
                         seq = num + 1
                         if not hasattr(line, 'to_delete'):
                             child_vals = {}

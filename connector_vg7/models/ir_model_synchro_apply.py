@@ -99,7 +99,10 @@ class IrModelSynchroApply(models.Model):
     def apply_not(self, channel_id, vals, loc_name,
                       ext_ref, loc_ext_id, default=None, ctx=None):
         if ext_ref in vals:
-            vals[loc_name] = not os0.str2bool(vals.get(ext_ref), True)
+            if isinstance(vals[ext_ref], (int, long, bool)):
+                vals[loc_name] = not vals[ext_ref]
+            else:
+                vals[loc_name] = not os0.str2bool(vals[ext_ref], True)
         return vals
 
     def apply_person(self, channel_id, vals, loc_name,
@@ -341,7 +344,7 @@ class IrModelSynchroApply(models.Model):
     def apply_eom(self, channel_id, vals, loc_name,
                    ext_ref, loc_ext_id, default=None, ctx=None):
         if vals.get(ext_ref):
-            eom = os0.str2bool(vals[ext_ref], False)
+            eom = os0.str2bool('%s' % vals[ext_ref], False)
             if eom:
                 vals['option'] = 'day_after_invoice_date'
             else:
@@ -368,6 +371,13 @@ class IrModelSynchroApply(models.Model):
     def apply_acc_user_type(self, channel_id, vals, loc_name,
                            ext_ref, loc_ext_id, default=None, ctx=None):
         vals[loc_name] = self.env['account.account.type'].search([])[0].id
+        return vals
+
+    def apply_set_inv_warn(self, channel_id, vals, loc_name, ext_ref,
+                           loc_ext_id, default=None, ctx=None):
+        if vals.get(ext_ref):
+            vals['invoice_warn'] = 'warning'
+            vals[loc_name] = vals[ext_ref]
         return vals
 
     ############################

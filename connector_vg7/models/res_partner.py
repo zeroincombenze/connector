@@ -138,6 +138,7 @@ class ResPartner(models.Model):
                         del vals[ext_ref]
                 for ext_ref in ('vg7:shipping', 'vg7:billing'):
                     if ext_ref in vals:
+                        vals[':customer'] = True
                         vals[ext_ref] = self.rephase_fields(
                             vals[ext_ref], ext_ref)
                         if ext_ref == 'vg7:shipping':

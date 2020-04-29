@@ -48,6 +48,11 @@
         <field name="model_id" ref="account_payment_term"/>
     </record>
 
+    <record forcecreate="1" id="account_payment_term_company_id" model="synchro.channel.model.fields">
+        <field name="name">company_id</field>
+        <field name="model_id" ref="account_payment_term"/>
+    </record>
+
 
     <record forcecreate="1" id="account_payment_term_line_payment_id" model="synchro.channel.model.fields">
         <field name="name">payment_id</field>
