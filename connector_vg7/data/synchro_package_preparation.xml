@@ -58,6 +58,20 @@
         <field name="model_id" ref="stock_picking_package_preparation"/>
     </record>
 
+    <record forcecreate="1" id="stock_picking_package_preparation_date" model="synchro.channel.model.fields">
+        <field name="name">date</field>
+        <field name="counterpart_name">data_emissione</field>
+        <field name="apply">datetime()</field>
+        <field name="model_id" ref="stock_picking_package_preparation"/>
+    </record>
+
+    <record forcecreate="1" id="stock_picking_package_preparation_date_done" model="synchro.channel.model.fields">
+        <field name="name">date_done</field>
+        <field name="counterpart_name">data_ritiro</field>
+        <field name="apply">datetime()</field>
+        <field name="model_id" ref="stock_picking_package_preparation"/>
+    </record>
+
     <record forcecreate="1" id="stock_picking_package_preparation_partner_id" model="synchro.channel.model.fields">
         <field name="name">partner_id</field>
         <field name="counterpart_name">customer_id</field>
@@ -70,12 +84,6 @@
         <field name="apply">partner_address()</field>
         <field name="spec">delivery</field>
         <field name="required" eval="True"/>
-        <field name="model_id" ref="stock_picking_package_preparation"/>
-    </record>
-
-    <record forcecreate="1" id="stock_picking_package_preparation_date" model="synchro.channel.model.fields">
-        <field name="name">date</field>
-        <field name="counterpart_name">data emissione</field>
         <field name="model_id" ref="stock_picking_package_preparation"/>
     </record>
 
@@ -122,6 +130,7 @@
 
     <record forcecreate="1" id="stock_picking_package_preparation_line_sequence" model="synchro.channel.model.fields">
         <field name="name">sequence</field>
+        <field name="counterpart_name">ordinamento</field>
         <field name="model_id" ref="stock_picking_package_preparation_line"/>
     </record>
 

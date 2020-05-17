@@ -19,6 +19,45 @@ try:
 except ImportError as err:
     _logger.debug(err)
 
+RE_NAME_2_UTYPE = {
+    'Acq': 'account.data_account_type_expenses',
+    'Banc(a|he|k)': 'account.data_account_type_liquidity',
+    'Canoni': 'account.data_account_type_expenses',
+    'Cash': 'account.data_account_type_liquidity',
+    '.*Cassa': 'account.data_account_type_liquidity',
+    'Clienti': 'account.data_account_type_receivable',
+    'Crediti.*soci': 'account.data_account_type_receivable',
+    'Crediti.*[Cc]lienti': 'account.data_account_type_receivable',
+    'Customer': 'account.data_account_type_receivable',
+    'Debiti.*[Cc]lienti': 'account.data_account_type_payable',
+    'Debiti.*[Ff]ornitori': 'account.data_account_type_payable',
+    '.*Immobilizzazioni': 'account.data_account_type_fixed_assets',
+    'Impianto.*Ampliamento': 'account.data_account_type_non_current_assets',
+    'Effetti': 'account.data_account_type_receivable',
+    'FA': 'account.data_account_type_current_liabilities',
+    'Fondo': 'account.data_account_type_current_liabilities',
+    'Fornitori': 'account.data_account_type_payable',
+    'IVA': 'account.data_account_type_current_liabilities',
+    'Purchase': 'account.data_account_type_expenses',
+    'QA': 'account.data_account_type_depreciation',
+    'Ricavi': 'account.data_account_type_revenue',
+    'Rimb.*[Ss]pese': 'account.data_account_type_other_income',
+    'Risconti': 'account.data_account_type_prepayments',
+    'Supplier': 'account.data_account_type_payable',
+    'Tass(a|e)': 'account.data_account_type_current_liabilities',
+    '': 'account.data_account_type_revenue',
+}
+
+RE_NAME_2_TTYPE = {
+    'Banc(a|he|k)': 'liquidity',
+    'Cash': 'liquidity',
+    'Cassa': 'liquidity',
+    'Crediti': 'receivable',
+    'Debiti': 'payable',
+    'Payable': 'payable',
+    'Receivable': 'receivable',
+    '': 'other',
+}
 
 class AccountAccount(models.Model):
     _inherit = "account.account"
@@ -102,22 +141,23 @@ class AccountAccount(models.Model):
         view/*
         """
         name = vals.get('name')
-        if name and (
-                not rec.user_type_id or
-                rec.user_type_id == self.env.ref(
-                    'account.data_account_type_receivable')):
-            if re.search('Crediti.*soci', name, ):
-                vals['user_type_id'] = self.env.ref(
-                    'account.data_account_type_receivable').id
-            elif re.search('Impianto.*Ampliamento', name):
-                vals['user_type_id'] = self.env.ref(
-                    'account.data_account_type_receivable').id
-            else:
-                vals['user_type_id'] = self.env.ref(
-                    'account.data_account_type_revenue').id
+        if (name and
+                (not vals.get('user_type_id') or
+                 vals['user_type_id'] == self.env.ref(
+                            'account.data_account_type_receivable')) and
+                (not rec or
+                 (rec and
+                  (not rec.user_type_id or
+                   rec.user_type_id == self.env.ref(
+                              'account.data_account_type_receivable'))))):
+            vals['user_type_id'] = self.env.ref(RE_NAME_2_UTYPE['']).id
+            for regex in RE_NAME_2_UTYPE:
+                if re.search(regex, name):
+                    vals['user_type_id'] = self.env.ref(
+                        RE_NAME_2_UTYPE[regex]).id
+                    break
         elif not rec:
-            vals['user_type_id'] = self.env.ref(
-                'account.data_account_type_revenue').id
+            vals['user_type_id'] = self.env.ref(RE_NAME_2_UTYPE['']).id
         return vals
 
     def assure_values(self, vals, rec):
@@ -133,7 +173,8 @@ class AccountAccount(models.Model):
                 acct = cls_type.search([])[0]
         elif rec and rec.user_type_id:
             acct = rec.user_type_id
-        if acct.type in ('payable', 'receivable'):
+        if (acct.type in ('payable', 'receivable') and
+                (not rec or not rec.reconcile)):
             vals['reconcile'] = True
         return vals
 
@@ -191,47 +232,20 @@ class AccountAccountType(models.Model):
             text = res
         return text
 
-    def cvt_acct_type(self, vals, rec, src_ver, tgt_ver):
-        name = False
-        if vals.get('name'):
-            name = vals['name']
-        elif rec:
-            name = rec['name']
-        acctype = False
-        if name:
-            src_majv = int(src_ver.split('.')[0])
-            tgt_majv = int(tgt_ver.split('.')[0])
-            if src_majv < 9 and tgt_majv >= 9:
-                acctype = {
-                    'Receivable': 'receivable',
-                    'Payable': 'payable',
-                    'Bank and Cash': 'liquidity',
-                    'Credit Card': 'liquidity',
-                    'Bank': 'liquidity',
-                    'Cash': 'liquidity',
-                }.get(name, 'other')
-            elif src_majv >= 9 and tgt_majv < 9:
-                acctype = {
-                    'Receivable': 'asset',
-                    'Payable': 'liability',
-                    'Bank and Cash': 'asset',
-                    'Credit Card': 'asset',
-                    'Bank': 'asset',
-                    'Cash': 'asset',
-                    'Current Assets': 'asset',
-                    'Non-current Assets': 'asset',
-                    'Fixed Asset': 'asset',
-                    'Assets': 'asset',
-                    'Income': 'income',
-                    'Other Income': 'income',
-                    'Expenses': 'expense',
-                    'Depreciation': 'expense',
-                    'Cost of Revenue': 'expense',
-                    'Prepayments': 'expense',
-                    'Current Year Earnings': 'expense',
-                    'Equity': 'liability',
-                }.get(name, 'none')
-        return acctype
+    def assure_values(self, vals, rec):
+        # actual_model = 'account.account.type'
+        if not vals.get('type') and not rec:
+            name = vals.get('name', '')
+            if (name.find('Bank') >= 0 or name.find('Card') >= 0 or
+                    name.find('Banc') >= 0 or name.find('Cart') >= 0):
+                vals['type'] = 'liquidity'
+            elif name.find('Payable') >= 0 or name.find('Debiti') >= 0:
+                vals['type'] = 'payable'
+            elif name.find('Receivable') >= 0 or name.find('Crediti') >= 0:
+                vals['type'] = 'receivable'
+            else:
+                vals['type'] = 'other'
+        return vals
 
     @api.model
     def synchro(self, vals, disable_post=None):

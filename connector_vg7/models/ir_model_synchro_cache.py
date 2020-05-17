@@ -148,7 +148,7 @@ class IrModelSynchroCache(models.Model):
             'write_uid': {'readonly': True},
         },
         'account.account': {
-            'user_type_id': {'required': True, 'APPLY': 'acc_user_type()'},
+            'user_type_id': {'required': True},
             'internal_type': {'readonly': False},
         },
         'account.invoice': {

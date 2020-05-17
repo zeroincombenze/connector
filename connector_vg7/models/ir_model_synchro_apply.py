@@ -368,16 +368,19 @@ class IrModelSynchroApply(models.Model):
                     vals['days'] = num_days - 2
         return vals
 
-    def apply_acc_user_type(self, channel_id, vals, loc_name,
-                           ext_ref, loc_ext_id, default=None, ctx=None):
-        vals[loc_name] = self.env['account.account.type'].search([])[0].id
-        return vals
-
     def apply_set_inv_warn(self, channel_id, vals, loc_name, ext_ref,
                            loc_ext_id, default=None, ctx=None):
         if vals.get(ext_ref):
             vals['invoice_warn'] = 'warning'
             vals[loc_name] = vals[ext_ref]
+        return vals
+
+    def apply_datetime(self, channel_id, vals, loc_name, ext_ref,
+                       loc_ext_id, default=None, ctx=None):
+        if vals.get(ext_ref):
+            vals[loc_name] = vals[ext_ref]
+            if len(vals[ext_ref].split(' ')) == 1:
+                vals[loc_name] = '%s 00:00:00' % vals[ext_ref]
         return vals
 
     ############################
@@ -397,13 +400,25 @@ class IrModelSynchroApply(models.Model):
     def apply_oe_account_account_type_name(
             self, channel_id, vals, loc_name, ext_ref, loc_ext_id,
             default=None, ctx=None):
-        synchro_model = self.env['ir.model.synchro']
-        tnldict = synchro_model.get_tnldict(channel_id)
-        ext_odoo_ver = synchro_model.get_ext_odoo_ver(ext_ref.split(':')[0])
-        vals[loc_name] = transodoo.translate_from_to(
-            tnldict, 'account.account.type', vals[ext_ref],
-            ext_odoo_ver, release.major_version,
-            type='value', fld_name='report_type')
+        if not vals.get(loc_name):
+            synchro_model = self.env['ir.model.synchro']
+            tnldict = synchro_model.get_tnldict(channel_id)
+            ext_odoo_ver = synchro_model.get_ext_odoo_ver(
+                ext_ref.split(':')[0])
+            names = transodoo.translate_from_to(
+                tnldict, 'account.account.type', vals[ext_ref],
+                ext_odoo_ver, release.major_version,
+                type='value', fld_name='report_type')
+            name = vals.get('name', '').lower()
+            if name == 'Contante':
+                name2 = 'cash'
+            elif name == 'Cassa':
+                name2 = 'cash'
+            if isinstance(names, list):
+                for nm in names:
+                    if nm == name:
+                        vals[loc_name] = nm
+                        break
         return vals
 
     def apply_oe_account_account_type(

@@ -914,6 +914,9 @@ class IrModelSynchro(models.Model):
             channel_id, xmodel, 'KEY_ID', default='id')
         child_ids = cache.get_struct_model_attr(
             actual_model, 'CHILD_IDS', default=False)
+        identity = cache.get_attr(channel_id, 'IDENTITY')
+        pfx_ext = '%s:' % cache.get_attr(channel_id, 'PREFIX')
+        ext_odoo_ver = self.get_ext_odoo_ver(pfx_ext)
         vals = check_4_double_field_id(vals)
         field_list = priority_fields(channel_id, vals, loc_ext_id, xmodel)
         ctx = cache.get_attr(channel_id, 'CTX')
@@ -1029,6 +1032,7 @@ class IrModelSynchro(models.Model):
                             (isinstance(vals[loc_name], basestring) and
                              not vals[loc_name].isdigit()))):
                         del vals[loc_name]
+                    del vals[ext_ref]
                 else:
                     vals[loc_name] = self.get_foreign_value(
                         channel_id, xmodel, vals[ext_ref], loc_name, is_foreign,
@@ -1036,6 +1040,14 @@ class IrModelSynchro(models.Model):
                         ttype=cache.get_struct_model_field_attr(
                             actual_model, loc_name, 'ttype'),
                         spec=spec, fmt='cmd')
+            elif identity == 'odoo':
+                tnldict = self.get_tnldict(channel_id)
+                vals[loc_name] = transodoo.translate_from_to(
+                    tnldict, xmodel, vals[ext_ref],
+                    ext_odoo_ver, release.major_version,
+                    type='value', fld_name=loc_name)
+                if isinstance(vals[loc_name], list):
+                    del vals[loc_name]
             vals = do_apply_n_clean(
                 channel_id, vals,
                 loc_name, ext_name, ext_ref, loc_ext_id,
@@ -1576,9 +1588,9 @@ class IrModelSynchro(models.Model):
                 vals[':%s' % parent_id_name] = parent_id
             try:
                 id = self.generic_synchro(cls,
-                                           vals,
-                                           channel_id=channel_id,
-                                           jacket=True)
+                                          vals,
+                                          channel_id=channel_id,
+                                          jacket=True)
                 if id < 0:
                     self.logmsg(
                         channel_id,
@@ -2034,7 +2046,7 @@ class IrModelSynchro(models.Model):
 
     @api.multi
     def pull_full_records(self, force=None, only_model=None,
-                          only_complete=None, select=None):
+                          only_complete=None, select=None, clear=None):
         """Called by import wizard
         @only_complete: import only records which name starting with 'Unknown'
         """
