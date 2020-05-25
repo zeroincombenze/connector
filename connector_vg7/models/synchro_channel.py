@@ -60,6 +60,17 @@ class SynchroChannel(models.Model):
         help="Trace data in log. Warning! Use this feature with caution; "
              "all sent data will be recorded in the log file."
              "This feature must be used only to debug handshake")
+    tracelevel = fields.Selection(
+        [('0', 'No Trace'),
+         ('1', 'Main functions'),
+         ('2', 'Main + Inner functions'),
+         ('3', 'Statements'),
+         ],
+        string='Trace Level',
+        default=False,
+        help="Trace data in log. Warning! Use this feature with caution; "
+             "all sent data will be recorded in the log file."
+             "This feature must be used only to debug handshake")
     method = fields.Selection(
         [('NO', 'No interchange'),
          ('JSON', 'By JSON (rpc)'),
@@ -83,6 +94,21 @@ class SynchroChannel(models.Model):
     def write(self, vals):
         self.env['ir.model.synchro.cache'].clean_cache()
         return super(SynchroChannel, self).write(vals)
+
+    @api.onchange('trace')
+    def onchange_trace(self):
+        if self.trace:
+            self.tracelevel = '2'
+        else:
+            self.tracelevel = '0'
+
+    @api.onchange('tracelevel')
+    def onchange_tracelevel(self):
+        # compatobility with old trace flag
+        if self.tracelevel == '0':
+            self.trace = False
+        else:
+            self.trace = True
 
 
 class SynchroChannelModel(models.Model):

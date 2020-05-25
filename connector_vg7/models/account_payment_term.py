@@ -70,7 +70,7 @@ class AccountPaymentTerm(models.Model):
     @api.model
     def preprocess(self, channel_id, vals):
         _logger.info(
-            '> preprocess(%s)' % vals)
+            'account.payment.term.preprocess(%s)' % vals)
         cache = self.env['ir.model.synchro.cache']
         if 'vg7:date_scadenza' in vals:
             num_dues = len(vals['vg7:date_scadenza'])
@@ -91,34 +91,12 @@ class AccountPaymentTerm(models.Model):
                     line_vals[':value'] = 'percent'
                     line_vals[':value_amount'] = rate
                 child_vals.append(line_vals)
-                # cache.set_model_attr(
-                #     channel_id, 'account.payment.term.line', '%d' % num,
-                #     line_vals)
-            # del vals['vg7:date_scadenza']
             vals['vg7:date_scadenza'] = child_vals
         return vals, ''
 
     def postprocess(self, channel_id, parent_id, vals):
         # _logger.info(
         #     '> postprocess(%d,%s)' % (parent_id, vals))  # debug
-        # cache = self.env['ir.model.synchro.cache']
-        # model = 'account.payment.term.line'
-        # cls = self.env[model]
-        # num = 0
-        # while 1:
-        #     kk = '%d' % num
-        #     if not cache.get_model_attr(channel_id, model, kk):
-        #         break
-        #     vals = {}
-        #     for field in cache.get_model_attr(channel_id, model, kk):
-        #         vals[field] = cache.get_model_attr(
-        #             channel_id, model, kk)[field]
-        #     vals['parent_id'] = parent_id
-        #     cache.del_model_attr(channel_id, model, kk)
-        #     self.env['ir.model.synchro'].synchro(
-        #         cls, vals, disable_post=True)
-        #     num += 1
-        # return (num > 0)
         return False
 
     @api.model

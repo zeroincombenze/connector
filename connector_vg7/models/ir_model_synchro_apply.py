@@ -383,6 +383,34 @@ class IrModelSynchroApply(models.Model):
                 vals[loc_name] = '%s 00:00:00' % vals[ext_ref]
         return vals
 
+    def apply_set_order_state(self, channel_id, vals, loc_name,
+                   ext_ref, loc_ext_id, default=None, ctx=None):
+        if vals.get(ext_ref):
+            if vals[ext_ref].isdigit():
+                state = {
+                    1: 'draft',
+                    2: 'sale',
+                    3: 'sale',
+                    4: 'sale',
+                    5: 'cancel',
+                    6: 'cancel',
+                    7: 'sale',
+                    8: 'sale',
+                    9: 'sale',
+                    10: 'sale',
+                    11: 'sale',
+                    12: 'draft',
+                    13: 'sale',
+                    14: 'sale',
+                    15: 'sale',
+                    16: 'sale',
+                }.get(int(vals[ext_ref]), '')
+            else:
+                state = vals[ext_ref]
+            if state:
+                vals[loc_name] = state
+        return vals
+
     ############################
     # ODOO MIGRATION FUNCTIONS #
     ############################

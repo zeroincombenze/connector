@@ -40,7 +40,8 @@
                     <field name="exchange_path"/>
                     <field name="sequence"/>
                     <field name="active"/>
-                    <field name="trace"/>
+                    <field name="trace" readonly="1"/>
+                    <field name="tracelevel"/>
                 </group>
                 <field name="model_ids">
                     <tree string="Model mapping" editable="bottom">

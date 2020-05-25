@@ -229,7 +229,7 @@ class IrModelSynchroCache(models.Model):
     # -----------------------
     @api.model_cr_context
     def expired_cache(self, channel_id, xmodel, model):
-        cache_model = '_queue'
+        cache_model = 'QUEUE_SYNC'
         if self.get_struct_model_attr(cache_model, 'XPIRE'):
             self.set_struct_model(cache_model)
             self.CACHE.set_struct_cache(self._cr.dbname, cache_model)
@@ -241,7 +241,7 @@ class IrModelSynchroCache(models.Model):
     @api.model_cr_context
     def push_id(self, channel_id, xmodel, model, loc_id=None, ext_id=None):
         self.expired_cache(channel_id, xmodel, model)
-        cache_model = '_queue'
+        cache_model = 'QUEUE_SYNC'
         if loc_id:
             rec_list = self.get_struct_model_attr(
                 cache_model, model, default=[])
@@ -258,7 +258,7 @@ class IrModelSynchroCache(models.Model):
     @api.model_cr_context
     def pop_id(self, channel_id, xmodel, model, loc_id=None, ext_id=None):
         self.expired_cache(channel_id, xmodel, model)
-        cache_model = '_queue'
+        cache_model = 'QUEUE_SYNC'
         if loc_id:
             rec_list = self.get_struct_model_attr(
                 cache_model, model, default=[])
@@ -276,7 +276,7 @@ class IrModelSynchroCache(models.Model):
     def id_is_in_cache(
             self, channel_id, xmodel, model, loc_id=None, ext_id=None):
         self.expired_cache(channel_id, xmodel, model)
-        cache_model = '_queue'
+        cache_model = 'QUEUE_SYNC'
         return ((loc_id and loc_id in self.get_struct_model_attr(
             cache_model, model, default=[])) or
                 (ext_id and ext_id in self.get_model_attr(
@@ -297,15 +297,9 @@ class IrModelSynchroCache(models.Model):
         cache = self.CACHE
         if lifetime:
             self.lifetime(lifetime)
-        # attrs = {}
         for chn_id in self.get_channel_list():
             if not channel_id or chn_id == channel_id:
-                # for nm in ('IN_QUEUE', 'OUT_QUEUE'):
-                #     attrs[nm] = self.get_attr(chn_id, nm, default=[])
                 cache.init_channel(self._cr.dbname, chn_id)
-                # for nm in ('IN_QUEUE', 'OUT_QUEUE'):
-                #     if attrs[nm]:
-                #         self.set_attr(chn_id, nm, attrs[nm])
         if model:
             cache.init_struct_model(self._cr.dbname, model)
         else:
@@ -314,7 +308,6 @@ class IrModelSynchroCache(models.Model):
 
     @api.model_cr_context
     def set_loglevel(self, loglevel):
-        # cache = self.CACHE
         self.setup_channels(all=True)
         for channel_id in self.get_channel_list():
             self.set_attr(channel_id, 'LOGLEVEL', loglevel)
@@ -659,8 +652,8 @@ class IrModelSynchroCache(models.Model):
             channel.id, 'OUT_QUEUE', default=[]))
         self.set_attr(channel.id, 'IN_QUEUE', self.get_attr(
             channel.id, 'IN_QUEUE', default=[]))
-        self.set_attr(channel.id, '_queue', self.get_attr(
-            channel.id, '_queue', default={}))
+        self.set_attr(channel.id, 'QUEUE_SYNC', self.get_attr(
+            channel.id, 'QUEUE_SYNC', default={}))
         self.set_attr(channel.id, 'PREFIX', channel.prefix)
         self.set_attr(channel.id, 'IDENTITY', channel.identity)
         self.set_attr(channel.id, 'METHOD', channel.method)
@@ -806,7 +799,7 @@ class IrModelSynchroCache(models.Model):
         self.setup_model_structure(model, actual_model)
         self.setup_model_in_channels(
             channel_id=channel_id, model=model, ext_model=ext_model)
-        self.set_struct_model('_queue')
+        self.set_struct_model('QUEUE_SYNC')
         if cls is not None:
             if cls.__class__.__name__ != model:
                 raise RuntimeError('Class %s not of declared model %s' % (

@@ -70,8 +70,8 @@ class ResPartner(models.Model):
 
     @api.model
     def rephase_fields(self, vals, ext_ref):
-        _logger.info(
-            '> rephase(%s,%s)' % (vals, ext_ref))  # debug
+        self.env['ir.model.synchro'].logmsg('debug',
+            '>>> rephase(%s,%s)' % (vals, ext_ref))
         prefix1 = ext_ref.split(':')[0]
         prefix2 = '%s_' % ext_ref.split(':')[1]
         prefix = '%s:' % prefix1
@@ -187,8 +187,8 @@ class ResPartner(models.Model):
                                    'vg7:surename'):
                             if vals[ext_ref].get(nm) == vals.get(nm):
                                 vals[ext_ref][nm] = False
-                        _logger.info(
-                            '> store(%s,%s)' % (vals[ext_ref], ext_ref)) # debug
+                        self.env['ir.model.synchro'].logmsg('debug',
+                            '>>> store(%s,%s)' % (vals[ext_ref], ext_ref))
                         cache.set_model_attr(
                             channel_id, actual_model, ext_ref, vals[ext_ref])
                         del vals[ext_ref]
@@ -226,7 +226,7 @@ class ResPartner(models.Model):
             del vals['codice_destinatario']
         if (vals.get('electronic_invoice_subjected') and
                 not vals.get('codice_destinatario')):
-            if rec:
+            if rec and rec.codice_destinatario:
                 vals['codice_destinatario'] = rec.codice_destinatario.strip()
             else:
                 del vals['electronic_invoice_subjected']
@@ -238,7 +238,7 @@ class ResPartner(models.Model):
             del vals['ipa_code']
         if (vals.get('is_pa') and
                 not vals.get('ipa_code')):
-            if rec:
+            if rec and rec.ipa_code:
                 vals['ipa_code'] = rec.ipa_code.strip()
             else:
                 del vals['is_pa']
