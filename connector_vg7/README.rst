@@ -1,6 +1,6 @@
 
 ================================
-|icon| connector_vg7 10.0.0.1.33
+|icon| connector_vg7 10.0.0.1.34
 ================================
 
 
@@ -160,6 +160,14 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 
 ChangeLog History / Cronologia modifiche
 ----------------------------------------
+
+10.0.0.1.34 (2020-05-25)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [FIX] Sync with model w/o odoo id / Sincronizzazione con modelle senza ID odoo
+* [IMP] Transaction log / Registro transazioni
+* [IMP] Partner record timestamp & error message / Data, ora e messaggio di errore in record soggetti
+
 
 10.0.0.1.33 (2020-05-11)
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -324,7 +332,7 @@ La distribuzione `Zeroincombenze® <https://wiki.zeroincombenze.org/en/Odoo>`__ 
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2020-05-11
+Last Update / Ultimo aggiornamento: 2020-06-02
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status

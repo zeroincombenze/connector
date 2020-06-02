@@ -37,6 +37,8 @@ class ProductTemplate(models.Model):
                            compute=_set_dim_name,
                            store=True,
                            readonly=True)
+    timestamp = fields.Datetime('Timestamp', copy=False, readonly=True)
+    errmsg = fields.Char('Error message', copy=False, readonly=True)
 
     CONTRAINTS = ()
     LINES_OF_REC = False
@@ -94,6 +96,8 @@ class ProductProduct(models.Model):
                            compute=_set_dim_name,
                            store=True,
                            readonly=True)
+    timestamp = fields.Datetime('Timestamp', copy=False, readonly=True)
+    errmsg = fields.Char('Error message', copy=False, readonly=True)
 
     CONTRAINTS = ()
 

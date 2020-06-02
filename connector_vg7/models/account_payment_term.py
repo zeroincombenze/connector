@@ -69,8 +69,8 @@ class AccountPaymentTerm(models.Model):
 
     @api.model
     def preprocess(self, channel_id, vals):
-        _logger.info(
-            'account.payment.term.preprocess(%s)' % vals)
+        self.env['ir.model.synchro'].logmsg('debug',
+            '>>> account.payment.term.preprocess()')
         cache = self.env['ir.model.synchro.cache']
         if 'vg7:date_scadenza' in vals:
             num_dues = len(vals['vg7:date_scadenza'])

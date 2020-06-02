@@ -22,6 +22,8 @@ class SaleOrder(models.Model):
     oe8_id = fields.Integer('Odoo8 ID', copy=False)
     oe10_id = fields.Integer('Odoo10 ID', copy=False)
     original_state = fields.Char('Original Status', copy=False)
+    timestamp = fields.Datetime('Timestamp', copy=False, readonly=True)
+    errmsg = fields.Char('Error message', copy=False, readonly=True)
 
     CONTRAINTS = []
     DEFAULT = {}
@@ -33,6 +35,35 @@ class SaleOrder(models.Model):
             self.env['ir.model.synchro']._build_unique_index(self._inherit,
                                                              prefix)
         return res
+
+    @api.model
+    def __preprocess(self, channel_id, vals):
+        xmodel = 'sale.order'
+        stored_field = 'agent_id'
+        _logger.info(
+            '%s.preprocess(%s)' % (xmodel, vals))
+        cache = self.env['ir.model.synchro.cache']
+        cache.del_model_attr(channel_id, xmodel, stored_field)
+        if 'vg7:agent_id' in vals:
+            agent_id, agent = self.bind_record(
+                channel_id, xmodel, {'vg7_id': int(vals['vg7:agent_id'])})
+            if agent_id:
+                vals['user_id'] = agent_id
+                cache.set_model_attr(
+                    channel_id, xmodel, stored_field, agent_id)
+            del vals['vg7:agent_id']
+        elif 'vg7:customer_id' in vals:
+            partner_id, partner = self.bind_record(
+                channel_id, 'res.partner',
+                {'vg7_id': int(vals['vg7:customer_id'])})
+            if partner:
+                vals['user_id'] = partner.agents[0].id
+        return vals, ''
+
+    def __postprocess(self, channel_id, parent_id, vals):
+        # _logger.info(
+        #     '> postprocess(%d,%s)' % (parent_id, vals))  # debug
+        return False
 
     @api.model
     def set_defaults(self):

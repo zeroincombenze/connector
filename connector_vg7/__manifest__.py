@@ -10,7 +10,7 @@
 {
     'name': 'connector_vg7',
     'summary': 'Connector to/from VG7 software',
-    'version': '10.0.0.1.33',
+    'version': '10.0.0.1.34',
     'category': 'Generic Modules',
     'author': 'SHS-AV s.r.l.',
     'website': 'https://www.zeroincombenze.it/',
@@ -50,6 +50,8 @@
         'views/sequence_view.xml',
         'views/synchro_channel_view.xml',
         'views/model_view.xml',
+        'views/project_view.xml',
+        'views/account_move_view.xml',
         'data/synchro_channel.xml',
         'data/synchro_partner.xml',
         'data/synchro_partner_bank.xml',

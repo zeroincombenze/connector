@@ -1,3 +1,11 @@
+10.0.0.1.34 (2020-05-25)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [FIX] Sync with model w/o odoo id / Sincronizzazione con modelle senza ID odoo
+* [IMP] Transaction log / Registro transazioni
+* [IMP] Partner record timestamp & error message / Data, ora e messaggio di errore in record soggetti
+
+
 10.0.0.1.33 (2020-05-11)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 

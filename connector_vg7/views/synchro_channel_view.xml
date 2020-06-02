@@ -84,6 +84,11 @@
         <field name="name">view.synchro.model.form</field>
         <field name="model">synchro.channel.model</field>
         <field name="arch" type="xml">
+            <header>
+                <button name="%(action_wizard_pull_records)d"
+                    type="action"
+                    string="Pull Records" class="oe_highlight"/>
+            </header>
             <form string="Synchonization Model">
                 <group>
                     <field name="name"/>
@@ -150,6 +155,27 @@
         <field name="view_id" ref="view_synchro_tnl_tree"/>
     </record>
 
+
+    <record id="view_synchro_log_tree" model="ir.ui.view">
+        <field name="name">view.synchro.log.tree</field>
+        <field name="model">ir.model.synchro.log</field>
+        <field name="arch" type="xml">
+            <tree string="Synchonization Log">
+                <field name="timestamp"/>
+                <field name="model"/>
+                <field name="res_id"/>
+                <field name="errmsg"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_synchro_log" model="ir.actions.act_window">
+        <field name="name">Synchronization log</field>
+        <field name="res_model">ir.model.synchro.log</field>
+        <field name="view_id" ref="view_synchro_log_tree"/>
+    </record>
+
+
     <menuitem id="menu_synchro_channel" name="Synchonization Channel"
               action="action_synchro_channel" parent="base.next_id_9"
               groups="base.group_no_one"/>
@@ -160,6 +186,10 @@
 
     <menuitem id="menu_synchro_translation" name="Translation Domains"
               action="action_synchro_tnl" parent="base.next_id_9"
+              groups="base.group_no_one"/>
+
+    <menuitem id="menu_synchro_log" name="Synchonization Log"
+              action="action_synchro_log" parent="base.next_id_9"
               groups="base.group_no_one"/>
 
 </odoo>

@@ -42,6 +42,8 @@ class ResPartner(models.Model):
                            compute=_set_dim_name,
                            store=True,
                            readonly=True)
+    timestamp = fields.Datetime('Timestamp', copy=False, readonly=True)
+    errmsg = fields.Char('Error message', copy=False, readonly=True)
 
     CONTRAINTS = (['id', '!=', 'parent_id'])
 
@@ -113,7 +115,7 @@ class ResPartner(models.Model):
             return vals
 
         _logger.info(
-            '> preprocess(%s)' % vals)      # debug
+            '>>> preprocess(%s)' % vals)      # debug
         cache = self.env['ir.model.synchro.cache']
         actual_model = 'res.partner'
         spec = ''
@@ -195,14 +197,12 @@ class ResPartner(models.Model):
                     else:
                         cache.set_model_attr(
                             channel_id, actual_model, ext_ref, {})
-                _logger.info(
-                    '> %s.synchro(%s,%s)' % (actual_model, vals, True))
         return vals, spec
 
     @api.model
     def postprocess(self, channel_id, parent_id, vals):
         _logger.info(
-            '> postprocess(%d,%s)' % (parent_id, vals))  # debug
+            '>>> postprocess(%d,%s)' % (parent_id, vals))  # debug
         cache = self.env['ir.model.synchro.cache']
         model = 'res.partner'
         done = False
