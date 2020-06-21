@@ -1720,6 +1720,7 @@ class IrModelSynchro(models.Model):
             return id, rec
 
         vals = unicodes(vals)
+        saved_vals = vals.copy()
         xmodel = cls.__class__.__name__
         self.logmsg('info', '>>> %(model)s.synchro(%(vals)s,%(x)s)',
             model=xmodel, ctx={'vals': vals, 'x': disable_post})
@@ -1860,8 +1861,8 @@ class IrModelSynchro(models.Model):
                             '>>> %s=%s.create(%s)' % (id, actual_model, vals))
                 except BaseException, e:
                     self.env.cr.rollback()  # pylint: disable=invalid-commit
-                    self.logmsg('error', '!-1! %(e)s',
-                        model=xmodel, ctx={'e': e})
+                    self.logmsg('error', '!-1! %(e)s vales=%(val)s',
+                        model=xmodel, ctx={'e': e, 'val': saved_vals})
                     pop_ref(channel_id, xmodel, actual_model, id, ext_id)
                     return -1
         if id > 0 and do_write:
@@ -1870,8 +1871,8 @@ class IrModelSynchro(models.Model):
                     {'lang': self.env.user.lang}).browse(id)
             except IOError, e:
                 self.env.cr.rollback()  # pylint: disable=invalid-commit
-                self.logmsg('error', '!-1! %(e)s',
-                    model=xmodel, ctx={'e': e})
+                self.logmsg('error', '!-3! %(e)s vales=%(val)s',
+                    model=xmodel, ctx={'e': e, 'val': saved_vals})
                 rec = None
             if rec:
                 if vals:
@@ -1888,8 +1889,8 @@ class IrModelSynchro(models.Model):
                         self.logmsg('trace', '', model=actual_model, rec=rec)
                     except BaseException, e:
                         self.env.cr.rollback() # pylint: disable=invalid-commit
-                        self.logmsg('error', '!-2! %(e)s',
-                            model=xmodel, ctx={'e': e})
+                        self.logmsg('error', '!-2! %(e)s vales=%(val)s',
+                            model=xmodel, ctx={'e': e, 'val': saved_vals})
                         pop_ref(channel_id, xmodel, actual_model, id, ext_id)
                         return -2
                 elif do_write:
@@ -2099,6 +2100,24 @@ class IrModelSynchro(models.Model):
                 self.pull_1_record(
                     channel_id, xmodel, getattr(rec, loc_ext_id))
 
+    @api.model
+    def vals_or_id(self, item, ext_key_id):
+        if isinstance(item, (int, long)):
+            vals = {}
+            ext_id = item
+        else:
+            vals = item
+            if isinstance(vals, (list, tuple)):
+                vals = vals[0]
+            if ext_key_id in vals:
+                if isinstance(vals[ext_key_id], (int, long)):
+                    ext_id = vals[ext_key_id]
+                else:
+                    ext_id = int(vals[ext_key_id])
+            else:
+                ext_id = False
+        return ext_id, vals
+
     @api.multi
     def pull_recs_2_complete(self, only_model=None):
         """Delete records does not exist on counterpart"""
@@ -2117,7 +2136,7 @@ class IrModelSynchro(models.Model):
                 ext_ix = -2
             return ext_id, ext_ix
 
-        def get_loc_id(loc_ix, recs, loc_ext_id):
+        def get_loc_id(loc_ix, recs, loc_ext_id, channel_id):
             if loc_ix < -1:
                 return -1, -2
             loc_ix += 1
@@ -2126,6 +2145,8 @@ class IrModelSynchro(models.Model):
                     loc_id = recs[loc_ix]
                 else:
                     loc_id = recs[loc_ix][loc_ext_id]
+                loc_id = self.get_actual_ext_id_value(
+                    channel_id, xmodel, loc_id)
             else:
                 loc_id = -1
                 loc_ix = -2
@@ -2177,7 +2198,8 @@ class IrModelSynchro(models.Model):
                 ext_ix = -1
                 loc_ix = -1
                 ext_id, ext_ix = get_ext_id(ext_ix, datas)
-                loc_id, loc_ix = get_loc_id(loc_ix, recs, loc_ext_id)
+                loc_id, loc_ix = get_loc_id(
+                    loc_ix, recs, loc_ext_id, channel_id)
                 while ext_id > 0 and loc_id > 0:
                     if ((loc_id > 0 and 0 < ext_id < loc_id) or
                             (loc_id < 0 and ext_id > 0) or
@@ -2218,10 +2240,12 @@ class IrModelSynchro(models.Model):
                                     xmodel, id, loc_id))
                         except:
                             self.env.cr.rollback()  # pylint: disable=invalid-commit
-                        loc_id, loc_ix = get_loc_id(loc_ix, recs, loc_ext_id)
+                        loc_id, loc_ix = get_loc_id(
+                            loc_ix, recs, loc_ext_id, channel_id)
                     else:
                         ext_id, ext_ix = get_ext_id(ext_ix, datas)
-                        loc_id, loc_ix = get_loc_id(loc_ix, recs, loc_ext_id)
+                        loc_id, loc_ix = get_loc_id(
+                            loc_ix, recs, loc_ext_id, channel_id)
             _logger.info('%s record successfully unlinked from channel %s' % (
                 ctr, channel_id))
 
@@ -2290,79 +2314,57 @@ class IrModelSynchro(models.Model):
                     channel_id, xmodel, 'KEY_ID', default='id')
                 loc_ext_id = self.get_loc_ext_id_name(channel_id,
                                                       xmodel)
-                # if not cache.get_struct_model_attr(xmodel, loc_ext_id):
-                #     loc_ext_id = ''
                 for item in datas:
                     if not item:
                         continue
-                    if isinstance(item, (int, long)):
-                        vals = {}
-                        ext_id = item
-                    else:
-                        vals = item
-                        if isinstance(vals[ext_key_id], (int, long)):
-                            ext_id = vals[ext_key_id]
-                        else:
-                            ext_id = int(vals[ext_key_id])
-                    if (select == 'new' and loc_ext_id and
-                            cls.search([(loc_ext_id, '=', ext_id)])):
-                        continue
-                    elif (select == 'upd' and loc_ext_id and
-                          not cls.search([(loc_ext_id, '=', ext_id)])):
-                        continue
-                    if not vals:
-                        vals = self.get_counterpart_response(
-                            channel_id, xmodel, ext_id=ext_id)
-                    if ext_key_id not in vals:
-                        self.logmsg('warning',
-                                    'Data received of model %s w/o id' %
-                                    xmodel)
-                        continue
-                    try:
-                        ctr += 1
-                        id = self.generic_synchro(cls,
-                                                   vals,
-                                                   channel_id=channel_id,
-                                                   jacket=True)
-                        if id < 0:
-                            self.logmsg(
-                                'warning',
-                                'External id %s error pulling from %s' %
-                                (ext_id, xmodel))
+                    ext_id, vals = self.vals_or_id(item, ext_key_id)
+                    if ext_id:
+                        if (select == 'new' and loc_ext_id and
+                                cls.search([(loc_ext_id, '=', ext_id)])):
                             continue
-                        # commit every table to avoid too big transaction
-                        self.env.cr.commit()   # pylint: disable=invalid-commit
-                        if id not in local_ids:
-                            local_ids.append(id)
-                        # cache.set_loglevel('debug')
-                    except BaseException:
-                        self.logmsg('warning',
-                                    'External id %s error pulling from %s' %
-                                    (ext_id, xmodel))
+                        elif (select == 'upd' and loc_ext_id and
+                              not cls.search([(loc_ext_id, '=', ext_id)])):
+                            continue
+                    id = self.pull_1_record(channel_id, xmodel, vals or ext_id)
+                    if id < 0:
+                        continue
+                    ctr += 1
+                    if id not in local_ids:
+                        local_ids.append(id)
             _logger.info('%s record successfully pulled from channel %s' % (
                 ctr, channel_id))
         return local_ids
 
     @api.model
-    def pull_1_record(self, channel_id, xmodel, ext_id, disable_post=None):
+    def pull_1_record(self, channel_id, xmodel, item, disable_post=None):
         self.logmsg('debug', '>>> %(model)s.pull_1_record(%(x)s)',
-            model=xmodel, ctx={'x': ext_id})
-        vals = self.get_counterpart_response(channel_id, xmodel, ext_id)
-        if not vals:
-            return
-        if isinstance(vals, (list, tuple)):
-            vals = vals[0]
+            model=xmodel, ctx={'x': item})
         cache = self.env['ir.model.synchro.cache']
         ext_key_id = cache.get_model_attr(
             channel_id, xmodel, 'KEY_ID', default='id')
-        if ext_key_id not in vals:
+        ext_id, vals = self.vals_or_id(item, ext_key_id)
+        if not vals and ext_id:
+            vals = self.get_counterpart_response(channel_id, xmodel, ext_id)
+        if not vals:
+            return
+        ext_id, vals = self.vals_or_id(vals, ext_key_id)
+        if not ext_key_id:
             self.logmsg('warning',
                         'Data received of model %s w/o id' %
                         xmodel)
             return
         cls = self.env[xmodel]
-        return self.generic_synchro(cls, vals, disable_post=disable_post,
+        id = self.generic_synchro(cls, vals, disable_post=disable_post,
                                     jacket=True, channel_id=channel_id)
+        if id < 0:
+            self.logmsg(
+                'warning',
+                'External id %s error pulling from %s' %
+                (ext_id, xmodel))
+            return id
+        # commit every table to avoid too big transaction
+        self.env.cr.commit()  # pylint: disable=invalid-commit
+        return id
 
     @api.multi
     def pull_record(self, cls, channel_id=None):

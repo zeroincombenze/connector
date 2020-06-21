@@ -1,6 +1,6 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_ir_model_synchro,access_ir_model_synchro,model_ir_model_synchro,base.group_user,1,1,1,1
-access_ir_model_synchro_log,access_ir_model_synchro_log,model_ir_model_synchro_log,base.group_user,1,0,0,0
+access_ir_model_synchro_log,access_ir_model_synchro_log,model_ir_model_synchro_log,base.group_user,1,1,1,1
 access_synchro_channel,access_synchro_channel,model_synchro_channel,base.group_user,1,1,1,1
 access_synchro_channel_model,access_synchro_channel_model,model_synchro_channel_model,base.group_user,1,1,1,1
 access_synchro_channel_model_fields,access_synchro_channel_model_fields,model_synchro_channel_model_fields,base.group_user,1,1,1,1

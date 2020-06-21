@@ -1,8 +1,14 @@
 
-===============================
-|Zeroincombenze| connector 10.0
-===============================
-|Build Status| |Codecov Status| |license gpl| |Try Me|
+================================
+|icon| connector_vg7 10.0.0.1.11
+================================
+
+
+**Bidirectional connector to/from VG7 software**
+
+.. |icon| image:: https://raw.githubusercontent.com/zeroincombenze/connector/10.0/connector_vg7/static/description/icon.png
+
+|Maturity| |Build Status| |Codecov Status| |license gpl| |Try Me|
 
 
 .. contents::
@@ -11,66 +17,49 @@
 Overview / Panoramica
 =====================
 
-|en| Odoo Connector Modules
----------------------------
+|en| Connector to/from VG7
+--------------------------
 
-*Odoo Connector is a powerful framework to develop any kind of bi-directional connector between Odoo (Open Source ERP formerly OpenERP) and any other software or service.*
+This module makes available the synchro function to synchronize external data
+with Odoo data.
+The function sysnchro return th ID of record found or created. Negative values
+are error codes.
 
-This Odoo add-on has a modular and generic core, with the ability to be extended with additional modules for new features or customizations.
+The function synchro accepts a data dictionary with field values, like create
+and write functions.
 
-Documentation:
-http://www.odoo-connector.com
+Every field name may be:
 
+* "id" (integer): the Odoo ID of record; if supplied means write specific existent record
+* "vg7_id" (integer): the external partner ID of record
+* Odoo name: same behavior of Odoo write and create; external partner must know the Odoo structure
+* External name as format "vg7:field": external name is translated into Odoo name base on dictionary
+* Prefixed Odoo name ad format "vg7_field":  external partner must know the Odoo structure but pass its local value
 
-|it| Connettori Odoo
---------------------
+Every field value may be:
 
-Connettore tra Odoo e altri software.
+* Value as is, i.e. partner name; value is acquired as is.
+* Odoo reference: ID of odoo M2O table; external partner must know the Odoo data
+* External references: ID of external reference; field name is prefixed by "vg7:" or "vg7_"
+* Text of reference: key of reference key, i.e. "admin" in user_id field
 
-Zeroincombenze® attualmente supporto solo il connettore VG7
+Behavior:
 
-Avaiable Addons / Moduli disponibili
-------------------------------------
-
-+------------------------+------------+------------+----------------------------------------------------------------------------------+
-| Name / Nome            | Version    | OCA Ver.   | Description / Descrizione                                                        |
-+------------------------+------------+------------+----------------------------------------------------------------------------------+
-| bridge_skeleton        | 10.0.2.0.0 | |no_check| | Core of Webkul Bridge Modules                                                    |
-+------------------------+------------+------------+----------------------------------------------------------------------------------+
-| component              | |no_check| | 10.0.1.1.0 | Components                                                                       |
-+------------------------+------------+------------+----------------------------------------------------------------------------------+
-| component_event        | |no_check| | 10.0.1.0.0 | Components Events                                                                |
-+------------------------+------------+------------+----------------------------------------------------------------------------------+
-| connector              | 10.0.1.0.0 | 10.0.2.0.0 | Connector                                                                        |
-+------------------------+------------+------------+----------------------------------------------------------------------------------+
-| connector_base_product | |halt|     | |same|     | Connector Base Product                                                           |
-+------------------------+------------+------------+----------------------------------------------------------------------------------+
-| connector_vg7          | 10.0.0.1.3 | |no_check| | Connector to/from VG7 software                                                   |
-+------------------------+------------+------------+----------------------------------------------------------------------------------+
-| connector_vg7_conai    | 10.0.0.1.1 | |no_check| | Bidirectional connector to/from VG7 software (CONAI plug-in)                     |
-+------------------------+------------+------------+----------------------------------------------------------------------------------+
-| connector_vg7_project  | 10.0.0.1.1 | |no_check| | Bidirectional connector to/from VG7 software (project plug-in)                   |
-+------------------------+------------+------------+----------------------------------------------------------------------------------+
-| ddt_to_magento_order   | |halt|     | |no_check| | Set Magento Order to close when DdT is created                                   |
-+------------------------+------------+------------+----------------------------------------------------------------------------------+
-| magento_bridge         | 10.0.2.0.0 | |no_check| | Basic MOB                                                                        |
-+------------------------+------------+------------+----------------------------------------------------------------------------------+
-| magento_openerp_stock  | 10.0.1.0.2 | |no_check| | MOB Stock Extension                                                              |
-+------------------------+------------+------------+----------------------------------------------------------------------------------+
+* If "id" in field names, the function executes a write to specific ID; id record does not exit exception is generated
+* If "vg7_id" in field name, record with vg7_id is searched; if found, the function executes a write
+* Search for record matching value passed; the function execute a fallback search algorithm
 
 
+|
 
-OCA comparation / Confronto con OCA
------------------------------------
+|it| Connettore con VG7
+-----------------------
 
-
-+-----------------------------------------------------------------+-------------------+----------------+--------------------------------+
-| Description / Descrizione                                       | Zeroincombenze    | OCA            | Notes / Note                   |
-+-----------------------------------------------------------------+-------------------+----------------+--------------------------------+
-| Coverage / Copertura test                                       |  |Codecov Status| | |OCA Codecov|  |                                |
-+-----------------------------------------------------------------+-------------------+----------------+--------------------------------+
+Non ancora documentato
 
 
+|
+|
 
 Getting started / Come iniziare
 ===============================
@@ -78,17 +67,10 @@ Getting started / Come iniziare
 |Try Me|
 
 
-Prerequisites / Prerequisiti
-----------------------------
-
-
-* python 2.7+ (best 2.7.5+)
-* postgresql 9.2+ (best 9.5)
-
+|
 
 Installation / Installazione
 ----------------------------
-
 
 +---------------------------------+------------------------------------------+
 | |en|                            | |it|                                     |
@@ -103,7 +85,7 @@ Installation / Installazione
 +---------------------------------+------------------------------------------+
 | Suggested deployment is:        | Posizione suggerita per l'installazione: |
 +---------------------------------+------------------------------------------+
-| /home/odoo/10.0/connector/                                                 |
+| /opt/odoo/10.0/connector/                                                  |
 +----------------------------------------------------------------------------+
 
 ::
@@ -114,12 +96,18 @@ Installation / Installazione
     ./install_tools.sh -p
     source /opt/odoo/dev/activate_tools
     odoo_install_repository connector -b 10.0 -O zero
-    venv_mgr create /opt/odoo/VENV-10.0 -O 10.0 -DI
+    sudo manage_odoo requirements -b 10.0 -vsy -o /opt/odoo/10.0
 
+From UI: go to:
+
+* |menu| Setting > Activate Developer mode 
+* |menu| Apps > Update Apps List
+* |menu| Setting > Apps |right_do| Select **connector_vg7** > Install
+
+|
 
 Upgrade / Aggiornamento
 -----------------------
-
 
 +---------------------------------+------------------------------------------+
 | |en|                            | |it|                                     |
@@ -132,18 +120,26 @@ Upgrade / Aggiornamento
 ::
 
     odoo_install_repository connector -b 10.0 -O zero -U
-    venv_mgr amend /opt/odoo/VENV-10.0 -O 10.0 -DI
     # Adjust following statements as per your system
     sudo systemctl restart odoo
 
+From UI: go to:
+
+* |menu| Setting > Activate Developer mode
+* |menu| Apps > Update Apps List
+* |menu| Setting > Apps |right_do| Select **connector_vg7** > Update
+
+|
 
 Support / Supporto
 ------------------
 
 
-|Zeroincombenze| This project is mainly maintained by the `SHS-AV s.r.l. <https://www.zeroincombenze.it/>`__
+|Zeroincombenze| This module is maintained by the `SHS-AV s.r.l. <https://www.zeroincombenze.it/>`__
 
 
+|
+|
 
 Get involved / Ci mettiamo in gioco
 ===================================
@@ -158,10 +154,45 @@ Proposals for enhancement
 -------------------------
 
 
-|en| If you have a proposal to change on oh these modules, you may want to send an email to <cc@shs-av.com> for initial feedback.
+|en| If you have a proposal to change this module, you may want to send an email to <cc@shs-av.com> for initial feedback.
 An Enhancement Proposal may be submitted if your idea gains ground.
 
-|it| Se hai proposte per migliorare uno dei moduli, puoi inviare una mail a <cc@shs-av.com> per un iniziale contatto.
+|it| Se hai proposte per migliorare questo modulo, puoi inviare una mail a <cc@shs-av.com> per un iniziale contatto.
+
+ChangeLog History / Cronologia modifiche
+----------------------------------------
+
+10.0.0.1.11 (2019-12-03)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [FIX] Partner minor fixes / Problemi minori clienti
+* [IMP] Delivery document import / Importazione DdT
+
+
+10.0.0.1.10 (2019-11-11)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [FIX] Parse id of vg7_response function / Validazione id funzione vg7_response
+* [FIX] Field with olny space are ingnored / I campi di soli spazi sono ignorati
+* [FIX] Log error whene invalid state change / Segnala errore in caso di cambio stato non valido
+* [IMP] Customer manages addressess / L'importazione dei clienti gestisce gli indirizzi
+
+
+10.0.0.1.9 (2019-10-14)
+~~~~~~~~~~~~~~~~~~~~~~~
+
+* [FIX] Not() function applied only to ext. ref. / La funzione not() è applicata solo se nome esterno
+
+
+10.0.0.1.8 (2019-10-09)
+~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] Account Payment Term / Tabella termini di pagamento
+* [IMP] New protection level / Nuovo livello di protezione
+
+
+|
+|
 
 Credits / Didascalie
 ====================
@@ -171,6 +202,23 @@ Copyright
 
 Odoo is a trademark of `Odoo S.A. <https://www.odoo.com/>`__ (formerly OpenERP)
 
+
+
+|
+
+Authors / Autori
+----------------
+
+* `SHS-AV s.r.l. <https://www.zeroincombenze.it/>`__
+
+
+Contributors / Collaboratori
+----------------------------
+
+* Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
+
+
+|
 
 ----------------
 
@@ -190,8 +238,9 @@ La distribuzione `Zeroincombenze® <https://wiki.zeroincombenze.org/en/Odoo>`__ 
 
 |
 
+This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2020-06-21
+Last Update / Ultimo aggiornamento: 2019-12-06
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Alfa-red.png
     :target: https://odoo-community.org/page/development-status
@@ -250,5 +299,4 @@ Last Update / Ultimo aggiornamento: 2020-06-21
 .. |FatturaPA| image:: https://raw.githubusercontent.com/zeroincombenze/grymb/master/certificates/ade/icons/fatturapa.png
    :target: https://github.com/zeroincombenze/grymb/blob/master/certificates/ade/scope/fatturapa.md
 .. |chat_with_us| image:: https://www.shs-av.com/wp-content/chat_with_us.gif
-   :target: https://t.me/axitec_helpdesk
-
+   :target: https://tawk.to/85d4f6e06e68dd4e358797643fe5ee67540e408b

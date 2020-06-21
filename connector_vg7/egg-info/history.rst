@@ -1,3 +1,10 @@
+10.0.0.1.35 (2020-06-18)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [FIX] Sync with odoo partner / Sincronizzazione con partner odoo
+* [IMP] Data value in error log / Dati passati in log errori
+
+
 10.0.0.1.34 (2020-05-25)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 

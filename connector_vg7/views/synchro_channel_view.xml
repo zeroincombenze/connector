@@ -84,11 +84,6 @@
         <field name="name">view.synchro.model.form</field>
         <field name="model">synchro.channel.model</field>
         <field name="arch" type="xml">
-            <header>
-                <button name="%(action_wizard_pull_records)d"
-                    type="action"
-                    string="Pull Records" class="oe_highlight"/>
-            </header>
             <form string="Synchonization Model">
                 <group>
                     <field name="name"/>
