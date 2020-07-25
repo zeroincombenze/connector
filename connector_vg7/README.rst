@@ -1,6 +1,9 @@
+.. !! from "readme_main_module.rst"
+
+.. !! from "readme_header.rst"
 
 ================================
-|icon| connector_vg7 10.0.0.1.34
+|icon| connector_vg7 10.0.0.1.36
 ================================
 
 
@@ -17,7 +20,9 @@
 Overview / Panoramica
 =====================
 
-|en| This module makes available the synchro function to synchronize external data
+|en| .. !! from "description.rst"
+
+This module makes available the synchro function to synchronize external data
 with Odoo data.
 The function sysnchro return th ID of record found or created. Negative values
 are error codes.
@@ -49,9 +54,26 @@ Behavior:
 
 |
 
-|it| Connettore con VG7
+|it| .. !! from "descrizione.rst"
+
+Connettore con VG7
 
 Non ancora documentato
+
+
+|
+
+OCA comparation / Confronto con OCA
+-----------------------------------
+
+.. !! from "oca_diff.rst"
+
+
++-----------------------------------------------------------------+-------------------+----------------+--------------------------------+
+| Description / Descrizione                                       | Zeroincombenze    | OCA            | Notes / Note                   |
++-----------------------------------------------------------------+-------------------+----------------+--------------------------------+
+| Coverage / Copertura test                                       |  |Codecov Status| | |OCA Codecov|  |                                |
++-----------------------------------------------------------------+-------------------+----------------+--------------------------------+
 
 
 |
@@ -68,6 +90,8 @@ Getting started / Come iniziare
 Installation / Installazione
 ----------------------------
 
+.. !! from "installation.rst"
+
 
 +---------------------------------+------------------------------------------+
 | |en|                            | |it|                                     |
@@ -78,7 +102,7 @@ Installation / Installazione
 |                                 |                                          |
 | Installation is built with:     | L'installazione è costruita con:         |
 +---------------------------------+------------------------------------------+
-| `Zeroincombenze Tools <https://github.com/zeroincombenze/tools>`__         |
+| `Zeroincombenze Tools <https://zeroincombenze-tools.readthedocs.io/>`__    |
 +---------------------------------+------------------------------------------+
 | Suggested deployment is:        | Posizione suggerita per l'installazione: |
 +---------------------------------+------------------------------------------+
@@ -88,12 +112,14 @@ Installation / Installazione
 ::
 
     cd $HOME
+    # Tools installation & activation: skip if you have installed this tool
     git clone https://github.com/zeroincombenze/tools.git
     cd ./tools
     ./install_tools.sh -p
     source /opt/odoo/dev/activate_tools
+    # Odoo installation
     odoo_install_repository connector -b 10.0 -O zero
-    venv_mgr create /opt/odoo/VENV-10.0 -O 10.0 -DI
+    vem create /opt/odoo/VENV-10.0 -O 10.0 -DI
 
 From UI: go to:
 
@@ -101,10 +127,13 @@ From UI: go to:
 * |menu| Apps > Update Apps List
 * |menu| Setting > Apps |right_do| Select **connector_vg7** > Install
 
+
 |
 
 Upgrade / Aggiornamento
 -----------------------
+
+.. !! from "upgrade.rst"
 
 
 +---------------------------------+------------------------------------------+
@@ -117,8 +146,15 @@ Upgrade / Aggiornamento
 
 ::
 
+    cd $HOME
+    # Tools installation & activation: skip if you have installed this tool
+    git clone https://github.com/zeroincombenze/tools.git
+    cd ./tools
+    ./install_tools.sh -p
+    source /opt/odoo/dev/activate_tools
+    # Odoo upgrade
     odoo_install_repository connector -b 10.0 -O zero -U
-    venv_mgr amend /opt/odoo/VENV-10.0 -O 10.0 -DI
+    vem amend /opt/odoo/VENV-10.0 -O 10.0 -DI
     # Adjust following statements as per your system
     sudo systemctl restart odoo
 
@@ -133,6 +169,7 @@ From UI: go to:
 Support / Supporto
 ------------------
 
+.. !! from "support.rst"
 
 |Zeroincombenze| This module is maintained by the `SHS-AV s.r.l. <https://www.zeroincombenze.it/>`__
 
@@ -143,6 +180,8 @@ Support / Supporto
 Get involved / Ci mettiamo in gioco
 ===================================
 
+.. !! from "maintenance.rst"
+
 Bug reports are welcome! You can use the issue tracker to report bugs,
 and/or submit pull requests on `GitHub Issues
 <https://github.com/zeroincombenze/connector/issues>`_.
@@ -152,6 +191,7 @@ In case of trouble, please check there if your issue has already been reported.
 Proposals for enhancement
 -------------------------
 
+.. !! from "proposals_for_enhancement.rst"
 
 |en| If you have a proposal to change this module, you may want to send an email to <cc@shs-av.com> for initial feedback.
 An Enhancement Proposal may be submitted if your idea gains ground.
@@ -160,6 +200,21 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 
 ChangeLog History / Cronologia modifiche
 ----------------------------------------
+
+.. !! from "history.rst"
+
+10.0.0.1.36 (2020-07-24)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] Ignore partner.user_ids / Ignora partner.user_ids
+
+
+10.0.0.1.35 (2020-06-18)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [FIX] Sync with odoo partner / Sincronizzazione con partner odoo
+* [IMP] Data value in error log / Dati passati in log errori
+
 
 10.0.0.1.34 (2020-05-25)
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -301,16 +356,22 @@ Odoo is a trademark of `Odoo S.A. <https://www.odoo.com/>`__ (formerly OpenERP)
 Authors / Autori
 ----------------
 
+.. !! from "authors.txt"
+
 * `SHS-AV s.r.l. <https://www.zeroincombenze.it/>`__
 
 
 Contributors / Collaboratori
 ----------------------------
 
+.. !! from "contributors.txt"
+
 * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
 
 
 |
+
+.. !! from "copyright_notes.rst"
 
 ----------------
 
@@ -324,15 +385,19 @@ is mainly designed to cover Italian law and markeplace.
 che distribuisce e promuove **Odoo** pronto all'uso sulla propria infrastuttura.
 La distribuzione `Zeroincombenze® <https://wiki.zeroincombenze.org/en/Odoo>`__ è progettata per le esigenze del mercato italiano.
 
+.. !! from "contact_us.rst"
+
 
 |chat_with_us|
+
+.. !! from "readme_footer.rst"
 
 
 |
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2020-06-05
+Last Update / Ultimo aggiornamento: 2020-07-24
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status

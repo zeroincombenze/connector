@@ -954,7 +954,8 @@ class IrModelSynchro(models.Model):
         ctx['ext_key_id'] = ext_key_id
         ref_in_queue = False
         for ext_ref in field_list:
-            self.logmsg('debug', '>>>   for "%(name)s" in field_list:',
+            self.logmsg('debug',
+                '>>>   for "%(model)s.%(name)s" in field_list:',
                 model=xmodel, ctx={'name': ext_ref})
             if not cache.is_struct(ext_ref):
                 continue
@@ -1061,8 +1062,9 @@ class IrModelSynchro(models.Model):
             if cache.get_struct_model_field_attr(
                     actual_model, loc_name, 'ttype') in (
                     'many2one', 'one2many', 'many2many'):
-                if ref_in_queue and loc_name not in (
-                        'country_id', 'company_id'):
+                if (ref_in_queue and loc_name not in (
+                        'country_id', 'company_id') or
+                        loc_name == 'user_ids'):
                     if (loc_name in vals and (
                             not vals[loc_name] or
                             (isinstance(vals[loc_name], basestring) and
@@ -1395,7 +1397,7 @@ class IrModelSynchro(models.Model):
             return vals
 
         self.logmsg('debug',
-            '>>> %(model)s.get_xmlrpc_response(%(chid)s,%(xid)s,%(sel)s):',
+            '>>> %(model)s.get_xmlrpc_response(ch=%(chid)s,%(xid)s,%(sel)s):',
             model=xmodel,
             ctx={'chid': channel_id, 'xid': ext_id, 'sel': select})
         cache = self.env['ir.model.synchro.cache']
@@ -1861,7 +1863,7 @@ class IrModelSynchro(models.Model):
                             '>>> %s=%s.create(%s)' % (id, actual_model, vals))
                 except BaseException, e:
                     self.env.cr.rollback()  # pylint: disable=invalid-commit
-                    self.logmsg('error', '!-1! %(e)s vales=%(val)s',
+                    self.logmsg('error', '!-1! %(e)s\nvalues=%(val)s',
                         model=xmodel, ctx={'e': e, 'val': saved_vals})
                     pop_ref(channel_id, xmodel, actual_model, id, ext_id)
                     return -1
@@ -1871,7 +1873,7 @@ class IrModelSynchro(models.Model):
                     {'lang': self.env.user.lang}).browse(id)
             except IOError, e:
                 self.env.cr.rollback()  # pylint: disable=invalid-commit
-                self.logmsg('error', '!-3! %(e)s vales=%(val)s',
+                self.logmsg('error', '!-3! %(e)s\nvalues=%(val)s',
                     model=xmodel, ctx={'e': e, 'val': saved_vals})
                 rec = None
             if rec:
@@ -1889,7 +1891,7 @@ class IrModelSynchro(models.Model):
                         self.logmsg('trace', '', model=actual_model, rec=rec)
                     except BaseException, e:
                         self.env.cr.rollback() # pylint: disable=invalid-commit
-                        self.logmsg('error', '!-2! %(e)s vales=%(val)s',
+                        self.logmsg('error', '!-2! %(e)s\nvalues=%(val)s',
                             model=xmodel, ctx={'e': e, 'val': saved_vals})
                         pop_ref(channel_id, xmodel, actual_model, id, ext_id)
                         return -2

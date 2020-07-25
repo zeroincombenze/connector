@@ -1,3 +1,6 @@
+.. !! from "readme_main_repository.rst"
+
+.. !! from "readme_header.rst"
 
 ===============================
 |Zeroincombenze| connector 10.0
@@ -11,8 +14,10 @@
 Overview / Panoramica
 =====================
 
-|en| Odoo Connector Modules
----------------------------
+|en| .. !! from "description.rst"
+
+Odoo Connector Modules
+----------------------
 
 *Odoo Connector is a powerful framework to develop any kind of bi-directional connector between Odoo (Open Source ERP formerly OpenERP) and any other software or service.*
 
@@ -22,8 +27,10 @@ Documentation:
 http://www.odoo-connector.com
 
 
-|it| Connettori Odoo
---------------------
+|it| .. !! from "descrizione.rst"
+
+Connettori Odoo
+---------------
 
 Connettore tra Odoo e altri software.
 
@@ -63,6 +70,8 @@ Avaiable Addons / Moduli disponibili
 OCA comparation / Confronto con OCA
 -----------------------------------
 
+.. !! from "oca_diff.rst"
+
 
 +-----------------------------------------------------------------+-------------------+----------------+--------------------------------+
 | Description / Descrizione                                       | Zeroincombenze    | OCA            | Notes / Note                   |
@@ -89,6 +98,8 @@ Prerequisites / Prerequisiti
 Installation / Installazione
 ----------------------------
 
+.. !! from "installation.rst"
+
 
 +---------------------------------+------------------------------------------+
 | |en|                            | |it|                                     |
@@ -99,7 +110,7 @@ Installation / Installazione
 |                                 |                                          |
 | Installation is built with:     | L'installazione è costruita con:         |
 +---------------------------------+------------------------------------------+
-| `Zeroincombenze Tools <https://github.com/zeroincombenze/tools>`__         |
+| `Zeroincombenze Tools <https://zeroincombenze-tools.readthedocs.io/>`__    |
 +---------------------------------+------------------------------------------+
 | Suggested deployment is:        | Posizione suggerita per l'installazione: |
 +---------------------------------+------------------------------------------+
@@ -109,16 +120,21 @@ Installation / Installazione
 ::
 
     cd $HOME
+    # Tools installation & activation: skip if you have installed this tool
     git clone https://github.com/zeroincombenze/tools.git
     cd ./tools
     ./install_tools.sh -p
     source /opt/odoo/dev/activate_tools
+    # Odoo installation
     odoo_install_repository connector -b 10.0 -O zero
-    venv_mgr create /opt/odoo/VENV-10.0 -O 10.0 -DI
+    vem create /opt/odoo/VENV-10.0 -O 10.0 -DI
+
 
 
 Upgrade / Aggiornamento
 -----------------------
+
+.. !! from "upgrade.rst"
 
 
 +---------------------------------+------------------------------------------+
@@ -131,8 +147,15 @@ Upgrade / Aggiornamento
 
 ::
 
+    cd $HOME
+    # Tools installation & activation: skip if you have installed this tool
+    git clone https://github.com/zeroincombenze/tools.git
+    cd ./tools
+    ./install_tools.sh -p
+    source /opt/odoo/dev/activate_tools
+    # Odoo upgrade
     odoo_install_repository connector -b 10.0 -O zero -U
-    venv_mgr amend /opt/odoo/VENV-10.0 -O 10.0 -DI
+    vem amend /opt/odoo/VENV-10.0 -O 10.0 -DI
     # Adjust following statements as per your system
     sudo systemctl restart odoo
 
@@ -140,6 +163,7 @@ Upgrade / Aggiornamento
 Support / Supporto
 ------------------
 
+.. !! from "support.rst"
 
 |Zeroincombenze| This project is mainly maintained by the `SHS-AV s.r.l. <https://www.zeroincombenze.it/>`__
 
@@ -147,6 +171,8 @@ Support / Supporto
 
 Get involved / Ci mettiamo in gioco
 ===================================
+
+.. !! from "maintenance.rst"
 
 Bug reports are welcome! You can use the issue tracker to report bugs,
 and/or submit pull requests on `GitHub Issues
@@ -157,6 +183,7 @@ In case of trouble, please check there if your issue has already been reported.
 Proposals for enhancement
 -------------------------
 
+.. !! from "proposals_for_enhancement.rst"
 
 |en| If you have a proposal to change on oh these modules, you may want to send an email to <cc@shs-av.com> for initial feedback.
 An Enhancement Proposal may be submitted if your idea gains ground.
@@ -172,6 +199,8 @@ Copyright
 Odoo is a trademark of `Odoo S.A. <https://www.odoo.com/>`__ (formerly OpenERP)
 
 
+.. !! from "copyright_notes.rst"
+
 ----------------
 
 
@@ -184,14 +213,18 @@ is mainly designed to cover Italian law and markeplace.
 che distribuisce e promuove **Odoo** pronto all'uso sulla propria infrastuttura.
 La distribuzione `Zeroincombenze® <https://wiki.zeroincombenze.org/en/Odoo>`__ è progettata per le esigenze del mercato italiano.
 
+.. !! from "contact_us.rst"
+
 
 |chat_with_us|
+
+.. !! from "readme_footer.rst"
 
 
 |
 
 
-Last Update / Ultimo aggiornamento: 2020-06-21
+Last Update / Ultimo aggiornamento: 2020-07-24
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Alfa-red.png
     :target: https://odoo-community.org/page/development-status
