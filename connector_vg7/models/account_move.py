@@ -45,11 +45,6 @@ class AccountMove(models.Model):
                                                              prefix)
         return res
 
-    @api.model
-    def synchro(self, vals, disable_post=None):
-        return self.env['ir.model.synchro'].synchro(
-            self, vals, disable_post=disable_post)
-
     @api.multi
     def pull_record(self):
         self.env['ir.model.synchro'].pull_record(self)
@@ -74,10 +69,13 @@ class AccountMoveLine(models.Model):
         return res
 
     @api.model
-    def synchro(self, vals, disable_post=None):
+    def synchro(self, vals, disable_post=None, no_deep_fields=None,
+                only_minimal=None):
         if 'type' in vals:
             del vals['type']
-        return self.env['ir.model.synchro'].synchro(self, vals)
+        return self.env['ir.model.synchro'].synchro(self, vals,
+            disable_post=disable_post,
+            no_deep_fields=no_deep_fields, only_minimal=only_minimal)
 
     @api.multi
     def pull_record(self):

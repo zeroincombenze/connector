@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <record id="view_currency_synchro_form" model="ir.ui.view">
-        <field name="name">view.currency.synchro.form</field>
-        <field name="model">res.currency</field>
-        <field name="inherit_id" ref="base.view_currency_form"/>
+    <record id="view_lang_synchro_form" model="ir.ui.view">
+        <field name="name">view.lang.synchro.form</field>
+        <field name="model">res.lang</field>
+        <field name="inherit_id" ref="base.res_lang_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//group[last()]" position="after">
+            <xpath expr="//group" position="after">
                 <group string="Synchronization">
                     <field name="vg7_id"/>
                     <field name="oe7_id"/>

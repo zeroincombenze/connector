@@ -47,11 +47,6 @@ class ResPartnerBank(models.Model):
             return vals, 'company'
         return vals, ''
 
-    @api.model
-    def synchro(self, vals, disable_post=None):
-        return self.env['ir.model.synchro'].synchro(
-            self, vals, disable_post=disable_post)
-
     @api.multi
     def pull_record(self):
         self.env['ir.model.synchro'].pull_record(self)
@@ -62,11 +57,13 @@ class ResPartnerBankCompany(models.Model):
     _inherit = "res.partner.bank"
 
     @api.model
-    def synchro(self, vals, disable_post=None):
+    def synchro(self, vals, disable_post=None,
+                only_minimal=None, no_deep_fields=None):
         if not disable_post:
             vals[':type'] = 'company'
         return self.env['ir.model.synchro'].synchro(
-            self, vals, disable_post=disable_post)
+            self, vals, disable_post=disable_post,
+            only_minimal=only_minimal, no_deep_fields=no_deep_fields)
 
     @api.multi
     def pull_record(self):

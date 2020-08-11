@@ -288,11 +288,13 @@ class ResPartner(models.Model):
         return vals
 
     @api.model
-    def synchro(self, vals, disable_post=None):
+    def synchro(self, vals, disable_post=None,
+                only_minimal=None, no_deep_fields=None):
         if not disable_post:
             vals[':type'] = 'contact'
         return self.env['ir.model.synchro'].synchro(
-            self, vals, disable_post=disable_post)
+            self, vals, disable_post=disable_post,
+            only_minimal=only_minimal, no_deep_fields=no_deep_fields)
 
     @api.multi
     def pull_record(self):
@@ -306,12 +308,14 @@ class ResPartnerShipping(models.Model):
     CONTRAINTS = (['id', '!=', 'parent_id'])
 
     @api.model
-    def synchro(self, vals, disable_post=None):
+    def synchro(self, vals, disable_post=None,
+                only_minimal=None, no_deep_fields=None):
         vals = self.env['res.partner'].rephase_fields(
             vals, 'vg7:shipping')
         vals[':type'] = 'delivery'
         return self.env['ir.model.synchro'].synchro(
-            self, vals, disable_post=disable_post)
+            self, vals, disable_post=disable_post,
+            only_minimal=only_minimal, no_deep_fields=no_deep_fields)
 
 
 class ResPartnerInvoice(models.Model):
@@ -321,12 +325,14 @@ class ResPartnerInvoice(models.Model):
     CONTRAINTS = (['id', '!=', 'parent_id'])
 
     @api.model
-    def synchro(self, vals, disable_post=None):
+    def synchro(self, vals, disable_post=None,
+                only_minimal=None, no_deep_fields=None):
         vals = self.env['res.partner'].rephase_fields(
             vals, 'vg7:billing')
         vals[':type'] = 'invoice'
         return self.env['ir.model.synchro'].synchro(
-            self, vals, disable_post=disable_post)
+            self, vals, disable_post=disable_post,
+            only_minimal=only_minimal, no_deep_fields=no_deep_fields)
 
 
 class ResPartnerSupplier(models.Model):
@@ -334,8 +340,10 @@ class ResPartnerSupplier(models.Model):
     _inherit = "res.partner"
 
     @api.model
-    def synchro(self, vals, disable_post=None):
+    def synchro(self, vals, disable_post=None,
+                only_minimal=None, no_deep_fields=None):
         vals['supplier'] = True
         vals[':type'] = 'contact'
         return self.env['ir.model.synchro'].synchro(
-            self, vals, disable_post=disable_post)
+            self, vals, disable_post=disable_post,
+            only_minimal=only_minimal, no_deep_fields=no_deep_fields)

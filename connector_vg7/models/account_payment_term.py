@@ -41,6 +41,8 @@ class AccountPaymentTerm(models.Model):
                            compute=_set_dim_name,
                            store=True,
                            readonly=True)
+    timestamp = fields.Datetime('Timestamp', copy=False, readonly=True)
+    errmsg = fields.Char('Error message', copy=False, readonly=True)
 
     CONTRAINTS = []
 
@@ -100,9 +102,11 @@ class AccountPaymentTerm(models.Model):
         return False
 
     @api.model
-    def synchro(self, vals, disable_post=None):
+    def synchro(self, vals, disable_post=None,
+                only_minimal=None, no_deep_fields=None):
         return self.env['ir.model.synchro'].synchro(
-            self, vals, disable_post=disable_post)
+            self, vals, disable_post=disable_post,
+            only_minimal=only_minimal, no_deep_fields=no_deep_fields)
 
 
 class AccountPaymentTermLine(models.Model):
@@ -126,6 +130,8 @@ class AccountPaymentTermLine(models.Model):
         return res
 
     @api.model
-    def synchro(self, vals, disable_post=None):
+    def synchro(self, vals, disable_post=None,
+                only_minimal=None, no_deep_fields=None):
         return self.env['ir.model.synchro'].synchro(
-            self, vals, disable_post=disable_post)
+            self, vals, disable_post=disable_post,
+            only_minimal=only_minimal, no_deep_fields=no_deep_fields)

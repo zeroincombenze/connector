@@ -9,10 +9,12 @@
             <field name="line_ids" position="after">
                 <group col="2" colspan="2">
                     <separator colspan="2" string="Synchronization"/>
+                    <field name="timestamp"/>
                     <field name="vg7_id"/>
                     <field name="oe7_id"/>
                     <field name="oe8_id"/>
                     <field name="oe10_id"/>
+                    <field name="errmsg"/>
                     <field name="dim_name"/>
                 </group>
             </field>

@@ -77,6 +77,8 @@ class AccountAccount(models.Model):
                            compute=_set_dim_name,
                            store=True,
                            readonly=True)
+    timestamp = fields.Datetime('Timestamp', copy=False, readonly=True)
+    errmsg = fields.Char('Error message', copy=False, readonly=True)
 
     CONTRAINTS = []
 
@@ -179,9 +181,11 @@ class AccountAccount(models.Model):
         return vals
 
     @api.model
-    def synchro(self, vals, disable_post=None):
+    def synchro(self, vals, disable_post=None, no_deep_fields=None,
+                only_minimal=None):
         return self.env['ir.model.synchro'].synchro(
-            self, vals, disable_post=disable_post)
+            self, vals, disable_post=disable_post,
+            no_deep_fields=no_deep_fields, only_minimal=only_minimal)
 
     @api.multi
     def pull_record(self):
@@ -248,7 +252,10 @@ class AccountAccountType(models.Model):
         return vals
 
     @api.model
-    def synchro(self, vals, disable_post=None):
+    def synchro(self, vals, disable_post=None, no_deep_fields=None,
+                only_minimal=None):
         if 'type' in vals:
             del vals['type']
-        return self.env['ir.model.synchro'].synchro(self, vals)
+        return self.env['ir.model.synchro'].synchro(self, vals,
+            disable_post=disable_post,
+            no_deep_fields=no_deep_fields, only_minimal=only_minimal)

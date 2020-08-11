@@ -37,6 +37,8 @@ class AccountFiscalPosition(models.Model):
                            compute=_set_dim_name,
                            store=True,
                            readonly=True)
+    timestamp = fields.Datetime('Timestamp', copy=False, readonly=True)
+    errmsg = fields.Char('Error message', copy=False, readonly=True)
 
     CONTRAINTS = []
 
@@ -62,8 +64,3 @@ class AccountFiscalPosition(models.Model):
                     res += ch.lower()
             text = res
         return text
-
-    @api.model
-    def synchro(self, vals, disable_post=None):
-        return self.env['ir.model.synchro'].synchro(
-            self, vals, disable_post=disable_post)

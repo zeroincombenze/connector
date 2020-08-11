@@ -62,8 +62,3 @@ class AccountJournal(models.Model):
                     res += ch.lower()
             text = res
         return text
-
-    @api.model
-    def synchro(self, vals, disable_post=None):
-        return self.env['ir.model.synchro'].synchro(
-            self, vals, disable_post=disable_post)

@@ -55,7 +55,7 @@ class ProjectTags(models.Model):
     @api.model_cr_context
     def _auto_init(self):
         res = super(ProjectTags, self)._auto_init()
-        for prefix in ('vg7', 'oe7'):
+        for prefix in ('vg7', 'oe7', 'oe8', 'oe10'):
             self.env['ir.model.synchro']._build_unique_index(self._inherit,
                                                              prefix)
         return res
@@ -79,7 +79,7 @@ class ProjectTask(models.Model):
     @api.model_cr_context
     def _auto_init(self):
         res = super(ProjectTask, self)._auto_init()
-        for prefix in ('vg7', 'oe7'):
+        for prefix in ('vg7', 'oe7', 'oe8', 'oe10'):
             self.env['ir.model.synchro']._build_unique_index(self._inherit,
                                                              prefix)
         return res
@@ -103,7 +103,7 @@ class ProjectTaskType(models.Model):
     @api.model_cr_context
     def _auto_init(self):
         res = super(ProjectTaskType, self)._auto_init()
-        for prefix in ('vg7', 'oe7'):
+        for prefix in ('vg7', 'oe7', 'oe8', 'oe10'):
             self.env['ir.model.synchro']._build_unique_index(self._inherit,
                                                              prefix)
         return res

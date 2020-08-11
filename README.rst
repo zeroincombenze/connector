@@ -1,6 +1,3 @@
-.. !! from "readme_main_repository.rst"
-
-.. !! from "readme_header.rst"
 
 ===============================
 |Zeroincombenze| connector 10.0
@@ -14,10 +11,8 @@
 Overview / Panoramica
 =====================
 
-|en| .. !! from "description.rst"
-
-Odoo Connector Modules
-----------------------
+|en| Odoo Connector Modules
+---------------------------
 
 *Odoo Connector is a powerful framework to develop any kind of bi-directional connector between Odoo (Open Source ERP formerly OpenERP) and any other software or service.*
 
@@ -27,10 +22,8 @@ Documentation:
 http://www.odoo-connector.com
 
 
-|it| .. !! from "descrizione.rst"
-
-Connettori Odoo
----------------
+|it| Connettori Odoo
+--------------------
 
 Connettore tra Odoo e altri software.
 
@@ -42,35 +35,29 @@ Avaiable Addons / Moduli disponibili
 +------------------------+------------+------------+----------------------------------------------------------------------------------+
 | Name / Nome            | Version    | OCA Ver.   | Description / Descrizione                                                        |
 +------------------------+------------+------------+----------------------------------------------------------------------------------+
-| bridge_skeleton        | 10.0.2.0.0 | |no_check| | Core of Webkul Bridge Modules                                                    |
+| bridge_skeleton        | 10.0.2.0.0 | |same|     | Core of Webkul Bridge Modules                                                    |
 +------------------------+------------+------------+----------------------------------------------------------------------------------+
-| component              | |no_check| | 10.0.1.1.0 | Components                                                                       |
+| connector              | 10.0.1.0.0 | |same|     | Connector                                                                        |
 +------------------------+------------+------------+----------------------------------------------------------------------------------+
-| component_event        | |no_check| | 10.0.1.0.0 | Components Events                                                                |
+| connector_base_product | |halt|     | |halt|     | Connector Base Product                                                           |
 +------------------------+------------+------------+----------------------------------------------------------------------------------+
-| connector              | 10.0.1.0.0 | 10.0.2.0.0 | Connector                                                                        |
+| connector_vg7          | 10.0.0.1.3 | 10.0.0.1.3 | Connector to/from VG7 software                                                   |
 +------------------------+------------+------------+----------------------------------------------------------------------------------+
-| connector_base_product | |halt|     | |same|     | Connector Base Product                                                           |
+| connector_vg7_conai    | 10.0.0.1.1 | |same|     | Bidirectional connector to/from VG7 software (CONAI plug-in)                     |
 +------------------------+------------+------------+----------------------------------------------------------------------------------+
-| connector_vg7          | 10.0.0.1.3 | |no_check| | Connector to/from VG7 software                                                   |
+| connector_vg7_project  | 10.0.0.1.1 | |same|     | Bidirectional connector to/from VG7 software (project plug-in)                   |
 +------------------------+------------+------------+----------------------------------------------------------------------------------+
-| connector_vg7_conai    | 10.0.0.1.1 | |no_check| | Bidirectional connector to/from VG7 software (CONAI plug-in)                     |
+| ddt_to_magento_order   | |halt|     | |halt|     | Set Magento Order to close when DdT is created                                   |
 +------------------------+------------+------------+----------------------------------------------------------------------------------+
-| connector_vg7_project  | 10.0.0.1.1 | |no_check| | Bidirectional connector to/from VG7 software (project plug-in)                   |
+| magento_bridge         | 10.0.2.0.0 | |same|     | Basic MOB                                                                        |
 +------------------------+------------+------------+----------------------------------------------------------------------------------+
-| ddt_to_magento_order   | |halt|     | |no_check| | Set Magento Order to close when DdT is created                                   |
-+------------------------+------------+------------+----------------------------------------------------------------------------------+
-| magento_bridge         | 10.0.2.0.0 | |no_check| | Basic MOB                                                                        |
-+------------------------+------------+------------+----------------------------------------------------------------------------------+
-| magento_openerp_stock  | 10.0.1.0.2 | |no_check| | MOB Stock Extension                                                              |
+| magento_openerp_stock  | 10.0.1.0.2 | |same|     | MOB Stock Extension                                                              |
 +------------------------+------------+------------+----------------------------------------------------------------------------------+
 
 
 
 OCA comparation / Confronto con OCA
 -----------------------------------
-
-.. !! from "oca_diff.rst"
 
 
 +-----------------------------------------------------------------+-------------------+----------------+--------------------------------+
@@ -97,8 +84,6 @@ Prerequisites / Prerequisiti
 
 Installation / Installazione
 ----------------------------
-
-.. !! from "installation.rst"
 
 
 +---------------------------------+------------------------------------------+
@@ -134,8 +119,6 @@ Installation / Installazione
 Upgrade / Aggiornamento
 -----------------------
 
-.. !! from "upgrade.rst"
-
 
 +---------------------------------+------------------------------------------+
 | |en|                            | |it|                                     |
@@ -163,7 +146,6 @@ Upgrade / Aggiornamento
 Support / Supporto
 ------------------
 
-.. !! from "support.rst"
 
 |Zeroincombenze| This project is mainly maintained by the `SHS-AV s.r.l. <https://www.zeroincombenze.it/>`__
 
@@ -171,8 +153,6 @@ Support / Supporto
 
 Get involved / Ci mettiamo in gioco
 ===================================
-
-.. !! from "maintenance.rst"
 
 Bug reports are welcome! You can use the issue tracker to report bugs,
 and/or submit pull requests on `GitHub Issues
@@ -183,7 +163,6 @@ In case of trouble, please check there if your issue has already been reported.
 Proposals for enhancement
 -------------------------
 
-.. !! from "proposals_for_enhancement.rst"
 
 |en| If you have a proposal to change on oh these modules, you may want to send an email to <cc@shs-av.com> for initial feedback.
 An Enhancement Proposal may be submitted if your idea gains ground.
@@ -199,8 +178,6 @@ Copyright
 Odoo is a trademark of `Odoo S.A. <https://www.odoo.com/>`__ (formerly OpenERP)
 
 
-.. !! from "copyright_notes.rst"
-
 ----------------
 
 
@@ -213,18 +190,14 @@ is mainly designed to cover Italian law and markeplace.
 che distribuisce e promuove **Odoo** pronto all'uso sulla propria infrastuttura.
 La distribuzione `Zeroincombenze® <https://wiki.zeroincombenze.org/en/Odoo>`__ è progettata per le esigenze del mercato italiano.
 
-.. !! from "contact_us.rst"
-
 
 |chat_with_us|
-
-.. !! from "readme_footer.rst"
 
 
 |
 
 
-Last Update / Ultimo aggiornamento: 2020-07-24
+Last Update / Ultimo aggiornamento: 2020-08-11
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Alfa-red.png
     :target: https://odoo-community.org/page/development-status

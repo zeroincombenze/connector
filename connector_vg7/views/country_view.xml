@@ -26,7 +26,7 @@
         <field name="inherit_id" ref="base.view_country_state_form"/>
         <field name="arch" type="xml">
             <xpath expr="//form/group" position="inside">
-                <group>
+                <group string="Synchronization">
                     <field name="vg7_id"/>
                     <field name="oe7_id"/>
                     <field name="oe8_id"/>

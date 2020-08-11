@@ -10,11 +10,13 @@
             <xpath expr="//page[last()]" position="after">
                 <page name="synchro" string="Synchronization">
                     <group>
+                        <field name="timestamp"/>
                         <field name="vg7_id"/>
                         <field name="oe7_id"/>
                         <field name="oe8_id"/>
                         <field name="oe10_id"/>
                         <field name="original_state"/>
+                        <field name="errmsg"/>
                     </group>
                 </page>
             </xpath>

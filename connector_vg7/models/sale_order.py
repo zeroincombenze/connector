@@ -100,13 +100,15 @@ class SaleOrder(models.Model):
         return vals
 
     @api.model
-    def synchro(self, vals, disable_post=None):
-        return self.env['ir.model.synchro'].synchro(
-            self, vals, disable_post=disable_post)
-
-    @api.model
     def commit(self, id):
         return self.env['ir.model.synchro'].commit(self, id)
+
+    @api.model
+    def synchro(self, vals, disable_post=None,
+                only_minimal=None, no_deep_fields=None):
+        return self.env['ir.model.synchro'].synchro(
+            self, vals, disable_post=disable_post,
+            only_minimal=only_minimal, no_deep_fields=no_deep_fields)
 
     @api.multi
     def pull_record(self):
@@ -133,6 +135,8 @@ class SaleOrderLine(models.Model):
         return res
 
     @api.model
-    def synchro(self, vals, disable_post=None):
+    def synchro(self, vals, disable_post=None,
+                only_minimal=None, no_deep_fields=None):
         return self.env['ir.model.synchro'].synchro(
-            self, vals, disable_post=disable_post)
+            self, vals, disable_post=disable_post,
+            only_minimal=only_minimal, no_deep_fields=no_deep_fields)

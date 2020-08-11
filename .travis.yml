@@ -12,7 +12,7 @@ python:
   - "2.7"
 
 virtualenv:
-  system_site_packages: true
+  system_site_packages: false
 
 git:
   submodules: false
@@ -25,24 +25,29 @@ addons:
   apt:
     sources:
       - pov-wkhtmltopdf
-#    Search your sources alias here:
-#      https://github.com/travis-ci/apt-source-whitelist/blob/master/ubuntu.json
+    # Search your sources alias here:
+    # https://github.com/travis-ci/apt-source-whitelist/blob/master/ubuntu.json
     packages:
-      # - curl                            # Already in TravisCI
-      # - nodejs                          # Already in TravisCI
-      # - npm                             # Already in TravisCI
-      - zlib1g
-      # - build-essential                 # Already in TravisCI
+      # - build-essential                 # Pre-installed
+      # - curl                            # Pre-installed
       - expect-dev
+      # - less-plugin-clean-css           # Pre-installed
+      # - lessc                           # Pre-installed
       - libffi-dev
       - libssl-dev
+      # - nodejs                          # Pre-installed
+      # - npm                             # Pre-installed
       - python-dev
+      # - python-setuptools               # Pre-installed
+      # - wkhtmltopdf                     # Pre-installed
+      - zlib1g
 
 before_install:
-# Use Zeroincombenze(R) tools
+  # Use Zeroincombenze(R) tools
   - git clone https://github.com/zeroincombenze/tools.git ${HOME}/tools --single-branch --depth=1
-  # - mv ${HOME}/tools ${HOME}
-  - export PATH=${HOME}/tools/maintainer-quality-tools/travis:${PATH}
+  # - export PATH=${HOME}/tools/maintainer-quality-tools/travis:${PATH}
+  - ${HOME}/tools/install_tools.sh -qopts
+  - source ${HOME}/dev/activate_tools
   - export PYTHONPATH=${HOME}/tools
 
 
@@ -54,12 +59,11 @@ install:
   # - export INSTALL_OPTIONS="--without-demo=account"
   # - cp ${HOME}/maintainer-quality-tools/cfg/.coveragerc .
   # - git clone --depth=1 https://github.com/OCA/maintainer-quality-tools.git ${HOME}/maintainer-quality-tools
-  # - export PATH=${HOME}/maintainer-quality-tools/travis:${PATH}
   # - export INCLUDE=$(getaddons.py -m ${HOME}/build/${ODOO_REPO}/odoo/addons ${HOME}/build/${ODOO_REPO}/addons)
 
 env:
   global:
-  - export TRAVIS_DEBUG_MODE="1"
+  - TRAVIS_DEBUG_MODE="2"
   - WKHTMLTOPDF_VERSION="0.12.4"
   - VERSION="10.0" TESTS="0" LINT_CHECK="0" ODOO_TNLBOT="0"
 

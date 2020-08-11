@@ -22,6 +22,8 @@ class AccountInvoice(models.Model):
     oe8_id = fields.Integer('Odoo8 ID', copy=False)
     oe10_id = fields.Integer('Odoo10 ID', copy=False)
     original_state = fields.Char('Original Status')
+    timestamp = fields.Datetime('Timestamp', copy=False, readonly=True)
+    errmsg = fields.Char('Error message', copy=False, readonly=True)
 
     CONTRAINTS = []
     LINES_OF_REC = 'invoice_line_ids'
@@ -53,13 +55,15 @@ class AccountInvoice(models.Model):
                 setattr(self, nm, getattr(self.partner_id, nm))
 
     @api.model
-    def synchro(self, vals, disable_post=None):
-        return self.env['ir.model.synchro'].synchro(
-            self, vals, disable_post=disable_post)
-
-    @api.model
     def commit(self, id):
         return self.env['ir.model.synchro'].commit(self, id)
+
+    @api.model
+    def synchro(self, vals, disable_post=None,
+                only_minimal=None, no_deep_fields=None):
+        return self.env['ir.model.synchro'].synchro(
+            self, vals, disable_post=disable_post,
+            only_minimal=only_minimal, no_deep_fields=no_deep_fields)
 
     @api.multi
     def pull_record(self):
@@ -87,6 +91,8 @@ class AccountInvoiceLine(models.Model):
         return res
 
     @api.model
-    def synchro(self, vals, disable_post=None):
+    def synchro(self, vals, disable_post=None,
+                only_minimal=None, no_deep_fields=None):
         return self.env['ir.model.synchro'].synchro(
-            self, vals, disable_post=disable_post)
+            self, vals, disable_post=disable_post,
+            only_minimal=only_minimal, no_deep_fields=no_deep_fields)

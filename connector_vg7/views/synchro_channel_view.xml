@@ -39,6 +39,8 @@
                     <field name="company_id"/>
                     <field name="exchange_path"/>
                     <field name="sequence"/>
+                    <field name="import_workflow"/>
+                    <field name="rec_counter"/>
                     <field name="active"/>
                     <field name="trace" readonly="1"/>
                     <field name="tracelevel"/>

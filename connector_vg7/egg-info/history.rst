@@ -1,3 +1,18 @@
+10.0.0.1.38 (2020-08-06)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] Full import DB / Funzione importazione DB completo
+* [FIX] Crash with some tomany fields / Strano crash con campi tomany
+* [FIX] Wrong paid state invoice / Stato fattura pagato
+* [IMP] Minimal values + No deep + remote_ids / Opzioni valori minimi + No livelli + ID remoti
+
+
+10.0.0.1.37 (2020-08-01)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [FIX] Crash with unmanaged tables / Crash con tabelle non gestite
+
+
 10.0.0.1.36 (2020-07-24)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 

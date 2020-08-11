@@ -31,7 +31,7 @@
             <xpath expr="//page[last()]" position="after">
                 <page name="synchro" string="Synchronization">
                     <button name="pull_record" string="Synchronize" type="object"/>
-                    <group>
+                    <group string="Product Variant">
                         <field name="timestamp"/>
                         <field name="vg7_id"/>
                         <field name="oe7_id"/>
@@ -51,12 +51,28 @@
         <field name="inherit_id" ref="product.product_uom_form_view"/>
         <field name="arch" type="xml">
             <xpath expr="//form" position="inside">
-                <group>
+                <group string="Synchronization">
                         <field name="vg7_id"/>
                         <field name="oe7_id"/>
                         <field name="oe8_id"/>
                         <field name="oe10_id"/>
                 </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_product_category_synchro_form" model="ir.ui.view">
+        <field name="name">res.product_category.synchro.form</field>
+        <field name="model">product.category</field>
+        <field name="inherit_id" ref="product.product_category_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='first']" position="after">
+                    <group string="Synchronization">
+                        <field name="vg7_id"/>
+                        <field name="oe7_id"/>
+                        <field name="oe8_id"/>
+                        <field name="oe10_id"/>
+                    </group>
             </xpath>
         </field>
     </record>

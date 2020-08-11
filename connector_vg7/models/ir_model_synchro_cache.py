@@ -135,8 +135,10 @@ class IrModelSynchroCache(models.Model):
             # 'company_id': {'required': True},
             'create_date': {'readonly': True},
             'create_uid': {'readonly': True},
-            'message_ids': {'readonly': True},
+            'message_channel_ids': {'readonly': True},
             'message_follower_ids': {'readonly': True},
+            'message_ids': {'readonly': True},
+            'message_is_follower': {'readonly': True},
             'message_last_post': {'readonly': True},
             'message_needaction': {'readonly': True},
             'message_needaction_counter': {'readonly': True},
@@ -168,6 +170,7 @@ class IrModelSynchroCache(models.Model):
             'user_id': {'readonly': False},
         },
         'account.payment.term': {},
+        'ir.sequence': {'number_next_actual': {'protect_update': 4}},
         'product.category': {},
         'product.product': {
             'company_id': {'readonly': True},
@@ -192,8 +195,10 @@ class IrModelSynchroCache(models.Model):
             'project_time_mode_id': {'readonly': True},
             'sp_account_id': {'readonly': True},
         },
-        'res.country': {},
-        'res.country.state': {},
+        'res.country': {
+            'name': {'protect_update': 2},
+        },
+        'res.country.state': {'name': {'protect_update': 2}},
         'res.currency': {
             'rate_ids': {'protect_update': 2},
             'rounding': {'protect_update': 2},
@@ -214,7 +219,10 @@ class IrModelSynchroCache(models.Model):
             'category_id': {'readonly': True},
             'company_id': {'readonly': True},
             'login_date': {'readonly': True},
+            'new_password': {'readonly': True},
             'opt_out': {'readonly': True},
+            'password': {'readonly': True},
+            'password_crypt': {'readonly': True},
         },
         'sale.order': {
             'name': {'readonly': False, 'required': False},

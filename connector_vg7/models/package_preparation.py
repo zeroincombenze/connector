@@ -27,6 +27,8 @@ class StockPickingPackagePreparation(models.Model):
     oe8_id = fields.Integer('Odoo8 ID', copy=False)
     oe10_id = fields.Integer('Odoo10 ID', copy=False)
     original_state = fields.Char('Original Status')
+    timestamp = fields.Datetime('Timestamp', copy=False, readonly=True)
+    errmsg = fields.Char('Error message', copy=False, readonly=True)
 
     CONTRAINTS = ()
 
@@ -39,14 +41,16 @@ class StockPickingPackagePreparation(models.Model):
         return res
 
     @api.model
-    def synchro(self, vals, disable_post=None):
+    def synchro(self, vals, disable_post=None, no_deep_fields=None,
+                only_minimal=None):
         # TODO: correct workaround!!
         do_rewrite = False
         if 'vg7:ddt_number' in vals:
             do_rewrite = True
             saved_vals = vals.copy()
         id = self.env['ir.model.synchro'].synchro(
-            self, vals, disable_post=disable_post)
+            self, vals, disable_post=disable_post,
+            only_minimal=only_minimal, no_deep_fields=no_deep_fields)
         if id > 0 and do_rewrite:
             saved_vals['id'] = id
             id = self.env['ir.model.synchro'].synchro(
@@ -78,15 +82,20 @@ class StockPickingPackagePreparationLine(models.Model):
         return res
 
     @api.model
-    def synchro(self, vals):
+    def synchro(self, vals, disable_post=None,
+                only_minimal=None, no_deep_fields=None):
         # TODO: correct workaround!!
         do_rewrite = False
         if 'vg7:order_row_id' in vals:
             do_rewrite = True
             saved_vals = vals.copy()
-        id = self.env['ir.model.synchro'].synchro(self, vals)
+        id = self.env['ir.model.synchro'].synchro(self, vals,
+            disable_post=disable_post,
+            only_minimal=only_minimal, no_deep_fields=no_deep_fields)
         if id > 0 and do_rewrite:
-            id = self.env['ir.model.synchro'].synchro(self, saved_vals)
+            id = self.env['ir.model.synchro'].synchro(self, saved_vals,
+                disable_post=disable_post,
+                only_minimal=only_minimal, no_deep_fields=no_deep_fields)
         return id
 
 
@@ -134,11 +143,6 @@ class StockPickingGoods_description(models.Model):
             text = res
         return text
 
-    @api.model
-    def synchro(self, vals, disable_post=None):
-        return self.env['ir.model.synchro'].synchro(
-            self, vals, disable_post=disable_post)
-
 
 class StockPickingCarriageCondition(models.Model):
 
@@ -184,11 +188,6 @@ class StockPickingCarriageCondition(models.Model):
                     res += ch.lower()
             text = res
         return text
-
-    @api.model
-    def synchro(self, vals, disable_post=None):
-        return self.env['ir.model.synchro'].synchro(
-            self, vals, disable_post=disable_post)
 
 
 class StockPickingTransportationReason(models.Model):
@@ -237,9 +236,11 @@ class StockPickingTransportationReason(models.Model):
         return text
 
     @api.model
-    def synchro(self, vals, disable_post=None):
+    def synchro(self, vals, disable_post=None,
+                only_minimal=None, no_deep_fields=None):
         return self.env['ir.model.synchro'].synchro(
-            self, vals, disable_post=disable_post)
+            self, vals, disable_post=disable_post,
+            only_minimal=only_minimal, no_deep_fields=no_deep_fields)
 
 
 class StockPickingTransportationMethod(models.Model):
@@ -286,8 +287,3 @@ class StockPickingTransportationMethod(models.Model):
                     res += ch.lower()
             text = res
         return text
-
-    @api.model
-    def synchro(self, vals, disable_post=None):
-        return self.env['ir.model.synchro'].synchro(
-            self, vals, disable_post=disable_post)

@@ -15,30 +15,30 @@
         <field name="args" eval="'()'"/>
     </record>
 
-    <record id="action_pull_full_records" model="ir.cron">
-        <field name="name">Download full table from counterpart</field>
+    <record id="action_pull_all_records" model="ir.cron">
+        <field name="name">Import all records from the counterpart</field>
         <field name="active" eval="False"/>
         <field name="user_id" ref="base.user_root"/>
-        <field name="interval_number">240</field>
+        <field name="interval_number">9</field>
         <field name="interval_type">minutes</field>
         <field name="numbercall">-1</field>
         <field name="doall" eval="False"/>
         <field name="model" eval="'ir.model.synchro'"/>
         <field name="function" eval="'pull_full_records'"/>
-        <field name="args" eval="'()'"/>
+        <field name="args" eval="'(True,)'"/>
     </record>
 
-    <record id="action_force_pull_full_records" model="ir.cron">
-        <field name="name">Force download full table from counterpart</field>
-        <field name="active" eval="False"/>
+    <record id="purge_import_log" model="ir.cron">
+        <field name="name">Purge importation log</field>
+        <field name="active" eval="True"/>
         <field name="user_id" ref="base.user_root"/>
-        <field name="interval_number">24</field>
-        <field name="interval_type">hours</field>
+        <field name="interval_number">55</field>
+        <field name="interval_type">minutes</field>
         <field name="numbercall">-1</field>
         <field name="doall" eval="False"/>
-        <field name="model" eval="'ir.model.synchro'"/>
-        <field name="function" eval="'pull_full_records'"/>
-        <field name="args" eval="'(True,)'"/>
+        <field name="model" eval="'ir.model.synchro.log'"/>
+        <field name="function" eval="'purge_log'" />
+        <field name="args" eval="'()'"/>
     </record>
 
 </odoo>

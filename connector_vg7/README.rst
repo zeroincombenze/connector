@@ -1,9 +1,6 @@
-.. !! from "readme_main_module.rst"
-
-.. !! from "readme_header.rst"
 
 ================================
-|icon| connector_vg7 10.0.0.1.36
+|icon| connector_vg7 10.0.0.1.38
 ================================
 
 
@@ -20,9 +17,7 @@
 Overview / Panoramica
 =====================
 
-|en| .. !! from "description.rst"
-
-This module makes available the synchro function to synchronize external data
+|en| This module makes available the synchro function to synchronize external data
 with Odoo data.
 The function sysnchro return th ID of record found or created. Negative values
 are error codes.
@@ -54,9 +49,7 @@ Behavior:
 
 |
 
-|it| .. !! from "descrizione.rst"
-
-Connettore con VG7
+|it| Connettore con VG7
 
 Non ancora documentato
 
@@ -65,8 +58,6 @@ Non ancora documentato
 
 OCA comparation / Confronto con OCA
 -----------------------------------
-
-.. !! from "oca_diff.rst"
 
 
 +-----------------------------------------------------------------+-------------------+----------------+--------------------------------+
@@ -89,8 +80,6 @@ Getting started / Come iniziare
 
 Installation / Installazione
 ----------------------------
-
-.. !! from "installation.rst"
 
 
 +---------------------------------+------------------------------------------+
@@ -133,8 +122,6 @@ From UI: go to:
 Upgrade / Aggiornamento
 -----------------------
 
-.. !! from "upgrade.rst"
-
 
 +---------------------------------+------------------------------------------+
 | |en|                            | |it|                                     |
@@ -169,7 +156,6 @@ From UI: go to:
 Support / Supporto
 ------------------
 
-.. !! from "support.rst"
 
 |Zeroincombenze| This module is maintained by the `SHS-AV s.r.l. <https://www.zeroincombenze.it/>`__
 
@@ -180,8 +166,6 @@ Support / Supporto
 Get involved / Ci mettiamo in gioco
 ===================================
 
-.. !! from "maintenance.rst"
-
 Bug reports are welcome! You can use the issue tracker to report bugs,
 and/or submit pull requests on `GitHub Issues
 <https://github.com/zeroincombenze/connector/issues>`_.
@@ -191,7 +175,6 @@ In case of trouble, please check there if your issue has already been reported.
 Proposals for enhancement
 -------------------------
 
-.. !! from "proposals_for_enhancement.rst"
 
 |en| If you have a proposal to change this module, you may want to send an email to <cc@shs-av.com> for initial feedback.
 An Enhancement Proposal may be submitted if your idea gains ground.
@@ -201,7 +184,20 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 ChangeLog History / Cronologia modifiche
 ----------------------------------------
 
-.. !! from "history.rst"
+10.0.0.1.38 (2020-08-06)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] Full import DB / Funzione importazione DB completo
+* [FIX] Crash with some tomany fields / Strano crash con campi tomany
+* [FIX] Wrong paid state invoice / Stato fattura pagato
+* [IMP] Minimal values + No deep + remote_ids / Opzioni valori minimi + No livelli + ID remoti
+
+
+10.0.0.1.37 (2020-08-01)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [FIX] Crash with unmanaged tables / Crash con tabelle non gestite
+
 
 10.0.0.1.36 (2020-07-24)
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -356,22 +352,16 @@ Odoo is a trademark of `Odoo S.A. <https://www.odoo.com/>`__ (formerly OpenERP)
 Authors / Autori
 ----------------
 
-.. !! from "authors.txt"
-
 * `SHS-AV s.r.l. <https://www.zeroincombenze.it/>`__
 
 
 Contributors / Collaboratori
 ----------------------------
 
-.. !! from "contributors.txt"
-
 * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
 
 
 |
-
-.. !! from "copyright_notes.rst"
 
 ----------------
 
@@ -385,19 +375,15 @@ is mainly designed to cover Italian law and markeplace.
 che distribuisce e promuove **Odoo** pronto all'uso sulla propria infrastuttura.
 La distribuzione `Zeroincombenze® <https://wiki.zeroincombenze.org/en/Odoo>`__ è progettata per le esigenze del mercato italiano.
 
-.. !! from "contact_us.rst"
-
 
 |chat_with_us|
-
-.. !! from "readme_footer.rst"
 
 
 |
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2020-07-24
+Last Update / Ultimo aggiornamento: 2020-08-11
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status

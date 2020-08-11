@@ -89,6 +89,12 @@ class SynchroChannel(models.Model):
         'synchro.channel.model', 'synchro_channel_id',
         string='Model mapping'
     )
+    import_workflow = fields.Integer('Import Workflow',
+        default=0,
+        help='Import status')
+    rec_counter = fields.Integer('Import Counter',
+        default=0,
+        help='Last imported record number')
 
     @api.multi
     def write(self, vals):

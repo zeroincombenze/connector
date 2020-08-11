@@ -13,27 +13,14 @@ from odoo import api, fields, models
 
 _logger = logging.getLogger(__name__)
 
-try:
-    from unidecode import unidecode
-except ImportError as err:
-    _logger.debug(err)
 
-
-class ResUsers(models.Model):
-    _inherit = "res.users"
+class ResLang(models.Model):
+    _inherit = "res.lang"
 
     vg7_id = fields.Integer('VG7 ID', copy=False)
     oe7_id = fields.Integer('Odoo7 ID', copy=False)
     oe8_id = fields.Integer('Odoo8 ID', copy=False)
     oe10_id = fields.Integer('Odoo10 ID', copy=False)
-
-    @api.model_cr_context
-    def _auto_init(self):
-        res = super(ResUsers, self)._auto_init()
-        for prefix in ('vg7', 'oe7', 'oe8', 'oe10'):
-            self.env['ir.model.synchro']._build_unique_index(self._inherit,
-                                                             prefix)
-        return res
 
     @api.model
     def synchro(self, vals, disable_post=None,
@@ -41,7 +28,3 @@ class ResUsers(models.Model):
         return self.env['ir.model.synchro'].synchro(
             self, vals, disable_post=disable_post,
             only_minimal=only_minimal, no_deep_fields=no_deep_fields)
-
-    @api.multi
-    def pull_record(self):
-        self.env['ir.model.synchro'].pull_record(self)
