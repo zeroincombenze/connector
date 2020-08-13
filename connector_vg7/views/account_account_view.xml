@@ -20,5 +20,22 @@
         </field>
     </record>
 
+    <record id="view_account_type_synchro_form" model="ir.ui.view">
+        <field name="name">account.type.synchro.form</field>
+        <field name="model">account.account.type</field>
+        <field name="inherit_id" ref="account.view_account_type_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='note']" position="after">
+                <group string="Synchronization">
+                    <field name="vg7_id"/>
+                    <field name="oe7_id"/>
+                    <field name="oe8_id"/>
+                    <field name="oe10_id"/>
+                    <field name="dim_name"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
 </odoo>
 

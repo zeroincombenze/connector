@@ -147,8 +147,6 @@ from datetime import datetime, timedelta
 import time
 import csv
 
-# import pdb
-
 import requests
 from odoo import api, fields, models, _
 from odoo import release
@@ -207,7 +205,6 @@ WORKFLOW = {
                             'default_debit_account_id', 'sequence_id']},
     14: {'model': 'account.payment.term'},
     15: {'model': 'res.partner.bank'},
-    15: {'model': 'res.city'},
     16: {'model': 'account.fiscal.position', 'only_minimal': True},
     17: {'model': 'res.partner',
          'no_deep_fields': ['*', 'company_id', 'category_id', 'country_id',
@@ -264,24 +261,25 @@ WORKFLOW = {
     54: {'model': 'project.project'},
     55: {'model': 'project.task'},
     56: {'model': 'delivery.carrier'},
-    57: {'model': 'account.account'},
-    58: {'model': 'account.tax'},
-    59: {'model': 'account.journal'},
-    60: {'model': 'account.fiscal.position'},
-    61: {'model': 'causale.pagamento'},
-    62: {'model': 'account.vat.period.end.statement'},
-    63: {'model': 'crm.team'},
-    64: {'model': 'crm.lead'},
-    65: {'model': 'crm.stage'},
-    66: {'model': 'crm.activity'},
-    67: {'model': 'stock.location'},
-    68: {'model': 'stock.warehouse'},
-    69: {'model': 'stock.move'},
-    70: {'model': 'stock.picking'},
-    71: {'model': 'account.analytic.account'},
-    72: {'model': 'res.users'},
-    73: {'model': 'mail.mail'},
-    74: {'model': 'mail.message'},
+    57: {'model': 'res.partner'},
+    58: {'model': 'account.account'},
+    59: {'model': 'account.tax'},
+    60: {'model': 'account.journal'},
+    61: {'model': 'account.fiscal.position'},
+    62: {'model': 'causale.pagamento'},
+    63: {'model': 'account.vat.period.end.statement'},
+    64: {'model': 'crm.team'},
+    65: {'model': 'crm.lead'},
+    66: {'model': 'crm.stage'},
+    67: {'model': 'crm.activity'},
+    68: {'model': 'stock.location'},
+    69: {'model': 'stock.warehouse'},
+    70: {'model': 'stock.move'},
+    71: {'model': 'stock.picking'},
+    72: {'model': 'account.analytic.account'},
+    73: {'model': 'res.users'},
+    74: {'model': 'mail.mail'},
+    75: {'model': 'mail.message'},
 }
 
 
@@ -2710,6 +2708,10 @@ class IrModelSynchro(models.Model):
         if 'name' not in vals:
             self.logmsg('error', 'Invalid module name')
             return -7
+        if vals.get('state', 'installed') != 'installed':
+            self.logmsg('error',
+                'Module %s is not installed on counterpart' % vals['name'])
+            return -4
         module_model = self.env['ir.module.module']
         module_ids = module_model.search([('name', '=', vals['name'])])
         if not module_ids:
@@ -2723,12 +2725,12 @@ class IrModelSynchro(models.Model):
             except BaseException:
                 self.logmsg('error',
                     'Module %s not installable' % vals['name'])
-                return -1
+                return -4
             module = module_model.browse(module_ids[0])
         if module.state != 'installed':
             self.logmsg('error',
                 'Module %s not installed' % vals['name'])
-            return -1
+            return -4
         self.logmsg('info',
             '>>> %s.install(%s)' % ('ir.module.module', module.name))
         self.logmsg('trace', '', model='ir.module.module', rec=module)

@@ -1,3 +1,9 @@
+10.0.0.1.39 (2020-08-11)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [FIX] Install just installed modules / Installazione solo di moduli installati
+
+
 10.0.0.1.38 (2020-08-06)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
