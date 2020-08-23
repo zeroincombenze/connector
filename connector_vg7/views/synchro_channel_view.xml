@@ -41,6 +41,7 @@
                     <field name="sequence"/>
                     <field name="import_workflow"/>
                     <field name="rec_counter"/>
+                    <field name="workflow_model"/>
                     <field name="active"/>
                     <field name="trace" readonly="1"/>
                     <field name="tracelevel"/>

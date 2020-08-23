@@ -181,17 +181,17 @@ MIN_FIELDS = ('code', 'company_id', 'description', 'default_code',
               'name', 'parent_id', 'partner_id', 'type')
 MIN_MANY_FIELDS = ('*', 'company_id', 'parent_id', 'partner_id')
 WORKFLOW = {
-    0: {'model': 'res.partner', 'select': 'new', 'only_minimal': True,
-        'remote_ids': '1-10'},
-    1: {'model': 'res.users', 'only_minimal': True,
-        'no_deep_fields': ['*', 'partner_id']},
-    2: {'model': 'ir.module.module'},
-    3: {'model': 'res.lang'},
-    4: {'model': 'res.currency', 'no_deep_fields': ['rate_ids']},
-    5: {'model': 'res.company', 'no_deep_fields': ['*', 'partner_id']},
-    6: {'model': 'res.country',
+    0: {'model': 'ir.module.module'},
+    1: {'model': 'res.lang'},
+    2: {'model': 'res.country',
         'no_deep_fields': ['country_group_ids', 'state_ids']},
-    7: {'model': 'res.country.state'},
+    3: {'model': 'res.country.state'},
+    4: {'model': 'res.currency', 'no_deep_fields': ['rate_ids']},
+    5: {'model': 'res.partner', 'select': 'new', 'only_minimal': True,
+        'remote_ids': '1-10'},
+    6: {'model': 'res.users', 'only_minimal': True,
+        'no_deep_fields': ['*', 'partner_id']},
+    7: {'model': 'res.company', 'no_deep_fields': ['*', 'partner_id']},
     8: {'model': 'account.account.type'},
     9: {'model': 'account.account',
         'no_deep_fields': ['*', 'company_id', 'user_type_id', 'tag_ids']},
@@ -847,6 +847,9 @@ class IrModelSynchro(models.Model):
         if not relation:
             raise RuntimeError('No relation for field %s of %s' % (name,
                                                                    xmodel))
+        if relation == actual_model and type == 'one2many':
+            # Avoid recursive request, i.e. res.partner
+            return []
         tomany = True if ttype in ('one2many', 'many2many') else False
         cache.open(channel_id=channel_id, model=relation)
         if isinstance(value, basestring):
@@ -1215,8 +1218,11 @@ class IrModelSynchro(models.Model):
                         ttype=cache.get_struct_model_field_attr(
                             actual_model, loc_name, 'ttype'),
                         spec=spec, fmt='cmd')
-                    if loc_id and loc_id > 0:
-                        vals[loc_name] = loc_id
+                    if loc_id:
+                        if isinstance(loc_id, (tuple, list)):
+                            vals[loc_name] = loc_id
+                        elif loc_id > 0:
+                            vals[loc_name] = loc_id
             elif identity == 'odoo':
                 tnldict = self.get_tnldict(channel_id)
                 vals[loc_name] = transodoo.translate_from_to(
@@ -2459,11 +2465,14 @@ class IrModelSynchro(models.Model):
                         remote_ids += eval(item)
             return remote_ids
 
-        def update_rec_counter(cur_channel, ext_id, rec_counter, use_workflow):
+        def update_rec_counter(cur_channel, ext_id, rec_counter, use_workflow,
+                               model=None):
             if ext_id > rec_counter:
                 rec_counter = ext_id
                 if use_workflow:
                     wkf = {'rec_counter': rec_counter}
+                    if model:
+                        wkf['workflow_model'] = model
                     cur_channel.write(wkf)
             return rec_counter
 
@@ -2564,12 +2573,14 @@ class IrModelSynchro(models.Model):
                                 (select == 'upd' and ext_id_name and
                                  not cls.search([(ext_id_name, '=', ext_id)]))):
                             rec_counter = update_rec_counter(
-                                cur_channel, ext_id, rec_counter, use_workflow)
+                                cur_channel, ext_id, rec_counter, use_workflow,
+                                model=xmodel)
                             continue
                         if use_workflow and ext_id <= rec_counter:
                             continue
                         rec_counter = update_rec_counter(
-                            cur_channel, ext_id, rec_counter, use_workflow)
+                            cur_channel, ext_id, rec_counter, use_workflow,
+                            model=xmodel)
                     loc_id = self.pull_1_record(
                         channel_id, xmodel, vals or ext_id,
                         only_minimal=only_minimal,
@@ -2590,7 +2601,7 @@ class IrModelSynchro(models.Model):
             _logger.info('%s record successfully pulled from channel %s' % (
                 ctr, channel_id))
         if use_workflow:
-            wkf = {'rec_counter': rec_counter}
+            wkf = {'rec_counter': rec_counter, 'workflow_model': ''}
             if not local_ids or WORKFLOW[workflow].get('remote_ids'):
                 wkf = {'import_workflow': workflow + 1, 'rec_counter': 0}
             cur_channel.write(wkf)
@@ -2828,5 +2839,9 @@ class IrModelSynchroLog(models.Model):
             domain = [('timestamp', '<', last)]
             if nrecs < 10000:
                 break
+        max_recs_per_session = 1000
         for rec in self.search(domain, order='timestamp desc'):
             rec.unlink()
+            max_recs_per_session -= 1
+            if not max_recs_per_session:
+                break

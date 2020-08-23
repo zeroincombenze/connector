@@ -41,7 +41,7 @@ Avaiable Addons / Moduli disponibili
 +------------------------+------------+------------+----------------------------------------------------------------------------------+
 | connector_base_product | |halt|     | |halt|     | Connector Base Product                                                           |
 +------------------------+------------+------------+----------------------------------------------------------------------------------+
-| connector_vg7          | 10.0.0.1.3 | 10.0.0.1.3 | Connector to/from VG7 software                                                   |
+| connector_vg7          | 10.0.0.1.4 | 10.0.0.1.3 | Connector to/from VG7 software                                                   |
 +------------------------+------------+------------+----------------------------------------------------------------------------------+
 | connector_vg7_conai    | 10.0.0.1.1 | |same|     | Bidirectional connector to/from VG7 software (CONAI plug-in)                     |
 +------------------------+------------+------------+----------------------------------------------------------------------------------+
@@ -197,7 +197,7 @@ La distribuzione `Zeroincombenze® <https://wiki.zeroincombenze.org/en/Odoo>`__ 
 |
 
 
-Last Update / Ultimo aggiornamento: 2020-08-11
+Last Update / Ultimo aggiornamento: 2020-08-23
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Alfa-red.png
     :target: https://odoo-community.org/page/development-status

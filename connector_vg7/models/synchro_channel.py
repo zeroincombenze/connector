@@ -95,6 +95,8 @@ class SynchroChannel(models.Model):
     rec_counter = fields.Integer('Import Counter',
         default=0,
         help='Last imported record number')
+    workflow_model = fields.Char('Current Workflow Model',
+        readonly=True)
 
     @api.multi
     def write(self, vals):
