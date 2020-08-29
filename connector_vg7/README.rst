@@ -1,6 +1,6 @@
 
 ================================
-|icon| connector_vg7 10.0.0.1.40
+|icon| connector_vg7 10.0.0.1.41
 ================================
 
 
@@ -19,7 +19,7 @@ Overview / Panoramica
 
 |en| This module makes available the synchro function to synchronize external data
 with Odoo data.
-The function sysnchro return th ID of record found or created. Negative values
+The function synchro return the ID of record found or created. Negative values
 are error codes.
 
 The function synchro accepts a data dictionary with field values, like create
@@ -184,10 +184,16 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 ChangeLog History / Cronologia modifiche
 ----------------------------------------
 
-10.0.0.1.50 (2020-08-23)
+10.0.0.1.41 (2020-08-29)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-* [IMP] Sho Workflow model / Mostra modello workflow corrente
+* [IMP] Avoid recurse / Controllo anti-ricorsione
+
+
+10.0.0.1.40 (2020-08-23)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] Show Workflow model / Mostra modello workflow corrente
 
 
 10.0.0.1.39 (2020-08-11)
@@ -395,7 +401,7 @@ La distribuzione `Zeroincombenze® <https://wiki.zeroincombenze.org/en/Odoo>`__ 
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2020-08-23
+Last Update / Ultimo aggiornamento: 2020-08-29
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status

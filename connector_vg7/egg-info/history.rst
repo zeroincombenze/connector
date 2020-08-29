@@ -1,7 +1,13 @@
-10.0.0.1.50 (2020-08-23)
+10.0.0.1.41 (2020-08-29)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-* [IMP] Sho Workflow model / Mostra modello workflow corrente
+* [IMP] Avoid recurse / Controllo anti-ricorsione
+
+
+10.0.0.1.40 (2020-08-23)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] Show Workflow model / Mostra modello workflow corrente
 
 
 10.0.0.1.39 (2020-08-11)

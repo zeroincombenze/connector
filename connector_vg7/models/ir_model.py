@@ -204,11 +204,11 @@ WORKFLOW = {
                             'default_credit_account_id',
                             'default_debit_account_id', 'sequence_id']},
     14: {'model': 'account.payment.term'},
-    15: {'model': 'res.partner.bank'},
-    16: {'model': 'account.fiscal.position', 'only_minimal': True},
-    17: {'model': 'res.partner',
+    15: {'model': 'account.fiscal.position', 'only_minimal': True},
+    16: {'model': 'res.partner',
          'no_deep_fields': ['*', 'company_id', 'category_id', 'country_id',
                            'parent_id', 'state_id']},
+    17: {'model': 'res.partner.bank'},
     18: {'model': 'product.uom'},
     19: {'model': 'product.category'},
     20: {'model': 'product.template',
@@ -555,7 +555,7 @@ class IrModelSynchro(models.Model):
             elif rec.original_state == 'cancel':
                 rec.action_invoice_cancel()
         elif model == 'sale.order':
-            # Please, dO not remove this write: set default values in header
+            # Please, do not remove this write: set default values in header
             rec.write({})
             if rec.state == rec.original_state:
                 return rec.id
@@ -565,7 +565,7 @@ class IrModelSynchro(models.Model):
                     model=model, rec=rec)
                 return -4
             elif rec.original_state == 'sale':
-                rec._compute_tax_id()
+                rec._amount_all()
                 if cache.get_struct_model_attr('sale.order.line', 'agents'):
                     rec._compute_commission_total()
                 rec.action_confirm()
@@ -847,7 +847,7 @@ class IrModelSynchro(models.Model):
         if not relation:
             raise RuntimeError('No relation for field %s of %s' % (name,
                                                                    xmodel))
-        if relation == actual_model and type == 'one2many':
+        if relation == actual_model and ttype == 'one2many':
             # Avoid recursive request, i.e. res.partner
             return []
         tomany = True if ttype in ('one2many', 'many2many') else False
@@ -1223,6 +1223,8 @@ class IrModelSynchro(models.Model):
                             vals[loc_name] = loc_id
                         elif loc_id > 0:
                             vals[loc_name] = loc_id
+                    elif loc_name:
+                        vals[loc_name] = False
             elif identity == 'odoo':
                 tnldict = self.get_tnldict(channel_id)
                 vals[loc_name] = transodoo.translate_from_to(
@@ -2732,7 +2734,7 @@ class IrModelSynchro(models.Model):
         if module.state == 'uninstalled':
             try:
                 module_model.execute('button_immediate_install', module_ids)
-                time.sleep(len(module.dependencies_id) + 2)
+                time.sleep(len(module.dependencies_id) + 3)
             except BaseException:
                 self.logmsg('error',
                     'Module %s not installable' % vals['name'])

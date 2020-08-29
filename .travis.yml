@@ -45,7 +45,6 @@ addons:
 before_install:
   # Use Zeroincombenze(R) tools
   - git clone https://github.com/zeroincombenze/tools.git ${HOME}/tools --single-branch --depth=1
-  # - export PATH=${HOME}/tools/maintainer-quality-tools/travis:${PATH}
   - ${HOME}/tools/install_tools.sh -qopts
   - source ${HOME}/dev/activate_tools
   - export PYTHONPATH=${HOME}/tools

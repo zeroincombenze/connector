@@ -1,6 +1,6 @@
 This module makes available the synchro function to synchronize external data
 with Odoo data.
-The function sysnchro return th ID of record found or created. Negative values
+The function synchro return the ID of record found or created. Negative values
 are error codes.
 
 The function synchro accepts a data dictionary with field values, like create
