@@ -177,8 +177,9 @@ try:
 except ImportError as err:
     _logger.error(err)
 
-MIN_FIELDS = ('code', 'company_id', 'description', 'default_code',
-              'name', 'parent_id', 'partner_id', 'type')
+MIN_FIELDS = ('category_id', 'code', 'company_id', 'description',
+              'default_code', 'journal_id', 'name', 'parent_id',
+              'partner_id', 'type')
 MIN_MANY_FIELDS = ('*', 'company_id', 'parent_id', 'partner_id')
 WORKFLOW = {
     0: {'model': 'ir.module.module'},
