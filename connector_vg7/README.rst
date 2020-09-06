@@ -1,6 +1,6 @@
 
 ================================
-|icon| connector_vg7 10.0.0.1.41
+|icon| connector_vg7 10.0.0.1.42
 ================================
 
 
@@ -183,6 +183,12 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 
 ChangeLog History / Cronologia modifiche
 ----------------------------------------
+
+10.0.0.1.41 (2020-08-05)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] Unit price in min invoice line / Prezzo unitario in riga fattura minima
+
 
 10.0.0.1.41 (2020-08-29)
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -401,7 +407,7 @@ La distribuzione `Zeroincombenze® <https://wiki.zeroincombenze.org/en/Odoo>`__ 
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2020-09-01
+Last Update / Ultimo aggiornamento: 2020-09-06
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status

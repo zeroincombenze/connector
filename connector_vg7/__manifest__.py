@@ -10,7 +10,7 @@
 {
     'name': 'connector_vg7',
     'summary': 'Connector to/from VG7 software',
-    'version': '10.0.0.1.41',
+    'version': '10.0.0.1.42',
     'category': 'Generic Modules',
     'author': 'SHS-AV s.r.l.',
     'website': 'https://www.zeroincombenze.it/',

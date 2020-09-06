@@ -179,7 +179,7 @@ except ImportError as err:
 
 MIN_FIELDS = ('category_id', 'code', 'company_id', 'description',
               'default_code', 'journal_id', 'name', 'parent_id',
-              'partner_id', 'product_uom', 'type')
+              'partner_id', 'price_unit', 'product_uom', 'type')
 MIN_MANY_FIELDS = ('*', 'company_id', 'parent_id', 'partner_id')
 WORKFLOW = {
     0: {'model': 'ir.module.module'},

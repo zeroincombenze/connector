@@ -1,3 +1,9 @@
+10.0.0.1.41 (2020-08-05)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] Unit price in min invoice line / Prezzo unitario in riga fattura minima
+
+
 10.0.0.1.41 (2020-08-29)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
