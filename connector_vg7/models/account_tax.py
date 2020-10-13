@@ -40,8 +40,6 @@ class AccountTax(models.Model):
     timestamp = fields.Datetime('Timestamp', copy=False, readonly=True)
     errmsg = fields.Char('Error message', copy=False, readonly=True)
 
-    CONTRAINTS = []
-
     @api.model_cr_context
     def _auto_init(self):
         res = super(AccountTax, self)._auto_init()
@@ -66,7 +64,6 @@ class AccountTax(models.Model):
         return text
 
     def assure_values(self, vals, rec):
-        actual_model = 'account.tax'
         if not vals.get('amount'):
             if rec:
                 vals['amount'] = rec.amount
@@ -80,4 +77,3 @@ class AccountTax(models.Model):
         return self.env['ir.model.synchro'].synchro(
             self, vals, disable_post=disable_post,
             only_minimal=only_minimal, no_deep_fields=no_deep_fields)
-

@@ -101,14 +101,12 @@ class ProductProduct(models.Model):
     timestamp = fields.Datetime('Timestamp', copy=False, readonly=True)
     errmsg = fields.Char('Error message', copy=False, readonly=True)
 
-    CONTRAINTS = ()
-
     @api.model_cr_context
     def _auto_init(self):
         res = super(ProductProduct, self)._auto_init()
         for prefix in ('vg7', 'oe7', 'oe8', 'oe10'):
-            self.env['ir.model.synchro']._build_unique_index(
-                self._inherit, prefix)
+            self.env['ir.model.synchro']._build_unique_index(self._inherit,
+                                                             prefix)
         return res
 
     def wep_text(self, text):
@@ -155,14 +153,12 @@ class ProductUom(models.Model):
     oe8_id = fields.Integer('Odoo8 ID', copy=False)
     oe10_id = fields.Integer('Odoo10 ID', copy=False)
 
-    CONTRAINTS = ()
-
     @api.model_cr_context
     def _auto_init(self):
         res = super(ProductUom, self)._auto_init()
         for prefix in ('vg7', 'oe7', 'oe8', 'oe10'):
-            self.env['ir.model.synchro']._build_unique_index(
-                self._inherit, prefix)
+            self.env['ir.model.synchro']._build_unique_index(self._inherit,
+                                                             prefix)
         return res
 
     @api.model
@@ -185,14 +181,12 @@ class ProductCategory(models.Model):
     oe8_id = fields.Integer('Odoo8 ID', copy=False)
     oe10_id = fields.Integer('Odoo10 ID', copy=False)
 
-    CONTRAINTS = ()
-
     @api.model_cr_context
     def _auto_init(self):
         res = super(ProductCategory, self)._auto_init()
         for prefix in ('vg7', 'oe7', 'oe8', 'oe10'):
-            self.env['ir.model.synchro']._build_unique_index(
-                self._inherit, prefix)
+            self.env['ir.model.synchro']._build_unique_index(self._inherit,
+                                                             prefix)
         return res
 
     @api.model
@@ -211,14 +205,12 @@ class ProductPricelist(models.Model):
     oe8_id = fields.Integer('Odoo8 ID', copy=False)
     oe10_id = fields.Integer('Odoo10 ID', copy=False)
 
-    CONTRAINTS = ()
-
     @api.model_cr_context
     def _auto_init(self):
         res = super(ProductPricelist, self)._auto_init()
         for prefix in ('vg7', 'oe7', 'oe8', 'oe10'):
-            self.env['ir.model.synchro']._build_unique_index(
-                self._inherit, prefix)
+            self.env['ir.model.synchro']._build_unique_index(self._inherit,
+                                                             prefix)
         return res
 
     @api.model
@@ -227,4 +219,3 @@ class ProductPricelist(models.Model):
         return self.env['ir.model.synchro'].synchro(
             self, vals, disable_post=disable_post,
             only_minimal=only_minimal, no_deep_fields=no_deep_fields)
-

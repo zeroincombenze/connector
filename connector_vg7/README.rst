@@ -1,6 +1,6 @@
 
 ================================
-|icon| connector_vg7 10.0.0.1.42
+|icon| connector_vg7 10.0.0.1.44
 ================================
 
 
@@ -17,8 +17,33 @@
 Overview / Panoramica
 =====================
 
-|en| This module makes available the synchro function to synchronize external data
+|en| This module makes available some functions to synchronize external data
 with Odoo data.
+
+Characteristics
+~~~~~~~~~~~~~~~
+
+* Multi-channels interchange
+* JSON, XMLRPC and CSV files protocols
+* Push and/or Pull logic
+* Many2one, One2Many and Many2Many managed with external references
+* Automatic field value translation
+* Odoo version from 6.1 to 12.0 field name and values automatic translation
+* Anti-recurse checks
+* Two phases create in order to create hierarchical record structure
+* Dynamic translation database
+
+This module can be used for:
+
+* Upgrade Odoo DB from a version to another version (even beck upgrade)
+* Import data from files without duplicating records
+* Connect Odoo with other software (current version supports until 4 counterparts)
+* Populate Odoo DB in the first installation migrated from another software
+
+
+Synchro
+~~~~~~~
+
 The function synchro return the ID of record found or created. Negative values
 are error codes.
 
@@ -27,31 +52,49 @@ and write functions.
 
 Every field name may be:
 
-* "id" (integer): the Odoo ID of record; if supplied means write specific existent record
-* "vg7_id" (integer): the external partner ID of record
-* Odoo name: same behavior of Odoo write and create; external partner must know the Odoo structure
-* External name as format "vg7:field": external name is translated into Odoo name base on dictionary
-* Prefixed Odoo name ad format "vg7_field":  external partner must know the Odoo structure but pass its local value
+* `id` (integer): the Odoo ID of record; if supplied means write specific existent record (deprecated)
+* `PFX_id` (integer): the external partner ID of record (PFX is the channel prefix)
+* External name as format `PFX:FIELD` where PFX is the channel prefix and FIELD is the external name which is translated into Odoo name based on dictionary
 
 Every field value may be:
 
-* Value as is, i.e. partner name; value is acquired as is.
-* Odoo reference: ID of odoo M2O table; external partner must know the Odoo data
-* External references: ID of external reference; field name is prefixed by "vg7:" or "vg7_"
+* Value as is, i.e. partner name; the value is acquired as is
+* External references: ID of external reference
 * Text of reference: key of reference key, i.e. "admin" in user_id field
 
-Behavior:
+Synchronizer behavior:
 
-* If "id" in field names, the function executes a write to specific ID; id record does not exit exception is generated
-* If "vg7_id" in field name, record with vg7_id is searched; if found, the function executes a write
-* Search for record matching value passed; the function execute a fallback search algorithm
+* If `PFX_id` field is supplied, record with `PFX_id` is searched
+* Otherwise Synchronizer search for a record matching values passed; the function execute a fallback search algorithm
+* If record found, Synchronizer executes the Odoo function write
+* If record not found, Synchronizer executes the Odoo function create and assign external 'id' to `PFX_id`
 
 
 |
 
 |it| Connettore con VG7
 
-Non ancora documentato
+Questo modulo rende disponibile alucne funzioni per sincronizzare con l'esterno.
+
+Caratteristiche
+~~~~~~~~~~~~~~~
+
+* Scambio multi-canale
+* Protocolli JSON, XMLRPC e file CSV
+* Logica Push o Pull
+* Many2one, One2Many e Many2Many gestiti con referenze esterne
+* Traduzione automatica dei campi
+* Traduzione automatica dei campi e dei valori di Odoo dalla 6.1 alla 12.0
+* Controllo anti-ricorsione
+* Creazione a due fasi
+* Traduttore dinamico
+
+Questo modulo può essere usato per:
+
+* Aggiornare database di Odoo tra versioni (anche all'indietro)
+* Importare dati da file senza duplicazioni
+* Connettere Odoo con altri software (sino a 4 contemporaneamente)
+* Popolare il DB di Odoo nella prima installazione quando migrazione da altro software
 
 
 |
@@ -184,7 +227,22 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 ChangeLog History / Cronologia modifiche
 ----------------------------------------
 
-10.0.0.1.41 (2020-08-05)
+10.0.0.1.44 (2020-09-27)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] New external ID model / Nuovo modello per external ID
+
+
+10.0.0.1.43 (2020-08-08)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] Report child error / Segnala errore nei record figli
+* [IMP] Purchase order / Ordini a fornitore
+* [FIX] Sometimes error -6 from vg7 client / Errore casuale -6 con client vg7
+* [FIX] Import new users / Importazione nuovi utenti
+
+
+10.0.0.1.42 (2020-08-05)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 * [IMP] Unit price in min invoice line / Prezzo unitario in riga fattura minima
@@ -407,7 +465,7 @@ La distribuzione `Zeroincombenze® <https://wiki.zeroincombenze.org/en/Odoo>`__ 
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2020-09-06
+Last Update / Ultimo aggiornamento: 2020-10-13
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status

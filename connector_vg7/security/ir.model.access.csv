@@ -11,3 +11,4 @@ access_ir_model_synchro_apply,access_ir_model_synchro_apply,model_ir_model_synch
 access_res_partner_invoice,access_res_partner_invoice,model_res_partner_invoice,base.group_user,1,0,0,0
 access_res_partner_supplier,access_res_partner_supplier,model_res_partner_supplier,base.group_user,1,0,0,0
 access_res_partner_bank_company,access_res_partner_bank_company,model_res_partner_bank_company,base.group_user,1,0,0,0
+access_ir_model_synchro_data,access_ir_model_synchro_data,model_ir_model_synchro_data,base.group_user,1,1,1,1

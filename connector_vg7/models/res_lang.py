@@ -22,6 +22,14 @@ class ResLang(models.Model):
     oe8_id = fields.Integer('Odoo8 ID', copy=False)
     oe10_id = fields.Integer('Odoo10 ID', copy=False)
 
+    @api.model_cr_context
+    def _auto_init(self):
+        res = super(ResLang, self)._auto_init()
+        for prefix in ('vg7', 'oe7', 'oe8', 'oe10'):
+            self.env['ir.model.synchro']._build_unique_index(self._inherit,
+                                                             prefix)
+        return res
+
     @api.model
     def synchro(self, vals, disable_post=None,
                 only_minimal=None, no_deep_fields=None):

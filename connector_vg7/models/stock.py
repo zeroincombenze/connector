@@ -13,11 +13,6 @@ from odoo import api, fields, models
 
 _logger = logging.getLogger(__name__)
 
-try:
-    from unidecode import unidecode
-except ImportError as err:
-    _logger.debug(err)
-
 
 class StockLocation(models.Model):
     _inherit = "stock.location"
@@ -27,14 +22,12 @@ class StockLocation(models.Model):
     oe8_id = fields.Integer('Odoo8 ID', copy=False)
     oe10_id = fields.Integer('Odoo10 ID', copy=False)
 
-    CONTRAINTS = ()
-
     @api.model_cr_context
     def _auto_init(self):
         res = super(StockLocation, self)._auto_init()
         for prefix in ('vg7', 'oe7', 'oe8', 'oe10'):
-            self.env['ir.model.synchro']._build_unique_index(
-                self._inherit, prefix)
+            self.env['ir.model.synchro']._build_unique_index(self._inherit,
+                                                             prefix)
         return res
 
 
@@ -46,14 +39,12 @@ class StockWarehouse(models.Model):
     oe8_id = fields.Integer('Odoo8 ID', copy=False)
     oe10_id = fields.Integer('Odoo10 ID', copy=False)
 
-    CONTRAINTS = ()
-
     @api.model_cr_context
     def _auto_init(self):
         res = super(StockWarehouse, self)._auto_init()
         for prefix in ('vg7', 'oe7', 'oe8', 'oe10'):
-            self.env['ir.model.synchro']._build_unique_index(
-                self._inherit, prefix)
+            self.env['ir.model.synchro']._build_unique_index(self._inherit,
+                                                             prefix)
         return res
 
 
@@ -67,14 +58,12 @@ class StockMove(models.Model):
     timestamp = fields.Datetime('Timestamp', copy=False, readonly=True)
     errmsg = fields.Char('Error message', copy=False, readonly=True)
 
-    CONTRAINTS = ()
-
     @api.model_cr_context
     def _auto_init(self):
         res = super(StockMove, self)._auto_init()
         for prefix in ('vg7', 'oe7', 'oe8', 'oe10'):
-            self.env['ir.model.synchro']._build_unique_index(
-                self._inherit, prefix)
+            self.env['ir.model.synchro']._build_unique_index(self._inherit,
+                                                             prefix)
         return res
 
     @api.model
@@ -100,14 +89,12 @@ class StockPicking(models.Model):
     timestamp = fields.Datetime('Timestamp', copy=False, readonly=True)
     errmsg = fields.Char('Error message', copy=False, readonly=True)
 
-    CONTRAINTS = ()
-
     @api.model_cr_context
     def _auto_init(self):
         res = super(StockPicking, self)._auto_init()
         for prefix in ('vg7', 'oe7', 'oe8', 'oe10'):
-            self.env['ir.model.synchro']._build_unique_index(
-                self._inherit, prefix)
+            self.env['ir.model.synchro']._build_unique_index(self._inherit,
+                                                             prefix)
         return res
 
     @api.model

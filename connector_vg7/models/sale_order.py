@@ -25,9 +25,6 @@ class SaleOrder(models.Model):
     timestamp = fields.Datetime('Timestamp', copy=False, readonly=True)
     errmsg = fields.Char('Error message', copy=False, readonly=True)
 
-    CONTRAINTS = []
-    DEFAULT = {}
-
     @api.model_cr_context
     def _auto_init(self):
         res = super(SaleOrder, self)._auto_init()
@@ -124,8 +121,6 @@ class SaleOrderLine(models.Model):
     oe10_id = fields.Integer('Odoo10 ID', copy=False)
     to_delete = fields.Boolean('Record to delete')
 
-    CONTRAINTS = []
-
     @api.model_cr_context
     def _auto_init(self):
         res = super(SaleOrderLine, self)._auto_init()
@@ -133,6 +128,21 @@ class SaleOrderLine(models.Model):
             self.env['ir.model.synchro']._build_unique_index(self._inherit,
                                                              prefix)
         return res
+
+    def assure_values(self, vals, rec):
+        nm = 'product_id'
+        if not isinstance(vals.get(nm), int) and not rec:
+            product = self.env['product.product'].search(
+                [('default_code', '=', 'MISC')])
+            if not product:
+                product = self.env['product.product'].search(
+                    [], limit=1)
+            if product:
+                product = product[0]
+                vals[nm] = product.id
+        if not vals.get('price_unit') and not rec:
+            vals['price_unit'] = 0.0
+        return vals
 
     @api.model
     def synchro(self, vals, disable_post=None,

@@ -23,3 +23,27 @@ class IrModuleModule(models.Model):
         return self.env['ir.model.synchro'].synchro(
             self, vals, disable_post=disable_post,
             only_minimal=only_minimal, no_deep_fields=no_deep_fields)
+
+
+class IrModuleCategory(models.Model):
+    _inherit = "ir.module.category"
+
+    vg7_id = fields.Integer('VG7 ID', copy=False)
+    oe7_id = fields.Integer('Odoo7 ID', copy=False)
+    oe8_id = fields.Integer('Odoo8 ID', copy=False)
+    oe10_id = fields.Integer('Odoo10 ID', copy=False)
+
+    @api.model_cr_context
+    def _auto_init(self):
+        res = super(IrModuleCategory, self)._auto_init()
+        for prefix in ('vg7', 'oe7', 'oe8', 'oe10'):
+            self.env['ir.model.synchro']._build_unique_index(self._inherit,
+                                                             prefix)
+        return res
+
+    @api.model
+    def synchro(self, vals, disable_post=None,
+                only_minimal=None, no_deep_fields=None):
+        return self.env['ir.model.synchro'].synchro(
+            self, vals, disable_post=disable_post,
+            only_minimal=only_minimal, no_deep_fields=no_deep_fields)

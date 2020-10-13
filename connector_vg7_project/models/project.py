@@ -22,20 +22,19 @@ class ProjectProject(models.Model):
     oe8_id = fields.Integer('Odoo8 ID', copy=False)
     oe10_id = fields.Integer('Odoo10 ID', copy=False)
 
-    CONTRAINTS = []
-
-    @api.model_cr_context
-    def _auto_init(self):
-        res = super(ProjectProject, self)._auto_init()
-        for prefix in ('vg7', 'oe7', 'oe8', 'oe10'):
-            self.env['ir.model.synchro']._build_unique_index(self._inherit,
-                                                             prefix)
-        return res
+    _sql_constraints = [
+        ('vg7_uniq', 'unique (vg7_id)', 'External reference must be unique!'),
+        ('oe7_uniq', 'unique (oe7_id)', 'External reference must be unique!'),
+        ('oe8_uniq', 'unique (oe8_id)', 'External reference must be unique!'),
+        ('oe10_uniq', 'unique (oe10_id)', 'External reference must be unique!'),
+    ]
 
     @api.model
-    def synchro(self, vals, disable_post=None):
+    def synchro(self, vals, disable_post=None,
+                only_minimal=None, no_deep_fields=None):
         return self.env['ir.model.synchro'].synchro(
-            self, vals, disable_post=disable_post)
+            self, vals, disable_post=disable_post,
+            only_minimal=only_minimal, no_deep_fields=no_deep_fields)
 
     @api.multi
     def pull_record(self):
@@ -50,20 +49,19 @@ class ProjectTags(models.Model):
     oe8_id = fields.Integer('Odoo8 ID', copy=False)
     oe10_id = fields.Integer('Odoo10 ID', copy=False)
 
-    CONTRAINTS = []
-
-    @api.model_cr_context
-    def _auto_init(self):
-        res = super(ProjectTags, self)._auto_init()
-        for prefix in ('vg7', 'oe7', 'oe8', 'oe10'):
-            self.env['ir.model.synchro']._build_unique_index(self._inherit,
-                                                             prefix)
-        return res
+    _sql_constraints = [
+        ('vg7_uniq', 'unique (vg7_id)', 'External reference must be unique!'),
+        ('oe7_uniq', 'unique (oe7_id)', 'External reference must be unique!'),
+        ('oe8_uniq', 'unique (oe8_id)', 'External reference must be unique!'),
+        ('oe10_uniq', 'unique (oe10_id)', 'External reference must be unique!'),
+    ]
 
     @api.model
-    def synchro(self, vals, disable_post=None):
+    def synchro(self, vals, disable_post=None,
+                only_minimal=None, no_deep_fields=None):
         return self.env['ir.model.synchro'].synchro(
-            self, vals, disable_post=disable_post)
+            self, vals, disable_post=disable_post,
+            only_minimal=only_minimal, no_deep_fields=no_deep_fields)
 
 
 class ProjectTask(models.Model):
@@ -74,20 +72,19 @@ class ProjectTask(models.Model):
     oe8_id = fields.Integer('Odoo8 ID', copy=False)
     oe10_id = fields.Integer('Odoo10 ID', copy=False)
 
-    CONTRAINTS = []
-
-    @api.model_cr_context
-    def _auto_init(self):
-        res = super(ProjectTask, self)._auto_init()
-        for prefix in ('vg7', 'oe7', 'oe8', 'oe10'):
-            self.env['ir.model.synchro']._build_unique_index(self._inherit,
-                                                             prefix)
-        return res
+    _sql_constraints = [
+        ('vg7_uniq', 'unique (vg7_id)', 'External reference must be unique!'),
+        ('oe7_uniq', 'unique (oe7_id)', 'External reference must be unique!'),
+        ('oe8_uniq', 'unique (oe8_id)', 'External reference must be unique!'),
+        ('oe10_uniq', 'unique (oe10_id)', 'External reference must be unique!'),
+    ]
 
     @api.model
-    def synchro(self, vals, disable_post=None):
+    def synchro(self, vals, disable_post=None,
+                only_minimal=None, no_deep_fields=None):
         return self.env['ir.model.synchro'].synchro(
-            self, vals, disable_post=disable_post)
+            self, vals, disable_post=disable_post,
+            only_minimal=only_minimal, no_deep_fields=no_deep_fields)
 
 
 class ProjectTaskType(models.Model):
@@ -98,17 +95,16 @@ class ProjectTaskType(models.Model):
     oe8_id = fields.Integer('Odoo8 ID', copy=False)
     oe10_id = fields.Integer('Odoo10 ID', copy=False)
 
-    CONTRAINTS = []
-
-    @api.model_cr_context
-    def _auto_init(self):
-        res = super(ProjectTaskType, self)._auto_init()
-        for prefix in ('vg7', 'oe7', 'oe8', 'oe10'):
-            self.env['ir.model.synchro']._build_unique_index(self._inherit,
-                                                             prefix)
-        return res
+    _sql_constraints = [
+        ('vg7_uniq', 'unique (vg7_id)', 'External reference must be unique!'),
+        ('oe7_uniq', 'unique (oe7_id)', 'External reference must be unique!'),
+        ('oe8_uniq', 'unique (oe8_id)', 'External reference must be unique!'),
+        ('oe10_uniq', 'unique (oe10_id)', 'External reference must be unique!'),
+    ]
 
     @api.model
-    def synchro(self, vals, disable_post=None):
+    def synchro(self, vals, disable_post=None,
+                only_minimal=None, no_deep_fields=None):
         return self.env['ir.model.synchro'].synchro(
-            self, vals, disable_post=disable_post)
+            self, vals, disable_post=disable_post,
+            only_minimal=only_minimal, no_deep_fields=no_deep_fields)

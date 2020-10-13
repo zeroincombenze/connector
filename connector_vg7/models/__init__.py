@@ -10,7 +10,8 @@
 from . import (account_account, account_fiscal_position, account_invoice,
                account_journal, account_move, account_payment_term,
                account_tax, analytic, ir_model, ir_model_synchro_apply,
-               ir_model_synchro_cache, ir_module_module, ir_sequence,
-               package_preparation, product, res_company, res_currency,
-               res_country, res_partner, res_partner_bank, res_lang, res_users,
-               sale_order, stock, synchro_channel)
+               ir_model_synchro_cache, ir_model_synchro_data, ir_module_module,
+               ir_sequence, package_preparation, purchase_order, product,
+               res_company, res_currency, res_country, res_groups, res_partner,
+               res_partner_bank, res_lang, res_users, sale_order, stock,
+               synchro_channel)

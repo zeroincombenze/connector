@@ -7,17 +7,11 @@
 #
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 #
-import re
 import logging
 
 from odoo import api, fields, models
 
 _logger = logging.getLogger(__name__)
-
-try:
-    from unidecode import unidecode
-except ImportError as err:
-    _logger.debug(err)
 
 
 class AccountMove(models.Model):
@@ -34,8 +28,6 @@ class AccountMove(models.Model):
     oe7_id = fields.Integer('Odoo7 ID', copy=False)
     oe8_id = fields.Integer('Odoo8 ID', copy=False)
     oe10_id = fields.Integer('Odoo10 ID', copy=False)
-
-    CONTRAINTS = []
 
     @api.model_cr_context
     def _auto_init(self):
@@ -57,8 +49,6 @@ class AccountMoveLine(models.Model):
     oe7_id = fields.Integer('Odoo7 ID', copy=False)
     oe8_id = fields.Integer('Odoo8 ID', copy=False)
     oe10_id = fields.Integer('Odoo10 ID', copy=False)
-
-    CONTRAINTS = []
 
     @api.model_cr_context
     def _auto_init(self):

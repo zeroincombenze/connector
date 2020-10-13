@@ -48,16 +48,49 @@ RE_NAME_2_UTYPE = {
     '': 'account.data_account_type_revenue',
 }
 
-RE_NAME_2_TTYPE = {
-    'Banc(a|he|k)': 'liquidity',
-    'Cash': 'liquidity',
-    'Cassa': 'liquidity',
-    'Crediti': 'receivable',
-    'Debiti': 'payable',
-    'Payable': 'payable',
-    'Receivable': 'receivable',
-    '': 'other',
+
+RE_TYPE_NAME_ID = {
+    'Receivable': 'account.data_account_type_receivable',
+    'Credit[oi]( client[ei])?': 'account.data_account_type_receivable',
+    'Payable': 'account.data_account_type_payable',
+    'Debit[oi]( fornitor[ei])?': 'account.data_account_type_payable',
+    'Bank and Cash': 'account.data_account_type_liquidity',
+    'Cas(h|sa)': 'account.data_account_type_liquidity',
+    'Ban(a|he|k)( [eo] [Cc]assa)?': 'account.data_account_type_liquidity',
+    'Credit Card': 'account.data_account_type_credit_card',
+    'Carta di credito': 'account.data_account_type_credit_card',
+    'Current Assets?': 'account.data_account_type_current_assets',
+    'Assets?': 'account.data_account_type_current_assets',
+    'Attività( correnti)?': 'account.data_account_type_current_assets',
+    'Non-current Assets?': 'account.data_account_type_non_current_assets',
+    'Attività non correnti': 'account.data_account_type_non_current_assets',
+    'Prepayments': 'account.data_account_type_prepayments',
+    'Risconti': 'account.data_account_type_prepayments',
+    'Fixed Assets?': 'account.data_account_type_fixed_assets',
+    'Immobilizzazioni': 'account.data_account_type_fixed_assets',
+    'Current Liabilities': 'account.data_account_type_current_liabilities',
+    'Liability': 'account.data_account_type_current_liabilities',
+    'Passività( correnti)?': 'account.data_account_type_current_liabilities',
+    'Non-current Liabilities?':
+        'account.data_account_type_non_current_liabilities',
+    'Passività non correnti':
+        'account.data_account_type_non_current_liabilities',
+    'Equity': 'account.data_account_type_equity',
+    'Capitale': 'account.data_account_type_equity',
+    'Current Year Earnings': 'account.data_unaffected_earnings',
+    'Risultato operativo': 'account.data_unaffected_earnings',
+    'Other Income': 'account.data_account_type_other_income',
+    'Altri ricavi operativi': 'account.data_account_type_other_income',
+    'Income': 'account.data_account_type_revenue',
+    'Ricav[oi]': 'account.data_account_type_revenue',
+    'Depreciation': 'account.data_account_type_depreciation',
+    'Ammortamento': 'account.data_account_type_depreciation',
+    'Costi': 'account.data_account_type_expenses',
+    'Expenses?': 'account.data_account_type_expenses',
+    'Cost of Revenue': 'account.data_account_type_direct_costs',
+    'Costi operativi': 'account.data_account_type_direct_costs',
 }
+
 
 class AccountAccount(models.Model):
     _inherit = "account.account"
@@ -79,8 +112,6 @@ class AccountAccount(models.Model):
                            readonly=True)
     timestamp = fields.Datetime('Timestamp', copy=False, readonly=True)
     errmsg = fields.Char('Error message', copy=False, readonly=True)
-
-    CONTRAINTS = []
 
     @api.model_cr_context
     def _auto_init(self):
@@ -160,6 +191,8 @@ class AccountAccount(models.Model):
                     break
         elif not rec:
             vals['user_type_id'] = self.env.ref(RE_NAME_2_UTYPE['']).id
+            self.env['ir.model.synchro'].logmsg('warning',
+                '### Undefined account user type', model='account.account')
         return vals
 
     def assure_values(self, vals, rec):
@@ -211,12 +244,10 @@ class AccountAccountType(models.Model):
                            store=True,
                            readonly=True)
 
-    CONTRAINTS = []
-
     @api.model_cr_context
     def _auto_init(self):
         res = super(AccountAccountType, self)._auto_init()
-        for prefix in ('vg7', 'oe7'):
+        for prefix in ('vg7', 'oe7', 'oe8', 'oe10'):
             self.env['ir.model.synchro']._build_unique_index(self._inherit,
                                                              prefix)
         return res
@@ -238,16 +269,29 @@ class AccountAccountType(models.Model):
 
     def assure_values(self, vals, rec):
         # actual_model = 'account.account.type'
-        if not vals.get('type') and not rec:
-            name = vals.get('name', '')
-            if (name.find('Bank') >= 0 or name.find('Card') >= 0 or
-                    name.find('Banc') >= 0 or name.find('Cart') >= 0):
-                vals['type'] = 'liquidity'
-            elif name.find('Payable') >= 0 or name.find('Debiti') >= 0:
-                vals['type'] = 'payable'
-            elif name.find('Receivable') >= 0 or name.find('Crediti') >= 0:
+        name = vals.get('name', '')
+        if not name and rec:
+            name = rec.name
+        type_name = False
+        if name:
+            for regex in RE_TYPE_NAME_ID:
+                if re.search(regex, name):
+                    type_name = RE_TYPE_NAME_ID[regex]
+                    vals['id'] = self.env.ref(type_name).id
+                    break
+        if type_name:
+            if type_name == 'account.data_account_type_receivable':
                 vals['type'] = 'receivable'
+            elif type_name == 'account.data_account_type_payable':
+                vals['type'] = 'payable'
+            elif type_name == 'account.data_account_type_liquidity':
+                vals['type'] = 'liquidity'
             else:
+                vals['type'] = 'other'
+        if 'type' not in vals:
+            self.env['ir.model.synchro'].logmsg('warning',
+                '### Undefined account type', model='account.account.type')
+            if not rec:
                 vals['type'] = 'other'
         return vals
 

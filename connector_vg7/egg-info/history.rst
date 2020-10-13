@@ -1,4 +1,19 @@
-10.0.0.1.41 (2020-08-05)
+10.0.0.1.44 (2020-09-27)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] New external ID model / Nuovo modello per external ID
+
+
+10.0.0.1.43 (2020-08-08)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] Report child error / Segnala errore nei record figli
+* [IMP] Purchase order / Ordini a fornitore
+* [FIX] Sometimes error -6 from vg7 client / Errore casuale -6 con client vg7
+* [FIX] Import new users / Importazione nuovi utenti
+
+
+10.0.0.1.42 (2020-08-05)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 * [IMP] Unit price in min invoice line / Prezzo unitario in riga fattura minima

@@ -41,7 +41,7 @@ MOB Stock Extesnion
             'views/res_config_view.xml',
     ],
     'application': True,
-    'installable': True,
+    'installable': False,
     'active': False,
     'pre_init_hook': 'pre_init_check',
 }

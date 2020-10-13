@@ -8,39 +8,64 @@
             <p align="center">
                 <img src="https://raw.githubusercontent.com/zeroincombenze/grymb/master/flags/en_US.png" alt="English"/>
             </p>
-            <p class="oe_mt16" align="justify">This module makes available the synchro function to synchronize external data
+            <p class="oe_mt16" align="justify">This module makes available some functions to synchronize external data
 with Odoo data.
+<p align="justify">
+<h3>Characteristics</h3>
+</p><p align="justify">
+<ul>
+<li>Multi-channels interchange</li>
+<li>JSON, XMLRPC and CSV files protocols</li>
+<li>Push and/or Pull logic</li>
+<li>Many2one, One2Many and Many2Many managed with external references</li>
+<li>Automatic field value translation</li>
+<li>Odoo version from 6.1 to 12.0 field name and values automatic translation</li>
+<li>Anti-recurse checks</li>
+<li>Two phases create in order to create hierarchical record structure</li>
+<li>Dynamic translation database</li>
+</ul>
+</p><p align="justify">
+This module can be used for:
+</p><p align="justify">
+<ul>
+<li>Upgrade Odoo DB from a version to another version (even beck upgrade)</li>
+<li>Import data from files without duplicating records</li>
+<li>Connect Odoo with other software (current version supports until 4 counterparts)</li>
+<li>Populate Odoo DB in the first installation migrated from another software</li>
+</ul>
+</p><p align="justify">
+</p><p align="justify">
+<h3>Synchro</h3>
+</p><p align="justify">
 The function synchro return the ID of record found or created. Negative values
 are error codes.
-<p align="justify">
+</p><p align="justify">
 The function synchro accepts a data dictionary with field values, like create
 and write functions.
 </p><p align="justify">
 Every field name may be:
 </p><p align="justify">
 <ul>
-<li>"id" (integer): the Odoo ID of record; if supplied means write specific existent record</li>
-<li>"vg7_id" (integer): the external partner ID of record</li>
-<li>Odoo name: same behavior of Odoo write and create; external partner must know the Odoo structure</li>
-<li>External name as format "vg7:field": external name is translated into Odoo name base on dictionary</li>
-<li>Prefixed Odoo name ad format "vg7_field":  external partner must know the Odoo structure but pass its local value</li>
+<li><code>id</code> (integer): the Odoo ID of record; if supplied means write specific existent record (deprecated)</li>
+<li><code>PFX_id</code> (integer): the external partner ID of record (PFX is the channel prefix)</li>
+<li>External name as format <code>PFX:FIELD</code> where PFX is the channel prefix and FIELD is the external name which is translated into Odoo name based on dictionary</li>
 </ul>
 </p><p align="justify">
 Every field value may be:
 </p><p align="justify">
 <ul>
-<li>Value as is, i.e. partner name; value is acquired as is.</li>
-<li>Odoo reference: ID of odoo M2O table; external partner must know the Odoo data</li>
-<li>External references: ID of external reference; field name is prefixed by "vg7:" or "vg7_"</li>
+<li>Value as is, i.e. partner name; the value is acquired as is</li>
+<li>External references: ID of external reference</li>
 <li>Text of reference: key of reference key, i.e. "admin" in user_id field</li>
 </ul>
 </p><p align="justify">
-Behavior:
+Synchronizer behavior:
 </p><p align="justify">
 <ul>
-<li>If "id" in field names, the function executes a write to specific ID; id record does not exit exception is generated</li>
-<li>If "vg7_id" in field name, record with vg7_id is searched; if found, the function executes a write</li>
-<li>Search for record matching value passed; the function execute a fallback search algorithm</li>
+<li>If <code>PFX_id</code> field is supplied, record with <code>PFX_id</code> is searched</li>
+<li>Otherwise Synchronizer search for a record matching values passed; the function execute a fallback search algorithm</li>
+<li>If record found, Synchronizer executes the Odoo function write</li>
+<li>If record not found, Synchronizer executes the Odoo function create and assign external 'id' to <code>PFX_id</code></li>
 </ul>
 </p></p>
         </div>
@@ -50,7 +75,30 @@ Behavior:
             </p>
             <p class="oe_mt16" align="justify">Connettore con VG7
 <p align="justify">
-Non ancora documentato
+Questo modulo rende disponibile alucne funzioni per sincronizzare con l'esterno.
+</p><p align="justify">
+<h3>Caratteristiche</h3>
+</p><p align="justify">
+<ul>
+<li>Scambio multi-canale</li>
+<li>Protocolli JSON, XMLRPC e file CSV</li>
+<li>Logica Push o Pull</li>
+<li>Many2one, One2Many e Many2Many gestiti con referenze esterne</li>
+<li>Traduzione automatica dei campi</li>
+<li>Traduzione automatica dei campi e dei valori di Odoo dalla 6.1 alla 12.0</li>
+<li>Controllo anti-ricorsione</li>
+<li>Creazione a due fasi</li>
+<li>Traduttore dinamico</li>
+</ul>
+</p><p align="justify">
+Questo modulo pu&#242; essere usato per:
+</p><p align="justify">
+<ul>
+<li>Aggiornare database di Odoo tra versioni (anche all'indietro)</li>
+<li>Importare dati da file senza duplicazioni</li>
+<li>Connettere Odoo con altri software (sino a 4 contemporaneamente)</li>
+<li>Popolare il DB di Odoo nella prima installazione quando migrazione da altro software</li>
+</ul>
 </p></p>
         </div>
     </div>

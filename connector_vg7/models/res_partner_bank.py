@@ -13,11 +13,6 @@ from odoo import api, fields, models
 
 _logger = logging.getLogger(__name__)
 
-try:
-    from unidecode import unidecode
-except ImportError as err:
-    _logger.debug(err)
-
 
 class ResPartnerBank(models.Model):
     _inherit = "res.partner.bank"
@@ -31,7 +26,7 @@ class ResPartnerBank(models.Model):
     @api.model_cr_context
     def _auto_init(self):
         res = super(ResPartnerBank, self)._auto_init()
-        for prefix in ('vg7', 'oe7', 'oe8', 'oe10'):
+        for prefix in ('vg7', 'vg72', 'oe7', 'oe8', 'oe10'):
             self.env['ir.model.synchro']._build_unique_index(self._inherit,
                                                              prefix)
         return res

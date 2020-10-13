@@ -90,6 +90,11 @@ class AccountInvoiceLine(models.Model):
                                                              prefix)
         return res
 
+    def assure_values(self, vals, rec):
+        if not vals.get('price_unit') and not rec:
+            vals['price_unit'] = 0.0
+        return vals
+
     @api.model
     def synchro(self, vals, disable_post=None,
                 only_minimal=None, no_deep_fields=None):

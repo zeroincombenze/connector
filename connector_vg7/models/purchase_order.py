@@ -14,21 +14,28 @@ from odoo import api, fields, models
 _logger = logging.getLogger(__name__)
 
 
-class ResCountry(models.Model):
-    _inherit = "res.country"
+class PurchaseOrder(models.Model):
+    _inherit = "purchase.order"
 
     vg7_id = fields.Integer('VG7 ID', copy=False)
     oe7_id = fields.Integer('Odoo7 ID', copy=False)
     oe8_id = fields.Integer('Odoo8 ID', copy=False)
     oe10_id = fields.Integer('Odoo10 ID', copy=False)
+    original_state = fields.Char('Original Status', copy=False)
+    timestamp = fields.Datetime('Timestamp', copy=False, readonly=True)
+    errmsg = fields.Char('Error message', copy=False, readonly=True)
 
     @api.model_cr_context
     def _auto_init(self):
-        res = super(ResCountry, self)._auto_init()
+        res = super(PurchaseOrder, self)._auto_init()
         for prefix in ('vg7', 'oe7', 'oe8', 'oe10'):
             self.env['ir.model.synchro']._build_unique_index(self._inherit,
                                                              prefix)
         return res
+
+    @api.model
+    def commit(self, id):
+        return self.env['ir.model.synchro'].commit(self, id)
 
     @api.model
     def synchro(self, vals, disable_post=None,
@@ -42,21 +49,37 @@ class ResCountry(models.Model):
         self.env['ir.model.synchro'].pull_record(self)
 
 
-class ResCountryState(models.Model):
-    _inherit = "res.country.state"
+class PurchaseOrderLine(models.Model):
+    _inherit = "purchase.order.line"
 
     vg7_id = fields.Integer('VG7 ID', copy=False)
     oe7_id = fields.Integer('Odoo7 ID', copy=False)
     oe8_id = fields.Integer('Odoo8 ID', copy=False)
     oe10_id = fields.Integer('Odoo10 ID', copy=False)
+    to_delete = fields.Boolean('Record to delete')
 
     @api.model_cr_context
     def _auto_init(self):
-        res = super(ResCountryState, self)._auto_init()
+        res = super(PurchaseOrderLine, self)._auto_init()
         for prefix in ('vg7', 'oe7', 'oe8', 'oe10'):
             self.env['ir.model.synchro']._build_unique_index(self._inherit,
                                                              prefix)
         return res
+
+    def assure_values(self, vals, rec):
+        nm = 'product_id'
+        if not isinstance(vals.get(nm), int) and not rec:
+            product = self.env['product.product'].search(
+                [('default_code', '=', 'MISC')])
+            if not product:
+                product = self.env['product.product'].search(
+                    [], limit=1)
+            if product:
+                product = product[0]
+                vals[nm] = product.id
+        if not vals.get('price_unit') and not rec:
+            vals['price_unit'] = 0.0
+        return vals
 
     @api.model
     def synchro(self, vals, disable_post=None,

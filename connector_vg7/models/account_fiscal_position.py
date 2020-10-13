@@ -40,8 +40,6 @@ class AccountFiscalPosition(models.Model):
     timestamp = fields.Datetime('Timestamp', copy=False, readonly=True)
     errmsg = fields.Char('Error message', copy=False, readonly=True)
 
-    CONTRAINTS = []
-
     @api.model_cr_context
     def _auto_init(self):
         res = super(AccountFiscalPosition, self)._auto_init()

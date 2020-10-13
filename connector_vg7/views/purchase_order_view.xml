@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_purchase_order_synchro_form" model="ir.ui.view">
+        <field name="name">account.purchase.order.synchro.form</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="sequence" eval="100"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[last()]" position="after">
+                <page name="synchro" string="Synchronization">
+                    <button name="pull_record" string="Synchronize" type="object"/>
+                    <group>
+                        <field name="timestamp"/>
+                        <field name="vg7_id"/>
+                        <field name="oe7_id"/>
+                        <field name="oe8_id"/>
+                        <field name="oe10_id"/>
+                        <field name="original_state"/>
+                        <field name="errmsg"/>
+                    </group>
+                </page>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/form//group[last()]" position="after">
+                <group name="synchro">
+                    <field name="vg7_id"/>
+                    <field name="oe7_id"/>
+                    <field name="oe8_id"/>
+                    <field name="oe10_id"/>
+                    <field name="to_delete"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
+

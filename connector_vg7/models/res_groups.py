@@ -14,8 +14,8 @@ from odoo import api, fields, models
 _logger = logging.getLogger(__name__)
 
 
-class ResUsers(models.Model):
-    _inherit = "res.users"
+class ResGroups(models.Model):
+    _inherit = "res.groups"
 
     vg7_id = fields.Integer('VG7 ID', copy=False)
     oe7_id = fields.Integer('Odoo7 ID', copy=False)
@@ -24,17 +24,11 @@ class ResUsers(models.Model):
 
     @api.model_cr_context
     def _auto_init(self):
-        res = super(ResUsers, self)._auto_init()
+        res = super(ResGroups, self)._auto_init()
         for prefix in ('vg7', 'oe7', 'oe8', 'oe10'):
             self.env['ir.model.synchro']._build_unique_index(self._inherit,
                                                              prefix)
         return res
-
-    def assure_values(self, vals, rec):
-        if 'notify_emails' in vals:
-            # Avoid synchonizzazion notify
-            vals['notify_emails'] = 'None'
-        return vals
 
     @api.model
     def synchro(self, vals, disable_post=None,
@@ -42,7 +36,3 @@ class ResUsers(models.Model):
         return self.env['ir.model.synchro'].synchro(
             self, vals, disable_post=disable_post,
             only_minimal=only_minimal, no_deep_fields=no_deep_fields)
-
-    @api.multi
-    def pull_record(self):
-        self.env['ir.model.synchro'].pull_record(self)

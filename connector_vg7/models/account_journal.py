@@ -38,8 +38,6 @@ class AccountJournal(models.Model):
                            store=True,
                            readonly=True)
 
-    CONTRAINTS = []
-
     @api.model_cr_context
     def _auto_init(self):
         res = super(AccountJournal, self)._auto_init()

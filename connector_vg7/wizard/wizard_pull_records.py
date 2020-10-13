@@ -9,7 +9,7 @@
 #
 import logging
 
-from odoo import api, fields, models
+from odoo import fields, models
 # from odoo.tools.translate import _
 # from odoo.exceptions import UserError
 

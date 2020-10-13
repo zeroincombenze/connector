@@ -9,32 +9,17 @@
 #
 import logging
 
-from odoo import api, fields, models
+from odoo import models
 from odoo import release
 
 _logger = logging.getLogger(__name__)
-try:
-    from python_plus import unicodes
-except ImportError as err:
-    _logger.error(err)
-try:
-    from odoo_score import odoo_score
-except ImportError as err:
-    _logger.error(err)
-try:
-    from unidecode import unidecode
-except ImportError as err:
-    _logger.error(err)
+
 try:
     from os0 import os0
 except ImportError as err:
     _logger.error(err)
 try:
     from clodoo import transodoo
-except ImportError as err:
-    _logger.error(err)
-try:
-    import oerplib
 except ImportError as err:
     _logger.error(err)
 
@@ -93,7 +78,7 @@ class IrModelSynchroApply(models.Model):
     def apply_bool(self, channel_id, vals, loc_name,
                    ext_ref, loc_ext_id, default=None, ctx=None):
         if ext_ref in vals:
-            vals[loc_name] = os0.str2bool(vals.get(ext_ref), Fialse)
+            vals[loc_name] = os0.str2bool(vals.get(ext_ref), False)
         return vals
 
     def apply_not(self, channel_id, vals, loc_name,
@@ -438,10 +423,6 @@ class IrModelSynchroApply(models.Model):
                 ext_odoo_ver, release.major_version,
                 type='value', fld_name='report_type')
             name = vals.get('name', '').lower()
-            if name == 'Contante':
-                name2 = 'cash'
-            elif name == 'Cassa':
-                name2 = 'cash'
             if isinstance(names, list):
                 for nm in names:
                     if nm == name:

@@ -38,7 +38,7 @@
         'views/sale_views.xml',
         'views/res_partner_view.xml'
     ],
-    'installable': True,
+    'installable': False,
     'auto_install': False,
     'pre_init_hook': 'pre_init_check',
 }

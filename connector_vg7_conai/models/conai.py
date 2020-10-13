@@ -11,11 +11,6 @@ from odoo import api, fields, models
 # from odoo.exceptions import UserError
 _logger = logging.getLogger(__name__)
 
-try:
-    from unidecode import unidecode
-except ImportError as err:
-    _logger.debug(err)
-
 
 class ItalyConaiProductCategory(models.Model):
     _inherit = 'italy.conai.product.category'
@@ -30,7 +25,7 @@ class ItalyConaiProductCategory(models.Model):
     @api.model_cr_context
     def _auto_init(self):
         res = super(ItalyConaiProductCategory, self)._auto_init()
-        for prefix in ('vg7', 'oe7'):
+        for prefix in ('vg7', 'oe7', 'oe8', 'oe10'):
             self.env['ir.model.synchro']._build_unique_index(self._inherit,
                                                              prefix)
         return res
@@ -54,7 +49,7 @@ class ItalyConaiPartnerCategory(models.Model):
     @api.model_cr_context
     def _auto_init(self):
         res = super(ItalyConaiPartnerCategory, self)._auto_init()
-        for prefix in ('vg7', 'oe7'):
+        for prefix in ('vg7', 'oe7', 'oe8', 'oe10'):
             self.env['ir.model.synchro']._build_unique_index(self._inherit,
                                                              prefix)
         return res

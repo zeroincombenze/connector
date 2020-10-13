@@ -8,31 +8,16 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 #
 import logging
-from datetime import datetime, timedelta
+# from datetime import datetime, timedelta
 
-from odoo import api, fields, models
+from odoo import api, models
 
 _logger = logging.getLogger(__name__)
-try:
-    from python_plus import unicodes
-except ImportError as err:
-    _logger.error(err)
 try:
     from odoo_score import odoo_score
 except ImportError as err:
     _logger.error(err)
-try:
-    from unidecode import unidecode
-except ImportError as err:
-    _logger.error(err)
-try:
-    from os0 import os0
-except ImportError as err:
-    _logger.error(err)
-try:
-    import oerplib
-except ImportError as err:
-    _logger.error(err)
+
 
 SKEYS = {
     'res.country': (['code'], ['name']),
@@ -73,9 +58,12 @@ SKEYS = {
                         ['default_code'],
                         ['barcode'],
                         ['dim_name']),
+    'project.project': (['account_analytic_id']),
     'sale.order': (['name']),
     'sale.order.line': (['order_id', 'sequence'], ['order_id', 'name']),
 }
+
+CANDIDATE_KEYS = ('acc_number', 'login', 'code', 'description', 'name')
 
 
 class IrModelSynchroCache(models.Model):
@@ -287,8 +275,8 @@ class IrModelSynchroCache(models.Model):
         cache_model = 'QUEUE_SYNC'
         return ((loc_id and loc_id in self.get_struct_model_attr(
             cache_model, model, default=[])) or
-                (ext_id and ext_id in self.get_model_attr(
-                    channel_id, cache_model, xmodel, default=[])))
+            (ext_id and ext_id in self.get_model_attr(
+                channel_id, cache_model, xmodel, default=[])))
 
     # -------------------------
     # General purpose functions
@@ -508,7 +496,7 @@ class IrModelSynchroCache(models.Model):
             has_company = False
         else:
             has_company = 'company_id' in self.get_struct_attr(model)
-        for nm in ('code', 'acc_number', 'login', 'description', 'name'):
+        for nm in CANDIDATE_KEYS:
             if (nm in self.get_struct_attr(model) and
                     not self.get_struct_model_field_attr(
                         model, nm, 'readonly')):
@@ -534,13 +522,15 @@ class IrModelSynchroCache(models.Model):
             if 'APPLY' in field_def:
                 self.set_model_field_attr(
                     channel_id, model, field, 'APPLY', field_def['APPLY'])
-            elif field in (
-                    'code', 'acc_number', 'login', 'description', 'name'):
+            elif field in CANDIDATE_KEYS:
                 self.set_model_field_attr(
                     channel_id, model, field, 'APPLY', 'set_tmp_name()')
         if SKEYS.get(model):
             self.store_odoo_model_1_channels(
                 channel_id, model, SKEYS[model], field_uname, ext_ref)
+        elif hasattr(self.env[model], 'SKEYS'):
+            self.store_odoo_model_1_channels(
+                channel_id, model, self.env[model].SKEYS, field_uname, ext_ref)
         else:
             self.store_odoo_model_1_channels(
                 channel_id, model, skeys, field_uname, ext_ref)
@@ -553,7 +543,7 @@ class IrModelSynchroCache(models.Model):
         skeys = []
         field_uname = False
         has_company = 'company_id' in self.get_struct_attr(model)
-        for nm in ('code', 'acc_number', 'login', 'description', 'name'):
+        for nm in CANDIDATE_KEYS:
             if nm in self.get_struct_attr(model):
                 if has_company:
                     skeys.append([nm, 'company_id'])
@@ -561,9 +551,8 @@ class IrModelSynchroCache(models.Model):
                     skeys.append([nm])
                 if not field_uname:
                     field_uname = nm
-        for field in self.env[
-            'synchro.channel.model.fields'].search(
-            [('model_id', '=', model_rec.id)]):
+        for field in self.env['synchro.channel.model.fields'].search(
+                [('model_id', '=', model_rec.id)]):
             if field.name:
                 loc_name = field.name
             else:

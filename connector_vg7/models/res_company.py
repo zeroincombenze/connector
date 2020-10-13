@@ -13,11 +13,6 @@ from odoo import api, fields, models
 
 _logger = logging.getLogger(__name__)
 
-try:
-    from unidecode import unidecode
-except ImportError as err:
-    _logger.debug(err)
-
 
 class ResCompany(models.Model):
     _inherit = "res.company"
@@ -26,6 +21,14 @@ class ResCompany(models.Model):
     oe7_id = fields.Integer('Odoo7 ID', copy=False)
     oe8_id = fields.Integer('Odoo8 ID', copy=False)
     oe10_id = fields.Integer('Odoo10 ID', copy=False)
+
+    @api.model_cr_context
+    def _auto_init(self):
+        res = super(ResCompany, self)._auto_init()
+        for prefix in ('vg7', 'oe7', 'oe8', 'oe10'):
+            self.env['ir.model.synchro']._build_unique_index(self._inherit,
+                                                             prefix)
+        return res
 
     @api.model
     def __preprocess(self, channel_id, vals):
@@ -71,14 +74,6 @@ class ResCompany(models.Model):
             vals = cache.get_model_attr(channel_id, model, stored_field)
             cache.del_model_attr(channel_id, model, stored_field)
             self.synchro(vals, disable_post=True)
-
-    @api.model_cr_context
-    def _auto_init(self):
-        res = super(ResCompany, self)._auto_init()
-        for prefix in ('vg7', 'oe7', 'oe8', 'oe10'):
-            self.env['ir.model.synchro']._build_unique_index(self._inherit,
-                                                             prefix)
-        return res
 
     @api.model
     def synchro(self, vals, disable_post=None,

@@ -88,7 +88,7 @@ This module works very well with latest version of magento 1.9.* and Odoo 10.0
         "static/src/xml/mob_dashboard_view.xml",
     ],
     'application': True,
-    'installable': True,
+    'installable': False,
     'auto_install': False,
     'pre_init_hook': 'pre_init_check',
 }

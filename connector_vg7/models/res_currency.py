@@ -13,11 +13,6 @@ from odoo import api, fields, models
 
 _logger = logging.getLogger(__name__)
 
-try:
-    from unidecode import unidecode
-except ImportError as err:
-    _logger.debug(err)
-
 
 class ResCurrency(models.Model):
     _inherit = "res.currency"
@@ -26,8 +21,6 @@ class ResCurrency(models.Model):
     oe7_id = fields.Integer('Odoo7 ID', copy=False)
     oe8_id = fields.Integer('Odoo8 ID', copy=False)
     oe10_id = fields.Integer('Odoo10 ID', copy=False)
-
-    CONTRAINTS = []
 
     @api.model_cr_context
     def _auto_init(self):

@@ -13,11 +13,6 @@ from odoo import api, fields, models
 
 _logger = logging.getLogger(__name__)
 
-try:
-    from unidecode import unidecode
-except ImportError as err:
-    _logger.debug(err)
-
 
 class IrSequence(models.Model):
     _inherit = "ir.sequence"
@@ -27,8 +22,6 @@ class IrSequence(models.Model):
     oe8_id = fields.Integer('Odoo8 ID', copy=False)
     oe10_id = fields.Integer('Odoo10 ID', copy=False)
 
-    CONTRAINTS = []
-
     @api.model_cr_context
     def _auto_init(self):
         res = super(IrSequence, self)._auto_init()
@@ -37,3 +30,9 @@ class IrSequence(models.Model):
                                                              prefix)
         return res
 
+    @api.model
+    def synchro(self, vals, disable_post=None,
+                only_minimal=None, no_deep_fields=None):
+        return self.env['ir.model.synchro'].synchro(
+            self, vals, disable_post=disable_post,
+            only_minimal=only_minimal, no_deep_fields=no_deep_fields)

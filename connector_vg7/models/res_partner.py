@@ -264,7 +264,7 @@ class ResPartner(models.Model):
                     del vals['parent_id']
             elif rec and rec.parent_id:
                 parent = rec.parent_id
-            if parent:
+            if parent and not isinstance(parent, (int, long)):
                 empty = True
                 for nm in ('name', 'street', 'city', 'vat',
                            'codice_destinatario', 'phone', 'email'):
@@ -279,8 +279,9 @@ class ResPartner(models.Model):
                             break
                 if empty:
                     vals = {}
-                elif (vals.get('name') == parent.name or
-                      vals.get('name', '').startswith('Unknown')):
+                elif (vals.get('name', '') and
+                      (vals.get('name') == parent.name or
+                       vals.get('name', '').startswith('Unknown'))):
                     vals['name'] = False
         else:
             if not vals.get('name') and not rec:

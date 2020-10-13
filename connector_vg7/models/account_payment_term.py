@@ -17,10 +17,6 @@ try:
     from unidecode import unidecode
 except ImportError as err:
     _logger.debug(err)
-try:
-    from os0 import os0
-except ImportError as err:
-    _logger.error(err)
 
 
 class AccountPaymentTerm(models.Model):
@@ -43,8 +39,6 @@ class AccountPaymentTerm(models.Model):
                            readonly=True)
     timestamp = fields.Datetime('Timestamp', copy=False, readonly=True)
     errmsg = fields.Char('Error message', copy=False, readonly=True)
-
-    CONTRAINTS = []
 
     @api.model_cr_context
     def _auto_init(self):
@@ -73,7 +67,6 @@ class AccountPaymentTerm(models.Model):
     def preprocess(self, channel_id, vals):
         self.env['ir.model.synchro'].logmsg('debug',
             '>>> account.payment.term.preprocess()')
-        cache = self.env['ir.model.synchro.cache']
         if 'vg7:date_scadenza' in vals:
             num_dues = len(vals['vg7:date_scadenza'])
             if num_dues:
