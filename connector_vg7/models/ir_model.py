@@ -491,7 +491,7 @@ class IrModelSynchro(models.Model):
             vals['original_state'] = vals['state']
         elif rec:
             vals['original_state'] = rec.state
-        if rec.state == 'draft':
+        if rec and rec.state == 'draft':
             return vals, errc
         if model == 'account.invoice':
             if rec:
