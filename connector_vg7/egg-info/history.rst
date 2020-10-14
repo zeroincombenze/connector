@@ -1,3 +1,9 @@
+10.0.0.1.45 (2020-10-14)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] Complete workflow if SO in draft / Completa workflow se ordine in bozza
+
+
 10.0.0.1.44 (2020-09-27)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
