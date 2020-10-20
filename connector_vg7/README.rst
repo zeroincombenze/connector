@@ -1,6 +1,6 @@
 
 ================================
-|icon| connector_vg7 10.0.0.1.44
+|icon| connector_vg7 10.0.0.1.46
 ================================
 
 
@@ -226,6 +226,18 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 
 ChangeLog History / Cronologia modifiche
 ----------------------------------------
+
+10.0.0.1.46 (2020-10-20)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] Import PO / Importazione ordini di acquisto
+
+
+10.0.0.1.45 (2020-10-14)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] Complete workflow if SO in draft / Completa workflow se ordine in bozza
+
 
 10.0.0.1.44 (2020-09-27)
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -465,7 +477,7 @@ La distribuzione `Zeroincombenze® <https://wiki.zeroincombenze.org/en/Odoo>`__ 
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2020-10-13
+Last Update / Ultimo aggiornamento: 2020-10-20
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status

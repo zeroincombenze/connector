@@ -131,7 +131,8 @@ class SaleOrderLine(models.Model):
 
     def assure_values(self, vals, rec):
         nm = 'product_id'
-        if not isinstance(vals.get(nm), int) and not rec:
+        if ((not isinstance(vals.get(nm), int) or not vals.get(nm))
+                and not rec):
             product = self.env['product.product'].search(
                 [('default_code', '=', 'MISC')])
             if not product:

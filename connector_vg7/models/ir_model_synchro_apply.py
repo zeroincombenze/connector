@@ -30,7 +30,7 @@ class IrModelSynchroApply(models.Model):
 
 
     def apply_set_value(self, channel_id, vals, loc_name,
-                        ext_ref, loc_ext_id, default=None, ctx=None):
+                        ext_ref, loc_ext_id_name, default=None, ctx=None):
         if loc_name not in vals:
             if vals.get(ext_ref):
                 vals[loc_name] = vals[ext_ref]
@@ -39,26 +39,26 @@ class IrModelSynchroApply(models.Model):
         return vals
 
     def apply_set_tmp_name(self, channel_id, vals, loc_name,
-                           ext_ref, loc_ext_id, default=None, ctx=None):
+                           ext_ref, loc_ext_id_name, default=None, ctx=None):
         if loc_name in vals and vals[loc_name]:
             return vals
         if vals.get(ext_ref):
             vals[loc_name] = vals[ext_ref]
         elif default:
             vals[loc_name] = default
-        elif loc_ext_id in vals:
-            if not isinstance(vals[loc_ext_id], (int, long)):
-                vals[loc_ext_id] = int(vals[loc_ext_id])
+        elif loc_ext_id_name in vals:
+            if not isinstance(vals[loc_ext_id_name], (int, long)):
+                vals[loc_ext_id_name] = int(vals[loc_ext_id_name])
             if loc_name == 'code':
-                vals[loc_name] = '%s' % vals[loc_ext_id]
+                vals[loc_name] = '%s' % vals[loc_ext_id_name]
             else:
-                vals[loc_name] = 'Unknown %s' % vals[loc_ext_id]
+                vals[loc_name] = 'Unknown %s' % vals[loc_ext_id_name]
         else:
             vals[loc_name] = 'Unknown'
         return vals
 
     def apply_upper(self, channel_id, vals, loc_name,
-                    ext_ref, loc_ext_id, default=None, ctx=None):
+                    ext_ref, loc_ext_id_name, default=None, ctx=None):
         if ext_ref in vals:
             if isinstance(vals[ext_ref], basestring):
                 vals[loc_name] = vals[ext_ref].upper()
@@ -67,7 +67,7 @@ class IrModelSynchroApply(models.Model):
         return vals
 
     def apply_lower(self, channel_id, vals, loc_name,
-                    ext_ref, loc_ext_id, default=None, ctx=None):
+                    ext_ref, loc_ext_id_name, default=None, ctx=None):
         if ext_ref in vals:
             if isinstance(vals[ext_ref], basestring):
                 vals[loc_name] = vals[ext_ref].lower()
@@ -76,13 +76,13 @@ class IrModelSynchroApply(models.Model):
         return vals
 
     def apply_bool(self, channel_id, vals, loc_name,
-                   ext_ref, loc_ext_id, default=None, ctx=None):
+                   ext_ref, loc_ext_id_name, default=None, ctx=None):
         if ext_ref in vals:
             vals[loc_name] = os0.str2bool(vals.get(ext_ref), False)
         return vals
 
     def apply_not(self, channel_id, vals, loc_name,
-                  ext_ref, loc_ext_id, default=None, ctx=None):
+                  ext_ref, loc_ext_id_name, default=None, ctx=None):
         if ext_ref in vals:
             if isinstance(vals[ext_ref], (int, long, bool)):
                 vals[loc_name] = not vals[ext_ref]
@@ -91,7 +91,7 @@ class IrModelSynchroApply(models.Model):
         return vals
 
     def apply_person(self, channel_id, vals, loc_name,
-                     ext_ref, loc_ext_id, default=None, ctx=None):
+                     ext_ref, loc_ext_id_name, default=None, ctx=None):
         '''First name and/or last name'''
         if ext_ref in vals and loc_name != ext_ref:
             vals[loc_name] = vals[ext_ref]
@@ -103,7 +103,7 @@ class IrModelSynchroApply(models.Model):
                     vals['lastname'] or '', vals['firstname'] or '')
                 if not vals['name'].strip():
                     vals = self.apply_set_tmp_name(
-                        channel_id, vals, 'name', ext_ref, loc_ext_id)
+                        channel_id, vals, 'name', ext_ref, loc_ext_id_name)
                 vals['is_company'] = True
                 vals['individual'] = True
             del vals['lastname']
@@ -111,7 +111,7 @@ class IrModelSynchroApply(models.Model):
         return vals
 
     def apply_vat(self, channel_id, vals, loc_name,
-                  ext_ref, loc_ext_id, default=None, ctx=None):
+                  ext_ref, loc_ext_id_name, default=None, ctx=None):
         '''External vat may not contain ISO code'''
         if ext_ref in vals:
             if isinstance(vals[ext_ref], basestring):
@@ -126,7 +126,7 @@ class IrModelSynchroApply(models.Model):
         return vals
 
     def apply_street_number(self, channel_id, vals, loc_name,
-                            ext_ref, loc_ext_id, default=None, ctx=None):
+                            ext_ref, loc_ext_id_name, default=None, ctx=None):
         '''Street number'''
         if ext_ref in vals:
             if 'street' in vals:
@@ -139,14 +139,14 @@ class IrModelSynchroApply(models.Model):
         return vals
 
     def apply_invoice_number(self, channel_id, vals, loc_name,
-                             ext_ref, loc_ext_id, default=None, ctx=None):
+                             ext_ref, loc_ext_id_name, default=None, ctx=None):
         '''Invoice number'''
         if ext_ref in vals:
             vals['move_name'] = vals[ext_ref]
         return vals
 
     def apply_journal(self, channel_id, vals, loc_name,
-                      ext_ref, loc_ext_id, default=None, ctx=None):
+                      ext_ref, loc_ext_id_name, default=None, ctx=None):
         if 'journal_id' not in vals:
             journal = self.env['account.invoice']._default_journal()
             if journal:
@@ -154,7 +154,7 @@ class IrModelSynchroApply(models.Model):
         return vals
 
     def apply_account(self, channel_id, vals, loc_name,
-                      ext_ref, loc_ext_id, default=None, ctx=None):
+                      ext_ref, loc_ext_id_name, default=None, ctx=None):
         if 'journal_id' in vals:
             journal_id = vals['journal_id']
         else:
@@ -177,7 +177,7 @@ class IrModelSynchroApply(models.Model):
         return vals
 
     def apply_uom(self, channel_id, vals, loc_name,
-                  ext_ref, loc_ext_id, default=None, ctx=None):
+                  ext_ref, loc_ext_id_name, default=None, ctx=None):
         if loc_name not in vals and 'product_id' in vals:
             product = self.env['product.product'].browse(vals['product_id'])
             vals[loc_name] = product.uom_id.id
@@ -186,7 +186,7 @@ class IrModelSynchroApply(models.Model):
         return vals
 
     def apply_tax(self, channel_id, vals, loc_name,
-                  ext_ref, loc_ext_id, default=None, ctx=None):
+                  ext_ref, loc_ext_id_name, default=None, ctx=None):
         if loc_name not in vals and 'product_id' in vals:
             product = self.env['product.product'].browse(vals['product_id'])
             if vals.get('type') in ('in_invoice', 'in_refund'):
@@ -198,7 +198,7 @@ class IrModelSynchroApply(models.Model):
         return vals
 
     def apply_agents(self, channel_id, vals, loc_name,
-                     ext_ref, loc_ext_id, default=None, ctx=None):
+                     ext_ref, loc_ext_id_name, default=None, ctx=None):
         def _prepare_line_agents_data(partner):
             rec = []
             for agent in partner.agents:
@@ -230,7 +230,7 @@ class IrModelSynchroApply(models.Model):
         return vals
 
     def apply_partner_info(self, channel_id, vals, loc_name,
-                           ext_ref, loc_ext_id, default=None, ctx=None):
+                           ext_ref, loc_ext_id_name, default=None, ctx=None):
         if loc_name in vals:
             return vals
         if vals.get('partner_id'):
@@ -258,7 +258,7 @@ class IrModelSynchroApply(models.Model):
         return vals
 
     def apply_partner_address(self, channel_id, vals, loc_name,
-                              ext_ref, loc_ext_id, default=None, ctx=None):
+                              ext_ref, loc_ext_id_name, default=None, ctx=None):
         if (loc_name in vals and
                 isinstance(vals.get(loc_name), int) and
                 vals[loc_name] > 0):
@@ -268,7 +268,7 @@ class IrModelSynchroApply(models.Model):
         return vals
 
     def apply_company_info(self, channel_id, vals, loc_name,
-                           ext_ref, loc_ext_id, default=None, ctx=None):
+                           ext_ref, loc_ext_id_name, default=None, ctx=None):
         if loc_name in vals:
             return vals
         company_id = vals.get('company_id')
@@ -289,7 +289,7 @@ class IrModelSynchroApply(models.Model):
         return vals
 
     def apply_set_global(self, channel_id, vals, loc_name,
-                         ext_ref, loc_ext_id, default=None, ctx=None):
+                         ext_ref, loc_ext_id_name, default=None, ctx=None):
         if loc_name in vals:
             return vals
         ctx = ctx or {}
@@ -298,7 +298,7 @@ class IrModelSynchroApply(models.Model):
         return vals
 
     def apply_set_einvoice(self, channel_id, vals, loc_name,
-                           ext_ref, loc_ext_id, default=None, ctx=None):
+                           ext_ref, loc_ext_id_name, default=None, ctx=None):
         if vals.get(ext_ref):
             if len(vals[ext_ref]) == 7:
                 vals['electronic_invoice_subjected'] = True
@@ -312,13 +312,13 @@ class IrModelSynchroApply(models.Model):
         return vals
 
     def apply_set_is_pa(self, channel_id, vals, loc_name,
-                        ext_ref, loc_ext_id, default=None, ctx=None):
+                        ext_ref, loc_ext_id_name, default=None, ctx=None):
         if len(vals.get(ext_ref, '')) == 6:
             vals['is_pa'] = True
         return vals
 
     def apply_iban(self, channel_id, vals, loc_name,
-                   ext_ref, loc_ext_id, default=None, ctx=None):
+                   ext_ref, loc_ext_id_name, default=None, ctx=None):
         if vals.get(ext_ref):
             vals[loc_name] = vals[ext_ref].replace(' ', '')
         elif vals.get('vg7:ABI') and vals.get('vg7:CAB'):
@@ -327,7 +327,7 @@ class IrModelSynchroApply(models.Model):
         return vals
 
     def apply_eom(self, channel_id, vals, loc_name,
-                  ext_ref, loc_ext_id, default=None, ctx=None):
+                  ext_ref, loc_ext_id_name, default=None, ctx=None):
         if vals.get(ext_ref):
             eom = os0.str2bool('%s' % vals[ext_ref], False)
             if eom:
@@ -354,14 +354,14 @@ class IrModelSynchroApply(models.Model):
         return vals
 
     def apply_set_inv_warn(self, channel_id, vals, loc_name, ext_ref,
-                           loc_ext_id, default=None, ctx=None):
+                           loc_ext_id_name, default=None, ctx=None):
         if vals.get(ext_ref):
             vals['invoice_warn'] = 'warning'
             vals[loc_name] = vals[ext_ref]
         return vals
 
     def apply_datetime(self, channel_id, vals, loc_name, ext_ref,
-                       loc_ext_id, default=None, ctx=None):
+                       loc_ext_id_name, default=None, ctx=None):
         if vals.get(ext_ref):
             vals[loc_name] = vals[ext_ref]
             if len(vals[ext_ref].split(' ')) == 1:
@@ -369,7 +369,7 @@ class IrModelSynchroApply(models.Model):
         return vals
 
     def apply_set_order_state(self, channel_id, vals, loc_name,
-                              ext_ref, loc_ext_id, default=None, ctx=None):
+                              ext_ref, loc_ext_id_name, default=None, ctx=None):
         if vals.get(ext_ref):
             if vals[ext_ref].isdigit():
                 state = {
@@ -400,7 +400,7 @@ class IrModelSynchroApply(models.Model):
     # ODOO MIGRATION FUNCTIONS #
     ############################
     def apply_oe_account_tax_amount(self, channel_id, vals, loc_name, ext_ref,
-                                    loc_ext_id, default=None, ctx=None):
+                                    loc_ext_id_name, default=None, ctx=None):
         synchro_model = self.env['ir.model.synchro']
         tnldict = synchro_model.get_tnldict(channel_id)
         ext_odoo_ver = synchro_model.get_ext_odoo_ver(ext_ref.split(':')[0])
@@ -411,7 +411,7 @@ class IrModelSynchroApply(models.Model):
         return vals
 
     def apply_oe_account_account_type_name(
-            self, channel_id, vals, loc_name, ext_ref, loc_ext_id,
+            self, channel_id, vals, loc_name, ext_ref, loc_ext_id_name,
             default=None, ctx=None):
         if not vals.get(loc_name):
             synchro_model = self.env['ir.model.synchro']
@@ -431,7 +431,7 @@ class IrModelSynchroApply(models.Model):
         return vals
 
     def apply_oe_account_account_type(
-            self, channel_id, vals, loc_name, ext_ref, loc_ext_id,
+            self, channel_id, vals, loc_name, ext_ref, loc_ext_id_name,
             default=None, ctx=None):
         if vals[ext_ref] == 'view':
             vals[loc_name] = 'other'

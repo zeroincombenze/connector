@@ -304,7 +304,7 @@ class IrModelSynchro(models.Model):
         )
         if not self._cr.fetchone():
             self._cr.execute(  # pylint: disable=E8103
-                "CREATE UNIQUE INDEX %s on %s (%s_id) where %s_id<>0 and %s_id<>null" %
+                "CREATE UNIQUE INDEX %s on %s (%s_id) where %s_id<>0 and %s_id is not null" %
                 (index_name, table, prefix, prefix, prefix)
             )
 
@@ -432,13 +432,16 @@ class IrModelSynchro(models.Model):
 
     def get_ext_odoo_ver(self, prefix):
         return {
+            'oe6': '6.1',
             'oe7': '7.0',
             'oe8': '8.0',
-            'oe10': '10.0',
-            'oe7:': '7.0',
-            'oe8:': '8.0',
+            'oe9': '9.0',
             'oe10:': '10.0',
-        }.get(prefix, '')
+            'oe11:': '11.0',
+            'oe12:': '12.0',
+            'oe13:': '13.0',
+            'oe14:': '14.0',
+        }.get(prefix.split(':')[0], '')
 
     def drop_fields(self, model, vals, to_delete):
         for name in to_delete:
@@ -523,6 +526,21 @@ class IrModelSynchro(models.Model):
                     rec.action_draft()
             if 'state' in vals:
                 del vals['state']
+        elif model == 'purchase.order':
+            if rec:
+                rec._compute_date_planned()
+                rec.write({})
+                if rec.invoice_count > 0 or rec.picking_count > 0:
+                    return vals, -4
+                if rec.state == 'done':
+                    return vals, -4
+                elif rec.state == 'purchase':
+                    rec.button_cancel()
+                    rec.button_draft()
+                elif rec.state == 'cancel':
+                    rec.button_draft()
+            if 'state' in vals:
+                del vals['state']
         elif model == 'stock.picking.package.preparation':
             if rec:
                 try:
@@ -588,6 +606,28 @@ class IrModelSynchro(models.Model):
                     return -10
             elif rec.original_state == 'cancel':
                 rec.action_cancel()
+        elif model == 'purchase.order':
+            # Please, do not remove this write: set default values in header
+            rec.write({})
+            if rec.state == rec.original_state:
+                return rec.id
+            elif rec.state != 'draft':
+                self.logmsg('error',
+                    '### Unauthorized state change of %(model)s.%(id)s',
+                    model=model, rec=rec)
+                return -4
+            elif rec.original_state == 'purchase':
+                rec._amount_all()
+                try:
+                    rec.button_confirm()
+                except BaseException, e:
+                    self.env.cr.rollback()  # pylint: disable=invalid-commit
+                    self.logmsg('error',
+                        'Error %(e) in %(model)s.set_actual_state()',
+                        model=model, ctx={'e': e})
+                    return -10
+            elif rec.original_state == 'cancel':
+                rec.button_cancel()
         elif model == 'stock.picking.package.preparation':
             try:
                 rec.set_done()
@@ -649,15 +689,15 @@ class IrModelSynchro(models.Model):
         if (key_name != 'name' and
                 cache.get_struct_model_attr(actual_model, 'name')):
             if ext_value:
-                vals['name'] = 'Unknown %s' % ext_value
+                vals['name'] = u'Unknown %s' % ext_value
             else:
-                vals['name'] = '%s=%s' % (key_name, value)
+                vals['name'] = u'%s=%s' % (key_name, value)
         elif (key_name != 'code' and
               cache.get_struct_model_attr(actual_model, 'code')):
             if ext_value:
-                vals['name'] = 'Unknown %s' % ext_value
+                vals['name'] = u'Unknown %s' % ext_value
             else:
-                vals['code'] = '%s=%s' % (key_name, value)
+                vals['code'] = u'%s=%s' % (key_name, value)
         if actual_model == 'res.partner' and spec in ('delivery', 'invoice'):
             vals['type'] = spec
         if xmodel == 'stock.picking.goods_description':
@@ -930,10 +970,7 @@ class IrModelSynchro(models.Model):
         pfx_ext = '%s:' % cache.get_attr(channel_id, 'PREFIX')
         identity = cache.get_attr(channel_id, 'IDENTITY')
         ext_odoo_ver = self.get_ext_odoo_ver(pfx_ext)
-        if identity == 'odoo':
-            tnldict = self.get_tnldict(channel_id)
-        else:
-            tnldict = {}
+        tnldict = self.get_tnldict(channel_id) if identity == 'odoo' else {}
         loc_ext_id_name = self.get_loc_ext_id_name(
             channel_id, xmodel, force=True)
         ext_id_name = cache.get_model_attr(
@@ -985,9 +1022,9 @@ class IrModelSynchro(models.Model):
     def get_default_n_apply(self, channel_id, xmodel, loc_name, ext_name,
                             is_foreign, ttype=None):
         cache = self.env['ir.model.synchro.cache']
+        identity = cache.get_attr(channel_id, 'IDENTITY')
         actual_model = self.get_actual_model(xmodel, only_name=True)
         if not cache.get_attr(channel_id, actual_model):
-            # return '', '', ''
             cache.open(channel_id=channel_id, model=actual_model)
         default = cache.get_model_field_attr(
             channel_id, xmodel, loc_name or '.%s' % ext_name, 'APPLY',
@@ -997,7 +1034,7 @@ class IrModelSynchro(models.Model):
                 channel_id, actual_model, loc_name or '.%s' % ext_name,
                 'APPLY', default='')
         if default.endswith('()'):
-            apply4 = ''
+            apply4 = 'odoo_migrate' if identity == 'odoo' else ''
             for fct in default.split(','):
                 if not fct.startswith('not') or is_foreign:
                     apply4 = '%s,%s' % (apply4, 'apply_%s' % default[:-2])
@@ -1007,7 +1044,7 @@ class IrModelSynchro(models.Model):
         elif default:
             apply4 = 'apply_set_value'
         else:
-            apply4 = ''
+            apply4 = 'odoo_migrate' if identity == 'odoo' else ''
         if ttype == 'boolean':
             default = os0.str2bool(default, True)
         spec = cache.get_model_field_attr(
@@ -1028,32 +1065,47 @@ class IrModelSynchro(models.Model):
                 del vals[ext_ref]
             return vals
 
-        def do_apply(channel_id, vals, loc_name, ext_ref, loc_ext_id,
-                     apply4, default, ctx=None):
+        def do_apply(channel_id, vals, loc_name, ext_ref, loc_ext_id_name,
+                     apply4, default, xmodel, ctx=None):
             ir_apply = self.env['ir.model.synchro.apply']
             src = ext_ref
             for fct in apply4.split(','):
-                if hasattr(ir_apply, fct):
+                if fct == 'odoo_migrate':
+                    ext_odoo_ver = self.get_ext_odoo_ver(ext_ref.split(':')[0])
+                    tnldict = self.get_tnldict(channel_id)
+                    vals[loc_name] = os0.u(transodoo.translate_from_to(
+                        tnldict, xmodel, vals[ext_ref],
+                        ext_odoo_ver, release.major_version,
+                        type='value', fld_name=loc_name))
+                    self.logmsg('debug',
+                        '>>> %(loc)s=%(fct)s(%(name)s,%(src)s,%(xid)s,%(d)s)',
+                        model=xmodel,
+                        ctx={'loc': vals.get(loc_name), 'fct': fct,
+                             'name': loc_name, 'src': src,
+                             'xid': loc_ext_id_name, 'd': default})
+                    src = loc_name
+                elif hasattr(ir_apply, fct):
                     vals = getattr(ir_apply, fct)(channel_id,
                         vals,
                         loc_name,
                         src,
-                        loc_ext_id,
+                        loc_ext_id_name,
                         default=default)
                     self.logmsg('debug',
                         '>>> %(loc)s=%(fct)s(%(name)s,%(src)s,%(xid)s,%(d)s)',
                         model=xmodel,
                         ctx={'loc': vals.get(loc_name), 'fct': fct,
-                             'name': loc_name, 'src': src, 'xid': loc_ext_id,
-                             'd': default})
+                             'name': loc_name, 'src': src,
+                             'xid': loc_ext_id_name, 'd': default})
                     src = loc_name
             return vals
 
-        def do_apply_n_clean(channel_id, vals, loc_name, ext_name,
-                             ext_ref, loc_ext_id, apply4, default, is_foreign,
-                             ctx=None):
-            vals = do_apply(channel_id, vals, loc_name, ext_ref, loc_ext_id,
-                apply4, default, ctx=ctx)
+        def do_apply_n_clean(channel_id, vals, loc_name, ext_name, ext_ref,
+                             loc_ext_id_name, apply4, default, is_foreign,
+                             xmodel, ctx=None):
+            if ext_ref in vals and loc_name:
+                vals = do_apply(channel_id, vals, loc_name, ext_ref,
+                    loc_ext_id_name, apply4, default, xmodel, ctx=ctx)
             vals = rm_ext_value(vals, loc_name, ext_name, ext_ref, is_foreign)
             return vals
 
@@ -1117,9 +1169,6 @@ class IrModelSynchro(models.Model):
             channel_id, xmodel, 'KEY_ID', default='id')
         child_ids = cache.get_struct_model_attr(
             actual_model, 'CHILD_IDS', default=False)
-        identity = cache.get_attr(channel_id, 'IDENTITY')
-        pfx_ext = '%s:' % cache.get_attr(channel_id, 'PREFIX')
-        ext_odoo_ver = self.get_ext_odoo_ver(pfx_ext)
         vals = check_4_double_field_id(vals)
         field_list = priority_fields(
             channel_id, vals, def_loc_ext_id_name, xmodel)
@@ -1143,7 +1192,7 @@ class IrModelSynchro(models.Model):
                 if is_foreign and apply4:
                     vals = do_apply(
                         channel_id, vals, loc_name, ext_ref, loc_ext_id_name,
-                        apply4, default, ctx=ctx)
+                        apply4, default, xmodel, ctx=ctx)
                 elif loc_name != def_loc_ext_id_name:
                     self.logmsg('warning',
                         '### Field <%(x)s> does not exist in model %(model)s',
@@ -1157,7 +1206,7 @@ class IrModelSynchro(models.Model):
                     vals = do_apply_n_clean(
                         channel_id, vals,
                         loc_name, ext_name, ext_ref, loc_ext_id_name,
-                        apply4, default, is_foreign, ctx=ctx)
+                        apply4, default, is_foreign, xmodel, ctx=ctx)
                 if loc_name in vals and not vals[loc_name]:
                     del vals[loc_name]
                 continue
@@ -1168,14 +1217,14 @@ class IrModelSynchro(models.Model):
                     vals = do_apply_n_clean(
                         channel_id, vals,
                         loc_name, ext_name, ext_ref, loc_ext_id_name,
-                        apply4, default, is_foreign, ctx=ctx)
+                        apply4, default, is_foreign, xmodel, ctx=ctx)
                 continue
             elif not vals[ext_ref]:
                 if is_foreign and apply4:
                     vals = do_apply_n_clean(
                         channel_id, vals,
                         loc_name, ext_name, ext_ref, loc_ext_id_name,
-                        apply4, default, is_foreign, ctx=ctx)
+                        apply4, default, is_foreign, xmodel, ctx=ctx)
                 continue
             if (cache.get_struct_model_field_attr(
                     actual_model, loc_name, 'ttype') in ('many2one',
@@ -1241,12 +1290,12 @@ class IrModelSynchro(models.Model):
                     condition = 'include'
                 else:
                     condition = 'exclude'
-                if (ref_in_queue and loc_name not in (
-                        'country_id', 'company_id') or (
+                if (loc_name not in ('country_id', 'company_id') and (
+                        ref_in_queue or (
                         condition == 'include' and
                         loc_name not in no_deep_fields) or (
                         condition == 'exclude' and
-                        loc_name in no_deep_fields)):
+                        loc_name in no_deep_fields))):
                     if (loc_name in vals and (
                             not vals[loc_name] or
                             (isinstance(vals[loc_name], basestring) and
@@ -1254,6 +1303,8 @@ class IrModelSynchro(models.Model):
                         del vals[loc_name]
                     del vals[ext_ref]
                 else:
+                    vals = do_apply(channel_id, vals, ext_ref, ext_ref,
+                        loc_ext_id_name, apply4, default, xmodel, ctx=ctx)
                     loc_id = self.get_foreign_value(
                         channel_id, xmodel, vals[ext_ref], loc_name, is_foreign,
                         ctx=ctx,
@@ -1267,19 +1318,22 @@ class IrModelSynchro(models.Model):
                             vals[loc_name] = loc_id
                     elif loc_name:
                         vals[loc_name] = False
-            elif identity == 'odoo':
-                tnldict = self.get_tnldict(channel_id)
-                vals[loc_name] = transodoo.translate_from_to(
-                    tnldict, xmodel, vals[ext_ref],
-                    ext_odoo_ver, release.major_version,
-                    type='value', fld_name=loc_name)
-                if isinstance(vals[loc_name], list):
-                    del vals[ext_ref]
-                    del vals[loc_name]
-            vals = do_apply_n_clean(
-                channel_id, vals,
-                loc_name, ext_name, ext_ref, loc_ext_id_name,
-                apply4, default, is_foreign, ctx=ctx)
+                    vals = rm_ext_value(vals, loc_name, ext_name, ext_ref,
+                        is_foreign)
+            # elif identity == 'odoo':
+            #     tnldict = self.get_tnldict(channel_id)
+            #     vals[loc_name] = transodoo.translate_from_to(
+            #         tnldict, xmodel, vals[ext_ref],
+            #         ext_odoo_ver, release.major_version,
+            #         type='value', fld_name=loc_name)
+            #     if isinstance(vals[loc_name], list):
+            #         del vals[ext_ref]
+            #         del vals[loc_name]
+            else:
+                vals = do_apply_n_clean(
+                    channel_id, vals,
+                    loc_name, ext_name, ext_ref, loc_ext_id_name,
+                    apply4, default, is_foreign, xmodel, ctx=ctx)
             if (loc_name in vals and
                     vals[loc_name] is False and
                     cache.get_struct_model_field_attr(
@@ -2780,7 +2834,6 @@ class IrModelSynchro(models.Model):
         self.logmsg('debug', '### assigned channel is %(chid)s',
             ctx={'chid': channel_id})
         cache.open(channel_id=channel_id, ext_model=ext_model)
-        # identity = cache.get_attr(channel_id, 'IDENTITY')
         for model in cache.get_channel_models(channel_id):
             if not cache.is_struct(model):
                 continue
