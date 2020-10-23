@@ -66,6 +66,20 @@ class StockMove(models.Model):
                                                              prefix)
         return res
 
+    def assure_values(self, vals, rec):
+        apply = self.env['ir.model.synchro.apply']
+        product = False
+        if 'product_id' not in vals and not rec:
+            product = apply.get_default_product()
+        if 'product_uom' not in vals and not rec:
+            if not product:
+                product = self.env['product.product'].browse(
+                    vals['product.id'])
+            vals['product_uom'] = product.uom_po_id.id
+        if 'location_id' not in vals:
+            vals['location_id'] = apply.get_default_location_id()
+        return vals
+
     @api.model
     def synchro(self, vals, disable_post=None,
                 only_minimal=None, no_deep_fields=None):

@@ -70,16 +70,40 @@ class PurchaseOrderLine(models.Model):
         nm = 'product_id'
         if ((not isinstance(vals.get(nm), int) or not vals.get(nm))
                 and not rec):
-            product = self.env['product.product'].search(
-                [('default_code', '=', 'MISC')])
-            if not product:
-                product = self.env['product.product'].search(
-                    [], limit=1)
+            product = self.env['ir.model.synchro.apply'].get_default_product()
             if product:
-                product = product[0]
                 vals[nm] = product.id
         if not vals.get('price_unit') and not rec:
             vals['price_unit'] = 0.0
+        return vals
+
+    @api.model
+    def synchro(self, vals, disable_post=None,
+                only_minimal=None, no_deep_fields=None):
+        return self.env['ir.model.synchro'].synchro(
+            self, vals, disable_post=disable_post,
+            only_minimal=only_minimal, no_deep_fields=no_deep_fields)
+
+
+class ProcurementRule(models.Model):
+    _inherit = "procurement.rule"
+
+    vg7_id = fields.Integer('VG7 ID', copy=False)
+    oe7_id = fields.Integer('Odoo7 ID', copy=False)
+    oe8_id = fields.Integer('Odoo8 ID', copy=False)
+    oe10_id = fields.Integer('Odoo10 ID', copy=False)
+
+    @api.model_cr_context
+    def _auto_init(self):
+        res = super(ProcurementRule, self)._auto_init()
+        for prefix in ('vg7', 'oe7', 'oe8', 'oe10'):
+            self.env['ir.model.synchro']._build_unique_index(self._inherit,
+                                                             prefix)
+        return res
+
+    def assure_values(self, vals, rec):
+        if 'action' not in vals and not rec:
+            vals['action'] = 'buy'
         return vals
 
     @api.model

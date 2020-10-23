@@ -175,11 +175,6 @@ try:
 except ImportError as err:
     _logger.error(err)
 
-MIN_FIELDS = ('category_id', 'code', 'company_id', 'company_ids',
-              'description', 'default_code', 'journal_id', 'login', 'name',
-              'parent_id', 'partner_id', 'product_id', 'product_uom', 'type',
-              'user_type_id')
-MIN_MANY_FIELDS = ('*', 'company_id', 'parent_id', 'partner_id')
 WORKFLOW = {
     0: {'model': 'ir.module.category', 'only_minimal': True},
     1: {'model': 'ir.module.module'},
@@ -290,6 +285,13 @@ class IrModelSynchro(models.Model):
     _inherit = 'ir.model'
 
     LOGLEVEL = 'debug'
+    DEF_INCL_FLDS = [
+        'action', 'category_id', 'code', 'company_ids', 'country_id',
+        'description', 'default_code', 'journal_id', 'location_id',
+        'location_dest_id', 'login', 'name', 'parent_id', 'partner_id',
+        'picking_type_id', 'product_id', 'product_uom', 'type', 'user_type_id'
+    ]
+    DEF_EXCL_FLDS = ['user_ids', 'sale_order_ids', 'meeting_ids']
 
     def _build_unique_index(self, model, prefix):
         '''Build unique index on table to <vg7>_id for performance'''
@@ -494,7 +496,10 @@ class IrModelSynchro(models.Model):
             vals['original_state'] = vals['state']
         elif rec:
             vals['original_state'] = rec.state
-        if rec and rec.state == 'draft':
+        if 'state' in vals:
+            del vals['state']
+        if (rec and rec.state == 'draft' and
+                model != 'stock.picking.package.preparation'):
             return vals, errc
         if model == 'account.invoice':
             if rec:
@@ -508,8 +513,6 @@ class IrModelSynchro(models.Model):
                     rec.action_invoice_draft()
                 elif rec.state == 'cancel':
                     rec.action_invoice_draft()
-            if 'state' in vals:
-                del vals['state']
         elif model == 'sale.order':
             if rec:
                 rec.set_defaults()
@@ -539,8 +542,6 @@ class IrModelSynchro(models.Model):
                     rec.button_draft()
                 elif rec.state == 'cancel':
                     rec.button_draft()
-            if 'state' in vals:
-                del vals['state']
         elif model == 'stock.picking.package.preparation':
             if rec:
                 try:
@@ -923,8 +924,8 @@ class IrModelSynchro(models.Model):
         relation = cache.get_struct_model_field_attr(
             actual_model, name, 'relation')
         if not relation:
-            raise RuntimeError('No relation for field %s of %s' % (name,
-                                                                   xmodel))
+            raise RuntimeError(_('No relation for field %s of %s' % (name,
+                                                                     xmodel)))
         if relation == actual_model and ttype == 'one2many':
             # Avoid recursive request, i.e. res.partner
             return []
@@ -1002,9 +1003,12 @@ class IrModelSynchro(models.Model):
             if ext_name == ext_id_name and loc_ext_id_name:
                 loc_name = loc_ext_id_name
             elif identity == 'odoo':
-                loc_name = transodoo.translate_from_to(
-                    tnldict, xmodel, ext_name,
-                    ext_odoo_ver, release.major_version)
+                if ext_odoo_ver:
+                    loc_name = transodoo.translate_from_to(
+                        tnldict, xmodel, ext_name,
+                        ext_odoo_ver, release.major_version)
+                else:
+                    loc_name = ext_name
             else:
                 loc_name = cache.get_model_field_attr(
                     channel_id, xmodel, ext_name, 'EXT_FIELDS', default='')
@@ -1073,10 +1077,13 @@ class IrModelSynchro(models.Model):
                 if fct == 'odoo_migrate':
                     ext_odoo_ver = self.get_ext_odoo_ver(ext_ref.split(':')[0])
                     tnldict = self.get_tnldict(channel_id)
-                    vals[loc_name] = os0.u(transodoo.translate_from_to(
-                        tnldict, xmodel, vals[ext_ref],
-                        ext_odoo_ver, release.major_version,
-                        type='value', fld_name=loc_name))
+                    if ext_odoo_ver:
+                        vals[loc_name] = os0.u(transodoo.translate_from_to(
+                            tnldict, xmodel, vals[ext_ref],
+                            ext_odoo_ver, release.major_version,
+                            type='value', fld_name=loc_name))
+                    else:
+                        vals[loc_name] = vals[ext_ref]
                     self.logmsg('debug',
                         '>>> %(loc)s=%(fct)s(%(name)s,%(src)s,%(xid)s,%(d)s)',
                         model=xmodel,
@@ -1160,8 +1167,6 @@ class IrModelSynchro(models.Model):
             model=xmodel)
         cache = self.env['ir.model.synchro.cache']
         actual_model = self.get_actual_model(xmodel, only_name=True)
-        no_deep_fields = no_deep_fields or [
-            'user_ids', 'sale_order_ids', 'meeting_ids']
         loc_ext_id_name = self.get_loc_ext_id_name(channel_id, xmodel)
         def_loc_ext_id_name = self.get_loc_ext_id_name(
             channel_id, xmodel, force=True)
@@ -1286,16 +1291,15 @@ class IrModelSynchro(models.Model):
                     'many2one', 'one2many', 'many2many'):
                 if (isinstance(no_deep_fields, (list, tuple)) and
                         len(no_deep_fields) and
-                        no_deep_fields[0] == '*'):
+                        '*' in no_deep_fields):
                     condition = 'include'
                 else:
                     condition = 'exclude'
-                if (loc_name not in ('country_id', 'company_id') and (
-                        ref_in_queue or (
+                if (ref_in_queue or (
                         condition == 'include' and
                         loc_name not in no_deep_fields) or (
                         condition == 'exclude' and
-                        loc_name in no_deep_fields))):
+                        loc_name in no_deep_fields)):
                     if (loc_name in vals and (
                             not vals[loc_name] or
                             (isinstance(vals[loc_name], basestring) and
@@ -1617,9 +1621,12 @@ class IrModelSynchro(models.Model):
             vals = {}
             if rec:
                 for field in cache.get_struct_attr(actual_model):
-                    ext_field = transodoo.translate_from_to(
-                        tnldict, actual_model, field,
-                        release.major_version, ext_odoo_ver)
+                    if ext_odoo_ver:
+                        ext_field = transodoo.translate_from_to(
+                            tnldict, actual_model, field,
+                            release.major_version, ext_odoo_ver)
+                    else:
+                        ext_field = field
                     if (field in ('id', 'state') or (
                             hasattr(rec, ext_field) and
                             cache.is_struct(field) and
@@ -1993,10 +2000,26 @@ class IrModelSynchro(models.Model):
         actual_model = self.get_actual_model(xmodel, only_name=True)
         actual_cls = self.get_actual_model(xmodel)
         cache = self.env['ir.model.synchro.cache']
-        no_deep_fields = MIN_MANY_FIELDS \
-            if only_minimal and not no_deep_fields else no_deep_fields
         cache.open(model=xmodel, cls=cls)
         channel_id = self.assign_channel(vals)
+        identity = cache.get_attr(channel_id, 'IDENTITY')
+        no_deep_fields = no_deep_fields or []
+        if identity != 'vg7':
+            self.DEF_INCL_FLDS = list(
+                set(self.DEF_INCL_FLDS) | set(['company_id']))
+        else:
+            self.DEF_INCL_FLDS = list(
+                set(self.DEF_INCL_FLDS) - set(['company_id']))
+        if '*' in no_deep_fields:
+            no_deep_fields = list(
+                set(no_deep_fields) - set(self.DEF_EXCL_FLDS))
+            no_deep_fields = list(
+                set(no_deep_fields) | set(self.DEF_INCL_FLDS))
+        else:
+            no_deep_fields = list(
+                set(no_deep_fields) | set(self.DEF_EXCL_FLDS))
+            no_deep_fields = list(
+                set(no_deep_fields) - set(self.DEF_INCL_FLDS))
         if not channel_id:
             cache.clean_cache()
             _logger.error('!-6! No channel found!')
@@ -2036,7 +2059,7 @@ class IrModelSynchro(models.Model):
                 actual_model = self.get_actual_model(xmodel)
                 cache.open(model=xmodel)
             self.logmsg('debug',
-                '>>> %(vals)s,%(spec)s=%(model)s.preprocess()',
+                '>>> %(vals)s,"%(spec)s"=%(model)s.preprocess()',
                 model=xmodel, ctx={'vals': vals, 'spec': spec})
         vals, ref_in_queue = self.map_to_internal(
             channel_id, xmodel, vals, disable_post,
@@ -2115,19 +2138,21 @@ class IrModelSynchro(models.Model):
                     parent_child_mode == 'C'):
                 min_vals = vals
                 do_write = False
+                vals = self.set_default_values(cls, channel_id, xmodel, vals)
             else:
-                min_vals = {ext_id_name: ext_id} if ext_id_name else {}
-                for nm in MIN_FIELDS:
+                vals = self.set_default_values(cls, channel_id, xmodel, vals)
+                min_vals = {def_ext_id_name: ext_id} if vals.get(
+                    def_ext_id_name) else {}
+                for nm in self.DEF_INCL_FLDS:
                     if vals.get(nm):
                         min_vals[nm] = vals[nm]
-                do_write = True
                 min_vals = self.set_default_values(
                     cls, channel_id, xmodel, min_vals)
                 if not min_vals or min_vals == vals:
-                    min_vals = vals
                     do_write = False
-            if not do_write:
-                vals = self.set_default_values(cls, channel_id, xmodel, vals)
+                    min_vals = vals
+                else:
+                    do_write = True
             if vals:
                 if hasattr(actual_cls, 'assure_values'):
                     vals = actual_cls.assure_values(vals, rec)
@@ -2136,31 +2161,40 @@ class IrModelSynchro(models.Model):
                 try:
                     rec = actual_cls.create(min_vals)
                     loc_id = rec.id
-                    if not ext_id_name:
-                        self.create_ext_id(
-                            channel_id, actual_model, loc_id, ext_id)
-                    if only_minimal:
-                        do_write = False
-                    if not do_write and min_vals != vals:
-                        self.logmsg('info',
-                            '>>> %s=%s.min_create(%s)' % (
-                                loc_id, actual_model, min_vals))
-                    else:
-                        self.logmsg('info',
-                            '>>> %s=%s.create(%s)' % (loc_id, actual_model, vals))
                 except BaseException, e:
                     self.env.cr.rollback()  # pylint: disable=invalid-commit
-                    self.logmsg('error', '!-1! %(e)s\nvalues=%(val)s',
-                        model=xmodel, ctx={'e': e, 'val': saved_vals})
-                    pop_ref(channel_id, xmodel, actual_model, loc_id, ext_id)
-                    return -1
+                    self.logmsg('warning',
+                        '>>> %s.min_create()  # %s' % (
+                            actual_model, e))
+                if loc_id < 1 and min_vals != vals:
+                    try:
+                        min_vals = vals
+                        rec = actual_cls.create(vals)
+                    except BaseException, e:
+                        self.env.cr.rollback()  # pylint: disable=invalid-commit
+                        self.logmsg('error', '!-1! %(e)s\nvalues=%(val)s',
+                            model=xmodel, ctx={'e': e, 'val': saved_vals})
+                        pop_ref(channel_id, xmodel, actual_model, loc_id, ext_id)
+                        return -1
+                if not ext_id_name:
+                    self.create_ext_id(
+                        channel_id, actual_model, loc_id, ext_id)
+                if only_minimal:
+                    do_write = False
+                if not do_write and min_vals != vals:
+                    self.logmsg('info',
+                        '>>> %s=%s.min_create(%s)' % (
+                            loc_id, actual_model, min_vals))
+                else:
+                    self.logmsg('info',
+                        '>>> %s=%s.create(%s)' % (loc_id, actual_model, vals))
         if loc_id > 0 and do_write:
             if def_ext_id_name in vals and def_ext_id_name != ext_id_name:
                 del vals[def_ext_id_name]
             try:
                 rec = actual_cls.with_context(
                     {'lang': self.env.user.lang}).browse(loc_id)
-            except IOError, e:
+            except BaseException, e:
                 self.env.cr.rollback()  # pylint: disable=invalid-commit
                 self.logmsg('error', '!-3! %(e)s\nvalues=%(val)s',
                     model=xmodel, ctx={'e': e, 'val': saved_vals})
@@ -2350,7 +2384,7 @@ class IrModelSynchro(models.Model):
                 loc_id = vals[ext_ref]
             if ext_ref == child_ids:
                 pass
-            elif (loc_name in MIN_FIELDS or
+            elif (loc_name in self.DEF_INCL_FLDS or
                   cache.get_struct_model_field_attr(
                       actual_model, loc_name, 'required') or
                   not cache.get_struct_model_field_attr(

@@ -92,6 +92,7 @@ class SaleOrder(models.Model):
         for nm in ('partner_shipping_id', 'partner_invoice_id'):
             if isinstance(vals.get(nm), int) and vals[nm] <= 0:
                 del vals[nm]
+            # if not vals.get(nm) and (not rec or vals.get('partner_id')):
             if not vals.get(nm) and not rec:
                 vals[nm] = vals['partner_id']
         return vals
@@ -133,13 +134,8 @@ class SaleOrderLine(models.Model):
         nm = 'product_id'
         if ((not isinstance(vals.get(nm), int) or not vals.get(nm))
                 and not rec):
-            product = self.env['product.product'].search(
-                [('default_code', '=', 'MISC')])
-            if not product:
-                product = self.env['product.product'].search(
-                    [], limit=1)
+            product = self.env['ir.model.synchro.apply'].get_default_product()
             if product:
-                product = product[0]
                 vals[nm] = product.id
         if not vals.get('price_unit') and not rec:
             vals['price_unit'] = 0.0

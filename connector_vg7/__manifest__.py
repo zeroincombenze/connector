@@ -48,7 +48,7 @@
         'views/account_invoice_view.xml',
         'views/stock_view.xml',
         'views/sale_order_view.xml',
-        # 'views/purchase_order_view.xml',
+        'views/purchase_order_view.xml',
         'views/account_tax_view.xml',
         'views/payment_term_view.xml',
         'views/picking_view.xml',

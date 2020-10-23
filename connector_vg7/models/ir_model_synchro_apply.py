@@ -371,7 +371,7 @@ class IrModelSynchroApply(models.Model):
     def apply_set_order_state(self, channel_id, vals, loc_name,
                               ext_ref, loc_ext_id_name, default=None, ctx=None):
         if vals.get(ext_ref):
-            if vals[ext_ref].isdigit():
+            if vals.get(ext_ref) and vals[ext_ref].isdigit():
                 state = {
                     1: 'draft',
                     2: 'sale',
@@ -438,3 +438,32 @@ class IrModelSynchroApply(models.Model):
         else:
             vals[loc_name] = vals[ext_ref]
         return vals
+
+    def get_default_product(self):
+        cache = self.env['ir.model.synchro.cache']
+        product = cache.get_struct_model_attr('product.product', 'DEF_REC')
+        if product:
+            return product
+        product = self.env['product.product'].search(
+            [('default_code', '=', 'MISC')])
+        if not product:
+            product = self.env['product.product'].search(
+                [], limit=1)
+        if product:
+            product = product[0]
+        cache.set_struct_model_attr('product.product', 'DEF_REC', product)
+        return product
+
+    def get_default_location_id(self):
+        cache = self.env['ir.model.synchro.cache']
+        location = cache.get_struct_model_attr('stock.location', 'DEF_ID')
+        if location:
+            return location.id
+        location = self.env['stock.location'].search(
+            [], limit=1, order='id')
+        if location:
+            location = location[0]
+            cache.set_struct_model_attr(
+                'product.product', 'DEF_ID', location.id)
+            return location.id
+        return False
