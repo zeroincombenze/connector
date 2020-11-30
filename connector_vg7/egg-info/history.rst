@@ -1,3 +1,15 @@
+10.0.0.2.0 (2020-11-30)
+~~~~~~~~~~~~~~~~~~~~~~~
+
+* [FIX] Partner without vat / Soggetto senza partita IVA
+* [IMP] Default tax type is 'sale' / Tipo codice IVA predefinito è 'vendita'
+* [IMP] Cache time-out changes / Modifica time-out di cache
+* [IMP] Supplemental keys / Chiavi di ricerca supplementari
+* [IMP] Langugae import / Importazione basato su lingua utente
+* [IMP] Odoo import store DB structure / Importazione da Odoo crea sttuttura
+* [IMP] Ancillary keys management / Gestione delle chiavi ausiliarie
+* [IMP] Automatic keys recognize / Riconoscimento automatico delle chiavi
+
 10.0.0.1.46 (2020-10-20)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
