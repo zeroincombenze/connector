@@ -100,18 +100,15 @@ class ResPartner(models.Model):
     def preprocess(self, channel_id, vals):
 
         def set_vg7_id(vals):
-            found = False
             for nm in ('customer_shipping_id', 'vg7:id', 'vg7_id'):
                 if vals.get(nm):
-                    found = True
-                    break
-            if found:
-                if isinstance(vals[nm], basestring):
-                    vals[nm] = int(vals[nm])
-                if vals.get('type'):
-                    vals[nm] = self.env[
-                        'ir.model.synchro'].get_loc_ext_id_value(
-                        channel_id, 'res.partner', vals[nm], spec=vals['type'])
+                    if isinstance(vals[nm], basestring):
+                        vals[nm] = int(vals[nm])
+                    if vals.get('type'):
+                        vals[nm] = self.env[
+                            'ir.model.synchro'].get_loc_ext_id_value(
+                            channel_id, 'res.partner', vals[nm],
+                            spec=vals['type'])
             return vals
 
         _logger.info(
@@ -137,15 +134,14 @@ class ResPartner(models.Model):
                 for ext_ref in ('parent_id', 'type_inv_addr'):
                     if ext_ref in vals:
                         del vals[ext_ref]
-                        del vals[ext_ref]
-                for ext_ref in ('vg7:shipping', 'vg7:billing'):
+                for ext_ref in ('vg7:billing', 'vg7:shipping'):
+                    diff = False
                     if ext_ref in vals:
                         vals[':customer'] = True
                         vals[ext_ref] = self.rephase_fields(
                             vals[ext_ref], ext_ref)
                         if ext_ref == 'vg7:shipping':
                             vals[ext_ref]['type'] = 'delivery'
-                            # vals[ext_ref] = set_vg7_id(vals[ext_ref])
                         elif ext_ref == 'vg7:billing':
                             vals[ext_ref]['type'] = 'invoice'
                             if ('vg7:id' not in vals[ext_ref] and
@@ -168,31 +164,42 @@ class ResPartner(models.Model):
                                          vals[ext_ref][nm] == vals[nm])):
                                     vals[nm] = vals[ext_ref][nm]
                                     del vals[ext_ref][nm]
-                            for nm in ('vg7:company',
-                                       'vg7:name',
-                                       'vg7:surename',
-                                       'vg7:street',
-                                       'vg7:street_number',
-                                       'vg7:postal_code',
-                                       'vg7:city',
-                                       'vg7:region',
-                                       'vg7:region_id',
-                                       'vg7:email',
-                                       'vg7:country',
-                                       'vg7:country_id',
-                                       'vg7:telephone',
-                                       'vg7:telephone2'):
-                                if nm in vals[ext_ref] and not vals.get(nm):
-                                    vals[nm] = vals[ext_ref][nm]
                         for nm in ('vg7:company',
                                    'vg7:name',
-                                   'vg7:surename'):
-                            if vals[ext_ref].get(nm) == vals.get(nm):
-                                vals[ext_ref][nm] = False
-                        self.env['ir.model.synchro'].logmsg('debug',
-                            '>>> store(%s,%s)' % (vals[ext_ref], ext_ref))
-                        cache.set_model_attr(
-                            channel_id, actual_model, ext_ref, vals[ext_ref])
+                                   'vg7:surename',
+                                   'vg7:street',
+                                   'vg7:street_number',
+                                   'vg7:postal_code',
+                                   'vg7:city',
+                                   'vg7:region',
+                                   'vg7:region_id',
+                                   'vg7:email',
+                                   'vg7:country',
+                                   'vg7:country_id',
+                                   'vg7:telephone',
+                                   'vg7:telephone2'):
+                            if nm not in vals[ext_ref]:
+                                continue
+                            elif nm in ('vg7:company',
+                                        'vg7:name',
+                                        'vg7:surename'):
+                                if vals.get(nm) != vals[ext_ref].get(nm):
+                                    if ext_ref != 'vg7:billing':
+                                        diff = True
+                                    elif not vals.get(nm):
+                                        vals[nm] = vals[ext_ref][nm]
+                                else:
+                                    vals[ext_ref][nm] = False
+                            elif nm in vals[ext_ref] and not vals.get(nm):
+                                vals[nm] = vals[ext_ref][nm]
+                            elif vals.get(nm) != vals[ext_ref].get(nm):
+                                diff = True
+                        if diff:
+                            self.env['ir.model.synchro'].logmsg('debug',
+                                '>>> store(%s,%s)' % (vals[ext_ref], ext_ref))
+                            cache.set_model_attr(
+                                channel_id, actual_model, ext_ref,
+                                vals[ext_ref])
                         del vals[ext_ref]
                     else:
                         cache.set_model_attr(

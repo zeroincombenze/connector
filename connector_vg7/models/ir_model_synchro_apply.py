@@ -42,6 +42,8 @@ class IrModelSynchroApply(models.Model):
                            ext_ref, loc_ext_id_name, default=None, ctx=None):
         if loc_name in vals and vals[loc_name]:
             return vals
+        if vals.get('type') in ('delivery', 'invoice'):
+            return vals
         if vals.get(ext_ref):
             vals[loc_name] = vals[ext_ref]
         elif default:
@@ -288,7 +290,7 @@ class IrModelSynchroApply(models.Model):
                 vals[loc_name] = company[partner_nm]
         return vals
 
-    def apply_set_global(self, channel_id, vals, loc_name,
+    def apply_get_global(self, channel_id, vals, loc_name,
                          ext_ref, loc_ext_id_name, default=None, ctx=None):
         if loc_name in vals:
             return vals

@@ -8,63 +8,63 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 #
 import logging
-# from datetime import datetime, timedelta
+from datetime import datetime, timedelta
+import itertools
 
 from odoo import api, models
+from odoo import release
 
 _logger = logging.getLogger(__name__)
+try:
+    from clodoo import transodoo
+except ImportError as err:
+    _logger.error(err)
 try:
     from odoo_score import odoo_score
 except ImportError as err:
     _logger.error(err)
 
 
-SKEYS = {
-    'res.country': (['code'], ['name']),
-    'res.country.state': (['name', 'country_id'],
-                          ['code', 'country_id'],),
-    'res.partner': (['vat', 'fiscalcode', 'type'],
+DEF_SKEYS = {
+    'res.partner': [['vat', 'fiscalcode', 'type'],
                     ['vat', 'name', 'type'],
                     ['fiscalcode', 'dim_name', 'type'],
-                    ['rea_code'],
+                    # ['rea_code'],
                     ['vat', 'dim_name', 'type'],
                     ['vat', 'type'],
                     ['dim_name', 'type'],
                     ['vat', 'fiscalcode', 'is_company'],
                     ['vat'],
-                    ['name', 'is_company'],
-                    ['name']),
-    'res.company': (['vat'], ['name']),
-    'account.account': (['code', 'company_id'],
+                    ['name', 'is_company']],
+    'res.company': [['vat'], ['name']],
+    'account.account': [['code', 'company_id'],
                         ['name', 'company_id'],
-                        ['dim_name', 'company_id']),
-    'account.account.type': (['type'], ['name'], ['dim_name']),
-    'account.tax': (['description', 'company_id'],
-                    ['name', 'company_id'],
-                    ['dim_name', 'company_id'],
-                    ['amount', 'company_id'],),
-    'account.invoice': (['number', 'company_id'], ['move_name', 'company_id']),
-    'account.invoice.line': (['invoice_id', 'sequence'],
-                             ['invoice_id', 'name']),
-    'product.template': (['name', 'default_code'],
+                        ['dim_name', 'company_id']],
+    'account.account.type': [['type'], ['name'], ['dim_name']],
+    'account.invoice': [['number', 'company_id'], ['move_name', 'company_id']],
+    'account.invoice.line': [['invoice_id', 'sequence'],
+                             ['invoice_id', 'name']],
+    'product.template': [['name', 'default_code'],
                          ['name', 'barcode'],
                          ['name'],
                          ['default_code'],
                          ['barcode'],
-                         ['dim_name']),
-    'product.product': (['name', 'default_code'],
+                         ['dim_name']],
+    'product.product': [['name', 'default_code'],
                         ['name', 'barcode'],
                         ['name'],
                         ['default_code'],
                         ['barcode'],
-                        ['dim_name']),
-    'project.project': (['account_analytic_id']),
-    'sale.order': (['name']),
-    'sale.order.line': (['order_id', 'sequence'], ['order_id', 'name']),
+                        ['dim_name']],
+    'project.project': [['account_analytic_id']],
+    'sale.order': [['name']],
+    'sale.order.line': [['order_id', 'sequence'], ['order_id', 'name']],
 }
-
-CANDIDATE_KEYS = ('acc_number', 'login', 'code', 'description', 'name')
-
+# Warning: order is very important!
+CANDIDATE_KEYS = ('acc_number', 'login', 'code', 'key', 'serial_number',
+                  'description', 'comment', 'name', 'dim_name')
+SUPPLEMENTAL_KEYS = ('amount',)
+ANCILLARY_KEYS = ('company_id', 'sequence', 'type_tax_use')
 
 class IrModelSynchroCache(models.Model):
     _name = 'ir.model.synchro.cache'
@@ -225,7 +225,7 @@ class IrModelSynchroCache(models.Model):
     # -----------------------
     @api.model_cr_context
     def expired_cache(self, channel_id, xmodel, model):
-        cache_model = 'QUEUE_SYNC'
+        cache_model = '_QUEUE_SYNC'
         if self.get_struct_model_attr(cache_model, 'XPIRE'):
             self.set_struct_model(cache_model)
             self.CACHE.set_struct_cache(self._cr.dbname, cache_model)
@@ -237,7 +237,7 @@ class IrModelSynchroCache(models.Model):
     @api.model_cr_context
     def push_id(self, channel_id, xmodel, model, loc_id=None, ext_id=None):
         self.expired_cache(channel_id, xmodel, model)
-        cache_model = 'QUEUE_SYNC'
+        cache_model = '_QUEUE_SYNC'
         if loc_id:
             rec_list = self.get_struct_model_attr(
                 cache_model, model, default=[])
@@ -254,7 +254,7 @@ class IrModelSynchroCache(models.Model):
     @api.model_cr_context
     def pop_id(self, channel_id, xmodel, model, loc_id=None, ext_id=None):
         self.expired_cache(channel_id, xmodel, model)
-        cache_model = 'QUEUE_SYNC'
+        cache_model = '_QUEUE_SYNC'
         if loc_id:
             rec_list = self.get_struct_model_attr(
                 cache_model, model, default=[])
@@ -272,7 +272,7 @@ class IrModelSynchroCache(models.Model):
     def id_is_in_cache(
             self, channel_id, xmodel, model, loc_id=None, ext_id=None):
         self.expired_cache(channel_id, xmodel, model)
-        cache_model = 'QUEUE_SYNC'
+        cache_model = '_QUEUE_SYNC'
         return ((loc_id and loc_id in self.get_struct_model_attr(
             cache_model, model, default=[])) or
             (ext_id and ext_id in self.get_model_attr(
@@ -401,6 +401,42 @@ class IrModelSynchroCache(models.Model):
     # --------------------------
     # Model structure primitives
     # --------------------------
+
+    def get_indexes(self, model):
+        query = """select c.name from ir_model m, ir_model_constraint c
+        where  c.model = m.id and m.model = '%s'"""
+        self._cr.execute(query % model)  # pylint: disable=E8103
+        res = []
+        for row in self.env.cr.fetchall():
+            res.append(row[0])
+        return res
+
+    def get_index_fields(self, model, index_name=None):
+        # index_name = index_name.replace('.', '_') if index_name else None
+        INDEX_FIELDS = """select pgc.conname as constraint_name,
+                          ccu.table_name,
+                          ccu.column_name,
+                          pgc.consrc as definition
+        from pg_constraint pgc
+        join pg_namespace nsp on nsp.oid = pgc.connamespace
+        join pg_class  cls on pgc.conrelid = cls.oid
+        left join information_schema.constraint_column_usage ccu
+        on pgc.conname = ccu.constraint_name and
+        nsp.nspname = ccu.constraint_schema
+        where contype ='u' and table_name='%s'
+        order by constraint_name,table_name"""
+        self._cr.execute(  # pylint: disable=E8103
+            INDEX_FIELDS % model.replace('.', '_')
+        )
+        res = {}
+        for row in self.env.cr.fetchall():
+            if index_name and index_name != row[0]:
+                continue
+            if row[0] not in res:
+                res[row[0]] = []
+            res[row[0]].append(row[2])
+        return res
+
     @api.model_cr_context
     def model_list(self):
         return self.CACHE.model_list(self._cr.dbname)
@@ -442,6 +478,68 @@ class IrModelSynchroCache(models.Model):
     # ----------------
     # Cache management
     # ----------------
+    def get_default_keys(self, model):
+        skeys = DEF_SKEYS.get(model, [])
+        uname = DEF_SKEYS.get(model, [[[]]])[0][0] or False
+        ancillary = {}
+        for field in ANCILLARY_KEYS:
+            if (field == 'sequence' and
+                    not self.get_struct_model_attr(model, 'PARENT_ID')):
+                continue
+            ancillary[field] = field in self.get_struct_attr(model)
+        if self.get_struct_model_attr(model, 'PARENT_ID'):
+            ALL_KEYS = (self.get_struct_model_attr(
+                model, 'PARENT_ID'),) + CANDIDATE_KEYS + SUPPLEMENTAL_KEYS
+        else:
+            ALL_KEYS = CANDIDATE_KEYS + SUPPLEMENTAL_KEYS
+        for nm in ALL_KEYS:
+            if (nm in self.get_struct_attr(model) and
+                    not self.get_struct_model_field_attr(
+                        model, nm, 'readonly')):
+                keys = [nm]
+                for kk in ancillary:
+                    if ancillary[kk]:
+                        keys.append(kk)
+                # if has_company:
+                #     keys.append('company_id')
+                # if has_type:
+                #     keys.append('type_tax_use')
+                if self.get_struct_model_attr(model, 'SUPPL_KEY'):
+                    keys.append(self.get_struct_model_attr(model, 'SUPPL_KEY'))
+                found = False
+                for kk in skeys:
+                    if not set(keys) - set(kk):
+                        found = True
+                        break
+                if not found:
+                    skeys.append(keys)
+                if not uname:
+                    uname = nm
+        return self.get_index_keys(model, uname, skeys)
+
+    def get_index_keys(self, model, uname, skeys):
+        for index_name in self.get_indexes(model):
+            keys = []
+            indexes = self.get_index_fields(model, index_name=index_name)
+            if not indexes:
+                continue
+            for fieldname in indexes[index_name]:
+                keys.append(fieldname)
+            if not keys:
+                # print('@@@ Invalid index %s' % index_name)  # debug
+                continue
+            if len(keys) == 1 and not uname:
+                uname = keys[0]
+            found = False
+            for kk in skeys:
+                if set(keys) == set(kk):
+                    found = True
+                    # print('@@@ Duplicate search index %s.%s' % (model, kk))  # debug
+                    break
+            if not found:
+                skeys.append(keys)
+        return uname, skeys
+
     @api.model_cr_context
     def store_model_field(
             self, channel_id, model, loc_name, ext_name, apply, protect, spec,
@@ -464,108 +562,131 @@ class IrModelSynchroCache(models.Model):
         self.set_model_field_attr(
             channel_id, model, loc_name, 'REQUIRED', required)
 
-    @api.model_cr_context
-    def store_odoo_model_1_channels(
-            self, channel_id, model, skeys, field_uname, ext_ref):
-        self.set_model_attr(channel_id, model, '2PULL', True)
-        self.set_model_attr(
-            channel_id, model, 'MODEL_KEY', field_uname)
-        self.set_model_attr(
-            channel_id, model, 'SKEYS', skeys)
-        self.set_model_attr(
-            channel_id, model, 'BIND', model)
-        self.set_model_attr(
-            channel_id, model, 'KEY_ID', 'id')
-        self.set_model_attr(
-            channel_id, model, 'EXT_ID', ext_ref)
-        self.set_model_attr(
-            channel_id, model, 'LAST_REC', {})
+    def store_field_from_rec(self, channel_id, model, field):
+        if field.name:
+            loc_name = field.name
+        else:
+            loc_name = '.%s' % field.counterpart_name
+        if field.counterpart_name:
+            ext_name = field.counterpart_name
+        else:
+            ext_name = '.%s' % field.name
+        required = self.get_struct_model_field_attr(
+            model, loc_name, 'required') or field.required
+        apply = field.apply
+        if (loc_name in itertools.chain.from_iterable(
+                self.get_struct_model_attr(model, 'SKEYS')) and
+                loc_name in CANDIDATE_KEYS):
+            if not apply:
+                apply = 'set_tmp_name()'
+            elif apply.find('set_tmp_name()') < 0:
+                apply += ',set_tmp_name()'
+        self.store_model_field(
+            channel_id, model, loc_name, ext_name, apply,
+            field.protect, field.spec, required)
+        if apply != field.apply:
+            field.write({'apply': apply})
 
     @api.model_cr_context
-    def setup_odoo_model(self, channel_id, model, force=None):
-        if (not force and
-                model in self.get_channel_models(channel_id) and
-                self.get_model_attr(channel_id, model, 'XPIRE') and
-                self.get_model_attr(channel_id, model, 'LOC_FIELDS')):
+    def store_odoo_field_from_rec(self, channel_id, model, field):
+        if not self.is_struct(field) or field == 'id':
             return
-        self.init_model(channel_id, model)
+        # diff = False
         ext_ref = '%s_id' % self.get_attr(channel_id, 'PREFIX')
-        skeys = []
-        field_uname = False
-        if model == 'res.users':
-            has_company = False
+        required = self.get_struct_model_field_attr(
+            model, field, 'required')
+        if field == ext_ref:
+            self.store_model_field(
+                channel_id, model, 'id', field, '', False, False, required)
         else:
-            has_company = 'company_id' in self.get_struct_attr(model)
-        for nm in CANDIDATE_KEYS:
-            if (nm in self.get_struct_attr(model) and
-                    not self.get_struct_model_field_attr(
-                        model, nm, 'readonly')):
-                if has_company:
-                    skeys.append([nm, 'company_id'])
-                else:
-                    skeys.append([nm])
-                if not field_uname:
-                    field_uname = nm
-        for field in self.get_struct_attr(model):
-            if not self.is_struct(field) or field == 'id':
-                continue
-            required = self.get_struct_model_field_attr(
-                model, field, 'required')
-            if field == ext_ref:
-                self.store_model_field(
-                    channel_id, model, 'id', field, '', False, False, required)
+            ext_odoo_ver = self.get_attr(channel_id, 'ODOO_FVER')
+            if ext_odoo_ver:
+                loc_name = transodoo.translate_from_to(
+                    self.get_attr(channel_id, 'TNL'), model, field,
+                    ext_odoo_ver, release.major_version)
             else:
-                self.store_model_field(
-                    channel_id, model, field, field, '', False, False,
-                    required)
+                loc_name = field
             field_def = self.TABLE_DEF.get(model, {}).get(field, {})
+            apply = ''
             if 'APPLY' in field_def:
-                self.set_model_field_attr(
-                    channel_id, model, field, 'APPLY', field_def['APPLY'])
-            elif field in CANDIDATE_KEYS:
-                self.set_model_field_attr(
-                    channel_id, model, field, 'APPLY', 'set_tmp_name()')
-        if SKEYS.get(model):
-            self.store_odoo_model_1_channels(
-                channel_id, model, SKEYS[model], field_uname, ext_ref)
-        elif hasattr(self.env[model], 'SKEYS'):
-            self.store_odoo_model_1_channels(
-                channel_id, model, self.env[model].SKEYS, field_uname, ext_ref)
-        else:
-            self.store_odoo_model_1_channels(
-                channel_id, model, skeys, field_uname, ext_ref)
-        self.CACHE.set_model_cache(self._cr.dbname, channel_id, model)
+                apply = field_def['APPLY']
+            if (field in itertools.chain.from_iterable(
+                    self.get_struct_model_attr(model, 'SKEYS')) and
+                    field in CANDIDATE_KEYS):
+                if not apply:
+                    apply = 'set_tmp_name()'
+                elif apply.find('set_tmp_name()') < 0:
+                    apply += ',set_tmp_name()'
+                # diff = True
+            if not apply:
+                apply = 'odoo_migrate()'
+            elif apply.find('odoo_migrate()') < 0:
+                apply += ',odoo_migrate()'
+            self.store_model_field(
+                channel_id, model, loc_name, field, apply, False, False,
+                required)
+            # if loc_name != field or diff:
+            model_rec = self.env['synchro.channel.model'].search(
+                [('name', '=', model),
+                 ('synchro_channel_id', '=', channel_id)])
+            vals = {
+                'name': loc_name,
+                'counterpart_name': field,
+                'apply': apply,
+                'protect': '0',
+                'required': required,
+                'model_id': model_rec.id,
+            }
+            self.env['synchro.channel.model.fields'].create(vals)
+
+    # @api.model_cr_context
+    # def setup_odoo_model(self, channel_id, model, force=None):
+    #     # TODO: deprecated
+    #     if (not force and
+    #             model in self.get_channel_models(channel_id) and
+    #             self.get_model_attr(channel_id, model, 'XPIRE') and
+    #             self.get_model_attr(channel_id, model, 'LOC_FIELDS')):
+    #         return
+    #     self.env['synchro.channel.model'].build_odoo_synchro_model(
+    #         channel_id, model)
+    #     self.init_model(channel_id, model)
+    #     ext_ref = '%s_id' % self.get_attr(channel_id, 'PREFIX')
+    #     for field in self.get_struct_attr(model):
+    #         if not self.is_struct(field) or field == 'id':
+    #             continue
+    #         required = self.get_struct_model_field_attr(
+    #             model, field, 'required')
+    #         if field == ext_ref:
+    #             self.store_model_field(
+    #                 channel_id, model, 'id', field, '', False, False,
+    #                 required)
+    #         else:
+    #             self.store_model_field(
+    #                 channel_id, model, field, field, '', False, False,
+    #                 required)
+    #         field_def = self.TABLE_DEF.get(model, {}).get(field, {})
+    #         if 'APPLY' in field_def:
+    #             self.set_model_field_attr(
+    #                 channel_id, model, field, 'APPLY', field_def['APPLY'])
+    #         elif field in CANDIDATE_KEYS:
+    #             self.set_model_field_attr(
+    #                 channel_id, model, field, 'APPLY', 'set_tmp_name()')
+    #     self.CACHE.set_model_cache(self._cr.dbname, channel_id, model)
 
     @api.model_cr_context
     def setup_channel_model_fields(self, model_rec):
         model = model_rec.name
         channel_id = model_rec.synchro_channel_id.id
-        skeys = []
-        field_uname = False
-        has_company = 'company_id' in self.get_struct_attr(model)
-        for nm in CANDIDATE_KEYS:
-            if nm in self.get_struct_attr(model):
-                if has_company:
-                    skeys.append([nm, 'company_id'])
-                else:
-                    skeys.append([nm])
-                if not field_uname:
-                    field_uname = nm
+        channel = self.env['synchro.channel'].browse(channel_id)
         for field in self.env['synchro.channel.model.fields'].search(
                 [('model_id', '=', model_rec.id)]):
-            if field.name:
-                loc_name = field.name
-            else:
-                loc_name = '.%s' % field.counterpart_name
-            if field.counterpart_name:
-                ext_name = field.counterpart_name
-            else:
-                ext_name = '.%s' % field.name
-            required = self.get_struct_model_field_attr(
-                model, loc_name, 'required') or field.required
-            self.store_model_field(
-                channel_id, model, loc_name, ext_name, field.apply,
-                field.protect, field.spec, required)
+            self.store_field_from_rec(channel_id, model, field)
+        if channel.identity == 'odoo':
+            for field in self.get_struct_attr(model):
+                if ((self.is_struct(field) and field != 'id') and
+                        field not in self.get_model_attr(
+                            channel_id, model, 'LOC_FIELDS')):
+                    self.store_odoo_field_from_rec(channel_id, model, field)
         # special names
         ext_ref = '%s_id' % self.get_attr(channel_id, 'PREFIX')
         self.set_model_field_attr(
@@ -574,40 +695,67 @@ class IrModelSynchroCache(models.Model):
             channel_id, model, ext_ref, 'LOC_FIELDS', 'id')
         self.set_model_field_attr(
             channel_id, model, 'id', 'EXT_FIELDS', ext_ref)
-        if not self.get_model_attr(channel_id, model, 'SKEYS'):
-            self.set_model_attr(
-                channel_id, model, 'SKEYS', skeys)
-        self.set_model_attr(
-            channel_id, model, 'MODEL_KEY', field_uname)
+
+    # @api.model_cr_context
+    # def store_odoo_model_1_channels(
+    #         self, channel_id, model, skeys, field_uname, ext_ref):
+    #     # TODO: Deprecated?
+    #     self.set_model_attr(channel_id, model, '2PULL', True)
+    #     self.set_model_attr(
+    #         channel_id, model, 'MODEL_KEY', field_uname)
+    #     self.set_model_attr(
+    #         channel_id, model, 'SKEYS', skeys)
+    #     self.set_model_attr(
+    #         channel_id, model, 'BIND', model)
+    #     self.set_model_attr(
+    #         channel_id, model, 'KEY_ID', 'id')
+    #     self.set_model_attr(
+    #         channel_id, model, 'EXT_ID', ext_ref)
+    #     self.set_model_attr(
+    #         channel_id, model, 'LAST_REC', {})
 
     @api.model_cr_context
-    def store_model_1_channel(self, channel_id, model, rec):
+    def store_model_1_channel(self, channel_id, rec):
+        model = rec.name
         if rec.field_2complete:
             self.set_model_attr(channel_id, model, '2PULL', True)
-        self.set_model_attr(
-            channel_id, model, 'MODEL_KEY', rec.field_uname)
-        if rec.search_keys:
-            self.set_model_attr(
-                channel_id, model, 'SKEYS', eval(rec.search_keys))
+        if not self.get_attr(channel_id, 'TNL'):
+            tnldict = {}
+            transodoo.read_stored_dict(tnldict)
+            self.set_attr(channel_id, 'TNL', tnldict)
+        if (datetime.strptime(rec.write_date, '%Y-%m-%d %H:%M:%S') + timedelta(
+                minutes=1)) < datetime.now():
+            # minutes = 9900)) < datetime.now():
+            if not self.get_struct_model_attr(model, 'SKEYS'):
+                actual_model = self.env['ir.model.synchro'].get_actual_model(
+                    model, only_name=True)
+                uname, skeys = self.get_default_keys(actual_model)
+                self.set_struct_model_attr(model, 'SKEYS', skeys)
+                self.set_struct_model_attr(model, 'MODEL_KEY', uname)
+                rec.write({'search_keys': skeys,
+                           'field_uname': uname})
+                self.env['ir.model.synchro'].logmsg(
+                    'debug', '### %(model)s SKEYS=%(skeys)s UNAME=%(uname)s',
+                    model=model,  ctx={'skeys': skeys, 'uname': uname})
         else:
-            self.set_model_attr(
-                channel_id, model, 'SKEYS', SKEYS.get(model))
+            self.set_struct_model_attr(model, 'SKEYS', eval(rec.search_keys))
+            self.set_struct_model_attr(model, 'MODEL_KEY', rec.field_uname)
         self.set_model_attr(
             channel_id, model, 'BIND', rec.counterpart_name)
+        channel = self.env['synchro.channel'].browse(channel_id)
         if rec.model_spec:
             self.set_model_attr(
                 channel_id, model, 'MODEL_SPEC', rec.model_spec)
-        if model == 'res.partner.shipping':
+        if channel.identity == 'vg7' and model == 'res.partner.shipping':
             self.set_model_attr(
                 channel_id, model, 'KEY_ID', 'customer_shipping_id')
         else:
-            self.set_model_attr(
-                channel_id, model, 'KEY_ID', 'id')
-        if model == 'res.partner.supplier':
+            self.set_model_attr(channel_id, model, 'KEY_ID', 'id')
+        if channel.identity == 'vg7' and model == 'res.partner.supplier':
             self.set_model_attr(
                 channel_id, model, 'EXT_ID',
                 '%s2_id' % self.get_attr(channel_id, 'PREFIX'))
-        elif model == 'res.partner.bank.company':
+        elif channel.identity == 'vg7' and model == 'res.partner.bank.company':
             self.set_model_attr(
                 channel_id, model, 'EXT_ID',
                 '%s2_id' % self.get_attr(channel_id, 'PREFIX'))
@@ -615,12 +763,13 @@ class IrModelSynchroCache(models.Model):
             self.set_model_attr(
                 channel_id, model, 'EXT_ID',
                 '%s_id' % self.get_attr(channel_id, 'PREFIX'))
-        if model == 'res.partner.invoice':
-            self.set_model_attr(
-                channel_id, model, 'ID_OFFSET', 200000000)
-        elif model == 'res.partner.shipping':
-            self.set_model_attr(
-                channel_id, model, 'ID_OFFSET', 100000000)
+        if channel.identity == 'vg7':
+            if model == 'res.partner.invoice':
+                self.set_model_attr(
+                    channel_id, model, 'ID_OFFSET', 200000000)
+            elif model == 'res.partner.shipping':
+                self.set_model_attr(
+                    channel_id, model, 'ID_OFFSET', 100000000)
         self.setup_channel_model_fields(rec)
 
     @api.model_cr_context
@@ -636,7 +785,7 @@ class IrModelSynchroCache(models.Model):
         channel = self.env['synchro.channel'].browse(channel_id)
         self.setup_1_channel(channel)
         self.init_model(channel_id, model)
-        self.store_model_1_channel(channel_id, model, rec)
+        self.store_model_1_channel(channel_id, rec)
         self.CACHE.set_model_cache(self._cr.dbname, channel_id, model)
 
     @api.model_cr_context
@@ -649,9 +798,20 @@ class IrModelSynchroCache(models.Model):
             channel.id, 'OUT_QUEUE', default=[]))
         self.set_attr(channel.id, 'IN_QUEUE', self.get_attr(
             channel.id, 'IN_QUEUE', default=[]))
-        self.set_attr(channel.id, 'QUEUE_SYNC', self.get_attr(
-            channel.id, 'QUEUE_SYNC', default={}))
+        self.set_attr(channel.id, '_QUEUE_SYNC', self.get_attr(
+            channel.id, '_QUEUE_SYNC', default={}))
         self.set_attr(channel.id, 'PREFIX', channel.prefix)
+        self.set_attr(channel.id, 'ODOO_FVER', {
+            'oe6': '6.1',
+            'oe7': '7.0',
+            'oe8': '8.0',
+            'oe9': '9.0',
+            'oe10': '10.0',
+            'oe11': '11.0',
+            'oe12': '12.0',
+            'oe13': '13.0',
+            'oe14': '14.0',
+        }.get(channel.prefix.split(':')[0], ''))
         self.set_attr(channel.id, 'IDENTITY', channel.identity)
         self.set_attr(channel.id, 'METHOD', channel.method)
         ctx = {}
@@ -689,12 +849,10 @@ class IrModelSynchroCache(models.Model):
                 self.setup_1_channel(channel)
 
     @api.model_cr_context
-    def setup_model_structure(self, model, actual_model, ro_fields=None):
+    def setup_model_structure(self, model, actual_model):
         """Store model structure into memory"""
         if not model:
             return
-        # cache = self.CACHE
-        ro_fields = ro_fields or []
         if self.get_struct_model_attr(model, 'XPIRE'):
             return
         ir_model = self.env['ir.model.fields']
@@ -710,8 +868,7 @@ class IrModelSynchroCache(models.Model):
                     attrs[attr] = global_def[attr]
                 elif attr == 'readonly' and (
                         field.ttype in ('binary', 'reference') or
-                        (field.related and not field.required) or
-                        field.name in ro_fields):
+                        (field.related and not field.required)):
                     attrs['readonly'] = True
                 else:
                     attrs[attr] = field[attr]
@@ -735,10 +892,15 @@ class IrModelSynchroCache(models.Model):
                         actual_model, 'CHILD_IDS', field.name)
                     self.set_struct_model_attr(
                         actual_model, 'MODEL_CHILD', field.relation)
-                elif field.relation and actual_model.startswith(
-                        field.relation):
+                elif (actual_model.endswith('.line') and
+                      field.relation and
+                      actual_model.startswith(field.relation)):
                     self.set_struct_model_attr(
                         actual_model, 'PARENT_ID', field.name)
+                elif (field.relation and
+                      actual_model.startswith(field.relation)):
+                    self.set_struct_model_attr(
+                        actual_model, 'SUPPL_KEY', field.name)
                 # TODO:avoid recursive loop
                 # elif field.relation == actual_model:
                 #    constraints = ['id', '<>', field.name]
@@ -767,36 +929,67 @@ class IrModelSynchroCache(models.Model):
 
     @api.model_cr_context
     def setup_model_in_channels(
-            self, channel_id=None, model=None, ext_model=None):
+            self, channel=None, model=None, ext_model=None):
         """Read model value from all active channel model table and store
         them into memory"""
         if model:
-            where = [('name', '=', model)]
+            domain = [('name', '=', model)]
         elif ext_model:
-            where = [('counterpart_name', '=', ext_model)]
+            domain = [('counterpart_name', '=', ext_model)]
         else:
             return
-        if channel_id:
-            where.append(('synchro_channel_id', '=', channel_id))
-        self.setup_channels()
-        for rec in self.env['synchro.channel.model'].search(where):
+        if channel:
+            domain.append(('synchro_channel_id', '=', channel.id))
+        recs = self.env['synchro.channel.model'].search(domain)
+        if not recs and ext_model:
+            self.setup_channels(all=True)
+            for channel_id in self.get_channel_list():
+                self.env['synchro.channel.model'].build_odoo_synchro_model(
+                        channel_id, ext_model)
+        for rec in self.env['synchro.channel.model'].search(domain):
             self.setup_ext_model(False, rec)
-        for chn_id in self.get_channel_list():
-            if channel_id and chn_id != channel_id:
-                continue
-            if self.get_attr(chn_id, 'IDENTITY') == 'odoo':
-                model = model or ext_model
-                self.setup_odoo_model(chn_id, model)
 
     @api.model_cr_context
-    def open(self, channel_id=None, model=None, ext_model=None, cls=None):
+    def open(self, channel=None, model=None, ext_model=None, cls=None):
         """Setup cache if needed, setup model cache if required and needed"""
-        actual_model = self.env[
-            'ir.model.synchro'].get_actual_model(model, only_name=True)
-        self.setup_model_structure(model, actual_model)
+        if channel and channel.identity == 'odoo':
+            if ext_model in ('ir.model', 'ir.module.module') and not model:
+                model = ext_model
+            elif model in ('ir.model', 'ir.module.module') and not ext_model:
+                ext_model = model
+        actual_model = model
+        if channel and ext_model and not model and channel.identity == 'odoo':
+            ext_odoo_ver = {
+                'oe6': '6.1',
+                'oe7': '7.0',
+                'oe8': '8.0',
+                'oe9': '9.0',
+                'oe10': '10.0',
+                'oe11': '11.0',
+                'oe12': '12.0',
+                'oe13': '13.0',
+                'oe14': '14.0',
+            }.get(channel.prefix.split(':')[0], '')
+            if ext_odoo_ver:
+                ir_synchro_model = self.env['ir.model.synchro']
+                tnldict = ir_synchro_model.get_tnldict(channel.id)
+                actual_model = transodoo.translate_from_to(
+                    tnldict, 'ir.model', ext_model,
+                    ext_odoo_ver, release.major_version,
+                    type='model')
+                if ext_model == actual_model:
+                    ext_model = transodoo.translate_from_to(
+                        tnldict, 'ir.model', ext_model,
+                        ext_odoo_ver, release.major_version,
+                        type='merge')
+        elif model:
+            actual_model = self.env[
+                'ir.model.synchro'].get_actual_model(model, only_name=True)
+        if actual_model:
+            self.setup_model_structure(model, actual_model)
         self.setup_model_in_channels(
-            channel_id=channel_id, model=model, ext_model=ext_model)
-        self.set_struct_model('QUEUE_SYNC')
+            channel=channel, model=model, ext_model=ext_model)
+        self.set_struct_model('_QUEUE_SYNC')
         if cls is not None:
             if cls.__class__.__name__ != model:
                 raise RuntimeError('Class %s not of declared model %s' % (

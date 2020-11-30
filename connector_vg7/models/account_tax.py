@@ -63,6 +63,14 @@ class AccountTax(models.Model):
             text = res
         return text
 
+    @api.model
+    def preprocess(self, channel_id, vals):
+        if ('type_tax_use' not in vals and
+                self.env['synchro.channel'].browse(
+                    channel_id).identity == 'vg7'):
+            vals['type_tax_use'] = 'sale'
+        return vals, ''
+
     def assure_values(self, vals, rec):
         if not vals.get('amount'):
             if rec:

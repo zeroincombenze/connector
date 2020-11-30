@@ -7,7 +7,16 @@
 #
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 #
+import logging
 from odoo import api, fields, models
+from odoo import release
+
+_logger = logging.getLogger(__name__)
+try:
+    from clodoo import transodoo
+except ImportError as err:
+    _logger.error(err)
+
 
 class SynchroChannel(models.Model):
     _name = 'synchro.channel'
@@ -129,8 +138,7 @@ class SynchroChannelModel(models.Model):
         required=True,
     )
     field_uname = fields.Text(
-        'Field for search with unique name',
-        required=True,
+        'Field for foreign search with unique name',
     )
     search_keys = fields.Char(
         'Pythonic key search sequence',
@@ -163,10 +171,47 @@ class SynchroChannelModel(models.Model):
         self.env['ir.model.synchro.cache'].clean_cache()
         return super(SynchroChannelModel, self).write(vals)
 
+    def build_odoo_synchro_model(self, channel_id, ext_model):
+        cache = self.env['ir.model.synchro.cache']
+        if cache.get_attr(channel_id, 'IDENTITY') != 'odoo':
+            return
+        if ext_model.startswith('ir.'):
+            return
+        if self.search([('name', '=', ext_model),
+                        ('synchro_channel_id', '=', channel_id)]):
+            return
+        ir_synchro_model = self.env['ir.model.synchro']
+        ext_odoo_ver = cache.get_attr(channel_id, 'ODOO_FVER')
+        actual_model = ext_model
+        if ext_odoo_ver:
+            tnldict = ir_synchro_model.get_tnldict(channel_id)
+            actual_model = transodoo.translate_from_to(
+                tnldict, 'ir.model', ext_model,
+                ext_odoo_ver, release.major_version,
+                type='model')
+            if ext_model == actual_model:
+                actual_model = transodoo.translate_from_to(
+                    tnldict, 'ir.model', ext_model,
+                    ext_odoo_ver, release.major_version,
+                    type='model')
+        field_uname, skeys = cache.get_default_keys(actual_model)
+        vals = {
+            'synchro_channel_id': channel_id,
+            'name': actual_model,
+            'counterpart_name': ext_model,
+            'field_uname': field_uname,
+            'search_keys': str(skeys),
+            'sequence': 16,
+        }
+        self.create(vals)
+        # commit table to avoid another I/O if next operation fails
+        self.env.cr.commit()  # pylint: disable=invalid-commit
+
 
 class SynchroChannelModelFields(models.Model):
     _name = 'synchro.channel.model.fields'
     _description = "Field mapping for Synchonization"
+    _order = 'name'
 
     name = fields.Char('Odoo field name')
     counterpart_name = fields.Char('Counterpart field name')
