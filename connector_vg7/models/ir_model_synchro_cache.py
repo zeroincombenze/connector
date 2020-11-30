@@ -723,9 +723,9 @@ class IrModelSynchroCache(models.Model):
             tnldict = {}
             transodoo.read_stored_dict(tnldict)
             self.set_attr(channel_id, 'TNL', tnldict)
+        # TODO: debug -> minutes=1 production -> minutes=9900
         if (datetime.strptime(rec.write_date, '%Y-%m-%d %H:%M:%S') + timedelta(
-                minutes=1)) < datetime.now():
-            # minutes = 9900)) < datetime.now():
+                minutes=9900)) < datetime.now():
             if not self.get_struct_model_attr(model, 'SKEYS'):
                 actual_model = self.env['ir.model.synchro'].get_actual_model(
                     model, only_name=True)
