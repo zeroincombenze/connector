@@ -1,3 +1,8 @@
+10.0.0.2.1 (2020-11-30)
+~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] Better ancillary keys management / Miglioramento gestione delle chiavi ausiliarie
+
 10.0.0.2.0 (2020-11-30)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -6,7 +11,7 @@
 * [IMP] Cache time-out changes / Modifica time-out di cache
 * [IMP] Supplemental keys / Chiavi di ricerca supplementari
 * [IMP] Langugae import / Importazione basato su lingua utente
-* [IMP] Odoo import store DB structure / Importazione da Odoo crea sttuttura
+* [IMP] Odoo import store DB structure / Importazione da Odoo crea struttura
 * [IMP] Ancillary keys management / Gestione delle chiavi ausiliarie
 * [IMP] Automatic keys recognize / Riconoscimento automatico delle chiavi
 

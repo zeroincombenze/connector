@@ -10,10 +10,13 @@
                 <page name="synchro" string="Synchronization">
                     <button name="pull_record" string="Synchronize" type="object"/>
                     <group>
+                        <field name="timestamp"/>
                         <field name="vg7_id"/>
                         <field name="oe7_id"/>
                         <field name="oe8_id"/>
                         <field name="oe10_id"/>
+                        <field name="original_state"/>
+                        <field name="errmsg"/>
                     </group>
                 </page>
             </xpath>

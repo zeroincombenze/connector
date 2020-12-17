@@ -7,6 +7,9 @@
 #
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 #
+import os
+import csv
+import requests
 import logging
 from odoo import api, fields, models
 from odoo import release
@@ -16,7 +19,14 @@ try:
     from clodoo import transodoo
 except ImportError as err:
     _logger.error(err)
-
+try:
+    import oerplib
+except ImportError as err:
+    _logger.error(err)
+try:
+    import odoorpc
+except ImportError as err:
+    _logger.error(err)
 
 class SynchroChannel(models.Model):
     _name = 'synchro.channel'
@@ -107,6 +117,75 @@ class SynchroChannel(models.Model):
     workflow_model = fields.Char('Current Workflow Model',
         readonly=True)
 
+    def get_channel_model(self, channel_id, model):
+        return self.search([('synchro_channel_id', '=', channel_id),
+                            ('name', '=', model)])[0]
+
+    def csv_session(self, endpoint):
+        """In CSV: dirname -> session"""
+        return False, endpoint
+
+    def vg7_json_session(self, endpoint):
+        """In JSON: headers -> cnx, endpoint -> session"""
+        headers = {'Authorization': 'access_token %s' % self.client_key}
+        return headers, endpoint
+
+    def odoo_rpc_session(self, endpoint):
+
+        def default_params():
+            return 'xmlrpc', 8069, 'demo', 'admin', 'admin'
+
+        def parse_endpoint(endpoint):
+            protocol, def_port, def_db, def_login, def_pwd = default_params()
+            if endpoint:
+                if len(endpoint.split('@')) == 2:
+                    login = endpoint.split('@')[0]
+                    endpoint = endpoint.split('@')[1]
+                else:
+                    login = self.env.user.login
+                if len(endpoint.split(':')) == 2:
+                    port = int(endpoint.split(':')[1])
+                    endpoint = endpoint.split(':')[0]
+                else:
+                    port = def_port
+            return protocol, port, def_db, login, def_pwd
+
+        def connect_params(endpoint):
+            protocol, port, def_db, login, def_pwd = parse_endpoint(endpoint)
+            db = self.client_key or def_db
+            passwd = self.password or def_pwd
+            return protocol, endpoint, port, db, login, passwd
+
+        def rpc_connect(endpoint, protocol, port):
+            try:
+                if self.method == 'JSON':
+                    cnx = odoorpc.ODOO(endpoint,
+                                       'jsonrpc',
+                                       port)
+                elif self.method == 'XML':
+                    cnx = oerplib.OERP(server=endpoint,
+                                       protocol='xmlrpc',
+                                       port=port)
+            except BaseException:  # pragma: no cover
+                cnx = False
+            return cnx
+
+        def rpc_login(cnx, db=None, login=None, passwd=None):
+            try:
+                session = cnx.login(database=db,
+                                    user=login,
+                                    passwd=passwd)
+            except BaseException:  # pragma: no cover
+                session = False
+            return cnx, session
+
+        protocol, endpoint, port, db, login, passwd = connect_params(endpoint)
+        return rpc_login(
+            rpc_connect(endpoint, protocol, port),
+            db=db,
+            login=login,
+            passwd=passwd)
+
     @api.multi
     def write(self, vals):
         self.env['ir.model.synchro.cache'].clean_cache()
@@ -166,34 +245,250 @@ class SynchroChannelModel(models.Model):
         string='Model mapping'
     )
 
-    @api.multi
-    def write(self, vals):
-        self.env['ir.model.synchro.cache'].clean_cache()
-        return super(SynchroChannelModel, self).write(vals)
+    def select_by_domain(self, vals, domain):
+        # TODO
+        return vals
 
-    def build_odoo_synchro_model(self, channel_id, ext_model):
+    def get_csv_response(
+            self, cnx, session, ext_id=False, domain=None, mode=None):
+        """In CSV session is the dirname"""
+        dirname = session
+        ext_model = self.counterpart_name
+        model = self.name
+        file_csv = os.path.expanduser(
+            os.path.join(dirname, ext_model + '.csv'))
+        self.env['ir.model.synchro'].logmsg('info',
+            '>>> %(model)s.get_csv_response(cnx,session,id=%(xid)s,%(csv)s)',
+            model=model, ctx={'xid': ext_id, 'csv': file_csv})
         cache = self.env['ir.model.synchro.cache']
-        if cache.get_attr(channel_id, 'IDENTITY') != 'odoo':
-            return
-        if ext_model.startswith('ir.'):
-            return
-        if self.search([('name', '=', ext_model),
-                        ('synchro_channel_id', '=', channel_id)]):
+        ext_id_name = cache.get_model_attr(
+            self.synchro_channel_id.id, model, 'KEY_ID', default='id')
+        if not os.path.isfile(file_csv):
+            return {} if ext_id else []
+        vals = []
+        with open(file_csv, 'rb') as fd:
+            hdr = False
+            reader = csv.DictReader(fd,
+                                    fieldnames=[],
+                                    restkey='undef_name')
+            for line in reader:
+                row = line['undef_name']
+                if not hdr:
+                    row_id = 0
+                    hdr = row
+                    continue
+                row_id += 1
+                row_res = {ext_id_name: row_id}
+                row_billing = {}
+                row_shipping = {}
+                row_contact = {}
+                for ix, value in enumerate(row):
+                    if (isinstance(value, basestring) and
+                            value.isdigit() and
+                            not value.startswith('0')):
+                        value = int(value)
+                    elif (isinstance(value, basestring) and
+                          value.startswith('[') and
+                          value.endswith(']')):
+                        value = eval(value)
+                    if hdr[ix] == ext_id_name:
+                        if not value:
+                            continue
+                        row_id = value
+                    if hdr[ix].startswith('billing_'):
+                        row_billing[hdr[ix]] = value
+                    elif hdr[ix].startswith('shipping_'):
+                        row_shipping[hdr[ix]] = value
+                    elif hdr[ix].startswith('contact_'):
+                        row_contact[hdr[ix]] = value
+                    else:
+                        row_res[hdr[ix]] = value
+                if row_billing:
+                    if model == 'res.partner.invoice':
+                        row_res = row_billing
+                    else:
+                        row_res['billing'] = row_billing
+                if row_shipping:
+                    if model == 'res.partner.shipping':
+                        for nm in ('customer_shipping_id', 'customer_id'):
+                            row_shipping[nm] = row_res[nm]
+                        row_res = row_shipping
+                    else:
+                        row_res['shipping'] = row_shipping
+                if row_contact:
+                    row_res['contact'] = row_contact
+                if (ext_id and not mode) and row_res[ext_id_name] != ext_id:
+                    continue
+                if ext_id:
+                    vals = row_res
+                    break
+                vals.append(row_res)
+        return self.select_by_domain(vals, domain)
+
+    def get_vg7_json_response(
+            self, cnx, session, ext_id=False, domain=None, mode=None):
+        """In JSON cnx contains the headers and session is the endpoint"""
+        ext_model = self.counterpart_name
+        headers = cnx
+        endpoint = session
+        if (ext_id and mode) or not ext_id:
+            url = os.path.join(endpoint, ext_model)
+        else:
+            url = os.path.join(endpoint, ext_model, str(ext_id))
+        try:
+            response = requests.get(url, headers=headers, verify=False)
+        except BaseException:
+            return getattr(response, 'status_code', 'N/A')
+        if response:
+            return self.select_by_domain(response.json(), domain)
+        return False
+
+    def get_odoo_rpc_response(
+            self, cnx, session, ext_id=False, domain=None, mode=None):
+        ext_model = self.counterpart_name
+        domain = domain or []
+        if (ext_id and mode) or not ext_id:
+            domain.append((mode, '=', ext_id))
+            try:
+                vals = cnx.search(ext_model, domain)
+            except BaseException:
+                vals = []
+        else:
+            try:
+                vals = cnx.browse(ext_model, ext_id)
+            except BaseException:
+                vals = {}
+        return vals
+
+    def get_counterpart_response(self, ext_id=False, domain=None, mode=None):
+        """Get data from counterpart
+        :param ext_id = counterpart id to read
+        :param domain = domain to search for
+        :param mode = parent_id field name, if get child records
+        """
+
+        def sort_data(datas):
+            # Single record
+            if not isinstance(datas, (list, tuple)):
+                return datas
+            ixs = {}
+            for item in datas:
+                if isinstance(item, dict):
+                    id = item.get('id')
+                    if not id:
+                        return datas
+                    ixs[int(id)] = item
+            datas = []
+            for id in sorted(ixs.keys()):
+                datas.append(ixs[id])
+            return datas
+
+        cache = self.env['ir.model.synchro.cache']
+        cache.open(channel=self.synchro_channel_id, model=self.name)
+        if not self.counterpart_name:
+            self.env['ir.model.synchro'].logmsg('error',
+                'Model %s not managed by external partner!', model=self.name)
+            return {}
+        channel = self.synchro_channel_id
+        if channel.method == 'CSV':
+            endpoint = channel.exchange_path
+        elif channel.method in ('JSON', 'XML', 'PEC', 'FTP'):
+            endpoint = channel.counterpart_url
+        else:
+            endpoint = False
+        if not endpoint:
+            self.env['ir.model.synchro'].logmsg('error',
+                'Channel %(chid)s without connection parameters!',
+                ctx={'chid': channel.id})
+            return {}
+        cnx = cache.get_attr(channel.id, 'CNX')
+        session = cache.get_attr(channel.id, 'SESSION')
+        method = channel.method.lower()
+        super_method = 'rpc' if channel.method in ('XML', 'JSON') else 'gen'
+        if not cnx or not session:
+            for fct in (
+                    '%s_%s_session' % (channel.identity, method),
+                    '%s_session' % method,
+                    '%s_%s_session' % (channel.identity, super_method),
+                    '%s_session' % super_method,
+            ):
+                if hasattr(channel, fct):
+                    self.env['ir.model.synchro'].logmsg('debug',
+                        '>>> %(model)s.%(fct)s(%(ep)s):',
+                        model=self.name,
+                        ctx={'fct': fct, 'ep': endpoint})
+                    cnx, session = getattr(channel, fct)(endpoint)
+                    cache.set_attr(channel.id, 'CNX', cnx)
+                    cache.set_attr(channel.id, 'SESSION', session)
+                    break
+        vals = False
+        for fct in (
+                'get_%s_%s_response' % (channel.identity, method),
+                'get_%s_response' % method,
+                'get_%s_%s_response' % (channel.identity, super_method),
+                'get_%s_response' % super_method,
+        ):
+            if hasattr(self, fct):
+                self.env['ir.model.synchro'].logmsg('debug',
+                    '>>> %(model)s.%(fct)s(cnx,session,%(xid)s):',
+                    model=self.name,
+                    ctx={'fct': fct, 'xid': ext_id})
+                vals = getattr(self, fct)(
+                    cnx, session, ext_id=ext_id, domain=domain, mode=mode)
+                break
+        if not isinstance(vals, dict) and not isinstance(vals, (list, tuple)):
+            self.env['ir.model.synchro'].logmsg('error',
+                'Response error %(sts)s (%(chid)s,%(url)s,%(pfx)s)',
+                model=self.name, ctx={
+                    'sts': vals,
+                    'url': channel.counterpart_url,
+                    'pfx': channel.prefix,
+                })
+            cache.clean_cache(channel_id=channel.id, model=channel.name)
+            vals = {} if (ext_id and not mode) else []
+        return sort_data(vals)
+
+    def build_odoo_synchro_model(self, channel_id, ext_model, model=None):
+        cache = self.env['ir.model.synchro.cache']
+        if (cache.get_attr(channel_id, 'IDENTITY') != 'odoo' or
+                (ext_model and ext_model.startswith('ir.')) or
+                (model and model.startswith('ir.'))):
             return
         ir_synchro_model = self.env['ir.model.synchro']
         ext_odoo_ver = cache.get_attr(channel_id, 'ODOO_FVER')
-        actual_model = ext_model
-        if ext_odoo_ver:
-            tnldict = ir_synchro_model.get_tnldict(channel_id)
-            actual_model = transodoo.translate_from_to(
-                tnldict, 'ir.model', ext_model,
-                ext_odoo_ver, release.major_version,
-                type='model')
-            if ext_model == actual_model:
+        if not ext_model and model:
+            if self.search([('name', '=', model),
+                            ('synchro_channel_id', '=', channel_id)]):
+                return
+            ext_model = actual_model = model
+            if ext_odoo_ver:
+                tnldict = ir_synchro_model.get_tnldict(channel_id)
+                ext_model = transodoo.translate_from_to(
+                    tnldict, 'ir.model', ext_model,
+                    ext_odoo_ver, release.major_version,
+                    type='model')
+                if ext_model == model:
+                    ext_model = transodoo.translate_from_to(
+                        tnldict, 'ir.model', ext_model,
+                        ext_odoo_ver, release.major_version,
+                        type='merge')
+        else:
+            if self.search([('counterpart_name', '=', ext_model),
+                            ('synchro_channel_id', '=', channel_id)]):
+                return
+            actual_model = ext_model
+            if ext_odoo_ver:
+                tnldict = ir_synchro_model.get_tnldict(channel_id)
                 actual_model = transodoo.translate_from_to(
                     tnldict, 'ir.model', ext_model,
                     ext_odoo_ver, release.major_version,
                     type='model')
+                if actual_model == ext_model:
+                    actual_model = transodoo.translate_from_to(
+                        tnldict, 'ir.model', ext_model,
+                        ext_odoo_ver, release.major_version,
+                        type='model')
+
         field_uname, skeys = cache.get_default_keys(actual_model)
         vals = {
             'synchro_channel_id': channel_id,
@@ -206,6 +501,11 @@ class SynchroChannelModel(models.Model):
         self.create(vals)
         # commit table to avoid another I/O if next operation fails
         self.env.cr.commit()  # pylint: disable=invalid-commit
+
+    @api.multi
+    def write(self, vals):
+        self.env['ir.model.synchro.cache'].clean_cache()
+        return super(SynchroChannelModel, self).write(vals)
 
 
 class SynchroChannelModelFields(models.Model):

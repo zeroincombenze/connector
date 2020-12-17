@@ -71,9 +71,9 @@ class ResPartner(models.Model):
         return text
 
     @api.model
-    def rephase_fields(self, vals, ext_ref):
+    def shirt_vals(self, vals, ext_ref):
         self.env['ir.model.synchro'].logmsg('debug',
-            '>>> rephase(%s,%s)' % (vals, ext_ref))
+            '>>> res.partner.shirt_vals(%s,%s)' % (vals, ext_ref))
         prefix1 = ext_ref.split(':')[0]
         prefix2 = '%s_' % ext_ref.split(':')[1]
         prefix = '%s:' % prefix1
@@ -138,7 +138,7 @@ class ResPartner(models.Model):
                     diff = False
                     if ext_ref in vals:
                         vals[':customer'] = True
-                        vals[ext_ref] = self.rephase_fields(
+                        vals[ext_ref] = self.shirt_vals(
                             vals[ext_ref], ext_ref)
                         if ext_ref == 'vg7:shipping':
                             vals[ext_ref]['type'] = 'delivery'
@@ -228,6 +228,8 @@ class ResPartner(models.Model):
     def assure_values(self, vals, rec):
         actual_model = 'res.partner'
         actual_cls = self.env[actual_model]
+        if rec and 'type' not in vals:
+            vals['type'] = rec.type
         if ('codice_destinatario' in vals and
                 not vals['codice_destinatario']):
             del vals['codice_destinatario']
@@ -240,11 +242,9 @@ class ResPartner(models.Model):
             if not vals['codice_destinatario']:
                 del vals['electronic_invoice_subjected']
                 del vals['codice_destinatario']
-        if ('ipa_code' in vals and
-                not vals['ipa_code']):
+        if 'ipa_code' in vals and not vals['ipa_code']:
             del vals['ipa_code']
-        if (vals.get('is_pa') and
-                not vals.get('ipa_code')):
+        if vals.get('is_pa') and not vals.get('ipa_code'):
             if rec and rec.ipa_code:
                 vals['ipa_code'] = rec.ipa_code.strip()
             else:
@@ -254,13 +254,6 @@ class ResPartner(models.Model):
                 del vals['ipa_code']
         if vals.get('individual'):
             vals['is_company'] = True
-        if vals.get('rea_code'):
-            ids = actual_cls.search([('rea_code', '=', vals['rea_code'])])
-            if ids:
-                if not rec or ids[0] != rec.id:
-                    _logger.info(
-                        'Duplicate REA Code %s' % vals['rea_code'])
-                    del vals['rea_code']
         if vals.get('type') in ('delivery', 'invoice'):
             parent = False
             if vals.get('parent_id'):
@@ -273,26 +266,47 @@ class ResPartner(models.Model):
                 parent = rec.parent_id
             if parent and not isinstance(parent, (int, long)):
                 empty = True
-                for nm in ('name', 'street', 'city', 'vat',
-                           'codice_destinatario', 'phone', 'email'):
+                for nm in ('name', 'street', 'city', 'vat', 'fiscalcode',
+                           'rea_code', 'codice_destinatario', 'phone',
+                           'email'):
                     if vals.get(nm) and vals[nm] != parent[nm]:
                         empty = False
                         break
                 if empty:
-                    for nm in ('state_id',):
+                    for nm in ('country_id', 'state_id'):
                         if (vals.get(nm) and parent[nm]
                                 and vals[nm] != parent[nm].id):
                             empty = False
                             break
                 if empty:
-                    vals = {}
-                elif (vals.get('name', '') and
-                      (vals.get('name') == parent.name or
-                       vals.get('name', '').startswith('Unknown'))):
+                    for nm in ('vat', 'fiscalcode', 'rea_code',
+                               'codice_destinatario'):
+                        if nm in vals:
+                            vals[nm] = False
+                if (vals.get('name') and
+                        (vals.get('name') == parent.name or
+                         vals.get('name', '').startswith('Unknown'))):
                     vals['name'] = False
+            if vals and (not rec or not rec.name):
+                vals['is_company'] = False
+            if parent and not isinstance(parent, (int, long)):
+                for nm in ('vat', 'rea_code', 'fiscalcode',
+                           'codice_destinatario'):
+                    # Odoo bug !? vat is set from parent by Odoo core
+                    if not vals.get(nm) or (rec and rec[nm] == parent[nm]):
+                        vals[nm] = False
+                    elif nm in vals and vals[nm] == parent[nm]:
+                        del vals[nm]
         else:
             if not vals.get('name') and not rec:
                 vals['name'] = 'Unknown'
+        if vals.get('rea_code'):
+            ids = actual_cls.search([('rea_code', '=', vals['rea_code'])])
+            if ids:
+                if not rec or ids[0] != rec.id:
+                    _logger.info(
+                        'Duplicate REA Code %s' % vals['rea_code'])
+                    del vals['rea_code']
         return vals
 
     @api.model
@@ -318,7 +332,7 @@ class ResPartnerShipping(models.Model):
     @api.model
     def synchro(self, vals, disable_post=None,
                 only_minimal=None, no_deep_fields=None):
-        vals = self.env['res.partner'].rephase_fields(
+        vals = self.env['res.partner'].shirt_vals(
             vals, 'vg7:shipping')
         vals[':type'] = 'delivery'
         return self.env['ir.model.synchro'].synchro(
@@ -335,7 +349,7 @@ class ResPartnerInvoice(models.Model):
     @api.model
     def synchro(self, vals, disable_post=None,
                 only_minimal=None, no_deep_fields=None):
-        vals = self.env['res.partner'].rephase_fields(
+        vals = self.env['res.partner'].shirt_vals(
             vals, 'vg7:billing')
         vals[':type'] = 'invoice'
         return self.env['ir.model.synchro'].synchro(

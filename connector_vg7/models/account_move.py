@@ -28,6 +28,9 @@ class AccountMove(models.Model):
     oe7_id = fields.Integer('Odoo7 ID', copy=False)
     oe8_id = fields.Integer('Odoo8 ID', copy=False)
     oe10_id = fields.Integer('Odoo10 ID', copy=False)
+    original_state = fields.Char('Original Status', copy=False)
+    timestamp = fields.Datetime('Timestamp', copy=False, readonly=True)
+    errmsg = fields.Char('Error message', copy=False, readonly=True)
 
     @api.model_cr_context
     def _auto_init(self):
@@ -49,6 +52,7 @@ class AccountMoveLine(models.Model):
     oe7_id = fields.Integer('Odoo7 ID', copy=False)
     oe8_id = fields.Integer('Odoo8 ID', copy=False)
     oe10_id = fields.Integer('Odoo10 ID', copy=False)
+    to_delete = fields.Boolean('Record to delete')
 
     @api.model_cr_context
     def _auto_init(self):

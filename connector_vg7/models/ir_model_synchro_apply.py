@@ -98,18 +98,23 @@ class IrModelSynchroApply(models.Model):
         if ext_ref in vals and loc_name != ext_ref:
             vals[loc_name] = vals[ext_ref]
             del vals[ext_ref]
-        if ('lastname' in vals and 'firstname' in vals and
-                (vals['lastname'] or vals['firstname'])):
-            if not vals.get('name'):
-                vals['name'] = '%s %s' % (
-                    vals['lastname'] or '', vals['firstname'] or '')
-                if not vals['name'].strip():
+        if vals.get('lastname') or vals.get('firstname'):
+            if not vals.get('name') or vals.get('individual'):
+                # TODO> xx python bug?
+                xx = ('%s %s %s' % (
+                    vals.get('name', ''),
+                    vals.get('lastname', ''),
+                    vals.get('firstname', ''))).strip()
+                vals['name'] = xx.replace('  ',' ')
+                if not vals['name'] and vals.get('individual'):
                     vals = self.apply_set_tmp_name(
                         channel_id, vals, 'name', ext_ref, loc_ext_id_name)
                 vals['is_company'] = True
                 vals['individual'] = True
-            del vals['lastname']
-            del vals['firstname']
+            if 'lastname' in vals:
+                del vals['lastname']
+            if 'firstname'in vals:
+                del vals['firstname']
         return vals
 
     def apply_vat(self, channel_id, vals, loc_name,
@@ -373,7 +378,9 @@ class IrModelSynchroApply(models.Model):
     def apply_set_order_state(self, channel_id, vals, loc_name,
                               ext_ref, loc_ext_id_name, default=None, ctx=None):
         if vals.get(ext_ref):
-            if vals.get(ext_ref) and vals[ext_ref].isdigit():
+            if (vals.get(ext_ref) and
+                    isinstance(vals[ext_ref], basestring) and
+                    vals[ext_ref].isdigit()):
                 state = {
                     1: 'draft',
                     2: 'sale',
@@ -399,7 +406,7 @@ class IrModelSynchroApply(models.Model):
         return vals
 
     ############################
-    # ODOO MIGRATION FUNCTIONS #
+    # ODOO MIGRATION FUNCTIONS #fstat
     ############################
     def apply_oe_account_tax_amount(self, channel_id, vals, loc_name, ext_ref,
                                     loc_ext_id_name, default=None, ctx=None):

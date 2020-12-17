@@ -29,7 +29,7 @@
         <field name="name">name</field>
         <field name="counterpart_name">description</field>
         <field name="apply">set_tmp_name()</field>
-        <field name="protect">0</field>
+        <field name="protect">2</field>
         <field name="model_id" ref="account_tax"/>
     </record>
 
@@ -37,7 +37,7 @@
         <field name="name">description</field>
         <field name="counterpart_name">code</field>
         <field name="apply">set_tmp_name()</field>
-        <field name="protect">0</field>
+        <field name="protect">2</field>
         <field name="model_id" ref="account_tax"/>
     </record>
 
