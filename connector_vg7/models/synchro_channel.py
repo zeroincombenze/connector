@@ -343,6 +343,59 @@ class SynchroChannelModel(models.Model):
             return self.select_by_domain(response.json(), domain)
         return False
 
+    def browse_odoo_rec(self, cnx, ext_model, ext_id):
+
+        def expand_many(rec, ext_field, vals):
+            try:
+                vals[ext_field] = [x.id for x in rec[ext_field]]
+            except BaseException:
+                if ext_field in vals:
+                    del vals[ext_field]
+            return vals
+
+        try:
+            rec = cnx.browse(ext_model, ext_id)
+        except:
+            rec = False
+        cache = self.env['ir.model.synchro.cache']
+        actual_model = self.name
+        vals = {}
+        if rec:
+            for ext_field in cache.get_model_attr(
+                    self.synchro_channel_id.id, ext_model, 'EXT_FIELDS'):
+                if not hasattr(rec, ext_field):
+                    continue
+                loc_name = cache.get_model_field_attr(
+                    self.synchro_channel_id.id,
+                    ext_model,
+                    ext_field,
+                    'EXT_FIELDS',
+                    default=ext_field)
+                if loc_name.startswith('.'):
+                    loc_name = ''
+                if not loc_name:
+                    continue
+                if isinstance(rec[ext_field], (bool, int, long)):
+                    vals[ext_field] = rec[ext_field]
+                elif cache.get_struct_model_field_attr(
+                        actual_model, loc_name, 'ttype') == 'many2one':
+                    try:
+                        vals[ext_field] = rec[ext_field].id
+                    except BaseException:
+                        vals[ext_field] = rec[ext_field]
+                elif cache.get_struct_model_field_attr(
+                        actual_model, loc_name, 'ttype') in (
+                        'one2many', 'many2many'):
+                    vals = expand_many(rec, ext_field, vals)
+                elif isinstance(rec[ext_field], basestring):
+                    vals[ext_field] = rec[ext_field].encode(
+                        'utf-8').decode('utf-8')
+                else:
+                    vals[ext_field] = rec[ext_field]
+            if vals:
+                vals['id'] = ext_id
+        return vals
+
     def get_odoo_rpc_response(
             self, cnx, session, ext_id=False, domain=None, mode=None):
         ext_model = self.counterpart_name
@@ -354,10 +407,11 @@ class SynchroChannelModel(models.Model):
             except BaseException:
                 vals = []
         else:
-            try:
-                vals = cnx.browse(ext_model, ext_id)
-            except BaseException:
-                vals = {}
+            # try:
+            #     vals = cnx.browse(ext_model, ext_id)
+            # except BaseException:
+            #     vals = {}
+            vals = self.browse_odoo_rec(cnx, ext_model, ext_id)
         return vals
 
     def get_counterpart_response(self, ext_id=False, domain=None, mode=None):

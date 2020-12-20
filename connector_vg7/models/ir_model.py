@@ -139,8 +139,10 @@ Return code:
     -6: unrecognized channel
     -7: no data supplied
     -8: unrecognized external table
-    -9: Unaccettable burst record
+    -9: Record already in queue
    -10: Cannot update record state
+   -11: Unmanaged table
+   -12: Internal error
   -100: if return code < -100 means error on child records
 """
 import logging
@@ -512,7 +514,7 @@ class IrModelSynchro(models.Model):
                     try:
                         rec.action_invoice_cancel()
                         rec.action_invoice_draft()
-                    except BaseException, e:
+                    except BaseException as e:
                         self.env.cr.rollback()  # pylint: disable=invalid-commit
                         self.logmsg('error',
                             'Error %(e) in %(model)s.set_state_to_draft()',
@@ -520,7 +522,7 @@ class IrModelSynchro(models.Model):
                 elif rec.state == 'cancel':
                     try:
                         rec.action_invoice_draft()
-                    except BaseException, e:
+                    except BaseException as e:
                         self.env.cr.rollback()  # pylint: disable=invalid-commit
                         self.logmsg('error',
                             'Error %(e) in %(model)s.set_state_to_draft()',
@@ -538,7 +540,7 @@ class IrModelSynchro(models.Model):
                     try:
                         rec.action_cancel()
                         rec.action_draft()
-                    except BaseException, e:
+                    except BaseException as e:
                         self.env.cr.rollback()  # pylint: disable=invalid-commit
                         self.logmsg('error',
                             'Error %(e) in %(model)s.set_state_to_draft()',
@@ -546,7 +548,7 @@ class IrModelSynchro(models.Model):
                 elif rec.state == 'cancel':
                     try:
                         rec.action_draft()
-                    except BaseException, e:
+                    except BaseException as e:
                         self.env.cr.rollback()  # pylint: disable=invalid-commit
                         self.logmsg('error',
                             'Error %(e) in %(model)s.set_state_to_draft()',
@@ -565,7 +567,7 @@ class IrModelSynchro(models.Model):
                     try:
                         rec.button_cancel()
                         rec.button_draft()
-                    except BaseException, e:
+                    except BaseException as e:
                         self.env.cr.rollback()  # pylint: disable=invalid-commit
                         self.logmsg('error',
                             'Error %(e) in %(model)s.set_state_to_draft()',
@@ -573,7 +575,7 @@ class IrModelSynchro(models.Model):
                 elif rec.state == 'cancel':
                     try:
                         rec.button_draft()
-                    except BaseException, e:
+                    except BaseException as e:
                         self.env.cr.rollback()  # pylint: disable=invalid-commit
                         self.logmsg('error',
                             'Error %(e) in %(model)s.set_state_to_draft()',
@@ -586,13 +588,13 @@ class IrModelSynchro(models.Model):
                         model=model, rec=rec)
                 except IOError:
                     self.env.cr.rollback()  # pylint: disable=invalid-commit
-                    errc = -2
+                    errc = -3
         elif model == 'account.move':
             if rec:
                 if rec.state == 'posted':
                     try:
                         rec.button_cancel()
-                    except BaseException, e:
+                    except BaseException as e:
                         self.env.cr.rollback()  # pylint: disable=invalid-commit
                         self.logmsg('error',
                             'Error %(e) in %(model)s.set_state_to_draft()',
@@ -619,7 +621,7 @@ class IrModelSynchro(models.Model):
             elif rec.original_state in ('open', 'paid'):
                 try:
                     rec.action_invoice_open()
-                except BaseException, e:
+                except BaseException as e:
                     self.env.cr.rollback()  # pylint: disable=invalid-commit
                     self.logmsg('error',
                         'Error %(e) in %(model)s.set_actual_state()',
@@ -630,7 +632,7 @@ class IrModelSynchro(models.Model):
             elif rec.original_state == 'cancel':
                 try:
                     rec.action_invoice_cancel()
-                except BaseException, e:
+                except BaseException as e:
                     self.env.cr.rollback()  # pylint: disable=invalid-commit
                     self.logmsg('error',
                         'Error %(e) in %(model)s.set_actual_state()',
@@ -652,7 +654,7 @@ class IrModelSynchro(models.Model):
                     rec._compute_commission_total()
                 try:
                     rec.action_confirm()
-                except BaseException, e:
+                except BaseException as e:
                     self.env.cr.rollback()  # pylint: disable=invalid-commit
                     self.logmsg('error',
                         'Error %(e) in %(model)s.set_actual_state()',
@@ -661,7 +663,7 @@ class IrModelSynchro(models.Model):
             elif rec.original_state == 'cancel':
                 try:
                     rec.action_cancel()
-                except BaseException, e:
+                except BaseException as e:
                     self.env.cr.rollback()  # pylint: disable=invalid-commit
                     self.logmsg('error',
                         'Error %(e) in %(model)s.set_actual_state()',
@@ -681,7 +683,7 @@ class IrModelSynchro(models.Model):
                 rec._amount_all()
                 try:
                     rec.button_confirm()
-                except BaseException, e:
+                except BaseException as e:
                     self.env.cr.rollback()  # pylint: disable=invalid-commit
                     self.logmsg('error',
                         'Error %(e) in %(model)s.set_actual_state()',
@@ -690,7 +692,7 @@ class IrModelSynchro(models.Model):
             elif rec.original_state == 'cancel':
                 try:
                     rec.button_cancel()
-                except BaseException, e:
+                except BaseException as e:
                     self.env.cr.rollback()  # pylint: disable=invalid-commit
                     self.logmsg('error',
                         'Error %(e) in %(model)s.set_actual_state()',
@@ -699,7 +701,7 @@ class IrModelSynchro(models.Model):
         elif model == 'stock.picking.package.preparation':
             try:
                 rec.set_done()
-            except BaseException, e:
+            except BaseException as e:
                 self.env.cr.rollback()  # pylint: disable=invalid-commit
                 self.logmsg('error',
                     'Error %(e) in %(model)s.set_actual_state()',
@@ -716,7 +718,7 @@ class IrModelSynchro(models.Model):
             elif rec.original_state == 'posted':
                 try:
                     rec.post()
-                except BaseException, e:
+                except BaseException as e:
                     self.env.cr.rollback()  # pylint: disable=invalid-commit
                     self.logmsg('error',
                         'Error %(e) in %(model)s.set_actual_state()',
@@ -771,11 +773,6 @@ class IrModelSynchro(models.Model):
                     actual_model, 'MODEL_WITH_COMPANY') and
                 ctx.get('company_id')):
             vals['company_id'] = ctx['company_id']
-        # if (key_name != 'country_id' and
-        #         cache.get_struct_model_attr(
-        #             actual_model, 'MODEL_WITH_COUNTRY') and
-        #         ctx.get('country_id')):
-        #     vals['country_id'] = ctx['country_id']
         if suppl_key and key_name != suppl_key and suppl_key in ctx:
             vals[suppl_key] = ctx[suppl_key]
         if (key_name != 'name' and
@@ -1231,7 +1228,7 @@ class IrModelSynchro(models.Model):
                     list_1.append(ext_ref)
                 elif loc_name in ('country_id', 'company_id'):
                     list_2.append(ext_ref)
-                elif loc_name in ('partner_id', 'street', child_ids):
+                elif loc_name in ('partner_id', 'street'):
                     list_3.insert(0, ext_ref)
                 elif loc_name in ('is_company',
                                   'product_uom',
@@ -1264,8 +1261,21 @@ class IrModelSynchro(models.Model):
                     del vals[nm]
             return vals
 
-        self.logmsg('debug', '>>> %(model)s.map_to_internal()',
-            model=xmodel)
+        def found_ref_in_queue(xmodel, vals, ext_ref):
+            self.logmsg('warning',
+                '### Found %(model)s[%(id)s] in queue!',
+                model=xmodel,
+                ctx={'id': vals[ext_ref]})
+            return True
+
+        def store_in_queue(channel_id, cache, loc_name, xmodel, vals):
+            cache.push_id(channel_id, xmodel, actual_model,
+                ext_id=vals[loc_name])
+            self.logmsg('debug',
+                'Push %(model)s[%(id)s] in queue!',
+                model=xmodel,
+                ctx={'id': vals[loc_name]})
+
         cache = self.env['ir.model.synchro.cache']
         actual_model = self.get_actual_model(xmodel, only_name=True)
         loc_ext_id_name = self.get_loc_ext_id_name(channel_id, xmodel)
@@ -1276,6 +1286,12 @@ class IrModelSynchro(models.Model):
         child_ids = cache.get_struct_model_attr(
             actual_model, 'CHILD_IDS', default=False)
         model_child = cache.get_struct_model_attr(actual_model, 'MODEL_CHILD')
+        self.logmsg('debug',
+            '>>> %(model)s.map_to_internal() %(a)s->%(c)s '
+            'xid=%(d)s/%(x)s->%(h)s',
+            model=xmodel, ctx={
+                'a': actual_model, 'c': model_child, 'h': child_ids,
+                'd': def_loc_ext_id_name, 'x': loc_ext_id_name})
         parent_child_mode = 'A' if child_ids and model_child else ''
         vals = check_4_double_field_id(vals)
         field_list, only_internal = priority_fields(
@@ -1285,8 +1301,8 @@ class IrModelSynchro(models.Model):
         ref_in_queue = False
         for ext_ref in field_list:
             self.logmsg('debug',
-                '>>>   for "%(model)s.%(name)s" in field_list:',
-                model=xmodel, ctx={'name': ext_ref})
+                '>>>   for "%(model)s.%(name)s"/"%(v)s" in field_list:',
+                model=xmodel, ctx={'name': ext_ref, 'v': vals.get(ext_ref)})
             if not cache.is_struct(ext_ref):
                 continue
             ext_name, loc_name, is_foreign = self.name_from_ref(
@@ -1295,6 +1311,13 @@ class IrModelSynchro(models.Model):
                 channel_id, xmodel, loc_name, ext_name, is_foreign,
                 ttype=cache.get_struct_model_field_attr(
                     actual_model, ext_name, 'ttype'))
+            self.logmsg('debug',
+                '###       /%(x)s -> loc:%(l)s==%(i)s is_f:%(f)s '
+                'def:%(d)s apply:%(a)s/',
+                model=xmodel,
+                ctx={'x': ext_ref, 'l': loc_name, 'f': is_foreign,
+                     'd': default, 'a': apply4, 'i': loc_ext_id_name})
+
             if not loc_name or not cache.get_struct_model_attr(
                     actual_model, loc_name):
                 if is_foreign and apply4:
@@ -1306,6 +1329,17 @@ class IrModelSynchro(models.Model):
                         '### Field <%(x)s> does not exist in model %(model)s',
                         model=xmodel,
                         ctx={'x': ext_ref})
+                if loc_name == def_loc_ext_id_name:
+                    if xmodel == actual_model:
+                        if cache.id_is_in_cache(
+                                channel_id, xmodel, actual_model,
+                                ext_id=vals[ext_ref]):
+                            ref_in_queue = found_ref_in_queue(
+                                xmodel, vals, ext_ref)
+                            break
+                        else:
+                            store_in_queue(
+                                channel_id, cache, ext_ref, xmodel, vals)
                 vals = rm_ext_value(vals, loc_name, ext_name, ext_ref,
                     is_foreign)
                 continue
@@ -1361,23 +1395,21 @@ class IrModelSynchro(models.Model):
                 continue
             elif is_foreign:
                 # Field like <vg7_id> with external ID in local DB
-                if loc_name == loc_ext_id_name:
+                if loc_name == def_loc_ext_id_name:
                     vals[ext_ref] = self.get_loc_ext_id_value(
                         channel_id, xmodel, vals[ext_ref])
-                    vals = rm_ext_value(vals, loc_name, ext_name, ext_ref,
-                        is_foreign)
                     if xmodel == actual_model:
                         if cache.id_is_in_cache(
                                 channel_id, xmodel, actual_model,
-                                ext_id=vals[loc_name]):
-                            ref_in_queue = True
-                            self.logmsg('warning',
-                                'Found %(model)s[%(id)s] in queue!',
-                                model=xmodel,
-                                ctx={'id': vals[loc_name]})
+                                ext_id=vals[ext_ref]):
+                            ref_in_queue = found_ref_in_queue(
+                                xmodel, vals, ext_ref)
+                            break
                         else:
-                            cache.push_id(channel_id, xmodel, actual_model,
-                                ext_id=vals[loc_name])
+                            store_in_queue(
+                                channel_id, cache, ext_ref, xmodel, vals)
+                    vals = rm_ext_value(vals, loc_name, ext_name, ext_ref,
+                        is_foreign)
                     continue
                 # If counterpart partner supplies both
                 # local and external values, just process local value
@@ -1389,14 +1421,12 @@ class IrModelSynchro(models.Model):
                     if cache.id_is_in_cache(
                             channel_id, xmodel, actual_model,
                             loc_id=vals[ext_ref]):
-                        ref_in_queue = True
-                        self.logmsg('warning',
-                            'Found %(model)s[%(id)s] in queue!',
-                            model=xmodel,
-                            ctx={'id': vals[ext_ref]})
+                        ref_in_queue = found_ref_in_queue(
+                            xmodel, vals, ext_ref)
+                        break
                     else:
-                        cache.push_id(channel_id, xmodel, actual_model,
-                            loc_id=vals[ext_ref])
+                        store_in_queue(
+                            channel_id, cache, ext_ref, xmodel, vals)
                 continue
             if cache.get_struct_model_field_attr(
                     actual_model, loc_name, 'ttype') in (
@@ -1490,7 +1520,6 @@ class IrModelSynchro(models.Model):
                             if (ttype == 'char' and
                                     'apply_set_tmp_name' not in fcts):
                                 fcts.append('apply_set_tmp_name')
-                            # elif (loc_name in ('country_id', 'company_id') and
                             elif (loc_name in (suppl_key, 'company_id') and
                                   'apply_get_global' not in fcts):
                                 fcts.append('apply_get_global')
@@ -1583,12 +1612,6 @@ class IrModelSynchro(models.Model):
                         else:
                             domain = []
                             break
-                    # elif xmodel == 'account.tax' and key == 'amount':
-                    #     if vals[key]:
-                    #     domain.append((key, '=', os0.b(vals[key])))
-                    #     else:
-                    #         domain = []
-                    #         break
                     else:
                         domain.append((key, '=', os0.b(vals[key])))
                 if domain:
@@ -1618,7 +1641,7 @@ class IrModelSynchro(models.Model):
                     model=actual_model, rec=rec)
             return rec.id, rec
         if found_valid_key:
-            return -1, None
+            return -9, None
         return -7, None
 
     def get_xmlrpc_response(
@@ -2000,6 +2023,16 @@ class IrModelSynchro(models.Model):
         if not child_ids and not model_child:
             _logger.error('!-5! Invalid structure of %s!' % xmodel)
             return -5
+        if not self.env['synchro.channel.model'].search(
+                [('synchro_channel_id', '=', channel_id),
+                 ('name', '=', model_child)]):
+            if cache.get_attr(channel_id, 'IDENTITY') == 'odoo':
+                self.env[
+                    'synchro.channel.model'].build_odoo_synchro_model(
+                    channel_id, model_child)
+            else:
+                _logger.error('!-11! Unmanaged model %s!' % model_child)
+                return -11
         cache.open(model=model_child)
         # Retrieve header id field
         parent_id_name = cache.get_struct_model_attr(model_child, 'PARENT_ID')
@@ -2043,12 +2076,12 @@ class IrModelSynchro(models.Model):
                     return id
                 # commit every table to avoid too big transaction
                 self.env.cr.commit()  # pylint: disable=invalid-commit
-            except BaseException, e:
+            except BaseException as e:
                 self.env.cr.rollback()  # pylint: disable=invalid-commit
                 self.logmsg('warning',
                     'Error %(e) pulling from %(model)s.%(id)s',
                     model=model_child, ctx={'e': e, 'id': item})
-                return -1
+                return -12
         self.commit(self.env[actual_model], parent_id)
         return ext_id
 
@@ -2059,6 +2092,10 @@ class IrModelSynchro(models.Model):
         def pop_ref(channel_id, xmodel, actual_model, id, ext_id):
             cache.pop_id(channel_id, xmodel, actual_model,
                 loc_id=id, ext_id=ext_id)
+            self.logmsg('debug',
+                'Pop %(model)s[%(id)s](%(xid)s) from queue!',
+                model=xmodel,
+                ctx={'id': id, 'xid': ext_id})
 
         def protect_against_vg7(xmodel, actual_model, vals):
             # Protect against VG7 mistakes
@@ -2085,9 +2122,14 @@ class IrModelSynchro(models.Model):
             rec = None
             if 'id' in vals:
                 id = vals.pop('id')
-                # rec = actual_cls.search([('id', '=', id)])
-                rec = actual_cls.with_context(
-                    {'lang': self.env.user.lang}).browse(id)
+            elif hasattr(actual_cls, 'get_id_from_ref'):
+                id, xref = actual_cls.get_id_from_ref(vals)
+            if id:
+                try:
+                    rec = actual_cls.with_context(
+                        {'lang': self.env.user.lang}).browse(id)
+                except BaseException:
+                    pass
                 if not rec or rec.id != id:
                     _logger.error('!-3! ID %s does not exist in %s' %
                                   (id, xmodel))
@@ -2173,9 +2215,9 @@ class IrModelSynchro(models.Model):
             channel_id, xmodel, force=True)
         ext_id = vals.get(def_ext_id_name)
         ext_id_name = self.get_loc_ext_id_name(channel_id, xmodel)
-        if xmodel == 'ir.module.module':
+        if ref_in_queue or xmodel == 'ir.module.module':
             pop_ref(channel_id, xmodel, actual_model, False, ext_id)
-            return self.manage_module(vals)
+            return -9
 
         self.logmsg('debug',
             '>>> child: mode="%s" ids=%s model="%s"' % (
@@ -2186,12 +2228,6 @@ class IrModelSynchro(models.Model):
         elif loc_id == 0:
             loc_id, rec = self.bind_record(
                 channel_id, xmodel, vals, constraints)
-        if ref_in_queue:
-            pop_ref(channel_id, xmodel, actual_model, loc_id, ext_id)
-            self.logmsg('info',
-                '### Record %s(%s) found in cache' % (
-                    actual_model, ext_id))
-            return loc_id
         if loc_id == -7 and not has_state:
             pop_ref(channel_id, xmodel, actual_model,False, ext_id)
             self.logmsg('info',
@@ -2256,7 +2292,7 @@ class IrModelSynchro(models.Model):
                     loc_id = rec.id
                     # commit to avoid lost data in recursive write
                     self.env.cr.commit()  # pylint: disable=invalid-commit
-                except BaseException, e:
+                except BaseException as e:
                     self.env.cr.rollback()  # pylint: disable=invalid-commit
                     self.logmsg('warning',
                         '>>> %s.min_create()  # %s' % (
@@ -2271,7 +2307,7 @@ class IrModelSynchro(models.Model):
                             rec = actual_cls.create(vals)
                         # commit to avoid lost data in recursive write
                         self.env.cr.commit()  # pylint: disable=invalid-commit
-                    except BaseException, e:
+                    except BaseException as e:
                         self.env.cr.rollback()  # pylint: disable=invalid-commit
                         self.logmsg('error', '!-1! %(e)s\nvalues=%(val)s',
                             model=xmodel, ctx={'e': e, 'val': saved_vals})
@@ -2295,7 +2331,7 @@ class IrModelSynchro(models.Model):
             try:
                 rec = actual_cls.with_context(
                     {'lang': self.env.user.lang}).browse(loc_id)
-            except BaseException, e:
+            except BaseException as e:
                 self.env.cr.rollback()  # pylint: disable=invalid-commit
                 self.logmsg('error', '!-3! %(e)s\nvalues=%(val)s',
                     model=xmodel, ctx={'e': e, 'val': saved_vals})
@@ -2317,11 +2353,12 @@ class IrModelSynchro(models.Model):
                             '>>> synchro: %s.write(%s)' % (
                                 actual_model, vals))
                         self.logmsg('trace', '', model=actual_model, rec=rec)
-                    except BaseException, e:
+                    except BaseException as e:
                         self.env.cr.rollback()  # pylint: disable=invalid-commit
                         self.logmsg('error', '!-2! %(e)s\nvalues=%(val)s',
                             model=xmodel, ctx={'e': e, 'val': saved_vals})
-                        pop_ref(channel_id, xmodel, actual_model, loc_id, ext_id)
+                        pop_ref(
+                            channel_id, xmodel, actual_model, loc_id, ext_id)
                         return -2
                 elif do_write:
                     self.logmsg('debug',
@@ -2540,7 +2577,7 @@ class IrModelSynchro(models.Model):
             loc_id = item[1]
             if not loc_id or loc_id < 1:
                 self.logmsg('warning',
-                    '### invalid queue(%s,%s)?' % (xmodel, loc_id))
+                    '### invalid %s.synchro_queue[%s]' % (xmodel, loc_id))
                 return
             self.logmsg('info', '>>> queued_pull(%s,%s)?' % (xmodel, loc_id))
             # rec = self.get_actual_model(xmodel).browse(loc_id)
@@ -2690,9 +2727,9 @@ class IrModelSynchro(models.Model):
                             self.logmsg('warning',
                                 '### Deleted record %s[%d] ext=%d' % (
                                     xmodel, id, loc_id))
-                        except BaseException, e:
+                        except BaseException as e:
                             self.env.cr.rollback()  # pylint: disable=invalid-commit
-                            self.logmsg('error', '!-2! %(e)s',
+                            self.logmsg('error', '!-3! %(e)s',
                                 model=xmodel, ctx={'e': e})
 
                         loc_id, loc_ix = get_loc_id(
@@ -2806,6 +2843,15 @@ class IrModelSynchro(models.Model):
                     order='sequence')]
             ctr = 0
             for xmodel in model_list:
+                if not self.env['synchro.channel.model'].search(
+                        [('synchro_channel_id', '=', channel_id),
+                         ('name', '=', xmodel)]):
+                    if identity == 'odoo':
+                        self.env[
+                            'synchro.channel.model'].build_odoo_synchro_model(
+                            channel_id, None, model=xmodel)
+                    else:
+                        continue
                 cache.open(model=xmodel)
                 actual_model = self.get_actual_model(xmodel, only_name=True)
                 if (only_complete and
@@ -2822,10 +2868,6 @@ class IrModelSynchro(models.Model):
                 if remote_ids:
                     datas = evaluate_remote_ids(remote_ids)
                 else:
-                    if not self.env['synchro.channel.model'].search(
-                            [('synchro_channel_id', '=', channel_id),
-                             ('name', '=', xmodel)]):
-                        continue
                     datas = self.get_channel_model(
                         channel_id,
                         xmodel).get_counterpart_response()

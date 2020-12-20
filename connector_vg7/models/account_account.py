@@ -23,8 +23,8 @@ RE_NAME_2_UTYPE = {
     'Acq': 'account.data_account_type_expenses',
     'Banc(a|he|k)': 'account.data_account_type_liquidity',
     'Canoni': 'account.data_account_type_expenses',
-    'Cash': 'account.data_account_type_liquidity',
-    '.*Cassa': 'account.data_account_type_liquidity',
+    'Cash': '_account.data_account_type_liquidity',
+    '.*Cassa': '_account.data_account_type_liquidity',
     'Clienti': 'account.data_account_type_receivable',
     'Crediti.*soci': 'account.data_account_type_receivable',
     'Crediti.*[Cc]lienti': 'account.data_account_type_receivable',
@@ -55,7 +55,7 @@ RE_TYPE_NAME_ID = {
     'Payable': 'account.data_account_type_payable',
     'Debit[oi]( fornitor[ei])?': 'account.data_account_type_payable',
     'Bank and Cash': 'account.data_account_type_liquidity',
-    'Cas(h|sa)': 'account.data_account_type_liquidity',
+    'Cas(h|sa)': '_account.data_account_type_liquidity',
     'Ban(a|he|k)( [eo] [Cc]assa)?': 'account.data_account_type_liquidity',
     'Credit Card': 'account.data_account_type_credit_card',
     'Carta di credito': 'account.data_account_type_credit_card',
@@ -267,24 +267,31 @@ class AccountAccountType(models.Model):
             text = res
         return text
 
-    def assure_values(self, vals, rec):
-        # actual_model = 'account.account.type'
+    def get_id_from_ref(self, vals):
         name = vals.get('name', '')
-        if not name and rec:
-            name = rec.name
-        type_name = False
+        ref_id = False
         if name:
             for regex in RE_TYPE_NAME_ID:
                 if re.search(regex, name):
                     type_name = RE_TYPE_NAME_ID[regex]
-                    vals['id'] = self.env.ref(type_name).id
+                    if not type_name.startswith('_'):
+                        ref_id = self.env.ref(type_name).id
                     break
+        return ref_id, type_name
+
+    def assure_values(self, vals, rec):
+        # actual_model = 'account.account.type'
+        if not vals.get('name') and rec:
+            vals['name'] = rec.name
+        ref_id, type_name = self.get_id_from_ref(vals)
         if type_name:
             if type_name == 'account.data_account_type_receivable':
                 vals['type'] = 'receivable'
             elif type_name == 'account.data_account_type_payable':
                 vals['type'] = 'payable'
-            elif type_name == 'account.data_account_type_liquidity':
+            elif type_name in ('account.data_account_type_liquidity',
+                               '_account.data_account_type_liquidity',
+                               'account.data_account_type_credit_card'):
                 vals['type'] = 'liquidity'
             else:
                 vals['type'] = 'other'
