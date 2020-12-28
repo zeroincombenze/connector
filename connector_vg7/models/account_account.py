@@ -269,7 +269,7 @@ class AccountAccountType(models.Model):
 
     def get_id_from_ref(self, vals):
         name = vals.get('name', '')
-        ref_id = False
+        ref_id = type_name = False
         if name:
             for regex in RE_TYPE_NAME_ID:
                 if re.search(regex, name):
