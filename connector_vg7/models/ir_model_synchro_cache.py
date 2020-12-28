@@ -114,14 +114,19 @@ class IrModelSynchroCache(models.Model):
         'ir.ui.view',
         'ir.values',
         'mail.alias',
+        'mail.followers',
+        'mail.message',
+        'mail.notification',
         'report',
         'res.config',
         'res.font',
+        'res.groups',
         'res.request.link',
         'res.users.log',
         'web_tour',
         'workflow',
     ]
+    SYSTEM_UNMANAGED = []
     TABLE_DEF = {
         'base': {
             # 'company_id': {'required': True},
@@ -285,6 +290,15 @@ class IrModelSynchroCache(models.Model):
     # -------------------------
     # General purpose functions
     # -------------------------
+    @api.model
+    def is_manageable(self, model):
+        return (model not in self.SYSTEM_MODEL_ROOT and
+                model not in self.SYSTEM_MODELS and
+                model not in self.SYSTEM_UNMANAGED)
+    @api.model
+    def set_unmanageable(self, model):
+        self.SYSTEM_UNMANAGED.append(model)
+
     @api.model_cr_context
     def lifetime(self, lifetime):
         return self.CACHE.lifetime(self._cr.dbname, lifetime)
@@ -497,8 +511,9 @@ class IrModelSynchroCache(models.Model):
                 ancillary_line[field] = field in self.get_struct_attr(model)
         for nm in CANDIDATE_KEYS + SUPPLEMENTAL_KEYS:
             if (nm in self.get_struct_attr(model) and
-                    not self.get_struct_model_field_attr(
-                        model, nm, 'readonly')):
+                    (is_child_model or
+                     not self.get_struct_model_field_attr(
+                         model, nm, 'readonly'))):
                 keys = [nm]
                 for kk in ancillary:
                     if ancillary[kk]:
@@ -726,19 +741,19 @@ class IrModelSynchroCache(models.Model):
 
     @api.model_cr_context
     def setup_ext_model(self, channel_id, rec):
-        ## self.env['ir.model.synchro'].logmsg(
-        ##     'info', '$$$>>> setup_ext_model()')
+        self.env['ir.model.synchro'].logmsg(
+            'any', '$$$>>> setup_ext_model()')
         if (channel_id and channel_id == rec.synchro_channel_id.id and
                 channel_id in self.get_channel_list()):
-            ## self.env['ir.model.synchro'].logmsg(
-            ##     'info', '$$$>>> ALREADY SET')
+            self.env['ir.model.synchro'].logmsg(
+                'any', '$$$>>> ALREADY SET')
             return
         model = rec.name
         if not channel_id:
             channel_id = rec.synchro_channel_id.id
         if self.get_model_attr(channel_id, model, 'XPIRE'):
-            ## self.env['ir.model.synchro'].logmsg(
-            ##     'info', '$$$>>> NOT EXPIRED')
+            self.env['ir.model.synchro'].logmsg(
+                'any', '$$$>>> NOT EXPIRED')
             return
         channel = self.env['synchro.channel'].browse(channel_id)
         self.setup_1_channel(channel)
@@ -748,11 +763,11 @@ class IrModelSynchroCache(models.Model):
 
     @api.model_cr_context
     def setup_1_channel(self, channel):
-        ## self.env['ir.model.synchro'].logmsg(
-        ##     'info', '$$$>>> setup_1_channel()')
+        self.env['ir.model.synchro'].logmsg(
+            'any', '$$$>>> setup_1_channel()')
         if self.get_attr(channel.id, 'XPIRE'):
-            ## self.env['ir.model.synchro'].logmsg(
-            ##     'info', '$$$>>> NOT EXPIRED')
+            self.env['ir.model.synchro'].logmsg(
+                'any', '$$$>>> NOT EXPIRED')
             return
         self.set_channel_base(channel.id)
         self.set_attr(channel.id, 'PRIO', channel.sequence)
@@ -795,10 +810,11 @@ class IrModelSynchroCache(models.Model):
         self.set_attr(channel.id, 'PASSWORD', channel.password)
         if channel.product_without_variants:
             self.set_attr(channel.id, 'NO_VARIANTS', True)
-        if channel.trace:
-            self.set_attr(channel.id, 'LOGLEVEL', 'info')
-        else:
-            self.set_attr(channel.id, 'LOGLEVEL', 'debug')
+        # if channel.trace:
+        #     self.set_attr(channel.id, 'LOGLEVEL', 'info')
+        # else:
+        #     self.set_attr(channel.id, 'LOGLEVEL', 'debug')
+        self.set_attr(channel.id, 'LOGLEVEL', channel.tracelevel)
         self.CACHE.set_channel_cache(self._cr.dbname, channel.id)
 
     @api.model_cr_context
@@ -815,12 +831,12 @@ class IrModelSynchroCache(models.Model):
         """Store model structure into memory"""
         actual_model = actual_model or model
         model = model or actual_model
-        ## self.env['ir.model.synchro'].logmsg(
-        ##     'info', '$$$>>> %(model)s.setup_model_structure(%(amodel)s)',
-        ##     model=model, ctx={'amodel': actual_model})
+        self.env['ir.model.synchro'].logmsg(
+            'any', '$$$>>> %(model)s.setup_model_structure(%(amodel)s)',
+            model=model, ctx={'amodel': actual_model})
         if not model or self.get_struct_model_attr(model, 'XPIRE'):
-            ## self.env['ir.model.synchro'].logmsg(
-            ##     'info', '$$$>>> NOT EXPIRED')
+            self.env['ir.model.synchro'].logmsg(
+                'any', '$$$>>> NOT EXPIRED')
             return
         ir_model = self.env['ir.model.fields']
         self.set_struct_model(actual_model)
@@ -841,8 +857,7 @@ class IrModelSynchroCache(models.Model):
                     attrs[attr] = field[attr]
             if attrs['required']:
                 attrs['readonly'] = False
-            if (field.relation in self.SYSTEM_MODEL_ROOT or
-                    field.relation in self.SYSTEM_MODELS):
+            if not self.is_manageable(model):
                 attrs['readonly'] = True
             self.set_struct_model_attr(
                 actual_model, field.name, {
@@ -899,22 +914,20 @@ class IrModelSynchroCache(models.Model):
             self, channel=None, model=None, ext_model=None):
         """Read model value from all active channel model table and store
         them into memory"""
-        # ir_synchro_model = self.env['ir.model.synchro']
-        ## self.env['ir.model.synchro'].logmsg(
-        ##     'info', '$$$>>> %(model)s.setup_model_in_channels(%(xmodel)s)',
-        ##     model=model, ctx={'xmodel': ext_model})
+        self.env['ir.model.synchro'].logmsg(
+            'any', '$$$>>> %(model)s.setup_model_in_channels(%(xmodel)s)',
+            model=model, ctx={'xmodel': ext_model})
         if model:
             domain = [('name', '=', model)]
         elif ext_model:
             domain = [('counterpart_name', '=', ext_model)]
         else:
-            ## self.env['ir.model.synchro'].logmsg(
-            ##     'info', '$$$>>> NO MODEL NEITHER EXT_MODEL')
+            self.env['ir.model.synchro'].logmsg(
+                'any', '$$$>>> NO MODEL NEITHER EXT_MODEL')
             return
         if channel:
             domain.append(('synchro_channel_id', '=', channel.id))
         recs = self.env['synchro.channel.model'].search(domain)
-        ### if not recs and not ext_model and
         if not recs and channel and channel.identity == 'odoo':
             if ext_model:
                 if channel:
@@ -942,9 +955,9 @@ class IrModelSynchroCache(models.Model):
     @api.model_cr_context
     def open(self, channel=None, model=None, ext_model=None, cls=None):
         """Setup cache if needed, setup model cache if required and needed"""
-        ## self.env['ir.model.synchro'].logmsg(
-        ##     'info', '$$$>>> %(model)s.open(%(xmodel)s)',
-        ##     model=model, ctx={'xmodel': ext_model})
+        self.env['ir.model.synchro'].logmsg(
+            'any', '$$$>>> %(model)s.open(%(xmodel)s)',
+            model=model, ctx={'xmodel': ext_model})
         ir_synchro_model = self.env['ir.model.synchro']
         if channel and channel.identity == 'odoo':
             if ext_model in ('ir.model', 'ir.module.module') and not model:

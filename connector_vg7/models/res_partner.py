@@ -228,8 +228,10 @@ class ResPartner(models.Model):
     def assure_values(self, vals, rec):
         actual_model = 'res.partner'
         actual_cls = self.env[actual_model]
-        if rec and 'type' not in vals:
-            vals['type'] = rec.type
+        if rec:
+            for nm in ('type', ):
+                if nm not in vals:
+                    vals[nm] = getattr(rec, nm)
         if ('codice_destinatario' in vals and
                 not vals['codice_destinatario']):
             del vals['codice_destinatario']
@@ -265,24 +267,6 @@ class ResPartner(models.Model):
             elif rec and rec.parent_id:
                 parent = rec.parent_id
             if parent and not isinstance(parent, (int, long)):
-                empty = True
-                for nm in ('name', 'street', 'city', 'vat', 'fiscalcode',
-                           'rea_code', 'codice_destinatario', 'phone',
-                           'email'):
-                    if vals.get(nm) and vals[nm] != parent[nm]:
-                        empty = False
-                        break
-                if empty:
-                    for nm in ('country_id', 'state_id'):
-                        if (vals.get(nm) and parent[nm]
-                                and vals[nm] != parent[nm].id):
-                            empty = False
-                            break
-                if empty:
-                    for nm in ('vat', 'fiscalcode', 'rea_code',
-                               'codice_destinatario'):
-                        if nm in vals:
-                            vals[nm] = False
                 if (vals.get('name') and
                         (vals.get('name') == parent.name or
                          vals.get('name', '').startswith('Unknown'))):
@@ -290,20 +274,22 @@ class ResPartner(models.Model):
             if vals and (not rec or not rec.name):
                 vals['is_company'] = False
             if parent and not isinstance(parent, (int, long)):
-                for nm in ('vat', 'rea_code', 'fiscalcode',
-                           'codice_destinatario'):
-                    # Odoo bug !? vat is set from parent by Odoo core
-                    if not vals.get(nm) or (rec and rec[nm] == parent[nm]):
-                        vals[nm] = False
-                    elif nm in vals and vals[nm] == parent[nm]:
-                        del vals[nm]
+                for nm in ('vat', 'fiscalcode', 'codice_destinatario',
+                           'country_id', 'state_id'):
+                    if (not vals.get(nm) and
+                            (not rec or (rec and not rec[nm])) and
+                            parent[nm]):
+                        if nm.endswith('_id'):
+                            vals[nm] = parent[nm].id
+                        else:
+                            vals[nm] = parent[nm]
         else:
             if not vals.get('name') and not rec:
                 vals['name'] = 'Unknown'
         if vals.get('rea_code'):
             ids = actual_cls.search([('rea_code', '=', vals['rea_code'])])
             if ids:
-                if not rec or ids[0] != rec.id:
+                if not rec or ids[0].id != rec.id:
                     _logger.info(
                         'Duplicate REA Code %s' % vals['rea_code'])
                     del vals['rea_code']

@@ -1,6 +1,6 @@
 
 ===============================
-|icon| connector_vg7 10.0.0.2.1
+|icon| connector_vg7 10.0.0.2.2
 ===============================
 
 
@@ -230,6 +230,11 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 
 ChangeLog History / Cronologia modifiche
 ----------------------------------------
+
+10.0.0.2.2 (2020-12-17)
+~~~~~~~~~~~~~~~~~~~~~~~
+
+* [FIX] Index error
 
 10.0.0.2.1 (2020-11-30)
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -504,7 +509,7 @@ La distribuzione `Zeroincombenze® <https://wiki.zeroincombenze.org/en/Odoo>`__ 
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2020-12-10
+Last Update / Ultimo aggiornamento: 2020-12-28
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status

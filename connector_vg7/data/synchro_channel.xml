@@ -6,7 +6,7 @@
         <field name="prefix">vg7</field>
         <field name="identity">vg7</field>
         <field name="product_without_variants" eval="True"/>
-        <field name="trace" eval="True"/>
+        <field name="tracelevel">2</field>
         <field name="active" eval="True"/>
     </record>
 

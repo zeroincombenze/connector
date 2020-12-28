@@ -73,17 +73,18 @@ class SynchroChannel(models.Model):
     sequence = fields.Integer('Priority', default=16)
     active = fields.Boolean(string='Active',
                             default=True)
-    trace = fields.Boolean(
-        string='Trace',
-        default=False,
-        help="Trace data in log. Warning! Use this feature with caution; "
-             "all sent data will be recorded in the log file."
-             "This feature must be used only to debug handshake")
+    # trace = fields.Boolean(
+    #     string='Trace',
+    #     default=False,
+    #     help="Trace data in log. Warning! Use this feature with caution; "
+    #          "all sent data will be recorded in the log file."
+    #          "This feature must be used only to debug handshake")
     tracelevel = fields.Selection(
         [('0', 'No Trace'),
          ('1', 'Main functions'),
          ('2', 'Main + Inner functions'),
          ('3', 'Statements'),
+         ('4', 'All'),
          ],
         string='Trace Level',
         default=False,
@@ -190,21 +191,6 @@ class SynchroChannel(models.Model):
     def write(self, vals):
         self.env['ir.model.synchro.cache'].clean_cache()
         return super(SynchroChannel, self).write(vals)
-
-    @api.onchange('trace')
-    def onchange_trace(self):
-        if self.trace:
-            self.tracelevel = '2'
-        else:
-            self.tracelevel = '0'
-
-    @api.onchange('tracelevel')
-    def onchange_tracelevel(self):
-        # compatobility with old trace flag
-        if self.tracelevel == '0':
-            self.trace = False
-        else:
-            self.trace = True
 
 
 class SynchroChannelModel(models.Model):
@@ -507,13 +493,13 @@ class SynchroChannelModel(models.Model):
         if (cache.get_attr(channel_id, 'IDENTITY') != 'odoo' or
                 (ext_model and ext_model.startswith('ir.')) or
                 (model and model.startswith('ir.'))):
-            return
+            return False
         ir_synchro_model = self.env['ir.model.synchro']
         ext_odoo_ver = cache.get_attr(channel_id, 'ODOO_FVER')
         if not ext_model and model:
             if self.search([('name', '=', model),
                             ('synchro_channel_id', '=', channel_id)]):
-                return
+                return True
             ext_model = actual_model = model
             if ext_odoo_ver:
                 tnldict = ir_synchro_model.get_tnldict(channel_id)
@@ -529,7 +515,7 @@ class SynchroChannelModel(models.Model):
         else:
             if self.search([('counterpart_name', '=', ext_model),
                             ('synchro_channel_id', '=', channel_id)]):
-                return
+                return True
             actual_model = ext_model
             if ext_odoo_ver:
                 tnldict = ir_synchro_model.get_tnldict(channel_id)
@@ -544,17 +530,29 @@ class SynchroChannelModel(models.Model):
                         type='model')
 
         field_uname, skeys = cache.get_default_keys(actual_model)
-        vals = {
-            'synchro_channel_id': channel_id,
-            'name': actual_model,
-            'counterpart_name': ext_model,
-            'field_uname': field_uname,
-            'search_keys': str(skeys),
-            'sequence': 16,
-        }
-        self.create(vals)
-        # commit table to avoid another I/O if next operation fails
-        self.env.cr.commit()  # pylint: disable=invalid-commit
+        if field_uname and skeys:
+            vals = {
+
+                'synchro_channel_id': channel_id,
+                'name': actual_model,
+                'counterpart_name': ext_model,
+                'field_uname': field_uname,
+                'search_keys': str(skeys),
+                'sequence': 16,
+            }
+            try:
+                self.create(vals)
+                # commit table to avoid another I/O if next operation fails
+                self.env.cr.commit()  # pylint: disable=invalid-commit
+                return True
+            except BaseException as e:
+                self.env.cr.rollback()  # pylint: disable=invalid-commit
+                self.logmsg('warning',
+                    'Error %(e) creating %(model)s',
+                    model=self.__name__, ctx={'e': e})
+        else:
+            cache.set_unmanageable(actual_model)
+        return False
 
     @api.multi
     def write(self, vals):
