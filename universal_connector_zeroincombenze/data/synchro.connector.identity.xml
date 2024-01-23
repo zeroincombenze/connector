@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+    <record model="synchro.connector.identity" id="zero16">
+        <field name="code">zero16</field>
+        <field name="name">Zeroincombenze 16.0</field>
+        <field name="odoo_version">16.0</field>
+        <field name="default_protocol_id" ref="universal_connector.jsonrpc"/>
+        <field name="enabled_protocols">jsonrpc,jsonrpcs,http+xmlrpc,https+xmlrpc</field>
+        <field name="login_endpoint">xmlrpc/2/common</field>
+        <field name="data_endpoint">xmlrpc/2/object</field>
+    </record>
+    <record model="synchro.connector.identity" id="zero15">
+        <field name="code">zero15</field>
+        <field name="name">Zeroincombenze 15.0</field>
+        <field name="odoo_version">15.0</field>
+        <field name="default_protocol_id" ref="universal_connector.jsonrpc"/>
+        <field name="enabled_protocols">jsonrpc,jsonrpcs,http+xmlrpc,https+xmlrpc</field>
+        <field name="login_endpoint">xmlrpc/2/common</field>
+        <field name="data_endpoint">xmlrpc/2/object</field>
+    </record>
+    <record model="synchro.connector.identity" id="zero14">
+        <field name="code">zero14</field>
+        <field name="name">Zeroincombenze 14.0</field>
+        <field name="odoo_version">14.0</field>
+        <field name="default_protocol_id" ref="universal_connector.jsonrpc"/>
+        <field name="enabled_protocols">jsonrpc,jsonrpcs,http+xmlrpc,https+xmlrpc</field>
+        <field name="login_endpoint">xmlrpc/2/common</field>
+        <field name="data_endpoint">xmlrpc/2/object</field>
+    </record>
+    <record model="synchro.connector.identity" id="zero13">
+        <field name="code">zero13</field>
+        <field name="name">Zeroincombenze 13.0</field>
+        <field name="odoo_version">13.0</field>
+        <field name="default_protocol_id" ref="universal_connector.jsonrpc"/>
+        <field name="enabled_protocols">jsonrpc,jsonrpcs,http+xmlrpc,https+xmlrpc</field>
+        <field name="login_endpoint">xmlrpc/2/common</field>
+        <field name="data_endpoint">xmlrpc/2/object</field>
+    </record>
+    <record model="synchro.connector.identity" id="zero12">
+        <field name="code">zero12</field>
+        <field name="name">Zeroincombenze 12.0</field>
+        <field name="odoo_version">12.0</field>
+        <field name="default_protocol_id" ref="universal_connector.jsonrpc"/>
+        <field name="enabled_protocols">jsonrpc,jsonrpcs,http+xmlrpc,https+xmlrpc</field>
+        <field name="login_endpoint">xmlrpc/2/common</field>
+        <field name="data_endpoint">xmlrpc/2/object</field>
+    </record>
+    <record model="synchro.connector.identity" id="zero11">
+        <field name="code">zero11</field>
+        <field name="name">Zeroincombenze 11.0</field>
+        <field name="odoo_version">11.0</field>
+        <field name="default_protocol_id" ref="universal_connector.jsonrpc"/>
+        <field name="enabled_protocols">jsonrpc,jsonrpcs,http+xmlrpc,https+xmlrpc</field>
+        <field name="login_endpoint">xmlrpc/2/common</field>
+        <field name="data_endpoint">xmlrpc/2/object</field>
+    </record>
+    <record model="synchro.connector.identity" id="zero10">
+        <field name="code">zero10</field>
+        <field name="name">Zeroincombenze 10.0</field>
+        <field name="odoo_version">10.0</field>
+        <field name="default_protocol_id" ref="universal_connector.jsonrpc"/>
+        <field name="enabled_protocols">jsonrpc,jsonrpcs,xmlrpc,xmlrpcs,http+xmlrpc,https+xmlrpc</field>
+        <field name="login_endpoint">xmlrpc/2/common</field>
+        <field name="data_endpoint">xmlrpc/2/object</field>
+    </record>
+    <record model="synchro.connector.identity" id="zero9">
+        <field name="code">zero9</field>
+        <field name="name">Zeroincombenze 9.0</field>
+        <field name="odoo_version">9.0</field>
+        <field name="default_protocol_id" ref="universal_connector.jsonrpc"/>
+        <field name="enabled_protocols">jsonrpc,jsonrpcs,xmlrpc,xmlrpcs,http+xmlrpc,https+xmlrpc</field>
+        <field name="login_endpoint">xmlrpc/2/common</field>
+        <field name="data_endpoint">xmlrpc/2/object</field>
+    </record>
+    <record model="synchro.connector.identity" id="zero8">
+        <field name="code">zero8</field>
+        <field name="name">Zeroincombenze 8.0</field>
+        <field name="odoo_version">8.0</field>
+        <field name="default_protocol_id" ref="universal_connector_protocol_xmlrpc.xmlrpc"/>
+        <field name="enabled_protocols">jsonrpc,jsonrpcs,xmlrpc,xmlrpcs,http+xmlrpc,https+xmlrpc</field>
+        <field name="login_endpoint">xmlrpc/2/common</field>
+        <field name="data_endpoint">xmlrpc/2/object</field>
+    </record>
+    <record model="synchro.connector.identity" id="zero7">
+        <field name="code">zero7</field>
+        <field name="name">Zeroincombenze 7.0</field>
+        <field name="odoo_version">7.0</field>
+        <field name="default_protocol_id" ref="universal_connector_protocol_xmlrpc.xmlrpc"/>
+        <field name="enabled_protocols">xmlrpc,xmlrpcs,http+xmlrpc,https+xmlrpc</field>
+        <field name="login_endpoint">xmlrpc/common</field>
+        <field name="data_endpoint">xmlrpc/object</field>
+    </record>
+</odoo>

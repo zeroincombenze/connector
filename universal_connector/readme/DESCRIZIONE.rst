@@ -1,0 +1,1 @@
+Connettore tra 2 istanze di Odoo, basato su odoo-connector.

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+    <record model="synchro.connector.protocol" id="jsonrpc">
+        <field name="code">jsonrpc</field>
+        <field name="name">Odoo JsonRPC</field>
+        <field name="default_port">8069</field>
+        <field name="pylib">odoorpc,odoolib</field>
+        <field name="pylib_name">odoorpc,odoo-client-lib</field>
+    </record>
+    <record model="synchro.connector.protocol" id="jsonrpc+ssl">
+        <field name="code">jsonrpc+ssl</field>
+        <field name="name">Odoo JsonRPC with SSL</field>
+        <field name="default_port">8069</field>
+        <field name="pylib">odoorpc,odoolib</field>
+        <field name="pylib_name">odoorpc,odoo-client-lib</field>
+    </record>
+</odoo>

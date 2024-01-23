@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+    <record model="synchro.connector.identity" id="powerp12">
+        <field name="code">powerp12</field>
+        <field name="name">Powerp 12.0</field>
+        <field name="odoo_version">12.0</field>
+        <field name="default_protocol_id" ref="universal_connector.jsonrpc"/>
+        <field name="enabled_protocols">jsonrpc,jsonrpcs,http+xmlrpc,https+xmlrpc</field>
+        <field name="endpoint">xmlrpc/2/common</field>
+        <field name="endpoint2">xmlrpc/2/object</field>
+    </record>
+</odoo>

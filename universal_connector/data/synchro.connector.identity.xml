@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+    <record model="synchro.connector.identity" id="odoo16">
+        <field name="code">odoo16</field>
+        <field name="name">Odoo 16.0</field>
+        <field name="odoo_version">16.0</field>
+        <field name="default_protocol_id" ref="universal_connector.jsonrpc"/>
+        <field name="enabled_protocols">jsonrpc,jsonrpc+ssl,http+xmlrpc,https+xmlrpc</field>
+        <field name="login_endpoint">xmlrpc/2/common</field>
+        <field name="data_endpoint">xmlrpc/2/object</field>
+    </record>
+    <record model="synchro.connector.identity" id="odoo15">
+        <field name="code">odoo15</field>
+        <field name="name">Odoo 15.0</field>
+        <field name="odoo_version">15.0</field>
+        <field name="default_protocol_id" ref="universal_connector.jsonrpc"/>
+        <field name="enabled_protocols">jsonrpc,jsonrpc+ssl,http+xmlrpc,https+xmlrpc</field>
+        <field name="login_endpoint">xmlrpc/2/common</field>
+        <field name="data_endpoint">xmlrpc/2/object</field>
+    </record>
+    <record model="synchro.connector.identity" id="odoo14">
+        <field name="code">odoo14</field>
+        <field name="name">Odoo 14.0</field>
+        <field name="odoo_version">14.0</field>
+        <field name="default_protocol_id" ref="universal_connector.jsonrpc"/>
+        <field name="enabled_protocols">jsonrpc,jsonrpc+ssl,http+xmlrpc,https+xmlrpc</field>
+        <field name="login_endpoint">xmlrpc/2/common</field>
+        <field name="data_endpoint">xmlrpc/2/object</field>
+    </record>
+    <record model="synchro.connector.identity" id="odoo13">
+        <field name="code">odoo13</field>
+        <field name="name">Odoo 13.0</field>
+        <field name="odoo_version">13.0</field>
+        <field name="default_protocol_id" ref="universal_connector.jsonrpc"/>
+        <field name="enabled_protocols">jsonrpc,jsonrpc+ssl,http+xmlrpc,https+xmlrpc</field>
+        <field name="login_endpoint">xmlrpc/2/common</field>
+        <field name="data_endpoint">xmlrpc/2/object</field>
+    </record>
+    <record model="synchro.connector.identity" id="odoo12">
+        <field name="code">odoo12</field>
+        <field name="name">Odoo 12.0</field>
+        <field name="odoo_version">12.0</field>
+        <field name="default_protocol_id" ref="universal_connector.jsonrpc"/>
+        <field name="enabled_protocols">jsonrpc,jsonrpc+ssl,http+xmlrpc,https+xmlrpc</field>
+        <field name="login_endpoint">xmlrpc/2/common</field>
+        <field name="data_endpoint">xmlrpc/2/object</field>
+    </record>
+    <record model="synchro.connector.identity" id="odoo11">
+        <field name="code">odoo11</field>
+        <field name="name">Odoo 11.0</field>
+        <field name="odoo_version">11.0</field>
+        <field name="default_protocol_id" ref="universal_connector.jsonrpc"/>
+        <field name="enabled_protocols">jsonrpc,jsonrpc+ssl,http+xmlrpc,https+xmlrpc</field>
+        <field name="login_endpoint">xmlrpc/2/common</field>
+        <field name="data_endpoint">xmlrpc/2/object</field>
+    </record>
+    <record model="synchro.connector.identity" id="odoo10">
+        <field name="code">odoo10</field>
+        <field name="name">Odoo 10.0</field>
+        <field name="odoo_version">10.0</field>
+        <field name="default_protocol_id" ref="universal_connector.jsonrpc"/>
+        <field name="enabled_protocols">jsonrpc,jsonrpc+ssl,xmlrpc,xmlrpcs,http+xmlrpc,https+xmlrpc</field>
+        <field name="login_endpoint">xmlrpc/2/common</field>
+        <field name="data_endpoint">xmlrpc/2/object</field>
+    </record>
+    <record model="synchro.connector.identity" id="odoo9">
+        <field name="code">odoo9</field>
+        <field name="name">Odoo 9.0</field>
+        <field name="odoo_version">9.0</field>
+        <field name="default_protocol_id" ref="universal_connector.jsonrpc"/>
+        <field name="enabled_protocols">jsonrpc,jsonrpc+ssl,xmlrpc,xmlrpcs,http+xmlrpc,https+xmlrpc</field>
+        <field name="login_endpoint">xmlrpc/2/common</field>
+        <field name="data_endpoint">xmlrpc/2/object</field>
+    </record>
+    <record model="synchro.connector.identity" id="odoo8">
+        <field name="code">odoo8</field>
+        <field name="name">Odoo 8.0</field>
+        <field name="odoo_version">8.0</field>
+        <field name="default_protocol_id" ref="universal_connector.xmlrpc"/>
+        <field name="enabled_protocols">jsonrpc,jsonrpc+ssl,xmlrpc,xmlrpcs,http+xmlrpc,https+xmlrpc</field>
+        <field name="login_endpoint">xmlrpc/2/common</field>
+        <field name="data_endpoint">xmlrpc/2/object</field>
+    </record>
+    <record model="synchro.connector.identity" id="odoo7">
+        <field name="code">odoo7</field>
+        <field name="name">Odoo 7.0</field>
+        <field name="odoo_version">7.0</field>
+        <field name="default_protocol_id" ref="universal_connector.xmlrpc"/>
+        <field name="enabled_protocols">xmlrpc,xmlrpcs,http+xmlrpc,https+xmlrpc</field>
+        <field name="login_endpoint">xmlrpc/common</field>
+        <field name="data_endpoint">xmlrpc/object</field>
+    </record>
+</odoo>

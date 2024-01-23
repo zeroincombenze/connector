@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+    <record model="synchro.connector.protocol" id="http+json">
+        <field name="code">http+json</field>
+        <field name="name">JSON over http</field>
+        <field name="default_port">80</field>
+        <field name="pylib">requests</field>
+        <field name="pylib_name">requests</field>
+    </record>
+    <record model="synchro.connector.protocol" id="https+json">
+        <field name="code">https+json</field>
+        <field name="name">JSON over https</field>
+        <field name="default_port">443</field>
+        <field name="pylib">requests</field>
+        <field name="pylib_name">requests</field>
+    </record>
+</odoo>

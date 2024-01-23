@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_edi_import_match,access_edi_import_match,model_edi_import_match,base.group_user,1,0,0,0
+access_edi_import_match_field,access_edi_import_match_field,model_edi_import_match_field,base.group_user,1,0,0,0
+access_edi_import_match_mgr,access_edi_import_match_mgr,model_edi_import_match,base.group_system,1,1,1,1
+access_edi_import_match_field_mgr,access_edi_import_match_field_mgr,model_edi_import_match_field,base.group_system,1,1,1,1

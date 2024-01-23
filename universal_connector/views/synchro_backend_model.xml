@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="view_synchro_backend_model_tree" model="ir.ui.view">
+        <field name="name">view.synchro.backend.model.tree</field>
+        <field name="model">synchro.backend.model</field>
+        <field name="arch" type="xml">
+            <tree string="Backend model">
+                <field name="sequence" widget="handle"/>
+                <field name="peer_name"/>
+                <field name="model_id"/>
+                <field name="permission"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_synchro_backend_model_form" model="ir.ui.view">
+        <field name="name">view.synchro.backend.model.form</field>
+        <field name="model">synchro.backend.model</field>
+        <field name="arch" type="xml">
+            <form string="Backend Model">
+                <group>
+                    <field name="sequence"/>
+                    <field name="peer_name"/>
+                    <field name="model_id"/>
+                    <field name="permission"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+</odoo>

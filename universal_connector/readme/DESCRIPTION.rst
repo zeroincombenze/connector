@@ -1,0 +1,1 @@
+Universal connector to/from Odoo and other software, based on odoo-connector.

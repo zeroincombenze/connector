@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+    <record model="synchro.connector.identity" id="vg7">
+        <field name="code">vg7</field>
+        <field name="name">VG7</field>
+        <field name="odoo_version"></field>
+        <field name="default_protocol_id" ref="universal_connector_json_over_http.https+json"/>
+        <field name="enabled_protocols">http+json,https+json</field>
+        <field name="login_endpoint">print/index.php/api/v1</field>
+        <field name="data_endpoint"></field>
+    </record>
+</odoo>

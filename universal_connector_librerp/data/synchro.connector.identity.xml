@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+    <record model="synchro.connector.identity" id="librerp6">
+        <field name="code">librerp6</field>
+        <field name="name">Librerp 6.1</field>
+        <field name="odoo_version">6.1</field>
+        <field name="default_protocol_id" ref="universal_connector_protocol_xmlrpc.xmlrpc"/>
+        <field name="enabled_protocols">xmlrpc,xmlrpcs,http+xmlrpc,https+xmlrpc</field>
+        <field name="endpoint">xmlrpc/common</field>
+        <field name="endpoint2">xmlrpc/object</field>
+    </record>
+</odoo>

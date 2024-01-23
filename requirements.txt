@@ -1,2 +1,2 @@
 cachetools>=2.0.1
-
+odoo_client_lib

@@ -1,0 +1,255 @@
+
+<section class="oe_container">
+    <div class="oe_row oe_spaced">
+        <div class="oe_span6">
+            <p align="center">
+                <img src="/l10n_uk/static/description/icon.png" alt="English" style="width:16px;height:16px;"/>
+                <img src="/l10n_us/static/description/icon.png" alt="English" style="width:16px;height:16px;"/>
+            </p>
+            <h2 class="oe_slogan" style="color:#162832;">Try to avoid duplicate before importing</h2>
+        </div>
+        <div class="oe_span6">
+            <p align="center">
+                <img src="/l10n_it/static/description/icon.png" alt="Italiano" style="width:16px;height:16px;"/>
+            </p>
+            <h2 class="oe_slogan" style="color:#162832;">Evita di duplicare record importati</h2>
+        </div>
+        <div class="oe_demo oe_screenshot">
+            <img src="description.png" alt="EDI Import Match" style="width:98%;max-width:1140px"/>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div>
+        <div class="oe_span6">
+            <p align="center">
+                <img src="/l10n_uk/static/description/icon.png" alt="English" style="width:16px;height:16px;"/>
+                <img src="/l10n_us/static/description/icon.png" alt="English" style="width:16px;height:16px;"/>
+            </p>
+            <p class="oe_mt16" align="justify">This module, inspired to OCA module <a href="https://github.com/OCA/server-backend/tree/12.0/base_import_match">Base Import Match</a>,
+allows you to set additional rules to match if a given import record is an update or a
+new record.
+<p align="justify">
+<h3>Target Audience</h3>
+</p><p align="justify">
+This module can be used to import data from Excel with improved rules.
+</p><p align="justify">
+<h3>Why use this</h3>
+</p><p align="justify">
+When importing data (like CSV import) with the standard Odoo <i>base_import</i> module,
+Odoo follows this rule:
+</p><p align="justify">
+<ul>
+<li>If you import the XMLID of a record, make an <b>update</b></li>
+<li>If you do not, <b>create</b> a new record</li>
+</ul>
+</p><p align="justify">
+These rules are too simple and data imported will be duplicated every time file
+is imported.
+</p><p align="justify">
+This module avoid to duplicate records.
+</p><p align="justify">
+<h3>How</h3>
+</p><p align="justify">
+User can create his own rules to recognize records.
+</p></p>
+        </div>
+        <div class="oe_span6">
+            <p align="center">
+                <img src="/l10n_it/static/description/icon.png" alt="Italiano" style="width:16px;height:16px;"/>
+            </p>
+            <p class="oe_mt16" align="justify">Questo modulo, ispirato al moduleo OCA <a href="https://github.com/OCA/server-backend/tree/12.0/base_import_match">Base Import Match</a>,
+permette di aggiungere regole aggiuntive per combaciare se un record
+&#232; da modificare o da creare.
+<p align="justify">
+<h3>Destinatari</h3>
+</p><p align="justify">
+Questo modulo &#232; utilizzabile da chi deve importare dati con regole evolute.
+</p><p align="justify">
+<h3>Perch&#233;</h3>
+</p><p align="justify">
+Quando si importa dati (esempio un CSV) con il modulo standard di Odoo <i>base_import</i>,
+sono applicate solo 2 regole:
+</p><p align="justify">
+<ul>
+<li>Se presente XMLID esegue un <b>aggiornamento</b>.</li>
+<li>Altrimenti esegue la <b>creazione</b> di un nuovo record</li>
+</ul>
+</p><p align="justify">
+Queste regole sono troppo semplici e i dati sono duplicati se il file &#232; importato pi&#249;
+volte.
+</p><p align="justify">
+Questo modulo evita le duplicazioni.
+</p><p align="justify">
+<h3>Come</h3>
+</p><p align="justify">
+L'utente pu&#242; creare proprie regole di riconoscimento record.
+</p></p>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="oe_row oe_spaced">
+        <h3 align="center" style="color:#162832;font-size: 26px;font-weight: 300;">Features | Caratteristiche</h3>
+        <div class="oe_span12">
+<table style="width:100%; padding:2px; border-spacing:2px; text-align:left;"><tr>
+<td>Description</td><td>Descrizione</td><td>Z0incomb</td><td>Note(s)</td><td/>
+</tr><tr>
+<td>Match rules by end user</td><td>Regole definite da utente finale</td><td>&#9989;</td><td>Available on OCA module</td><td/>
+</tr><tr>
+<td>Conditional rule</td><td>Regola condizionale</td><td>&#9989;</td><td>Available on OCA module</td><td/>
+</tr><tr>
+<td>Default for conditional rule</td><td>Valore predefinito per regola condizionale</td><td>&#9989;</td><td/><td/>
+</tr><tr>
+<td>State depends on Country</td><td>Provincia dipendente da nazione</td><td>&#9989;</td><td/><td/>
+</tr><tr>
+<td>Match boolean values</td><td>Confronta valori booleani</td><td>&#10060;</td><td/><td/>
+</tr><tr>
+</tr></table>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="oe_row oe_spaced">
+        <h3 align="center" style="color:#162832;font-size: 26px;font-weight: 300;">Configuration | Configurazione</h3>
+        <div class="oe_span6">
+            <p align="center">
+                <img src="/l10n_uk/static/description/icon.png" alt="English" style="width:16px;height:16px;"/>
+                <img src="/l10n_us/static/description/icon.png" alt="English" style="width:16px;height:16px;"/>
+            </p>
+            <p class="oe_mt16" align="justify">Activate developer mode:
+<p align="justify">
+<ol>
+<li> <span class="fa fa-th-large" style="color:#7C7BAD"/> Settings &#187; Technical &#187; Database Structure &#187; Import Match</li>
+<li> <span style="color:white;background-color:#7C7BAD">&#160;Create&#160;</span></li>
+<li> Choose a <i>Model</i></li>
+<li> Choose the <i>Fields</i> that can be used in the search</li>
+<li> If the rule must be used only for certain imported values, check
+   <i>Conditional</i> and enter the <b>exact string</b> that is going to be imported
+   in <i>Imported value</i>.</li>
+</ol>
+</p><p align="justify">
+   #. Keep in mind that the match here is evaluated as a case sensitive
+      <b>text string</b> always. If you enter e.g. <code>True</code>, it will match that
+      string, but will not match <code>1</code> or <code>true</code>.
+<ol>
+<li> <span style="color:white;background-color:#7C7BAD">&#160;Save&#160;</span></li>
+</ol>
+</p><p align="justify">
+In that list view, you can sort rules by drag and drop.
+</p></p>
+        </div>
+        <div class="oe_span6">
+            <p align="center">
+                <img src="/l10n_it/static/description/icon.png" alt="Italiano" style="width:16px;height:16px;"/>
+            </p>
+            <p class="oe_mt16" align="justify">Attivare la modalit&#224; sviluppatore.
+<p align="justify">
+<ol>
+<li> <span class="fa fa-th-large" style="color:#7C7BAD"/> Impostazioni &#187; Funzioni tecniche &#187; Struttura Database &#187; Regole corrispondenza importazione</li>
+<li> <span style="color:white;background-color:#7C7BAD">&#160;Creare&#160;</span></li>
+<li> Scegliere un <i>Modello</i></li>
+<li> Scegliere i <i>Campi</i> che servono alla ricerca</li>
+<li> La regola pu&#242; essere applicata alla presenza di un campo dichiarato <i>Condizione</i>.</li>
+</ol>
+</p><p align="justify">
+   #. Keep in mind that the match here is evaluated as a case sensitive
+      <b>text string</b> always. If you enter e.g. <code>True</code>, it will match that
+      string, but will not match <code>1</code> or <code>true</code>.
+<ol>
+<li> <span style="color:white;background-color:#7C7BAD">&#160;Salvare&#160;</span></li>
+</ol>
+</p><p align="justify">
+La lista pu&#242; essere ordinata per priorit&#224;.
+</p></p>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="oe_row oe_spaced">
+        <h3 align="center" style="color:#162832;font-size: 26px;font-weight: 300;">Usage | Utilizzo</h3>
+        <div class="oe_span6">
+            <p align="center">
+                <img src="/l10n_uk/static/description/icon.png" alt="English" style="width:16px;height:16px;"/>
+                <img src="/l10n_us/static/description/icon.png" alt="English" style="width:16px;height:16px;"/>
+            </p>
+            <p class="oe_mt16" align="justify">To use this module, you need to:
+<p align="justify">
+<ol>
+<li> Follow steps in <b>Configuration</b> section above.</li>
+<li> Go to any list view.</li>
+<li> Press <span style="color:white;background-color:#7C7BAD">&#160;Import&#160;</span> and follow the import procedure as usual.</li>
+</ol>
+</p></p>
+        </div>
+        <div class="oe_span6">
+            <p align="center">
+                <img src="/l10n_it/static/description/icon.png" alt="Italiano" style="width:16px;height:16px;"/>
+            </p>
+            <p class="oe_mt16" align="justify"/>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="oe_row oe_spaced">
+        <h3 align="center" style="color:#162832;font-size: 26px;font-weight: 300;">ChangeLog History | Cronologia modifiche</h3>
+        <div class="oe_span12">
+<h4>12.0.1.0.0 (2024-01-22)</h4>
+<p align="justify">
+<ul>
+<li>Initial implementation / Implementazione iniziale</li>
+<li>[QUA] Test coverage 46% (203: 109+94) [0 TestPoints] - quality rating 28 (target 100)</li>
+</ul>
+</p>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="oe_row oe_spaced">
+        <h3 align="center" style="color:#162832;font-size: 26px;font-weight: 300;">Known issues | Problemi conosciuti</h3>
+        <div class="oe_span12">
+This module replaces some feature of the base Odoo function that cannob be overridden.
+For this reason, this module depends on specific 12.0.1.3 version of <i>base</i> that is the
+latest version.
+<p align="justify">
+Please, before buy this module, check for base version and if it is older, update base
+module to most recent version.
+</p>
+        </div>
+    </div>
+</section>
+
+<section class="oe_container">
+    <div class="oe_row oe_spaced">
+        <div class="oe_span6" align="left">
+            <p class="oe_mt16">Authors | Autori:</p>
+            <p class="oe_mt16"><ul>
+<li><a href="https://www.tecnativa.com">Tecnativa</a></li>
+<li><a href="https://odoo-community.org">Odoo Community Association (OCA)</a></li>
+<li><a href="https://www.zeroincombenze.it">SHS-AV s.r.l.</a></li>
+</ul></p>
+        </div>
+        <div class="oe_span6" align="left">
+            <p class="oe_mt16">Contributors | Contributi da:</p>
+            <p class="oe_mt16"><ul>
+<li><a href="https://www.tecnativa.com">Tecnativa</a></li>
+<li><a href="mailto:antoniomaria.vigliott@gmail.com">Antonio M. Vigliotti</a></li>
+</ul></p>
+        </div>
+    </div>
+    <div class="oe_row oe_spaced">
+        <div class="oe_span12">
+            <p>This module is maintained by the <b><a href="https://www.shs-av.com">SHS_AV s.r.l.</a></b>.</p>
+        </div>
+    </div>
+    <div class="oe_row oe_spaced">
+        <p>This module is part of <a href="https://github.com/zeroincombenze/connector">connector</a> project.</p>
+        <p>Published information on | Informazioni pubblicate: 2024-01-22</p>
+    </div>
+</section>

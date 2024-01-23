@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+    <record model="synchro.connector.protocol" id="jsonrpc">
+        <field name="code">jsonrpc</field>
+        <field name="name">Odoo JsonRPC</field>
+        <field name="default_port">8069</field>
+        <field name="pylib">odoorpc,odoo-client-lib</field>
+    </record>
+    <record model="synchro.connector.protocol" id="jsonrpc+ssl">
+        <field name="code">jsonrpc+ssl</field>
+        <field name="name">Odoo JsonRPC with SSL</field>
+        <field name="default_port">8069</field>
+        <field name="pylib">odoorpc,odoo-client-lib</field>
+    </record>
+    <record model="synchro.connector.protocol" id="xmlrpc">
+        <field name="code">xmlrpc</field>
+        <field name="name">Odoo XmlRPC</field>
+        <field name="default_port">8069</field>
+        <field name="pylib">odoo-client-lib,oerplib</field>
+    </record>
+    <record model="synchro.connector.protocol" id="xmlrpcs">
+        <field name="code">xmlrpcs</field>
+        <field name="name">Odoo XmlRPC with SSL</field>
+        <field name="default_port">8069</field>
+        <field name="pylib">odoo-client-lib,oerplib</field>
+    </record>
+    <record model="synchro.connector.protocol" id="http+xmlrpc">
+        <field name="code">http+xmlrpc</field>
+        <field name="name">XmlRPC over http</field>
+        <field name="default_port">80</field>
+        <field name="pylib">xmlrpc.client</field>
+    </record>
+    <record model="synchro.connector.protocol" id="https+xmlrpc">
+        <field name="code">https+xmlrpc</field>
+        <field name="name">XmlRPC over https</field>
+        <field name="default_port">443</field>
+        <field name="pylib">xmlrpc.client</field>
+    </record>
+</odoo>

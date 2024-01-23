@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+    <record model="synchro.backend" id="localhost-demo14-odoo14">
+        <field name="hostname">localhost</field>
+        <field name="identity_id" ref="universal_connector.odoo14"/>
+        <field name="database">demo14</field>
+        <field name="version">14.0</field>
+        <field name="protocol_id" ref="universal_connector.jsonrpc"/>
+        <field name="port">8174</field>
+        <field name="login">admin</field>
+        <field name="password">admin</field>
+    </record>
+    <record model="synchro.backend" id="localhost-oca12-powerp12">
+        <field name="hostname">localhost</field>
+        <field name="identity_id" ref="universal_connector_powerp.powerp12"/>
+        <field name="database">oca12</field>
+        <field name="version">12.0</field>
+        <field name="protocol_id" ref="universal_connector.jsonrpc"/>
+        <field name="port">8272</field>
+        <field name="login">admin</field>
+        <field name="password">admin</field>
+    </record>
+    <record model="synchro.backend" id="localhost-test10-zero10">
+        <field name="hostname">localhost</field>
+        <field name="identity_id" ref="universal_connector_zeroincombenze.zero10"/>
+        <field name="database">test10</field>
+        <field name="version">10.0</field>
+        <field name="protocol_id" ref="universal_connector.jsonrpc"/>
+        <field name="port">8170</field>
+        <field name="login">admin</field>
+        <field name="password">admin</field>
+    </record>
+    <record model="synchro.backend" id="localhost-test8-zero8">
+        <field name="hostname">localhost</field>
+        <field name="identity_id" ref="universal_connector_zeroincombenze.zero8"/>
+        <field name="database">test8</field>
+        <field name="version">8.0</field>
+        <field name="protocol_id" ref="universal_connector_protocol_xmlrpc.xmlrpc"/>
+        <field name="port">8168</field>
+        <field name="login">admin</field>
+        <field name="password">admin</field>
+    </record>
+    <record model="synchro.backend" id="localhost-test7-zero7">
+        <field name="hostname">localhost</field>
+        <field name="identity_id" ref="universal_connector_zeroincombenze.zero7"/>
+        <field name="database">test7</field>
+        <field name="version">7.0</field>
+        <field name="protocol_id" ref="universal_connector_protocol_xmlrpc.xmlrpc"/>
+        <field name="port">8167</field>
+        <field name="login">admin</field>
+        <field name="password">admin</field>
+    </record>
+    <record model="synchro.backend" id="localhost-test6-librerp6">
+        <field name="hostname">localhost</field>
+        <field name="identity_id" ref="universal_connector_librerp.librerp6"/>
+        <field name="database">test6</field>
+        <field name="version">6.1</field>
+        <field name="protocol_id" ref="universal_connector_protocol_xmlrpc.xmlrpc"/>
+        <field name="port">8166</field>
+        <field name="login">admin</field>
+        <field name="password">admin</field>
+    </record>
+    <record model="synchro.backend" id="localhost-printdemo-vg7">
+        <field name="hostname">vg7printdemo.it</field>
+        <field name="identity_id" ref="universal_connector_vg7.vg7"/>
+        <field name="database"></field>
+        <field name="version"></field>
+        <field name="protocol_id" ref="universal_connector_json_over_http.http+json"/>
+        <field name="port">80</field>
+        <field name="login">antonio</field>
+        <field name="password">formazione.odoo156</field>
+    </record>
+</odoo>
