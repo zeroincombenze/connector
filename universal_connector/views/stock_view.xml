@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_stock_location_synchro_form" model="ir.ui.view">
+        <field name="name">view.stock_location.synchro.form</field>
+        <field name="model">stock.location</field>
+        <field name="inherit_id" ref="stock.view_location_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='comment']" position="after">
+                <group string="Synchronization">
+                    <field name="vg7_id"/>
+                    <field name="oe7_id"/>
+                    <field name="oe8_id"/>
+                    <field name="oe10_id"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_warehouse_synchro_form" model="ir.ui.view">
+        <field name="name">view.warehouse.synchro.form</field>
+        <field name="model">stock.warehouse</field>
+        <field name="inherit_id" ref="stock.view_warehouse"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[last()]" position="after">
+                <page name="synchro" string="Synchronization">
+                    <group>
+                        <field name="vg7_id"/>
+                        <field name="oe7_id"/>
+                        <field name="oe8_id"/>
+                        <field name="oe10_id"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_stock_move_synchro_form" model="ir.ui.view">
+        <field name="name">view.stock.move.synchro.form</field>
+        <field name="model">stock.move</field>
+        <field name="inherit_id" ref="stock.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group" position="after">
+                <group string="Synchronization">
+                    <field name="timestamp"/>
+                    <field name="vg7_id"/>
+                    <field name="oe7_id"/>
+                    <field name="oe8_id"/>
+                    <field name="oe10_id"/>
+                    <field name="errmsg"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_picking_synchro_form" model="ir.ui.view">
+        <field name="name">view.picking.synchro.form</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[last()]" position="after">
+                <page name="synchro" string="Synchronization">
+                    <group>
+                        <field name="timestamp"/>
+                        <field name="vg7_id"/>
+                        <field name="oe7_id"/>
+                        <field name="oe8_id"/>
+                        <field name="oe10_id"/>
+                        <field name="errmsg"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

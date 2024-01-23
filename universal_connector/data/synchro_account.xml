@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+
+    <record forcecreate="1" id="account_account" model="synchro.channel.model">
+        <field name="name">account.account</field>
+        <field name="field_uname">name</field>
+        <field name="search_keys">(['code', 'company_id'],['name', 'company_id'],['dim_name', 'company_id'])</field>
+        <field name="sequence">6</field>
+        <field name="synchro_channel_id" ref="channel_vg7"/>
+    </record>
+
+    <record forcecreate="1" id="account_account_type" model="synchro.channel.model">
+        <field name="name">account.account.type</field>
+        <field name="field_uname">type</field>
+        <field name="search_keys">(['type'],['name'],['dim_name'])</field>
+        <field name="sequence">5</field>
+        <field name="synchro_channel_id" ref="channel_vg7"/>
+    </record>
+
+    <record forcecreate="1" id="account_payment_term" model="synchro.channel.model">
+        <field name="name">account.payment.term</field>
+        <field name="counterpart_name">payments</field>
+        <field name="field_uname">name</field>
+        <field name="search_keys">(['name'],)</field>
+        <field name="field_2complete">True</field>
+        <field name="sequence">8</field>
+        <field name="synchro_channel_id" ref="channel_vg7"/>
+    </record>
+
+    <record forcecreate="1" id="account_payment_term_line" model="synchro.channel.model">
+        <field name="name">account.payment.term.line</field>
+        <field name="field_uname">sequence</field>
+        <field name="search_keys">(['sequence', 'payment_id'],)</field>
+        <field name="sequence">18</field>
+        <field name="synchro_channel_id" ref="channel_vg7"/>
+    </record>
+
+
+    <record forcecreate="1" id="account_payment_term_code" model="synchro.channel.model.fields">
+        <field name="name">name</field>
+        <field name="counterpart_name">description</field>
+        <field name="model_id" ref="account_payment_term"/>
+    </record>
+
+    <record forcecreate="1" id="account_payment_term_line_ids" model="synchro.channel.model.fields">
+        <field name="name">line_ids</field>
+        <field name="counterpart_name">date_scadenza</field>
+        <field name="model_id" ref="account_payment_term"/>
+    </record>
+
+    <record forcecreate="1" id="account_payment_term_company_id" model="synchro.channel.model.fields">
+        <field name="name">company_id</field>
+        <field name="model_id" ref="account_payment_term"/>
+    </record>
+
+
+    <record forcecreate="1" id="account_payment_term_line_payment_id" model="synchro.channel.model.fields">
+        <field name="name">payment_id</field>
+        <field name="model_id" ref="account_payment_term_line"/>
+    </record>
+
+    <record forcecreate="1" id="account_payment_term_line_sequence" model="synchro.channel.model.fields">
+        <field name="name">sequence</field>
+        <field name="model_id" ref="account_payment_term_line"/>
+    </record>
+
+    <record forcecreate="1" id="account_payment_term_line_days" model="synchro.channel.model.fields">
+        <field name="name">days</field>
+        <field name="counterpart_name">scadenza</field>
+        <field name="model_id" ref="account_payment_term_line"/>
+    </record>
+
+    <record forcecreate="1" id="account_payment_term_line_option" model="synchro.channel.model.fields">
+        <field name="name">option</field>
+        <field name="counterpart_name">fine_mese</field>
+        <field name="apply">eom()</field>
+        <field name="model_id" ref="account_payment_term_line"/>
+    </record>
+
+    <record forcecreate="1" id="account_payment_term_line_payment_days" model="synchro.channel.model.fields">
+        <field name="name">payment_days</field>
+        <field name="counterpart_name">giorni_fine_mese</field>
+        <field name="model_id" ref="account_payment_term_line"/>
+    </record>
+
+    <record forcecreate="1" id="account_payment_term_line_to_delete" model="synchro.channel.model.fields">
+        <field name="name">to_delete</field>
+        <field name="apply">false</field>
+        <field name="model_id" ref="account_payment_term_line"/>
+    </record>
+
+</odoo>
+

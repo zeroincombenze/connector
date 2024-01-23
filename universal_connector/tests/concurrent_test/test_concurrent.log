@@ -1,0 +1,5 @@
+
+2023-10-31 09:42:56: init_test(ctx)
+>>> synchro(ctx, res.company, {u'oe8:id': 3, u'oe8:name': u'Test Company'}) => 4
+
+2023-10-31 09:45:38: *** Starting VG7 test ***

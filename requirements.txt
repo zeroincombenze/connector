@@ -1,2 +1,8 @@
+python_plus
+odoo_score
+os0
+clodoo
+z0lib
+unidecode
 cachetools>=2.0.1
 unittest2

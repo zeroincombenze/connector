@@ -250,7 +250,7 @@ class WorkContext(object):
                 _logger.error(
                     'No component registry for database %s. '
                     'Probably because the Odoo registry has not been built '
-                    'yet.'
+                    'yet.', dbname
                 )
                 raise
         self._propagate_kwargs = [
@@ -269,6 +269,15 @@ class WorkContext(object):
         This is the environment of the current collection.
         """
         return self.collection.env
+
+    @property
+    def model(self):
+        """ Return the current Odoo model
+
+        This is the model of the current environment.
+        """
+        # Added as from 12.0
+        return self.env[self.model_name]
 
     def work_on(self, model_name=None, collection=None):
         """ Create a new work context for another model keeping attributes

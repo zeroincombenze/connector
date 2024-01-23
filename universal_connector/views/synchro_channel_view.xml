@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_synchro_channel_tree" model="ir.ui.view">
+        <field name="name">view.synchro.channel.tree</field>
+        <field name="model">synchro.channel</field>
+        <field name="arch" type="xml">
+            <tree string="Synchonization Channel">
+                <field name="sequence"/>
+                <field name="name"/>
+                <field name="prefix"/>
+                <field name="identity"/>
+                <field name="method"/>
+                <field name="company_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_synchro_channel_form" model="ir.ui.view">
+        <field name="name">view.synchro.channel.form</field>
+        <field name="model">synchro.channel</field>
+        <field name="arch" type="xml">
+            <form string="Synchonization Channel">
+                <header>
+                    <button name="button_check_connection"
+                            type="object"
+                            class="oe_highlight"
+                            string="Check Connection"
+                            attrs="{'invisible':['|',('state','not in',['draft']),('active','=',False)]}"
+                    />
+                    <button name="%(action_wizard_pull_records)d"
+                            type="action"
+                            string="Pull Records" class="oe_highlight"
+                            attrs="{'invisible':['|',('state','in',['draft']),('active','=',False)]}"
+                    />
+                    <button name="button_reset_to_draft"
+                            type="object"
+                            string="Reset To draft Connection"
+                            attrs="{'invisible':['|',('state','in',['draft']),('active','=',False)]}"
+                    />
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <group>
+                    <field name="name"/>
+                    <field name="prefix"/>
+                    <field name="identity"/>
+                    <field name="method"/>
+                    <field name="client_key"/>
+                    <field name="password" password="True"/>
+                    <field name="counterpart_url"/>
+                </group>
+                <group>
+                    <field name="company_id"/>
+                    <field name="exchange_path"/>
+                    <field name="sequence"/>
+                    <field name="import_workflow"/>
+                    <field name="rec_counter"/>
+                    <field name="workflow_model"/>
+                    <field name="active"/>
+                    <!-- <field name="trace" readonly="1"/> -->
+                    <field name="tracelevel"/>
+                </group>
+                <field name="model_ids">
+                    <tree string="Model mapping" editable="bottom">
+                        <field name="name"/>
+                        <field name="counterpart_name"/>
+                        <field name="field_uname"/>
+                        <field name="model_spec"/>
+                        <field name="field_2complete"/>
+                        <field name="sequence"/>
+                    </tree>
+                </field>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_synchro_channel" model="ir.actions.act_window">
+        <field name="name">Synchonization Channel</field>
+        <field name="res_model">synchro.channel</field>
+        <field name="view_id" ref="view_synchro_channel_tree"/>
+    </record>
+
+
+    <record id="view_synchro_model_tree" model="ir.ui.view">
+        <field name="name">view.synchro.channel.model.tree</field>
+        <field name="model">synchro.channel.model</field>
+        <field name="arch" type="xml">
+            <tree string="Synchonization model">
+                <field name="name"/>
+                <field name="counterpart_name"/>
+                <field name="field_uname"/>
+                <field name="model_spec"/>
+                <field name="field_2complete"/>
+                <field name="sequence"/>
+                <field name="synchro_channel_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_synchro_model_form" model="ir.ui.view">
+        <field name="name">view.synchro.model.form</field>
+        <field name="model">synchro.channel.model</field>
+        <field name="arch" type="xml">
+            <form string="Synchonization Model">
+                <group>
+                    <field name="name"/>
+                    <field name="counterpart_name"/>
+                    <field name="field_uname"/>
+                    <field name="search_keys"/>
+                    <field name="model_spec"/>
+                    <field name="field_2complete"/>
+                    <field name="sequence"/>
+                    <field name="synchro_channel_id"/>
+                    <field name="rec_counter"/>
+                </group>
+                <field name="field_ids">
+                    <tree string="Field mapping" editable="bottom">
+                        <field name="name"/>
+                        <field name="spec"/>
+                        <field name="counterpart_name"/>
+                        <field name="apply"/>
+                        <field name="protect_update"/>
+                        <field name="required"/>
+                    </tree>
+                </field>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_synchro_model" model="ir.actions.act_window">
+        <field name="name">Synchonization Model</field>
+        <field name="res_model">synchro.channel.model</field>
+        <field name="view_id" ref="view_synchro_model_tree"/>
+    </record>
+
+
+    <record id="view_synchro_tnl_tree" model="ir.ui.view">
+        <field name="name">view.synchro.tnl.tree</field>
+        <field name="model">synchro.channel.domain.translation</field>
+        <field name="arch" type="xml">
+            <tree string="Synchonization Domains">
+                <field name="model"/>
+                <field name="key"/>
+                <field name="odoo_value"/>
+                <field name="ext_value"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_synchro_tnl_form" model="ir.ui.view">
+        <field name="name">view.synchro.tnl.form</field>
+        <field name="model">synchro.channel.domain.translation</field>
+        <field name="arch" type="xml">
+            <form string="Synchonization Domains">
+                <group>
+                    <field name="model"/>
+                    <field name="key"/>
+                    <field name="odoo_value"/>
+                    <field name="ext_value"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_synchro_tnl" model="ir.actions.act_window">
+        <field name="name">Translation Domains</field>
+        <field name="res_model">synchro.channel.domain.translation</field>
+        <field name="view_id" ref="view_synchro_tnl_tree"/>
+    </record>
+
+
+    <record id="view_synchro_log_tree" model="ir.ui.view">
+        <field name="name">view.synchro.log.tree</field>
+        <field name="model">ir.model.synchro.log</field>
+        <field name="arch" type="xml">
+            <tree string="Synchonization Log">
+                <field name="timestamp"/>
+                <field name="model"/>
+                <field name="res_id"/>
+                <field name="errmsg"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_synchro_log" model="ir.actions.act_window">
+        <field name="name">Synchronization log</field>
+        <field name="res_model">ir.model.synchro.log</field>
+        <field name="view_id" ref="view_synchro_log_tree"/>
+    </record>
+
+
+    <menuitem id="menu_synchro_channel" name="Synchonization Channel"
+              action="action_synchro_channel" parent="base.next_id_9"
+              groups="base.group_no_one"/>
+
+    <menuitem id="menu_synchro_model" name="Synchonization Model"
+              action="action_synchro_model" parent="base.next_id_9"
+              groups="base.group_no_one"/>
+
+    <menuitem id="menu_synchro_translation" name="Translation Domains"
+              action="action_synchro_tnl" parent="base.next_id_9"
+              groups="base.group_no_one"/>
+
+    <menuitem id="menu_synchro_log" name="Synchonization Log"
+              action="action_synchro_log" parent="base.next_id_9"
+              groups="base.group_no_one"/>
+
+</odoo>

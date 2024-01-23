@@ -2,25 +2,24 @@
 
 set -o errexit -o nounset
 
-if [ "$TRAVIS_BRANCH" = "10.0" ] && [ "$TRAVIS_PULL_REQUEST" = false ]; then
-  cd "${TRAVIS_BUILD_DIR}"
+if [ $TRAVIS_BRANCH = "8.0" ] && [ $TRAVIS_PULL_REQUEST = false ]; then
+  cd ${TRAVIS_BUILD_DIR}
   rev=$(git rev-parse --short HEAD)
 
-  mkdir gh-pages
-  cd gh-pages
-
+  cd ${HOME}/doc
   git init
   git config user.name "Guewen Baconnier"
   git config user.email "guewen.baconnier@camptocamp.com"
-  git remote add upstream "https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git"
+  git remote add upstream https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git
   git fetch upstream
-  git checkout gh-pages
+  git reset upstream/gh-pages
 
-  rm -rf "${TRAVIS_BRANCH}"
-  mv "${HOME}/doc" "${TRAVIS_BRANCH}"
+  echo "odoo-connector.com" > CNAME
+  touch .nojekyll
 
-  git add "${TRAVIS_BRANCH}"
-  git commit -m"rebuild pages at ${rev} on branch ${TRAVIS_BRANCH}"
+  touch .
+  git add -A .
+  git commit -m"rebuild pages at ${rev}"
 
   git push -q upstream HEAD:gh-pages
 fi
