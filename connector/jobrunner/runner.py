@@ -54,11 +54,7 @@ How to use it?
 * Set the following environment variables:
 
   - ODOO_CONNECTOR_CHANNELS=root:4 (or any other channels configuration)
-  - optional: ODOO_CONNECTOR_SCHEME=http
-  - optional if xmlrpc_interface is not set: ODOO_CONNECTOR_HOST=localhost
   - optional if xmlrpc_port is not set: ODOO_CONNECTOR_PORT=8069
-  - optional: ODOO_CONNECTOR_HTTP_AUTH_USER and
-              ODOO_CONNECTOR_HTTP_AUTH_PASSWORD
 
 * Start Odoo with --workers > 1. [2]
 * Disable then "Enqueue Jobs" cron.
@@ -102,7 +98,7 @@ ERROR_RECOVERY_DELAY = 5
 _logger = logging.getLogger(__name__)
 
 
-def _async_http_get(scheme, host, port, user, password, db_name, job_uuid):
+def _async_http_get(port, db_name, job_uuid):
     # Method to set failed job (due to timeout, etc) as pending,
     # to avoid keeping it as enqueued.
     def set_job_pending():
@@ -119,15 +115,12 @@ def _async_http_get(scheme, host, port, user, password, db_name, job_uuid):
     #       if this was python3 I would be doing this with
     #       asyncio, aiohttp and aiopg
     def urlopen():
-        url = ('%s://%s:%s/connector/runjob?db=%s&job_uuid=%s' %
-               (scheme, host, port, db_name, job_uuid))
+        url = ('http://localhost:%s/connector/runjob?db=%s&job_uuid=%s' %
+               (port, db_name, job_uuid))
         try:
-            auth = None
-            if user:
-                auth = (user, password)
             # we are not interested in the result, so we set a short timeout
             # but not too short so we trap and log hard configuration errors
-            requests.get(url, timeout=1, auth=auth)
+            requests.get(url, timeout=1)
         except requests.Timeout:
             set_job_pending()
         except:
@@ -227,18 +220,8 @@ class Database(object):
 
 class ConnectorRunner(object):
 
-    def __init__(self,
-                 scheme='http',
-                 host='localhost',
-                 port=8069,
-                 user=None,
-                 password=None,
-                 channel_config_string='root:1'):
-        self.scheme = scheme
-        self.host = host
+    def __init__(self, port=8069, channel_config_string='root:1'):
         self.port = port
-        self.user = user
-        self.password = password
         self.channel_manager = ChannelManager()
         self.channel_manager.simple_configure(channel_config_string)
         self.db_by_name = {}
@@ -282,13 +265,7 @@ class ConnectorRunner(object):
             _logger.info("asking Odoo to run job %s on db %s",
                          job.uuid, job.db_name)
             self.db_by_name[job.db_name].set_job_enqueued(job.uuid)
-            _async_http_get(self.scheme,
-                            self.host,
-                            self.port,
-                            self.user,
-                            self.password,
-                            job.db_name,
-                            job.uuid)
+            _async_http_get(self.port, job.db_name, job.uuid)
 
     def process_notifications(self):
         for db in self.db_by_name.values():
