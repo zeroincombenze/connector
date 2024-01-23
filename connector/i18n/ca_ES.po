@@ -1,21 +1,20 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # * connector
-#
+# 
 # Translators:
 msgid ""
 msgstr ""
 "Project-Id-Version: connector (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-02 02:46+0000\n"
-"PO-Revision-Date: 2018-02-02 14:11+0000\n"
+"POT-Creation-Date: 2017-04-05 02:47+0000\n"
+"PO-Revision-Date: 2017-04-25 10:41+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
-"Language-Team: Catalan (Spain) (http://www.transifex.com/oca/OCA-"
-"connector-8-0/language/ca_ES/)\n"
-"Language: ca_ES\n"
+"Language-Team: Catalan (Spain) (http://www.transifex.com/oca/OCA-connector-8-0/language/ca_ES/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
+"Language: ca_ES\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. module: connector
@@ -213,7 +212,7 @@ msgstr ""
 #: field:connector.config.settings,create_uid:0
 #: field:queue.job.channel,create_uid:0 field:queue.requeue.job,create_uid:0
 msgid "Created by"
-msgstr "Creat per"
+msgstr ""
 
 #. module: connector
 #: field:connector.checkpoint,create_date:0
@@ -221,7 +220,7 @@ msgstr "Creat per"
 #: field:connector.config.settings,create_date:0
 #: field:queue.job.channel,create_date:0 field:queue.requeue.job,create_date:0
 msgid "Created on"
-msgstr "Creat a"
+msgstr ""
 
 #. module: connector
 #: field:queue.job,retry:0
@@ -247,7 +246,7 @@ msgstr ""
 #. module: connector
 #: field:queue.job,name:0
 msgid "Description"
-msgstr "Descripció"
+msgstr ""
 
 #. module: connector
 #: field:connector.backend,display_name:0
@@ -259,7 +258,7 @@ msgstr "Descripció"
 #: field:queue.job.function,display_name:0
 #: field:queue.requeue.job,display_name:0 field:queue.worker,display_name:0
 msgid "Display Name"
-msgstr "Nom visible"
+msgstr ""
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_search selection:queue.job,state:0
@@ -431,7 +430,7 @@ msgstr ""
 #: field:queue.job.function,__last_update:0
 #: field:queue.requeue.job,__last_update:0 field:queue.worker,__last_update:0
 msgid "Last Modified on"
-msgstr "Darrera modificació en"
+msgstr ""
 
 #. module: connector
 #: field:connector.checkpoint,write_uid:0
@@ -439,7 +438,7 @@ msgstr "Darrera modificació en"
 #: field:connector.config.settings,write_uid:0
 #: field:queue.job.channel,write_uid:0 field:queue.requeue.job,write_uid:0
 msgid "Last Updated by"
-msgstr "Darrera actualització per"
+msgstr ""
 
 #. module: connector
 #: field:connector.checkpoint,write_date:0
@@ -447,7 +446,7 @@ msgstr "Darrera actualització per"
 #: field:connector.config.settings,write_date:0
 #: field:queue.job.channel,write_date:0 field:queue.requeue.job,write_date:0
 msgid "Last Updated on"
-msgstr "Darrera actualització el"
+msgstr ""
 
 #. module: connector
 #: field:external.binding,sync_date:0
@@ -490,7 +489,7 @@ msgstr ""
 #: field:connector.backend,name:0 field:queue.job.channel,name:0
 #: field:queue.job.function,name:0
 msgid "Name"
-msgstr "Nom"
+msgstr ""
 
 #. module: connector
 #: help:connector.checkpoint,name:0
@@ -659,7 +658,7 @@ msgstr ""
 #. module: connector
 #: field:queue.job,date_started:0 field:queue.worker,date_start:0
 msgid "Start Date"
-msgstr "Data d'inici"
+msgstr ""
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_search selection:queue.job,state:0
@@ -749,7 +748,7 @@ msgstr ""
 #. module: connector
 #: field:connector.backend,version:0
 msgid "Version"
-msgstr "Versió"
+msgstr ""
 
 #. module: connector
 #: model:ir.model,name:connector.model_queue_requeue_job
@@ -759,8 +758,7 @@ msgstr ""
 #. module: connector
 #: help:connector.config.settings,module_multi_company:0
 msgid ""
-"Work in multi-company environments, with appropriate security access between "
-"companies.\n"
+"Work in multi-company environments, with appropriate security access between companies.\n"
 "-This installs the module multi_company."
 msgstr ""
 

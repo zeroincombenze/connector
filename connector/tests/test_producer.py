@@ -70,11 +70,7 @@ class test_producers(common.TransactionCase):
         the event should not be fired at all
         """
         # clear all the registered events
-        consumers = on_record_write._consumers
         on_record_write._consumers = {None: set()}
-        try:
-            with mock.patch.object(on_record_write, 'fire'):
-                self.partner.write({'name': 'Kif Kroker'})
-                self.assertEqual(on_record_write.fire.called, False)
-        finally:
-            on_record_write._consumers = consumers
+        with mock.patch.object(on_record_write, 'fire'):
+            self.partner.write({'name': 'Kif Kroker'})
+            self.assertEqual(on_record_write.fire.called, False)

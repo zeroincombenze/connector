@@ -1,24 +1,22 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # * connector
-#
+# 
 # Translators:
-# liAnGjiA <liangjia@qq.com>, 2017
 # zeng <z_fy@live.cn>, 2016
 # zeng <z_fy@live.cn>, 2016-2017
 msgid ""
 msgstr ""
 "Project-Id-Version: connector (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-12 01:33+0000\n"
-"PO-Revision-Date: 2017-08-18 06:48+0000\n"
-"Last-Translator: liAnGjiA <liangjia@qq.com>\n"
-"Language-Team: Chinese (China) (http://www.transifex.com/oca/OCA-"
-"connector-8-0/language/zh_CN/)\n"
-"Language: zh_CN\n"
+"POT-Creation-Date: 2017-04-05 02:47+0000\n"
+"PO-Revision-Date: 2017-04-19 01:22+0000\n"
+"Last-Translator: zeng <z_fy@live.cn>\n"
+"Language-Team: Chinese (China) (http://www.transifex.com/oca/OCA-connector-8-0/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
+"Language: zh_CN\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #. module: connector
@@ -33,15 +31,7 @@ msgid ""
 "                    based on their type.  Only some need a manual\n"
 "                    review.</p>\n"
 "            "
-msgstr ""
-"<p>没有记录待检查.</p>\n"
-"                <p> 当连接器导入新记录时\n"
-"                    它们会显示在这里\n"
-"                 记录导入完成后\n"
-"                    单击'审阅' 按钮.  </p>\n"
-"                <p>连接器列出需要审阅的新记录\n"
-"                    根据类型，一部分需要手动审查\n"
-"            "
+msgstr "<p>没有记录待检查.</p>\n                <p> 当连接器导入新记录时\n                    它们会显示在这里\n                 记录导入完成后\n                    单击'审阅' 按钮.  </p>\n                <p>连接器列出需要审阅的新记录\n                    根据类型，一部分需要手动审查\n            "
 
 #. module: connector
 #: code:addons/connector/checkpoint/checkpoint.py:136
@@ -569,12 +559,12 @@ msgstr "队列中作业"
 #. module: connector
 #: model:ir.model,name:connector.model_queue_worker
 msgid "Queue Worker"
-msgstr "作业队列"
+msgstr ""
 
 #. module: connector
 #: field:connector.checkpoint,record:0
 msgid "Record"
-msgstr "记录"
+msgstr ""
 
 #. module: connector
 #: field:connector.checkpoint,record_id:0
@@ -584,7 +574,7 @@ msgstr "记录 ID"
 #. module: connector
 #: field:connector.checkpoint,name:0
 msgid "Record Name"
-msgstr "记录名"
+msgstr ""
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_form
@@ -703,9 +693,7 @@ msgstr "任务"
 msgid ""
 "The job will fail if the number of tries reach the max. retries.\n"
 "Retries are infinite when empty."
-msgstr ""
-"如果尝试次数达到最大重试数，作业将被标记为失败\n"
-"如果没有设置最大重试次数，将会无限次重试."
+msgstr "如果尝试次数达到最大重试数，作业将被标记为失败\n如果没有设置最大重试次数，将会无限次重试."
 
 #. module: connector
 #: help:connector.checkpoint,backend_id:0
@@ -772,8 +760,7 @@ msgstr "对已选作业进行重排"
 #. module: connector
 #: help:connector.config.settings,module_multi_company:0
 msgid ""
-"Work in multi-company environments, with appropriate security access between "
-"companies.\n"
+"Work in multi-company environments, with appropriate security access between companies.\n"
 "-This installs the module multi_company."
 msgstr ""
 

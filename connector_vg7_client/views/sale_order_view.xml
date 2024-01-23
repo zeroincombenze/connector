@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<openerp>
+<data>
+
+    <record id="view_sale_order_form_sync" model="ir.ui.view">
+        <field name="name">sale.order.form.sync</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <button name="action_button_confirm" position="after">
+                <button name="send_synchro"
+                        type="object"
+                        string="Send to 10.0" class="oe_highlight"/>
+            </button>
+        </field>
+    </record>
+
+</data>
+</openerp>
+

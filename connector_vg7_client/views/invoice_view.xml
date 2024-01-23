@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<openerp>
+<data>
+
+    <record id="view_invoice_form_sync" model="ir.ui.view">
+        <field name="name">account.invoice.form.sync</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_form"/>
+        <field name="arch" type="xml">
+            <button name="invoice_proforma2" position="after">
+                <button name="send_synchro"
+                        type="object"
+                        string="Send to 10.0" class="oe_highlight"/>
+            </button>
+        </field>
+    </record>
+
+</data>
+</openerp>
+

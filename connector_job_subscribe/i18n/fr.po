@@ -1,7 +1,7 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # * connector_job_subscribe
-#
+# 
 # Translators:
 # OCA Transbot <transbot@odoo-community.org>, 2017
 msgid ""
@@ -9,15 +9,14 @@ msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-04-05 02:47+0000\n"
-"PO-Revision-Date: 2018-06-23 16:04+0000\n"
-"Last-Translator: Guewen Baconnier <guewen.baconnier@camptocamp.com>\n"
+"PO-Revision-Date: 2017-04-05 02:47+0000\n"
+"Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2017\n"
 "Language-Team: French (https://www.transifex.com/oca/teams/23907/fr/)\n"
-"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.0.1\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #. module: connector_job_subscribe
 #: view:res.users:connector_job_subscribe.view_user_connector_form
@@ -30,13 +29,11 @@ msgid ""
 "If this flag is checked and the user is Connector Manager, he will receive "
 "job notifications."
 msgstr ""
-"Si cette case est activée et l'utilisatrice est Responsable Connecteur, elle "
-"va recevoir des notifications de job."
 
 #. module: connector_job_subscribe
 #: field:res.users,subscribe_job:0
 msgid "Jobs Notifications"
-msgstr "Notifications de jobs"
+msgstr ""
 
 #. module: connector_job_subscribe
 #: model:ir.model,name:connector_job_subscribe.model_queue_job

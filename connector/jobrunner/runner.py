@@ -117,7 +117,6 @@ import logging
 import os
 import re
 import select
-import signal
 import threading
 import time
 
@@ -134,8 +133,6 @@ SELECT_TIMEOUT = 60
 ERROR_RECOVERY_DELAY = 5
 
 _logger = logging.getLogger(__name__)
-
-sessions = {}
 
 
 # Unfortunately, it is not possible to extend the Odoo
@@ -157,16 +154,6 @@ def _channels():
 
 
 def _async_http_get(port, db_name, job_uuid):
-    if not sessions.get(db_name):
-        sessions[db_name] = requests.Session()
-    session = sessions[db_name]
-    if not session.cookies:
-        # obtain an anonymous session
-        _logger.info("obtaining an anonymous session for the job runner")
-        url = 'http://localhost:%s/web/login?db=%s' % (port, db_name)
-        response = session.get(url, timeout=30)
-        response.raise_for_status()
-
     # Method to set failed job (due to timeout, etc) as pending,
     # to avoid keeping it as enqueued.
     def set_job_pending():
@@ -188,17 +175,11 @@ def _async_http_get(port, db_name, job_uuid):
         try:
             # we are not interested in the result, so we set a short timeout
             # but not too short so we trap and log hard configuration errors
-            response = session.get(url, timeout=1)
-
-            # raise_for_status will result in either nothing, a Client Error
-            # for HTTP Response codes between 400 and 500 or a Server Error
-            # for codes between 500 and 600
-            response.raise_for_status()
+            requests.get(url, timeout=1)
         except requests.Timeout:
             set_job_pending()
         except:
             _logger.exception("exception in GET %s", url)
-            session.cookies.clear()
             set_job_pending()
     thread = threading.Thread(target=urlopen)
     thread.daemon = True
@@ -213,15 +194,6 @@ class Database(object):
         self.conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
         self.has_connector = self._has_connector()
         if self.has_connector:
-            if not self._lock():
-                _logger.exception(
-                    "Jobrunner lock was not granted. Is there another "
-                    "jobrunner active in database %s? Trying to stop Odoo.",
-                    self.db_name)
-                os.kill(openerp.service.server.server.pid, signal.SIGINT)
-                raise RuntimeError(
-                    'Jobrunner lock was not granted in database %s' % db_name)
-
             self.has_channel = self._has_queue_job_column('channel')
             self._initialize()
 
@@ -245,14 +217,6 @@ class Database(object):
                 else:
                     raise
             return cr.fetchone()
-
-    def _lock(self):
-        """ Request a session lock on the database. The session lock will be
-        released when self.conn is deleted. If the lock is not granted, there
-        is already a jobrunner running in this database. """
-        with closing(self.conn.cursor()) as cr:
-            cr.execute("select pg_try_advisory_lock(hashtext('jobrunner'))")
-            return cr.fetchone()[0]
 
     def _has_queue_job_column(self, column):
         if not self.has_connector:
@@ -409,14 +373,10 @@ class ConnectorRunner(object):
                     self.wait_notification()
             except KeyboardInterrupt:
                 self.stop()
-            except Exception as e:
-                # Interrupted system call, i.e. KeyboardInterrupt during select
-                if isinstance(e, select.error) and e[0] == 4:
-                    self.stop()
-                else:
-                    _logger.exception("exception: sleeping %ds and retrying",
-                                      ERROR_RECOVERY_DELAY)
-                    self.close_databases()
-                    time.sleep(ERROR_RECOVERY_DELAY)
+            except:
+                _logger.exception("exception: sleeping %ds and retrying",
+                                  ERROR_RECOVERY_DELAY)
+                self.close_databases()
+                time.sleep(ERROR_RECOVERY_DELAY)
         self.close_databases(remove_jobs=False)
         _logger.info("stopped")

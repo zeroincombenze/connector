@@ -1,7 +1,7 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # * connector
-#
+# 
 # Translators:
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2014
 msgid ""
@@ -9,16 +9,14 @@ msgstr ""
 "Project-Id-Version: connector (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-12-22 14:19+0000\n"
-"PO-Revision-Date: 2024-01-17 10:36+0000\n"
-"Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
-"Language-Team: Italian (http://www.transifex.com/oca/OCA-connector-8-0/"
-"language/it/)\n"
-"Language: it\n"
+"PO-Revision-Date: 2016-12-23 08:32+0000\n"
+"Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
+"Language-Team: Italian (http://www.transifex.com/oca/OCA-connector-8-0/language/it/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.17\n"
+"Language: it\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. module: connector
 #: model:ir.actions.act_window,help:connector.action_connector_checkpoint
@@ -83,7 +81,7 @@ msgstr ""
 #. module: connector
 #: view:connector.config.settings:connector.view_connector_config_settings
 msgid "Backends"
-msgstr "Backend"
+msgstr "Backends"
 
 #. module: connector
 #: view:connector.checkpoint.review:connector.view_connector_checkpoint_review
@@ -99,13 +97,13 @@ msgid "Canceled. Nothing to do."
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:462
+#: code:addons/connector/queue/model.py:457
 #, python-format
 msgid "Cannot change the root channel"
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:469
+#: code:addons/connector/queue/model.py:464
 #, python-format
 msgid "Cannot remove the root channel"
 msgstr ""
@@ -261,7 +259,7 @@ msgstr "Descrizione"
 #: field:queue.job.function,display_name:0
 #: field:queue.requeue.job,display_name:0 field:queue.worker,display_name:0
 msgid "Display Name"
-msgstr "Nome visualizzato"
+msgstr "Nome da visualizzare"
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_search selection:queue.job,state:0
@@ -276,7 +274,7 @@ msgstr ""
 #. module: connector
 #: view:queue.job:connector.view_queue_job_search selection:queue.job,state:0
 msgid "Enqueued"
-msgstr "In coda"
+msgstr "In Coda"
 
 #. module: connector
 #: field:queue.job,exc_info:0
@@ -307,7 +305,7 @@ msgstr "Fallito"
 #: field:connector.checkpoint,message_follower_ids:0
 #: field:queue.job,message_follower_ids:0
 msgid "Followers"
-msgstr "Seguito da"
+msgstr "Followers"
 
 #. module: connector
 #: field:queue.job,func_name:0
@@ -336,9 +334,7 @@ msgstr "Raggruppa per..."
 msgid ""
 "Holds the Chatter summary (number of messages, ...). This summary is "
 "directly in html format in order to be inserted in kanban views."
-msgstr ""
-"Contiene il riepilogo Chatter (numero di messaggi, ...). Questa sintesi è "
-"direttamente in formato HTML, al fine di essere inserita nelle viste kanban."
+msgstr "Gestisce il sommario (numero di messaggi, ...) del Chatter. Questo sommario è direttamente in html così da poter essere inserito nelle viste kanban."
 
 #. module: connector
 #: field:connector.backend,id:0 field:connector.checkpoint,id:0
@@ -352,7 +348,7 @@ msgstr "ID"
 #. module: connector
 #: help:connector.checkpoint,message_unread:0 help:queue.job,message_unread:0
 msgid "If checked new messages require your attention."
-msgstr "Se selezionata, nuovi messaggi richiedono attenzione."
+msgstr "Se selezionato, nuovi messaggi richiedono la tua attenzione."
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_form
@@ -375,7 +371,7 @@ msgstr "Importato da"
 #: field:connector.checkpoint,message_is_follower:0
 #: field:queue.job,message_is_follower:0
 msgid "Is a Follower"
-msgstr "Sta seguendo"
+msgstr "È un follower"
 
 #. module: connector
 #: model:ir.model,name:connector.model_queue_job_channel
@@ -412,7 +408,7 @@ msgstr ""
 #: view:queue.job:connector.view_queue_job_tree
 #: field:queue.requeue.job,job_ids:0 field:queue.worker,job_ids:0
 msgid "Jobs"
-msgstr "Lavori"
+msgstr "Jobs"
 
 #. module: connector
 #: field:queue.worker,date_alive:0
@@ -472,7 +468,7 @@ msgstr ""
 #. module: connector
 #: field:queue.job,max_retries:0
 msgid "Max. retries"
-msgstr "Massimo tentativi"
+msgstr "N. max tentativi"
 
 #. module: connector
 #: field:connector.checkpoint,message_ids:0 field:queue.job,message_ids:0
@@ -529,7 +525,7 @@ msgid "Parent Channel"
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:454
+#: code:addons/connector/queue/model.py:449
 #, python-format
 msgid "Parent channel required."
 msgstr ""
@@ -537,7 +533,7 @@ msgstr ""
 #. module: connector
 #: view:queue.job:connector.view_queue_job_search selection:queue.job,state:0
 msgid "Pending"
-msgstr "In attesa"
+msgstr "Attesa"
 
 #. module: connector
 #: field:queue.job,func:0
@@ -557,7 +553,7 @@ msgstr "Coda"
 #. module: connector
 #: model:ir.model,name:connector.model_queue_job
 msgid "Queue Job"
-msgstr "Lavoro in coda"
+msgstr "Coda Job"
 
 #. module: connector
 #: model:ir.model,name:connector.model_queue_worker
@@ -653,7 +649,7 @@ msgid "Share or embbed any screen of Odoo."
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:192
+#: code:addons/connector/queue/model.py:187
 #, python-format
 msgid ""
 "Something bad happened during the execution of the job. More details in the "
@@ -663,7 +659,7 @@ msgstr ""
 #. module: connector
 #: field:queue.job,date_started:0 field:queue.worker,date_start:0
 msgid "Start Date"
-msgstr "Data inizio"
+msgstr "Data Inizio"
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_search selection:queue.job,state:0
@@ -689,7 +685,7 @@ msgstr "Periodo Iva"
 #. module: connector
 #: field:queue.job,func_string:0
 msgid "Task"
-msgstr "Attività"
+msgstr "Task"
 
 #. module: connector
 #: help:queue.job,max_retries:0
@@ -716,7 +712,7 @@ msgstr ""
 #. module: connector
 #: view:queue.requeue.job:connector.view_requeue_job
 msgid "The selected jobs will be requeued."
-msgstr "I lavori selezionati verranno riaccodati."
+msgstr "I job selezionati verranno rischedulati."
 
 #. module: connector
 #: help:connector.config.settings,module_google_calendar:0
@@ -758,13 +754,12 @@ msgstr ""
 #. module: connector
 #: model:ir.model,name:connector.model_queue_requeue_job
 msgid "Wizard to requeue a selection of jobs"
-msgstr "Procedura guidata per riaccodare una selezione di lavori"
+msgstr "Wizard per rischedulare una selezione di job"
 
 #. module: connector
 #: help:connector.config.settings,module_multi_company:0
 msgid ""
-"Work in multi-company environments, with appropriate security access between "
-"companies.\n"
+"Work in multi-company environments, with appropriate security access between companies.\n"
 "-This installs the module multi_company."
 msgstr ""
 

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+    <record id="view_synchro_channel_tree" model="ir.ui.view">
+        <field name="name">view.synchro.channel.tree</field>
+        <field name="model">synchro.channel</field>
+        <field name="arch" type="xml">
+            <tree string="Synchonization Channel">
+                <field name="sequence"/>
+                <field name="name"/>
+                <field name="prefix"/>
+                <field name="identity"/>
+                <field name="method"/>
+                <field name="company_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_synchro_channel_form" model="ir.ui.view">
+        <field name="name">view.synchro.channel.form</field>
+        <field name="model">synchro.channel</field>
+        <field name="arch" type="xml">
+            <form string="Synchonization Channel">
+                <group>
+                    <field name="name"/>
+                    <field name="prefix"/>
+                    <field name="identity"/>
+                    <field name="method"/>
+                    <field name="client_key"/>
+                    <field name="password" password="True"/>
+                    <field name="counterpart_url"/>
+                </group>
+                <group>
+                    <field name="company_id"/>
+                    <field name="exchange_path"/>
+                    <field name="sequence"/>
+                    <field name="active"/>
+                    <field name="trace"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_synchro_channel" model="ir.actions.act_window">
+        <field name="name">Synchonization Channel</field>
+        <field name="res_model">synchro.channel</field>
+        <field name="view_id" ref="view_synchro_channel_tree"/>
+    </record>
+
+    <menuitem id="menu_synchro_channel" name="Synchonization Channel"
+              action="action_synchro_channel" parent="base.next_id_9"
+              groups="base.group_no_one"/>
+
+    </data>
+</openerp>
