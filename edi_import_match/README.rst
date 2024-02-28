@@ -80,19 +80,12 @@ L'utente può creare proprie regole di riconoscimento record.
 Features | Caratteristiche
 --------------------------
 
-+---------------------------------------------------------------------------+----------+-------------------------+
-| Description | Descrizione                                                 | Z0incomb | Note(s)                 |
-+---------------------------------------------------------------------------+----------+-------------------------+
-| Match rules by end user | Regole definite da utente finale                | ✅       | Available on OCA module |
-+---------------------------------------------------------------------------+----------+-------------------------+
-| Conditional rule | Regola condizionale                                    | ✅       | Available on OCA module |
-+---------------------------------------------------------------------------+----------+-------------------------+
-| Default for conditional rule | Valore predefinito per regola condizionale | ✅       |                         |
-+---------------------------------------------------------------------------+----------+-------------------------+
-| State depends on Country | Provincia dipendente da nazione                | ✅       |                         |
-+---------------------------------------------------------------------------+----------+-------------------------+
-| Match boolean values | Confronta valori booleani                          | ❌       |                         |
-+---------------------------------------------------------------------------+----------+-------------------------+
+Description | Descrizione,Z0incombenze(R),Note(s)
+Match rules by end user | Regole definite da utente finale,✅,Available on OCA module
+Conditional rule | Regola condizionale,✅,Available on OCA module
+Default for conditional rule | Valore predefinito per regola condizionale,✅,
+State depends on Country | Provincia dipendente da nazione,✅,
+Match boolean values | Confronta valori booleani,❌,
 
 
 
@@ -214,7 +207,7 @@ In case of trouble, please check there if your issue has already been reported.
 Known issues | Roadmap
 ----------------------
 
-This module replaces some feature of the base Odoo function that cannob be overridden.
+This module replaces some feature of the base Odoo function that cannot be overridden.
 For this reason, this module depends on specific 12.0.1.3 version of *base* that is the
 latest version.
 
@@ -244,8 +237,8 @@ ChangeLog History | Cronologia modifiche
 
 
 
-Credits | Didascalie
-====================
+Credits | Ringraziamenti
+========================
 
 Copyright
 ---------
@@ -262,8 +255,8 @@ Authors | Autori
 
 
 
-Contributors | Contributi da
-----------------------------
+Contributors | Partecipanti
+---------------------------
 
 * `Tecnativa <https://www.tecnativa.com>`__
 * `Antonio M. Vigliotti <antoniomaria.vigliott@gmail.com>`__
@@ -294,7 +287,7 @@ La distribuzione `Zeroincombenze® <https://www.zeroincombenze.it/>`__ è proget
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2024-01-22
+Last Update / Ultimo aggiornamento: 2024-02-27
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status

@@ -1,4 +1,4 @@
-This module replaces some feature of the base Odoo function that cannob be overridden.
+This module replaces some feature of the base Odoo function that cannot be overridden.
 For this reason, this module depends on specific 12.0.1.3 version of *base* that is the
 latest version.
 

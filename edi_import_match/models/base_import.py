@@ -35,7 +35,7 @@ class BaseImportMatch(models.Model):
     active = fields.Boolean("Active", default=True)
 
     @api.onchange("model_id")
-    def _onchange_model_id(self):
+    def _onchange_model_id(self):                                    # pragma: no cover
         self.field_ids = False
 
     @api.depends("model_id", "field_ids")
@@ -75,6 +75,15 @@ class BaseImportMatch(models.Model):
             Return a dataset with one single match if it was found, or an
             empty dataset if none or multiple matches were found.
         """
+        def cast_value(value):
+            if isinstance(value, str) and value in ("False", "0", ""):
+                return False
+            converter = getattr(self.env["ir.fields.converter"],
+                                "_str_to_%s" % field.field_id.ttype)
+            if not converter:                                       # pragma: no cover
+                return value
+            return converter(field.model_id.model, field.field_id, value)[0]
+
         # Get usable rules to perform matches
         usable = self._usable_rules(model._name, converted_row)
         # usable = self.browse(usable)
@@ -86,19 +95,24 @@ class BaseImportMatch(models.Model):
                 # Check imported value if it is a conditional field
                 if field.conditional:
                     # Invalid combinations are skipped
-                    if (imported_row.get(field.name,
-                                         field.default_value) != field.imported_value):
+                    if (
+                            cast_value(
+                                imported_row.get(field.name, field.default_value))
+                            != cast_value(field.imported_value)
+                    ):
                         combination_valid = False
                         break
-                domain.append((field.name, "=", converted_row.get(field.name,
-                                                                  field.default_value)))
+                domain.append((field.name,
+                               "=",
+                               converted_row.get(field.name,
+                                                 cast_value(field.default_value))))
             if not combination_valid:
                 continue
             match = model.search(domain)
             # When a single match is found, stop searching
             if len(match) == 1:
                 return match
-            elif match:
+            elif match:                                              # pragma: no cover
                 _logger.warning(
                     "Found multiple matches for model %s and domain %s; "
                     "falling back to default behavior (create new record)",
@@ -172,6 +186,6 @@ class BaseImportMatchField(models.Model):
             )
 
     @api.onchange("field_id", "match_id", "conditional", "imported_value")
-    def _onchange_match_id_name(self):
+    def _onchange_match_id_name(self):                              # pragma: no cover
         """Update match name."""
         self.mapped("match_id")._compute_name()

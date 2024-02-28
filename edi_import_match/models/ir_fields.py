@@ -18,6 +18,7 @@ class IrFieldsConverter(models.AbstractModel):
             record with values of typetag ``fromtype``) and returning a converted
             records matching what :meth:`odoo.osv.orm.Model.write` expects.
 
+            This monkey patch manages 2 level search for res.country.state
             :param model: :class:`odoo.osv.orm.Model` for the conversion base
             :returns: a converter callable
             :rtype: (record: dict, logger: (field, error) -> None) -> dict
@@ -32,7 +33,7 @@ class IrFieldsConverter(models.AbstractModel):
 
             def fn(record, log):
                 converted = {}
-                # TNY
+                # Search for country of res.country.state
                 suppl = {}
                 if "country_id" in record.keys() and "state_id" in record.keys():
                     field = "country_id"
@@ -69,6 +70,7 @@ class IrFieldsConverter(models.AbstractModel):
 
         @api.model
         def _str_to_many2one_z0(self, model, field, values, args=None):
+            # Redefined function with supplemental arguments (monkey patch)
             # Should only be one record, unpack
             [record] = values
 
@@ -90,6 +92,7 @@ class IrFieldsConverter(models.AbstractModel):
                              ``id`` for an external id and ``.id`` for a database
                              id
             :param value: value of the reference to match to an actual record
+            :param args: supplemental arguments for name_search (monkey patch)
             :param context: OpenERP request context
             :return: a pair of the matched database identifier (if any), the
                      translated user-readable name for the field and the list of

@@ -16,7 +16,6 @@
         "data/edi_import_match.xml",
         "views/edi_import_match_view.xml",
     ],
-    "demo": ["demo/edi_import_match.xml"],
     "maintainer": "Antonio M. Vigliotti <antoniomaria.vigliotti@gmail.com>",
     "installable": True,
     "application": False,

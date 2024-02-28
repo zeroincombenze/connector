@@ -43,9 +43,9 @@ class Base(models.AbstractModel):
                 if xmlid:
                     # Skip rows with ID, they do not need all this
                     row["id"] = xmlid
-                    # newdata.append(tuple(row[f] for f in clean_fields))
+                    newdata.append(tuple(row[f] for f in clean_fields))
                     continue
-                elif dbid:
+                elif dbid:                                           # pragma: no cover
                     # Find the xmlid for this dbid
                     match = self.browse(dbid)
                 else:
