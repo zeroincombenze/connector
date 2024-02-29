@@ -1,0 +1,65 @@
+2024-02-29 09:32:12,000 543688 DAEMON test_edi_import_match_12 run_odoo_debug.sh: cd /home/odoo/12.0/venv_odoo && source ./bin/activate
+2024-02-29 08:32:19,433 545386 INFO ? odoo: Odoo version 12.0 
+2024-02-29 08:32:19,434 545386 INFO ? odoo: Using configuration file at /home/odoo/12.0/connector/edi_import_match/tests/logs/zero12.connector.edi_import_match.conf 
+2024-02-29 08:32:19,434 545386 INFO ? odoo: addons paths: ['/home/odoo/.local/share/Odoo12/addons/addons/12.0', '/home/odoo/12.0/odoo/addons', '/home/odoo/12.0/addons', '/home/odoo/.local/share/Odoo12/addons', '/home/odoo/12.0/account-analytic', '/home/odoo/12.0/account-budgeting', '/home/odoo/12.0/account-closing', '/home/odoo/12.0/account-consolidation', '/home/odoo/12.0/account-financial-reporting', '/home/odoo/12.0/account-financial-tools', '/home/odoo/12.0/account-fiscal-rule', '/home/odoo/12.0/account-invoice-reporting', '/home/odoo/12.0/account-invoicing', '/home/odoo/12.0/account-payment', '/home/odoo/12.0/account-reconcile', '/home/odoo/12.0/bank-payment', '/home/odoo/12.0/bank-statement-import', '/home/odoo/12.0/brand', '/home/odoo/12.0/calendar', '/home/odoo/12.0/commission', '/home/odoo/12.0/community-data-files', '/home/odoo/12.0/connector', '/home/odoo/12.0/contract', '/home/odoo/12.0/credit-control', '/home/odoo/12.0/crm', '/home/odoo/12.0/currency', '/home/odoo/12.0/data-protection', '/home/odoo/12.0/delivery-carrier', '/home/odoo/12.0/dms', '/home/odoo/12.0/e-commerce', '/home/odoo/12.0/edi', '/home/odoo/12.0/helpdesk', '/home/odoo/12.0/hr', '/home/odoo/12.0/intrastat-extrastat', '/home/odoo/12.0/knowledge', '/home/odoo/12.0/l10n-italy', '/home/odoo/12.0/l10n-italy-supplemental', '/home/odoo/12.0/maintenance', '/home/odoo/12.0/management-system', '/home/odoo/12.0/manufacture', '/home/odoo/12.0/margin-analysis', '/home/odoo/12.0/mis-builder', '/home/odoo/12.0/multi-company', '/home/odoo/12.0/partner-contact', '/home/odoo/12.0/product-attribute', '/home/odoo/12.0/product-pack', '/home/odoo/12.0/product-variant', '/home/odoo/12.0/profiles', '/home/odoo/12.0/project', '/home/odoo/12.0/purchase-reporting', '/home/odoo/12.0/purchase-workflow', '/home/odoo/12.0/queue', '/home/odoo/12.0/report-print-send', '/home/odoo/12.0/reporting-engine', '/home/odoo/12.0/rma', '/home/odoo/12.0/sale-reporting', '/home/odoo/12.0/sale-workflow', '/home/odoo/12.0/search-engine', '/home/odoo/12.0/server-auth', '/home/odoo/12.0/server-backend', '/home/odoo/12.0/server-brand', '/home/odoo/12.0/server-env', '/home/odoo/12.0/server-tools', '/home/odoo/12.0/server-ux', '/home/odoo/12.0/social', '/home/odoo/12.0/stock-logistics-barcode', '/home/odoo/12.0/stock-logistics-reporting', '/home/odoo/12.0/stock-logistics-transport', '/home/odoo/12.0/stock-logistics-warehouse', '/home/odoo/12.0/stock-logistics-workflow', '/home/odoo/12.0/storage', '/home/odoo/12.0/timesheet', '/home/odoo/12.0/uncovered', '/home/odoo/12.0/web', '/home/odoo/12.0/website', '/home/odoo/12.0/wms', '/home/odoo/12.0/zerobug-test', '/home/odoo/12.0/venv_odoo/lib/python3.7/site-packages/odoo/addons'] 
+2024-02-29 08:32:19,434 545386 INFO ? odoo: database: odoo12@localhost:default 
+2024-02-29 08:32:19,605 545386 INFO ? odoo.addons.base.models.ir_actions_report: Will use the Wkhtmltopdf binary at /home/odoo/12.0/venv_odoo/bin/wkhtmltopdf 
+2024-02-29 08:32:19,751 545386 INFO ? odoo.service.server: HTTP service (werkzeug) running on nb200z0.:38528 
+2024-02-29 08:32:19,767 545386 INFO test_edi_import_match_12 odoo.modules.loading: loading 1 modules... 
+2024-02-29 08:32:19,780 545386 INFO test_edi_import_match_12 odoo.modules.loading: 1 modules loaded in 0.01s, 0 queries 
+2024-02-29 08:32:19,940 545386 INFO test_edi_import_match_12 odoo.modules.loading: updating modules list 
+2024-02-29 08:32:19,944 545386 INFO test_edi_import_match_12 odoo.addons.base.models.ir_module: ALLOW access to module.update_list on [] to user __system__ #1 via n/a 
+2024-02-29 08:32:32,488 545386 INFO test_edi_import_match_12 odoo.addons.base.models.ir_module: ALLOW access to module.button_install on ['edi_import_match'] to user __system__ #1 via n/a 
+2024-02-29 08:32:32,776 545386 INFO test_edi_import_match_12 odoo.modules.loading: loading 10 modules... 
+2024-02-29 08:32:32,853 545386 INFO test_edi_import_match_12 odoo.modules.loading: 10 modules loaded in 0.08s, 0 queries 
+2024-02-29 08:32:32,858 545386 INFO test_edi_import_match_12 odoo.modules.loading: loading 11 modules... 
+2024-02-29 08:32:33,235 545386 INFO test_edi_import_match_12 odoo.modules.registry: module edi_import_match: creating or updating database tables 
+2024-02-29 08:32:34,239 545386 INFO test_edi_import_match_12 odoo.models: Storing computed values of edi.import.match.name 
+2024-02-29 08:32:35,035 545386 INFO test_edi_import_match_12 odoo.modules.loading: loading edi_import_match/security/ir.model.access.csv 
+2024-02-29 08:32:35,071 545386 INFO test_edi_import_match_12 odoo.modules.loading: loading edi_import_match/data/edi_import_match.xml 
+2024-02-29 08:32:35,222 545386 INFO test_edi_import_match_12 odoo.modules.loading: loading edi_import_match/views/edi_import_match_view.xml 
+2024-02-29 08:32:35,317 545386 INFO test_edi_import_match_12 odoo.modules.loading: Module edi_import_match: loading demo 
+2024-02-29 08:32:36,047 545386 INFO test_edi_import_match_12 odoo.modules.module: odoo.addons.edi_import_match.tests.test_import running tests. 
+2024-02-29 08:32:36,048 545386 INFO test_edi_import_match_12 odoo.addons.edi_import_match.tests.test_import: test_01_update_phone (odoo.addons.edi_import_match.tests.test_import.TestImport) 
+2024-02-29 08:32:36,207 545386 INFO test_edi_import_match_12 odoo.addons.edi_import_match.tests.testenv: 🎺🎺🎺 Starting test v2.0.16 (debug_level=0, commit=True) 
+2024-02-29 08:32:36,211 545386 INFO test_edi_import_match_12 odoo.addons.edi_import_match.tests.testenv: 🎺🎺 Testing module: edi_import_match (12.0.1.0.0) 
+2024-02-29 08:32:36,212 545386 INFO test_edi_import_match_12 odoo.addons.edi_import_match.tests.testenv: 🎺🎺 Loading data from:   
+2024-02-29 08:32:36,235 545386 INFO test_edi_import_match_12 odoo.addons.base_import.models.base_import: importing 1 rows... 
+2024-02-29 08:32:36,291 545386 INFO test_edi_import_match_12 odoo.addons.base_import.models.base_import: done 
+2024-02-29 08:32:36,292 545386 INFO test_edi_import_match_12 odoo.addons.edi_import_match.tests.testenv: 🏆🥇 4 tests SUCCESSFULLY completed 
+2024-02-29 08:32:36,350 545386 INFO test_edi_import_match_12 odoo.addons.edi_import_match.tests.test_import: test_02_by_xref (odoo.addons.edi_import_match.tests.test_import.TestImport) 
+2024-02-29 08:32:36,366 545386 INFO test_edi_import_match_12 odoo.addons.edi_import_match.tests.testenv: 🎺🎺🎺 Starting test v2.0.16 (debug_level=0, commit=True) 
+2024-02-29 08:32:36,372 545386 INFO test_edi_import_match_12 odoo.addons.edi_import_match.tests.testenv: 🎺🎺 Testing module: edi_import_match (12.0.1.0.0) 
+2024-02-29 08:32:36,372 545386 INFO test_edi_import_match_12 odoo.addons.edi_import_match.tests.testenv: 🎺🎺 Loading data from:   
+2024-02-29 08:32:36,392 545386 INFO test_edi_import_match_12 odoo.addons.base_import.models.base_import: importing 1 rows... 
+2024-02-29 08:32:36,434 545386 INFO test_edi_import_match_12 odoo.addons.base_import.models.base_import: done 
+2024-02-29 08:32:36,435 545386 INFO test_edi_import_match_12 odoo.addons.edi_import_match.tests.testenv: 🏆🥇 4 tests SUCCESSFULLY completed 
+2024-02-29 08:32:36,436 545386 INFO test_edi_import_match_12 odoo.addons.edi_import_match.tests.test_import: test_03_country (odoo.addons.edi_import_match.tests.test_import.TestImport) 
+2024-02-29 08:32:36,453 545386 INFO test_edi_import_match_12 odoo.addons.edi_import_match.tests.testenv: 🎺🎺🎺 Starting test v2.0.16 (debug_level=0, commit=True) 
+2024-02-29 08:32:36,456 545386 INFO test_edi_import_match_12 odoo.addons.edi_import_match.tests.testenv: 🎺🎺 Testing module: edi_import_match (12.0.1.0.0) 
+2024-02-29 08:32:36,456 545386 INFO test_edi_import_match_12 odoo.addons.edi_import_match.tests.testenv: 🎺🎺 Loading data from:   
+2024-02-29 08:32:36,481 545386 INFO test_edi_import_match_12 odoo.addons.base_import.models.base_import: importing 1 rows... 
+2024-02-29 08:32:36,530 545386 INFO test_edi_import_match_12 odoo.addons.base_import.models.base_import: done 
+2024-02-29 08:32:36,531 545386 INFO test_edi_import_match_12 odoo.addons.edi_import_match.tests.testenv: 🏆🥇 2 tests SUCCESSFULLY completed 
+2024-02-29 08:32:36,533 545386 INFO test_edi_import_match_12 odoo.addons.edi_import_match.tests.test_import: Ran 3 tests in 0.485s 
+2024-02-29 08:32:36,533 545386 INFO test_edi_import_match_12 odoo.addons.edi_import_match.tests.test_import: OK 
+2024-02-29 08:32:36,553 545386 INFO test_edi_import_match_12 odoo.modules.loading: 11 modules loaded in 3.69s, 189 queries 
+2024-02-29 08:32:36,811 545386 INFO test_edi_import_match_12 odoo.modules.loading: Modules loaded. 
+2024-02-29 08:32:36,816 545386 INFO test_edi_import_match_12 odoo.service.server: Starting post tests 
+2024-02-29 08:32:36,818 545386 INFO test_edi_import_match_12 odoo.service.server: All post-tested in 0.00s, 0 queries 
+2024-02-29 08:32:36,818 545386 INFO test_edi_import_match_12 odoo.service.server: Initiating shutdown 
+2024-02-29 08:32:36,818 545386 INFO test_edi_import_match_12 odoo.service.server: Hit CTRL-C again or send a second signal to force the shutdown. 
+
++===================================================================
+| please test [36medi_import_match[0m (12.0): [32mSUCCESS![0m
++===================================================================
+
+[1;37;44m$ coverage report --rcfile=/home/odoo/12.0/connector/edi_import_match/tests/logs/coverage_edi_import_match_12rc -m
+[34;107mName                                                               Stmts   Miss  Cover   Missing
+------------------------------------------------------------------------------------------------
+/home/odoo/12.0/connector/edi_import_match/models/base.py             27      1    96%   10
+/home/odoo/12.0/connector/edi_import_match/models/base_import.py      66      8    88%   42, 51, 103-104, 110, 123, 127, 180
+/home/odoo/12.0/connector/edi_import_match/models/ir_fields.py       108     91    16%   27-69, 75-81, 104-195
+------------------------------------------------------------------------------------------------
+TOTAL                                                                201    100    50%
+[0m

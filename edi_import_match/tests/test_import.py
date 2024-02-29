@@ -27,7 +27,7 @@ class TestImport(SingleTransactionCase):
             })
         record.do(fields, [], {"headers": True,  "quoting": '"', "separator": ","})
 
-    def test_update_phone(self):
+    def test_01_update_phone(self):
         partner = self.env.ref("base.res_partner_10")
         # Check for no other modules had update original phone
         self.assertNotEqual(partner.phone, "0039 011 555555")
@@ -38,7 +38,7 @@ class TestImport(SingleTransactionCase):
         partner = self.env.ref("base.res_partner_10")
         self.assertEqual(partner.phone, "0039 011 555555")
 
-    def test_by_xref(self):
+    def test_02_by_xref(self):
         partner = self.env.ref("base.res_partner_10")
         # Check for no other modules had update original phone
         self.assertNotEqual(partner.website, "https://www.jackson.com")
@@ -48,3 +48,27 @@ class TestImport(SingleTransactionCase):
                            ["id", "name", "comment", "website"])
         partner = self.env.ref("base.res_partner_10")
         self.assertEqual(partner.website, "https://www.jackson.com")
+
+    def test_03_country(self):
+        partner = self.env.ref("base.res_partner_10")
+        # Delete country
+        partner.write({"country_id": False})
+        self.assertNotEqual(partner.state_id, self.env.ref("base.us"))
+        # Now import Excel file
+        self.wizard_import("res.partner",
+                           "test_country.xlsx",
+                           ["id", "name", "comment", "country_id"])
+        partner = self.env.ref("base.res_partner_10")
+        self.assertEqual(partner.country_id, self.env.ref("base.us"))
+
+    def _test_04_country_state(self):
+        partner = self.env.ref("base.res_partner_10")
+        # Delete country state
+        partner.write({"state_id": False})
+        self.assertNotEqual(partner.state_id, self.env.ref("base.state_us_1"))
+        # Now import Excel file
+        self.wizard_import("res.partner",
+                           "test_country_state.xlsx",
+                           ["id", "name", "comment", "country_id", "state_id"])
+        partner = self.env.ref("base.res_partner_10")
+        self.assertEqual(partner.website, self.env.ref("base.state_us_1"))
