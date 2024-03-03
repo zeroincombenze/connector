@@ -96,12 +96,20 @@ L'utente pu&#242; creare proprie regole di riconoscimento record.
     <div class="oe_row oe_spaced">
         <h3 align="center" style="color:#162832;font-size: 26px;font-weight: 300;">Features | Caratteristiche</h3>
         <div class="oe_span12">
-Description | Descrizione,Z0incombenze(R),Note(s)
-Match rules by end user | Regole definite da utente finale,&#9989;,Available on OCA module
-Conditional rule | Regola condizionale,&#9989;,Available on OCA module
-Default for conditional rule | Valore predefinito per regola condizionale,&#9989;,
-State depends on Country | Provincia dipendente da nazione,&#9989;,
-Match boolean values | Confronta valori booleani,&#10060;,
+<table style="width:100%; padding:2px; border-spacing:2px; text-align:left;"><tr>
+<td>Description</td><td>Descrizione</td><td>Z0incomb</td><td>Note(s)</td><td/>
+</tr><tr>
+<td>Match rules by end user</td><td>Regole definite da utente finale</td><td>&#9989;</td><td>Available on plug-in OCA module</td><td/>
+</tr><tr>
+<td>Conditional rule</td><td>Regola condizionale</td><td>&#9989;</td><td>Available on plug-in OCA module</td><td/>
+</tr><tr>
+<td>Default for conditional rule</td><td>Valore predefinito per regola condizionale</td><td>&#9989;</td><td/><td/>
+</tr><tr>
+<td>State depends on Country</td><td>Provincia dipendente da nazione</td><td>&#9989;</td><td/><td/>
+</tr><tr>
+<td>Match boolean values</td><td>Confronta valori booleani</td><td>&#9989;</td><td>True/False/1/0</td><td/>
+</tr><tr>
+</tr></table>
         </div>
     </div>
 </section>
@@ -124,16 +132,10 @@ Match boolean values | Confronta valori booleani,&#10060;,
 <li> If the rule must be used only for certain imported values, check
    <i>Conditional</i> and enter the <b>exact string</b> that is going to be imported
    in <i>Imported value</i>.</li>
-</ol>
-</p><p align="justify">
-   #. Keep in mind that the match here is evaluated as a case sensitive
-      <b>text string</b> always. If you enter e.g. <code>True</code>, it will match that
-      string, but will not match <code>1</code> or <code>true</code>.
-<ol>
 <li> <span style="color:white;background-color:#7C7BAD">&#160;Save&#160;</span></li>
 </ol>
 </p><p align="justify">
-In that list view, you can sort rules by drag and drop.
+In that list view, rules are sorted by priority
 </p></p>
         </div>
         <div class="oe_span6">
@@ -148,16 +150,10 @@ In that list view, you can sort rules by drag and drop.
 <li> Scegliere un <i>Modello</i></li>
 <li> Scegliere i <i>Campi</i> che servono alla ricerca</li>
 <li> La regola pu&#242; essere applicata alla presenza di un campo dichiarato <i>Condizione</i>.</li>
-</ol>
-</p><p align="justify">
-   #. Keep in mind that the match here is evaluated as a case sensitive
-      <b>text string</b> always. If you enter e.g. <code>True</code>, it will match that
-      string, but will not match <code>1</code> or <code>true</code>.
-<ol>
 <li> <span style="color:white;background-color:#7C7BAD">&#160;Salvare&#160;</span></li>
 </ol>
 </p><p align="justify">
-La lista pu&#242; essere ordinata per priorit&#224;.
+La lista &#232; ordinata per priorit&#224;.
 </p></p>
         </div>
     </div>
@@ -174,17 +170,48 @@ La lista pu&#242; essere ordinata per priorit&#224;.
             <p class="oe_mt16" align="justify">To use this module, you need to:
 <p align="justify">
 <ol>
-<li> Follow steps in <b>Configuration</b> section above.</li>
-<li> Go to any list view.</li>
-<li> Press <span style="color:white;background-color:#7C7BAD">&#160;Import&#160;</span> and follow the import procedure as usual.</li>
+<li> Follow steps in <b>Configuration</b> section above</li>
+<li> Go to any list view</li>
+<li> Press <span style="color:white;background-color:#7C7BAD">&#160;Import&#160;</span> and follow the import procedure as usual</li>
 </ol>
+</p><p align="justify">
+<h3>How to fill import file columns</h3>
+</p><p align="justify">
+You can fill data column depending on field type:
+</p><p align="justify">
+<ul>
+<li>Text: fill data to load</li>
+<li>Date/Datetime: fill data in ISO format</li>
+<li>Number: fill data to load, use '.' for decimal point if csv</li>
+<li>Many2one: load code or name value</li>
+<li>One2Many/Many2Many: currently unsupported</li>
+</ul>
 </p></p>
         </div>
         <div class="oe_span6">
             <p align="center">
                 <img src="/l10n_it/static/description/icon.png" alt="Italiano" style="width:16px;height:16px;"/>
             </p>
-            <p class="oe_mt16" align="justify"/>
+            <p class="oe_mt16" align="justify">Per utilizzare questo modulo:
+<p align="justify">
+<ol>
+<li> Esegui le istruzioni della sezione <b>Configurazione</b> sopra</li>
+<li> Apri il men&#249; lista dei dati da importare</li>
+<li> Premi <span style="color:white;background-color:#7C7BAD">&#160;Importare&#160;</span> e segui le istruzione come di consueto</li>
+</ol>
+</p><p align="justify">
+<h3>Come compilare le colonne</h3>
+</p><p align="justify">
+I dati da compilare dipendono dal tipo di campo:
+</p><p align="justify">
+<ul>
+<li>Testo: riempire con il dato da caricare</li>
+<li>Data/Dataora: usare il formato ISO</li>
+<li>Numero: riempire con il valore, usare il '.' come virgola decimale nei csv</li>
+<li>Many2one: caricare il code o la descrizione</li>
+<li>One2Many/Many2Many: non ancora supportati</li>
+</ul>
+</p></p>
         </div>
     </div>
 </section>
@@ -225,15 +252,13 @@ module to most recent version.
         <div class="oe_span6" align="left">
             <p class="oe_mt16"><b>Authors | Autori:</b></p>
             <p class="oe_mt16"><ul>
-<li><a href="https://www.tecnativa.com">Tecnativa</a></li>
-<li><a href="https://odoo-community.org">Odoo Community Association (OCA)</a></li>
 <li><a href="https://www.zeroincombenze.it">SHS-AV s.r.l.</a></li>
+<li><a href="https://www.tecnativa.com">Tecnativa</a></li>
 </ul></p>
         </div>
         <div class="oe_span6" align="left">
             <p class="oe_mt16"><b>Contributors | Partecipanti:</b></p>
             <p class="oe_mt16"><ul>
-<li><a href="https://www.tecnativa.com">Tecnativa</a></li>
 <li><a href="mailto:antoniomaria.vigliott@gmail.com">Antonio M. Vigliotti</a></li>
 </ul></p>
         </div>
@@ -245,6 +270,6 @@ module to most recent version.
     </div>
     <div class="oe_row oe_spaced">
         <p>This module is part of <a href="https://github.com/zeroincombenze/connector">connector</a> project.</p>
-        <p>Published information on | Informazioni pubblicate: 2024-02-27</p>
+        <p>Published information on | Informazioni pubblicate: 2024-03-04</p>
     </div>
 </section>

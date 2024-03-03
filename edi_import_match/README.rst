@@ -80,12 +80,19 @@ L'utente può creare proprie regole di riconoscimento record.
 Features | Caratteristiche
 --------------------------
 
-Description | Descrizione,Z0incombenze(R),Note(s)
-Match rules by end user | Regole definite da utente finale,✅,Available on OCA module
-Conditional rule | Regola condizionale,✅,Available on OCA module
-Default for conditional rule | Valore predefinito per regola condizionale,✅,
-State depends on Country | Provincia dipendente da nazione,✅,
-Match boolean values | Confronta valori booleani,❌,
++---------------------------------------------------------------------------+----------+---------------------------------+
+| Description | Descrizione                                                 | Z0incomb | Note(s)                         |
++---------------------------------------------------------------------------+----------+---------------------------------+
+| Match rules by end user | Regole definite da utente finale                | ✅       | Available on plug-in OCA module |
++---------------------------------------------------------------------------+----------+---------------------------------+
+| Conditional rule | Regola condizionale                                    | ✅       | Available on plug-in OCA module |
++---------------------------------------------------------------------------+----------+---------------------------------+
+| Default for conditional rule | Valore predefinito per regola condizionale | ✅       |                                 |
++---------------------------------------------------------------------------+----------+---------------------------------+
+| State depends on Country | Provincia dipendente da nazione                | ✅       |                                 |
++---------------------------------------------------------------------------+----------+---------------------------------+
+| Match boolean values | Confronta valori booleani                          | ✅       | True/False/1/0                  |
++---------------------------------------------------------------------------+----------+---------------------------------+
 
 
 
@@ -101,13 +108,9 @@ Activate developer mode:
 #. If the rule must be used only for certain imported values, check
    *Conditional* and enter the **exact string** that is going to be imported
    in *Imported value*.
-
-   #. Keep in mind that the match here is evaluated as a case sensitive
-      **text string** always. If you enter e.g. ``True``, it will match that
-      string, but will not match ``1`` or ``true``.
 #. [Save]
 
-In that list view, you can sort rules by drag and drop.
+In that list view, rules are sorted by priority
 
 
 
@@ -116,9 +119,20 @@ Usage | Utilizzo
 
 To use this module, you need to:
 
-#. Follow steps in **Configuration** section above.
-#. Go to any list view.
-#. Press [Import] and follow the import procedure as usual.
+#. Follow steps in **Configuration** section above
+#. Go to any list view
+#. Press [Import] and follow the import procedure as usual
+
+How to fill import file columns
+-------------------------------
+
+You can fill data column depending on field type:
+
+* Text: fill data to load
+* Date/Datetime: fill data in ISO format
+* Number: fill data to load, use '.' for decimal point if csv
+* Many2one: load code or name value
+* One2Many/Many2Many: currently unsupported
 
 
 
@@ -249,16 +263,14 @@ Odoo is a trademark of `Odoo S.A. <https://www.odoo.com/>`__ (formerly OpenERP)
 Authors | Autori
 ----------------
 
-* `Tecnativa <https://www.tecnativa.com>`__
-* `Odoo Community Association (OCA) <https://odoo-community.org>`__
 * `SHS-AV s.r.l. <https://www.zeroincombenze.it>`__
+* `Tecnativa <https://www.tecnativa.com>`__
 
 
 
 Contributors | Partecipanti
 ---------------------------
 
-* `Tecnativa <https://www.tecnativa.com>`__
 * `Antonio M. Vigliotti <antoniomaria.vigliott@gmail.com>`__
 
 
@@ -287,7 +299,7 @@ La distribuzione `Zeroincombenze® <https://www.zeroincombenze.it/>`__ è proget
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2024-02-27
+Last Update / Ultimo aggiornamento: 2024-03-04
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status

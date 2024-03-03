@@ -11,6 +11,8 @@ class TestImport(SingleTransactionCase):
         super().setUp()
         self.debug_level = 0
         self.setup_env(setup_list=[])
+        # Force the load of the hook to test coverage
+        self.env["ir.fields.converter"]._register_hook()
 
     def tearDown(self):
         super().tearDown()
@@ -61,7 +63,7 @@ class TestImport(SingleTransactionCase):
         partner = self.env.ref("base.res_partner_10")
         self.assertEqual(partner.country_id, self.env.ref("base.us"))
 
-    def _test_04_country_state(self):
+    def test_04_country_state(self):
         partner = self.env.ref("base.res_partner_10")
         # Delete country state
         partner.write({"state_id": False})
@@ -71,4 +73,16 @@ class TestImport(SingleTransactionCase):
                            "test_country_state.xlsx",
                            ["id", "name", "comment", "country_id", "state_id"])
         partner = self.env.ref("base.res_partner_10")
-        self.assertEqual(partner.website, self.env.ref("base.state_us_1"))
+        self.assertEqual(partner.state_id, self.env.ref("base.state_us_1"))
+
+    def _test_05_state(self):
+        partner = self.env.ref("base.res_partner_10")
+        # Delete country state
+        partner.write({"state_id": False})
+        self.assertNotEqual(partner.state_id, self.env.ref("base.state_us_1"))
+        # Now import Excel file
+        self.wizard_import("res.partner",
+                           "test_country_state.xlsx",
+                           ["id", "name", "comment", "state_id"])
+        partner = self.env.ref("base.res_partner_10")
+        self.assertEqual(partner.state_id, self.env.ref("base.state_us_1"))
