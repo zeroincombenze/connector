@@ -60,9 +60,10 @@ class IrFieldsConverter(models.AbstractModel):
                                 # uniform handling
                                 w = ImportWarning(w)
                             log(field, w)
-                    except (UnicodeEncodeError, UnicodeDecodeError) as e:
+                    except (UnicodeEncodeError,
+                            UnicodeDecodeError) as e:                # pragma: no cover
                         log(field, ValueError(str(e)))
-                    except ValueError as e:
+                    except ValueError as e:                          # pragma: no cover
                         log(field, e)
                 return converted
 
@@ -112,12 +113,12 @@ class IrFieldsConverter(models.AbstractModel):
                       'help': _(u"See all possible values")}
             if subfield is None:
                 action['res_model'] = field.comodel_name
-            elif subfield in ('id', '.id'):
+            elif subfield in ('id', '.id'):                          # pragma: no cover
                 action['res_model'] = 'ir.model.data'
                 action['domain'] = [('model', '=', field.comodel_name)]
 
             RelatedModel = self.env[field.comodel_name]
-            if subfield == '.id':
+            if subfield == '.id':                                    # pragma: no cover
                 field_type = _(u"database id")
                 if isinstance(value, str) and not self._str_to_boolean(model,
                                                                        field,
@@ -130,7 +131,7 @@ class IrFieldsConverter(models.AbstractModel):
                 try:
                     if RelatedModel.search([('id', '=', tentative_id)]):
                         id = tentative_id
-                except psycopg2.DataError:
+                except psycopg2.DataError:                          # pragma: no cover
                     # type error
                     raise self._format_import_error(
                         ValueError,
