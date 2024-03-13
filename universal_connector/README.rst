@@ -1,4 +1,3 @@
-
 ===========================================================
 |icon| universal_connector/Connettore universale 10.0.0.3.3
 ===========================================================
@@ -68,8 +67,6 @@ Synchronizer behavior:
 * If record not found, Synchronizer executes the Odoo function create and assign external 'id' to `PFX_id`
 
 
-|
-
 |it| Questo modulo rende disponibile alucne funzioni per sincronizzare con l'esterno.
 
 Caratteristiche
@@ -93,6 +90,10 @@ Questo modulo può essere usato per:
 * Popolare il DB di Odoo nella prima installazione quando migrazione da altro software
 
 
+|thumbnail|
+
+.. |thumbnail| image:: https://raw.githubusercontent.com/zeroincombenze/connector/10.0/universal_connector/static/description/description.png
+
 
 Getting started | Primi passi
 =============================
@@ -100,9 +101,26 @@ Getting started | Primi passi
 |Try Me|
 
 
-Installation | Installazione
+Prerequisites | Prerequisiti
 ----------------------------
 
+* python 2.7+ (best 2.7.5+)
+* postgresql 9.2+ (best 9.5)
+
+::
+
+    cd $HOME
+    # Follow statements activate deployment, installation and upgrade tools
+    cd $HOME
+    [[ ! -d ./tools ]] && git clone https://github.com/zeroincombenze/tools.git
+    cd ./tools
+    ./install_tools.sh -pUT
+    source $HOME/devel/activate_tools
+
+
+
+Installation | Installazione
+----------------------------
 
 +---------------------------------+------------------------------------------+
 | |en|                            | |it|                                     |
@@ -122,66 +140,27 @@ Installation | Installazione
 
 ::
 
-    cd $HOME
-    # *** Tools installation & activation ***
-    # Case 1: you have not installed zeroincombenze tools
-    git clone https://github.com/zeroincombenze/tools.git
-    cd $HOME/tools
-    ./install_tools.sh -pT
-    source $HOME/devel/activate_tools
-    # Case 2: you have already installed zeroincombenze tools
-    cd $HOME/tools
-    ./install_tools.sh -UT
-    source $HOME/devel/activate_tools
-    # *** End of tools installation or upgrade ***
     # Odoo repository installation; OCB repository must be installed
     deploy_odoo clone -r connector -b 10.0 -G zero -p $HOME/10.0
     # Upgrade virtual environment
     vem amend $HOME/10.0/venv_odoo
-
-From UI: go to:
-
-* |menu| Setting > Activate Developer mode
-* |menu| Apps > Update Apps List
-* |menu| Setting > Apps |right_do| Select **universal_connector** > Install
 
 
 
 Upgrade | Aggiornamento
 -----------------------
 
-
 ::
 
-    cd $HOME
-    # *** Tools installation & activation ***
-    # Case 1: you have not installed zeroincombenze tools
-    git clone https://github.com/zeroincombenze/tools.git
-    cd $HOME/tools
-    ./install_tools.sh -pT
-    source $HOME/devel/activate_tools
-    # Case 2: you have already installed zeroincombenze tools
-    cd $HOME/tools
-    ./install_tools.sh -UT
-    source $HOME/devel/activate_tools
-    # *** End of tools installation or upgrade ***
-    # Odoo repository upgrade
     deploy_odoo update -r connector -b 10.0 -G zero -p $HOME/10.0
     vem amend $HOME/10.0/venv_odoo
     # Adjust following statements as per your system
     sudo systemctl restart odoo
 
-From UI: go to:
-
-* |menu| Setting > Activate Developer mode
-* |menu| Apps > Update Apps List
-* |menu| Setting > Apps |right_do| Select **universal_connector** > Update
-
 
 
 Support | Supporto
 ------------------
-
 
 |Zeroincombenze| This module is supported by the `SHS-AV s.r.l. <https://www.zeroincombenze.it/>`__
 
@@ -197,9 +176,9 @@ and/or submit pull requests on `GitHub Issues
 In case of trouble, please check there if your issue has already been reported.
 
 
+
 Proposals for enhancement
 -------------------------
-
 
 |en| If you have a proposal to change this module, you may want to send an email to <cc@shs-av.com> for initial feedback.
 An Enhancement Proposal may be submitted if your idea gains ground.
@@ -211,9 +190,15 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 ChangeLog History | Cronologia modifiche
 ----------------------------------------
 
+10.0.0.3.4 (2024-03-13)
+~~~~~~~~~~~~~~~~~~~~~~~
+
+* [FIX]
+
 10.0.0.3.3 (2023-10-31)
 ~~~~~~~~~~~~~~~~~~~~~~~
-* [IMP] Unit price withoit tax / Scorporo IVA
+
+* [IMP] Unit price without tax / Scorporo IVA
 
 10.0.0.3.2 (2023-03-02)
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -227,10 +212,20 @@ ChangeLog History | Cronologia modifiche
 * [FIX] Ignore Odoo counterpart fields do not exist in local
 * [FIX] Wrong error messages
 
+10.0.0.2.9 (2022-07-27)
+~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] Enhanced search
+
+10.0.0.2.8 (2022-07-18)
+~~~~~~~~~~~~~~~~~~~~~~~
+
+* [FIX] Partner: check for parent_id / Controlli su import clienti
 
 
-Credits | Didascalie
-====================
+
+Credits | Ringraziamenti
+========================
 
 Copyright
 ---------
@@ -241,23 +236,25 @@ Odoo is a trademark of `Odoo S.A. <https://www.odoo.com/>`__ (formerly OpenERP)
 Authors | Autori
 ----------------
 
-* SHS-AV s.r.l. <https://www.zeroincombenze.it>
+* `SHS-AV s.r.l. <https://www.zeroincombenze.it>`__
 
 
-Contributors | Contributi da
-----------------------------
 
-* Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
+Contributors | Partecipanti
+---------------------------
+
+* `Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>`__
+
 
 
 Maintainer | Manutenzione
 -------------------------
 
-Antonio M. Vigliotti <antoniomaria.vigliotti@gmail.com>
+* `Antonio M. Vigliotti <antoniomaria.vigliotti@gmail.com>`__
+
 
 
 ----------------
-
 
 |en| **zeroincombenze®** is a trademark of `SHS-AV s.r.l. <https://www.shs-av.com/>`__
 which distributes and promotes ready-to-use **Odoo** on own cloud infrastructure.
@@ -269,47 +266,25 @@ che distribuisce e promuove **Odoo** pronto all'uso sulla propria infrastuttura.
 La distribuzione `Zeroincombenze® <https://www.zeroincombenze.it/>`__ è progettata per le esigenze del mercato italiano.
 
 
-
 |
 |
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2023-10-31
+Last Update / Ultimo aggiornamento: 2024-03-13
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status
     :alt: 
-.. |Build Status| image:: https://travis-ci.org/zeroincombenze/connector.svg?branch=10.0
-    :target: https://travis-ci.com/zeroincombenze/connector
-    :alt: github.com
 .. |license gpl| image:: https://img.shields.io/badge/licence-LGPL--3-7379c3.svg
     :target: http://www.gnu.org/licenses/lgpl-3.0-standalone.html
     :alt: License: LGPL-3
 .. |license opl| image:: https://img.shields.io/badge/licence-OPL-7379c3.svg
     :target: https://www.odoo.com/documentation/user/14.0/legal/licenses/licenses.html
     :alt: License: OPL
-.. |Coverage Status| image:: https://coveralls.io/repos/github/zeroincombenze/connector/badge.svg?branch=10.0
-    :target: https://coveralls.io/github/zeroincombenze/connector?branch=10.0
-    :alt: Coverage
-.. |Codecov Status| image:: https://codecov.io/gh/zeroincombenze/connector/branch/10.0/graph/badge.svg
-    :target: https://codecov.io/gh/zeroincombenze/connector/branch/10.0
-    :alt: Codecov
-.. |Tech Doc| image:: https://www.zeroincombenze.it/wp-content/uploads/ci-ct/prd/button-docs-10.svg
-    :target: https://wiki.zeroincombenze.org/en/Odoo/10.0/dev
-    :alt: Technical Documentation
-.. |Help| image:: https://www.zeroincombenze.it/wp-content/uploads/ci-ct/prd/button-help-10.svg
-    :target: https://wiki.zeroincombenze.org/it/Odoo/10.0/man
-    :alt: Technical Documentation
 .. |Try Me| image:: https://www.zeroincombenze.it/wp-content/uploads/ci-ct/prd/button-try-it-10.svg
     :target: https://erp10.zeroincombenze.it
     :alt: Try Me
-.. |OCA Codecov| image:: https://codecov.io/gh/OCA/connector/branch/10.0/graph/badge.svg
-    :target: https://codecov.io/gh/OCA/connector/branch/10.0
-    :alt: Codecov
-.. |Odoo Italia Associazione| image:: https://www.odoo-italia.org/images/Immagini/Odoo%20Italia%20-%20126x56.png
-   :target: https://odoo-italia.org
-   :alt: Odoo Italia Associazione
 .. |Zeroincombenze| image:: https://avatars0.githubusercontent.com/u/6972555?s=460&v=4
    :target: https://www.zeroincombenze.it/
    :alt: Zeroincombenze
@@ -333,7 +308,3 @@ Last Update / Ultimo aggiornamento: 2023-10-31
    :target: https://github.com/zeroincombenze/grymb/blob/master/certificates/ade/scope/Desktoptelematico.md
 .. |FatturaPA| image:: https://raw.githubusercontent.com/zeroincombenze/grymb/master/certificates/ade/icons/fatturapa.png
    :target: https://github.com/zeroincombenze/grymb/blob/master/certificates/ade/scope/fatturapa.md
-.. |chat_with_us| image:: https://www.shs-av.com/wp-content/chat_with_us.gif
-   :target: https://t.me/Assitenza_clienti_powERP
-
-

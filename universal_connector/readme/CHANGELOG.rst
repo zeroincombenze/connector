@@ -1,6 +1,12 @@
+10.0.0.3.4 (2024-03-13)
+~~~~~~~~~~~~~~~~~~~~~~~
+
+* [FIX]
+
 10.0.0.3.3 (2023-10-31)
 ~~~~~~~~~~~~~~~~~~~~~~~
-* [IMP] Unit price withoit tax / Scorporo IVA
+
+* [IMP] Unit price without tax / Scorporo IVA
 
 10.0.0.3.2 (2023-03-02)
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -275,3 +281,4 @@
 * [IMP] Account Payment Term / Tabella termini di pagamento
 * [IMP] New protection level / Nuovo livello di protezione
 * [QUA] Test coverage 45% (4960: 2735+2225) [6 TestPoints] - quality rating 1336 (target 100)
+* [QUA] Test coverage 33% (4960: 3314+1646) [10 TestPoints] - quality rating 21 (target 100)

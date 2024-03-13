@@ -1,0 +1,6 @@
+amount,description,id,type_tax_use,name
+22,22v,z0bug.tax_22v,sale,IVA 22% su vendite
+10,10v,z0bug.tax_10v,sale,IVA 10% su vendite
+4,4v,z0bug.tax_4v,sale,IVA 4% su vendite
+0,a15v,z0bug.tax_a15v,sale,Vend.escluso art.15 DPR633
+22,22a,z0bug.tax_22a,purchase,IVA 22% da acquisti

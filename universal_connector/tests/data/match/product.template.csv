@@ -1,0 +1,5 @@
+conai_id,id,name,default_code
+False,z0bug.product_template_1,Product Alpha,AA
+False,z0bug.product_template_2,Product Beta,BB
+False,z0bug.product_template_3,Product Chi,CC
+False,z0bug.product_template_SB,Spese Bancarie,SP-BANC

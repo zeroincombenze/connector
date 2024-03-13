@@ -15,6 +15,7 @@ import os
 import sys
 from datetime import date, datetime, timedelta
 import time
+import csv
 from os0 import os0
 
 try:
@@ -33,7 +34,7 @@ ref_dt_m_1 = (date.today() - timedelta(33)).strftime("%Y-%m-%d")
 ref_dt_m_2 = (date.today() - timedelta(64)).strftime("%Y-%m-%d")
 ref_ts_m_1 = "%s 12:34:56" % ref_dt_m_1
 
-EXT_COMPANY_ID = 2
+EXT_COMPANY_ID = 1
 TEST_IBAN = "IT60X0542811101000000123456"
 MODEL_WITH_CHILD = (
     "account.payment.term",
@@ -240,6 +241,7 @@ TNL_VG7_TABLES = {
     "sale.order.line": "",
 }
 TNL_OE8_TABLES = {}
+TABLE_LIST = list(TNL_VG7_TABLES.keys())
 TNL_TEXT_2_M2 = {
     "country_id": {"Italia": "base.it"},
     "tax_id": {"22v": "z0bug.tax_22v"},
@@ -502,6 +504,7 @@ TABLE_OF_REF_CHILD = {
         True,
     ],
 }
+THIS_MODULE = "universal_connector"
 MODULE_LIST = [
     "account",
     "account_payment_term_extension",
@@ -514,830 +517,45 @@ MODULE_LIST = [
     "l10n_it_ddt",
     "l10n_it_einvoice_out",
     "l10n_it_ricevute_bancarie",
-    "universal_connector",
     "partner_bank",
-    "mk_test_env",
+    # "mk_test_env",
     "l10n_it_conai",
+    # THIS_MODULE,
     "connector_vg7_conai",
 ]
-
-# Warning! Data name not ending with "_DEF" is saved into csv file so every
-# record must be contains all fields e and all fields must be in the same order
-ACCOUNT_ACCOUNT_TYPE_DEF = [
-    {
-        "id": "account.data_account_type_receivable",
-        "name": "Receivable",
-        "type": "receivable",
-    },
-    {"id": "account.data_account_type_payable", "name": "Payable", "type": "payable"},
-    {
-        "id": "account.data_account_type_liquidity",
-        "name": "Bank and Cash",
-        "type": "liquidity",
-    },
-    {
-        "id": "account.data_account_type_credit_card",
-        "name": "Credit Card",
-        "type": "liquidity",
-    },
-    {
-        "id": "account.data_account_type_current_assets",
-        "name": "Current Assets",
-        "type": "other",
-    },
-    {
-        "id": "account.data_account_type_non_current_assets",
-        "name": "Non-current Assets",
-        "type": "other",
-    },
-    {
-        "id": "account.data_account_type_prepayments",
-        "name": "Prepayments",
-        "type": "other",
-    },
-    {
-        "id": "account.data_account_type_fixed_assets",
-        "name": "Fixed Assets",
-        "type": "other",
-    },
-    {
-        "id": "account.data_account_type_current_liabilities",
-        "name": "Current Liabilities",
-        "type": "other",
-    },
-    {
-        "id": "account.data_account_type_non_current_liabilities",
-        "name": "Non-current Liabilities",
-        "type": "other",
-    },
-    {"id": "account.data_account_type_equity", "name": "Equity", "type": "other"},
-    {
-        "id": "account.data_unaffected_earnings",
-        "name": "Current Year Earnings",
-        "type": "other",
-    },
-    {
-        "id": "account.data_account_type_other_income",
-        "name": "Other Income",
-        "type": "other",
-    },
-    {"id": "account.data_account_type_revenue", "name": "Income", "type": "other"},
-    {
-        "id": "account.data_account_type_depreciation",
-        "name": "Depreciation",
-        "type": "other",
-    },
-    {"id": "account.data_account_type_expenses", "name": "Expenses", "type": "other"},
-    {
-        "id": "account.data_account_type_direct_costs",
-        "name": "Cost of Revenue",
-        "type": "other",
-    },
-]
-ACCOUNT_ACCOUNT_TYPE_OE8 = [
-    {"id": 1, "code": "receivable", "name": "Receivable", "report_type": "receivable"},
-    {"id": 2, "code": "payable", "name": "Payable", "report_type": "payable"},
-    {"id": 3, "code": "bank", "name": "Bank", "report_type": "liquidity"},
-    {"id": 4, "code": "cash", "name": "Cash", "report_type": "liquidity"},
-    {"id": 5, "code": "asset", "name": "Assets", "report_type": "other"},
-    {"id": 6, "code": "liability", "name": "Liability", "report_type": "other"},
-    {"id": 7, "code": "income", "name": "Income", "report_type": "other"},
-    {"id": 8, "code": "expense", "name": "Expense", "report_type": "other"},
-    {"id": 9, "code": "credit_card", "name": "Credit Card", "report_type": "liquidity"},
-    {"id": 10, "code": "equity", "name": "Equity", "report_type": "other"},
-]
-ACCOUNT_ACCOUNT_DEF = [
-    {
-        "code": "152100",
-        "name": "Crediti v/clienti Italia",
-        "user_type_id": "account.data_account_type_receivable",
-    },
-    {
-        "code": "250100",
-        "name": "Debiti v/fornitori Italia",
-        "user_type_id": "account.data_account_type_payable",
-    },
-    {
-        "code": "180002",
-        "name": "Banca",
-        "user_type_id": "account.data_account_type_liquidity",
-    },
-]
-ACCOUNT_ACCOUNT_VG7 = []
-ACCOUNT_ACCOUNT_OE8 = [
-    {"id": 152, "code": "152100", "name": "CLIENTI", "user_type": 1},
-    {"id": 250, "code": "250100", "name": "FORNITORI", "user_type": 2},
-    {"id": 180, "code": "180002", "name": "Banca Pop. Zero", "user_type": 3},
-    {"id": 510, "code": "510000", "name": "Ricavi vendite", "user_type": 7},
-]
-ACCOUNT_INVOICE_VG7 = []
-ACCOUNT_INVOICE_LINE_VG7 = []
-ACCOUNT_INVOICE_OE8 = [
-    {
-        "id": 131,
-        "account_id": 152,
-        "date_invoice": ref_dt_today,
-        "internal_number": "SAJ/2021/0002",
-        "journal_id": 1,
-        "number": "SAJ/2021/0002",
-        "partner_id": 101,
-        "partner_shipping_id": 101,
-        "payment_term": 31,
-        "state": "open",
-        "type": "out_invoice",
-        "reference": "1234 del 2021",
-        "origin": "Test 8.0",
-    }
-]
-ACCOUNT_INVOICE_LINE_OE8 = [
-    {
-        "id": 131,
-        "invoice_id": 131,
-        "account_id": 510,
-        "invoice_line_tax_id": [1],
-        "name": "Product Alpha",
-        "price_unit": 1.05,
-        "discount": 0.0,
-        "product_id": 1,
-        "uos_id": 10,
-        "quantity": 50,
-    },
-    {
-        "id": 131,
-        "invoice_id": 131,
-        "account_id": 510,
-        "invoice_line_tax_id": [1],
-        "name": "Product Beta",
-        "price_unit": 5.38,
-        "discount": 0.0,
-        "product_id": 2,
-        "uos_id": 10,
-        "quantity": 1,
-    },
-]
-ACCOUNT_JOURNAL_VG7 = []
-ACCOUNT_JOURNAL_OE8 = [
-    {"id": 1, "code": "INV", "name": "Customer Invoices", "type": "sale"},
-    {"id": 2, "code": "BILL", "name": "Supplier Bills", "type": "purchase"},
-    {"id": 3, "code": "GEN", "name": "Generic", "type": "general"},
-]
-ACCOUNT_MOVE_VG7 = []
-ACCOUNT_MOVE_LINE_VG7 = []
-ACCOUNT_MOVE_OE8 = [
-    {
-        "id": 2001,
-        "name": "BNK/2020/0001",
-        "journal_id": 3,
-        "date": ref_dt_m_1,
-        "narration": "Test connector",
-        "ref": "payment",
-        "state": "posted",
-    }
-]
-ACCOUNT_MOVE_LINE_OE8 = [
-    {
-        "id": 2001,
-        "move_id": 2001,
-        "name": "BNK/2020/0001",
-        "ref": "payment",
-        "account_id": 180,
-        "journal_id": 3,
-        "debit": 100.0,
-        "credit": 0.0,
-        "partner_id": False,
-        "date_maturity": ref_dt_today,
-        "product_id": False,
-        "product_uom_id": False,
-        "quantity": 0.0,
-        "tax_amount": 0.0,
-        "tax_code_id": None,
-    },
-    {
-        "id": 2001,
-        "move_id": 2001,
-        "name": "BNK/2020/0001",
-        "ref": "payment",
-        "debit": 0.0,
-        "credit": 100.0,
-        "account_id": 152,
-        "journal_id": 3,
-        "partner_id": 101,
-        "date_maturity": ref_dt_today,
-        "product_id": False,
-        "product_uom_id": False,
-        "quantity": 0.0,
-        "tax_amount": 0.0,
-        "tax_code_id": None,
-    },
-]
-ACCOUNT_TAX_DEF = [
-    {
-        "id": "z0bug.tax_22v",
-        "type_tax_use": "sale",
-        "name": "IVA 22% su vendite",
-        "description": "22v",
-        "amount": 22,
-    },
-    {
-        "id": "z0bug.tax_10v",
-        "type_tax_use": "sale",
-        "name": "IVA 10% su vendite",
-        "description": "10v",
-        "amount": 10,
-    },
-    {
-        "id": "z0bug.tax_4v",
-        "type_tax_use": "sale",
-        "name": "IVA 4% su vendite",
-        "description": "4v",
-        "amount": 4,
-    },
-    {
-        "id": "z0bug.tax_a15v",
-        "type_tax_use": "sale",
-        "name": "Vend.escluso art.15 DPR633",
-        "description": "a15v",
-        "amount": 0,
-    },
-    {
-        "id": "z0bug.tax_22a",
-        "type_tax_use": "purchase",
-        "name": "IVA 22% da acquisti",
-        "description": "22a",
-        "amount": 22,
-    },
-]
-ACCOUNT_TAX_VG7 = [
-    {"id": 22, "code": "22%", "description": "", "aliquota": 22},
-    {"id": 4, "code": "4%", "description": "", "aliquota": 4},
-    {"id": 101, "code": "A1", "description": "Forfettario art. 101", "aliquota": 0},
-    {"id": 115, "code": "15", "description": "Art. 15", "aliquota": 0},
-]
-ACCOUNT_TAX_OE8 = [
-    {
-        "id": 1,
-        "description": "22v",
-        "name": "IVA 22% a debito",
-        "amount": 22,
-        "type_tax_use": "sale",
-    },
-    {
-        "id": 10,
-        "description": "10v",
-        "name": "IVA 10% a debito",
-        "amount": 10,
-        "type_tax_use": "sale",
-    },
-    {
-        "id": 2,
-        "description": "22a",
-        "name": "IVA 22% a credito",
-        "amount": 22,
-        "type_tax_use": "purchase",
-    },
-]
-PAYMENT_TERM_DEF = [
-    {"id": "z0bug.payment_1", "name": "RiBA 30GG/FM"},
-    {"id": "z0bug.payment_2", "name": "RiBA 30/60 GG/FM"},
-    {"id": "z0bug.payment_3", "name": "BB 30GG/FM+10"},
-    {"id": "z0bug.payment_4", "name": "SEPA DD 30GG"},
-]
-PAYMENT_TERM_VG7 = [
-    {"id": 30, "code": "30", "description": "RiBA 30GG/FM"},
-    {"id": 31, "code": "30", "description": "RiBA 30GG/FM+10"},
-    {"id": 3060, "code": "31", "description": "RiBA 30/60 GG/FM"},
-]
-PAYMENT_TERM_LINE_VG7 = [
-    {"id": 30, "scadenza": 30, "giorni_fine_mese": 0, "fine_mese": 1},
-    {"id": 31, "scadenza": 30, "giorni_fine_mese": 10, "fine_mese": 1},
-    {"id": 3060, "scadenza": 30, "giorni_fine_mese": 0, "fine_mese": 1},
-    {"id": 3060, "scadenza": 60, "giorni_fine_mese": 0, "fine_mese": "S"},
-]
-PAYMENT_TERM_OE8 = [
-    {"id": 30, "name": "RiBA 30GG/FM"},
-    {"id": 31, "name": "RiBA 30/60 GG/FM"},
-]
-PAYMENT_TERM_LINE_OE8 = [
-    {"id": 30, "payment_id": 30, "value": "balance", "days": 30},
-    {
-        "id": 31,
-        "payment_id": 31,
-        # 'value': 'procent',
-        "value": "percent",
-        "days": 30,
-    },
-    {"id": 31, "payment_id": 31, "value": "balance", "days": 60},
-]
-CONAI_PROD_DEF = [
-    {"code": "CA", "name": "Carta", "conai_price_unit": 30},
-    {"code": "AC", "name": "Acciaio", "conai_price_unit": 3},
-]
-CONAI_PROD_VG7 = [
-    {"id": 1, "code": "CA", "description": "Carta ondulata", "prezzo_unitario": 35},
-    {"id": 10, "code": "AC", "description": "Acciaio", "prezzo_unitario": 18},
-]
-PURCHASE_ORDER_VG7 = []
-PURCHASE_ORDER_LINE_VG7 = []
-PURCHASE_ORDER_OE8 = []
-PURCHASE_ORDER_LINE_OE8 = []
-PRODUCT_PRODUCT_DEF = [
-    {
-        "id": "z0bug.product_product_1",
-        "default_code": "AAA",
-        "name": "Product Alpha",
-        "conai_id": False,
-    },
-    {
-        "id": "z0bug.product_product_2",
-        "default_code": "BBB",
-        "name": "Product Beta",
-        "conai_id": False,
-    },
-    {
-        "id": "z0bug.product_product_3",
-        "default_code": "CCC",
-        "name": "Product Chi",
-        "conai_id": False,
-    },
-    {
-        "id": "z0bug.product_template_SB",
-        "default_code": "SP-BANC",
-        "name": "Spese Bancarie",
-        "conai_id": False,
-    },
-]
-PRODUCT_PRODUCT_VG7 = [
-    {"id": 1, "code": "AAA", "description": "Product Alpha", "conai_id": 1},
-    {"id": 2, "code": "BBB", "description": "Product Beta", "conai_id": 1},
-    {"id": 3, "code": "CCC", "description": "Product CC", "conai_id": False},
-]
-PRODUCT_PRODUCT_OE8 = [
-    {"id": 1, "product_tmpl_id": 1, "default_code": "AAA", "name": "Product Alpha"},
-    {"id": 2, "product_tmpl_id": 2, "default_code": "BBB", "name": "Product Beta"},
-    {"id": 3, "product_tmpl_id": 3, "default_code": "CCC", "name": "Product CC"},
-]
-PRODUCT_TEMPLATE_DEF = [
-    {
-        "id": "z0bug.product_template_1",
-        "default_code": "AA",
-        "name": "Product Alpha",
-        "conai_id": False,
-    },
-    {
-        "id": "z0bug.product_template_2",
-        "default_code": "BB",
-        "name": "Product Beta",
-        "conai_id": False,
-    },
-    {
-        "id": "z0bug.product_template_3",
-        "default_code": "CC",
-        "name": "Product Chi",
-        "conai_id": False,
-    },
-    {
-        "id": "z0bug.product_template_SB",
-        "default_code": "SP-BANC",
-        "name": "Spese Bancarie",
-        "conai_id": False,
-    },
-]
-PRODUCT_TEMPLATE_VG7 = [
-    {"id": 1, "code": "AA", "description": "Product Alpha", "conai_id": 1},
-    {"id": 2, "code": "BB", "description": "Product Beta", "conai_id": 1},
-    {"id": 3, "code": "CC", "description": "Product CC", "conai_id": False},
-]
-PRODUCT_TEMPLATE_OE8 = [
-    {
-        "id": 1,
-        "default_code": "AA",
-        "name": "Product Alpha",
-        "type": "consu",
-        "uom_id": 10,
-        "uom_po_id": 10,
-        "taxes_id": 1,
-        "supplier_taxes_id": 2,
-    },
-    {
-        "id": 2,
-        "default_code": "BB",
-        "name": "Product Beta",
-        "type": "consu",
-        "uom_id": 10,
-        "uom_po_id": 10,
-        "taxes_id": 1,
-        "supplier_taxes_id": 2,
-    },
-    {
-        "id": 3,
-        "default_code": "CC",
-        "name": "Product CC",
-        "type": "consu",
-        "uom_id": 10,
-        "uom_po_id": 10,
-        "taxes_id": 1,
-        "supplier_taxes_id": 2,
-    },
-]
-PRODUCT_UOM_DEF = [
-    {"id": "product.product_uom_unit", "name": "Unit(s)"},
-    {"id": "product.product_uom_kgm", "name": "kg"},
-]
-PRODUCT_UOM_VG7 = [
-    {"id": 1, "code": "NR"},
-    {"id": 2, "code": "KG"},
-    {"id": 5, "code": "m"},
-]
-PRODUCT_UOM_OE8 = [
-    {"id": 10, "name": "Unit(s)"},
-    {"id": 12, "name": "kg"},
-    {"id": 15, "name": "m"},
-]
-RES_COMPANY_VG7 = []
-RES_COMPANY_OE8 = [{"id": EXT_COMPANY_ID, "partner_id": 3, "name": "Test Company"}]
-RES_COUNTRY_VG7 = [
-    {"id": 39, "code": "IT", "description": "Italia"},
-    {"id": 49, "code": "DE", "description": "Germania"},
-]
-RES_COUNTRY_OE8 = [
-    {"id": 39, "code": "IT", "name": "Italia"},
-    {"id": 44, "code": "UK", "name": "Regno Unito"},
-]
-RES_COUNTRY_STATE_VG7 = [
-    {"id": 2, "code": "MI", "description": "Milano"},
-    {"id": 11, "code": "TO", "description": "Torino"},
-    {"id": 54, "code": "BO", "description": "Bologna"},
-    {"id": 81, "code": "NA", "description": "Napoli"},
-    {"id": 82, "code": "CE", "description": "Caserta"},
-]
-RES_COUNTRY_STATE_OE8 = [
-    {"id": 2, "country_id": 39, "code": "MI", "name": "Milano"},
-    {"id": 11, "country_id": 39, "code": "TO", "name": "Torino"},
-    {"id": 54, "country_id": 39, "code": "BO", "name": "Bologna"},
-    {"id": 81, "country_id": 39, "code": "NA", "name": "Napoli"},
-    {"id": 82, "country_id": 39, "code": "CE", "name": "Caserta"},
-]
-RES_PARTNER_SHIPPING = [
-    {
-        "customer_shipping_id": 101,
-        "customer_id": 11,
-        "shipping_name": "Partner A",
-        "shipping_surename": "",
-        "shipping_country_id": 39,
-        "shipping_region_id": 11,
-        "shipping_postal_code": "35100",
-        "shipping_city": "Padova",
-    },
-    {
-        "customer_shipping_id": 102,
-        "customer_id": 12,
-        "shipping_name": "",
-        "shipping_surename": "",
-        "shipping_country_id": 39,
-        "shipping_region_id": 11,
-        "shipping_postal_code": "10061",
-        "shipping_city": "S. Secondo fraz. Pinasca",
-    },
-]
-RES_PARTNER_BILLING = [
-    {
-        "customer_billing_id": 11,
-        "customer_id": 11,
-        "billing_country_id": 39,
-        "billing_name": "",
-        "billing_street": "Via Porta Nuova",
-        "billing_street_number": "1",
-        "billing_postal_code": "",
-        "billing_city": "Torino",
-        "billing_piva": "00385870480",
-        "billing_bank_id": None,
-    },
-    {
-        "customer_billing_id": 12,
-        "customer_id": 12,
-        "billing_country_id": 39,
-        "billing_name": "",
-        "billing_street": None,
-        "billing_street_number": None,
-        "billing_postal_code": "",
-        "billing_city": "",
-        "billing_piva": "",
-        "billing_bank_id": 2468,
-    },
-]
-RES_PARTNER_DEF = [
-    {
-        "id": "z0bug.res_partner_2",
-        "name": "Agro Latte Due  s.n.c.",
-        "street": "Via II Giugno, 22",
-        "country_id": "base.it",
-        "zip": "10060",
-        "city": "S. Secondo Pinerolo",
-        "state_id": "base.state_it_to",
-        "vat": "IT02345670018",
-        "goods_description_id": "l10n_it_ddt.goods_description_SFU",
-        "carriage_condition_id": "l10n_it_ddt.carriage_condition_PAF",
-        "transportation_method_id": "l10n_it_ddt.transportation_method_COR",
-        "customer": True,
-        "supplier": False,
-    },
-    {
-        "id": "z0bug.res_partner_4",
-        "name": "Delta 4 s.r.l.",
-        "street": "C.so IV Marzo, 33",
-        "country_id": "base.it",
-        "zip": "65122",
-        "city": "Pescara",
-        "state_id": "base.state_it_pe",
-        "vat": "IT06631580013",
-        "goods_description_id": None,
-        "carriage_condition_id": None,
-        "transportation_method_id": None,
-        "customer": False,
-        "supplier": True,
-    },
-]
-RES_PARTNER_VG7 = [
-    {
-        "id": 11,
-        "company": "Partner A",
-        "name": None,
-        "surename": None,
-        "street": "",
-        "street_number": "",
-        "postal_code": "10100",
-        "city": "Torino",
-        "region": "TORINO",
-        "region_id": 11,
-        "country_id": "Italia",
-        "esonerato_fe": "1",
-        "piva": "",
-        "cf": "",
-        "payment_id": 30,
-        "goods_description_id": False,
-        "carriage_condition_id": False,
-        "transportation_method_id": False,
-        "splitmode": None,
-    },
-    {
-        # Agro Latte Due  s.n.c.
-        "id": 12,
-        "company": None,
-        "name": None,
-        "surename": None,
-        "street": None,
-        "street_number": None,
-        "postal_code": None,
-        "city": None,
-        "region": None,
-        "region_id": None,
-        "country_id": None,
-        "esonerato_fe": None,
-        "piva": "02345670018",
-        "cf": "",
-        "payment_id": None,
-        "goods_description_id": None,
-        "carriage_condition_id": None,
-        "transportation_method_id": None,
-        "splitmode": None,
-    },
-    {
-        # None
-        "id": 7,
-        "company": None,
-        "name": None,
-        "surename": None,
-        "street": None,
-        "street_number": None,
-        "postal_code": None,
-        "city": None,
-        "region": None,
-        "region_id": None,
-        "country_id": None,
-        "esonerato_fe": None,
-        "piva": None,
-        "cf": None,
-        "payment_id": None,
-        "goods_description_id": "l10n_it_ddt.goods_description_SFU",
-        "carriage_condition_id": "l10n_it_ddt.carriage_condition_PAF",
-        "transportation_method_id": "l10n_it_ddt.transportation_method_COR",
-        "splitmode": None,
-    },
-    {
-        # New record
-        "id": 17,
-        "company": None,
-        "name": "Mario",
-        "surename": "Rossi",
-        "street": None,
-        "street_number": None,
-        "postal_code": None,
-        "city": None,
-        "region": None,
-        "region_id": None,
-        "country_id": "Italia",
-        "esonerato_fe": None,
-        "piva": None,
-        "cf": "RSSMRA69C02D612M",
-        "payment_id": None,
-        "goods_description_id": False,
-        "carriage_condition_id": False,
-        "transportation_method_id": False,
-        "splitmode": "LF",
-    },
-]
-RES_PARTNER_OE8 = [
-    {"id": 1, "name": "admbot", "email": "admbot@example.com"},
-    {"id": 3, "name": "Test Company", "email": "info@example.com"},
-    {"id": 101, "name": "Partner A", "email": "partnera@example.com"},
-]
-RES_PARTNER_SUPPLIER_VG7 = [
-    {
-        "id": 14,
-        "company": "Delta 4 s.r.l.",
-        "name": None,
-        "surename": None,
-        "street": "Via Sofocle",
-        "street_number": "14",
-        "postal_code": "20864",
-        "city": "Milano",
-        "region": "MILANO",
-        "region_id": 2,
-        "country_id": 39,
-        "piva": "06631580013",
-        "cf": "01781920150",
-    }
-]
-RES_PARTNER_BANK_VG7 = [
-    {
-        "id": 2468,
-        "description": "Banca Popolare",
-        # IT60X0542811101000000123456
-        "IBAN": TEST_IBAN,
-        "customer_id": 12,
-    }
-]
-RES_PARTNER_BANK_OE8 = []
-RES_USERS_VG7 = []
-RES_USERS_OE8 = [{"id": 13, "login": "admbot", "partner_id": 1}]
-SALE_ORDER_VG7 = [
-    {
-        "id": 131,
-        "customer_id": 11,
-        "customer_shipping_id": 101,
-        "order_number": "210131",
-        "date": ref_dt_m_1,
-        "order_state": 2,
-        "payment_id": 31,
-        "billing": {},
-        "shipping": {},
-    },
-    {
-        "id": 210,
-        "customer_id": 12,
-        "customer_shipping_id": 12,
-        "order_number": "210210",
-        "date": ref_dt_m_1,
-        "order_state": 2,
-        "payment_id": 30,
-        "billing": {},
-        "shipping": {},
-    },
-]
-SALE_ORDER_LINE_VG7 = [
-    {
-        "id": 131,
-        "order_id": 131,
-        "job_name": "Product Alpha",
-        "product_name": "Product Alpha",
-        "quantity": 50,
-        "unitary_price": 1.05,
-        "tax_id": "22v",
-    },
-    {
-        "id": 131,
-        "order_id": 131,
-        "job_name": "Product Beta",
-        "product_name": "Product Beta",
-        "quantity": 1,
-        "unitary_price": 5.38,
-        "tax_id": "22v",
-    },
-    {
-        "id": 210,
-        "order_id": 210,
-        "job_name": "Product Alpha",
-        "product_name": "Product Alpha",
-        "quantity": 100,
-        "unitary_price": 1.05,
-        "tax_id": "22v",
-    },
-    {
-        "id": 210,
-        "order_id": 210,
-        "job_name": "Product Beta",
-        "product_name": "Product Beta",
-        "quantity": 60,
-        "unitary_price": 5.38,
-        "tax_id": "22v",
-    },
-]
-SALE_ORDER_OE8 = [
-    {
-        "id": 80,
-        "name": "SO080",
-        "date_order": ref_ts_m_1,
-        "partner_id": 101,
-        "client_order_ref": "1234 del 2021",
-        "origin": "Test 8.0",
-        "partner_invoice_id": 101,
-        "partner_shipping_id": 101,
-        "payment_term": 30,
-        "state": "manual",
-        "transportation_reason_id": 1,
-    }
-]
-SALE_ORDER_LINE_OE8 = [
-    {
-        "id": 80,
-        "order_id": 80,
-        "name": "Product Alpha",
-        "product_id": 1,
-        "product_tmpl_id": 1,
-        "price_unit": 1.05,
-        "discount": 0.0,
-        "product_uom": 10,
-        "product_uom_qty": 50,
-        "tax_id": [1],
-    }
-]
-STOCK_PICKING_TRANSPORTATION_REASON_VG7 = [
-    {"id": 3, "code": "V", "description": "Vendita"},
-    {"id": 4, "code": "L", "description": "Conto Lavoro"},
-]
-STOCK_PICKING_TRANSPORTATION_REASON_OE8 = [
-    {"id": 1, "name": "Vendita", "to_be_invoiced": 1}
-]
-STOCK_PICKING_PACKAGE_PREPARATION_VG7 = [
-    {
-        "id": 7,
-        "ddt_number": "1234",
-        "numero_colli": 1,
-        "customer_id": 11,
-        "vettori_prima_riga": "",
-        "vettori_seconda_riga": "",
-        "voce_doganale": "",
-        "aspetto_esteriore_dei_beni": "BANCALI",
-        "causal_id": 3,
-        "note": "Si prega di controllate i dati entro le 24h.",
-        "peso_netto": 9.0,
-        "tipo_porto": "FRANCO",
-        "peso_lordo": 10.0,
-        "ora_ritiro": "18:30:00",
-        "data_emissione": "2020-11-30",
-        # 'data_ritiro': '2020-11-30',
-        "mezzo": "MITTENTE",
-    }
-]
-STOCK_PICKING_PACKAGE_PREPARATION_LINE_VG7 = [
-    {
-        "id": 7,
-        "ddt_id": 7,
-        "product_id": 1,
-        "quantita": 50,
-        "prezzo_unitario": 1.05,
-        "order_id": 131,
-        "order_row_id": 1310,
-        "descrizione": "Product Alpha",
-        "conai_id": 1,
-        "tax_code_id": 22,
-    },
-    {
-        "id": 7,
-        "ddt_id": 7,
-        "product_id": 2,
-        "quantita": 1,
-        "prezzo_unitario": 5.38,
-        "order_id": 131,
-        "order_row_id": 1311,
-        "descrizione": "Product Beta",
-        "conai_id": 1,
-        "tax_code_id": 22,
-    },
-]
-STOCK_PICKING_PACKAGE_PREPARATION_OE8 = []
-STOCK_PICKING_PACKAGE_PREPARATION_LINE_OE8 = []
+IDENTITY_LIST = ["vg7:", "oe8:"]
 
 
-def get_csv_path(identity):
-    root = os.path.join(
-        os.path.dirname(os.path.expanduser(os.environ.get("HOME_DEVEL", "~/devel"))),
-        "clodoo",
-        "test",
-    )
-    if not identity:
-        return root
-    return os.path.join(root, (identity.split(":")[0]))
+def get_ext_model(model, identity):
+    if identity.startswith("vg7") and model in TNL_VG7_TABLES:
+        ext_model = TNL_VG7_TABLES[model]
+    elif identity.startswith("oe8"):
+        ext_model = model
+    else:
+        ext_model = model
+    return ext_model
+
+
+def get_ext_id_field(identity):
+    return identity.split(":")[0] + "_id"
+
+
+def get_csv_path(identity="match"):
+    # Get csv file with source test data
+    testdir = os.path.join(os.path.dirname(os.path.dirname(__file__)))
+    root = os.path.join(testdir, "data", (identity.split(":")[0]))
+    if not os.path.isdir(root):
+        raise IOError("Directory %s not found!!!" % root)
+    return root
+
+
+def get_exchange_path(identity):
+    # Get csv fexchanage path
+    testdir = os.path.join(os.path.dirname(os.path.dirname(__file__)))
+    root = os.path.join(testdir, "res", (identity.split(":")[0]))
+    if not os.path.isdir(root):
+        os.makedirs(root)
+    return root
 
 
 def env_ref(ctx, xref, retxref_id=None):
@@ -1423,7 +641,9 @@ def delete_record(
 ):
     if not ctx["conai"] and "conai" in model:
         return
-    print("Delete records %s of model %s ..." % (domains, model))
+    print("Delete %s records of model %s ..." % (
+        domains if domains != -1 and domains <> [] else "all",
+        model))
 
     excl_list = [
         rec.res_id
@@ -1458,7 +678,8 @@ def delete_record(
         elif isinstance(domain, int):
             full_domain = []
             for test_prefix in ("vg7:", "oe8:"):
-                ext_name = "%s_id" % test_prefix.split(":")[0] if test_prefix else False
+                ext_name = ("%s_id" % test_prefix.split(":")[0]
+                            if test_prefix else False)
                 if domain == -1:
                     leaf = [(ext_name, "!=", False), (ext_name, "!=", 0)]
                 else:
@@ -1532,7 +753,7 @@ def write_record(ctx, model, domain, vals, company_id=False, create=None, unique
     return ids
 
 
-def reset_ext_id(model):
+def reset_ext_id(ctx, model):
     domain = ["|"]
     if model == "res.partner":
         domain.append("|")
@@ -1549,7 +770,7 @@ def reset_ext_id(model):
 
 
 def rm_file_2_pull(ext_model, identity):
-    fn = os.path.join(get_csv_path(identity), "%s.csv" % ext_model)
+    fn = os.path.join(get_exchange_path(identity), "%s.csv" % ext_model)
     if os.path.isfile(fn):
         os.unlink(fn)
 
@@ -1573,7 +794,10 @@ def set_sequence(ctx, domain, next_number, multi=False, company_id=False):
                         ctx,
                         "%s.date_range" % model,
                         rec1.id,
-                        {"number_next_actual": next_number, "number_next": next_number},
+                        {
+                            "number_next_actual": next_number,
+                            "number_next": next_number
+                        },
                     )
 
 
@@ -1616,9 +840,9 @@ def store_ext_id(ctx, model, loc_id, ext_id, identity):
 def write_file_2_pull(ext_model, vals, mode=None, identity=None):
     mode = mode or "w"
     if identity:
-        fn = os.path.join(get_csv_path(identity), "%s.csv" % ext_model)
+        fn = os.path.join(get_exchange_path(identity), "%s.csv" % ext_model)
     else:
-        fn = os.path.join(get_csv_path(), "%s.csv" % ext_model)
+        fn = os.path.join(get_exchange_path(), "%s.csv" % ext_model)
     if mode == "a":
         with open(fn, "r") as fd:
             ln = fd.read().split("\n")[0]
@@ -1754,11 +978,13 @@ def get_loc_value(
                     and "LOC" in TNL_VG7_DICT[ref_model]
                     and loc_name != "tax_id"
                 ):
-                    loc_value = TNL_VG7_DICT[ref_model]["LOC"].get(loc_value, loc_value)
+                    loc_value = TNL_VG7_DICT[ref_model]["LOC"].get(loc_value,
+                                                                   loc_value)
                     mode = "tnx"
             elif identity.startswith("oe8"):
                 if ref_model in TNL_OE8_DICT and "LOC" in TNL_OE8_DICT[ref_model]:
-                    loc_value = TNL_OE8_DICT[ref_model]["LOC"].get(loc_value, loc_value)
+                    loc_value = TNL_OE8_DICT[ref_model]["LOC"].get(loc_value,
+                                                                   loc_value)
                     mode = "tnx"
             ckstr = True
         elif loc_name == "parent_id":
@@ -1845,13 +1071,15 @@ def get_ext_value(
                     TABLE_OF_REF_FIELD[loc_name] in TNL_VG7_DICT
                     and "LOC" in TNL_VG7_DICT[ref_model]
                 ):
-                    ext_value = TNL_VG7_DICT[ref_model]["LOC"].get(ext_value, ext_value)
+                    ext_value = TNL_VG7_DICT[ref_model]["LOC"].get(ext_value,
+                                                                   ext_value)
             elif identity.startswith("oe8"):
                 if (
                     TABLE_OF_REF_FIELD[loc_name] in TNL_OE8_DICT
                     and "LOC" in TNL_OE8_DICT[ref_model]
                 ):
-                    ext_value = TNL_OE8_DICT[ref_model]["LOC"].get(ext_value, ext_value)
+                    ext_value = TNL_OE8_DICT[ref_model]["LOC"].get(ext_value,
+                                                                   ext_value)
     elif ext_ref in ("vg7:id", "vg7_id", "oe8:id", "oe8_id") and (
         isinstance(vals[ext_ref], basestring) and vals[ext_ref].isdigit()
     ):
@@ -1950,7 +1178,8 @@ def test_function_synchro(ctx, model, vals, identity=None, ext_id=None):
 
 
 def test_function_synchro2(
-    ctx, model, vals, parent_field, child_field, child_model, identity=None, ext_id=None
+        ctx, model, vals, parent_field, child_field, child_model,
+        identity=None, ext_id=None
 ):
     """
     Test function synchro: child records are sent after parent record
@@ -1982,7 +1211,10 @@ def test_function_trigger(ctx, ext_model, vals, identity, ext_id):
         ctx, ">>> trigger_one_record(ctx, %s, %s, %s)" % (ext_model, ext_id, identity)
     )
     rec_id = clodoo.executeL8(
-        ctx, "ir.model.synchro", "trigger_one_record", ext_model, identity, ext_id
+        ctx,
+        "ir.model.synchro",
+        "trigger_one_record",
+        ext_model, identity, ext_id
     )
     if ext_id and rec_id > 0:
         store_ext_id(ctx, ext_model, rec_id, ext_id, identity)
@@ -2037,10 +1269,35 @@ def set_wrong_data(vals, mode):
     return vals
 
 
+def load_csv_file(fqn):
+    def cast_value(vals):
+        res = {}
+        for k, v in vals.items():
+            if k in ("id", "vg7_id", "oe8_id") and isinstance(v, basestring):
+                res[k] = int(v) if v else False
+            elif v in (r"\N", "None"):
+                continue
+            else:
+                res[k] = v
+        return res
+
+    datas = []
+    if not os.path.isfile(fqn):
+        raise IOError("File %s not found!" % fqn)
+    with open(fqn, "r") as fd:
+        header = False
+        reader = csv.reader(fd)
+        for row in reader:
+            if not header:
+                header = row
+                continue
+            datas.append(cast_value(dict(zip(header, row))))
+    return datas
+
+
 def load_n_test_model(
     ctx,
     model,
-    default,
     mode=None,
     store=None,
     identity=None,
@@ -2285,435 +1542,200 @@ def load_n_test_model(
             vals[ext_child_field] = vals_line
         return vals, vals_line, parent_field, ext_child_field, child_model
 
-    if not ext_model:
-        if identity.startswith("vg7") and model in TNL_VG7_TABLES:
-            ext_model = TNL_VG7_TABLES[model]
-        elif identity.startswith("oe8"):
-            ext_model = model
-        else:
-            ext_model = model
-            model = False
+    ext_model = ext_model or get_ext_model(model, identity)
+    fqn = os.path.join(get_csv_path(identity), ext_model + ".csv")
+    ext_recs_2_test = load_csv_file(fqn)
+    fqn = os.path.join(get_csv_path(), model + ".csv")
+    test_recs = load_csv_file(fqn)
+
     vals_shipping = vals_billing = vals_line = {}
     main_ext_id = False
     wa = wal = "w"
-    for datas in default:
-        vals = datas.copy()
-        test_vals = get_some_default(model, vals, identity, {})
+    ext_id_field = get_ext_id_field(identity)
+    for rec in ext_recs_2_test:
+        test_vals = get_some_default(model, rec, identity, {})
         if ext_model in ("customers_shipping_addresses", "customers_billing_addresses"):
-            shirt_vals(vals)
-        for field in datas:
-            if field in vals and vals[field] is None:
-                del vals[field]
+            shirt_vals(rec)
+        ext_id = False
+        for field in rec:
+            if field in rec and rec[field] is None:
+                del rec[field]
                 continue
-            loc_name, dummy = get_loc_name(model, field, identity)
-            if not ctx["conai"] and field == "conai_id":
-                del vals[field]
-                continue
-            if (identity and is_untranslable(loc_name, field, vals)) or (
-                not identity and not is_untranslable(loc_name, field, vals)
-            ):
-                del vals[field]
-        if identity.startswith("oe8") and model in MODEL_WITH_COMPANY:
-            vals["company_id"] = EXT_COMPANY_ID
+            if field == "id":
+                ext_id = rec[field]
+                if not main_ext_id:
+                    main_ext_id = rec[field]
+            elif field == "company_id" and not rec[field]:
+                rec[field] = EXT_COMPANY_ID
 
-        parent_field = ext_child_field = child_model = False
-        if identity == "vg7:" and model == "res.partner" and mode != "wrong":
-            for xmodel in ("res.partner.shipping", "res.partner.invoice"):
-                if xmodel == "res.partner.invoice":
-                    (
-                        vals,
-                        vals_billing,
-                        parent_field,
-                        ext_child_field,
-                        child_model,
-                    ) = get_child_values(ctx, xmodel, identity, mode, vals, join=True)
-                else:
-                    (
-                        vals,
-                        vals_shipping,
-                        parent_field,
-                        ext_child_field,
-                        child_model,
-                    ) = get_child_values(ctx, xmodel, identity, mode, vals, join=True)
-        elif model in MODEL_WITH_CHILD:
-            (
-                vals,
-                vals_line,
-                parent_field,
-                ext_child_field,
-                child_model,
-            ) = get_child_values(ctx, model, identity, mode, vals, join=True)
+        if fct_test == "synchro":
+            loc_id, vals = test_function_synchro(
+                ctx, model, rec, identity=identity, ext_id=ext_id
+            )
+        checked = False
+        for test_rec in test_recs:
+            if ext_id == test_rec.get(ext_id_field):
+                rec = clodoo.browseL8(ctx, model, loc_id)
+                check_records(ctx, identity, model, loc_id, test_rec, rec)
+                checked = True
+                break
+        if not checked:
+            raise IOError("No match record found for %s=%s" % (ext_id_field, ext_id))
+    return
+    #
+    #         loc_name, dummy = get_loc_name(model, field, identity)
+    #         if not ctx["conai"] and field == "conai_id":
+    #             del vals[field]
+    #             continue
+    #         if (identity and is_untranslable(loc_name, field, vals)) or (
+    #             not identity and not is_untranslable(loc_name, field, vals)
+    #         ):
+    #             del vals[field]
+    #     if identity.startswith("oe8") and model in MODEL_WITH_COMPANY:
+    #         vals["company_id"] = EXT_COMPANY_ID
+    #
+    #     parent_field = ext_child_field = child_model = False
+    #     if identity == "vg7:" and model == "res.partner" and mode != "wrong":
+    #         for xmodel in ("res.partner.shipping", "res.partner.invoice"):
+    #             if xmodel == "res.partner.invoice":
+    #                 (
+    #                     vals,
+    #                     vals_billing,
+    #                     parent_field,
+    #                     ext_child_field,
+    #                     child_model,
+    #                 ) = get_child_values(ctx, xmodel, identity, mode, vals, join=True)
+    #             else:
+    #                 (
+    #                     vals,
+    #                     vals_shipping,
+    #                     parent_field,
+    #                     ext_child_field,
+    #                     child_model,
+    #                 ) = get_child_values(ctx, xmodel, identity, mode, vals, join=True)
+    #     elif model in MODEL_WITH_CHILD:
+    #         (
+    #             vals,
+    #             vals_line,
+    #             parent_field,
+    #             ext_child_field,
+    #             child_model,
+    #         ) = get_child_values(ctx, model, identity, mode, vals, join=True)
+    #
+    #     if not main_ext_id and vals.get("id"):
+    #         main_ext_id = vals["id"]
+    #     if store:
+    #         if ext_child_field and fct_test == "trigger" and child_model:
+    #             child_ids = []
+    #             for rec in vals[ext_child_field]:
+    #                 child_ids.append(rec["id"])
+    #                 write_file_2_pull(child_model, rec, wal, identity=identity)
+    #                 wal = "a"
+    #         rec = vals.copy()
+    #         if ext_child_field and fct_test != "trigger":
+    #             rec[ext_child_field] = '"%s"' % rec[ext_child_field]
+    #         elif ext_child_field and fct_test == "trigger" and child_model:
+    #             rec[ext_child_field] = '"%s"' % child_ids
+    #             vals[ext_child_field] = child_ids
+    #         write_file_2_pull(ext_model, rec, wa, identity=identity)
+    #         wa = "a"
+    #     vals = apply_4_custom(vals, mode)
+    #     vals = set_wrong_data(vals, mode)
+    #     ext_id = get_ext_id_from_vals(vals)
+    #     if not store and fct_test == "trigger":
+    #         fct_test = "synchro"
+    #     if model:
+    #         if fct_test == "synchro":
+    #             rec_id, vals = test_function_synchro(
+    #                 ctx, model, vals, identity=identity, ext_id=ext_id
+    #             )
+    #         elif fct_test == "synchro2":
+    #             rec_id, vals = test_function_synchro2(
+    #                 ctx,
+    #                 model,
+    #                 vals,
+    #                 parent_field,
+    #                 ext_child_field,
+    #                 child_model,
+    #                 identity=identity,
+    #                 ext_id=ext_id,
+    #             )
+    #         else:
+    #             rec_id, vals = test_function_trigger(
+    #                 ctx, ext_model, vals, identity, ext_id
+    #             )
+    #         hash = "%s%s:%s" % (identity, model, mode)
+    #         if hash in FAILED_TRX and ext_id in FAILED_TRX[hash]:
+    #             if rec_id == FAILED_TRX[hash][ext_id]:
+    #                 ctx["ctr"] += 1
+    #                 continue
+    #             raise IOError(
+    #                 "!!%s.syncro(%d) failed(%d): expected %s!"
+    #                 % (model, ext_id, rec_id, FAILED_TRX[hash][ext_id])
+    #             )
+    #         elif rec_id < 1:
+    #             raise IOError("!!%s.syncro(%d) failed(%d)!" % (model, ext_id, rec_id))
+    #         if test_vals:
+    #             vals.update(test_vals)
+    #         if fct_test == "synchro2" and model in MODEL_TO_COMMIT:
+    #             if "state" in vals:
+    #                 vals["state"] = "draft"
+    #             general_check(ctx, model, rec_id, vals, mode=mode, state="draft")
+    #         else:
+    #             general_check(ctx, model, rec_id, vals, mode=mode)
+    #         if identity == "vg7:" and model == "product.product":
+    #             check_childs(ctx, model, rec_id, vals, identity, mode=mode)
+    #         elif model == "res.partner":
+    #             if vals_shipping:
+    #                 check_childs(
+    #                     ctx,
+    #                     model,
+    #                     rec_id,
+    #                     vals_shipping,
+    #                     identity,
+    #                     mode=mode,
+    #                     spec="shipping",
+    #                 )
+    #             if vals_billing:
+    #                 check_childs(
+    #                     ctx,
+    #                     model,
+    #                     rec_id,
+    #                     vals_billing,
+    #                     identity,
+    #                     mode=mode,
+    #                     spec="invoice",
+    #                 )
+    #         elif model in MODEL_WITH_CHILD:
+    #             if vals_line:
+    #                 if fct_test == "synchro2" and model in MODEL_TO_COMMIT:
+    #                     check_childs(
+    #                         ctx,
+    #                         model,
+    #                         rec_id,
+    #                         vals_line,
+    #                         identity,
+    #                         mode=mode,
+    #                         state="draft",
+    #                     )
+    #                 else:
+    #                     check_childs(ctx, model, rec_id, vals_line, identity, mode=mode)
+    #         if fct_test == "synchro2" and model in MODEL_TO_COMMIT:
+    #             if test_vals:
+    #                 vals.update(test_vals)
+    #             commit(ctx, model, rec_id, vals)
+    # return main_ext_id
 
-        if not main_ext_id and vals.get("id"):
-            main_ext_id = vals["id"]
-        if store:
-            if ext_child_field and fct_test == "trigger" and child_model:
-                child_ids = []
-                for datas in vals[ext_child_field]:
-                    child_ids.append(datas["id"])
-                    write_file_2_pull(child_model, datas, wal, identity=identity)
-                    wal = "a"
-            datas = vals.copy()
-            if ext_child_field and fct_test != "trigger":
-                datas[ext_child_field] = '"%s"' % datas[ext_child_field]
-            elif ext_child_field and fct_test == "trigger" and child_model:
-                datas[ext_child_field] = '"%s"' % child_ids
-                vals[ext_child_field] = child_ids
-            write_file_2_pull(ext_model, datas, wa, identity=identity)
-            wa = "a"
-        vals = apply_4_custom(vals, mode)
-        vals = set_wrong_data(vals, mode)
-        ext_id = get_ext_id_from_vals(vals)
-        if not store and fct_test == "trigger":
-            fct_test = "synchro"
-        if model:
-            if fct_test == "synchro":
-                rec_id, vals = test_function_synchro(
-                    ctx, model, vals, identity=identity, ext_id=ext_id
-                )
-            elif fct_test == "synchro2":
-                rec_id, vals = test_function_synchro2(
-                    ctx,
-                    model,
-                    vals,
-                    parent_field,
-                    ext_child_field,
-                    child_model,
-                    identity=identity,
-                    ext_id=ext_id,
-                )
-            else:
-                rec_id, vals = test_function_trigger(
-                    ctx, ext_model, vals, identity, ext_id
-                )
-            hash = "%s%s:%s" % (identity, model, mode)
-            if hash in FAILED_TRX and ext_id in FAILED_TRX[hash]:
-                if rec_id == FAILED_TRX[hash][ext_id]:
-                    ctx["ctr"] += 1
-                    continue
-                raise IOError(
-                    "!!%s.syncro(%d) failed(%d): expected %s!"
-                    % (model, ext_id, rec_id, FAILED_TRX[hash][ext_id])
-                )
-            elif rec_id < 1:
-                raise IOError("!!%s.syncro(%d) failed(%d)!" % (model, ext_id, rec_id))
-            if test_vals:
-                vals.update(test_vals)
-            if fct_test == "synchro2" and model in MODEL_TO_COMMIT:
-                if "state" in vals:
-                    vals["state"] = "draft"
-                general_check(ctx, model, rec_id, vals, mode=mode, state="draft")
-            else:
-                general_check(ctx, model, rec_id, vals, mode=mode)
-            if identity == "vg7:" and model == "product.product":
-                check_childs(ctx, model, rec_id, vals, identity, mode=mode)
-            elif model == "res.partner":
-                if vals_shipping:
-                    check_childs(
-                        ctx,
-                        model,
-                        rec_id,
-                        vals_shipping,
-                        identity,
-                        mode=mode,
-                        spec="shipping",
-                    )
-                if vals_billing:
-                    check_childs(
-                        ctx,
-                        model,
-                        rec_id,
-                        vals_billing,
-                        identity,
-                        mode=mode,
-                        spec="invoice",
-                    )
-            elif model in MODEL_WITH_CHILD:
-                if vals_line:
-                    if fct_test == "synchro2" and model in MODEL_TO_COMMIT:
-                        check_childs(
-                            ctx,
-                            model,
-                            rec_id,
-                            vals_line,
-                            identity,
-                            mode=mode,
-                            state="draft",
-                        )
-                    else:
-                        check_childs(ctx, model, rec_id, vals_line, identity, mode=mode)
-            if fct_test == "synchro2" and model in MODEL_TO_COMMIT:
-                if test_vals:
-                    vals.update(test_vals)
-                commit(ctx, model, rec_id, vals)
-    return main_ext_id
 
-
-def reset_model(
-    ctx, model, default, company_id=None, identity=None, tnl=None, only_def=None
-):
+def reset_model(ctx, model):
     if not ctx["conai"] and "conai" in model:
         return
-    print("Reset model %s (%s) ..." % (model, identity))
-
-    ext_id = False
-    loc_id = False
-    if identity:
-        ext_name = "%s_id" % identity.split(":")[0]
-    rec_ids = []
-    for datas in default:
-        vals = {}
-        for field in datas:
-            if datas[field] is None:
-                continue
-            if identity:
-                loc_name, dummy = get_loc_name(model, field, identity)
-            else:
-                loc_name = field
-            if loc_name == "id":
-                if not identity:
-                    loc_id, dummy = get_ext_value(
-                        ctx, model, field, field, "id", datas, "", identity=identity
-                    )
-                elif identity and ext_name:
-                    ext_id, dummy = get_ext_value(
-                        ctx, model, field, field, "id", datas, "", identity=identity
-                    )
-                continue
-            if not ctx["conai"] and field == "conai_id":
-                loc_name = False
-            if loc_name:
-                vals[loc_name], dummy = get_ext_value(
-                    ctx, model, field, field, loc_name, datas, "", identity=identity
-                )
-        if not vals:
-            continue
-        if model in SOME_DEFAULT:
-            for item in SOME_DEFAULT[model]:
-                if compare_some(item, vals):
-                    if item["value"][1] in ctx:
-                        vals[item["value"][0]] = ctx[item["value"][1]]
-                    else:
-                        vals[item["value"][0]] = item["value"][1]
-        domain = ids = []
-        if loc_id:
-            ids = [loc_id]
-        elif ext_id:
-            domain = [(ext_name, "=", ext_id)]
-            ids = clodoo.searchL8(ctx, model, domain)
-        if not ids:
-            for kk in CANDIDATE_KEYS:
-                if kk in vals:
-                    if kk in ("default_code", "name"):
-                        domain = [(kk, "like", vals[kk])]
-                    else:
-                        domain = [(kk, "=", vals[kk])]
-                    break
-            if domain:
-                if model == "res.country.state":
-                    domain.append(("country_id", "=", ctx["res.country.IT"]))
-        if domain:
-            if company_id:
-                domain.append(("company_id", "=", company_id))
-        if domain:
-            ids = clodoo.searchL8(ctx, model, domain)
-        if ids:
-            rec_ids += ids
-            if len(ids) > 1:
-                print('Warning: Too many records "%s.%s"' % (model, domain))
-            if tnl:
-                clodoo.writeL8(ctx, model, ids, vals)
-                write_log(
-                    ctx,
-                    '>>> %s.write(%s, %s, ctx="en_US")' % (model, ids, vals),
-                    eol=True,
-                )
-                if model in NAME_REFS:
-                    done_tnl = False
-                    for item in NAME_REFS[model]:
-                        if compare_some(item, vals):
-                            done_tnl = True
-                            vals[item["value"][0]] = item["value"][1]
-                    if done_tnl:
-                        clodoo.writeL8(ctx, model, ids, vals, context={"lang": tnl})
-                        write_log(
-                            ctx,
-                            '>>> %s.write(%s, %s, ctx="%s")' % (model, ids, vals, tnl),
-                            eol=True,
-                        )
-            else:
-                clodoo.writeL8(ctx, model, ids, vals)
-                write_log(ctx, ">>> %s.write(%s, %s)" % (model, ids, vals), eol=True)
-            if model in SET_DEFAULT_FROM_CTX:
-                for item in SET_DEFAULT_FROM_CTX[model]:
-                    if compare_some(item, vals):
-                        ctx[item["value"]] = ids[0]
-        else:
-            print('Warning: No records found "%s.%s"' % (model, domain))
-    if identity:
-        if identity.startswith("vg7"):
-            ext_model = TNL_VG7_TABLES[model]
-        else:
-            ext_model = TNL_OE8_TABLES.get(model, model)
-        rm_file_2_pull(ext_model, identity)
-    reset_ext_id(model)
-    if only_def and rec_ids:
-        delete_record(
-            ctx, model, [("id", "not in", rec_ids)], multi=True, company_id=company_id
-        )
+    print("Reset model %s ..." % model)
+    reset_ext_id(ctx, model)
 
 
-def get_invalid_partners(ctx):
-    return clodoo.searchL8(
-        ctx,
-        "res.partner",
-        [
-            ("parent_id", "=", False),
-            "|",
-            ("name", "=", False),
-            "|",
-            ("name", "=", ""),
-            ("name", "=", " "),
-        ],
-    )
-
-
-def get_unknown_partners(ctx):
-    return clodoo.searchL8(ctx, "res.partner", [("name", "ilike", "Unknown")])
-
-
-def get_duplicate_partners(ctx):
-    return clodoo.searchL8(ctx, "res.partner", [("name", "like", "Rossi")]) == 1
-
-
-def init_test():
-    ctx = parser.parseoptargs(sys.argv[1:], apply_conf=False)
-    ctx["ctr"] = 0
-    ctx["conf_fn"] = os.environ["TEST_CONFN"]
-    ctx["db_name"] = os.environ["TEST_DB"]
-    ctx["conai"] = False
-    ctx["ask"] = False
-    ctx["module"] = False
-    uid, ctx = clodoo.oerp_set_env(confn=ctx["conf_fn"], db=ctx["db_name"], ctx=ctx)
-    ctx["logfn"] = __file__.replace(".py", ".log")
-
-    write_log(
-        ctx,
-        "\n%s: init_test(ctx)" % datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M:%S"),
-        eol=True,
-    )
-    clodoo.executeL8(ctx, "ir.model.synchro.cache", "set_loglevel", 0, "debug")
-    reset_cache(ctx)
-
-    model = "res.company"
-    vals = {"id": 3, "name": "Test Company"}
-    rec_id, vals = test_function_synchro(ctx, model, vals, identity="oe8:")
-
-    model = "ir.module.module"
-    for modname in MODULE_LIST:
-        if modname in ("connector_vg7_conai", "l10n_it_conai") and not ctx["conai"]:
-            continue
-        print("checking module %s ..." % modname)
-        module_ids = clodoo.searchL8(ctx, model, [("name", "=", modname)])
-        if not module_ids:
-            raise IOError("Module %s does not exist!!!" % modname)
-        vals = {"name": modname}
-        res_id = clodoo.executeL8(ctx, model, "synchro", vals)
-        if res_id < 0:
-            raise IOError("!!Error %s installing %s!" % (res_id, modname))
-        module = clodoo.browseL8(ctx, model, res_id)
-        if module.state != "installed":
-                raise IOError("Module %s not installed!!!" % modname)
-
-    return ctx
-
-    model = "res.lang"
-    if ctx["lang"] not in ("en_US", "."):
-        vals = {"code": ctx["lang"]}
-        print("Installing language %s ..." % vals["code"])
-        clodoo.executeL8(ctx, model, "synchro", vals)
-
-    ctx["company_id"] = env_ref(ctx, "z0bug.mycompany")
-    if not ctx["company_id"]:
-        raise IOError("!!Internal error: no company to test found!")
-
-    print("Initializing environment ...")
-    model = "res.company"
-    company = clodoo.browseL8(ctx, model, ctx["company_id"])
-    if not company.country_id or company.name != "Test Company":
-        clodoo.writeL8(
-            ctx,
-            model,
-            ctx["company_id"],
-            {"country_id": env_ref(ctx, "base.it"), "name": "Test Company"},
-        )
-
-    # Default values for current user
-    model = "res.users"
-    user_id = env_ref(ctx, "base.user_root")
-    if user_id != ctx["user_id"]:
-        raise IOError(
-            "!!Invalid current user id %s; set %s!" % (ctx["user_id"], user_id)
-        )
-    user = clodoo.browseL8(ctx, model, ctx["user_id"])
-    if user.login != ctx["lgi_user"]:
-        raise IOError(
-            "!!Invalid current user login %s; set %s!" % (user.login, ctx["lgi_user"])
-        )
-    vals = {}
-    if user.company_id.id != ctx["company_id"]:
-        vals["company_id"] = ctx["company_id"]
-    if ctx["lang"] != "." and user.lang != ctx["lang"]:
-        vals["lang"] = ctx["lang"]
-    if vals:
-        clodoo.writeL8(ctx, "res.users", ctx["user_id"], vals)
-        write_log(ctx, ">>> res.users.write(%s, %s)" % (ctx["user_id"], vals), eol=True)
-        ctx["lang"] = clodoo.browseL8(ctx, model, ctx["user_id"]).lang
-    # Set message note
-    ctx["company_note"] = "Si prega di controllate i dati entro le 24h."
-    vals = {"sale_note": ctx["company_note"]}
-    clodoo.writeL8(ctx, "res.company", ctx["company_id"], vals)
-    write_log(
-        ctx, ">>> res.company.write(%s, %s)" % (ctx["company_id"], vals), eol=True
-    )
-    # Configure VG7 channel
-    # Wrong method. Will be set forward, in order to test cache too
-    model = "synchro.channel"
-    write_record(
-        ctx,
-        model,
-        [],
-        {"method": "JSON", "exchange_path": get_csv_path("vg7:"), "tracelevel": "4"},
-    )
-    if not ctx.get("_cr"):
-        print("No sql support found!")
-        if ctx["ask"]:
-            input("Press RET to continue")
-    else:
-        for query in (
-            "delete from procurement_order",
-            "delete from stock_pack_operation",
-            # 'delete from stock_picking',
-            "delete from stock_move",
-            "stock_quant",
-            "stock_inventory",
-        ):
-            try:
-                clodoo.exec_sql(ctx, query)
-            except BaseException:
-                pass
-
-    write_log(
-        ctx,
-        "\n%s: *** Write initial records ***"
-        % (datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M:%S")),
-        eol=True,
-    )
-    for model, domain, ctx["company_id"], vals in (
-        ("account.journal", [], ctx["company_id"], {"update_posted": True}),
-    ):
-        write_record(ctx, model, domain, vals, company_id=ctx["company_id"])
-
+def delete_all_records(ctx):
+    print("Deleting all records for init ...")
     write_log(
         ctx,
         "\n%s: *** Delete records ***"
@@ -2820,77 +1842,247 @@ def init_test():
             company_id=company_id,
         )
 
+    if not ctx.get("_cr"):
+        print("No sql support found!")
+        if ctx["ask"]:
+            input("Press RET to continue")
+    else:
+        for query in (
+            "delete from procurement_order",
+            "delete from stock_pack_operation",
+            # 'delete from stock_picking',
+            "delete from stock_move",
+            "stock_quant",
+            "stock_inventory",
+        ):
+            try:
+                clodoo.exec_sql(ctx, query)
+            except BaseException:
+                pass
+
+
+def initialize_all_records(ctx):
+    print("Initialize all records")
     write_log(
         ctx,
-        "\n%s: *** Reset model ***"
+        "\n%s: *** Initializa all models ***"
         % (datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M:%S")),
         eol=True,
     )
-    for model, datas, identity, company_id, tnl, only_def in (
-        (
-            "account.account.type",
-            ACCOUNT_ACCOUNT_TYPE_DEF,
-            "oe8:",
-            False,
-            "it_IT",
-            True,
-        ),
-        (
-            "account.account",
-            ACCOUNT_ACCOUNT_DEF,
-            "oe8:",
-            ctx["company_id"],
-            False,
-            False,
-        ),
-        ("res.country", RES_COUNTRY_VG7, "vg7:", False, False, False),
-        ("res.country", RES_COUNTRY_OE8, "oe8:", False, False, False),
-        # ('res.country.state',
-        #  RES_COUNTRY_STATE_VG7, 'vg7:', False, False, False),
-        ("res.country.state", RES_COUNTRY_STATE_OE8, "oe8:", False, False, False),
-        ("res.partner", RES_PARTNER_DEF, False, False, False, False),
-        ("res.company", [], "oe8:", False, False, False),
-        ("res.users", [], "oe8:", False, False, False),
-        ("italy.conai.product.category", CONAI_PROD_DEF, False, False, False, False),
-        ("product.uom", PRODUCT_UOM_DEF, False, False, False, False),
-        ("product.template", PRODUCT_TEMPLATE_DEF, False, False, "it_IT", False),
-        ("product.product", PRODUCT_PRODUCT_DEF, False, False, False, False),
-        (
-            "account.payment.term",
-            PAYMENT_TERM_DEF,
-            False,
-            ctx["company_id"],
-            False,
-            False,
-        ),
-        ("account.tax", ACCOUNT_TAX_DEF, False, ctx["company_id"], False, False),
-        (
-            "stock.picking.transportation_reason",
-            STOCK_PICKING_TRANSPORTATION_REASON_VG7,
-            False,
-            False,
-            False,
-            False,
-        ),
-    ):
-        reset_model(
+    for model in TABLE_LIST :
+        reset_model(ctx, model)
+
+
+def get_invalid_partners(ctx):
+    return clodoo.searchL8(
+        ctx,
+        "res.partner",
+        [
+            ("parent_id", "=", False),
+            "|",
+            ("name", "=", False),
+            "|",
+            ("name", "=", ""),
+            ("name", "=", " "),
+        ],
+    )
+
+
+def get_unknown_partners(ctx):
+    return clodoo.searchL8(ctx, "res.partner", [("name", "ilike", "Unknown")])
+
+
+def get_duplicate_partners(ctx):
+    return clodoo.searchL8(ctx, "res.partner", [("name", "like", "Rossi")]) == 1
+
+
+def check_if_module_installed(ctx, modname, ctr=-1, maxctr=-1):
+    if ctr >= 0 and maxctr >= 0:
+        print("checking module %s (%d/%d) ..." % (modname, ctr + 1, maxctr))
+    else:
+        print("checking module %s ..." % modname)
+    model = "ir.module.module"
+    module_ids = clodoo.searchL8(ctx, model, [("name", "=", modname)])
+    if not module_ids:
+        raise IOError("Module %s does not exist!!!" % modname)
+    state = "uninstalled"
+    if len(module_ids) == 1:
+        state = clodoo.browseL8(ctx, model, module_ids[0]).state
+    return state == "installed"
+
+
+def assure_cache(ctx):
+    clodoo.executeL8(ctx,
+                     "ir.model.synchro.cache",
+                     "set_loglevel",
+                     0,
+                     "debug")
+    reset_cache(ctx)
+
+
+def assure_lang(ctx):
+    model = "res.lang"
+    if ctx["lang"] == ".":
+        ctx["lang"] = "it_IT"
+    else:
+        ctx["lang"] == ctx.get("lang", "it_IT")
+    if not clodoo.searchL8(ctx, model, [("code", "=", ctx["lang"])]):
+        vals = {"code": ctx["lang"]}
+        print("Installing language %s ..." % vals["code"])
+        clodoo.executeL8(ctx, model, "synchro", vals)
+
+
+def assure_company(ctx):
+    ctx["company_id"] = env_ref(ctx, "z0bug.mycompany")
+    if not ctx["company_id"]:
+        raise IOError("!!Internal error: no company to test found!")
+    model = "res.company"
+    company = clodoo.browseL8(ctx, model, ctx["company_id"])
+    if not company.country_id or company.name != "Test Company":
+        clodoo.writeL8(
             ctx,
             model,
-            datas,
-            company_id=company_id,
-            identity=identity,
-            tnl=tnl,
-            only_def=only_def,
+            ctx["company_id"],
+            {"country_id": env_ref(ctx, "base.it"), "name": "Test Company"},
         )
-
-    channel_ids = clodoo.searchL8(ctx, "synchro.channel", [("identity", "!=", "odoo")])
-    if channel_ids:
-        model = "synchro.channel.model"
-        delete_record(
-            ctx, model, [("synchro_channel_id", "!=", channel_ids[0])], multi=True
-        )
+    ctx["company_note"] = "Si prega di controllate i dati entro le 24h."
+    vals = {"sale_note": ctx["company_note"]}
+    clodoo.writeL8(ctx, "res.company", ctx["company_id"], vals)
+    write_log(
+        ctx, ">>> res.company.write(%s, %s)" % (ctx["company_id"], vals), eol=True
+    )
     if not company.due_cost_service_id:
         raise IOError("!!Missed bank cost in company!!")
+
+
+def assure_user(ctx):
+    model = "res.users"
+    user_id = env_ref(ctx, "base.user_root")
+    if user_id != ctx["user_id"]:
+        raise IOError(
+            "!!Invalid current user id %s; set %s!" % (ctx["user_id"], user_id)
+        )
+    user = clodoo.browseL8(ctx, model, ctx["user_id"])
+    if user.login != ctx["lgi_user"]:
+        raise IOError(
+            "!!Invalid current user login %s; set %s!" % (user.login, ctx["lgi_user"])
+        )
+    vals = {}
+    if user.company_id.id != ctx["company_id"]:
+        vals["company_id"] = ctx["company_id"]
+    if user.lang != ctx["lang"]:
+        vals["lang"] = ctx["lang"]
+    if vals:
+        clodoo.writeL8(ctx, "res.users", ctx["user_id"], vals)
+        write_log(ctx, ">>> res.users.write(%s, %s)" % (ctx["user_id"], vals), eol=True)
+        ctx["lang"] = clodoo.browseL8(ctx, model, ctx["user_id"]).lang
+
+
+def assure_journals(ctx):
+    for model, domain, ctx["company_id"], vals in (
+        ("account.journal", [], ctx["company_id"], {"update_posted": True}),
+    ):
+        write_record(ctx, model, domain, vals, company_id=ctx["company_id"])
+
+
+def assure_all_backends(ctx):
+    model = "synchro.channel"
+    write_record(
+        ctx,
+        model,
+        [],
+        {"method": "JSON", "exchange_path": get_exchange_path("vg7:"), "tracelevel": "4"},
+    )
+
+
+def init_new_db(ctx):
+    # Temporary solution
+    print("Be patient, the universal connector test takes a long time ...")
+    print("Please drop DB %s" % ctx["db_name"])
+    input("Press RET to continue ...")
+    print("Now recreate DB %s" % ctx["db_name"])
+    input("Press RET to continue ...")
+    with open(ctx["conf_fn"], "r") as fd:
+        contents = fd.read()
+    if "psycopg2 = 1" not in contents:
+        with open(ctx["conf_fn"], "a") as fd:
+            fd.write("psycopg2 = 1\n")
+
+#
+def set_new_db(ctx):
+    company_id = env_ref(ctx, "z0bug.mycompany")
+    if not company_id:
+        print("Activate Developer Mode and create full test environment")
+        print("lang=it_IT, no new company, CoA=Zero, No CONAI ...")
+        print("You need to create only chart of account, partners and products ...")
+        input("Press RET to continue ...")
+
+
+def init_test():
+    ctx = parser.parseoptargs(sys.argv[1:], apply_conf=False)
+    ctx["ctr"] = 0
+    # ctx["conf_fn"] = os.environ["TEST_CONFN"]
+    ctx["conf_fn"] = "/home/odoo/10.0/connector/universal_connector/tests/logs/zero10.connector.universal_connector.conf"
+    # ctx["db_name"] = os.environ["TEST_DB"]
+    ctx["db_name"] = "connect10"
+    ctx["conai"] = False
+    ctx["ask"] = False
+    ctx["module"] = False
+
+    print("init_test(ctx) ...")
+    write_log(
+        ctx,
+        "\n%s: init_test(ctx)" % datetime.strftime(datetime.now(),
+                                                   "%Y-%m-%d %H:%M:%S"),
+        eol=True,
+    )
+
+    init_new_db(ctx)
+    uid, ctx = clodoo.oerp_set_env(confn=ctx["conf_fn"], db=ctx["db_name"], ctx=ctx)
+    ctx["logfn"] = __file__.replace(".py", ".log")
+
+    modname = "mk_test_env"
+    installed = False
+    while not installed:
+        installed = check_if_module_installed(ctx, modname)
+        if not installed:
+            print("Module %s not installed!" % modname)
+            print("Please install %s" % modname)
+            input("Press RET to continue ...")
+    set_new_db(ctx)
+
+    modname = THIS_MODULE
+    while not installed:
+        installed = check_if_module_installed(ctx, modname)
+        if not installed:
+            print("Module %s not installed!" % modname)
+            print("Please install %s" % modname)
+            input("Press RET to continue ...")
+
+    assure_cache(ctx)
+
+    model = "ir.module.module"
+    maxctr = len(MODULE_LIST)
+    for ctr, modname in enumerate(MODULE_LIST):
+        if modname in ("connector_vg7_conai", "l10n_it_conai") and not ctx["conai"]:
+            continue
+        installed = check_if_module_installed(ctx, modname, ctr=ctr, maxctr=maxctr)
+        if not installed:
+            vals = {"name": modname}
+            res_id = clodoo.executeL8(ctx, model, "synchro", vals)
+            if res_id < 0:
+                raise IOError("!!Error %s installing %s!" % (res_id, modname))
+            module = clodoo.browseL8(ctx, model, res_id)
+            if module.state != "installed":
+                    raise IOError("Module %s not installed!!!" % modname)
+
+    assure_lang(ctx)
+    assure_company(ctx)
+    assure_user(ctx)
+    assure_journals(ctx)
+    assure_all_backends(ctx)
+    delete_all_records(ctx)
+    initialize_all_records(ctx)
     return ctx
 
 
@@ -2911,14 +2103,45 @@ def compare(ctx, rec_value, ext_value, mode):
         return rec_value == ext_value + 100000000
     elif mode == "invoice":
         return rec_value == ext_value + 200000000
-    elif isinstance(rec_value, basestring) and isinstance(ext_value, int):
+    elif isinstance(rec_value, basestring) and isinstance(ext_value, (int, long)):
         return rec_value == str(ext_value)
+    elif isinstance(rec_value, (int, long)) and isinstance(ext_value, basestring):
+        return rec_value == int(ext_value)
     elif ext_value is None:
         return True
     elif rec_value or ext_value:
         return rec_value == ext_value
     return True
 
+
+def check_records(ctx, identity, model, loc_id, test_rec, mode=None, state=None):
+    write_log(ctx, ">>> %s.check_record(%s, %s)" % (model, loc_id, test_rec), eol=True)
+    spec = False
+    if model.startswith("res.partner.") and model != "res.partner.bank":
+        spec = {
+            "shipping": "delivery",
+            "billing": "invoice",
+            "supplier": "supplier",
+            "company": "company",
+        }[model.split(".")[-1]]
+        model = "res.partner"
+    fields_2_ignore = []
+    for ident in IDENTITY_LIST:
+        if ident != identity:
+            fields_2_ignore.append(get_ext_id_field(ident))
+    loc_rec = clodoo.browseL8(ctx, model, loc_id)
+    for field in [x for x in dir(loc_rec) if not x.startswith("_")]:
+        loc_name = get_loc_name(model, field, identity)[0]
+        if loc_name in fields_2_ignore:
+            continue
+        if loc_name in test_rec:
+            if not compare(ctx, getattr(loc_rec, loc_name), test_rec[loc_name], spec):
+                raise IOError(
+                    "!!Field %s[%s].%s: invalid value <%s> expected <%s>"
+                    % (model, loc_id, field, loc_rec.type, spec)
+                )
+            ctx["ctr"] += 1
+    return
 
 def general_check(ctx, model, loc_id, vals, mode=None, state=None):
     write_log(ctx, ">>> %s.general_check(%s, %s)" % (model, loc_id, vals), eol=True)
@@ -3080,9 +2303,68 @@ def general_check(ctx, model, loc_id, vals, mode=None, state=None):
         ctx["ctr"] += 1
 
 
+def cvt_csv(model, identity="match"):
+    if identity == "match":
+        source = (model.replace(".", "_") + "_DEF").upper()
+    else:
+        source = (model.replace(".", "_") + "_" + identity.split(":")[0]).upper()
+    if source not in globals():
+        print("No data found for model %s (%s)" % (model, identity))
+        return
+    fn = os.path.join(get_csv_path(identity), model + ".csv")
+    with open(fn, "w") as fd:
+        header = False
+        for items in globals()[source]:
+            if not header:
+                header = ",".join(items.keys())
+                fd.write(header + "\n")
+            data = [
+                ('"' + x.replace('"', "\")") + '"' if isinstance(x, basestring) and '"' in x else str(x))
+                for x in items.values()
+            ]
+            fd.write(",".join(data) + "\n")
+
+
+
 def test_synchro_vg7(ctx):
     print("Test synchronization Odoo against external software %s (%s)"
           % (__version__, datetime.now()))
+    for model in (
+            "account.account.type",
+            "account.account",
+            "account.invoice",
+            "account.invoice.line",
+            "account.journal",
+            "account.move",
+            "account.move.line",
+            "account.tax",
+            "payment.term",
+            "payment.term.line",
+            "conai.prod",
+            "purchase.order",
+            "purchase.order.line",
+            "product.product",
+            "product.template",
+            "product.uom",
+            "res.company",
+            "res.country",
+            "res.country.state",
+            "res.partner",
+            "res.partner.shipping",
+            "res.partner.billing",
+            "res.partner.bank",
+            "res.users",
+            "sale.order",
+            "sale.order.line",
+            "stock.picking.transportation.reason",
+            "stock.picking.package.preparation",
+            "stock.picking.package.preparation.line",
+    ):
+        for identity in ("", "oe8:", "vg7:"):
+            if identity:
+                cvt_csv(model, identity)
+            else:
+                cvt_csv(model)
 
     def test_company(ctx, mode=None, identity=None, fct_test=None):
         identity = identity or "oe8:"
@@ -3091,7 +2373,6 @@ def test_synchro_vg7(ctx):
         load_n_test_model(
             ctx,
             model,
-            RES_COMPANY_VG7 if identity == "vg7:" else RES_COMPANY_OE8,
             mode=mode,
             store=not mode,
             identity=identity,
@@ -3104,7 +2385,6 @@ def test_synchro_vg7(ctx):
         load_n_test_model(
             ctx,
             model,
-            RES_USERS_VG7 if identity == "vg7:" else RES_USERS_OE8,
             mode=mode,
             store=not mode,
             identity=identity,
@@ -3117,7 +2397,6 @@ def test_synchro_vg7(ctx):
         vg7_id = load_n_test_model(
             ctx,
             model,
-            RES_COUNTRY_VG7 if identity == "vg7:" else RES_COUNTRY_OE8,
             mode=mode,
             store=not mode,
             identity=identity,
@@ -3126,20 +2405,19 @@ def test_synchro_vg7(ctx):
         if identity == "vg7:":
             ctx["res.country.IT"] = vg7_id
 
-        model = "res.country.state"
-        print("Write %s (%s) ..." % (model, identity))
-        vg7_id = load_n_test_model(
-            ctx,
-            model,
-            RES_COUNTRY_STATE_VG7 if identity == "vg7:" else RES_COUNTRY_STATE_OE8,
-            mode=mode,
-            store=not mode,
-            identity=identity,
-            fct_test=fct_test,
-            test_suppl="country_id",
-        )
-        if identity == "vg7:":
-            ctx["res.country.state.MI"] = vg7_id
+        # model = "res.country.state"
+        # print("Write %s (%s) ..." % (model, identity))
+        # vg7_id = load_n_test_model(
+        #     ctx,
+        #     model,
+        #     mode=mode,
+        #     store=not mode,
+        #     identity=identity,
+        #     fct_test=fct_test,
+        #     test_suppl="country_id",
+        # )
+        # if identity == "vg7:":
+        #     ctx["res.country.state.MI"] = vg7_id
 
     def test_tax(ctx, mode=None, identity=None, fct_test=None):
         identity = identity or "vg7:"
@@ -3148,7 +2426,6 @@ def test_synchro_vg7(ctx):
         vg7_id = load_n_test_model(
             ctx,
             model,
-            ACCOUNT_TAX_VG7 if identity == "vg7:" else ACCOUNT_TAX_OE8,
             mode=mode,
             store=not mode,
             identity=identity,
@@ -3166,7 +2443,6 @@ def test_synchro_vg7(ctx):
         vg7_id = load_n_test_model(
             ctx,
             model,
-            PAYMENT_TERM_VG7 if identity == "vg7:" else PAYMENT_TERM_OE8,
             mode=mode,
             store=not mode,
             identity=identity,
@@ -3180,7 +2456,7 @@ def test_synchro_vg7(ctx):
         model = "italy.conai.product.category"
         print("Write %s (%s) ..." % (model, identity))
         vg7_id = load_n_test_model(
-            ctx, model, CONAI_PROD_VG7, mode=mode, store=not mode, identity="vg7:"
+            ctx, model, mode=mode, store=not mode, identity="vg7:"
         )
         if identity == "vg7:":
             ctx["italy.conai.product.category.CA"] = vg7_id
@@ -3192,7 +2468,6 @@ def test_synchro_vg7(ctx):
         vg7_id = load_n_test_model(
             ctx,
             model,
-            PRODUCT_UOM_VG7 if identity == "vg7:" else PRODUCT_UOM_OE8,
             mode=mode,
             store=not mode,
             identity=identity,
@@ -3209,7 +2484,6 @@ def test_synchro_vg7(ctx):
             load_n_test_model(
                 ctx,
                 model,
-                PRODUCT_TEMPLATE_OE8,
                 mode=mode,
                 store=not mode,
                 identity=identity,
@@ -3220,7 +2494,6 @@ def test_synchro_vg7(ctx):
         vg7_id = load_n_test_model(
             ctx,
             model,
-            PRODUCT_PRODUCT_VG7 if identity == "vg7:" else PRODUCT_PRODUCT_OE8,
             mode=mode,
             store=not mode,
             identity=identity,
@@ -3237,7 +2510,6 @@ def test_synchro_vg7(ctx):
             load_n_test_model(
                 ctx,
                 "res.partner.shipping",
-                RES_PARTNER_SHIPPING,
                 mode=mode,
                 store=not mode,
                 identity=identity,
@@ -3245,7 +2517,6 @@ def test_synchro_vg7(ctx):
             load_n_test_model(
                 ctx,
                 "customers_billing_addresses",
-                RES_PARTNER_BILLING,
                 mode=mode,
                 store=not mode,
                 identity=identity,
@@ -3262,7 +2533,6 @@ def test_synchro_vg7(ctx):
             bank_id = load_n_test_model(
                 ctx,
                 "res.partner.bank",
-                RES_PARTNER_BANK_VG7,
                 mode=True,
                 store=True,
                 identity=identity,
@@ -3276,7 +2546,6 @@ def test_synchro_vg7(ctx):
             vg7_id = load_n_test_model(
                 ctx,
                 model,
-                RES_PARTNER_SUPPLIER_VG7,
                 mode=mode,
                 store=not mode,
                 identity=identity,
@@ -3331,7 +2600,6 @@ def test_synchro_vg7(ctx):
         load_n_test_model(
             ctx,
             model,
-            ACCOUNT_ACCOUNT_TYPE_OE8,
             mode=mode,
             store=not mode,
             identity="oe8:",
@@ -3345,7 +2613,6 @@ def test_synchro_vg7(ctx):
         load_n_test_model(
             ctx,
             model,
-            ACCOUNT_ACCOUNT_OE8,
             mode=mode,
             store=not mode,
             identity=identity,
@@ -3373,7 +2640,6 @@ def test_synchro_vg7(ctx):
         vg7_id = load_n_test_model(
             ctx,
             model,
-            SALE_ORDER_VG7 if identity == "vg7:" else SALE_ORDER_OE8,
             mode=mode,
             store=not mode,
             identity=identity,
@@ -3389,7 +2655,6 @@ def test_synchro_vg7(ctx):
         vg7_id = load_n_test_model(
             ctx,
             model,
-            ACCOUNT_INVOICE_OE8 if identity == "vg7:" else ACCOUNT_INVOICE_OE8,
             mode=mode,
             store=not mode,
             identity=identity,
@@ -3405,7 +2670,6 @@ def test_synchro_vg7(ctx):
         load_n_test_model(
             ctx,
             model,
-            PURCHASE_ORDER_VG7 if identity == "vg7:" else PURCHASE_ORDER_OE8,
             mode=mode,
             store=not mode,
             identity=identity,
@@ -3420,9 +2684,6 @@ def test_synchro_vg7(ctx):
         vg7_id = load_n_test_model(
             ctx,
             model,
-            STOCK_PICKING_TRANSPORTATION_REASON_VG7
-            if identity == "vg7:"
-            else STOCK_PICKING_TRANSPORTATION_REASON_OE8,
             mode=mode,
             store=not mode,
             identity=identity,
@@ -3438,9 +2699,6 @@ def test_synchro_vg7(ctx):
         vg7_id = load_n_test_model(
             ctx,
             model,
-            STOCK_PICKING_PACKAGE_PREPARATION_VG7
-            if identity == "vg7:"
-            else STOCK_PICKING_PACKAGE_PREPARATION_OE8,
             mode=mode,
             store=not mode,
             identity=identity,
@@ -3456,7 +2714,6 @@ def test_synchro_vg7(ctx):
         load_n_test_model(
             ctx,
             model,
-            ACCOUNT_MOVE_VG7 if identity == "vg7:" else ACCOUNT_MOVE_OE8,
             mode=mode,
             store=not mode,
             identity=identity,
@@ -3475,9 +2732,13 @@ def test_synchro_vg7(ctx):
         % datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M:%S"),
         eol=True,
     )
-    return
 
     test_country(ctx, identity="vg7:")
+
+    input("Press RET to continue ...")
+    return
+
+
     test_country(ctx, mode="upper", identity="vg7:")
 
     test_tax(ctx, mode="only_amount", identity="vg7:")
@@ -3531,7 +2792,7 @@ def test_synchro_vg7(ctx):
         ctx,
         model,
         clodoo.searchL8(ctx, model, []),
-        {"method": "CSV", "exchange_path": get_csv_path("oe8:"), "tracelevel": "4"},
+        {"method": "CSV", "exchange_path": get_exchange_path("oe8:"), "tracelevel": "4"},
     )
     reset_cache(ctx)
 
@@ -3563,8 +2824,8 @@ def test_synchro_vg7(ctx):
         raise IOError("!!Found duplicate res.partner records ROSSI!")
     ctx["ctr"] += 1
 
-    print("%d tests universal_connector successfully ended on %s"
-          % (ctx["ctr"], datetime.now()))
+    print("%d tests %s successfully ended on %s"
+          % (ctx["ctr"], THIS_MODULE, datetime.now()))
     # try:
     #     clodoo.executeL8(
     #         ctx,
@@ -3661,16 +2922,16 @@ parser.add_argument(
 ctx = parser.parseoptargs(sys.argv[1:], apply_conf=False)
 # import pdb; pdb.set_trace()
 ## ctx["conf_fn"] = "/home/odoo/10.0/venv_odoo/pycharm_odoo.conf"
-ctx["conf_fn"] = os.environ["TEST_CONFN"]
+# ctx["conf_fn"] = os.environ["TEST_CONFN"]
 ## ctx["db_name"] = "test_universal_connector_10"
-ctx["db_name"] = os.environ["TEST_DB"]
-ctx["conai"] = False
-ctx["ask"] = False
-ctx["module"] = False
-uid, ctx = clodoo.oerp_set_env(confn=ctx["conf_fn"], db=ctx["db_name"], ctx=ctx)
-ctx["logfn"] = __file__.replace(".py", ".log")
-msg_time = time.time()
-with open(ctx["logfn"], "w") as fd:
-    fd.write("")
+# ctx["db_name"] = os.environ["TEST_DB"]
+# ctx["conai"] = False
+# ctx["ask"] = False
+# ctx["module"] = False
+# uid, ctx = clodoo.oerp_set_env(confn=ctx["conf_fn"], db=ctx["db_name"], ctx=ctx)
+# ctx["logfn"] = __file__.replace(".py", ".log")
+# msg_time = time.time()
+# with open(ctx["logfn"], "w") as fd:
+#     fd.write("")
 test_synchro_vg7(ctx)
 exit(0)

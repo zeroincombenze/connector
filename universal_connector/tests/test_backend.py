@@ -4,6 +4,7 @@
 Universal connector module connect local Odoo instance with external instance.
 Without external running instance, these test CANNOT be executed
 
+**************************************************************************
 In order to run full test on the same host MUST be active follow instance:
 
 * Odoo 10.0 with OCA modules; http/xmlrpc port: 8270; DB name: oca10
@@ -85,7 +86,7 @@ class MyTest(SingleTransactionCase):
     def test_connection(self):
         # This test requires external Odoo instance active. See header
         _logger.info(
-            "🎺 Starting connection test"
+            "🎺 Starting connection test on ports 8270 (db=oca10) and 8272 (db=oca12)"
         )
         for xref in self.get_resource_data_list("synchro.channel"):
             backend = self.resource_browse(xref)

@@ -1,0 +1,2 @@
+product_tmpl_id,discount,name,product_uom,tax_id,order_id,price_unit,product_uom_qty,id,product_id
+1,0.0,Product Alpha,10,[1],80,1.05,50,80,1

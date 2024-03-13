@@ -1,0 +1,4 @@
+code,type,id,name
+INV,sale,1,Customer Invoices
+BILL,purchase,2,Supplier Bills
+GEN,general,3,Generic

@@ -14,6 +14,14 @@
             </p>
             <h2 class="oe_slogan" style="color:#162832;">Connettore universale</h2>
         </div>
+        <div class="oe_demo oe_screenshot">
+            
+        </div>
+    </div>
+</section>
+
+<section>
+    <div>
         <div class="oe_span6">
             <p align="center">
                 <img src="/l10n_uk/static/description/icon.png" alt="English" style="width:16px;height:16px;"/>
@@ -22,7 +30,7 @@
             <p class="oe_mt16" align="justify">This module makes available some functions to synchronize external data
 with Odoo data.
 <p align="justify">
-<h3>Characteristics</h3>
+<h4>Characteristics</h4>
 </p><p align="justify">
 <ul>
 <li>Multi-channels interchange</li>
@@ -46,7 +54,7 @@ This module can be used for:
 </ul>
 </p><p align="justify">
 </p><p align="justify">
-<h3>Synchro</h3>
+<h4>Synchro</h4>
 </p><p align="justify">
 The function synchro return the ID of record found or created. Negative values
 are error codes.
@@ -57,9 +65,9 @@ and write functions.
 Every field name may be:
 </p><p align="justify">
 <ul>
-<li><code>id</code> (integer): the Odoo ID of record; if supplied means write specific existent record (deprecated)</li>
-<li><code>PFX_id</code> (integer): the external partner ID of record (PFX is the channel prefix)</li>
-<li>External name as format <code>PFX:FIELD</code> where PFX is the channel prefix and FIELD is the external name which is translated into Odoo name based on dictionary</li>
+<li>`id` (integer): the Odoo ID of record; if supplied means write specific existent record (deprecated)</li>
+<li>`PFX_id` (integer): the external partner ID of record (PFX is the channel prefix)</li>
+<li>External name as format `PFX:FIELD` where PFX is the channel prefix and FIELD is the external name which is translated into Odoo name based on dictionary</li>
 </ul>
 </p><p align="justify">
 Every field value may be:
@@ -73,10 +81,10 @@ Every field value may be:
 Synchronizer behavior:
 </p><p align="justify">
 <ul>
-<li>If <code>PFX_id</code> field is supplied, record with <code>PFX_id</code> is searched</li>
+<li>If `PFX_id` field is supplied, record with `PFX_id` is searched</li>
 <li>Otherwise Synchronizer search for a record matching values passed; the function execute a fallback search algorithm</li>
 <li>If record found, Synchronizer executes the Odoo function write</li>
-<li>If record not found, Synchronizer executes the Odoo function create and assign external 'id' to <code>PFX_id</code></li>
+<li>If record not found, Synchronizer executes the Odoo function create and assign external 'id' to `PFX_id`</li>
 </ul>
 </p></p>
         </div>
@@ -86,7 +94,7 @@ Synchronizer behavior:
             </p>
             <p class="oe_mt16" align="justify">Questo modulo rende disponibile alucne funzioni per sincronizzare con l'esterno.
 <p align="justify">
-<h3>Caratteristiche</h3>
+<h4>Caratteristiche</h4>
 </p><p align="justify">
 <ul>
 <li>Scambio multi-canale</li>
@@ -110,57 +118,78 @@ Questo modulo pu&#242; essere usato per:
 </ul>
 </p></p>
         </div>
-        
     </div>
+</section>
+
+<section>
     <div class="oe_row oe_spaced">
         <h3 align="center" style="color:#162832;font-size: 26px;font-weight: 300;">ChangeLog History | Cronologia modifiche</h3>
         <div class="oe_span12">
-<h3>10.0.0.3.3 (2023-10-31)</h3>
-<ul>
-<li>[IMP] Unit price withoit tax / Scorporo IVA</li>
-</ul>
+<h4>10.0.0.3.4 (2024-03-13)</h4>
 <p align="justify">
-<h3>10.0.0.3.2 (2023-03-02)</h3>
+<ul>
+<li>[FIX]</li>
+</ul>
+</p><p align="justify">
+<h4>10.0.0.3.3 (2023-10-31)</h4>
+</p><p align="justify">
+<ul>
+<li>[IMP] Unit price without tax / Scorporo IVA</li>
+</ul>
+</p><p align="justify">
+<h4>10.0.0.3.2 (2023-03-02)</h4>
 </p><p align="justify">
 <ul>
 <li>[IMP] Pull records sto last remote pulled record id</li>
 <li>[FIX] Excel backend with connected test</li>
 </ul>
 </p><p align="justify">
-<h3>10.0.0.3.1 (2023-02-26)</h3>
+<h4>10.0.0.3.1 (2023-02-26)</h4>
 </p><p align="justify">
 <ul>
 <li>[FIX] Ignore Odoo counterpart fields do not exist in local</li>
 <li>[FIX] Wrong error messages</li>
+</ul>
+</p><p align="justify">
+<h4>10.0.0.2.9 (2022-07-27)</h4>
+</p><p align="justify">
+<ul>
+<li>[IMP] Enhanced search</li>
+</ul>
+</p><p align="justify">
+<h4>10.0.0.2.8 (2022-07-18)</h4>
+</p><p align="justify">
+<ul>
+<li>[FIX] Partner: check for parent_id / Controlli su import clienti</li>
 </ul>
 </p>
         </div>
     </div>
 </section>
 
-<section class="oe_container oe_separator"/>
-
 <section class="oe_container">
     <div class="oe_row oe_spaced">
+        <h3 align="center" style="color:#162832;font-size: 26px;font-weight: 300;">Credits | Ringraziamenti</h3>
         <div class="oe_span6" align="left">
-            <p class="oe_mt16">Authors | Autori:</p>
+            <p class="oe_mt16"><b>Authors | Autori:</b></p>
             <p class="oe_mt16"><ul>
-<li><a href="https://www.zeroincombenze.it/">SHS-AV s.r.l.</a></li>
+<li><a href="https://www.zeroincombenze.it">SHS-AV s.r.l.</a></li>
 </ul></p>
         </div>
         <div class="oe_span6" align="left">
-            <p class="oe_mt16">Contributors | Contributi da:</p>
+            <p class="oe_mt16"><b>Contributors | Partecipanti:</b></p>
             <p class="oe_mt16"><ul>
-<li>Antonio Maria Vigliotti &lt;antoniomaria.vigliotti@gmail.com&gt;</li>
+<li><a href="mailto:antoniomaria.vigliotti@gmail.com">Antonio Maria Vigliotti</a></li>
 </ul></p>
         </div>
     </div>
     <div class="oe_row oe_spaced">
         <div class="oe_span12">
-            <p>This module is maintained by the <b>SHS_AV s.r.l.</b>.</p>
+            <p>This module is maintained by the <b><a href="https://www.shs-av.com">SHS_AV s.r.l.</a></b>.</p>
         </div>
     </div>
     <div class="oe_row oe_spaced">
         <p>This module is part of <a href="https://github.com/zeroincombenze/connector">connector</a> project.</p>
+        <p>Published information on | Informazioni pubblicate: 2024-03-13</p>
     </div>
 </section>

@@ -1,0 +1,4 @@
+uom_id,supplier_taxes_id,default_code,uom_po_id,taxes_id,type,id,name
+10,2,AA,10,1,consu,1,Product Alpha
+10,2,BB,10,1,consu,2,Product Beta
+10,2,CC,10,1,consu,3,Product CC

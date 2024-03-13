@@ -15,6 +15,15 @@ PKGPATH=$(readlink -f $(dirname $0)/../)
 HOME_DEVEL=$(readlink -f $(dirname $0)/../../../../devel)
 # XPORT="18069"
 XPORT="8170"
+START_SVR=1
+
+# Get parameters if test executed inside regression tests
+fn="$HOME/10.0/connector/universal_connector/tests/logs/zero10.connector.universal_connector.conf"
+if [[ -f $fn ]]; then
+  XPORT=$(grep -EH "^xmlrpc_port *=" $fn|cut -d= -f2|tr -d " ")
+  DB="test_odoo_10"
+  START_SVR=0
+fi
 
 cp $LGITMPL $LGICNF
 sed -E "s|xmlrpc_port *=.*|xmlrpc_port=$XPORT|" -i $LGICNF
@@ -29,16 +38,20 @@ sed -E "s|^ *\*.py|    $PKGPATH|" -i $COVERAGE_PROCESS_START
 cd $VENV
 . $VENV/bin/activate
 cd $ODOO_DIR
-echo $ODOO_DIR/odoo-bin --config=$LCONF
-coverage run --rcfile=$COVERAGE_PROCESS_START $ODOO_DIR/odoo-bin --config=$LCONF &
-sleep 2
+if [[ $START_SVR -ne 0  ]]; then
+  echo $ODOO_DIR/odoo-bin --config=$LCONF
+  coverage run --rcfile=$COVERAGE_PROCESS_START $ODOO_DIR/odoo-bin --config=$LCONF &
+  sleep 2
+fi
 echo $VENV/bin/python $PYCMD $OPTS --dbname $DB --config $LGICNF
 $VENV/bin/python $PYCMD $OPTS --dbname $DB --config $LGICNF
-pid=$(ps -ef | grep "$ODOO_DIR/odoo-bin.*$LCONF" | grep -v grep | grep -v coverage | awk '{print $2}' | head -n1)
-[[ -n $pid ]] && kill $pid && sleep 1
-pid=$(ps -ef | grep "$ODOO_DIR/odoo-bin.*$LCONF" | grep -v grep | awk '{print $2}' | head -n1)
-[[ -n $pid ]] && kill $pid && sleep 1
-coverage report --rcfile=$COVERAGE_PROCESS_START -im
+if [[ $START_SVR -ne 0  ]]; then
+  pid=$(ps -ef | grep "$ODOO_DIR/odoo-bin.*$LCONF" | grep -v grep | grep -v coverage | awk '{print $2}' | head -n1)
+  [[ -n $pid ]] && kill $pid && sleep 1
+  pid=$(ps -ef | grep "$ODOO_DIR/odoo-bin.*$LCONF" | grep -v grep | awk '{print $2}' | head -n1)
+  [[ -n $pid ]] && kill $pid && sleep 1
+  coverage report --rcfile=$COVERAGE_PROCESS_START -im
+fi
 deactivate
-sleep 2
+[[ $START_SVR -ne 0  ]] && sleep 2
 ps -ef|grep "$ODOO_DIR/odoo-bin.*$LCONF"

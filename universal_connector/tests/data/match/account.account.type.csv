@@ -1,0 +1,18 @@
+type,id,name
+receivable,account.data_account_type_receivable,Receivable
+payable,account.data_account_type_payable,Payable
+liquidity,account.data_account_type_liquidity,Bank and Cash
+liquidity,account.data_account_type_credit_card,Credit Card
+other,account.data_account_type_current_assets,Current Assets
+other,account.data_account_type_non_current_assets,Non-current Assets
+other,account.data_account_type_prepayments,Prepayments
+other,account.data_account_type_fixed_assets,Fixed Assets
+other,account.data_account_type_current_liabilities,Current Liabilities
+other,account.data_account_type_non_current_liabilities,Non-current Liabilities
+other,account.data_account_type_equity,Equity
+other,account.data_unaffected_earnings,Current Year Earnings
+other,account.data_account_type_other_income,Other Income
+other,account.data_account_type_revenue,Income
+other,account.data_account_type_depreciation,Depreciation
+other,account.data_account_type_expenses,Expenses
+other,account.data_account_type_direct_costs,Cost of Revenue

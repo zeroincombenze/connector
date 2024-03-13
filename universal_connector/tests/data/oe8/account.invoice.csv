@@ -1,0 +1,2 @@
+origin,internal_number,account_id,reference,payment_term,number,date_invoice,partner_id,id,partner_shipping_id,journal_id,state,type
+Test 8.0,SAJ/2021/0002,152,1234 del 2021,31,SAJ/2021/0002,2024-03-13,101,131,101,1,open,out_invoice

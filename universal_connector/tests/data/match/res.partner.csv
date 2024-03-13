@@ -1,0 +1,3 @@
+transportation_method_id,street,id,customer,city,name,zip,carriage_condition_id,country_id,supplier,state_id,vat,goods_description_id
+l10n_it_ddt.transportation_method_COR,Via II Giugno, 22,z0bug.res_partner_2,True,S. Secondo Pinerolo,Agro Latte Due  s.n.c.,10060,l10n_it_ddt.carriage_condition_PAF,base.it,False,base.state_it_to,IT02345670018,l10n_it_ddt.goods_description_SFU
+None,C.so IV Marzo, 33,z0bug.res_partner_4,False,Pescara,Delta 4 s.r.l.,65122,None,base.it,True,base.state_it_pe,IT06631580013,None
