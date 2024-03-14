@@ -514,6 +514,7 @@ TABLE_OF_REF_CHILD = {
 }
 THIS_MODULE = "universal_connector"
 MODULE_LIST = [
+    "mk_test_env",
     "account",
     "account_payment_term_extension",
     "date_range",
@@ -526,9 +527,8 @@ MODULE_LIST = [
     "l10n_it_einvoice_out",
     "l10n_it_ricevute_bancarie",
     "partner_bank",
-    # "mk_test_env",
     "l10n_it_conai",
-    # THIS_MODULE,
+    THIS_MODULE,
     "connector_vg7_conai",
 ]
 IDENTITY_LIST = ["vg7:", "oe8:"]
@@ -1288,12 +1288,12 @@ def load_csv_file(ctx, fqn):
     def cast_value(vals):
         res = {}
         for k, v in vals.items():
-            if k in ("id", "vg7_id", "oe8_id") and isinstance(v, basestring):
+            if isinstance(v, basestring) and "." in v and " " not in v:
+                res[k] = env_ref(ctx, v, retxref_id=True)
+            elif k in ("id", "vg7_id", "oe8_id") and isinstance(v, basestring):
                 res[k] = int(v) if v else False
             elif v in (r"\N", "None"):
                 continue
-            elif isinstance(v, basestring) and "." in v and " " not in v:
-                res[k] = env_ref(ctx, v, retxref_id=True)
             else:
                 res[k] = v
         return res
@@ -1335,123 +1335,6 @@ def load_n_test_model(
         ),
     )
 
-    def check_childs(
-        ctx, model, rec_id, vals_line, identity, mode=None, spec=None, state=None
-    ):
-        xmodel = "%s.%s" % (model, spec) if spec else model
-        child_model = TABLE_OF_REF_CHILD[xmodel][0]
-        childs = TABLE_OF_REF_CHILD[xmodel][1]
-        child_ids = clodoo.browseL8(ctx, model, rec_id)[childs]
-        parent_field = TABLE_OF_REF_CHILD[xmodel][2]
-        multi = TABLE_OF_REF_CHILD[xmodel][6]
-        num_details = len(vals_line)
-        if model == "account.invoice":
-            num_details += 2
-        if ctx["conai"]:
-            num_details += 1
-        if multi and len(child_ids) != num_details:
-            raise IOError(
-                "!!Wrong len(%s[%d].line_ids)==%d: expected %d!"
-                % (model, rec_id, len(child_ids), num_details)
-            )
-        ctx["ctr"] += 1
-        rec_type = TABLE_OF_REF_CHILD[xmodel][5]
-        if multi:
-            for ix, child_vals in enumerate(vals_line):
-                child_vals[":%s" % parent_field] = rec_id
-                ext_child_id = child_vals.get("%sid" % identity) or child_vals.get("id")
-                child_id = get_id_from_vg7id(
-                    ctx,
-                    child_model,
-                    ext_child_id,
-                    name="%s_id" % identity.split(":")[0],
-                )
-                general_check(
-                    ctx,
-                    child_model,
-                    child_id,
-                    jacket_vals(child_vals, identity),
-                    mode="child",
-                    state=state,
-                )
-                store_ext_id(ctx, child_model, child_id, ext_child_id, identity)
-        else:
-            check_child_record(
-                ctx,
-                rec_id,
-                rec_type,
-                test_vals,
-                vals,
-                vals_line,
-                identity,
-                mode=mode,
-                state=state,
-            )
-
-    def check_child_record(
-        ctx,
-        rec_id,
-        rec_type,
-        test_vals,
-        vals,
-        child_vals,
-        identity,
-        mode=None,
-        state=None,
-    ):
-        child_vals = set_wrong_data(child_vals, mode)
-        if rec_type == "product":
-            model = "product.product"
-            child_id = clodoo.browseL8(ctx, model, rec_id).product_tmpl_id
-            if not child_id:
-                raise IOError("!!Missing product.template ref of rec %d!" % rec_id)
-            ctx["ctr"] += 1
-            child_id = child_id.id
-            child_model = "product.template"
-            for field in test_vals.keys():
-                del child_vals[field]
-            general_check(ctx, child_model, child_id, child_vals, state=state)
-            # store_child_vg7id(child_model,
-            #     child_id, child_vals['%sid' % identity], identity)
-        elif rec_type in ("delivery", "invoice"):
-            model = "res.partner"
-            ids = clodoo.searchL8(
-                ctx, model, [("parent_id", "=", rec_id), ("type", "=", rec_type)]
-            )
-            if not ids:
-                if (
-                    child_vals.get("customer_billing_id") not in (11, 12)
-                    and child_vals.get("customer_shipping_id") != 102
-                ):
-                    raise IOError(
-                        "!!Missing child record type %s of rec %d!" % (rec_type, rec_id)
-                    )
-                return
-            ctx["ctr"] += 1
-            child_id = ids[0]
-            child_model = model
-            for field in test_vals.keys():
-                del child_vals[field]
-            if identity.startswith("vg7"):
-                if rec_type == "delivery":
-                    child_vals["id"] = child_vals["customer_shipping_id"]
-                    del child_vals["customer_shipping_id"]
-                elif rec_type == "invoice":
-                    child_vals["id"] = child_vals["customer_billing_id"]
-                    del child_vals["customer_billing_id"]
-            general_check(
-                ctx,
-                child_model,
-                child_id,
-                jacket_vals(child_vals, identity),
-                mode=rec_type,
-                state=state,
-            )
-            if rec_type == "delivery":
-                store_ext_id(
-                    ctx, child_model, child_id, child_vals["%sid" % identity], identity
-                )
-
     def get_ext_id_from_vals(vals):
         ext_id = False
         if vals.get("id"):
@@ -1461,103 +1344,6 @@ def load_n_test_model(
         elif vals.get("customer_billing_id"):
             ext_id = vals["customer_billing_id"]
         return ext_id
-
-    def apply_4_custom(vals, mode):
-        if mode == "upper" and "description" in vals:
-            vals["description"] = vals["description"].upper()
-        if mode == "only_amount" and "code" in vals:
-            del vals["code"]
-        return vals
-
-    def get_child_values(ctx, model, identity, mode, vals, join=None):
-        def get_shipping_vals(vg7_id, identity, mode):
-            for item in RES_PARTNER_SHIPPING:
-                if item.get("customer_id") == vg7_id:
-                    return set_wrong_data(item, mode)
-            return {}
-
-        def get_billing_vals(vg7_id, identity, mode):
-            for item in RES_PARTNER_BILLING:
-                # TODO: why?
-                if item.get("customer_id") == vg7_id:
-                    return set_wrong_data(item, mode)
-            return {}
-
-        def get_payment_term_line_vals(vg7_id, identity, mode):
-            vals = []
-            for ix, item in enumerate(
-                value_by_identity(
-                    identity, PAYMENT_TERM_LINE_VG7, PAYMENT_TERM_LINE_OE8
-                )
-            ):
-                if item["id"] == vg7_id:
-                    lines = item.copy()
-                    lines["id"] = lines["id"] * 10 + ix
-                    vals.append(lines)
-            return vals
-
-        def get_move_line_vals(vg7_id, identity, mode):
-            vals = []
-            for ix, item in enumerate(
-                value_by_identity(
-                    identity, ACCOUNT_MOVE_LINE_VG7, ACCOUNT_MOVE_LINE_OE8
-                )
-            ):
-                if item["id"] == vg7_id:
-                    lines = item.copy()
-                    lines["id"] = lines["id"] * 10 + ix
-                    vals.append(lines)
-            return vals
-
-        def get_sale_order_line_vals(vg7_id, identity, mode):
-            vals = []
-            for ix, item in enumerate(
-                value_by_identity(identity, SALE_ORDER_LINE_VG7, SALE_ORDER_LINE_OE8)
-            ):
-                if item["id"] == vg7_id:
-                    lines = item.copy()
-                    lines["id"] = lines["id"] * 10 + ix
-                    vals.append(lines)
-            return vals
-
-        def get_ddt_line_vals(vg7_id, identity, mode):
-            vals = []
-            for ix, item in enumerate(
-                value_by_identity(
-                    identity,
-                    STOCK_PICKING_PACKAGE_PREPARATION_LINE_VG7,
-                    STOCK_PICKING_PACKAGE_PREPARATION_LINE_OE8,
-                )
-            ):
-                if item["id"] == vg7_id:
-                    lines = item.copy()
-                    lines["id"] = lines["id"] * 10 + ix
-                    vals.append(lines)
-            return vals
-
-        def get_invoice_line_vals(vg7_id, identity, mode):
-            vals = []
-            for ix, item in enumerate(
-                value_by_identity(
-                    identity, ACCOUNT_INVOICE_LINE_VG7, ACCOUNT_INVOICE_LINE_OE8
-                )
-            ):
-                if item["id"] == vg7_id:
-                    lines = item.copy()
-                    lines["id"] = lines["id"] * 10 + ix
-                    vals.append(lines)
-            return vals
-
-        child_model = TABLE_OF_REF_CHILD[model][0]
-        parent_field = TABLE_OF_REF_CHILD[model][2]
-        ext_child_field = False
-        if TABLE_OF_REF_CHILD[model][3]:
-            ext_child_field = TABLE_OF_REF_CHILD[model][3].get(identity.split(":")[0])
-        fct = TABLE_OF_REF_CHILD[model][4]
-        vals_line = locals()[fct](vals.get("id"), identity, mode)
-        if ext_child_field and join:
-            vals[ext_child_field] = vals_line
-        return vals, vals_line, parent_field, ext_child_field, child_model
 
     def prepare_rec(rec, main_ext_id):
         ext_id = False
@@ -1570,7 +1356,7 @@ def load_n_test_model(
                 if not main_ext_id:
                     main_ext_id = rec[field]
             elif field == "company_id" and not rec[field]:
-                rec[field] = EXT_COMPANY_ID
+                rec[field] = ctx["company_id"]
         return rec, ext_id, main_ext_id
 
     ext_model = ext_model or get_ext_model(model, identity)
@@ -1603,6 +1389,8 @@ def load_n_test_model(
             loc_id = test_function_trigger(
                 ctx, ext_model, identity=identity, ext_id=ext_id
             )
+        if loc_id < 0:
+            raise IOError("Error %d processing %s=%s" % (loc_id, ext_id_field, ext_id))
         checked = False
         for test_rec in test_recs:
             if ext_id == test_rec.get(ext_id_field):
@@ -2073,26 +1861,8 @@ def init_test():
     init_new_db(ctx)
     uid, ctx = clodoo.oerp_set_env(confn=ctx["conf_fn"], db=ctx["db_name"], ctx=ctx)
     ctx["logfn"] = __file__.replace(".py", ".log")
-
-    modname = "mk_test_env"
-    installed = False
-    while not installed:
-        installed = check_if_module_installed(ctx, modname)
-        if not installed:
-            print("Module %s not installed!" % modname)
-            print("Please install %s" % modname)
-            input("Press RET to continue ...")
-    set_new_db(ctx)
-
-    modname = THIS_MODULE
-    while not installed:
-        installed = check_if_module_installed(ctx, modname)
-        if not installed:
-            print("Module %s not installed!" % modname)
-            print("Please install %s" % modname)
-            input("Press RET to continue ...")
-
-    assure_cache(ctx)
+    if os.path.isfile(ctx["logfn"]):
+        os.unlink(ctx["logfn"])
 
     model = "ir.module.module"
     maxctr = len(MODULE_LIST)
@@ -2101,6 +1871,15 @@ def init_test():
             continue
         installed = check_if_module_installed(ctx, modname, ctr=ctr, maxctr=maxctr)
         if not installed:
+            if modname in ("mk_test_env", THIS):
+                while not installed:
+                    print("Module %s not installed!" % modname)
+                    print("Please install %s" % modname)
+                    input("Press RET to continue ...")
+                    installed = check_if_module_installed(ctx, modname)
+                if modname == "mk_test_env":
+                    set_new_db(ctx)
+                continue
             vals = {"name": modname}
             res_id = clodoo.executeL8(ctx, model, "synchro", vals)
             if res_id < 0:
@@ -2108,14 +1887,17 @@ def init_test():
             module = clodoo.browseL8(ctx, model, res_id)
             if module.state != "installed":
                     raise IOError("Module %s not installed!!!" % modname)
+        elif modname == "mk_test_env":
+            set_new_db(ctx)
 
+    assure_cache(ctx)
     assure_lang(ctx)
     assure_company(ctx)
     assure_user(ctx)
     assure_journals(ctx)
     assure_all_backends(ctx)
-    delete_all_records(ctx)
-    initialize_all_records(ctx)
+    # delete_all_records(ctx)
+    # initialize_all_records(ctx)
     return ctx
 
 
@@ -2183,165 +1965,6 @@ def check_records(ctx, identity, model, loc_id, test_rec, mode=None, state=None)
             ctx["ctr"] += 1
     return
 
-def general_check(ctx, model, loc_id, vals, mode=None, state=None):
-    write_log(ctx, ">>> %s.general_check(%s, %s)" % (model, loc_id, vals), eol=True)
-    if not loc_id or loc_id < 1:
-        raise IOError("!!%s.syncro(%d) failed!" % (model, loc_id))
-    spec = False
-    if model.startswith("res.partner.") and model != "res.partner.bank":
-        spec = {
-            "shipping": "delivery",
-            "billing": "invoice",
-            "supplier": "supplier",
-            "company": "company",
-        }[model.split(".")[-1]]
-        model = "res.partner"
-    elif model == "res.partner" and mode in ("delivery", "invoice"):
-        spec = mode
-    loc_rec = clodoo.browseL8(ctx, model, loc_id)
-    if spec:
-        if not compare(ctx, loc_rec.type, spec, spec):
-            raise IOError(
-                "!!Field %s[%s].%s: invalid value <%s> expected <%s>"
-                % (model, loc_id, "type", loc_rec.type, spec)
-            )
-        ctx["ctr"] += 1
-    if model == "res.partner" and "vg7:billing" in vals:
-        for nm in (
-            "piva",
-            "cf",
-            "esonerato_fe",
-            "codice_univoco",
-            "bank_id",
-            "payment_id",
-            "pec",
-            "street",
-            "street_number",
-        ):
-            if "billing_%s" % nm in vals["vg7:billing"]:
-                vals["vg7:%s" % nm] = vals["vg7:billing"]["billing_%s" % nm]
-    identity = False
-    for ext_ref in vals:
-        if ext_ref.startswith("vg7:") or ext_ref.startswith("oe8:"):
-            identity = ext_ref[0:4]
-            break
-    for ext_ref in vals:
-        if ext_ref in UNCHECK_FIELDS:
-            continue
-        if model in UNCHECK_MODEL_FIELDS and ext_ref in UNCHECK_MODEL_FIELDS[model]:
-            continue
-        # Odoo BUG !?
-        if (
-            model == "res.partner"
-            and ext_ref == "vg7:piva"
-            and loc_rec.type != "contact"
-        ):
-            continue
-        loc_name = ext_name = ext_ref
-        mode2 = False
-        if ext_ref in ("vg7:id", "oe8:id"):
-            loc_name = ext_ref.replace(":", "_")
-            ext_name = "id"
-            if model == "res.partner" and spec == "supplier":
-                loc_name = "vg72_id"
-        elif ext_ref.startswith("vg7:") or ext_ref.startswith("oe8:"):
-            identity = ext_ref[0:4]
-            ext_name = ext_ref[4:]
-            loc_name, mode2 = get_loc_name(model, ext_ref, identity)
-            if loc_name == ext_ref:
-                loc_name, mode2 = get_loc_name(model, ext_name, identity)
-        elif ext_ref.startswith(":"):
-            identity = ""
-            ext_name = ""
-            loc_name = ext_ref[1:]
-        if not loc_name:
-            continue
-        if not ctx["conai"] and "conai" in loc_name:
-            continue
-        if loc_name in ("vg7_id", "oe8_id") and mode == "child":
-            continue
-        if (
-            model in UNCHECK_DRAFT_FIELDS
-            and loc_name in UNCHECK_DRAFT_FIELDS[model]
-            and state == "draft"
-        ):
-            continue
-        mode_compare = False
-        if mode == "upper" and mode2 == "nocase":
-            mode_compare = mode2
-        elif mode == "only_amount" and mode2 == "nounknown":
-            mode_compare = mode2
-
-        loc_value, mode2 = get_loc_value(
-            ctx, model, loc_rec, ext_ref, ext_name, loc_name, vals, identity, spec
-        )
-        transcode = True
-        if mode == "tnx":
-            transcode = False
-        else:
-            mode_compare = mode_compare or mode2
-        ext_value, mode2 = get_ext_value(
-            ctx,
-            model,
-            ext_ref,
-            ext_name,
-            loc_name,
-            vals,
-            spec,
-            identity=identity,
-            transcode=transcode,
-            state=state,
-        )
-        mode_compare = mode_compare or mode2
-        if loc_name == "vg7_id":
-            mode_compare = spec
-        if vals[ext_ref] == "" and not mode:
-            continue
-        if not compare(ctx, loc_value, ext_value, mode_compare):
-            raise IOError(
-                "!!Field %s[%s].%s: invalid value <%s> expected <%s> # %s"
-                % (model, loc_id, loc_name, loc_value, ext_value, mode)
-            )
-        ctx["ctr"] += 1
-        if model == "account.account.type" and loc_name == "name":
-            for item in ACCOUNT_ACCOUNT_TYPE_DEF:
-                if loc_rec.name == item["name"]:
-                    xref = item["id"]
-                    id = env_ref(ctx, xref)
-                    if loc_id != id:
-                        raise IOError(
-                            "!!Field %s[%s].%s: invalid value <%s> expected <%s> # %s"
-                            % (model, loc_id, loc_name, loc_id, id, loc_rec.name)
-                        )
-                    ctx["ctr"] += 1
-        if mode == "individual":
-            if not compare(ctx, loc_rec.name, "Rossi Mario", False):
-                raise IOError(
-                    "!!Field %s[%s].%s: invalid value <%s> expected <%s>"
-                    % (model, loc_id, "name", loc_rec.name, "Rossi Mario")
-                )
-            ctx["ctr"] += 1
-            if not compare(ctx, loc_rec.individual, True, False):
-                raise IOError(
-                    "!!Field %s[%s].%s: invalid value <%s> expected <%s>"
-                    % (model, loc_id, "individual", loc_rec.individual, False)
-                )
-            ctx["ctr"] += 1
-    if model == "res.partner" and loc_rec.type == "contact":
-        if not compare(ctx, loc_rec.is_company, True, False):
-            raise IOError(
-                "!!Field %s[%s].%s: invalid value <%s> expected <%s>"
-                % (model, loc_id, "is_company", loc_rec.is_company, True)
-            )
-        ctx["ctr"] += 1
-    if model == "res.partner" and loc_rec.type != "contact":
-        if not compare(ctx, loc_rec.is_company, bool(loc_rec.name), False):
-            raise IOError(
-                "!!Field %s[%s].%s: invalid value <%s> expected <%s>"
-                % (model, loc_id, "is_company", loc_rec.is_company, bool(loc_rec.name))
-            )
-        ctx["ctr"] += 1
-
 
 def cvt_csv(model, identity="match"):
     if identity == "match":
@@ -2396,9 +2019,9 @@ def test_synchro_vg7(ctx):
 
     def test_country(ctx, mode=None, identity="vg7:", fct_test=None, reset=False):
         model = "res.country"
-        print("Write %s (%s) ..." % (model, identity))
         if reset:
             reset_model(ctx, model)
+        print("Write %s (%s) ..." % (model, identity))
         vg7_id = load_n_test_model(
             ctx,
             model,
@@ -2411,6 +2034,8 @@ def test_synchro_vg7(ctx):
             ctx["res.country.IT"] = vg7_id
 
         model = "res.country.state"
+        if reset:
+            reset_model(ctx, model)
         print("Write %s (%s) ..." % (model, identity))
         vg7_id = load_n_test_model(
             ctx,
@@ -2424,9 +2049,18 @@ def test_synchro_vg7(ctx):
         if identity == "vg7:":
             ctx["res.country.state.MI"] = vg7_id
 
-    def test_tax(ctx, mode=None, identity=None, fct_test=None):
+    def test_tax(ctx, mode=None, identity=None, fct_test=None, reset=False):
         identity = identity or "vg7:"
         model = "account.tax"
+        if reset:
+            delete_record(
+                ctx,
+                model,
+                [("name", "in", ["Forfettario art. 101", "Art. 15"])],
+                multi=True,
+                company_id=ctx["company_id"],
+            )
+            reset_model(ctx, model)
         print("Write %s (%s) ..." % (model, identity))
         vg7_id = load_n_test_model(
             ctx,
@@ -2529,7 +2163,6 @@ def test_synchro_vg7(ctx):
         vg7_id = load_n_test_model(
             ctx,
             model,
-            RES_PARTNER_VG7 if identity == "vg7:" else RES_PARTNER_OE8,
             mode=mode,
             store=not mode,
             identity=identity,
@@ -2631,7 +2264,6 @@ def test_synchro_vg7(ctx):
         load_n_test_model(
             ctx,
             model,
-            ACCOUNT_JOURNAL_VG7 if identity == "vg7:" else ACCOUNT_JOURNAL_OE8,
             mode=mode,
             store=not mode,
             identity=identity,
@@ -2735,17 +2367,14 @@ def test_synchro_vg7(ctx):
         eol=True,
     )
 
-    test_country(ctx, identity="vg7:")
+    test_country(ctx, identity="vg7:", reset=True)
     test_country(ctx, identity="vg7:", fct_test="trigger", reset=True)
+    test_tax(ctx, identity="vg7:", reset=True)
+    test_tax(ctx, identity="vg7:", fct_test="trigger", reset=True)
 
     print("%d tests %s successfully ended on %s"
           % (ctx["ctr"], THIS_MODULE, datetime.now()))
     return
-
-
-
-    test_tax(ctx, mode="only_amount", identity="vg7:")
-    test_tax(ctx, identity="vg7:")
 
     test_payment(ctx, mode="wrong", identity="vg7:")
     test_payment(ctx, identity="vg7:")
@@ -2923,18 +2552,5 @@ parser.add_argument(
 )
 
 ctx = parser.parseoptargs(sys.argv[1:], apply_conf=False)
-# import pdb; pdb.set_trace()
-## ctx["conf_fn"] = "/home/odoo/10.0/venv_odoo/pycharm_odoo.conf"
-# ctx["conf_fn"] = os.environ["TEST_CONFN"]
-## ctx["db_name"] = "test_universal_connector_10"
-# ctx["db_name"] = os.environ["TEST_DB"]
-# ctx["conai"] = False
-# ctx["ask"] = False
-# ctx["module"] = False
-# uid, ctx = clodoo.oerp_set_env(confn=ctx["conf_fn"], db=ctx["db_name"], ctx=ctx)
-# ctx["logfn"] = __file__.replace(".py", ".log")
-# msg_time = time.time()
-# with open(ctx["logfn"], "w") as fd:
-#     fd.write("")
 test_synchro_vg7(ctx)
 exit(0)

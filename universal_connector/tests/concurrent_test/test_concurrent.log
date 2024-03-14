@@ -1,183 +1,8 @@
 >>> res.company.write(1, {u'sale_note': u'Si prega di controllate i dati entro le 24h.'})
 
-2024-03-13 20:09:11: *** Delete records ***
+2024-03-14 12:55:33: *** Starting VG7 test ***
 
-2024-03-13 20:09:16: *** Initializa all models ***
->>> res.company.write(1, {u'sale_note': u'Si prega di controllate i dati entro le 24h.'})
-
-2024-03-13 20:12:31: *** Delete records ***
-
-2024-03-13 20:12:37: *** Initializa all models ***
->>> res.company.write(1, {u'sale_note': u'Si prega di controllate i dati entro le 24h.'})
-
-2024-03-13 20:18:36: *** Delete records ***
-
-2024-03-13 20:18:41: *** Initializa all models ***
-
-2024-03-13 20:18:42: *** Starting VG7 test ***
-
-2024-03-13 20:18:42: load_n_test_model(ctx, res.country, mode=None, pfx=vg7:, fct=synchro)
->>> synchro(ctx, res.country, {u'vg7:code': 'IT', u'vg7:description': 'Italia', u'vg7:id': 39}) => 110
->>> res.country.check_record(110, {'code': 'IT', 'vg7_id': 39, 'oe8_id': 39, 'name': 'Italia'})
->>> synchro(ctx, res.country, {u'vg7:code': 'DE', u'vg7:description': 'Germania', u'vg7:id': 49}) => 58
->>> res.country.check_record(58, {'code': 'DE', 'vg7_id': 49, 'oe8_id': False, 'name': 'Germania'})
->>> synchro(ctx, res.country, {u'vg7:code': 'FR', u'vg7:description': 'FRANCIA', u'vg7:id': 33}) => 76
->>> res.country.check_record(76, {'code': 'FR', 'vg7_id': 33, 'oe8_id': False, 'name': 'Francia'})
->>> res.company.write(1, {u'sale_note': u'Si prega di controllate i dati entro le 24h.'})
-
-2024-03-13 20:26:30: *** Delete records ***
-
-2024-03-13 20:26:35: *** Initializa all models ***
-
-2024-03-13 20:26:36: *** Starting VG7 test ***
-
-2024-03-13 20:26:54: load_n_test_model(ctx, res.country, mode=None, pfx=vg7:, fct=synchro)
->>> synchro(ctx, res.country, {u'vg7:code': 'IT', u'vg7:description': 'Italia', u'vg7:id': 39}) => 110
->>> res.country.check_record(110, {'code': 'IT', 'vg7_id': 39, 'oe8_id': 39, 'name': 'Italia'})
->>> synchro(ctx, res.country, {u'vg7:code': 'DE', u'vg7:description': 'Germania', u'vg7:id': 49}) => 58
->>> res.country.check_record(58, {'code': 'DE', 'vg7_id': 49, 'oe8_id': False, 'name': 'Germania'})
->>> synchro(ctx, res.country, {u'vg7:code': 'FR', u'vg7:description': 'FRANCIA', u'vg7:id': 33}) => 76
->>> res.country.check_record(76, {'code': 'FR', 'vg7_id': 33, 'oe8_id': False, 'name': 'Francia'})
->>> res.company.write(1, {u'sale_note': u'Si prega di controllate i dati entro le 24h.'})
-
-2024-03-13 20:35:03: *** Delete records ***
-
-2024-03-13 20:35:08: *** Initializa all models ***
-
-2024-03-13 20:35:08: *** Starting VG7 test ***
-
-2024-03-13 20:35:08: load_n_test_model(ctx, res.country, mode=None, pfx=vg7:, fct=synchro)
->>> synchro(ctx, res.country, {u'vg7:code': 'IT', u'vg7:description': 'Italia', u'vg7:id': 39}) => 110
->>> res.country.check_record(110, {'code': 'IT', 'vg7_id': 39, 'oe8_id': 39, 'name': 'Italia'})
->>> synchro(ctx, res.country, {u'vg7:code': 'DE', u'vg7:description': 'Germania', u'vg7:id': 49}) => 58
->>> res.country.check_record(58, {'code': 'DE', 'vg7_id': 49, 'oe8_id': False, 'name': 'Germania'})
->>> synchro(ctx, res.country, {u'vg7:code': 'FR', u'vg7:description': 'FRANCIA', u'vg7:id': 33}) => 76
->>> res.country.check_record(76, {'code': 'FR', 'vg7_id': 33, 'oe8_id': False, 'name': 'Francia'})
->>> res.company.write(1, {u'sale_note': u'Si prega di controllate i dati entro le 24h.'})
-
-2024-03-13 20:36:20: *** Delete records ***
-
-2024-03-13 20:36:25: *** Initializa all models ***
-
-2024-03-13 20:36:25: *** Starting VG7 test ***
-
-2024-03-13 20:36:25: load_n_test_model(ctx, res.country, mode=None, pfx=vg7:, fct=synchro)
->>> synchro(ctx, res.country, {u'vg7:code': 'IT', u'vg7:description': 'Italia', u'vg7:id': 39}) => 110
->>> res.country.check_record(110, {'code': 'IT', 'vg7_id': 39, 'oe8_id': 39, 'name': 'Italia'})
->>> synchro(ctx, res.country, {u'vg7:code': 'DE', u'vg7:description': 'Germania', u'vg7:id': 49}) => 58
->>> res.country.check_record(58, {'code': 'DE', 'vg7_id': 49, 'oe8_id': False, 'name': 'Germania'})
->>> synchro(ctx, res.country, {u'vg7:code': 'FR', u'vg7:description': 'FRANCIA', u'vg7:id': 33}) => 76
->>> res.country.check_record(76, {'code': 'FR', 'vg7_id': 33, 'oe8_id': False, 'name': 'Francia'})
->>> res.company.write(1, {u'sale_note': u'Si prega di controllate i dati entro le 24h.'})
-
-2024-03-13 20:40:07: *** Delete records ***
-
-2024-03-13 20:40:12: *** Initializa all models ***
-
-2024-03-13 20:40:13: *** Starting VG7 test ***
-
-2024-03-13 20:40:13: load_n_test_model(ctx, res.country, mode=None, pfx=vg7:, fct=synchro)
->>> synchro(ctx, res.country, {u'vg7:code': 'IT', u'vg7:description': 'Italia', u'vg7:id': 39}) => 110
->>> res.country.check_record(110, {'code': 'IT', 'vg7_id': 39, 'oe8_id': 39, 'name': 'Italia'})
->>> synchro(ctx, res.country, {u'vg7:code': 'DE', u'vg7:description': 'Germania', u'vg7:id': 49}) => 58
->>> res.country.check_record(58, {'code': 'DE', 'vg7_id': 49, 'oe8_id': False, 'name': 'Germania'})
->>> synchro(ctx, res.country, {u'vg7:code': 'FR', u'vg7:description': 'FRANCIA', u'vg7:id': 33}) => 76
->>> res.country.check_record(76, {'code': 'FR', 'vg7_id': 33, 'oe8_id': False, 'name': 'Francia'})
->>> res.company.write(1, {u'sale_note': u'Si prega di controllate i dati entro le 24h.'})
-
-2024-03-13 20:41:48: *** Delete records ***
-
-2024-03-13 20:41:53: *** Initializa all models ***
-
-2024-03-13 20:41:54: *** Starting VG7 test ***
-
-2024-03-13 20:41:54: load_n_test_model(ctx, res.country, mode=None, pfx=vg7:, fct=synchro)
->>> synchro(ctx, res.country, {u'vg7:code': 'IT', u'vg7:description': 'Italia', u'vg7:id': 39}) => 110
->>> res.country.check_record(110, {'code': 'IT', 'vg7_id': 39, 'oe8_id': 39, 'name': 'Italia'})
->>> synchro(ctx, res.country, {u'vg7:code': 'DE', u'vg7:description': 'Germania', u'vg7:id': 49}) => 58
->>> res.country.check_record(58, {'code': 'DE', 'vg7_id': 49, 'oe8_id': False, 'name': 'Germania'})
->>> synchro(ctx, res.country, {u'vg7:code': 'FR', u'vg7:description': 'FRANCIA', u'vg7:id': 33}) => 76
->>> res.country.check_record(76, {'code': 'FR', 'vg7_id': 33, 'oe8_id': False, 'name': 'France'})
->>> res.company.write(1, {u'sale_note': u'Si prega di controllate i dati entro le 24h.'})
-
-2024-03-14 06:24:49: *** Delete records ***
-
-2024-03-14 06:24:55: *** Initializa all models ***
-
-2024-03-14 06:24:56: *** Starting VG7 test ***
-
-2024-03-14 06:24:56: load_n_test_model(ctx, res.country, mode=None, pfx=vg7:, fct=synchro)
->>> synchro(ctx, res.country, {u'vg7:code': 'IT', u'vg7:description': 'Italia', u'vg7:id': 39}) => 110
->>> res.country.check_record(110, {'code': 'IT', 'vg7_id': 39, 'oe8_id': 39, 'name': 'Italia'})
->>> synchro(ctx, res.country, {u'vg7:code': 'DE', u'vg7:description': 'Germania', u'vg7:id': 49}) => 58
->>> res.country.check_record(58, {'code': 'DE', 'vg7_id': 49, 'oe8_id': False, 'name': 'Germania'})
->>> synchro(ctx, res.country, {u'vg7:code': '', u'vg7:description': 'MALTA', u'vg7:id': 356}) => 255
->>> res.country.check_record(255, {'code': 'MT', 'vg7_id': 356, 'oe8_id': False, 'name': 'Malta'})
->>> res.company.write(1, {u'sale_note': u'Si prega di controllate i dati entro le 24h.'})
-
-2024-03-14 06:34:47: *** Delete records ***
-
-2024-03-14 06:34:52: *** Initializa all models ***
-
-2024-03-14 06:34:53: *** Starting VG7 test ***
-
-2024-03-14 06:34:53: load_n_test_model(ctx, res.country, mode=None, pfx=vg7:, fct=synchro)
->>> synchro(ctx, res.country, {u'vg7:code': 'IT', u'vg7:description': 'Italia', u'vg7:id': 39}) => 110
->>> res.country.check_record(110, {'code': 'IT', 'vg7_id': 39, 'oe8_id': 39, 'name': 'Italia'})
->>> synchro(ctx, res.country, {u'vg7:code': 'DE', u'vg7:description': 'Germania', u'vg7:id': 49}) => 58
->>> res.country.check_record(58, {'code': 'DE', 'vg7_id': 49, 'oe8_id': False, 'name': 'Germania'})
->>> synchro(ctx, res.country, {u'vg7:code': '', u'vg7:description': 'MALTA', u'vg7:id': 356}) => 255
->>> res.country.check_record(255, {'code': 'MT', 'vg7_id': 356, 'oe8_id': False, 'name': 'Malta'})
->>> res.company.write(1, {u'sale_note': u'Si prega di controllate i dati entro le 24h.'})
-
-2024-03-14 06:39:10: *** Delete records ***
-
-2024-03-14 06:39:15: *** Initializa all models ***
-
-2024-03-14 06:39:15: *** Starting VG7 test ***
-
-2024-03-14 06:39:37: load_n_test_model(ctx, res.country, mode=None, pfx=vg7:, fct=synchro)
->>> synchro(ctx, res.country, {u'vg7:code': 'IT', u'vg7:description': 'Italia', u'vg7:id': 39}) => 110
->>> res.country.check_record(110, {'code': 'IT', 'vg7_id': 39, 'oe8_id': 39, 'name': 'Italia'})
->>> synchro(ctx, res.country, {u'vg7:code': 'DE', u'vg7:description': 'Germania', u'vg7:id': 49}) => 58
->>> res.country.check_record(58, {'code': 'DE', 'vg7_id': 49, 'oe8_id': False, 'name': 'Germania'})
->>> res.company.write(1, {u'sale_note': u'Si prega di controllate i dati entro le 24h.'})
-
-2024-03-14 06:43:21: *** Delete records ***
-
-2024-03-14 06:43:26: *** Initializa all models ***
-
-2024-03-14 06:43:27: *** Starting VG7 test ***
-
-2024-03-14 06:43:35: load_n_test_model(ctx, res.country, mode=None, pfx=vg7:, fct=synchro)
->>> synchro(ctx, res.country, {u'vg7:code': 'IT', u'vg7:description': 'Italia', u'vg7:id': 39}) => 110
->>> res.country.check_record(110, {'code': 'IT', 'vg7_id': 39, 'oe8_id': 39, 'name': 'Italia'})
->>> synchro(ctx, res.country, {u'vg7:code': 'DE', u'vg7:description': 'Germania', u'vg7:id': 49}) => 58
->>> res.country.check_record(58, {'code': 'DE', 'vg7_id': 49, 'oe8_id': False, 'name': 'Germania'})
->>> res.company.write(1, {u'sale_note': u'Si prega di controllate i dati entro le 24h.'})
-
-2024-03-14 06:51:33: *** Delete records ***
-
-2024-03-14 06:51:40: *** Initializa all models ***
-
-2024-03-14 06:51:40: *** Starting VG7 test ***
-
-2024-03-14 06:51:40: load_n_test_model(ctx, res.country, mode=None, pfx=vg7:, fct=synchro)
->>> synchro(ctx, res.country, {u'vg7:code': 'IT', u'vg7:description': 'Italia', u'vg7:id': 39}) => 110
->>> res.country.check_record(110, {'code': 'IT', 'vg7_id': 39, 'oe8_id': 39, 'name': 'Italia'})
->>> synchro(ctx, res.country, {u'vg7:code': 'DE', u'vg7:description': 'Germania', u'vg7:id': 49}) => 58
->>> res.country.check_record(58, {'code': 'DE', 'vg7_id': 49, 'oe8_id': False, 'name': 'Germania'})
->>> synchro(ctx, res.country, {u'vg7:description': 'MALTA', u'vg7:id': 356}) => 255
->>> res.country.check_record(255, {'code': 'MT', 'vg7_id': 356, 'oe8_id': False, 'name': 'Malta'})
->>> res.company.write(1, {u'sale_note': u'Si prega di controllate i dati entro le 24h.'})
-
-2024-03-14 07:02:52: *** Delete records ***
-
-2024-03-14 07:02:57: *** Initializa all models ***
-
-2024-03-14 07:02:58: *** Starting VG7 test ***
-
-2024-03-14 07:02:58: load_n_test_model(ctx, res.country, mode=None, pfx=vg7:, fct=synchro)
+2024-03-14 12:55:33: load_n_test_model(ctx, res.country, mode=None, pfx=vg7:, fct=synchro)
 >>> synchro(ctx, res.country, {u'vg7:code': 'IT', u'vg7:description': 'Italia', u'vg7:id': 39}) => 110
 >>> res.country.check_record(110, {'code': 'IT', 'vg7_id': 39, 'oe8_id': 39, 'name': 'Italia'})
 >>> synchro(ctx, res.country, {u'vg7:code': 'DE', u'vg7:description': 'Germania', u'vg7:id': 49}) => 58
@@ -185,161 +10,7 @@
 >>> synchro(ctx, res.country, {u'vg7:description': 'MALTA', u'vg7:id': 356}) => 255
 >>> res.country.check_record(255, {'code': 'MT', 'vg7_id': 356, 'oe8_id': False, 'name': 'Malta'})
 
-2024-03-14 07:02:59: load_n_test_model(ctx, res.country, mode=None, pfx=vg7:, fct=trigger)
->>> trigger_one_record(ctx, countries, 39, vg7:)>>> res.company.write(1, {u'sale_note': u'Si prega di controllate i dati entro le 24h.'})
-
-2024-03-14 07:04:20: *** Delete records ***
-
-2024-03-14 07:04:25: *** Initializa all models ***
-
-2024-03-14 07:04:26: *** Starting VG7 test ***
-
-2024-03-14 07:04:26: load_n_test_model(ctx, res.country, mode=None, pfx=vg7:, fct=synchro)
->>> synchro(ctx, res.country, {u'vg7:code': 'IT', u'vg7:description': 'Italia', u'vg7:id': 39}) => 110
->>> res.country.check_record(110, {'code': 'IT', 'vg7_id': 39, 'oe8_id': 39, 'name': 'Italia'})
->>> synchro(ctx, res.country, {u'vg7:code': 'DE', u'vg7:description': 'Germania', u'vg7:id': 49}) => 58
->>> res.country.check_record(58, {'code': 'DE', 'vg7_id': 49, 'oe8_id': False, 'name': 'Germania'})
->>> synchro(ctx, res.country, {u'vg7:description': 'MALTA', u'vg7:id': 356}) => 255
->>> res.country.check_record(255, {'code': 'MT', 'vg7_id': 356, 'oe8_id': False, 'name': 'Malta'})
-
-2024-03-14 07:04:50: load_n_test_model(ctx, res.country, mode=None, pfx=vg7:, fct=trigger)
->>> res.company.write(1, {u'sale_note': u'Si prega di controllate i dati entro le 24h.'})
-
-2024-03-14 07:12:18: *** Delete records ***
-
-2024-03-14 07:12:23: *** Initializa all models ***
-
-2024-03-14 07:12:23: *** Starting VG7 test ***
-
-2024-03-14 07:12:23: load_n_test_model(ctx, res.country, mode=None, pfx=vg7:, fct=synchro)
->>> synchro(ctx, res.country, {u'vg7:code': 'IT', u'vg7:description': 'Italia', u'vg7:id': 39}) => 110
->>> res.country.check_record(110, {'code': 'IT', 'vg7_id': 39, 'oe8_id': 39, 'name': 'Italia'})
->>> synchro(ctx, res.country, {u'vg7:code': 'DE', u'vg7:description': 'Germania', u'vg7:id': 49}) => 58
->>> res.country.check_record(58, {'code': 'DE', 'vg7_id': 49, 'oe8_id': False, 'name': 'Germania'})
->>> synchro(ctx, res.country, {u'vg7:description': 'MALTA', u'vg7:id': 356}) => 255
->>> res.country.check_record(255, {'code': 'MT', 'vg7_id': 356, 'oe8_id': False, 'name': 'Malta'})
-
-2024-03-14 07:12:39: load_n_test_model(ctx, res.country, mode=None, pfx=vg7:, fct=trigger)
->>> res.company.write(1, {u'sale_note': u'Si prega di controllate i dati entro le 24h.'})
-
-2024-03-14 09:00:45: *** Delete records ***
-
-2024-03-14 09:00:49: *** Initializa all models ***
-
-2024-03-14 09:00:49: *** Starting VG7 test ***
-
-2024-03-14 09:00:49: load_n_test_model(ctx, res.country, mode=None, pfx=vg7:, fct=synchro)
->>> synchro(ctx, res.country, {u'vg7:code': 'IT', u'vg7:description': 'Italia', u'vg7:id': 39}) => 110
->>> res.country.check_record(110, {'code': 'IT', 'vg7_id': 39, 'oe8_id': 39, 'name': 'Italia'})
->>> synchro(ctx, res.country, {u'vg7:code': 'DE', u'vg7:description': 'Germania', u'vg7:id': 49}) => 58
->>> res.country.check_record(58, {'code': 'DE', 'vg7_id': 49, 'oe8_id': False, 'name': 'Germania'})
->>> synchro(ctx, res.country, {u'vg7:description': 'MALTA', u'vg7:id': 356}) => 255
->>> res.country.check_record(255, {'code': 'MT', 'vg7_id': 356, 'oe8_id': False, 'name': 'Malta'})
-
-2024-03-14 09:00:53: load_n_test_model(ctx, res.country, mode=None, pfx=vg7:, fct=trigger)
->>> trigger_one_record(ctx, countries, 39, vg7:)>>> res.company.write(1, {u'sale_note': u'Si prega di controllate i dati entro le 24h.'})
-
-2024-03-14 09:08:06: *** Delete records ***
-
-2024-03-14 09:08:10: *** Initializa all models ***
-
-2024-03-14 09:08:11: *** Starting VG7 test ***
-
-2024-03-14 09:08:11: load_n_test_model(ctx, res.country, mode=None, pfx=vg7:, fct=synchro)
->>> synchro(ctx, res.country, {u'vg7:code': 'IT', u'vg7:description': 'Italia', u'vg7:id': 39}) => 110
->>> res.country.check_record(110, {'code': 'IT', 'vg7_id': 39, 'oe8_id': 39, 'name': 'Italia'})
->>> synchro(ctx, res.country, {u'vg7:code': 'DE', u'vg7:description': 'Germania', u'vg7:id': 49}) => 58
->>> res.country.check_record(58, {'code': 'DE', 'vg7_id': 49, 'oe8_id': False, 'name': 'Germania'})
->>> synchro(ctx, res.country, {u'vg7:description': 'MALTA', u'vg7:id': 356}) => 255
->>> res.country.check_record(255, {'code': 'MT', 'vg7_id': 356, 'oe8_id': False, 'name': 'Malta'})
-
-2024-03-14 09:08:11: load_n_test_model(ctx, res.country, mode=None, pfx=vg7:, fct=trigger)
->>> trigger_one_record(ctx, countries, 39, vg7:)>>> res.company.write(1, {u'sale_note': u'Si prega di controllate i dati entro le 24h.'})
-
-2024-03-14 09:30:58: *** Delete records ***
-
-2024-03-14 09:31:03: *** Initializa all models ***
-
-2024-03-14 09:31:03: *** Starting VG7 test ***
-
-2024-03-14 09:31:03: load_n_test_model(ctx, res.country, mode=None, pfx=vg7:, fct=synchro)
->>> synchro(ctx, res.country, {u'vg7:code': 'IT', u'vg7:description': 'Italia', u'vg7:id': 39}) => 110
->>> res.country.check_record(110, {'code': 'IT', 'vg7_id': 39, 'oe8_id': 39, 'name': 'Italia'})
->>> synchro(ctx, res.country, {u'vg7:code': 'DE', u'vg7:description': 'Germania', u'vg7:id': 49}) => 58
->>> res.country.check_record(58, {'code': 'DE', 'vg7_id': 49, 'oe8_id': False, 'name': 'Germania'})
->>> synchro(ctx, res.country, {u'vg7:description': 'MALTA', u'vg7:id': 356}) => 255
->>> res.country.check_record(255, {'code': 'MT', 'vg7_id': 356, 'oe8_id': False, 'name': 'Malta'})
-
-2024-03-14 09:31:04: load_n_test_model(ctx, res.country, mode=None, pfx=vg7:, fct=trigger)
->>> trigger_one_record(ctx, countries, 39, vg7:)>>> res.country.check_record(110, {'code': 'IT', 'vg7_id': 39, 'oe8_id': 39, 'name': 'Italia'})
->>> trigger_one_record(ctx, countries, 49, vg7:)>>> res.country.check_record(58, {'code': 'DE', 'vg7_id': 49, 'oe8_id': False, 'name': 'Germania'})
->>> trigger_one_record(ctx, countries, 356, vg7:)>>> res.country.check_record(255, {'code': 'MT', 'vg7_id': 356, 'oe8_id': False, 'name': 'Malta'})
->>> res.company.write(1, {u'sale_note': u'Si prega di controllate i dati entro le 24h.'})
-
-2024-03-14 09:34:00: *** Delete records ***
-
-2024-03-14 09:34:05: *** Initializa all models ***
-
-2024-03-14 09:34:05: *** Starting VG7 test ***
-
-2024-03-14 09:34:05: load_n_test_model(ctx, res.country, mode=None, pfx=vg7:, fct=synchro)
->>> synchro(ctx, res.country, {u'vg7:code': 'IT', u'vg7:description': 'Italia', u'vg7:id': 39}) => 110
->>> res.country.check_record(110, {'code': 'IT', 'vg7_id': 39, 'oe8_id': 39, 'name': 'Italia'})
->>> synchro(ctx, res.country, {u'vg7:code': 'DE', u'vg7:description': 'Germania', u'vg7:id': 49}) => 58
->>> res.country.check_record(58, {'code': 'DE', 'vg7_id': 49, 'oe8_id': False, 'name': 'Germania'})
->>> synchro(ctx, res.country, {u'vg7:description': 'MALTA', u'vg7:id': 356}) => 255
->>> res.country.check_record(255, {'code': 'MT', 'vg7_id': 356, 'oe8_id': False, 'name': 'Malta'})
-
-2024-03-14 09:34:30: load_n_test_model(ctx, res.country, mode=None, pfx=vg7:, fct=trigger)
->>> trigger_one_record(ctx, countries, 39, vg7:)>>> res.country.check_record(110, {'code': 'IT', 'vg7_id': 39, 'oe8_id': 39, 'name': 'Italia'})
->>> trigger_one_record(ctx, countries, 49, vg7:)>>> res.country.check_record(58, {'code': 'DE', 'vg7_id': 49, 'oe8_id': False, 'name': 'Germania'})
->>> trigger_one_record(ctx, countries, 356, vg7:)>>> res.country.check_record(255, {'code': 'MT', 'vg7_id': 356, 'oe8_id': False, 'name': 'Malta'})
->>> res.company.write(1, {u'sale_note': u'Si prega di controllate i dati entro le 24h.'})
-
-2024-03-14 09:48:07: *** Delete records ***
-
-2024-03-14 09:48:12: *** Initializa all models ***
-
-2024-03-14 09:48:12: *** Starting VG7 test ***
-
-2024-03-14 09:48:12: load_n_test_model(ctx, res.country, mode=None, pfx=vg7:, fct=synchro)
->>> res.company.write(1, {u'sale_note': u'Si prega di controllate i dati entro le 24h.'})
-
-2024-03-14 09:49:52: *** Delete records ***
-
-2024-03-14 09:49:57: *** Initializa all models ***
-
-2024-03-14 09:49:57: *** Starting VG7 test ***
-
-2024-03-14 09:49:57: load_n_test_model(ctx, res.country, mode=None, pfx=vg7:, fct=synchro)
->>> synchro(ctx, res.country, {u'vg7:code': 'IT', u'vg7:description': 'Italia', u'vg7:id': 39}) => 110
->>> res.country.check_record(110, {'code': 'IT', 'vg7_id': 39, 'oe8_id': 39, 'name': 'Italia'})
->>> synchro(ctx, res.country, {u'vg7:code': 'DE', u'vg7:description': 'Germania', u'vg7:id': 49}) => 58
->>> res.country.check_record(58, {'code': 'DE', 'vg7_id': 49, 'oe8_id': False, 'name': 'Germania'})
->>> synchro(ctx, res.country, {u'vg7:description': 'MALTA', u'vg7:id': 356}) => 255
->>> res.country.check_record(255, {'code': 'MT', 'vg7_id': 356, 'oe8_id': False, 'name': 'Malta'})
-
-2024-03-14 09:49:58: load_n_test_model(ctx, res.country, mode=None, pfx=vg7:, fct=trigger)
->>> trigger_one_record(ctx, countries, 39, vg7:)>>> res.country.check_record(110, {'code': 'IT', 'vg7_id': 39, 'oe8_id': 39, 'name': 'Italia'})
->>> trigger_one_record(ctx, countries, 49, vg7:)>>> res.country.check_record(58, {'code': 'DE', 'vg7_id': 49, 'oe8_id': False, 'name': 'Germania'})
->>> trigger_one_record(ctx, countries, 356, vg7:)>>> res.country.check_record(255, {'code': 'MT', 'vg7_id': 356, 'oe8_id': False, 'name': 'Malta'})
->>> res.company.write(1, {u'sale_note': u'Si prega di controllate i dati entro le 24h.'})
-
-2024-03-14 09:52:19: *** Delete records ***
-
-2024-03-14 09:52:23: *** Initializa all models ***
-
-2024-03-14 09:52:24: *** Starting VG7 test ***
-
-2024-03-14 09:52:24: load_n_test_model(ctx, res.country, mode=None, pfx=vg7:, fct=synchro)
->>> synchro(ctx, res.country, {u'vg7:code': 'IT', u'vg7:description': 'Italia', u'vg7:id': 39}) => 110
->>> res.country.check_record(110, {'code': 'IT', 'vg7_id': 39, 'oe8_id': 39, 'name': 'Italia'})
->>> synchro(ctx, res.country, {u'vg7:code': 'DE', u'vg7:description': 'Germania', u'vg7:id': 49}) => 58
->>> res.country.check_record(58, {'code': 'DE', 'vg7_id': 49, 'oe8_id': False, 'name': 'Germania'})
->>> synchro(ctx, res.country, {u'vg7:description': 'MALTA', u'vg7:id': 356}) => 255
->>> res.country.check_record(255, {'code': 'MT', 'vg7_id': 356, 'oe8_id': False, 'name': 'Malta'})
-
-2024-03-14 09:52:24: load_n_test_model(ctx, res.country.state, mode=None, pfx=vg7:, fct=synchro)
+2024-03-14 12:55:34: load_n_test_model(ctx, res.country.state, mode=None, pfx=vg7:, fct=synchro)
 >>> synchro(ctx, res.country.state, {u'vg7:code': 'MI', u'vg7:description': 'Milano', u'vg7:id': 2}) => 363
 >>> res.country.state.check_record(363, {'code': 'MI', 'country_id': 3548, 'vg7_id': 2, 'oe8_id': False, 'name': 'Milano'})
 >>> synchro(ctx, res.country.state, {u'vg7:code': 'TO', u'vg7:description': 'Torino', u'vg7:id': 11}) => 402
@@ -353,15 +24,33 @@
 >>> synchro(ctx, res.country.state, {u'vg7:code': 'CE', u'vg7:description': 'Caserta', u'vg7:id': 82}) => 328
 >>> res.country.state.check_record(328, {'code': 'CE', 'country_id': 3548, 'vg7_id': 82, 'oe8_id': False, 'name': 'Caserta'})
 
-2024-03-14 09:52:25: load_n_test_model(ctx, res.country, mode=None, pfx=vg7:, fct=trigger)
+2024-03-14 12:55:35: load_n_test_model(ctx, res.country, mode=None, pfx=vg7:, fct=trigger)
 >>> trigger_one_record(ctx, countries, 39, vg7:)>>> res.country.check_record(110, {'code': 'IT', 'vg7_id': 39, 'oe8_id': 39, 'name': 'Italia'})
 >>> trigger_one_record(ctx, countries, 49, vg7:)>>> res.country.check_record(58, {'code': 'DE', 'vg7_id': 49, 'oe8_id': False, 'name': 'Germania'})
 >>> trigger_one_record(ctx, countries, 356, vg7:)>>> res.country.check_record(255, {'code': 'MT', 'vg7_id': 356, 'oe8_id': False, 'name': 'Malta'})
 
-2024-03-14 09:52:26: load_n_test_model(ctx, res.country.state, mode=None, pfx=vg7:, fct=trigger)
+2024-03-14 12:55:36: load_n_test_model(ctx, res.country.state, mode=None, pfx=vg7:, fct=trigger)
 >>> trigger_one_record(ctx, regions, 2, vg7:)>>> res.country.state.check_record(363, {'code': 'MI', 'country_id': 3548, 'vg7_id': 2, 'oe8_id': False, 'name': 'Milano'})
 >>> trigger_one_record(ctx, regions, 11, vg7:)>>> res.country.state.check_record(402, {'code': 'TO', 'country_id': 3548, 'vg7_id': 11, 'oe8_id': False, 'name': 'Torino'})
 >>> trigger_one_record(ctx, regions, 15, vg7:)>>> res.country.state.check_record(307, {'code': 'AL', 'country_id': 3548, 'vg7_id': 15, 'oe8_id': False, 'name': 'Alessandria'})
 >>> trigger_one_record(ctx, regions, 54, vg7:)>>> res.country.state.check_record(320, {'code': 'BO', 'country_id': 3548, 'vg7_id': 54, 'oe8_id': False, 'name': 'Bologna'})
 >>> trigger_one_record(ctx, regions, 81, vg7:)>>> res.country.state.check_record(366, {'code': 'NA', 'country_id': 3548, 'vg7_id': 81, 'oe8_id': False, 'name': 'Napoli'})
 >>> trigger_one_record(ctx, regions, 82, vg7:)>>> res.country.state.check_record(328, {'code': 'CE', 'country_id': 3548, 'vg7_id': 82, 'oe8_id': False, 'name': 'Caserta'})
+>>> account.tax.unlink([189])
+
+2024-03-14 12:55:37: load_n_test_model(ctx, account.tax, mode=None, pfx=vg7:, fct=synchro)
+>>> synchro(ctx, account.tax, {u'vg7:aliquota': '22', u'vg7:code': '22%', u'vg7:description': 'Iva 22%', u'vg7:id': 22}) => 172
+>>> account.tax.check_record(172, {'name': 'IVA 22% su vendite', 'vg7_id': 22, 'company_id': '', 'type_tax_use': 'sale', 'amount': '22', 'oe8_id': False, 'description': '22v'})
+>>> synchro(ctx, account.tax, {u'vg7:aliquota': '4', u'vg7:code': '4%', u'vg7:description': '', u'vg7:id': 4}) => 7
+>>> account.tax.check_record(7, {'name': 'IVA 4% su vendite', 'vg7_id': 4, 'company_id': '', 'type_tax_use': 'sale', 'amount': '4', 'oe8_id': False, 'description': '4v'})
+>>> synchro(ctx, account.tax, {u'vg7:aliquota': '0', u'vg7:code': 'A1', u'vg7:description': 'Forfettario art. 101', u'vg7:id': 101}) => 190
+>>> account.tax.check_record(190, {'name': 'Forfettario art. 101', 'vg7_id': 101, 'company_id': '', 'type_tax_use': 'sale', 'amount': '0', 'oe8_id': False, 'description': 'A1'})
+>>> synchro(ctx, account.tax, {u'vg7:aliquota': '0', u'vg7:code': 'a15', u'vg7:description': 'Art. 15', u'vg7:id': 115}) => 191
+>>> account.tax.check_record(191, {'name': 'Vend.escluso art.15 DPR633', 'vg7_id': 115, 'company_id': '', 'type_tax_use': 'sale', 'amount': '0', 'oe8_id': False, 'description': 'a15v'})
+>>> account.tax.unlink([190, 191])
+
+2024-03-14 12:55:38: load_n_test_model(ctx, account.tax, mode=None, pfx=vg7:, fct=trigger)
+>>> trigger_one_record(ctx, tax_codes, 22, vg7:)>>> account.tax.check_record(172, {'name': 'IVA 22% su vendite', 'vg7_id': 22, 'company_id': '', 'type_tax_use': 'sale', 'amount': '22', 'oe8_id': False, 'description': '22v'})
+>>> trigger_one_record(ctx, tax_codes, 4, vg7:)>>> account.tax.check_record(7, {'name': 'IVA 4% su vendite', 'vg7_id': 4, 'company_id': '', 'type_tax_use': 'sale', 'amount': '4', 'oe8_id': False, 'description': '4v'})
+>>> trigger_one_record(ctx, tax_codes, 101, vg7:)>>> account.tax.check_record(192, {'name': 'Forfettario art. 101', 'vg7_id': 101, 'company_id': '', 'type_tax_use': 'sale', 'amount': '0', 'oe8_id': False, 'description': 'A1'})
+>>> trigger_one_record(ctx, tax_codes, 115, vg7:)>>> account.tax.check_record(193, {'name': 'Vend.escluso art.15 DPR633', 'vg7_id': 115, 'company_id': '', 'type_tax_use': 'sale', 'amount': '0', 'oe8_id': False, 'description': 'a15v'})
