@@ -216,6 +216,9 @@ TNL_VG7_TABLES = {
     "account.account.type": "",
     "account.invoice": "",
     "account.invoice.line": "",
+    "account.journal": "",
+    "account.move": "",
+    "account.move.line": "",
     "account.payment.term": "payments",
     "account.payment.term.line": "",
     "account.tax": "tax_codes",
@@ -226,22 +229,27 @@ TNL_VG7_TABLES = {
     "product.product": "products",
     "product.template": "",
     "product.uom": "ums",
-    "res.currency": "",
+    "purchase.order": "",
+    "purchase.order.line": "",
+    "res.company": "",
     "res.country": "countries",
     "res.country.state": "regions",
+    "res.currency": "",
     "res.partner": "customers",
     "res.partner.bank": "banks",
     "res.partner.bank.company": "bank_accounts",
+    "res.partner.billing": "",
     "res.partner.shipping": "customers_shipping_addresses",
     "res.partner.supplier": "suppliers",
+    "res.users": "",
+    "sale.order": "orders",
+    "sale.order.line": "",
     "stock.picking.package.preparation": "ddt",
     "stock.picking.package.preparation.line": "",
     "stock.picking.transportation_reason": "causals",
-    "sale.order": "orders",
-    "sale.order.line": "",
 }
 TNL_OE8_TABLES = {}
-TABLE_LIST = list(TNL_VG7_TABLES.keys())
+MODEL_LIST = list(TNL_VG7_TABLES.keys())
 TNL_TEXT_2_M2 = {
     "country_id": {"Italia": "base.it"},
     "tax_id": {"22v": "z0bug.tax_22v"},
@@ -534,6 +542,15 @@ def get_ext_model(model, identity):
     else:
         ext_model = model
     return ext_model
+
+
+def get_actual_model(model):
+    if model in (
+            "res.partner.billing",
+            "res.partner.shipping",
+            "res.partner.supplier"):
+        return "res.partner"
+    return model
 
 
 def get_ext_id_field(identity):
@@ -837,14 +854,10 @@ def store_ext_id(ctx, model, loc_id, ext_id, identity):
             store_oe8id(ctx, model, loc_id, ext_id)
 
 
-def write_file_2_pull(ext_model, vals, mode=None, identity=None):
-    mode = mode or "w"
-    if identity:
-        fn = os.path.join(get_exchange_path(identity), "%s.csv" % ext_model)
-    else:
-        fn = os.path.join(get_exchange_path(), "%s.csv" % ext_model)
+def write_file_2_pull(identity, ext_model, vals, mode="w"):
+    fqn = os.path.join(get_exchange_path(identity), "%s.csv" % ext_model)
     if mode == "a":
-        with open(fn, "r") as fd:
+        with open(fqn, "r") as fd:
             ln = fd.read().split("\n")[0]
         data = "%s\n" % ",".join([str(vals.get(x, "")) for x in ln.split(",")])
     else:
@@ -852,7 +865,7 @@ def write_file_2_pull(ext_model, vals, mode=None, identity=None):
             ",".join(vals.keys()),
             ",".join(map(lambda x: str(vals[x]), vals.keys())),
         )
-    with open(fn, mode) as fd:
+    with open(fqn, mode) as fd:
         fd.write(data)
 
 
@@ -883,13 +896,17 @@ def is_untranslable(loc_name, ext_ref, vals):
     return False
 
 
-def jacket_vals(vals, prefix=None):
-    prefix = prefix or "vg7:"
+def jacket_vals(vals, prefix="vg7:"):
+    def cast_value(value):
+        if value in (r"\N", "None"):
+            return ""
+        return value
+
     for nm in vals.copy():
         if is_untranslable(nm, nm, vals):
             continue
         if not nm.startswith("%s" % prefix) and not nm.startswith(":"):
-            vals["%s%s" % (prefix, nm)] = vals[nm]
+            vals["%s%s" % (prefix, nm)] = cast_value(vals[nm])
             del vals[nm]
     return vals
 
@@ -1174,7 +1191,7 @@ def test_function_synchro(ctx, model, vals, identity=None, ext_id=None):
     write_log(ctx, " => %s" % rec_id, eol=True)
     if ext_id and rec_id > 0:
         store_ext_id(ctx, model, rec_id, ext_id, identity)
-    return rec_id, vals
+    return rec_id
 
 
 def test_function_synchro2(
@@ -1206,7 +1223,7 @@ def test_function_synchro2(
     return rec_id, vals
 
 
-def test_function_trigger(ctx, ext_model, vals, identity, ext_id):
+def test_function_trigger(ctx, ext_model, identity, ext_id):
     write_log(
         ctx, ">>> trigger_one_record(ctx, %s, %s, %s)" % (ext_model, ext_id, identity)
     )
@@ -1218,9 +1235,7 @@ def test_function_trigger(ctx, ext_model, vals, identity, ext_id):
     )
     if ext_id and rec_id > 0:
         store_ext_id(ctx, ext_model, rec_id, ext_id, identity)
-    vals = jacket_vals(vals, identity)
-    write_log(ctx, " => %s, %s" % (rec_id, vals), eol=True)
-    return rec_id, vals
+    return rec_id
 
 
 def commit(ctx, model, rec_id, vals):
@@ -1269,7 +1284,7 @@ def set_wrong_data(vals, mode):
     return vals
 
 
-def load_csv_file(fqn):
+def load_csv_file(ctx, fqn):
     def cast_value(vals):
         res = {}
         for k, v in vals.items():
@@ -1277,6 +1292,8 @@ def load_csv_file(fqn):
                 res[k] = int(v) if v else False
             elif v in (r"\N", "None"):
                 continue
+            elif isinstance(v, basestring) and "." in v and " " not in v:
+                res[k] = env_ref(ctx, v, retxref_id=True)
             else:
                 res[k] = v
         return res
@@ -1542,20 +1559,7 @@ def load_n_test_model(
             vals[ext_child_field] = vals_line
         return vals, vals_line, parent_field, ext_child_field, child_model
 
-    ext_model = ext_model or get_ext_model(model, identity)
-    fqn = os.path.join(get_csv_path(identity), ext_model + ".csv")
-    ext_recs_2_test = load_csv_file(fqn)
-    fqn = os.path.join(get_csv_path(), model + ".csv")
-    test_recs = load_csv_file(fqn)
-
-    vals_shipping = vals_billing = vals_line = {}
-    main_ext_id = False
-    wa = wal = "w"
-    ext_id_field = get_ext_id_field(identity)
-    for rec in ext_recs_2_test:
-        test_vals = get_some_default(model, rec, identity, {})
-        if ext_model in ("customers_shipping_addresses", "customers_billing_addresses"):
-            shirt_vals(rec)
+    def prepare_rec(rec, main_ext_id):
         ext_id = False
         for field in rec:
             if field in rec and rec[field] is None:
@@ -1567,10 +1571,37 @@ def load_n_test_model(
                     main_ext_id = rec[field]
             elif field == "company_id" and not rec[field]:
                 rec[field] = EXT_COMPANY_ID
+        return rec, ext_id, main_ext_id
 
+    ext_model = ext_model or get_ext_model(model, identity)
+    fqn = os.path.join(get_csv_path(identity), ext_model + ".csv")
+    ext_recs_2_test = load_csv_file(ctx, fqn)
+    fqn = os.path.join(get_csv_path(), model + ".csv")
+    test_recs = load_csv_file(ctx, fqn)
+
+    # vals_shipping = vals_billing = vals_line = {}
+    main_ext_id = False
+    wa = "w"
+    ext_id_field = get_ext_id_field(identity)
+    if fct_test == "trigger":
+        for rec in ext_recs_2_test:
+            rec, ext_id, main_ext_id = prepare_rec(rec, main_ext_id)
+            write_file_2_pull(identity, ext_model, rec, wa)
+            wa = "a"
+
+    for rec in ext_recs_2_test:
+        # test_vals = get_some_default(model, rec, identity, {})
+        # if ext_model in ("customers_shipping_addresses", "customers_billing_addresses"):
+        #     shirt_vals(rec)
         if fct_test == "synchro":
-            loc_id, vals = test_function_synchro(
+            rec, ext_id, main_ext_id = prepare_rec(rec, main_ext_id)
+            loc_id = test_function_synchro(
                 ctx, model, rec, identity=identity, ext_id=ext_id
+            )
+        elif fct_test == "trigger":
+            ext_id = rec["id"]
+            loc_id = test_function_trigger(
+                ctx, ext_model, identity=identity, ext_id=ext_id
             )
         checked = False
         for test_rec in test_recs:
@@ -1731,7 +1762,9 @@ def reset_model(ctx, model):
     if not ctx["conai"] and "conai" in model:
         return
     print("Reset model %s ..." % model)
-    reset_ext_id(ctx, model)
+    actual_model = get_actual_model(model)
+    if actual_model == model:
+        reset_ext_id(ctx, model)
 
 
 def delete_all_records(ctx):
@@ -1869,7 +1902,7 @@ def initialize_all_records(ctx):
         % (datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M:%S")),
         eol=True,
     )
-    for model in TABLE_LIST :
+    for model in MODEL_LIST:
         reset_model(ctx, model)
 
 
@@ -1991,7 +2024,7 @@ def assure_all_backends(ctx):
         ctx,
         model,
         [],
-        {"method": "JSON", "exchange_path": get_exchange_path("vg7:"), "tracelevel": "4"},
+        {"method": "CSV", "exchange_path": get_exchange_path("vg7:"), "tracelevel": "4"},
     )
 
 
@@ -2104,9 +2137,13 @@ def compare(ctx, rec_value, ext_value, mode):
     elif mode == "invoice":
         return rec_value == ext_value + 200000000
     elif isinstance(rec_value, basestring) and isinstance(ext_value, (int, long)):
+        if rec_value.isdigit():
+            return int(rec_value) == ext_value
         return rec_value == str(ext_value)
     elif isinstance(rec_value, (int, long)) and isinstance(ext_value, basestring):
-        return rec_value == int(ext_value)
+        if ext_value.isdigit():
+            return rec_value == int(ext_value)
+        return str(rec_value) == ext_value
     elif ext_value is None:
         return True
     elif rec_value or ext_value:
@@ -2135,10 +2172,13 @@ def check_records(ctx, identity, model, loc_id, test_rec, mode=None, state=None)
         if loc_name in fields_2_ignore:
             continue
         if loc_name in test_rec:
-            if not compare(ctx, getattr(loc_rec, loc_name), test_rec[loc_name], spec):
+            if not (ctx, getattr(loc_rec, loc_name), test_rec[loc_name], spec):
                 raise IOError(
                     "!!Field %s[%s].%s: invalid value <%s> expected <%s>"
-                    % (model, loc_id, field, loc_rec.type, spec)
+                    % (model, loc_id,
+                       field,
+                       getattr(loc_rec, loc_name),
+                       test_rec[loc_name])
                 )
             ctx["ctr"] += 1
     return
@@ -2329,42 +2369,6 @@ def cvt_csv(model, identity="match"):
 def test_synchro_vg7(ctx):
     print("Test synchronization Odoo against external software %s (%s)"
           % (__version__, datetime.now()))
-    for model in (
-            "account.account.type",
-            "account.account",
-            "account.invoice",
-            "account.invoice.line",
-            "account.journal",
-            "account.move",
-            "account.move.line",
-            "account.tax",
-            "payment.term",
-            "payment.term.line",
-            "conai.prod",
-            "purchase.order",
-            "purchase.order.line",
-            "product.product",
-            "product.template",
-            "product.uom",
-            "res.company",
-            "res.country",
-            "res.country.state",
-            "res.partner",
-            "res.partner.shipping",
-            "res.partner.billing",
-            "res.partner.bank",
-            "res.users",
-            "sale.order",
-            "sale.order.line",
-            "stock.picking.transportation.reason",
-            "stock.picking.package.preparation",
-            "stock.picking.package.preparation.line",
-    ):
-        for identity in ("", "oe8:", "vg7:"):
-            if identity:
-                cvt_csv(model, identity)
-            else:
-                cvt_csv(model)
 
     def test_company(ctx, mode=None, identity=None, fct_test=None):
         identity = identity or "oe8:"
@@ -2390,10 +2394,11 @@ def test_synchro_vg7(ctx):
             identity=identity,
         )
 
-    def test_country(ctx, mode=None, identity=None, fct_test=None):
-        identity = identity or "vg7:"
+    def test_country(ctx, mode=None, identity="vg7:", fct_test=None, reset=False):
         model = "res.country"
         print("Write %s (%s) ..." % (model, identity))
+        if reset:
+            reset_model(ctx, model)
         vg7_id = load_n_test_model(
             ctx,
             model,
@@ -2405,19 +2410,19 @@ def test_synchro_vg7(ctx):
         if identity == "vg7:":
             ctx["res.country.IT"] = vg7_id
 
-        # model = "res.country.state"
-        # print("Write %s (%s) ..." % (model, identity))
-        # vg7_id = load_n_test_model(
-        #     ctx,
-        #     model,
-        #     mode=mode,
-        #     store=not mode,
-        #     identity=identity,
-        #     fct_test=fct_test,
-        #     test_suppl="country_id",
-        # )
-        # if identity == "vg7:":
-        #     ctx["res.country.state.MI"] = vg7_id
+        model = "res.country.state"
+        print("Write %s (%s) ..." % (model, identity))
+        vg7_id = load_n_test_model(
+            ctx,
+            model,
+            mode=mode,
+            store=not mode,
+            identity=identity,
+            fct_test=fct_test,
+            # test_suppl="country_id",
+        )
+        if identity == "vg7:":
+            ctx["res.country.state.MI"] = vg7_id
 
     def test_tax(ctx, mode=None, identity=None, fct_test=None):
         identity = identity or "vg7:"
@@ -2721,10 +2726,7 @@ def test_synchro_vg7(ctx):
         )
 
     ctx = init_test()
-    # company_id = ctx['company_id']
-    #
-    # Repeat tests 2 times to check correct synchronization
-    #
+
     print("*** Starting VG7 test ***")
     write_log(
         ctx,
@@ -2734,12 +2736,13 @@ def test_synchro_vg7(ctx):
     )
 
     test_country(ctx, identity="vg7:")
+    test_country(ctx, identity="vg7:", fct_test="trigger", reset=True)
 
-    input("Press RET to continue ...")
+    print("%d tests %s successfully ended on %s"
+          % (ctx["ctr"], THIS_MODULE, datetime.now()))
     return
 
 
-    test_country(ctx, mode="upper", identity="vg7:")
 
     test_tax(ctx, mode="only_amount", identity="vg7:")
     test_tax(ctx, identity="vg7:")

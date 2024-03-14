@@ -3905,9 +3905,8 @@ class IrModelSynchro(models.Model):
             ctx={"xm": ext_model, "xid": ext_id, "pfx": prefix},
         )
         if not prefix:
-            return
+            return -7
         cache = self.env["ir.model.synchro.cache"]
-        # cache.open(ext_model=ext_model)
         channel = self.env["synchro.channel"].assign_backend({"%s:" % prefix: ""})
         channel_id = channel.id
         if not channel_id:
