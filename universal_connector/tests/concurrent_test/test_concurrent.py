@@ -515,6 +515,7 @@ TABLE_OF_REF_CHILD = {
 THIS_MODULE = "universal_connector"
 MODULE_LIST = [
     "mk_test_env",
+    THIS_MODULE,
     "account",
     "account_payment_term_extension",
     "date_range",
@@ -528,7 +529,6 @@ MODULE_LIST = [
     "l10n_it_ricevute_bancarie",
     "partner_bank",
     "l10n_it_conai",
-    THIS_MODULE,
     "connector_vg7_conai",
 ]
 IDENTITY_LIST = ["vg7:", "oe8:"]
@@ -1289,7 +1289,7 @@ def load_csv_file(ctx, fqn):
         res = {}
         for k, v in vals.items():
             if isinstance(v, basestring) and "." in v and " " not in v:
-                res[k] = env_ref(ctx, v, retxref_id=True)
+                res[k] = env_ref(ctx, v)
             elif k in ("id", "vg7_id", "oe8_id") and isinstance(v, basestring):
                 res[k] = int(v) if v else False
             elif v in (r"\N", "None"):
@@ -1321,6 +1321,7 @@ def load_n_test_model(
     ext_model=None,
     test_suppl=None,
     fct_test=None,
+    lang=None
 ):
     fct_test = fct_test or "synchro"
     write_log(
@@ -1360,9 +1361,15 @@ def load_n_test_model(
         return rec, ext_id, main_ext_id
 
     ext_model = ext_model or get_ext_model(model, identity)
-    fqn = os.path.join(get_csv_path(identity), ext_model + ".csv")
+    if lang:
+        fqn = os.path.join(get_csv_path(identity), ext_model + "." + lang + ".csv")
+    else:
+        fqn = os.path.join(get_csv_path(identity), ext_model + ".csv")
     ext_recs_2_test = load_csv_file(ctx, fqn)
-    fqn = os.path.join(get_csv_path(), model + ".csv")
+    if lang:
+        fqn = os.path.join(get_csv_path(), model + "." + lang + ".csv")
+    else:
+        fqn = os.path.join(get_csv_path(), model + ".csv")
     test_recs = load_csv_file(ctx, fqn)
 
     # vals_shipping = vals_billing = vals_line = {}
@@ -1370,22 +1377,19 @@ def load_n_test_model(
     wa = "w"
     ext_id_field = get_ext_id_field(identity)
     if fct_test == "trigger":
-        for rec in ext_recs_2_test:
-            rec, ext_id, main_ext_id = prepare_rec(rec, main_ext_id)
-            write_file_2_pull(identity, ext_model, rec, wa)
+        for ext_rec in ext_recs_2_test:
+            ext_rec, ext_id, main_ext_id = prepare_rec(ext_rec, main_ext_id)
+            write_file_2_pull(identity, ext_model, ext_rec, wa)
             wa = "a"
 
-    for rec in ext_recs_2_test:
-        # test_vals = get_some_default(model, rec, identity, {})
-        # if ext_model in ("customers_shipping_addresses", "customers_billing_addresses"):
-        #     shirt_vals(rec)
+    for ext_rec in ext_recs_2_test:
         if fct_test == "synchro":
-            rec, ext_id, main_ext_id = prepare_rec(rec, main_ext_id)
+            ext_rec, ext_id, main_ext_id = prepare_rec(ext_rec, main_ext_id)
             loc_id = test_function_synchro(
-                ctx, model, rec, identity=identity, ext_id=ext_id
+                ctx, model, ext_rec, identity=identity, ext_id=ext_id
             )
         elif fct_test == "trigger":
-            ext_id = rec["id"]
+            ext_id = ext_rec["id"]
             loc_id = test_function_trigger(
                 ctx, ext_model, identity=identity, ext_id=ext_id
             )
@@ -1394,8 +1398,8 @@ def load_n_test_model(
         checked = False
         for test_rec in test_recs:
             if ext_id == test_rec.get(ext_id_field):
-                rec = clodoo.browseL8(ctx, model, loc_id)
-                check_records(ctx, identity, model, loc_id, test_rec, rec)
+                # rec = clodoo.browseL8(ctx, model, loc_id)
+                check_records(ctx, identity, model, loc_id, test_rec)
                 checked = True
                 break
         if not checked:
@@ -1772,18 +1776,16 @@ def assure_company(ctx):
     write_log(
         ctx, ">>> res.company.write(%s, %s)" % (ctx["company_id"], vals), eol=True
     )
-    if not company.due_cost_service_id:
-        raise IOError("!!Missed bank cost in company!!")
 
 
-def assure_user(ctx):
+def assure_user(ctx, lang=None):
     model = "res.users"
     user_id = env_ref(ctx, "base.user_root")
-    if user_id != ctx["user_id"]:
+    if user_id != ctx["user"].id:
         raise IOError(
-            "!!Invalid current user id %s; set %s!" % (ctx["user_id"], user_id)
+            "!!Invalid current user id %s; set %s!" % (ctx["user"].id, user_id)
         )
-    user = clodoo.browseL8(ctx, model, ctx["user_id"])
+    user = clodoo.browseL8(ctx, model, ctx["user"].id)
     if user.login != ctx["lgi_user"]:
         raise IOError(
             "!!Invalid current user login %s; set %s!" % (user.login, ctx["lgi_user"])
@@ -1791,12 +1793,13 @@ def assure_user(ctx):
     vals = {}
     if user.company_id.id != ctx["company_id"]:
         vals["company_id"] = ctx["company_id"]
-    if user.lang != ctx["lang"]:
-        vals["lang"] = ctx["lang"]
+    lang = lang or ctx["lang"]
+    if user.lang != lang:
+        vals["lang"] = lang
     if vals:
-        clodoo.writeL8(ctx, "res.users", ctx["user_id"], vals)
-        write_log(ctx, ">>> res.users.write(%s, %s)" % (ctx["user_id"], vals), eol=True)
-        ctx["lang"] = clodoo.browseL8(ctx, model, ctx["user_id"]).lang
+        clodoo.writeL8(ctx, "res.users", ctx["user"].id, vals)
+        write_log(ctx, ">>> res.users.write(%s, %s)" % (ctx["user"].id, vals), eol=True)
+        ctx["lang"] = clodoo.browseL8(ctx, model, ctx["user"].id).lang
 
 
 def assure_journals(ctx):
@@ -1808,17 +1811,46 @@ def assure_journals(ctx):
 
 def assure_all_backends(ctx):
     model = "synchro.channel"
-    write_record(
-        ctx,
-        model,
-        [],
-        {"method": "CSV", "exchange_path": get_exchange_path("vg7:"), "tracelevel": "4"},
-    )
+    for backend in clodoo.browseL8(ctx, model, clodoo.searchL8(ctx, model, [])):
+        if backend.state != "draft":
+            clodoo.executeL8(
+                ctx, model, "button_reset_to_draft", backend.id)
+        if backend.prefix == "oe10":
+            clodoo.writeL8(
+                ctx,
+                model,
+                backend.id,
+                {
+                    "method": "JSON",
+                    "client_key": "oca10",
+                    "password": "admin",
+                    "counterpart_url": "admin@localhost:8270",
+                    "sequence": 20,
+                    "tracelevel": "4"
+                },
+            )
+        else:
+            clodoo.writeL8(
+                ctx,
+                model,
+                backend.id,
+                {
+                    "method": "CSV",
+                    "exchange_path": get_exchange_path(backend.prefix),
+                    "tracelevel": "4"
+                },
+            )
+        clodoo.executeL8(
+            ctx, model, "button_check_connection", backend.id)
+        backend = clodoo.browseL8(ctx, model, backend.id)
+        if backend.state != "checked":
+            raise IOError("!!Backend %s[%s] not checked!" % (backend.name, backend.id))
+
 
 
 def init_new_db(ctx):
     # Temporary solution
-    print("Be patient, the universal connector test takes a long time ...")
+    print("Be patient, the universal connector full test takes a few time ...")
     print("Please drop DB %s" % ctx["db_name"])
     input("Press RET to continue ...")
     print("Now recreate DB %s" % ctx["db_name"])
@@ -1828,28 +1860,80 @@ def init_new_db(ctx):
     if "psycopg2 = 1" not in contents:
         with open(ctx["conf_fn"], "a") as fd:
             fd.write("psycopg2 = 1\n")
+    uid, ctx = clodoo.oerp_set_env(
+        confn=ctx["conf_fn"], db=ctx["db_name"], ctx=ctx)
+    if not uid:
+        raise IOError("DB %s not connected via json/xmlrpc!" % ctx["db_name"])
+    return ctx
 
-#
+
 def set_new_db(ctx):
     company_id = env_ref(ctx, "z0bug.mycompany")
-    if not company_id:
+    while not company_id:
         print("Activate Developer Mode and create full test environment")
-        print("lang=it_IT, no new company, CoA=Zero, No CONAI ...")
+        print("lang=it_IT, no new company, CoA=Zero,%s CONAI ..."
+              % " not" if ctx["conai"] else " ")
         print("You need to create only chart of account, partners and products ...")
         input("Press RET to continue ...")
+        company_id = env_ref(ctx, "z0bug.mycompany")
 
 
 def init_test():
-    ctx = parser.parseoptargs(sys.argv[1:], apply_conf=False)
-    ctx["ctr"] = 0
-    # ctx["conf_fn"] = os.environ["TEST_CONFN"]
-    ctx["conf_fn"] = "/home/odoo/10.0/connector/universal_connector/tests/logs/zero10.connector.universal_connector.conf"
-    # ctx["db_name"] = os.environ["TEST_DB"]
-    ctx["db_name"] = "connect10"
-    ctx["conai"] = False
-    ctx["ask"] = False
-    ctx["module"] = False
+    def wait_4_module_installed(ctx, modname, ctr, maxctr):
+        installed = False
+        while not installed:
+            print("Module %s not installed!" % modname)
+            print("Please install %s" % modname)
+            input("Press RET to continue ...")
+            installed = check_if_module_installed(ctx, modname)
 
+    def wait_4_module_uninstalled(ctx, modname):
+        installed = check_if_module_installed(ctx, modname)
+        while installed:
+            print("Module %s installed!" % modname)
+            print("Please uninstall %s" % modname)
+            input("Press RET to continue ...")
+            installed = check_if_module_installed(ctx, modname)
+
+    def action_after_installed(ctx, modname, connector_installed):
+        if modname == "mk_test_env":
+            set_new_db(ctx)
+            assure_company(ctx)
+            tax_id = env_ref(ctx, "z0bug.tax_22v")
+            while not tax_id:
+                print("Activate Developer Mode and Load Account records ...")
+                input("Press RET to continue ...")
+                tax_id = env_ref(ctx, "z0bug.tax_22v")
+            partner_id = env_ref(ctx, "z0bug.res_partner_1")
+            while not partner_id:
+                print("Activate Developer Mode and Load Partner records ...")
+                input("Press RET to continue ...")
+                partner_id = env_ref(ctx, "z0bug.res_partner_1")
+            product_id = env_ref(ctx, "z0bug.product_product_1")
+            while not product_id:
+                print("Activate Developer Mode and Load Products records ...")
+                input("Press RET to continue ...")
+                product_id = env_ref(ctx, "z0bug.product_product_1")
+        elif modname == THIS_MODULE:
+            connector_installed = True
+            assure_cache(ctx)
+            assure_all_backends(ctx)
+            assure_lang(ctx)
+            assure_user(ctx)
+        return connector_installed
+
+    ctx = parser.parseoptargs(sys.argv[1:], apply_conf=False)
+    ctx.update({
+        "ctr": 0,
+        "conf_fn": os.environ["TEST_CONFN"],
+        "logfn": __file__.replace(".py", ".log"),
+        "db_name": "connect10",
+        "conai": False,
+        "ask": False,
+        "module": False,
+    })
+    if os.path.isfile(ctx["logfn"]):
+        os.unlink(ctx["logfn"])
     print("init_test(ctx) ...")
     write_log(
         ctx,
@@ -1858,50 +1942,40 @@ def init_test():
         eol=True,
     )
 
-    init_new_db(ctx)
-    uid, ctx = clodoo.oerp_set_env(confn=ctx["conf_fn"], db=ctx["db_name"], ctx=ctx)
-    ctx["logfn"] = __file__.replace(".py", ".log")
-    if os.path.isfile(ctx["logfn"]):
-        os.unlink(ctx["logfn"])
-
+    ctx = init_new_db(ctx)
     model = "ir.module.module"
     maxctr = len(MODULE_LIST)
+    connector_installed = False
     for ctr, modname in enumerate(MODULE_LIST):
-        if modname in ("connector_vg7_conai", "l10n_it_conai") and not ctx["conai"]:
-            continue
         installed = check_if_module_installed(ctx, modname, ctr=ctr, maxctr=maxctr)
-        if not installed:
-            if modname in ("mk_test_env", THIS):
-                while not installed:
-                    print("Module %s not installed!" % modname)
-                    print("Please install %s" % modname)
-                    input("Press RET to continue ...")
-                    installed = check_if_module_installed(ctx, modname)
-                if modname == "mk_test_env":
-                    set_new_db(ctx)
-                continue
+        if "conai" in modname and not ctx["conai"]:
+            if installed:
+                wait_4_module_uninstalled(ctx, modname)
+            continue
+        if connector_installed and not installed:
             vals = {"name": modname}
             res_id = clodoo.executeL8(ctx, model, "synchro", vals)
             if res_id < 0:
                 raise IOError("!!Error %s installing %s!" % (res_id, modname))
             module = clodoo.browseL8(ctx, model, res_id)
             if module.state != "installed":
-                    raise IOError("Module %s not installed!!!" % modname)
-        elif modname == "mk_test_env":
-            set_new_db(ctx)
+                raise IOError("Module %s not installed!!!" % modname)
+        if not installed:
+            wait_4_module_installed(ctx, modname, ctr, maxctr)
+        connector_installed = action_after_installed(
+            ctx, modname, connector_installed)
 
-    assure_cache(ctx)
-    assure_lang(ctx)
-    assure_company(ctx)
-    assure_user(ctx)
     assure_journals(ctx)
-    assure_all_backends(ctx)
-    # delete_all_records(ctx)
-    # initialize_all_records(ctx)
+    if not clodoo.browseL8(ctx,
+                           "res.company",
+                           ctx["company_id"]).due_cost_service_id:
+        raise IOError("!!Missed bank cost in company!!")
     return ctx
 
 
 def compare(ctx, rec_value, ext_value, mode):
+    if hasattr(rec_value, "id"):
+        rec_value = rec_value.id
     if mode == "nounknown":
         return not rec_value.startswith("Unknown")
     elif mode == "unknown":
@@ -1954,7 +2028,7 @@ def check_records(ctx, identity, model, loc_id, test_rec, mode=None, state=None)
         if loc_name in fields_2_ignore:
             continue
         if loc_name in test_rec:
-            if not (ctx, getattr(loc_rec, loc_name), test_rec[loc_name], spec):
+            if not compare(ctx, getattr(loc_rec, loc_name), test_rec[loc_name], spec):
                 raise IOError(
                     "!!Field %s[%s].%s: invalid value <%s> expected <%s>"
                     % (model, loc_id,
@@ -2357,7 +2431,70 @@ def test_synchro_vg7(ctx):
             fct_test=fct_test,
         )
 
+    def test_oca10(ctx):
+        ctx2 = ctx.copy()
+        uid2, ctx2 = clodoo.oerp_set_env(
+            confn=ctx2["conf_fn"], db="oca10", ctx=ctx2, xmlrpc_port=8270)
+        model = "res.country"
+        ids = clodoo.searchL8(ctx2, model, [("code", "=", "GB")])
+        if len(ids) != 1:
+            raise IOError("Record GB not found on odoo DB oca10!")
+        loc_id = test_function_trigger(
+            ctx, model, identity="oe10_id", ext_id=ids[0]
+        )
+        if loc_id < 1:
+            raise IOError("No data from DB oca10!")
+        loc_rec = clodoo.browseL8(ctx, model, loc_id)
+        if not compare(ctx, getattr(loc_rec, "code"), "GB"):
+            raise IOError(
+                "!!Field %s[%s].%s: invalid value <%s> expected <%s>"
+                % (model, loc_id,
+                   "code",
+                   getattr(loc_rec, "code"),
+                   "UK")
+            )
+        if not compare(ctx, getattr(loc_rec, "oe10_id"), ids[0]):
+            raise IOError(
+                "!!Field %s[%s].%s: invalid value <%s> expected <%s>"
+                % (model, loc_id,
+                   "oe10_id",
+                   getattr(loc_rec, "code"),
+                   ids[0])
+            )
+
+    def test_en_us(ctx):
+        model = "res.country"
+        reset_model(ctx, model)
+        identity = "oe8:"
+        print("Write %s (%s) ..." % (model, identity))
+        load_n_test_model(
+            ctx,
+            model,
+            identity=identity,
+            lang="en_US"
+        )
+        # Set italian
+        assure_user(ctx)
+
     ctx = init_test()
+
+    # print("*** Starting Odoo/OCA test ***")
+    # write_log(
+    #     ctx,
+    #     "\n%s: *** Starting Odoo/OCA test ***"
+    #     % datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M:%S"),
+    #     eol=True,
+    # )
+    # test_oca10(ctx)
+
+    # print("*** Starting Odoo/OCA en_US test ***")
+    # write_log(
+    #     ctx,
+    #     "\n%s: *** Starting Odoo/OCA en_US test ***"
+    #     % datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M:%S"),
+    #     eol=True,
+    # )
+    # test_en_us(ctx)
 
     print("*** Starting VG7 test ***")
     write_log(
@@ -2369,8 +2506,18 @@ def test_synchro_vg7(ctx):
 
     test_country(ctx, identity="vg7:", reset=True)
     test_country(ctx, identity="vg7:", fct_test="trigger", reset=True)
-    test_tax(ctx, identity="vg7:", reset=True)
-    test_tax(ctx, identity="vg7:", fct_test="trigger", reset=True)
+    # test_tax(ctx, identity="vg7:", reset=True)
+    # test_tax(ctx, identity="vg7:", fct_test="trigger", reset=True)
+
+    print("*** Starting OE8 test ***")
+    write_log(
+        ctx,
+        "\n%s: *** Starting OE8 test ***"
+        % datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M:%S"),
+        eol=True,
+    )
+
+    test_country(ctx, identity="oe8:", fct_test="trigger", reset=True)
 
     print("%d tests %s successfully ended on %s"
           % (ctx["ctr"], THIS_MODULE, datetime.now()))

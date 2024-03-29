@@ -937,7 +937,7 @@ class IrModelSynchro(models.Model):
         )
         return channel_model[0] if channel_model else self.env["synchro.channel.model"]
 
-    def sync_rec_from_counterpart(self, backend_id, model, vg7_id):
+    def sync_rec_from_counterpart(self, backend_id, model, vg7_id, only_minimal=True):
         if not vg7_id:
             self.logmsg(
                 "error", "### Missing id for %(model)s counterpart request", model=model
@@ -955,7 +955,8 @@ class IrModelSynchro(models.Model):
         if not vals:
             return False
         cls = self.env[model]
-        return self.generic_synchro(cls, vals, channel_id=backend_id, jacket=True)
+        return self.generic_synchro(
+            cls, vals, channel_id=backend_id, jacket=True, only_minimal=only_minimal)
 
     def create_new_ref(
         self, backend_id, actual_model, key_name, value, ext_value, ctx=None, spec=None
@@ -1242,7 +1243,7 @@ class IrModelSynchro(models.Model):
         is_foreign,
         ctx=None,
         spec=None,
-        no_create=None,
+        no_create=True,
     ):
         """Value is a local ID or an external ID (is_foreign=True)"""
         self.logmsg(
@@ -2747,10 +2748,10 @@ class IrModelSynchro(models.Model):
 
     @api.model
     def synchro(
-        self, cls, vals, chk_in_queue=None, no_deep_fields=None, only_minimal=None
+        self, cls, vals, chk_in_queue=None, no_deep_fields=[], only_minimal=True
     ):
         """Generic synchronizer entry
-        The external counterpart can call this method to synchornize a record;
+        The external counterpart can call this method to synchronize a record;
         datas are prefixed by identification code which is store in channel.
         Prefix ia associated to conversion/mapping rule.
         """
@@ -3177,7 +3178,7 @@ class IrModelSynchro(models.Model):
         jacket=None,
         chk_in_queue=None,
         channel_id=None,
-        only_minimal=None,
+        only_minimal=True,
         no_deep_fields=None,
     ):
         self.logmsg(

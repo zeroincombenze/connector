@@ -722,7 +722,8 @@ class IrModelSynchroCache(models.Model):
         if channel.identity == "odoo":
             for field in self.get_struct_attr(model):
                 if (
-                    (self.is_struct(field) and field != "id")
+                    (self.is_struct(field)
+                     and field not in ("id", "vg7_id", "oe7_id", "oe8_id", "oe10_id"))
                     and not self.get_model_attr(channel_id, model, "XPIRE")
                     and field
                     not in self.get_model_attr(channel_id, model, "LOC_FIELDS")

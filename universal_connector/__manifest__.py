@@ -26,6 +26,7 @@
     "external_dependencies": {
         "python": ["python_plus", "odoo_score", "os0", "clodoo", "z0lib", "unidecode"]
     },
+    "version_external_dependencies": ["clodoo>=2.0.10", "python_plus>=2.0.12"],
     "data": [
         "security/ir.model.access.csv",
         "wizard/wizard_pull_records_view.xml",
@@ -66,4 +67,5 @@
     ],
     "installable": True,
     "development_status": "Beta",
+    "pre_init_hook": "check_4_depending",
 }

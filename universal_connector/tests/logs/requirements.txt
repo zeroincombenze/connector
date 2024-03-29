@@ -16,7 +16,7 @@ cffi==1.15.1
 chardet==4.0.0
 checksumdir==1.1.7
 click==7.1.2
-clodoo==2.0.9
+clodoo==2.0.10
 codicefiscale==0.9
 configparser==4.0.2
 contextlib2==0.6.0.post1
@@ -71,7 +71,7 @@ num2words==0.5.13
 numpy==1.16.6
 odoo==10.0
 odoo-score==2.0.7
-OdooRPC==0.9.0
+OdooRPC==0.8.0
 OERPLib==0.8.4
 ofxparse==0.16
 openpyxl==2.6.4
@@ -181,6 +181,6 @@ XlsxWriter==0.9.3
 xlwt==1.1.2
 z0bug-odoo==2.0.17
 z0lib==2.0.9
-zerobug==2.0.14
+zerobug==2.0.15
 zipp==1.2.0
 zpl2==1.0

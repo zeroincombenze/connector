@@ -190,7 +190,7 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 ChangeLog History | Cronologia modifiche
 ----------------------------------------
 
-10.0.0.3.4 (2024-03-14)
+10.0.0.3.4 (2024-03-29)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 * [FIX]
@@ -271,7 +271,7 @@ La distribuzione `Zeroincombenze® <https://www.zeroincombenze.it/>`__ è proget
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2024-03-14
+Last Update / Ultimo aggiornamento: 2024-03-29
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status

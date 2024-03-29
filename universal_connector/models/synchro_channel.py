@@ -304,7 +304,7 @@ class SynchroChannel(models.Model):
             try:
                 if protocol == "jsonrpc":
                     cnx.login(db=db, login=login, password=passwd)
-                    session = True
+                    session = cnx.env.user
                 else:
                     session = cnx.login(database=db, user=login, passwd=passwd)
             except BaseException as e:  # pragma: no cover
@@ -473,7 +473,7 @@ class SynchroChannelModel(models.Model):
             return self.select_by_domain(response.json(), domain)
         return False
 
-    def browse_odoo_rec(self, cnx, ext_model, ext_id):
+    def browse_odoo_rec(self, cnx, ext_model, ext_id, method="json"):
         def expand_many(rec, ext_field, vals):
             try:
                 vals[ext_field] = [x.id for x in rec[ext_field]]
@@ -482,10 +482,17 @@ class SynchroChannelModel(models.Model):
                     del vals[ext_field]
             return vals
 
-        try:
-            rec = cnx.browse(ext_model, ext_id)
-        except BaseException:  # pragma: no cover
-            rec = False
+        if method == "xml":
+            try:
+                rec = cnx.browse(ext_model, ext_id)
+            except BaseException:  # pragma: no cover
+                rec = False
+        else:
+            Model = cnx.env[ext_model]
+            try:
+                rec = Model.browse(ext_id)
+            except BaseException:  # pragma: no cover
+                rec = False
         cache = self.env["ir.model.synchro.cache"]
         actual_model = self.name
         vals = {}
@@ -528,7 +535,23 @@ class SynchroChannelModel(models.Model):
                 vals["id"] = ext_id
         return vals
 
-    def get_odoo_rpc_response(self, cnx, session, ext_id=False, domain=None, mode=None):
+    def get_odoo_json_response(
+            self, cnx, session, ext_id=False, domain=None, mode=None):
+        ext_model = self.counterpart_name
+        Model = cnx.env[ext_model]
+        domain = domain or []
+        if ext_id and mode:
+            domain.append((mode, "=", ext_id))
+        if not ext_id or mode:
+            try:
+                vals = Model.search(domain)
+            except BaseException:  # pragma: no cover
+                vals = []
+        else:
+            vals = self.browse_odoo_rec(cnx, ext_model, ext_id)
+        return vals
+
+    def get_odoo_xml_response(self, cnx, session, ext_id=False, domain=None, mode=None):
         ext_model = self.counterpart_name
         domain = domain or []
         if ext_id and mode:
@@ -539,7 +562,7 @@ class SynchroChannelModel(models.Model):
             except BaseException:  # pragma: no cover
                 vals = []
         else:
-            vals = self.browse_odoo_rec(cnx, ext_model, ext_id)
+            vals = self.browse_odoo_rec(cnx, ext_model, ext_id, method="xml")
         return vals
 
     def get_counterpart_response(self, ext_id=False, domain=None, mode=None):

@@ -1,4 +1,4 @@
-10.0.0.3.4 (2024-03-14)
+10.0.0.3.4 (2024-03-29)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 * [FIX]
@@ -281,4 +281,4 @@
 * [IMP] Account Payment Term / Tabella termini di pagamento
 * [IMP] New protection level / Nuovo livello di protezione
 * [QUA] Test coverage 45% (4960: 2735+2225) [6 TestPoints] - quality rating 1336 (target 100)
-* [QUA] Test coverage 47% (4960: 2644+2316) [10 TestPoints] - quality rating 29 (target 100)
+* [QUA] Test coverage 47% (4975: 2653+2322) [10 TestPoints] - quality rating 29 (target 100)
