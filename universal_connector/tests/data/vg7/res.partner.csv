@@ -1,5 +1,0 @@
-payment_id,city,name,street_number,esonerato_fe,carriage_condition_id,company,country_id,cf,transportation_method_id,splitmode,piva,street,postal_code,region,surename,goods_description_id,id,region_id
-30,Torino,None,,1,False,Partner A,Italia,,False,None,,,10100,TORINO,None,False,11,11
-None,None,None,None,None,None,None,None,,None,None,02345670018,None,None,None,None,None,12,None
-None,None,None,None,None,l10n_it_ddt.carriage_condition_PAF,None,None,None,l10n_it_ddt.transportation_method_COR,None,None,None,None,None,None,l10n_it_ddt.goods_description_SFU,7,None
-None,None,Mario,None,None,False,None,Italia,RSSMRA69C02D612M,False,LF,None,None,None,None,Rossi,False,17,None

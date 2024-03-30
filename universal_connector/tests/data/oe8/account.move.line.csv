@@ -1,3 +1,0 @@
-account_id,date_maturity,partner_id,id,move_id,name,tax_amount,product_id,product_uom_id,journal_id,tax_code_id,credit,debit,ref,quantity
-180,2024-03-13,False,2001,2001,BNK/2020/0001,0.0,False,False,3,None,0.0,100.0,payment,0.0
-152,2024-03-13,101,2001,2001,BNK/2020/0001,0.0,False,False,3,None,100.0,0.0,payment,0.0

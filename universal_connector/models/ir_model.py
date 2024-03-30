@@ -1110,7 +1110,7 @@ class IrModelSynchro(models.Model):
                     if domain:
                         rec = exec_search(cls, domain, has_sequence, has_active)
         if rec:
-            if len(rec) > 16:
+            if not has_sequence and len(rec) > 16:
                 rec = False
             elif len(rec) > 1:
                 maybe_dif = True
@@ -1695,6 +1695,8 @@ class IrModelSynchro(models.Model):
                     xmodel,
                     ctx=ctx,
                 )
+            actual_model = self.get_actual_model(xmodel, only_name=True)
+            vals = cast_type(vals, actual_model, loc_name, loc_name)
             vals = rm_ext_value(vals, loc_name, ext_name, ext_ref, is_foreign)
             return vals
 
@@ -1779,7 +1781,7 @@ class IrModelSynchro(models.Model):
                 ctx={"id": vals[loc_name]},
             )
 
-        def cast_type(vals, actual_model, loc_name):
+        def cast_type(vals, actual_model, loc_name, ext_ref):
             if (
                 cache.get_struct_model_field_attr(actual_model, loc_name, "ttype")
                 in ("many2one", "one2many", "many2many", "integer")
@@ -1895,24 +1897,24 @@ class IrModelSynchro(models.Model):
                             store_in_queue(backend_id, cache, ext_ref, xmodel, vals)
                 vals = rm_ext_value(vals, loc_name, ext_name, ext_ref, is_foreign)
                 continue
-            elif ext_ref not in vals:
-                if is_foreign and apply4:
-                    vals = do_apply_n_clean(
-                        backend_id,
-                        vals,
-                        loc_name,
-                        ext_name,
-                        ext_ref,
-                        loc_ext_id_name,
-                        apply4,
-                        default,
-                        is_foreign,
-                        xmodel,
-                        ctx=ctx,
-                    )
-                if loc_name in vals and not vals[loc_name]:
-                    del vals[loc_name]
-                continue
+            # elif ext_ref not in vals:
+            #     if is_foreign and apply4:
+            #         vals = do_apply_n_clean(
+            #             backend_id,
+            #             vals,
+            #             loc_name,
+            #             ext_name,
+            #             ext_ref,
+            #             loc_ext_id_name,
+            #             apply4,
+            #             default,
+            #             is_foreign,
+            #             xmodel,
+            #             ctx=ctx,
+            #         )
+            #     if loc_name in vals and not vals[loc_name]:
+            #         del vals[loc_name]
+            #     continue
             elif isinstance(vals[ext_ref], basestring) and not vals[ext_ref].strip():
                 vals[ext_ref] = vals[ext_ref].strip()
                 if is_foreign and apply4:
@@ -1946,7 +1948,7 @@ class IrModelSynchro(models.Model):
                         ctx=ctx,
                     )
                 continue
-            vals = cast_type(vals, actual_model, loc_name)
+            vals = cast_type(vals, actual_model, loc_name, ext_ref)
             if loc_name == child_ids:
                 self.logmsg(
                     "any",

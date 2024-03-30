@@ -14,7 +14,7 @@ from builtins import input
 import os
 import sys
 from datetime import date, datetime, timedelta
-import time
+import re
 import csv
 from os0 import os0
 
@@ -1288,7 +1288,11 @@ def load_csv_file(ctx, fqn):
     def cast_value(vals):
         res = {}
         for k, v in vals.items():
-            if isinstance(v, basestring) and "." in v and " " not in v:
+            if k == "company_id" and not v:
+                res[k] = ctx["user"].company_id.id
+            elif isinstance(v, basestring) and re.match(r"[0-9]*\.[0-9]+$", v):
+                res[k] = eval(v)
+            elif isinstance(v, basestring) and "." in v and " " not in v:
                 res[k] = env_ref(ctx, v)
             elif k in ("id", "vg7_id", "oe8_id") and isinstance(v, basestring):
                 res[k] = int(v) if v else False
@@ -1365,7 +1369,7 @@ def load_n_test_model(
         fqn = os.path.join(get_csv_path(identity), ext_model + "." + lang + ".csv")
     else:
         fqn = os.path.join(get_csv_path(identity), ext_model + ".csv")
-    ext_recs_2_test = load_csv_file(ctx, fqn)
+    ext_recs_image = load_csv_file(ctx, fqn)
     if lang:
         fqn = os.path.join(get_csv_path(), model + "." + lang + ".csv")
     else:
@@ -1377,12 +1381,12 @@ def load_n_test_model(
     wa = "w"
     ext_id_field = get_ext_id_field(identity)
     if fct_test == "trigger":
-        for ext_rec in ext_recs_2_test:
+        for ext_rec in ext_recs_image:
             ext_rec, ext_id, main_ext_id = prepare_rec(ext_rec, main_ext_id)
             write_file_2_pull(identity, ext_model, ext_rec, wa)
             wa = "a"
 
-    for ext_rec in ext_recs_2_test:
+    for ext_rec in ext_recs_image:
         if fct_test == "synchro":
             ext_rec, ext_id, main_ext_id = prepare_rec(ext_rec, main_ext_id)
             loc_id = test_function_synchro(
@@ -1973,37 +1977,37 @@ def init_test():
     return ctx
 
 
-def compare(ctx, rec_value, ext_value, mode):
-    if hasattr(rec_value, "id"):
-        rec_value = rec_value.id
+def compare(ctx, loc_value, test_value, mode=None, loc_name=None):
+    if hasattr(loc_value, "id"):
+        loc_value = loc_value.id
     if mode == "nounknown":
-        return not rec_value.startswith("Unknown")
+        return not loc_value.startswith("Unknown")
     elif mode == "unknown":
-        return rec_value.startswith("Unknown")
+        return loc_value.startswith("Unknown")
     elif mode == "individual":
-        return rec_value in ctx["partner_MR_ids"]
+        return loc_value in ctx["partner_MR_ids"]
     elif mode == "nocase":
-        return rec_value.lower() == ext_value.lower()
-    elif mode and mode == ext_value:
+        return loc_value.lower() == test_value.lower()
+    elif mode and mode == test_value:
         if mode == "supplier":
-            return rec_value == "contact"
-        return rec_value == ext_value
+            return loc_value == "contact"
+        return loc_value == test_value
     elif mode == "delivery":
-        return rec_value == ext_value + 100000000
+        return loc_value == test_value + 100000000
     elif mode == "invoice":
-        return rec_value == ext_value + 200000000
-    elif isinstance(rec_value, basestring) and isinstance(ext_value, (int, long)):
-        if rec_value.isdigit():
-            return int(rec_value) == ext_value
-        return rec_value == str(ext_value)
-    elif isinstance(rec_value, (int, long)) and isinstance(ext_value, basestring):
-        if ext_value.isdigit():
-            return rec_value == int(ext_value)
-        return str(rec_value) == ext_value
-    elif ext_value is None:
+        return loc_value == test_value + 200000000
+    elif isinstance(loc_value, basestring) and isinstance(test_value, (int, long)):
+        if loc_value.isdigit():
+            return int(loc_value) == test_value
+        return loc_value == str(test_value)
+    elif isinstance(loc_value, (int, long)) and isinstance(test_value, basestring):
+        if test_value.isdigit():
+            return loc_value == int(test_value)
+        return str(loc_value) == test_value
+    elif test_value is None:
         return True
-    elif rec_value or ext_value:
-        return rec_value == ext_value
+    elif loc_value or test_value:
+        return loc_value == test_value
     return True
 
 
@@ -2028,7 +2032,10 @@ def check_records(ctx, identity, model, loc_id, test_rec, mode=None, state=None)
         if loc_name in fields_2_ignore:
             continue
         if loc_name in test_rec:
-            if not compare(ctx, getattr(loc_rec, loc_name), test_rec[loc_name], spec):
+            if not compare(ctx, getattr(loc_rec, loc_name),
+                           test_rec[loc_name],
+                           spec,
+                           loc_name=loc_name):
                 raise IOError(
                     "!!Field %s[%s].%s: invalid value <%s> expected <%s>"
                     % (model, loc_id,
@@ -2506,7 +2513,7 @@ def test_synchro_vg7(ctx):
 
     test_country(ctx, identity="vg7:", reset=True)
     test_country(ctx, identity="vg7:", fct_test="trigger", reset=True)
-    # test_tax(ctx, identity="vg7:", reset=True)
+    test_tax(ctx, identity="vg7:", reset=True)
     # test_tax(ctx, identity="vg7:", fct_test="trigger", reset=True)
 
     print("*** Starting OE8 test ***")
