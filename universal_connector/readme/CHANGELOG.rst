@@ -281,4 +281,4 @@
 * [IMP] Account Payment Term / Tabella termini di pagamento
 * [IMP] New protection level / Nuovo livello di protezione
 * [QUA] Test coverage 45% (4960: 2735+2225) [6 TestPoints] - quality rating 1336 (target 100)
-* [QUA] Test coverage 34% (4971: 3273+1698) [10 TestPoints] - quality rating 21 (target 100)
+* [QUA] Test coverage 47% (4971: 2653+2318) [10 TestPoints] - quality rating 29 (target 100)

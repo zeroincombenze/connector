@@ -14,6 +14,7 @@ from builtins import input
 import os
 import sys
 from datetime import date, datetime, timedelta
+from time import sleep
 import re
 import csv
 from os0 import os0
@@ -1554,6 +1555,22 @@ def load_n_test_model(
     # return main_ext_id
 
 
+def reset_res_country(ctx):
+    if ctx.get("_cr"):
+        query = (
+            "UPDATE ir_translation SET value='%s'"
+            " WHERE name='res.country,name' AND src='%s' AND lang='it_IT'")
+        for (value, src) in (
+                ("Germania", "Germany"),
+                ("Italia", "Italy"),
+                ("Regno Unito", "United Kingdom"),
+        ):
+            try:
+                clodoo.exec_sql(ctx, query % (value, src))
+            except BaseException:
+                pass
+
+
 def reset_model(ctx, model):
     if not ctx["conai"] and "conai" in model:
         return
@@ -1561,6 +1578,8 @@ def reset_model(ctx, model):
     actual_model = get_actual_model(model)
     if actual_model == model:
         reset_ext_id(ctx, model)
+    if actual_model == "res.country":
+        reset_res_country(ctx)
 
 
 def delete_all_records(ctx):
@@ -1572,94 +1591,94 @@ def delete_all_records(ctx):
         eol=True,
     )
     for model, domains, company_id, multi, childs, action in (
-        (
-            "account.invoice",
-            -1,
-            ctx["company_id"],
-            True,
-            None,
-            ["move_name=", "action_invoice_cancel"],
-        ),
-        (
-            "stock.picking.package.preparation",
-            -1,
-            ctx["company_id"],
-            True,
-            None,
-            ["set_draft", "action_cancel"],
-        ),
-        ("sale.order", -1, ctx["company_id"], True, None, "action_cancel"),
-        ("purchase.order", -1, ctx["company_id"], True, None, "button_cancel"),
-        ("account.move", -1, ctx["company_id"], True, None, "button_cancel"),
-        ("account.payment.term", -1, ctx["company_id"], True, None, None),
-        ("res.partner.bank", [], False, True, None, None),
-        ("res.partner", -1, False, True, "child_ids", None),
-        (
-            "res.partner",
-            [("name", "like", "Partner A%"), ("type", "=", "contact")],
-            False,
-            True,
-            "child_ids",
-            None,
-        ),
-        (
-            "res.partner",
-            [("name", "=", "La Romagnola srl"), ("type", "=", "contact")],
-            False,
-            True,
-            "child_ids",
-            None,
-        ),
-        (
-            "res.partner",
-            [("fiscalcode", "=", "RSSMRA60T45L219M")],
-            False,
-            True,
-            "child_ids",
-            None,
-        ),
-        ("res.partner", [("name", "=like", "Unknown %")], False, True, False, None),
-        (
-            "product.template",
-            [("default_code", "in", ["AA", "AAA", "BB", "BBB", "CC", "CCC"])],
-            False,
-            True,
-            False,
-            False,
-        ),
-        (
-            "product.product",
-            [("default_code", "in", ["AA", "AAA", "BB", "BBB", "CC", "CCC"])],
-            False,
-            True,
-            False,
-            False,
-        ),
-        ("product.uom", [("name", "in", ["NR", "KG"])], False, False, False, False),
-        ("account.payment.term", -1, ctx["company_id"], True, None, None),
-        ("account.tax", -1, ctx["company_id"], True, None, None),
-        ("res.country.state", -1, False, True, None, None),
-        ("stock.picking.goods_description", -1, False, True, None, None),
-        ("crm.team", [("name", "=", "Sale Example Team")], False, False, None, None),
-        (
-            "account.account",
-            [("code", "=", "180111")],
-            ctx["company_id"],
-            False,
-            None,
-            None,
-        ),
-        ("ir.model.synchro.data", [], False, True, None, None),
-        ("res.users", [("login", "=", "admbot")], False, False, None, None),
-        ("res.partner", [("name", "=", "admbot")], False, False, None, None),
-        (
-            "res.partner.bank",
-            [("acc_number", "=", TEST_IBAN)],
-            ctx["company_id"],
-            False,
-            None,
-            None,
-        ),
+        # (
+        #     "account.invoice",
+        #     -1,
+        #     ctx["company_id"],
+        #     True,
+        #     None,
+        #     ["move_name=", "action_invoice_cancel"],
+        # ),
+        # (
+        #     "stock.picking.package.preparation",
+        #     -1,
+        #     ctx["company_id"],
+        #     True,
+        #     None,
+        #     ["set_draft", "action_cancel"],
+        # ),
+        # ("sale.order", -1, ctx["company_id"], True, None, "action_cancel"),
+        # ("purchase.order", -1, ctx["company_id"], True, None, "button_cancel"),
+        # ("account.move", -1, ctx["company_id"], True, None, "button_cancel"),
+        # ("account.payment.term", -1, ctx["company_id"], True, None, None),
+        # ("res.partner.bank", [], False, True, None, None),
+        # ("res.partner", -1, False, True, "child_ids", None),
+        # (
+        #     "res.partner",
+        #     [("name", "like", "Partner A%"), ("type", "=", "contact")],
+        #     False,
+        #     True,
+        #     "child_ids",
+        #     None,
+        # ),
+        # (
+        #     "res.partner",
+        #     [("name", "=", "La Romagnola srl"), ("type", "=", "contact")],
+        #     False,
+        #     True,
+        #     "child_ids",
+        #     None,
+        # ),
+        # (
+        #     "res.partner",
+        #     [("fiscalcode", "=", "RSSMRA60T45L219M")],
+        #     False,
+        #     True,
+        #     "child_ids",
+        #     None,
+        # ),
+        # ("res.partner", [("name", "=like", "Unknown %")], False, True, False, None),
+        # (
+        #     "product.template",
+        #     [("default_code", "in", ["AA", "AAA", "BB", "BBB", "CC", "CCC"])],
+        #     False,
+        #     True,
+        #     False,
+        #     False,
+        # ),
+        # (
+        #     "product.product",
+        #     [("default_code", "in", ["AA", "AAA", "BB", "BBB", "CC", "CCC"])],
+        #     False,
+        #     True,
+        #     False,
+        #     False,
+        # ),
+        # ("product.uom", [("name", "in", ["NR", "KG"])], False, False, False, False),
+        # ("account.payment.term", -1, ctx["company_id"], True, None, None),
+        ("account.tax", [("description", "=", "a15")], ctx["company_id"], True, None, None),
+        # ("res.country.state", -1, False, True, None, None),
+        # ("stock.picking.goods_description", -1, False, True, None, None),
+        # ("crm.team", [("name", "=", "Sale Example Team")], False, False, None, None),
+        # (
+        #     "account.account",
+        #     [("code", "=", "180111")],
+        #     ctx["company_id"],
+        #     False,
+        #     None,
+        #     None,
+        # ),
+        # ("ir.model.synchro.data", [], False, True, None, None),
+        # ("res.users", [("login", "=", "admbot")], False, False, None, None),
+        # ("res.partner", [("name", "=", "admbot")], False, False, None, None),
+        # (
+        #     "res.partner.bank",
+        #     [("acc_number", "=", TEST_IBAN)],
+        #     ctx["company_id"],
+        #     False,
+        #     None,
+        #     None,
+        # ),
     ):
         delete_record(
             ctx,
@@ -1857,7 +1876,7 @@ def init_new_db(ctx):
     print("Be patient, the universal connector full test takes a few time ...")
     print("Please drop DB %s" % ctx["db_name"])
     input("Press RET to continue ...")
-    print("Now recreate DB %s" % ctx["db_name"])
+    print("Now recreate DB %s (w/o demo data)" % ctx["db_name"])
     input("Press RET to continue ...")
     with open(ctx["conf_fn"], "r") as fd:
         contents = fd.read()
@@ -1890,6 +1909,7 @@ def init_test():
             print("Please install %s" % modname)
             input("Press RET to continue ...")
             installed = check_if_module_installed(ctx, modname)
+        sleep(1)
 
     def wait_4_module_uninstalled(ctx, modname):
         installed = check_if_module_installed(ctx, modname)
@@ -1898,6 +1918,7 @@ def init_test():
             print("Please uninstall %s" % modname)
             input("Press RET to continue ...")
             installed = check_if_module_installed(ctx, modname)
+        sleep(1)
 
     def action_after_installed(ctx, modname, connector_installed):
         if modname == "mk_test_env":
@@ -1974,6 +1995,7 @@ def init_test():
                            "res.company",
                            ctx["company_id"]).due_cost_service_id:
         raise IOError("!!Missed bank cost in company!!")
+    delete_all_records(ctx)
     return ctx
 
 
