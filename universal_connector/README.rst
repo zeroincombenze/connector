@@ -190,15 +190,16 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 ChangeLog History | Cronologia modifiche
 ----------------------------------------
 
-10.0.0.3.4 (2024-03-30)
+10.0.0.3.4 (2024-04-01)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-* [FIX]
+* [QUA] Test coverage 37% (4971: 3156+1815) [10 TestPoints] - quality rating 23 (target 100)
 
 10.0.0.3.3 (2023-10-31)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 * [IMP] Unit price without tax / Scorporo IVA
+* [QUA] Test coverage 45% (4960: 2735+2225) [6 TestPoints] - quality rating 1336 (target 100)
 
 10.0.0.3.2 (2023-03-02)
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -271,7 +272,7 @@ La distribuzione `Zeroincombenze® <https://www.zeroincombenze.it/>`__ è proget
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2024-03-30
+Last Update / Ultimo aggiornamento: 2024-04-01
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status

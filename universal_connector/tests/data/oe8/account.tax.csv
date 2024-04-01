@@ -1,4 +1,4 @@
-amount,type_tax_use,id,name,description
-22,sale,1,IVA 22% a debito,22v
-10,sale,10,IVA 10% a debito,10v
-22,purchase,2,IVA 22% a credito,22a
+id,amount,description,name,type_tax_use,
+1,22,22v,IVA 22% su vendite,sale
+3,10,10v,IVA 10% su vendite,sale
+2,22,22a,IVA 22% da acquisti,purchase

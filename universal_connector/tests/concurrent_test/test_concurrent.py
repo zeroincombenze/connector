@@ -1410,149 +1410,6 @@ def load_n_test_model(
         if not checked:
             raise IOError("No match record found for %s=%s" % (ext_id_field, ext_id))
     return
-    #
-    #         loc_name, dummy = get_loc_name(model, field, identity)
-    #         if not ctx["conai"] and field == "conai_id":
-    #             del vals[field]
-    #             continue
-    #         if (identity and is_untranslable(loc_name, field, vals)) or (
-    #             not identity and not is_untranslable(loc_name, field, vals)
-    #         ):
-    #             del vals[field]
-    #     if identity.startswith("oe8") and model in MODEL_WITH_COMPANY:
-    #         vals["company_id"] = EXT_COMPANY_ID
-    #
-    #     parent_field = ext_child_field = child_model = False
-    #     if identity == "vg7:" and model == "res.partner" and mode != "wrong":
-    #         for xmodel in ("res.partner.shipping", "res.partner.invoice"):
-    #             if xmodel == "res.partner.invoice":
-    #                 (
-    #                     vals,
-    #                     vals_billing,
-    #                     parent_field,
-    #                     ext_child_field,
-    #                     child_model,
-    #                 ) = get_child_values(ctx, xmodel, identity, mode, vals, join=True)
-    #             else:
-    #                 (
-    #                     vals,
-    #                     vals_shipping,
-    #                     parent_field,
-    #                     ext_child_field,
-    #                     child_model,
-    #                 ) = get_child_values(ctx, xmodel, identity, mode, vals, join=True)
-    #     elif model in MODEL_WITH_CHILD:
-    #         (
-    #             vals,
-    #             vals_line,
-    #             parent_field,
-    #             ext_child_field,
-    #             child_model,
-    #         ) = get_child_values(ctx, model, identity, mode, vals, join=True)
-    #
-    #     if not main_ext_id and vals.get("id"):
-    #         main_ext_id = vals["id"]
-    #     if store:
-    #         if ext_child_field and fct_test == "trigger" and child_model:
-    #             child_ids = []
-    #             for rec in vals[ext_child_field]:
-    #                 child_ids.append(rec["id"])
-    #                 write_file_2_pull(child_model, rec, wal, identity=identity)
-    #                 wal = "a"
-    #         rec = vals.copy()
-    #         if ext_child_field and fct_test != "trigger":
-    #             rec[ext_child_field] = '"%s"' % rec[ext_child_field]
-    #         elif ext_child_field and fct_test == "trigger" and child_model:
-    #             rec[ext_child_field] = '"%s"' % child_ids
-    #             vals[ext_child_field] = child_ids
-    #         write_file_2_pull(ext_model, rec, wa, identity=identity)
-    #         wa = "a"
-    #     vals = apply_4_custom(vals, mode)
-    #     vals = set_wrong_data(vals, mode)
-    #     ext_id = get_ext_id_from_vals(vals)
-    #     if not store and fct_test == "trigger":
-    #         fct_test = "synchro"
-    #     if model:
-    #         if fct_test == "synchro":
-    #             rec_id, vals = test_function_synchro(
-    #                 ctx, model, vals, identity=identity, ext_id=ext_id
-    #             )
-    #         elif fct_test == "synchro2":
-    #             rec_id, vals = test_function_synchro2(
-    #                 ctx,
-    #                 model,
-    #                 vals,
-    #                 parent_field,
-    #                 ext_child_field,
-    #                 child_model,
-    #                 identity=identity,
-    #                 ext_id=ext_id,
-    #             )
-    #         else:
-    #             rec_id, vals = test_function_trigger(
-    #                 ctx, ext_model, vals, identity, ext_id
-    #             )
-    #         hash = "%s%s:%s" % (identity, model, mode)
-    #         if hash in FAILED_TRX and ext_id in FAILED_TRX[hash]:
-    #             if rec_id == FAILED_TRX[hash][ext_id]:
-    #                 ctx["ctr"] += 1
-    #                 continue
-    #             raise IOError(
-    #                 "!!%s.syncro(%d) failed(%d): expected %s!"
-    #                 % (model, ext_id, rec_id, FAILED_TRX[hash][ext_id])
-    #             )
-    #         elif rec_id < 1:
-    #             raise IOError("!!%s.syncro(%d) failed(%d)!" % (model, ext_id, rec_id))
-    #         if test_vals:
-    #             vals.update(test_vals)
-    #         if fct_test == "synchro2" and model in MODEL_TO_COMMIT:
-    #             if "state" in vals:
-    #                 vals["state"] = "draft"
-    #             general_check(ctx, model, rec_id, vals, mode=mode, state="draft")
-    #         else:
-    #             general_check(ctx, model, rec_id, vals, mode=mode)
-    #         if identity == "vg7:" and model == "product.product":
-    #             check_childs(ctx, model, rec_id, vals, identity, mode=mode)
-    #         elif model == "res.partner":
-    #             if vals_shipping:
-    #                 check_childs(
-    #                     ctx,
-    #                     model,
-    #                     rec_id,
-    #                     vals_shipping,
-    #                     identity,
-    #                     mode=mode,
-    #                     spec="shipping",
-    #                 )
-    #             if vals_billing:
-    #                 check_childs(
-    #                     ctx,
-    #                     model,
-    #                     rec_id,
-    #                     vals_billing,
-    #                     identity,
-    #                     mode=mode,
-    #                     spec="invoice",
-    #                 )
-    #         elif model in MODEL_WITH_CHILD:
-    #             if vals_line:
-    #                 if fct_test == "synchro2" and model in MODEL_TO_COMMIT:
-    #                     check_childs(
-    #                         ctx,
-    #                         model,
-    #                         rec_id,
-    #                         vals_line,
-    #                         identity,
-    #                         mode=mode,
-    #                         state="draft",
-    #                     )
-    #                 else:
-    #                     check_childs(ctx, model, rec_id, vals_line, identity, mode=mode)
-    #         if fct_test == "synchro2" and model in MODEL_TO_COMMIT:
-    #             if test_vals:
-    #                 vals.update(test_vals)
-    #             commit(ctx, model, rec_id, vals)
-    # return main_ext_id
 
 
 def reset_res_country(ctx):
@@ -1571,15 +1428,66 @@ def reset_res_country(ctx):
                 pass
 
 
+def reset_account_tax(ctx):
+    model = "account.tax"
+    fqn = os.path.join(get_csv_path(), model + ".csv")
+    test_recs = load_csv_file(ctx, fqn)
+    for rec in test_recs:
+        code = rec["description"]
+        name = rec["name"]
+        ids = clodoo.searchL8(
+            ctx, model, [("description", "=", code)])
+        vals = {"vg7_id": False, "oe8_id": False, "name": name}
+        clodoo.writeL8(ctx, model, ids, vals)
+
+
+def dirty_account_tax(ctx):
+    model = "account.tax"
+    for (code, name) in (
+            ("22v", "Iva debito 22%"),
+            ("10v", "Iva debito 10%"),
+            ("22a", "Iva credito 22%"),
+    ):
+        ids = clodoo.searchL8(
+            ctx, model, [("description", "=", code)])
+        clodoo.writeL8(ctx, model, ids, {"name": name})
+
+
+def reset_res_partner(ctx):
+    model = "res.partner"
+    fqn = os.path.join(get_csv_path(), model + ".csv")
+    test_recs = load_csv_file(ctx, fqn)
+    for rec in test_recs:
+        code = rec["vat"]
+        name = rec["name"]
+        ids = clodoo.searchL8(
+            ctx, model, [("vat", "=", code)])
+        vals = {"vg7_id": False, "oe8_id": False, "vg72_id": False, "name": name}
+        clodoo.writeL8(ctx, model, ids, vals)
+
+def dirty_res_partner(ctx):
+    for (vat, name) in (
+            ("IT00115719999", "Partner 1"),
+    ):
+        ids = clodoo.searchL8(
+            ctx, "res.partner", [("vat", "=", vat),
+                                 ("type", "=", "contact")])
+        clodoo.writeL8(ctx, "res.partner", ids, {"name": name})
+
+
 def reset_model(ctx, model):
     if not ctx["conai"] and "conai" in model:
         return
     print("Reset model %s ..." % model)
     actual_model = get_actual_model(model)
-    if actual_model == model:
-        reset_ext_id(ctx, model)
     if actual_model == "res.country":
         reset_res_country(ctx)
+    elif actual_model == "account.tax":
+        reset_account_tax(ctx)
+    elif actual_model == "res.partner":
+        reset_res_partner(ctx)
+    elif actual_model == model:
+        reset_ext_id(ctx, model)
 
 
 def delete_all_records(ctx):
@@ -2164,6 +2072,8 @@ def test_synchro_vg7(ctx):
                 company_id=ctx["company_id"],
             )
             reset_model(ctx, model)
+            if identity == "oe8:":
+                dirty_account_tax(ctx)
         print("Write %s (%s) ..." % (model, identity))
         vg7_id = load_n_test_model(
             ctx,
@@ -2244,95 +2154,22 @@ def test_synchro_vg7(ctx):
         if identity == "vg7:":
             ctx["product.product.A"] = vg7_id
 
-    def test_partner(ctx, mode=None, identity=None, fct_test=None):
+    def test_partner(ctx, mode=None, identity=None, fct_test=None, reset=False):
         identity = identity or "vg7:"
         model = "res.partner"
+        if reset:
+            reset_model(ctx, model)
+            dirty_res_partner(ctx)
         print("Write %s (%s) ..." % (model, identity))
-        if not mode and identity == "vg7:":
-            load_n_test_model(
-                ctx,
-                "res.partner.shipping",
-                mode=mode,
-                store=not mode,
-                identity=identity,
-            )
-            load_n_test_model(
-                ctx,
-                "customers_billing_addresses",
-                mode=mode,
-                store=not mode,
-                identity=identity,
-            )
         vg7_id = load_n_test_model(
             ctx,
             model,
             mode=mode,
             store=not mode,
             identity=identity,
+            fct_test=fct_test,
         )
-        if mode and identity == "vg7:":
-            bank_id = load_n_test_model(
-                ctx,
-                "res.partner.bank",
-                mode=True,
-                store=True,
-                identity=identity,
-            )
-            ctx["res.partner.bank.BPop"] = bank_id
 
-        if identity == "vg7:":
-            ctx["res.partner.A"] = vg7_id
-            model = "res.partner.supplier"
-            print("Write %s (%s) ..." % (model, identity))
-            vg7_id = load_n_test_model(
-                ctx,
-                model,
-                mode=mode,
-                store=not mode,
-                identity=identity,
-            )
-
-        if identity == "vg7:":
-            # Special error test
-            model = "res.partner"
-            vals = {"vg7:piva": "02345670019", "vg7:id": 12}
-            rec_id, vals = test_function_synchro(ctx, model, vals, identity=identity)
-            if rec_id >= 0:
-                raise IOError(
-                    "!!Test failed: expected error, received %s record ID" % rec_id
-                )
-            ctx["ctr"] += 1
-            partner = clodoo.browseL8(
-                ctx,
-                model,
-                clodoo.browseL8(
-                    ctx,
-                    "ir.model.synchro.log",
-                    clodoo.searchL8(
-                        ctx,
-                        "ir.model.synchro.log",
-                        [("timestamp", ">=", datetime.today().strftime("%Y-%m-%d"))],
-                        order="id desc",
-                    )[0],
-                ).res_id,
-            )
-            if ("%s" % rec_id) not in partner.errmsg:
-                raise IOError("!!Test failed: partner w/o errr message")
-            ctx["ctr"] += 1
-
-            clodoo.writeL8(ctx, model, partner.id, {"active": False})
-            partner = clodoo.browseL8(ctx, model, partner.id)
-            if partner.active:
-                raise IOError("!!Internal error: partner active")
-            vals = {"vg7:company": partner.name, "vg7:piva": partner.vat, "vg7:id": 12}
-            rec_id, vals = test_function_synchro(ctx, model, vals, identity=identity)
-            if rec_id != partner.id:
-                raise IOError("!!Test failed: wrong partner ID")
-            ctx["ctr"] += 1
-            partner = clodoo.browseL8(ctx, model, partner.id)
-            if not partner.active:
-                raise IOError("!!Test failes: partner not active")
-            ctx["ctr"] += 1
 
     def test_account_type(ctx, mode=None, identity=None, fct_test=None):
         identity = identity or "oe8:"
@@ -2535,8 +2372,10 @@ def test_synchro_vg7(ctx):
 
     test_country(ctx, identity="vg7:", reset=True)
     test_country(ctx, identity="vg7:", fct_test="trigger", reset=True)
+    test_partner(ctx, identity="vg7:", reset=True)
+    test_partner(ctx, identity="vg7:", fct_test="trigger", reset=True)
     test_tax(ctx, identity="vg7:", reset=True)
-    # test_tax(ctx, identity="vg7:", fct_test="trigger", reset=True)
+    test_tax(ctx, identity="vg7:", fct_test="trigger", reset=True)
 
     print("*** Starting OE8 test ***")
     write_log(
@@ -2546,7 +2385,9 @@ def test_synchro_vg7(ctx):
         eol=True,
     )
 
-    test_country(ctx, identity="oe8:", fct_test="trigger", reset=True)
+    test_country(ctx, identity="oe8:", reset=True)
+    test_partner(ctx, identity="oe8:", reset=True)
+    test_tax(ctx, identity="oe8:", reset=True)
 
     print("%d tests %s successfully ended on %s"
           % (ctx["ctr"], THIS_MODULE, datetime.now()))
