@@ -12,13 +12,18 @@ from builtins import *  # noqa
 from builtins import input
 
 import os
+import os.path as pth
 import sys
+import argparse
 from datetime import date, datetime, timedelta
 from time import sleep
 import re
 import csv
-from os0 import os0
 
+try:
+    from python_plus.python_plus import _u
+except ImportError:
+    from python_plus import _u
 try:
     from clodoo import clodoo
 except ImportError:
@@ -535,766 +540,194 @@ MODULE_LIST = [
 IDENTITY_LIST = ["vg7:", "oe8:"]
 
 
-def get_ext_model(model, identity):
-    if identity.startswith("vg7") and model in TNL_VG7_TABLES:
-        ext_model = TNL_VG7_TABLES[model]
-    elif identity.startswith("oe8"):
-        ext_model = model
-    else:
-        ext_model = model
-    return ext_model
+class ExtTestEnv(object):
 
+    def __init__(self, *args):
+        self.parseoptargs(args)
+        for item in ("confn", "db_name", "lang"):
+            setattr(self, item, getattr(self.opt_args, item))
+        self.confn = self.confn or os.environ["TEST_CONFN"]
+        self.db_name = self.db_name or "connect10"
+        self.lang = self.lang or "it_IT"
+        self.logfn = __file__.replace(".py", ".log")
+        self.conai = False
+        self.ask = False
+        self.module = False
+        self.ctr = 0
+        if pth.isfile(self.logfn):
+            os.unlink(self.logfn)
+        self.fqn_to_remove = []
 
-def get_actual_model(model):
-    if model in (
-            "res.partner.billing",
-            "res.partner.shipping",
-            "res.partner.supplier"):
-        return "res.partner"
-    return model
+    def parseoptargs(self, args):
+        parser = argparse.ArgumentParser(
+            # formatter_class=argparse.RawDescriptionHelpFormatter,
+            description="Odoo test environment - © 2020-2024 by SHS-AV s.r.l.",
+        )
+        parser.add_argument(
+            "-c",
+            "--config",
+            help="Odoo configuration file",
+            dest="confn",
+            metavar="FILE",
+        )
+        parser.add_argument(
+            "-d",
+            "--database",
+            help="DB name to test",
+            dest="db_name",
+            metavar="FILE",
+        )
+        parser.add_argument(
+            "-l",
+            "--lang",
+            help="Language to test",
+            metavar="ISO3166",
+        )
+        self.opt_args = parser.parse_args(*args)
 
+    def write_log(self, mesg, eol=True, echo=True, no_ts=False):
+        if echo:
+            print(mesg)
+        with open(self.logfn, "a") as fd:
+            if no_ts:
+                fd.write(u" - ")
+            else:
+                fd.write(_u(datetime.strftime(datetime.now(), u"%Y-%m-%d %H:%M:%S ")))
+            fd.write(mesg)
+            if eol:
+                fd.write("\n")
 
-def get_ext_id_field(identity):
-    return identity.split(":")[0] + "_id"
+    def env_ref(self, xref, retxref_id=None):
+        def simulate_xref(name, model, by=None):
+            by = by or "name"
+            tok = name.split("_")[-1]
+            domain = [(by, "=", tok)]
+            domain.append(("company_id", "=", self.company_id))
+            recs = clodoo.searchL8(self.ctx, model, domain)
+            if len(recs) == 1:
+                return recs[0]
+            return False
 
-
-def get_csv_path(identity="match"):
-    # Get csv file with source test data
-    testdir = os.path.join(os.path.dirname(os.path.dirname(__file__)))
-    root = os.path.join(testdir, "data", (identity.split(":")[0]))
-    if not os.path.isdir(root):
-        raise IOError("Directory %s not found!!!" % root)
-    return root
-
-
-def get_exchange_path(identity):
-    # Get csv fexchanage path
-    testdir = os.path.join(os.path.dirname(os.path.dirname(__file__)))
-    root = os.path.join(testdir, "res", (identity.split(":")[0]))
-    if not os.path.isdir(root):
-        os.makedirs(root)
-    return root
-
-
-def env_ref(ctx, xref, retxref_id=None):
-    def simulate_xref(xrefs, model, by=None):
-        by = by or "name"
-        tok = xrefs[1].split("_")[-1]
-        domain = [(by, "=", tok)]
-        domain.append(("company_id", "=", ctx["company_id"]))
-        recs = clodoo.searchL8(ctx, model, domain)
-        if len(recs) == 1:
-            return recs[0]
-        return False
-
-    if " " in xref:
-        return xref
-    xrefs = xref.split(".")
-    if len(xrefs) == 2:
+        if " " in xref:
+            return xref
+        module, name = xref.split(".", 2)
         model = "ir.model.data"
         ids = clodoo.searchL8(
-            ctx, model, [("module", "=", xrefs[0]), ("name", "=", xrefs[1])]
+            self.ctx, model, [("module", "=", module), ("name", "=", name)]
         )
         if ids:
             if retxref_id:
                 return ids[0]
-            return clodoo.browseL8(ctx, model, ids[0]).res_id
+            return clodoo.browseL8(self.ctx, model, ids[0]).res_id
         elif xref.startswith("z0bug.tax_"):
-            return simulate_xref(xrefs, "account.tax", by="description")
-    return False
+            return simulate_xref(name, "account.tax", by="description")
+        return False
 
-
-def write_log(ctx, mesg, eol=None):
-    with open(ctx["logfn"], "a") as fd:
-        if eol:
-            fd.write("%s\n" % mesg)
-        else:
-            fd.write(mesg)
-
-
-def compare_some(dict_item, vals, field=None):
-    field = field or dict_item["domain"][0]
-    if (
-        (dict_item["domain"][1] == "=" and vals[field] == dict_item["domain"][2])
-        or (
-            dict_item["domain"][1] == "=~"
-            and vals[field].startswith(dict_item["domain"][2])
-        )
-        or (dict_item["domain"][1] == "in" and vals[field] in dict_item["domain"][2])
-    ):
-        return True
-    return False
-
-
-def get_some_default(model, vals, identity, test_vals):
-    if model in SOME_DEFAULT:
-        for dict_item in SOME_DEFAULT[model]:
-            field = dict_item["domain"][0]
-            if identity.startswith("vg7"):
-                for x in TNL_VG7_DICT[model].items():
-                    if x[1] == dict_item["domain"][0]:
-                        field = x[0]
-                        break
-            if compare_some(dict_item, vals, field=field):
-                if dict_item["value"][0].startswith(":"):
-                    # test_vals[dict_item['value'][0][1:]] = ctx[
-                    #     dict_item['value'][1]]
-                    test_vals[dict_item["value"][0]] = ctx[dict_item["value"][1]]
-                elif identity:
-                    if dict_item["value"][1] in ctx:
-                        test_vals["%s%s" % (identity, dict_item["value"][0])] = ctx[
-                            dict_item["value"][1]
-                        ]
-                    else:
-                        test_vals[
-                            "%s%s" % (identity, dict_item["value"][0])
-                        ] = dict_item["value"][1]
-                else:
-                    test_vals[dict_item["value"][0]] = ctx[dict_item["value"][1]]
-    return test_vals
-
-
-def delete_record(
-    ctx, model, domains, multi=False, action=None, childs=None, company_id=False
-):
-    if not ctx["conai"] and "conai" in model:
-        return
-    print("Delete %s records of model %s ..." % (
-        domains if domains != -1 and domains <> [] else "all",
-        model))
-
-    excl_list = [
-        rec.res_id
-        for rec in clodoo.browseL8(
-            ctx,
-            "ir.model.data",
-            clodoo.searchL8(ctx, "ir.model.data", [("model", "=", model)]),
-        )
-    ]
-    if model == "res.partner":
-        for rec in clodoo.browseL8(
-            ctx, "res.users", clodoo.searchL8(ctx, "res.users", [])
-        ):
-            if rec.partner_id.id not in excl_list:
-                excl_list.append(rec.partner_id.id)
-    if not isinstance(domains, (list, tuple)):
-        domains = [domains]
-    single_query = True
-    for domain in domains:
-        if isinstance(domain, (basestring, int)):
-            single_query = False
-            break
-        elif isinstance(domain, (list, tuple)):
-            break
-    if single_query:
-        domains = [domains]
-    for domain in domains:
-        rec_ids = []
-        if isinstance(domain, basestring):
-            rec_ids = env_ref(ctx, domain)
-            rec_ids = [rec_ids] if rec_ids else []
-        elif isinstance(domain, int):
-            full_domain = []
-            for test_prefix in ("vg7:", "oe8:"):
-                ext_name = ("%s_id" % test_prefix.split(":")[0]
-                            if test_prefix else False)
-                if domain == -1:
-                    leaf = [(ext_name, "!=", False), (ext_name, "!=", 0)]
-                else:
-                    leaf = [(ext_name, "=", domain)]
-                if not full_domain:
-                    full_domain = leaf
-                else:
-                    if len(leaf) > 1:
-                        leaf.insert(0, "&")
-                    if len(full_domain) == 2:
-                        full_domain.insert(0, "&")
-                    full_domain.insert(0, "|")
-                    full_domain.extend(leaf)
-            domain = full_domain
-        if not rec_ids:
-            if company_id:
-                domain.append(("company_id", "=", company_id))
-            if excl_list:
-                domain.append(("id", "not in", excl_list))
-            rec_ids = clodoo.searchL8(ctx, model, domain)
-        if (not multi and len(rec_ids) == 1) or (multi and len(rec_ids)):
-            if action:
-                if not isinstance(action, (list, tuple)):
-                    action = [action]
-                for act in action:
-                    if act == "move_name=":
-                        clodoo.writeL8(ctx, model, rec_ids, {"move_name": ""})
-                    else:
-                        try:
-                            clodoo.executeL8(ctx, model, act, rec_ids)
-                        except BaseException:
-                            print("Warning! Cannot execute %s.%s" % (model, act))
-            if childs:
-                for parent in clodoo.browseL8(ctx, model, rec_ids):
-                    for rec in parent[childs]:
-                        if rec.id in rec_ids:
-                            continue
-                        try:
-                            clodoo.unlinkL8(ctx, model, rec.id)
-                            write_log(
-                                ctx, ">>> %s.unlink(%s)" % (model, rec.id), eol=True
-                            )
-                        except BaseException as e:
-                            print("Error %s removing records ..." % e)
-            try:
-                clodoo.unlinkL8(ctx, model, rec_ids)
-                write_log(ctx, ">>> %s.unlink(%s)" % (model, rec_ids), eol=True)
-            except BaseException as e:
-                print("Error %s removing records ..." % e)
-                if ctx["ask"]:
-                    input("Press RET to continue")
-                else:
-                    exit(1)
-
-
-def write_record(ctx, model, domain, vals, company_id=False, create=None, unique=None):
-    if isinstance(domain, basestring):
-        ids = env_ref(ctx, domain)
-        ids = [ids] if ids else []
-    else:
-        if company_id:
-            domain.append(("company_id", "=", company_id))
-        ids = clodoo.searchL8(ctx, model, domain)
-    if ids:
-        clodoo.writeL8(ctx, model, ids, vals)
-        if unique and len(ids) > 1:
-            print('Warning: Too many records "%s.%s"' % (model, domain))
-            delete_record(ctx, model, [("id", "in", ids[1:])])
-    elif create:
-        ids = [clodoo.createL8(ctx, model, vals)]
-    return ids
-
-
-def reset_ext_id(ctx, model):
-    domain = ["|"]
-    if model == "res.partner":
-        domain.append("|")
-    for nm in ("vg7_id", "oe8_id"):
-        domain.append((nm, ">", 0))
-    if model == "res.partner":
-        domain.append(("vg72_id", ">", "0"))
-    vals = {"vg7_id": False, "oe8_id": False}
-    if model == "res.partner":
-        vals["vg72_id"] = False
-    ids = clodoo.searchL8(ctx, model, domain)
-    for id in ids:
-        clodoo.writeL8(ctx, model, id, vals)
-
-
-def rm_file_2_pull(ext_model, identity):
-    fn = os.path.join(get_exchange_path(identity), "%s.csv" % ext_model)
-    if os.path.isfile(fn):
-        os.unlink(fn)
-
-
-def set_sequence(ctx, domain, next_number, multi=False, company_id=False):
-    model = "ir.sequence"
-    if company_id:
-        domain.append(("company_id", "=", company_id))
-    ids = clodoo.searchL8(ctx, model, domain)
-    if (not multi and len(ids) == 1) or (multi and len(ids)):
-        for rec in clodoo.browseL8(ctx, model, ids):
-            clodoo.writeL8(
-                ctx,
-                model,
-                ids,
-                {"number_next_actual": next_number, "number_next": next_number},
-            )
-            for rec1 in rec.date_range_ids:
-                if rec1.date_from < date.today() <= rec1.date_to:
-                    clodoo.writeL8(
-                        ctx,
-                        "%s.date_range" % model,
-                        rec1.id,
-                        {
-                            "number_next_actual": next_number,
-                            "number_next": next_number
-                        },
-                    )
-
-
-def store_vg7id(ctx, model, loc_id, vg7_id):
-    if model not in TNL_VG7_DICT:
-        TNL_VG7_DICT[model] = {}
-    if "EXT" not in TNL_VG7_DICT[model]:
-        TNL_VG7_DICT[model]["LOC"] = {}
-        TNL_VG7_DICT[model]["EXT"] = {}
-    if isinstance(vg7_id, basestring) and vg7_id.isdigit():
-        TNL_VG7_DICT[model]["LOC"][loc_id] = eval(vg7_id)
-        TNL_VG7_DICT[model]["EXT"][eval(vg7_id)] = loc_id
-    else:
+    @staticmethod
+    def store_vg7id(model, loc_id, vg7_id):
+        if model not in TNL_VG7_DICT:
+            TNL_VG7_DICT[model] = {}
+        if "EXT" not in TNL_VG7_DICT[model]:
+            TNL_VG7_DICT[model]["LOC"] = {}
+            TNL_VG7_DICT[model]["EXT"] = {}
+        if isinstance(vg7_id, basestring) and vg7_id.isdigit():
+            vg7_id = int(vg7_id)
         TNL_VG7_DICT[model]["LOC"][loc_id] = vg7_id
         TNL_VG7_DICT[model]["EXT"][vg7_id] = loc_id
 
-
-def store_oe8id(ctx, model, loc_id, oe8_id):
-    if model not in TNL_OE8_DICT:
-        TNL_OE8_DICT[model] = {}
-    if "EXT" not in TNL_OE8_DICT[model]:
-        TNL_OE8_DICT[model]["LOC"] = {}
-        TNL_OE8_DICT[model]["EXT"] = {}
-    if isinstance(oe8_id, basestring) and oe8_id.isdigit():
-        TNL_OE8_DICT[model]["LOC"][loc_id] = eval(oe8_id)
-        TNL_OE8_DICT[model]["EXT"][eval(oe8_id)] = loc_id
-    else:
+    @staticmethod
+    def store_oe8id(model, loc_id, oe8_id):
+        if model not in TNL_OE8_DICT:
+            TNL_OE8_DICT[model] = {}
+        if "EXT" not in TNL_OE8_DICT[model]:
+            TNL_OE8_DICT[model]["LOC"] = {}
+            TNL_OE8_DICT[model]["EXT"] = {}
+        if isinstance(oe8_id, basestring) and oe8_id.isdigit():
+            oe8_id = int(oe8_id)
         TNL_OE8_DICT[model]["LOC"][loc_id] = oe8_id
         TNL_OE8_DICT[model]["EXT"][oe8_id] = loc_id
 
+    def store_ext_id(self, model, loc_id, ext_id, identity):
+        if loc_id and ext_id:
+            if identity.startswith("vg7"):
+                self.store_vg7id(model, loc_id, ext_id)
+            elif identity.startswith("oe8"):
+                self.store_oe8id(model, loc_id, ext_id)
 
-def store_ext_id(ctx, model, loc_id, ext_id, identity):
-    if loc_id and ext_id:
-        if identity.startswith("vg7"):
-            store_vg7id(ctx, model, loc_id, ext_id)
-        elif identity.startswith("oe8"):
-            store_oe8id(ctx, model, loc_id, ext_id)
+    @staticmethod
+    def get_ext_id_field(identity):
+        return identity.split(":")[0] + "_id"
 
+    @staticmethod
+    def get_csv_path(identity="match"):
+        testdir = pth.join(pth.dirname(pth.dirname(__file__)))
+        root = pth.join(testdir, "data", (identity.split(":")[0]))
+        if not pth.isdir(root):
+            raise IOError("Directory %s not found!!!" % root)
+        return root
 
-def write_file_2_pull(identity, ext_model, vals, mode="w"):
-    fqn = os.path.join(get_exchange_path(identity), "%s.csv" % ext_model)
-    if mode == "a":
-        with open(fqn, "r") as fd:
-            ln = fd.read().split("\n")[0]
-        data = "%s\n" % ",".join([str(vals.get(x, "")) for x in ln.split(",")])
-    else:
-        data = "%s\n%s\n" % (
-            ",".join(vals.keys()),
-            ",".join(map(lambda x: str(vals[x]), vals.keys())),
-        )
-    with open(fqn, mode) as fd:
-        fd.write(data)
+    @staticmethod
+    def get_exchange_path(identity):
+        testdir = pth.join(pth.dirname(pth.dirname(__file__)))
+        root = pth.join(testdir, "res", (identity.split(":")[0]))
+        if not pth.isdir(root):
+            os.makedirs(root)
+        return root
 
-
-def get_vg7id_from_id(ctx, model, id):
-    return clodoo.browseL8(ctx, model, id).vg7_id
-
-
-def get_id_from_vg7id(ctx, model, vg7_id, name=None):
-    name = name or "vg7_id"
-    ids = clodoo.searchL8(ctx, model, [(name, "=", vg7_id)])
-    if ids:
-        return ids[0]
-    return -1
-
-
-def is_untranslable(loc_name, ext_ref, vals):
-    if ext_ref in vals and (
-        vals[ext_ref] is False
-        or (
-            (
-                isinstance(vals[ext_ref], basestring)
-                and " " not in vals[ext_ref]
-                and len(vals[ext_ref].split(".")) == 2
-            )
-        )
-    ):
-        return True
-    return False
-
-
-def jacket_vals(vals, prefix="vg7:"):
-    def cast_value(value):
-        if value in (r"\N", "None"):
-            return ""
-        return value
-
-    for nm in vals.copy():
-        if is_untranslable(nm, nm, vals):
-            continue
-        if not nm.startswith("%s" % prefix) and not nm.startswith(":"):
-            vals["%s%s" % (prefix, nm)] = cast_value(vals[nm])
-            del vals[nm]
-    return vals
-
-
-def shirt_vals(vals):
-    for nm in vals.copy():
-        if nm in ("customer_shipping_id", "customer_billing_id"):
-            continue
-        new_name = nm.replace("billing_", "").replace("shipping_", "")
-        if new_name != nm:
-            vals[new_name] = vals[nm]
-            del vals[nm]
-    return vals
-
-
-def value_by_identity(identity, val_vg7, val_oe8):
-    if identity.startswith("vg7"):
-        return val_vg7
-    elif identity.startswith("oe8"):
-        return val_oe8
-    return False
-
-
-def get_id_from_extid(loc_name, loc_value, identity):
-    if loc_name in TABLE_OF_REF_FIELD:
-        ref_model = TABLE_OF_REF_FIELD[loc_name]
-        if identity.startswith("vg7"):
-            if ref_model in TNL_VG7_DICT and "LOC" in TNL_VG7_DICT[ref_model]:
-                loc_value = TNL_VG7_DICT[ref_model]["LOC"].get(loc_value, loc_value)
-        elif identity.startswith("oe8"):
-            if ref_model in TNL_OE8_DICT and "LOC" in TNL_OE8_DICT[ref_model]:
-                loc_value = TNL_OE8_DICT[ref_model]["LOC"].get(loc_value, loc_value)
-    return loc_name
-
-
-def get_loc_name(model, field, identity):
-    mode = False
-    loc_name = field
-    if field in ("vg7:id", "oe8:id"):
-        loc_name = "id"
-    elif identity.startswith("vg7"):
-        if model and model in TNL_VG7_DICT and field in TNL_VG7_DICT[model]:
-            loc_name = TNL_VG7_DICT[model][field]
-            if loc_name and isinstance(loc_name, (tuple, list)):
-                mode = loc_name[1]
-                loc_name = loc_name[0]
-        if loc_name == field:
-            if field.startswith("shipping_"):
-                loc_name = field[9:]
-            elif field.startswith("billing_"):
-                loc_name = field[8:]
-            if model and model in TNL_VG7_DICT and loc_name in TNL_VG7_DICT[model]:
-                loc_name = TNL_VG7_DICT[model][loc_name]
-    elif identity.startswith("oe8"):
-        if model and model in TNL_OE8_DICT and field in TNL_OE8_DICT[model]:
-            loc_name = TNL_OE8_DICT[model][field]
-            if loc_name and isinstance(loc_name, (tuple, list)):
-                mode = loc_name[1]
-                loc_name = loc_name[0]
-    return loc_name, mode
-
-
-def get_loc_value(
-    ctx, model, loc_rec, ext_ref, ext_name, loc_name, vals, identity, spec
-):
-    mode = False
-    if loc_name.endswith("_id") or loc_name in M2O_FIELDS or loc_name in M2M_FIELDS:
-        if loc_name in M2M_FIELDS:
-            try:
-                loc_value = getattr(loc_rec, loc_name)[0].id
-            except BaseException:
-                loc_value = getattr(loc_rec, loc_name)
+    @staticmethod
+    def get_ext_model(model, identity):
+        if identity.startswith("vg7") and model in TNL_VG7_TABLES:
+            ext_model = TNL_VG7_TABLES[model]
         else:
-            try:
-                loc_value = getattr(loc_rec, loc_name).id
-            except BaseException:
-                loc_value = getattr(loc_rec, loc_name)
-        if not spec and isinstance(loc_value, int):
-            loc_value = loc_value % 100000000
-        ckstr = False
-        if loc_name in TABLE_OF_REF_FIELD:
-            ref_model = TABLE_OF_REF_FIELD[loc_name]
-            if identity.startswith("vg7"):
-                if (
-                    ref_model in TNL_VG7_DICT
-                    and "LOC" in TNL_VG7_DICT[ref_model]
-                    and loc_name != "tax_id"
-                ):
-                    loc_value = TNL_VG7_DICT[ref_model]["LOC"].get(loc_value,
-                                                                   loc_value)
-                    mode = "tnx"
-            elif identity.startswith("oe8"):
-                if ref_model in TNL_OE8_DICT and "LOC" in TNL_OE8_DICT[ref_model]:
-                    loc_value = TNL_OE8_DICT[ref_model]["LOC"].get(loc_value,
-                                                                   loc_value)
-                    mode = "tnx"
-            ckstr = True
-        elif loc_name == "parent_id":
-            if identity.startswith("vg7"):
-                if model in TNL_VG7_DICT:
-                    loc_value = TNL_VG7_DICT[model]["LOC"].get(loc_value, loc_value)
-            elif identity.startswith("oe8"):
-                if model in TNL_OE8_DICT:
-                    loc_value = TNL_OE8_DICT[model]["LOC"].get(loc_value, loc_value)
-            ckstr = True
-        if ckstr and isinstance(vals[ext_ref], basestring):
-            ids = clodoo.searchL8(
-                ctx,
-                ref_model,
-                [("name", "ilike", vals[ext_ref])],
-                context={"lang": "it_IT"},
-            )
-            if not ids:
-                ids = clodoo.searchL8(
-                    ctx, ref_model, [("name", "ilike", vals[ext_ref])]
+            ext_model = model
+        return ext_model
+
+    @staticmethod
+    def is_untranslable(ext_ref, vals):
+        if ext_ref in vals and (
+            vals[ext_ref] is False
+            or (
+                (
+                    isinstance(vals[ext_ref], basestring)
+                    and " " not in vals[ext_ref]
+                    and len(vals[ext_ref].split(".")) == 2
                 )
-            if len(ids) >= 1:
-                if len(ids) > 1:
-                    print(
-                        "Warning: "
-                        "multiple records %s.%s detected" % (ref_model, vals[ext_ref])
-                    )
-                if identity.startswith("vg7") and ref_model in TNL_VG7_DICT:
-                    vals[ext_ref] = TNL_VG7_DICT[ref_model]["LOC"].get(ids[0], ids[0])
-                elif identity.startswith("oe8") and ref_model in TNL_OE8_DICT:
-                    vals[ext_ref] = TNL_OE8_DICT[ref_model]["LOC"].get(ids[0], ids[0])
-                else:
-                    vals[ext_ref] = ids[0]
-    else:
-        loc_value = getattr(loc_rec, loc_name)
-        if isinstance(loc_value, datetime):
-            if ext_ref in ("vg7:data_emissione", "vg7:data_ritiro", "vg7:date"):
-                loc_value = datetime.strftime(loc_value, "%Y-%m-%d")
-            else:
-                loc_value = datetime.strftime(loc_value, "%Y-%m-%d %H:%M:%S")
-        elif isinstance(loc_value, date):
-            loc_value = datetime.strftime(loc_value, "%Y-%m-%d")
-        elif model == "product.uom" and loc_value == "Unità":
-            loc_value = "Unit(s)"
-        elif (
-            model == "account.invoice"
-            and loc_name == "number"
-            and loc_rec.state != "draft"
-        ):
-            mode = "nounknown"
-    return loc_value, mode
-
-
-def get_ext_value(
-    ctx,
-    model,
-    ext_ref,
-    ext_name,
-    loc_name,
-    vals,
-    spec,
-    identity=None,
-    transcode=None,
-    state=None,
-):
-    transcode = transcode if transcode is not None else True
-    mode = False
-    field_pfx = False
-    if ext_ref.startswith("vg7:") or ext_ref.startswith("oe8:"):
-        field_pfx = ext_ref[0:4]
-    if is_untranslable(loc_name, ext_ref, vals) and not field_pfx and vals[ext_ref]:
-        ext_value = env_ref(ctx, vals[ext_ref])
-    elif model == "sale.order" and vals[ext_ref] == -1:
-        ext_value = vals[ext_ref] = 12
-        ctx["ctr"] += 1
-    else:
-        ext_value = vals[ext_ref]
-    # ext_ref like ":name" are not local translated; translate here
-    if ext_ref.startswith(":") and ext_name and transcode:
-        if loc_name in TABLE_OF_REF_FIELD:
-            ref_model = TABLE_OF_REF_FIELD[loc_name]
-            if not identity or identity.startswith("vg7"):
-                if (
-                    TABLE_OF_REF_FIELD[loc_name] in TNL_VG7_DICT
-                    and "LOC" in TNL_VG7_DICT[ref_model]
-                ):
-                    ext_value = TNL_VG7_DICT[ref_model]["LOC"].get(ext_value,
-                                                                   ext_value)
-            elif identity.startswith("oe8"):
-                if (
-                    TABLE_OF_REF_FIELD[loc_name] in TNL_OE8_DICT
-                    and "LOC" in TNL_OE8_DICT[ref_model]
-                ):
-                    ext_value = TNL_OE8_DICT[ref_model]["LOC"].get(ext_value,
-                                                                   ext_value)
-    elif ext_ref in ("vg7:id", "vg7_id", "oe8:id", "oe8_id") and (
-        isinstance(vals[ext_ref], basestring) and vals[ext_ref].isdigit()
-    ):
-        ext_value = eval(vals[ext_ref])
-    elif loc_name == "state":
-        ext_value = vals[ext_ref]
-        if state:
-            ext_value = state
-        elif (
-            ext_ref in STATUS_VALUE
-            and not isinstance(STATUS_VALUE[ext_ref], bool)
-            and vals[ext_ref] in STATUS_VALUE[ext_ref]
-        ):
-            ext_value = STATUS_VALUE[ext_ref][vals[ext_ref]]
-    elif (
-        loc_name in TNL_TEXT_2_M2
-        and isinstance(ext_value, basestring)
-        and ext_value in TNL_TEXT_2_M2[loc_name]
-    ):
-        ext_value = env_ref(ctx, TNL_TEXT_2_M2[loc_name][ext_value])
-    elif loc_name in M2M_FIELDS and isinstance(ext_value, (list, tuple)):
-        ext_value = ext_value[0]
-    elif spec in ("delivery", "invoice") and loc_name in ("name", "firstname"):
-        ext_value = False
-    elif loc_name == "company_id" and not identity.startswith("oe8"):
-        ext_value = env_ref(ctx, "z0bug.mycompany")
-    elif (
-        loc_name.endswith("_id")
-        and isinstance(vals[ext_ref], basestring)
-        and vals[ext_ref].isdigit()
-    ):
-        ext_value = eval(vals[ext_ref])
-    elif loc_name == "street" and field_pfx == "vg7:":
-        ext_value = "%s, %s" % (
-            vals[ext_ref],
-            vals.get(
-                "vg7:%s_number" % ext_name,
-                vals.get(
-                    "vg7:%s_number" % ext_name,
-                    vals.get(
-                        "%s_number" % ext_name, vals.get("%s_number" % ext_name, "")
-                    ),
-                ),
-            ),
-        )
-        if ext_value == ", " or ext_value == ("%s, %s" % (None, None)):
-            ext_value = None
-    elif ext_ref == "state" and field_pfx:
-        ext_value = "draft"
-    elif loc_name == "vat" and (field_pfx == "vg7:" or identity == "vg7:"):
-        if vals[ext_ref]:
-            ext_value = "IT%s" % vals[ext_ref]
-    elif model == "account.tax" and loc_name in ("name", "description"):
-        ext_value = vals[ext_ref]
-        mode = "nounknown"
-    elif (
-        model == "res.partner"
-        and loc_name == "electronic_invoice_subjected"
-        and field_pfx == "vg7:"
-    ):
-        ext_value = not os0.str2bool(vals[ext_ref], 0)
-    elif ext_name == "giorni_fine_mese" and not ext_value:
-        ext_value = ""
-    if model == "res.partner" and ext_ref == "vg7:name" and vals.get("vg7_id") == 17:
-        mode = "individual"
-    return ext_value, mode
-
-
-def reset_cache(ctx):
-    lifetime = clodoo.executeL8(
-        ctx,
-        "ir.model.synchro.cache",
-        "clean_cache",
-        0,
-        None,  # channel_id
-        None,  # model
-        60,
-    )  # cache lifetime
-    if lifetime != 60:
-        raise IOError("Invalid cache lifetime setup!!!")
-    ctx["ctr"] += 1
-
-
-def test_function_synchro(ctx, model, vals, identity=None, ext_id=None):
-    """
-    Test function synchro: child record datas are in model values
-    """
-    if identity:
-        vals = jacket_vals(vals, identity)
-    write_log(ctx, ">>> synchro(ctx, %s, %s)" % (model, vals))
-    rec_id = clodoo.executeL8(ctx, model, "synchro", vals)
-    write_log(ctx, " => %s" % rec_id, eol=True)
-    if ext_id and rec_id > 0:
-        store_ext_id(ctx, model, rec_id, ext_id, identity)
-    return rec_id
-
-
-def test_function_synchro2(
-        ctx, model, vals, parent_field, child_field, child_model,
-        identity=None, ext_id=None
-):
-    """
-    Test function synchro: child records are sent after parent record
-    Require commit function
-    """
-    if child_field not in vals:
-        raise KeyError("No child field!")
-    child_vals = vals[child_field]
-    del vals[child_field]
-    if identity:
-        vals = jacket_vals(vals, identity)
-    write_log(ctx, ">>> synchro(ctx, %s, %s)" % (model, vals))
-    rec_id = clodoo.executeL8(ctx, model, "synchro", vals)
-    write_log(ctx, " => %s" % rec_id, eol=True)
-    if ext_id and rec_id > 0:
-        store_ext_id(ctx, model, rec_id, ext_id, identity)
-    for item in child_vals:
-        if identity:
-            child_vals = jacket_vals(item, identity)
-        child_vals[":%s" % parent_field] = rec_id
-        write_log(ctx, ">>> synchro(ctx, %s, %s)" % (child_model, child_vals))
-        child_id = clodoo.executeL8(ctx, child_model, "synchro", child_vals)
-        write_log(ctx, " => %s" % child_id, eol=True)
-    return rec_id, vals
-
-
-def test_function_trigger(ctx, ext_model, identity, ext_id):
-    write_log(
-        ctx, ">>> trigger_one_record(ctx, %s, %s, %s)" % (ext_model, ext_id, identity)
-    )
-    rec_id = clodoo.executeL8(
-        ctx,
-        "ir.model.synchro",
-        "trigger_one_record",
-        ext_model, identity, ext_id
-    )
-    if ext_id and rec_id > 0:
-        store_ext_id(ctx, ext_model, rec_id, ext_id, identity)
-    return rec_id
-
-
-def commit(ctx, model, rec_id, vals):
-    write_log(ctx, ">>> commit(ctx, %s, %s)" % (model, rec_id))
-    ret_id = clodoo.executeL8(ctx, model, "commit", rec_id)
-    write_log(ctx, " => %s" % rec_id, eol=True)
-    if ret_id != rec_id:
-        raise IOError(
-            "!!Invalid %s commit status <%s> expected <%s>" % (model, ret_id, rec_id)
-        )
-    ctx["ctr"] += 1
-    state = False
-    for nm in vals:
-        if nm in STATUS_VALUE:
-            if isinstance(STATUS_VALUE[nm], bool):
-                state = vals[nm]
-                break
-            elif vals[nm] in STATUS_VALUE[nm]:
-                state = STATUS_VALUE[nm][vals[nm]]
-                break
-    if state:
-        rec_state = clodoo.browseL8(ctx, model, rec_id).state
-        if state != rec_state:
-            raise IOError(
-                "!!Invalid %s record %s status <%s> expected <%s>"
-                % (model, rec_id, rec_state, state)
             )
-        ctx["ctr"] += 1
+        ):
+            return True
+        return False
 
+    @staticmethod
+    def get_actual_model(model):
+        if model in (
+                "res.partner.billing",
+                "res.partner.shipping",
+                "res.partner.supplier"):
+            return "res.partner"
+        return model
 
-def set_wrong_data(vals, mode):
-    if (
-        mode == "wrong"
-        and vals.get("name") == "Mario"
-        and vals.get("surename") == "Rossi"
-    ):
-        vals["name"], vals["surename"] = vals["surename"], vals["name"]
-    for nm in WRONG_DATA:
-        if nm in vals:
-            if mode == "wrong" and vals[nm] == WRONG_DATA[nm][0]:
-                vals[nm] = WRONG_DATA[nm][1]
-                if nm == "region" in vals and "region_id" in vals:
-                    del vals["region_id"]
-            elif vals[nm] == "$":
-                vals[nm] = ""
-    return vals
+    def jacket_vals(self, vals, prefix="vg7:"):
+        for ext_ref in vals.copy():
+            if self.is_untranslable(ext_ref, vals):
+                continue
+            if not ext_ref.startswith((prefix, ":")):
+                ref = "%s%s" % (prefix, ext_ref)
+                if vals[ext_ref] in (r"\N", "None"):
+                    vals[ref] = ""
+                else:
+                    vals[ref] = vals[ext_ref]
+                del vals[ext_ref]
+        return vals
 
-
-def load_csv_file(ctx, fqn):
-    def cast_value(vals):
+    def cast_value(self, vals):
         res = {}
         for k, v in vals.items():
             if k == "company_id" and not v:
-                res[k] = ctx["user"].company_id.id
+                res[k] = self.user.company_id.id
             elif isinstance(v, basestring) and re.match(r"[0-9]*\.[0-9]+$", v):
                 res[k] = eval(v)
             elif isinstance(v, basestring) and "." in v and " " not in v:
-                res[k] = env_ref(ctx, v)
+                res[k] = self.env_ref(v)
             elif k in ("id", "vg7_id", "oe8_id") and isinstance(v, basestring):
                 res[k] = int(v) if v else False
             elif v in (r"\N", "None"):
@@ -1303,55 +736,534 @@ def load_csv_file(ctx, fqn):
                 res[k] = v
         return res
 
-    datas = []
-    if not os.path.isfile(fqn):
-        raise IOError("File %s not found!" % fqn)
-    with open(fqn, "r") as fd:
-        header = False
-        reader = csv.reader(fd)
-        for row in reader:
-            if not header:
-                header = row
+    @staticmethod
+    def get_loc_name(model, field, identity):
+        mode = False
+        loc_name = field
+        if field in ("vg7:id", "oe8:id"):
+            loc_name = "id"
+        elif identity.startswith("vg7"):
+            if model and model in TNL_VG7_DICT and field in TNL_VG7_DICT[model]:
+                loc_name = TNL_VG7_DICT[model][field]
+                if loc_name and isinstance(loc_name, (tuple, list)):
+                    mode = loc_name[1]
+                    loc_name = loc_name[0]
+            if loc_name == field:
+                if field.startswith("shipping_"):
+                    loc_name = field[9:]
+                elif field.startswith("billing_"):
+                    loc_name = field[8:]
+                if model and model in TNL_VG7_DICT and loc_name in TNL_VG7_DICT[model]:
+                    loc_name = TNL_VG7_DICT[model][loc_name]
+        elif identity.startswith("oe8"):
+            if model and model in TNL_OE8_DICT and field in TNL_OE8_DICT[model]:
+                loc_name = TNL_OE8_DICT[model][field]
+                if loc_name and isinstance(loc_name, (tuple, list)):
+                    mode = loc_name[1]
+                    loc_name = loc_name[0]
+        return loc_name, mode
+
+    def load_csv_file(self, fqn):
+        datas = []
+        if not pth.isfile(fqn):
+            raise IOError("File %s not found!" % fqn)
+        with open(fqn, "r") as fd:
+            header = False
+            reader = csv.reader(fd)
+            for row in reader:
+                if not header:
+                    header = row
+                    continue
+                datas.append(self.cast_value(dict(zip(header, row))))
+        return datas
+
+    def reset_cache(self):
+        lifetime = clodoo.executeL8(
+            self.ctx,
+            "ir.model.synchro.cache",
+            "clean_cache",
+            0,
+            None,  # channel_id
+            None,  # model
+            60,
+        )  # cache lifetime
+        if lifetime != 60:
+            raise IOError("Invalid cache lifetime setup!!!")
+        self.ctr += 1
+
+    def delete_record(
+        self, model, domains, multi=False, action=None, childs=None, company_id=False
+    ):
+        self.write_log(
+            "delete_record(%s, %s)" % (
+                model,
+                domains if domains != -1 and domains != [] else "all",
+                ))
+        excl_list = [
+            rec.res_id
+            for rec in clodoo.browseL8(
+                self.ctx,
+                "ir.model.data",
+                clodoo.searchL8(self.ctx, "ir.model.data", [("model", "=", model)]),
+            )
+        ]
+        if model == "res.partner":
+            for rec in clodoo.browseL8(
+                self.ctx, "res.users",
+                    clodoo.searchL8(self.ctx, "res.users", [])
+            ):
+                if rec.partner_id.id not in excl_list:
+                    excl_list.append(rec.partner_id.id)
+        if not isinstance(domains, (list, tuple)):
+            domains = [domains]
+        single_query = True
+        for domain in domains:
+            if isinstance(domain, (basestring, int)):
+                single_query = False
+                break
+            elif isinstance(domain, (list, tuple)):
+                break
+        if single_query:
+            domains = [domains]
+        for domain in domains:
+            rec_ids = []
+            if isinstance(domain, basestring):
+                rec_ids = self.env_ref(domain)
+                rec_ids = [rec_ids] if rec_ids else []
+            elif isinstance(domain, int):
+                full_domain = []
+                for test_prefix in ("vg7:", "oe8:"):
+                    ext_name = ("%s_id" % test_prefix.split(":")[0]
+                                if test_prefix else False)
+                    if domain == -1:
+                        leaf = [(ext_name, "!=", False), (ext_name, "!=", 0)]
+                    else:
+                        leaf = [(ext_name, "=", domain)]
+                    if not full_domain:
+                        full_domain = leaf
+                    else:
+                        if len(leaf) > 1:
+                            leaf.insert(0, "&")
+                        if len(full_domain) == 2:
+                            full_domain.insert(0, "&")
+                        full_domain.insert(0, "|")
+                        full_domain.extend(leaf)
+                domain = full_domain
+            if not rec_ids:
+                if company_id:
+                    domain.append(("company_id", "=", company_id))
+                if excl_list:
+                    domain.append(("id", "not in", excl_list))
+                rec_ids = clodoo.searchL8(self.ctx, model, domain)
+            if (not multi and len(rec_ids) == 1) or (multi and len(rec_ids)):
+                if action:
+                    if not isinstance(action, (list, tuple)):
+                        action = [action]
+                    for act in action:
+                        if act == "move_name=":
+                            clodoo.writeL8(
+                                self.ctx, model, rec_ids, {"move_name": ""})
+                        else:
+                            try:
+                                clodoo.executeL8(self.ctx, model, act, rec_ids)
+                            except BaseException:
+                                print("Warning! Cannot execute %s.%s" % (model, act))
+                if childs:
+                    for parent in clodoo.browseL8(self.ctx, model, rec_ids):
+                        for rec in parent[childs]:
+                            if rec.id in rec_ids:
+                                continue
+                            try:
+                                clodoo.unlinkL8(self.ctx, model, rec.id)
+                                self.write_log("%s.unlink(%s)" % (model, rec.id))
+                            except BaseException as e:
+                                print("Error %s removing records ..." % e)
+                try:
+                    clodoo.unlinkL8(self.ctx, model, rec_ids)
+                    self.write_log("%s.unlink(%s)" % (model, rec_ids))
+                except BaseException as e:
+                    print("Error %s removing records ..." % e)
+                    if self.ask:
+                        input("Press RET to continue")
+                    else:
+                        exit(1)
+
+    def write_record(
+            self, model, domain, vals, company_id=False, create=None, unique=None):
+        self.write_log(
+            "write_record(%s, %s)" % (model, domain))
+        if isinstance(domain, basestring):
+            ids = self.env_ref(domain)
+            ids = [ids] if ids else []
+        else:
+            if company_id:
+                domain.append(("company_id", "=", company_id))
+            ids = clodoo.searchL8(self.ctx, model, domain)
+        if ids:
+            clodoo.writeL8(self.ctx, model, ids, vals)
+            if unique and len(ids) > 1:
+                self.write_log(
+                    "Warning: Too many records '%s(%s)'" % (model, domain),
+                    no_ts=True)
+                self.delete_record(model, [("id", "in", ids[1:])])
+        elif create:
+            ids = [clodoo.createL8(self.ctx, model, vals)]
+        return ids
+
+    def init_new_db(self):
+        # Temporary solution
+        print("Be patient, the universal connector full test takes a few time ...")
+        print("Please drop DB %s" % self.db_name)
+        input("Press RET to continue ...")
+        print("Now recreate DB %s (w/o demo data)" % self.db_name)
+        input("Press RET to continue ...")
+        with open(self.confn, "r") as fd:
+            contents = fd.read()
+        if "psycopg2 = 1" not in contents:
+            with open(self.confn, "a") as fd:
+                fd.write("psycopg2 = 1\n")
+        uid, self.ctx = clodoo.oerp_set_env(confn=self.confn, db=self.db_name)
+        if not uid:
+            raise IOError("DB %s not connected via json/xmlrpc!" % self.db_name)
+        self.user = self.ctx["user"]
+
+    def set_new_db(self):
+        company_id = self.env_ref("z0bug.mycompany")
+        while not company_id:
+            print("Activate Developer Mode and create full test environment")
+            print("lang=it_IT, no new company, CoA=Zero,%s CONAI ..."
+                  % " not" if self.conai else " ")
+            print("You need to create only chart of account, partners and products ...")
+            input("Press RET to continue ...")
+            company_id = self.env_ref("z0bug.mycompany")
+
+    def check_if_module_installed(self, modname, ctr=-1, maxctr=-1):
+        if ctr >= 0 and maxctr >= 0:
+            self.write_log(
+                "check_if_module_installed(%s, %d/%d)" % (modname, ctr + 1, maxctr),
+            )
+        else:
+            self.write_log("check_if_module_installed(%s)" % modname)
+        model = "ir.module.module"
+        module_ids = clodoo.searchL8(self.ctx, model, [("name", "=", modname)])
+        if not module_ids:
+            raise IOError("Module %s does not exist!!!" % modname)
+        state = "uninstalled"
+        if len(module_ids) == 1:
+            state = clodoo.browseL8(self.ctx, model, module_ids[0]).state
+        return state == "installed"
+
+    def wait_4_module_uninstalled(self, modname):
+        installed = self.check_if_module_installed(modname)
+        while installed:
+            print("Module %s installed!" % modname)
+            print("Please uninstall %s" % modname)
+            input("Press RET to continue ...")
+            installed = self.check_if_module_installed(modname)
+        sleep(1)
+
+    def wait_4_module_installed(self, modname, ctr, maxctr):
+        installed = False
+        while not installed:
+            print("Module %s not installed!" % modname)
+            print("Please install %s" % modname)
+            input("Press RET to continue ...")
+            installed = self.check_if_module_installed(modname, ctr=ctr, maxctr=maxctr)
+        sleep(1)
+
+    def assure_company(self):
+        self.company_id = self.env_ref("z0bug.mycompany")
+        if not self.company_id:
+            raise IOError("!!Internal error: no company to test found!")
+        model = "res.company"
+        company = clodoo.browseL8(self.ctx, model, self.company_id)
+        if not company.country_id or company.name != "Test Company":
+            clodoo.writeL8(
+                self.ctx,
+                model,
+                self.company_id,
+                {"country_id": self.env_ref("base.it"), "name": "Test Company"},
+            )
+        self.company_note = "Si prega di controllate i dati entro le 24h."
+        vals = {"sale_note": self.company_note}
+        clodoo.writeL8(self.ctx, "res.company", self.company_id, vals)
+        self.write_log(
+            "res.company.write(%s, %s)" % (self.company_id, vals),
+        )
+
+    def assure_cache(self):
+        clodoo.executeL8(self.ctx,
+                         "ir.model.synchro.cache",
+                         "set_loglevel",
+                         0,
+                         "debug")
+        self.reset_cache()
+
+    def assure_all_backends(self):
+        model = "synchro.channel"
+        for backend in clodoo.browseL8(
+                self.ctx, model, clodoo.searchL8(
+                    self.ctx, model, [])):
+            if backend.state != "draft":
+                clodoo.executeL8(
+                    self.ctx, model, "button_reset_to_draft", backend.id)
+            if backend.prefix == "oe10":
+                clodoo.writeL8(
+                    self.ctx,
+                    model,
+                    backend.id,
+                    {
+                        "method": "JSON",
+                        "client_key": "oca10",
+                        "password": "admin",
+                        "counterpart_url": "admin@localhost:8270",
+                        "sequence": 20,
+                        "tracelevel": "4"
+                    },
+                )
+            else:
+                clodoo.writeL8(
+                    self.ctx,
+                    model,
+                    backend.id,
+                    {
+                        "method": "CSV",
+                        "exchange_path": self.get_exchange_path(backend.prefix),
+                        "tracelevel": "4"
+                    },
+                )
+            clodoo.executeL8(
+                self.ctx, model, "button_check_connection", backend.id)
+            backend = clodoo.browseL8(self.ctx, model, backend.id)
+            if backend.state != "checked":
+                raise IOError(
+                    "!!Backend %s[%s] not checked!" % (backend.name, backend.id))
+
+    def assure_lang(self):
+        model = "res.lang"
+        if not clodoo.searchL8(self.ctx, model, [("code", "=", self.lang)]):
+            vals = {"code": self.lang}
+            print("Installing language %s ..." % vals["code"])
+            clodoo.executeL8(self.ctx, model, "synchro", vals)
+
+    def assure_user(self, lang=None):
+        model = "res.users"
+        user_id = self.env_ref("base.user_root")
+        if user_id != self.user.id:
+            raise IOError(
+                "!!Invalid current user id %s; set %s!" % (self.user.id, user_id)
+            )
+        user = clodoo.browseL8(self.ctx, model, self.user.id)
+        vals = {}
+        if user.company_id.id != self.company_id:
+            vals["company_id"] = self.company_id
+        lang = lang or self.lang
+        if user.lang != lang:
+            vals["lang"] = lang
+        if vals:
+            clodoo.writeL8(self.ctx, "res.users", self.user.id, vals)
+            self.write_log("res.users.write(%s, %s)" % (self.user.id, vals))
+            self.lang = clodoo.browseL8(self.ctx, model, self.user.id).lang
+
+    def assure_journals(self):
+        for model, domain, self.company_id, vals in (
+            ("account.journal", [], self.company_id, {"update_posted": True}),
+        ):
+            self.write_record(model, domain, vals)
+
+    def action_after_installed(self, modname, connector_installed):
+        if modname == "mk_test_env":
+            self.set_new_db()
+            self.assure_company()
+            tax_id = self.env_ref("z0bug.tax_22v")
+            while not tax_id:
+                print("Activate Developer Mode and Load Account records ...")
+                input("Press RET to continue ...")
+                tax_id = self.env_ref("z0bug.tax_22v")
+            partner_id = self.env_ref("z0bug.res_partner_1")
+            while not partner_id:
+                print("Activate Developer Mode and Load Partner records ...")
+                input("Press RET to continue ...")
+                partner_id = self.env_ref("z0bug.res_partner_1")
+            product_id = self.env_ref("z0bug.product_product_1")
+            while not product_id:
+                print("Activate Developer Mode and Load Products records ...")
+                input("Press RET to continue ...")
+                product_id = self.env_ref("z0bug.product_product_1")
+        elif modname == THIS_MODULE:
+            connector_installed = True
+            self.assure_cache()
+            self.assure_all_backends()
+            self.assure_lang()
+            self.assure_user()
+        return connector_installed
+
+    def delete_all_records(self):
+        self.write_log("delete_all_records()")
+        for model, domains, company_id, multi, childs, action in (
+            ("account.tax", [("description", "=", "a15")], self.company_id, True, None, None),
+        ):
+            self.delete_record(
+                model,
+                domains,
+                multi=multi,
+                action=action,
+                childs=childs,
+                company_id=company_id,
+            )
+
+        if not self.ctx.get("_cr"):
+            print("No sql support found!")
+            if self.ask:
+                input("Press RET to continue")
+        else:
+            for query in (
+                "delete from procurement_order",
+                "delete from stock_pack_operation",
+                # 'delete from stock_picking',
+                "delete from stock_move",
+                "stock_quant",
+                "stock_inventory",
+            ):
+                try:
+                    clodoo.exec_sql(self.ctx, query)
+                except BaseException:
+                    pass
+
+    def setup(self):
+        self.write_log("self.setup()")
+        self.init_new_db()
+        model = "ir.module.module"
+        maxctr = len(MODULE_LIST)
+        connector_installed = False
+        for ctr, modname in enumerate(MODULE_LIST):
+            installed = self.check_if_module_installed(modname, ctr=ctr, maxctr=maxctr)
+            if "conai" in modname and not self.conai:
+                if installed:
+                    self.wait_4_module_uninstalled(modname)
                 continue
-            datas.append(cast_value(dict(zip(header, row))))
-    return datas
+            if connector_installed and not installed:
+                vals = {"name": modname}
+                res_id = clodoo.executeL8(self.ctx, model, "synchro", vals)
+                if res_id < 0:
+                    raise IOError("!!Error %s installing %s!" % (res_id, modname))
+                module = clodoo.browseL8(self.ctx, model, res_id)
+                if module.state != "installed":
+                    raise IOError("Module %s not installed!!!" % modname)
+            if not installed:
+                self.wait_4_module_installed(modname, ctr, maxctr)
+            connector_installed = self.action_after_installed(
+                modname, connector_installed)
+        self.assure_journals()
+        if not clodoo.browseL8(self.ctx,
+                               "res.company",
+                               self.company_id).due_cost_service_id:
+            raise IOError("!!Missed bank cost in company!!")
+        self.delete_all_records()
 
+    def teardown(self):
+        for fqn in self.fqn_to_remove:
+            if pth.isfile(fqn):
+                os.unlink(fqn)
+        self.write_log("%d tests %s SUCCESSFULLY ENDED" % (self.ctr, THIS_MODULE))
+        # try:
+        #     clodoo.executeL8(
+        #         ctx,
+        #         "ir.model.synchro.cache",
+        #         "die",
+        #         True
+        #     )
+        # except BaseException:
+        #     pass
 
-def load_n_test_model(
-    ctx,
-    model,
-    mode=None,
-    store=None,
-    identity=None,
-    ext_model=None,
-    test_suppl=None,
-    fct_test=None,
-    lang=None
-):
-    fct_test = fct_test or "synchro"
-    write_log(
-        ctx,
-        "\n%s: load_n_test_model(ctx, %s, mode=%s, pfx=%s, fct=%s)\n"
-        % (
-            datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M:%S"),
-            model,
-            mode,
-            identity,
-            fct_test or "trigger",
-        ),
-    )
+    def init_any_model(
+            self, identity, model, code="code", name="name", domain=(), reset_id=False):
+        if reset_id:
+            ext_id_field = self.get_ext_id_field(identity)
+        fqn = pth.join(self.get_csv_path(), model + ".en_US.csv")
+        if not pth.isfile(fqn):
+            fqn = pth.join(self.get_csv_path(), model + ".csv")
+        test_recs = self.load_csv_file(fqn)
+        for rec in test_recs:
+            if domain and domain != ():
+                ids = clodoo.searchL8(
+                    self.ctx, model, [(code, "=", rec[code]), domain])
+            else:
+                ids = clodoo.searchL8(self.ctx, model, [(code, "=", rec[code])])
+            vals = {"name": rec[name]}
+            if reset_id:
+                vals[ext_id_field] = False
+                if model == "res.partner" and identity.startswith("vg7"):
+                    vals["vg72_id"] = False
+            clodoo.writeL8(self.ctx, model, ids, vals, context={"lang": "en_US"})
 
-    def get_ext_id_from_vals(vals):
-        ext_id = False
-        if vals.get("id"):
-            ext_id = vals["id"]
-        elif vals.get("customer_shipping_id"):
-            ext_id = vals["customer_shipping_id"]
-        elif vals.get("customer_billing_id"):
-            ext_id = vals["customer_billing_id"]
-        return ext_id
+    def init_res_country(self, identity, reset_id=False):
+        model = "res.country"
+        if self.ctx.get("_cr"):
+            query = (
+                "UPDATE ir_translation SET value='%s'"
+                " WHERE name='res.country,name' AND src='%s' AND lang='it_IT'")
+            for (value, src) in (
+                    ("Germania", "Germany"),
+                    ("Italia", "Italy"),
+                    ("Regno Unito", "United Kingdom"),
+            ):
+                try:
+                    clodoo.exec_sql(self.ctx, query % (value, src))
+                except BaseException:
+                    self.write_log("Cannot reset res.country", no_ts=True)
+        self.init_any_model(identity, model, reset_id=reset_id)
 
-    def prepare_rec(rec, main_ext_id):
+    def reset_account_tax(self, identity, reset_id=False):
+        model = "account.tax"
+        self.init_any_model(identity, model, code="description", reset_id=reset_id)
+
+    def dirty_account_tax(self):
+        model = "account.tax"
+        for (code, name) in (
+                ("22v", "Iva debito 22%"),
+                ("10v", "Iva debito 10%"),
+                ("22a", "Iva credito 22%"),
+        ):
+            ids = clodoo.searchL8(
+                self.ctx, model, [("description", "=", code)])
+            clodoo.writeL8(self.ctx, model, ids, {"name": name})
+
+    def reset_res_partner(self, identity, reset_id=False):
+        model = "res.partner"
+        self.init_any_model(identity, model, code="vat", reset_id=reset_id)
+
+    def dirty_res_partner(self):
+        for (vat, name) in (
+                ("IT00115719999", "Partner 1"),
+        ):
+            ids = clodoo.searchL8(
+                self.ctx, "res.partner", [("vat", "=", vat),
+                                          ("type", "=", "contact")])
+            clodoo.writeL8(self.ctx, "res.partner", ids, {"name": name})
+
+    def reset_ext_id(self, identity, model):
+        ext_id_field = self.get_ext_id_field(identity)
+        domain = [(ext_id_field, ">", 0)]
+        vals = {ext_id_field: False}
+        ids = clodoo.searchL8(self.ctx, model, domain)
+        for id in ids:
+            clodoo.writeL8(self.ctx, model, id, vals)
+
+    def init_model(self, identity, model, reset_id=False):
+        if not self.conai and "conai" in model:
+            return
+        actual_model = self.get_actual_model(model)
+        if actual_model == "res.country":
+            self.init_res_country(identity, reset_id=reset_id)
+        elif actual_model == "account.tax":
+            self.reset_account_tax(identity, reset_id=reset_id)
+        elif actual_model == "res.partner":
+            self.reset_res_partner(identity, reset_id=reset_id)
+        elif actual_model == model and reset_id:
+            self.reset_ext_id(identity, model)
+
+    def prepare_rec(self, rec, main_ext_id):
         ext_id = False
         for field in rec:
             if field in rec and rec[field] is None:
@@ -1362,1212 +1274,254 @@ def load_n_test_model(
                 if not main_ext_id:
                     main_ext_id = rec[field]
             elif field == "company_id" and not rec[field]:
-                rec[field] = ctx["company_id"]
+                rec[field] = self.company_id
         return rec, ext_id, main_ext_id
 
-    ext_model = ext_model or get_ext_model(model, identity)
-    if lang:
-        fqn = os.path.join(get_csv_path(identity), ext_model + "." + lang + ".csv")
-    else:
-        fqn = os.path.join(get_csv_path(identity), ext_model + ".csv")
-    ext_recs_image = load_csv_file(ctx, fqn)
-    if lang:
-        fqn = os.path.join(get_csv_path(), model + "." + lang + ".csv")
-    else:
-        fqn = os.path.join(get_csv_path(), model + ".csv")
-    test_recs = load_csv_file(ctx, fqn)
-
-    # vals_shipping = vals_billing = vals_line = {}
-    main_ext_id = False
-    wa = "w"
-    ext_id_field = get_ext_id_field(identity)
-    if fct_test == "trigger":
-        for ext_rec in ext_recs_image:
-            ext_rec, ext_id, main_ext_id = prepare_rec(ext_rec, main_ext_id)
-            write_file_2_pull(identity, ext_model, ext_rec, wa)
-            wa = "a"
-
-    for ext_rec in ext_recs_image:
-        if fct_test == "synchro":
-            ext_rec, ext_id, main_ext_id = prepare_rec(ext_rec, main_ext_id)
-            loc_id = test_function_synchro(
-                ctx, model, ext_rec, identity=identity, ext_id=ext_id
-            )
-        elif fct_test == "trigger":
-            ext_id = ext_rec["id"]
-            loc_id = test_function_trigger(
-                ctx, ext_model, identity=identity, ext_id=ext_id
-            )
-        if loc_id < 0:
-            raise IOError("Error %d processing %s=%s" % (loc_id, ext_id_field, ext_id))
-        checked = False
-        for test_rec in test_recs:
-            if ext_id == test_rec.get(ext_id_field):
-                # rec = clodoo.browseL8(ctx, model, loc_id)
-                check_records(ctx, identity, model, loc_id, test_rec)
-                checked = True
-                break
-        if not checked:
-            raise IOError("No match record found for %s=%s" % (ext_id_field, ext_id))
-    return
-
-
-def reset_res_country(ctx):
-    if ctx.get("_cr"):
-        query = (
-            "UPDATE ir_translation SET value='%s'"
-            " WHERE name='res.country,name' AND src='%s' AND lang='it_IT'")
-        for (value, src) in (
-                ("Germania", "Germany"),
-                ("Italia", "Italy"),
-                ("Regno Unito", "United Kingdom"),
-        ):
-            try:
-                clodoo.exec_sql(ctx, query % (value, src))
-            except BaseException:
-                pass
-
-
-def reset_account_tax(ctx):
-    model = "account.tax"
-    fqn = os.path.join(get_csv_path(), model + ".csv")
-    test_recs = load_csv_file(ctx, fqn)
-    for rec in test_recs:
-        code = rec["description"]
-        name = rec["name"]
-        ids = clodoo.searchL8(
-            ctx, model, [("description", "=", code)])
-        vals = {"vg7_id": False, "oe8_id": False, "name": name}
-        clodoo.writeL8(ctx, model, ids, vals)
-
-
-def dirty_account_tax(ctx):
-    model = "account.tax"
-    for (code, name) in (
-            ("22v", "Iva debito 22%"),
-            ("10v", "Iva debito 10%"),
-            ("22a", "Iva credito 22%"),
-    ):
-        ids = clodoo.searchL8(
-            ctx, model, [("description", "=", code)])
-        clodoo.writeL8(ctx, model, ids, {"name": name})
-
-
-def reset_res_partner(ctx):
-    model = "res.partner"
-    fqn = os.path.join(get_csv_path(), model + ".csv")
-    test_recs = load_csv_file(ctx, fqn)
-    for rec in test_recs:
-        code = rec["vat"]
-        name = rec["name"]
-        ids = clodoo.searchL8(
-            ctx, model, [("vat", "=", code)])
-        vals = {"vg7_id": False, "oe8_id": False, "vg72_id": False, "name": name}
-        clodoo.writeL8(ctx, model, ids, vals)
-
-def dirty_res_partner(ctx):
-    for (vat, name) in (
-            ("IT00115719999", "Partner 1"),
-    ):
-        ids = clodoo.searchL8(
-            ctx, "res.partner", [("vat", "=", vat),
-                                 ("type", "=", "contact")])
-        clodoo.writeL8(ctx, "res.partner", ids, {"name": name})
-
-
-def reset_model(ctx, model):
-    if not ctx["conai"] and "conai" in model:
-        return
-    print("Reset model %s ..." % model)
-    actual_model = get_actual_model(model)
-    if actual_model == "res.country":
-        reset_res_country(ctx)
-    elif actual_model == "account.tax":
-        reset_account_tax(ctx)
-    elif actual_model == "res.partner":
-        reset_res_partner(ctx)
-    elif actual_model == model:
-        reset_ext_id(ctx, model)
-
-
-def delete_all_records(ctx):
-    print("Deleting all records for init ...")
-    write_log(
-        ctx,
-        "\n%s: *** Delete records ***"
-        % (datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M:%S")),
-        eol=True,
-    )
-    for model, domains, company_id, multi, childs, action in (
-        # (
-        #     "account.invoice",
-        #     -1,
-        #     ctx["company_id"],
-        #     True,
-        #     None,
-        #     ["move_name=", "action_invoice_cancel"],
-        # ),
-        # (
-        #     "stock.picking.package.preparation",
-        #     -1,
-        #     ctx["company_id"],
-        #     True,
-        #     None,
-        #     ["set_draft", "action_cancel"],
-        # ),
-        # ("sale.order", -1, ctx["company_id"], True, None, "action_cancel"),
-        # ("purchase.order", -1, ctx["company_id"], True, None, "button_cancel"),
-        # ("account.move", -1, ctx["company_id"], True, None, "button_cancel"),
-        # ("account.payment.term", -1, ctx["company_id"], True, None, None),
-        # ("res.partner.bank", [], False, True, None, None),
-        # ("res.partner", -1, False, True, "child_ids", None),
-        # (
-        #     "res.partner",
-        #     [("name", "like", "Partner A%"), ("type", "=", "contact")],
-        #     False,
-        #     True,
-        #     "child_ids",
-        #     None,
-        # ),
-        # (
-        #     "res.partner",
-        #     [("name", "=", "La Romagnola srl"), ("type", "=", "contact")],
-        #     False,
-        #     True,
-        #     "child_ids",
-        #     None,
-        # ),
-        # (
-        #     "res.partner",
-        #     [("fiscalcode", "=", "RSSMRA60T45L219M")],
-        #     False,
-        #     True,
-        #     "child_ids",
-        #     None,
-        # ),
-        # ("res.partner", [("name", "=like", "Unknown %")], False, True, False, None),
-        # (
-        #     "product.template",
-        #     [("default_code", "in", ["AA", "AAA", "BB", "BBB", "CC", "CCC"])],
-        #     False,
-        #     True,
-        #     False,
-        #     False,
-        # ),
-        # (
-        #     "product.product",
-        #     [("default_code", "in", ["AA", "AAA", "BB", "BBB", "CC", "CCC"])],
-        #     False,
-        #     True,
-        #     False,
-        #     False,
-        # ),
-        # ("product.uom", [("name", "in", ["NR", "KG"])], False, False, False, False),
-        # ("account.payment.term", -1, ctx["company_id"], True, None, None),
-        ("account.tax", [("description", "=", "a15")], ctx["company_id"], True, None, None),
-        # ("res.country.state", -1, False, True, None, None),
-        # ("stock.picking.goods_description", -1, False, True, None, None),
-        # ("crm.team", [("name", "=", "Sale Example Team")], False, False, None, None),
-        # (
-        #     "account.account",
-        #     [("code", "=", "180111")],
-        #     ctx["company_id"],
-        #     False,
-        #     None,
-        #     None,
-        # ),
-        # ("ir.model.synchro.data", [], False, True, None, None),
-        # ("res.users", [("login", "=", "admbot")], False, False, None, None),
-        # ("res.partner", [("name", "=", "admbot")], False, False, None, None),
-        # (
-        #     "res.partner.bank",
-        #     [("acc_number", "=", TEST_IBAN)],
-        #     ctx["company_id"],
-        #     False,
-        #     None,
-        #     None,
-        # ),
-    ):
-        delete_record(
-            ctx,
-            model,
-            domains,
-            multi=multi,
-            action=action,
-            childs=childs,
-            company_id=company_id,
-        )
-
-    if not ctx.get("_cr"):
-        print("No sql support found!")
-        if ctx["ask"]:
-            input("Press RET to continue")
-    else:
-        for query in (
-            "delete from procurement_order",
-            "delete from stock_pack_operation",
-            # 'delete from stock_picking',
-            "delete from stock_move",
-            "stock_quant",
-            "stock_inventory",
-        ):
-            try:
-                clodoo.exec_sql(ctx, query)
-            except BaseException:
-                pass
-
-
-def initialize_all_records(ctx):
-    print("Initialize all records")
-    write_log(
-        ctx,
-        "\n%s: *** Initializa all models ***"
-        % (datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M:%S")),
-        eol=True,
-    )
-    for model in MODEL_LIST:
-        reset_model(ctx, model)
-
-
-def get_invalid_partners(ctx):
-    return clodoo.searchL8(
-        ctx,
-        "res.partner",
-        [
-            ("parent_id", "=", False),
-            "|",
-            ("name", "=", False),
-            "|",
-            ("name", "=", ""),
-            ("name", "=", " "),
-        ],
-    )
-
-
-def get_unknown_partners(ctx):
-    return clodoo.searchL8(ctx, "res.partner", [("name", "ilike", "Unknown")])
-
-
-def get_duplicate_partners(ctx):
-    return clodoo.searchL8(ctx, "res.partner", [("name", "like", "Rossi")]) == 1
-
-
-def check_if_module_installed(ctx, modname, ctr=-1, maxctr=-1):
-    if ctr >= 0 and maxctr >= 0:
-        print("checking module %s (%d/%d) ..." % (modname, ctr + 1, maxctr))
-    else:
-        print("checking module %s ..." % modname)
-    model = "ir.module.module"
-    module_ids = clodoo.searchL8(ctx, model, [("name", "=", modname)])
-    if not module_ids:
-        raise IOError("Module %s does not exist!!!" % modname)
-    state = "uninstalled"
-    if len(module_ids) == 1:
-        state = clodoo.browseL8(ctx, model, module_ids[0]).state
-    return state == "installed"
-
-
-def assure_cache(ctx):
-    clodoo.executeL8(ctx,
-                     "ir.model.synchro.cache",
-                     "set_loglevel",
-                     0,
-                     "debug")
-    reset_cache(ctx)
-
-
-def assure_lang(ctx):
-    model = "res.lang"
-    if ctx["lang"] == ".":
-        ctx["lang"] = "it_IT"
-    else:
-        ctx["lang"] == ctx.get("lang", "it_IT")
-    if not clodoo.searchL8(ctx, model, [("code", "=", ctx["lang"])]):
-        vals = {"code": ctx["lang"]}
-        print("Installing language %s ..." % vals["code"])
-        clodoo.executeL8(ctx, model, "synchro", vals)
-
-
-def assure_company(ctx):
-    ctx["company_id"] = env_ref(ctx, "z0bug.mycompany")
-    if not ctx["company_id"]:
-        raise IOError("!!Internal error: no company to test found!")
-    model = "res.company"
-    company = clodoo.browseL8(ctx, model, ctx["company_id"])
-    if not company.country_id or company.name != "Test Company":
-        clodoo.writeL8(
-            ctx,
-            model,
-            ctx["company_id"],
-            {"country_id": env_ref(ctx, "base.it"), "name": "Test Company"},
-        )
-    ctx["company_note"] = "Si prega di controllate i dati entro le 24h."
-    vals = {"sale_note": ctx["company_note"]}
-    clodoo.writeL8(ctx, "res.company", ctx["company_id"], vals)
-    write_log(
-        ctx, ">>> res.company.write(%s, %s)" % (ctx["company_id"], vals), eol=True
-    )
-
-
-def assure_user(ctx, lang=None):
-    model = "res.users"
-    user_id = env_ref(ctx, "base.user_root")
-    if user_id != ctx["user"].id:
-        raise IOError(
-            "!!Invalid current user id %s; set %s!" % (ctx["user"].id, user_id)
-        )
-    user = clodoo.browseL8(ctx, model, ctx["user"].id)
-    if user.login != ctx["lgi_user"]:
-        raise IOError(
-            "!!Invalid current user login %s; set %s!" % (user.login, ctx["lgi_user"])
-        )
-    vals = {}
-    if user.company_id.id != ctx["company_id"]:
-        vals["company_id"] = ctx["company_id"]
-    lang = lang or ctx["lang"]
-    if user.lang != lang:
-        vals["lang"] = lang
-    if vals:
-        clodoo.writeL8(ctx, "res.users", ctx["user"].id, vals)
-        write_log(ctx, ">>> res.users.write(%s, %s)" % (ctx["user"].id, vals), eol=True)
-        ctx["lang"] = clodoo.browseL8(ctx, model, ctx["user"].id).lang
-
-
-def assure_journals(ctx):
-    for model, domain, ctx["company_id"], vals in (
-        ("account.journal", [], ctx["company_id"], {"update_posted": True}),
-    ):
-        write_record(ctx, model, domain, vals, company_id=ctx["company_id"])
-
-
-def assure_all_backends(ctx):
-    model = "synchro.channel"
-    for backend in clodoo.browseL8(ctx, model, clodoo.searchL8(ctx, model, [])):
-        if backend.state != "draft":
-            clodoo.executeL8(
-                ctx, model, "button_reset_to_draft", backend.id)
-        if backend.prefix == "oe10":
-            clodoo.writeL8(
-                ctx,
-                model,
-                backend.id,
-                {
-                    "method": "JSON",
-                    "client_key": "oca10",
-                    "password": "admin",
-                    "counterpart_url": "admin@localhost:8270",
-                    "sequence": 20,
-                    "tracelevel": "4"
-                },
-            )
+    def write_file_2_pull(self, identity, ext_model, vals, mode="w"):
+        fqn = pth.join(self.get_exchange_path(identity), "%s.csv" % ext_model)
+        if mode == "a":
+            with open(fqn, "r") as fd:
+                ln = fd.read().split("\n")[0]
+            data = "%s\n" % ",".join([str(vals.get(x, "")) for x in ln.split(",")])
         else:
-            clodoo.writeL8(
-                ctx,
-                model,
-                backend.id,
-                {
-                    "method": "CSV",
-                    "exchange_path": get_exchange_path(backend.prefix),
-                    "tracelevel": "4"
-                },
+            data = "%s\n%s\n" % (
+                ",".join(vals.keys()),
+                ",".join(map(lambda x: str(vals[x]), vals.keys())),
             )
-        clodoo.executeL8(
-            ctx, model, "button_check_connection", backend.id)
-        backend = clodoo.browseL8(ctx, model, backend.id)
-        if backend.state != "checked":
-            raise IOError("!!Backend %s[%s] not checked!" % (backend.name, backend.id))
+        with open(fqn, mode) as fd:
+            fd.write(data)
+        self.fqn_to_remove.append(fqn)
 
-
-
-def init_new_db(ctx):
-    # Temporary solution
-    print("Be patient, the universal connector full test takes a few time ...")
-    print("Please drop DB %s" % ctx["db_name"])
-    input("Press RET to continue ...")
-    print("Now recreate DB %s (w/o demo data)" % ctx["db_name"])
-    input("Press RET to continue ...")
-    with open(ctx["conf_fn"], "r") as fd:
-        contents = fd.read()
-    if "psycopg2 = 1" not in contents:
-        with open(ctx["conf_fn"], "a") as fd:
-            fd.write("psycopg2 = 1\n")
-    uid, ctx = clodoo.oerp_set_env(
-        confn=ctx["conf_fn"], db=ctx["db_name"], ctx=ctx)
-    if not uid:
-        raise IOError("DB %s not connected via json/xmlrpc!" % ctx["db_name"])
-    return ctx
-
-
-def set_new_db(ctx):
-    company_id = env_ref(ctx, "z0bug.mycompany")
-    while not company_id:
-        print("Activate Developer Mode and create full test environment")
-        print("lang=it_IT, no new company, CoA=Zero,%s CONAI ..."
-              % " not" if ctx["conai"] else " ")
-        print("You need to create only chart of account, partners and products ...")
-        input("Press RET to continue ...")
-        company_id = env_ref(ctx, "z0bug.mycompany")
-
-
-def init_test():
-    def wait_4_module_installed(ctx, modname, ctr, maxctr):
-        installed = False
-        while not installed:
-            print("Module %s not installed!" % modname)
-            print("Please install %s" % modname)
-            input("Press RET to continue ...")
-            installed = check_if_module_installed(ctx, modname)
-        sleep(1)
-
-    def wait_4_module_uninstalled(ctx, modname):
-        installed = check_if_module_installed(ctx, modname)
-        while installed:
-            print("Module %s installed!" % modname)
-            print("Please uninstall %s" % modname)
-            input("Press RET to continue ...")
-            installed = check_if_module_installed(ctx, modname)
-        sleep(1)
-
-    def action_after_installed(ctx, modname, connector_installed):
-        if modname == "mk_test_env":
-            set_new_db(ctx)
-            assure_company(ctx)
-            tax_id = env_ref(ctx, "z0bug.tax_22v")
-            while not tax_id:
-                print("Activate Developer Mode and Load Account records ...")
-                input("Press RET to continue ...")
-                tax_id = env_ref(ctx, "z0bug.tax_22v")
-            partner_id = env_ref(ctx, "z0bug.res_partner_1")
-            while not partner_id:
-                print("Activate Developer Mode and Load Partner records ...")
-                input("Press RET to continue ...")
-                partner_id = env_ref(ctx, "z0bug.res_partner_1")
-            product_id = env_ref(ctx, "z0bug.product_product_1")
-            while not product_id:
-                print("Activate Developer Mode and Load Products records ...")
-                input("Press RET to continue ...")
-                product_id = env_ref(ctx, "z0bug.product_product_1")
-        elif modname == THIS_MODULE:
-            connector_installed = True
-            assure_cache(ctx)
-            assure_all_backends(ctx)
-            assure_lang(ctx)
-            assure_user(ctx)
-        return connector_installed
-
-    ctx = parser.parseoptargs(sys.argv[1:], apply_conf=False)
-    ctx.update({
-        "ctr": 0,
-        "conf_fn": os.environ["TEST_CONFN"],
-        "logfn": __file__.replace(".py", ".log"),
-        "db_name": "connect10",
-        "conai": False,
-        "ask": False,
-        "module": False,
-    })
-    if os.path.isfile(ctx["logfn"]):
-        os.unlink(ctx["logfn"])
-    print("init_test(ctx) ...")
-    write_log(
-        ctx,
-        "\n%s: init_test(ctx)" % datetime.strftime(datetime.now(),
-                                                   "%Y-%m-%d %H:%M:%S"),
-        eol=True,
-    )
-
-    ctx = init_new_db(ctx)
-    model = "ir.module.module"
-    maxctr = len(MODULE_LIST)
-    connector_installed = False
-    for ctr, modname in enumerate(MODULE_LIST):
-        installed = check_if_module_installed(ctx, modname, ctr=ctr, maxctr=maxctr)
-        if "conai" in modname and not ctx["conai"]:
-            if installed:
-                wait_4_module_uninstalled(ctx, modname)
-            continue
-        if connector_installed and not installed:
-            vals = {"name": modname}
-            res_id = clodoo.executeL8(ctx, model, "synchro", vals)
-            if res_id < 0:
-                raise IOError("!!Error %s installing %s!" % (res_id, modname))
-            module = clodoo.browseL8(ctx, model, res_id)
-            if module.state != "installed":
-                raise IOError("Module %s not installed!!!" % modname)
-        if not installed:
-            wait_4_module_installed(ctx, modname, ctr, maxctr)
-        connector_installed = action_after_installed(
-            ctx, modname, connector_installed)
-
-    assure_journals(ctx)
-    if not clodoo.browseL8(ctx,
-                           "res.company",
-                           ctx["company_id"]).due_cost_service_id:
-        raise IOError("!!Missed bank cost in company!!")
-    delete_all_records(ctx)
-    return ctx
-
-
-def compare(ctx, loc_value, test_value, mode=None, loc_name=None):
-    if hasattr(loc_value, "id"):
-        loc_value = loc_value.id
-    if mode == "nounknown":
-        return not loc_value.startswith("Unknown")
-    elif mode == "unknown":
-        return loc_value.startswith("Unknown")
-    elif mode == "individual":
-        return loc_value in ctx["partner_MR_ids"]
-    elif mode == "nocase":
-        return loc_value.lower() == test_value.lower()
-    elif mode and mode == test_value:
-        if mode == "supplier":
-            return loc_value == "contact"
-        return loc_value == test_value
-    elif mode == "delivery":
-        return loc_value == test_value + 100000000
-    elif mode == "invoice":
-        return loc_value == test_value + 200000000
-    elif isinstance(loc_value, basestring) and isinstance(test_value, (int, long)):
-        if loc_value.isdigit():
-            return int(loc_value) == test_value
-        return loc_value == str(test_value)
-    elif isinstance(loc_value, (int, long)) and isinstance(test_value, basestring):
-        if test_value.isdigit():
-            return loc_value == int(test_value)
-        return str(loc_value) == test_value
-    elif test_value is None:
+    def compare(self, loc_value, test_value, mode=None):
+        if hasattr(loc_value, "id"):
+            loc_value = loc_value.id
+        if mode == "nounknown":
+            return not loc_value.startswith("Unknown")
+        elif mode == "unknown":
+            return loc_value.startswith("Unknown")
+        elif mode == "individual":
+            return loc_value in self.partner_MR_ids
+        elif mode == "nocase":
+            return loc_value.lower() == test_value.lower()
+        elif mode and mode == test_value:
+            if mode == "supplier":
+                return loc_value == "contact"
+            return loc_value == test_value
+        elif mode == "delivery":
+            return loc_value == test_value + 100000000
+        elif mode == "invoice":
+            return loc_value == test_value + 200000000
+        elif isinstance(loc_value, basestring) and isinstance(test_value, (int, long)):
+            if loc_value.isdigit():
+                return int(loc_value) == test_value
+            return loc_value == str(test_value)
+        elif isinstance(loc_value, (int, long)) and isinstance(test_value, basestring):
+            if test_value.isdigit():
+                return loc_value == int(test_value)
+            return str(loc_value) == test_value
+        elif test_value is None:
+            return True
+        elif loc_value or test_value:
+            return loc_value == test_value
         return True
-    elif loc_value or test_value:
-        return loc_value == test_value
-    return True
 
+    def check_records(self, identity, model, loc_id, test_rec, mode=None, state=None):
+        self.write_log(
+            "check_record(%s, %s, %s, %s)" % (identity, model, loc_id, test_rec),
+            echo=False)
+        spec = False
+        if model.startswith("res.partner.") and model != "res.partner.bank":
+            spec = {
+                "shipping": "delivery",
+                "billing": "invoice",
+                "supplier": "supplier",
+                "company": "company",
+            }[model.split(".")[-1]]
+            model = "res.partner"
+        fields_2_ignore = []
+        for ident in IDENTITY_LIST:
+            if ident != identity:
+                fields_2_ignore.append(self.get_ext_id_field(ident))
+        loc_rec = clodoo.browseL8(self.ctx, model, loc_id)
+        for field in [x for x in dir(loc_rec) if not x.startswith("_")]:
+            loc_name = self.get_loc_name(model, field, identity)[0]
+            if loc_name in fields_2_ignore:
+                continue
+            if loc_name in test_rec:
+                if not self.compare(
+                        getattr(loc_rec, loc_name),
+                        test_rec[loc_name],
+                        spec):
+                    raise IOError(
+                        "!!Field %s[%s].%s: invalid value <%s> expected <%s>"
+                        % (model, loc_id,
+                           field,
+                           getattr(loc_rec, loc_name),
+                           test_rec[loc_name])
+                    )
+                self.ctr += 1
 
-def check_records(ctx, identity, model, loc_id, test_rec, mode=None, state=None):
-    write_log(ctx, ">>> %s.check_record(%s, %s)" % (model, loc_id, test_rec), eol=True)
-    spec = False
-    if model.startswith("res.partner.") and model != "res.partner.bank":
-        spec = {
-            "shipping": "delivery",
-            "billing": "invoice",
-            "supplier": "supplier",
-            "company": "company",
-        }[model.split(".")[-1]]
-        model = "res.partner"
-    fields_2_ignore = []
-    for ident in IDENTITY_LIST:
-        if ident != identity:
-            fields_2_ignore.append(get_ext_id_field(ident))
-    loc_rec = clodoo.browseL8(ctx, model, loc_id)
-    for field in [x for x in dir(loc_rec) if not x.startswith("_")]:
-        loc_name = get_loc_name(model, field, identity)[0]
-        if loc_name in fields_2_ignore:
-            continue
-        if loc_name in test_rec:
-            if not compare(ctx, getattr(loc_rec, loc_name),
-                           test_rec[loc_name],
-                           spec,
-                           loc_name=loc_name):
-                raise IOError(
-                    "!!Field %s[%s].%s: invalid value <%s> expected <%s>"
-                    % (model, loc_id,
-                       field,
-                       getattr(loc_rec, loc_name),
-                       test_rec[loc_name])
+    def test_function_synchro(self, model, vals, identity=None, ext_id=None):
+        """
+        Test function synchro: child record datas are in model values
+        """
+        if identity:
+            vals = self.jacket_vals(vals, identity)
+        self.write_log("synchro(%s, %s)" % (model, vals), eol=False)
+        rec_id = clodoo.executeL8(self.ctx, model, "synchro", vals)
+        self.write_log(str(rec_id), no_ts=True)
+        if ext_id and rec_id > 0:
+            self.store_ext_id(model, rec_id, ext_id, identity)
+        return rec_id
+
+    def test_function_trigger(self, ext_model, identity, ext_id):
+        self.write_log(
+            "trigger_one_record(%s, %s, %s)" % (ext_model, ext_id, identity), eol=False
+        )
+        rec_id = clodoo.executeL8(
+            self.ctx,
+            "ir.model.synchro",
+            "trigger_one_record",
+            ext_model, identity, ext_id
+        )
+        self.write_log(str(rec_id), no_ts=True)
+        if ext_id and rec_id > 0:
+            self.store_ext_id(ext_model, rec_id, ext_id, identity)
+        return rec_id
+
+    def load_n_test_model(
+        self,
+        identity,
+        model,
+        mode=None,
+        ext_model=None,
+        fct_test="synchro",
+        lang=None
+    ):
+        self.write_log(
+            "load_n_test_model(%s, %s, mode=%s, fct=%s)"
+            % (identity, model, mode, fct_test),
+        )
+
+        ext_model = ext_model or self.get_ext_model(model, identity)
+        if lang:
+            fqn = pth.join(self.get_csv_path(identity), ext_model + "." + lang + ".csv")
+        else:
+            fqn = pth.join(self.get_csv_path(identity), ext_model + ".csv")
+        ext_recs_image = self.load_csv_file(fqn)
+        if lang:
+            fqn = pth.join(self.get_csv_path(), model + "." + lang + ".csv")
+        else:
+            fqn = pth.join(self.get_csv_path(), model + ".csv")
+        test_recs = self.load_csv_file(fqn)
+
+        main_ext_id = False
+        wa = "w"
+        ext_id_field = self.get_ext_id_field(identity)
+        if not ext_id_field:
+            raise IOError("No match external id name for %s" % identity)
+        if fct_test == "trigger":
+            for ext_rec in ext_recs_image:
+                ext_rec, ext_id, main_ext_id = self.prepare_rec(ext_rec, main_ext_id)
+                self.write_file_2_pull(identity, ext_model, ext_rec, wa)
+                wa = "a"
+
+        for ext_rec in ext_recs_image:
+            loc_id = ext_id = -127
+            if fct_test == "synchro":
+                ext_rec, ext_id, main_ext_id = self.prepare_rec(ext_rec, main_ext_id)
+                loc_id = self.test_function_synchro(
+                    model, ext_rec, identity=identity, ext_id=ext_id
                 )
-            ctx["ctr"] += 1
-    return
-
-
-def cvt_csv(model, identity="match"):
-    if identity == "match":
-        source = (model.replace(".", "_") + "_DEF").upper()
-    else:
-        source = (model.replace(".", "_") + "_" + identity.split(":")[0]).upper()
-    if source not in globals():
-        print("No data found for model %s (%s)" % (model, identity))
+            elif fct_test == "trigger":
+                ext_id = ext_rec["id"]
+                loc_id = self.test_function_trigger(
+                    ext_model, identity=identity, ext_id=ext_id
+                )
+            if loc_id < 0:
+                raise IOError(
+                    "Error %d processing %s=%s" % (loc_id, ext_id_field, ext_id))
+            checked = False
+            for test_rec in test_recs:
+                if ext_id == test_rec[ext_id_field]:
+                    self.check_records(identity, model, loc_id, test_rec)
+                    checked = True
+                    break
+            if not checked:
+                raise IOError(
+                    "No match record found for %s=%s" % (ext_id_field, ext_id))
         return
-    fn = os.path.join(get_csv_path(identity), model + ".csv")
-    with open(fn, "w") as fd:
-        header = False
-        for items in globals()[source]:
-            if not header:
-                header = ",".join(items.keys())
-                fd.write(header + "\n")
-            data = [
-                ('"' + x.replace('"', "\")") + '"' if isinstance(x, basestring) and '"' in x else str(x))
-                for x in items.values()
-            ]
-            fd.write(",".join(data) + "\n")
 
-
-
-def test_synchro_vg7(ctx):
-    print("Test synchronization Odoo against external software %s (%s)"
-          % (__version__, datetime.now()))
-
-    def test_company(ctx, mode=None, identity=None, fct_test=None):
-        identity = identity or "oe8:"
-        model = "res.company"
-        print("Write %s (%s) ..." % (model, identity))
-        load_n_test_model(
-            ctx,
-            model,
-            mode=mode,
-            store=not mode,
-            identity=identity,
-        )
-
-    def test_user(ctx, mode=None, identity=None, fct_test=None):
-        identity = identity or "oe8:"
-        model = "res.users"
-        print("Write %s (%s) ..." % (model, identity))
-        load_n_test_model(
-            ctx,
-            model,
-            mode=mode,
-            store=not mode,
-            identity=identity,
-        )
-
-    def test_country(ctx, mode=None, identity="vg7:", fct_test=None, reset=False):
+    def test_country(
+            self, mode=None, identity="vg7:", fct_test="synchro", reset_id=False):
         model = "res.country"
-        if reset:
-            reset_model(ctx, model)
-        print("Write %s (%s) ..." % (model, identity))
-        vg7_id = load_n_test_model(
-            ctx,
+        self.init_model(identity, model, reset_id=reset_id)
+        self.load_n_test_model(
+            identity,
             model,
-            mode=mode,
-            store=not mode,
-            identity=identity,
             fct_test=fct_test,
         )
-        if identity == "vg7:":
-            ctx["res.country.IT"] = vg7_id
 
         model = "res.country.state"
-        if reset:
-            reset_model(ctx, model)
-        print("Write %s (%s) ..." % (model, identity))
-        vg7_id = load_n_test_model(
-            ctx,
+        self.init_model(identity, model, reset_id=reset_id)
+        self.load_n_test_model(
+            identity,
             model,
-            mode=mode,
-            store=not mode,
-            identity=identity,
-            fct_test=fct_test,
-            # test_suppl="country_id",
-        )
-        if identity == "vg7:":
-            ctx["res.country.state.MI"] = vg7_id
-
-    def test_tax(ctx, mode=None, identity=None, fct_test=None, reset=False):
-        identity = identity or "vg7:"
-        model = "account.tax"
-        if reset:
-            delete_record(
-                ctx,
-                model,
-                [("name", "in", ["Forfettario art. 101", "Art. 15"])],
-                multi=True,
-                company_id=ctx["company_id"],
-            )
-            reset_model(ctx, model)
-            if identity == "oe8:":
-                dirty_account_tax(ctx)
-        print("Write %s (%s) ..." % (model, identity))
-        vg7_id = load_n_test_model(
-            ctx,
-            model,
-            mode=mode,
-            store=not mode,
-            identity=identity,
             fct_test=fct_test,
         )
-        if identity == "vg7:":
-            ctx["account.tax.22v"] = vg7_id
 
-    def test_payment(ctx, mode=None, identity=None, fct_test=None):
-        identity = identity or "vg7:"
-        model = "account.payment.term"
-        print("Write %s (%s) ..." % (model, identity))
-        if identity.startswith("oe8"):
-            store_oe8id(ctx, "account.payment.term.line", "percent", "procent")
-        vg7_id = load_n_test_model(
-            ctx,
-            model,
-            mode=mode,
-            store=not mode,
-            identity=identity,
-            fct_test=fct_test,
-        )
-        if identity == "vg7:":
-            ctx["account.payment.term.30GG"] = vg7_id
-
-    def test_conai(ctx, mode=None, identity=None, fct_test=None):
-        identity = identity or "vg7:"
-        model = "italy.conai.product.category"
-        print("Write %s (%s) ..." % (model, identity))
-        vg7_id = load_n_test_model(
-            ctx, model, mode=mode, store=not mode, identity="vg7:"
-        )
-        if identity == "vg7:":
-            ctx["italy.conai.product.category.CA"] = vg7_id
-
-    def test_uom(ctx, mode=None, identity=None, fct_test=None):
-        identity = identity or "vg7:"
-        model = "product.uom"
-        print("Write %s (%s) ..." % (model, identity))
-        vg7_id = load_n_test_model(
-            ctx,
-            model,
-            mode=mode,
-            store=not mode,
-            identity=identity,
-            fct_test=fct_test,
-        )
-        if identity == "vg7:":
-            ctx["product.uom.NR"] = vg7_id
-
-    def test_product(ctx, mode=None, identity=None, fct_test=None):
-        identity = identity or "vg7:"
-        if identity == "oe8:":
-            model = "product.template"
-            print("Write %s (%s) ..." % (model, identity))
-            load_n_test_model(
-                ctx,
-                model,
-                mode=mode,
-                store=not mode,
-                identity=identity,
-                fct_test=fct_test,
-            )
-        model = "product.product"
-        print("Write %s (%s) ..." % (model, identity))
-        vg7_id = load_n_test_model(
-            ctx,
-            model,
-            mode=mode,
-            store=not mode,
-            identity=identity,
-            fct_test=fct_test,
-        )
-        if identity == "vg7:":
-            ctx["product.product.A"] = vg7_id
-
-    def test_partner(ctx, mode=None, identity=None, fct_test=None, reset=False):
-        identity = identity or "vg7:"
+    def test_partner(
+            self, mode=None, identity="vg7:", fct_test="synchro", reset_id=False):
         model = "res.partner"
-        if reset:
-            reset_model(ctx, model)
-            dirty_res_partner(ctx)
-        print("Write %s (%s) ..." % (model, identity))
-        vg7_id = load_n_test_model(
-            ctx,
+        self.init_model(identity, model, reset_id=reset_id)
+        if reset_id:
+            self.dirty_res_partner()
+        self.load_n_test_model(
+            identity,
             model,
-            mode=mode,
-            store=not mode,
-            identity=identity,
+            fct_test=fct_test,
+        )
+
+    def test_tax(
+            self, mode=None, identity="vg7:", fct_test="synchro", reset_id=False):
+        model = "account.tax"
+        self.init_model(identity, model, reset_id=reset_id)
+        if reset_id:
+            self.dirty_account_tax()
+        self.load_n_test_model(
+            identity,
+            model,
             fct_test=fct_test,
         )
 
 
-    def test_account_type(ctx, mode=None, identity=None, fct_test=None):
-        identity = identity or "oe8:"
-        model = "account.account.type"
-        print("Write %s (%s) ..." % (model, identity))
-        load_n_test_model(
-            ctx,
-            model,
-            mode=mode,
-            store=not mode,
-            identity="oe8:",
-            fct_test="trigger",
-        )
+def main(cli_args=[]):
+    if not cli_args:
+        cli_args = sys.argv[1:]
+    ext_test_env = ExtTestEnv(cli_args)
+    ext_test_env.setup()
 
-    def test_account(ctx, mode=None, identity=None, fct_test=None):
-        identity = identity or "oe8:"
-        model = "account.account"
-        print("Write %s (%s) ..." % (model, identity))
-        load_n_test_model(
-            ctx,
-            model,
-            mode=mode,
-            store=not mode,
-            identity=identity,
-            fct_test=fct_test,
-        )
-
-    def test_journal(ctx, mode=None, identity=None, fct_test=None):
-        identity = identity or "oe8:"
-        model = "account.journal"
-        print("Write %s (%s) ..." % (model, identity))
-        load_n_test_model(
-            ctx,
-            model,
-            mode=mode,
-            store=not mode,
-            identity=identity,
-            fct_test=fct_test,
-        )
-
-    def test_sale_order(ctx, mode=None, identity=None, fct_test=None):
-        identity = identity or "vg7:"
-        model = "sale.order"
-        print("Write %s (%s) ..." % (model, identity))
-        vg7_id = load_n_test_model(
-            ctx,
-            model,
-            mode=mode,
-            store=not mode,
-            identity=identity,
-            fct_test=fct_test,
-        )
-        if identity == "vg7:":
-            ctx["sale.order.210123"] = vg7_id
-
-    def test_invoice(ctx, mode=None, identity=None, fct_test=None):
-        identity = identity or "vg7:"
-        model = "account.invoice"
-        print("Write %s (%s) ..." % (model, identity))
-        vg7_id = load_n_test_model(
-            ctx,
-            model,
-            mode=mode,
-            store=not mode,
-            identity=identity,
-            fct_test=fct_test,
-        )
-        if identity == "vg7:":
-            ctx["account.invoice.210123"] = vg7_id
-
-    def test_purchase_order(ctx, mode=None, identity=None, fct_test=None):
-        identity = identity or "vg7:"
-        model = "purchase.order"
-        print("Write %s (%s) ..." % (model, identity))
-        load_n_test_model(
-            ctx,
-            model,
-            mode=mode,
-            store=not mode,
-            identity=identity,
-            fct_test=fct_test,
-        )
-        # ctx['purchase.order.210123'] = vg7_id
-
-    def test_causale_trasporto(ctx, mode=None, identity=None, fct_test=None):
-        identity = identity or "vg7:"
-        model = "stock.picking.transportation_reason"
-        print("Write %s (%s) ..." % (model, identity))
-        vg7_id = load_n_test_model(
-            ctx,
-            model,
-            mode=mode,
-            store=not mode,
-            identity=identity,
-            fct_test=fct_test,
-        )
-        if identity == "vg7:":
-            ctx["stock.picking.transportation_reason.V"] = vg7_id
-
-    def test_ddt(ctx, mode=None, identity=None, fct_test=None):
-        identity = identity or "vg7:"
-        model = "stock.picking.package.preparation"
-        print("Write %s (%s) ..." % (model, identity))
-        vg7_id = load_n_test_model(
-            ctx,
-            model,
-            mode=mode,
-            store=not mode,
-            identity=identity,
-            fct_test=fct_test,
-        )
-        if identity == "vg7:":
-            ctx["stock.picking.package.preparation.1234"] = vg7_id
-
-    def test_account_move(ctx, mode=None, identity=None, fct_test=None):
-        identity = identity or "oe8:"
-        model = "account.move"
-        print("Write %s (%s) ..." % (model, identity))
-        load_n_test_model(
-            ctx,
-            model,
-            mode=mode,
-            store=not mode,
-            identity=identity,
-            fct_test=fct_test,
-        )
-
-    def test_oca10(ctx):
-        ctx2 = ctx.copy()
-        uid2, ctx2 = clodoo.oerp_set_env(
-            confn=ctx2["conf_fn"], db="oca10", ctx=ctx2, xmlrpc_port=8270)
-        model = "res.country"
-        ids = clodoo.searchL8(ctx2, model, [("code", "=", "GB")])
-        if len(ids) != 1:
-            raise IOError("Record GB not found on odoo DB oca10!")
-        loc_id = test_function_trigger(
-            ctx, model, identity="oe10_id", ext_id=ids[0]
-        )
-        if loc_id < 1:
-            raise IOError("No data from DB oca10!")
-        loc_rec = clodoo.browseL8(ctx, model, loc_id)
-        if not compare(ctx, getattr(loc_rec, "code"), "GB"):
-            raise IOError(
-                "!!Field %s[%s].%s: invalid value <%s> expected <%s>"
-                % (model, loc_id,
-                   "code",
-                   getattr(loc_rec, "code"),
-                   "UK")
-            )
-        if not compare(ctx, getattr(loc_rec, "oe10_id"), ids[0]):
-            raise IOError(
-                "!!Field %s[%s].%s: invalid value <%s> expected <%s>"
-                % (model, loc_id,
-                   "oe10_id",
-                   getattr(loc_rec, "code"),
-                   ids[0])
-            )
-
-    def test_en_us(ctx):
-        model = "res.country"
-        reset_model(ctx, model)
-        identity = "oe8:"
-        print("Write %s (%s) ..." % (model, identity))
-        load_n_test_model(
-            ctx,
-            model,
-            identity=identity,
-            lang="en_US"
-        )
-        # Set italian
-        assure_user(ctx)
-
-    ctx = init_test()
-
-    # print("*** Starting Odoo/OCA test ***")
-    # write_log(
-    #     ctx,
-    #     "\n%s: *** Starting Odoo/OCA test ***"
-    #     % datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M:%S"),
-    #     eol=True,
-    # )
-    # test_oca10(ctx)
-
-    # print("*** Starting Odoo/OCA en_US test ***")
-    # write_log(
-    #     ctx,
-    #     "\n%s: *** Starting Odoo/OCA en_US test ***"
-    #     % datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M:%S"),
-    #     eol=True,
-    # )
-    # test_en_us(ctx)
-
-    print("*** Starting VG7 test ***")
-    write_log(
-        ctx,
-        "\n%s: *** Starting VG7 test ***"
-        % datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M:%S"),
-        eol=True,
-    )
-
-    test_country(ctx, identity="vg7:", reset=True)
-    test_country(ctx, identity="vg7:", fct_test="trigger", reset=True)
-    test_partner(ctx, identity="vg7:", reset=True)
-    test_partner(ctx, identity="vg7:", fct_test="trigger", reset=True)
-    test_tax(ctx, identity="vg7:", reset=True)
-    test_tax(ctx, identity="vg7:", fct_test="trigger", reset=True)
-
-    print("*** Starting OE8 test ***")
-    write_log(
-        ctx,
-        "\n%s: *** Starting OE8 test ***"
-        % datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M:%S"),
-        eol=True,
-    )
-
-    test_country(ctx, identity="oe8:", reset=True)
-    test_partner(ctx, identity="oe8:", reset=True)
-    test_tax(ctx, identity="oe8:", reset=True)
-
-    print("%d tests %s successfully ended on %s"
-          % (ctx["ctr"], THIS_MODULE, datetime.now()))
-    return
-
-    test_payment(ctx, mode="wrong", identity="vg7:")
-    test_payment(ctx, identity="vg7:")
-    test_payment(ctx, mode=True, identity="vg7:")
-
-    if ctx["conai"]:
-        test_conai(ctx)
-        test_conai(ctx, mode=True)
-
-    test_uom(ctx, identity="vg7:")
-    test_uom(ctx, mode=True)
-
-    test_product(ctx)
-    test_product(ctx, mode=True)
-
-    test_partner(ctx, mode="wrong")
-    test_partner(ctx)
-
-    test_causale_trasporto(ctx, identity="vg7:")
-    test_causale_trasporto(ctx, mode=True, identity="vg7:")
-
-    test_sale_order(ctx, identity="vg7:", fct_test="synchro2")
-    test_sale_order(ctx, mode="wrong", identity="vg7:", fct_test="synchro2")
-    test_sale_order(ctx, identity="vg7:")
-    test_sale_order(ctx, mode=True, identity="vg7:")
-
-    test_ddt(ctx, identity="vg7:", fct_test="synchro2")
-    test_ddt(ctx, identity="vg7:")
-    test_ddt(ctx, mode=True, identity="vg7:")
-
-    test_purchase_order(ctx, identity="vg7:", fct_test="synchro2")
-    test_purchase_order(ctx, mode="wrong", identity="vg7:", fct_test="synchro2")
-    test_purchase_order(ctx, identity="vg7:")
-    test_purchase_order(ctx, mode=True, identity="vg7:")
-
-    print("*** Starting OE8 test ***")
-    write_log(
-        ctx,
-        "\n%s: *** Starting OE8 test ***"
-        % datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M:%S"),
-        eol=True,
-    )
-
-    # Set method CSV and reset cache
-    model = "synchro.channel"
-    clodoo.writeL8(
-        ctx,
-        model,
-        clodoo.searchL8(ctx, model, []),
-        {"method": "CSV", "exchange_path": get_exchange_path("oe8:"), "tracelevel": "4"},
-    )
-    reset_cache(ctx)
-
-    test_partner(ctx, identity="oe8:", fct_test="trigger")
-    test_company(ctx, identity="oe8:", fct_test="trigger")
-    test_user(ctx, identity="oe8:", fct_test="trigger")
-    test_country(ctx, identity="oe8:", fct_test="trigger")
-    test_account_type(ctx, identity="oe8:", fct_test="trigger")
-    test_account(ctx, identity="oe8:", mode="wrong", fct_test="trigger")
-    test_account(ctx, identity="oe8:", fct_test="trigger")
-    test_tax(ctx, identity="oe8:", fct_test="trigger")
-    test_payment(ctx, identity="oe8:", fct_test="trigger")
-    test_journal(ctx, identity="oe8:", mode="wrong", fct_test="trigger")
-    test_journal(ctx, identity="oe8:", fct_test="trigger")
-    test_causale_trasporto(ctx, identity="oe8:", fct_test="trigger")
-    test_uom(ctx, identity="oe8:", fct_test="trigger")
-    test_product(ctx, identity="oe8:", fct_test="trigger")
-    test_sale_order(ctx, identity="oe8:", fct_test="trigger")
-    test_invoice(ctx, identity="oe8:", fct_test="trigger")
-    test_account_move(ctx, identity="oe8:", fct_test="trigger")
-
-    # Final checks
-    ids = get_invalid_partners(ctx)
-    ids += get_unknown_partners(ctx)
-    if ids:
-        raise IOError("!!Found invalid or unknown res.partner records %s!" % ids)
-    ctx["ctr"] += 2
-    if get_duplicate_partners(ctx):
-        raise IOError("!!Found duplicate res.partner records ROSSI!")
-    ctx["ctr"] += 1
-
-    print("%d tests %s successfully ended on %s"
-          % (ctx["ctr"], THIS_MODULE, datetime.now()))
-    # try:
-    #     clodoo.executeL8(
-    #         ctx,
-    #         "ir.model.synchro.cache",
-    #         "die",
-    #         True
-    #     )
-    # except BaseException:
-    #     pass
-    return
+    ext_test_env.write_log("*** Starting VG7 test ***", echo=True)
+    ext_test_env.test_country(identity="vg7:", reset_id=True)
+    ext_test_env.test_country(identity="vg7:", fct_test="trigger")
+    ext_test_env.test_partner(identity="vg7:", reset_id=True)
+    ext_test_env.test_partner(identity="vg7:", fct_test="trigger")
+    # In order to increase test coverage, from here trigger run before synchro test
+    ext_test_env.test_tax(identity="vg7:", reset_id=True, fct_test="trigger")
+    ext_test_env.test_tax(identity="vg7:")
 
 
-parser = z0lib.parseoptargs(
-    "Odoo test environment", "© 2020-2022 by SHS-AV s.r.l.", version=__version__
-)
-parser.add_argument("-h")
-parser.add_argument(
-    "-c",
-    "--config",
-    help="configuration command file",
-    dest="conf_fn",
-    metavar="file",
-    default="./inv2draft_n_restore.conf",
-)
-parser.add_argument(
-    "-d",
-    "--dbname",
-    help="DB name to connect",
-    dest="db_name",
-    metavar="file",
-    default="",
-)
-parser.add_argument(
-    "-L",
-    "--logfile",
-    help="test logfile",
-    dest="logfn",
-    metavar="file",
-    default="./test_synchro.log",
-)
-parser.add_argument(
-    "-l",
-    "--lang",
-    help="language translation",
-    metavar="iso-3166 or '.'",
-    dest="lang",
-    default=".",
-)
-parser.add_argument("-n")
-parser.add_argument("-q")
-parser.add_argument(
-    "-U", "--login-user", help="login user to test", dest="lgi_user", default="admin"
-)
-parser.add_argument("-V")
-parser.add_argument("-v")
-parser.add_argument(
-    "-1",
-    "--conai",
-    action="store_true",
-    help="enable test conai module",
-    dest="conai",
-    default=False,
-)
-parser.add_argument(
-    "-2",
-    "--no-conai",
-    action="store_false",
-    help="disable test conai module",
-    dest="conai",
-)
-parser.add_argument(
-    "-3",
-    "--no-ask",
-    action="store_false",
-    help="ask for some tests",
-    dest="ask",
-    default=True,
-)
-parser.add_argument(
-    "-4", "--ask", action="store_true", help="execute tests w/o ask", dest="ask"
-)
-parser.add_argument(
-    "-5",
-    "--no-module",
-    action="store_false",
-    help="do not check for modules",
-    dest="chk_module",
-    default=True,
-)
-parser.add_argument(
-    "-6", "--module", action="store_true", help="check for modules", dest="chk_module"
-)
+    ext_test_env.write_log("*** Starting OE8 test ***", echo=True)
+    ext_test_env.test_country(identity="oe8:", reset_id=True)
+    ext_test_env.test_country(identity="oe8:", fct_test="trigger")
+    ext_test_env.test_partner(identity="oe8:", reset_id=True)
+    ext_test_env.test_partner(identity="oe8:", fct_test="trigger")
+    # In order to increase test coverage, from here trigger run before synchro test
+    ext_test_env.test_tax(identity="oe8:", reset_id=True, fct_test="trigger")
+    ext_test_env.test_tax(identity="oe8:")
 
-ctx = parser.parseoptargs(sys.argv[1:], apply_conf=False)
-test_synchro_vg7(ctx)
-exit(0)
+    ext_test_env.teardown()
+
+
+if __name__ == "__main__":
+    exit(main())
