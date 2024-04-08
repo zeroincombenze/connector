@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo (10.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-28 16:34+0000\n"
-"PO-Revision-Date: 2023-10-28 16:34+0000\n"
+"POT-Creation-Date: 2024-04-05 11:47+0000\n"
+"PO-Revision-Date: 2024-04-05 11:47+0000\n"
 "Last-Translator: Antonio M. Vigliotti <antoniomaria.vigliotti@gmail.com>\n"
 "Language-Team: Zeroincombenze (https://www.zeroincombenze.it)\n"
 "Language: it\n"
@@ -159,7 +159,7 @@ msgstr "Verificato/a"
 #. module: universal_connector
 #: model:ir.model.fields,field_description:universal_connector.field_synchro_channel_client_key
 msgid "Client key"
-msgstr "Client key"
+msgstr "Cliente chiave"
 
 #. module: universal_connector
 #: model:ir.model.fields,help:universal_connector.field_synchro_channel_client_key
@@ -252,7 +252,7 @@ msgstr "Divisa"
 #. module: universal_connector
 #: model:ir.model.fields,field_description:universal_connector.field_synchro_channel_workflow_model
 msgid "Current Workflow Model"
-msgstr "Current Workflow Model"
+msgstr "Attuale Flusso di lavoro Modello"
 
 #. module: universal_connector
 #: selection:synchro.channel.model,model_spec:0
@@ -364,7 +364,7 @@ msgstr "Mappatura campo per sincronizzazione"
 #. module: universal_connector
 #: model:ir.model,name:universal_connector.model_synchro_channel_domain_translation
 msgid "Field translation for field"
-msgstr "Campo translation non valida in codice IVA campo"
+msgstr "Campo traduzione non valida in codice IVA campo"
 
 #. module: universal_connector
 #: model:ir.model,name:universal_connector.model_ir_model_fields
@@ -390,12 +390,14 @@ msgstr "Function are in format \"nome()\".\n"
 #. module: universal_connector
 #: model:ir.model.fields,field_description:universal_connector.field_synchro_channel_model_fields_apply
 msgid "Function to apply for supply value or default value."
-msgstr "Function a apply non valida in codice IVA supply  o default ."
+msgstr ""
+"Funzione a applicare non valida in codice IVA supply valore o calendario\" ecc "
+"valore."
 
 #. module: universal_connector
 #: selection:synchro.channel.model,model_spec:0
 msgid "Generic Address"
-msgstr "Generic Address"
+msgstr "Generico Indirizzo"
 
 #. module: universal_connector
 #: selection:synchro.channel,identity:0
@@ -418,7 +420,7 @@ msgstr "Come i dati saranno inviati e ricevuti."
 #: model:ir.model.fields,field_description:universal_connector.field_ir_model_synchro_data_id
 #: model:ir.model.fields,field_description:universal_connector.field_ir_model_synchro_id
 #: model:ir.model.fields,field_description:universal_connector.field_ir_model_synchro_log_id
-#: model:ir.model.fields,field_description:universal_connector.field_res_partner_bank_company_id_6089
+#: model:ir.model.fields,field_description:universal_connector.field_res_partner_bank_company_id_6093
 #: model:ir.model.fields,field_description:universal_connector.field_res_partner_invoice_id
 #: model:ir.model.fields,field_description:universal_connector.field_res_partner_shipping_id
 #: model:ir.model.fields,field_description:universal_connector.field_res_partner_supplier_id
@@ -475,7 +477,7 @@ msgstr "Fattura"
 #: selection:synchro.channel.model,model_spec:0
 #: selection:synchro.channel.model.fields,spec:0
 msgid "Invoice Address"
-msgstr "Invoice Address"
+msgstr "Indirizzo fattura"
 
 #. module: universal_connector
 #: model:ir.model,name:universal_connector.model_account_invoice_line
@@ -485,7 +487,7 @@ msgstr "Riga fattura"
 #. module: universal_connector
 #: model:ir.model.fields,field_description:universal_connector.field_wizard_synchro_pull_records_ir_model_id
 msgid "Ir model id"
-msgstr "Ir model id"
+msgstr "Ir modello id"
 
 #. module: universal_connector
 #: model:ir.model,name:universal_connector.model_account_journal
@@ -560,7 +562,7 @@ msgstr "Ultimo aggiornamento il"
 #: model:ir.model.fields,help:universal_connector.field_synchro_channel_model_rec_counter
 #: model:ir.model.fields,help:universal_connector.field_synchro_channel_rec_counter
 msgid "Last imported record number"
-msgstr "Last imported record number"
+msgstr "Ultimi imported documentazione numero"
 
 #. module: universal_connector
 #: model:ir.model.fields,help:universal_connector.field_wizard_synchro_pull_records_remote_ids
@@ -576,17 +578,17 @@ msgstr "List of remote Id, comma o space separated;\n"
 #. module: universal_connector
 #: selection:synchro.channel,tracelevel:0
 msgid "Main + Inner functions"
-msgstr "Main + Inner functions"
+msgstr "Main + Inner funzioni"
 
 #. module: universal_connector
 #: selection:synchro.channel,tracelevel:0
 msgid "Main functions"
-msgstr "Main functions"
+msgstr "Main funzioni"
 
 #. module: universal_connector
 #: selection:synchro.channel.model.fields,protect_update:0
 msgid "Max counter"
-msgstr "Max counter"
+msgstr "Massimo counter"
 
 #. module: universal_connector
 #: model:ir.model,name:universal_connector.model_stock_picking_transportation_method
@@ -604,24 +606,24 @@ msgstr "Modello"
 #: model:ir.model.fields,field_description:universal_connector.field_ir_model_synchro_data_res_id
 #: model:ir.model.fields,field_description:universal_connector.field_ir_model_synchro_log_res_id
 msgid "Model ID"
-msgstr "Model ID"
+msgstr "Modello ID"
 
 #. module: universal_connector
 #: model:ir.model.fields,field_description:universal_connector.field_synchro_channel_model_fields_model_id
 msgid "Model id"
-msgstr "Model id"
+msgstr "Modello id"
 
 #. module: universal_connector
 #: model:ir.model.fields,field_description:universal_connector.field_synchro_channel_model_field_ids
 #: model:ir.model.fields,field_description:universal_connector.field_synchro_channel_model_ids
 #: model:ir.ui.view,arch_db:universal_connector.view_synchro_channel_form
 msgid "Model mapping"
-msgstr "Model mapping"
+msgstr "Modello mapping"
 
 #. module: universal_connector
 #: model:ir.model,name:universal_connector.model_synchro_channel_model
 msgid "Model mapping for Synchonization"
-msgstr "Model mapping non valida in codice IVA Synchonization"
+msgstr "Modello mapping non valida in codice IVA Synchonization"
 
 #. module: universal_connector
 #: model:ir.model.fields,field_description:universal_connector.field_synchro_channel_model_field_2complete
@@ -652,10 +654,10 @@ msgstr "Non approfondito"
 #. module: universal_connector
 #: selection:wizard.synchro.pull.records,nesting_level:0
 msgid "No Deep, minimal data"
-msgstr "dati minimi senza approfondimento"
+msgstr "Dati minimi senza approfondimento"
 
 #. module: universal_connector
-#: code:addons/universal_connector/models/ir_model.py:4067
+#: code:addons/universal_connector/models/ir_model.py:4069
 #, python-format
 msgid "No Error"
 msgstr "Nessun errore"
@@ -663,7 +665,7 @@ msgstr "Nessun errore"
 #. module: universal_connector
 #: selection:synchro.channel,tracelevel:0
 msgid "No Trace"
-msgstr "NO Trace"
+msgstr "NO Traccia"
 
 #. module: universal_connector
 #: selection:synchro.channel,method:0
@@ -671,7 +673,7 @@ msgid "No interchange"
 msgstr "NO interchange"
 
 #. module: universal_connector
-#: code:addons/universal_connector/models/ir_model.py:1336
+#: code:addons/universal_connector/models/ir_model.py:1337
 #, python-format
 msgid "No relation for field %s of %s"
 msgstr "NO relation non valida in codice IVA campo %s of %s"
@@ -680,7 +682,7 @@ msgstr "NO relation non valida in codice IVA campo %s of %s"
 #: model:ir.model.fields,field_description:universal_connector.field_synchro_channel_domain_translation_key
 #: model:ir.model.fields,field_description:universal_connector.field_synchro_channel_model_fields_name
 msgid "Odoo field name"
-msgstr "Odoo campo nome"
+msgstr "Powered by campo nome"
 
 #. module: universal_connector
 #: model:ir.model.fields,field_description:universal_connector.field_synchro_channel_domain_translation_odoo_value
@@ -690,7 +692,7 @@ msgstr "Valore campo Odoo"
 #. module: universal_connector
 #: selection:synchro.channel,identity:0
 msgid "Odoo instance"
-msgstr "Odoo instance"
+msgstr "Powered by istanza"
 
 #. module: universal_connector
 #: model:ir.model.fields,field_description:universal_connector.field_synchro_channel_domain_translation_model
@@ -750,7 +752,7 @@ msgstr "Nome modello Odoo"
 #: model:ir.model.fields,field_description:universal_connector.field_stock_picking_transportation_reason_oe10_id
 #: model:ir.model.fields,field_description:universal_connector.field_stock_warehouse_oe10_id
 msgid "Odoo10 ID"
-msgstr "Odoo10 ID"
+msgstr "odoo10 ID"
 
 #. module: universal_connector
 #: model:ir.model.fields,field_description:universal_connector.field_account_account_oe7_id
@@ -804,7 +806,7 @@ msgstr "Odoo10 ID"
 #: model:ir.model.fields,field_description:universal_connector.field_stock_picking_transportation_reason_oe7_id
 #: model:ir.model.fields,field_description:universal_connector.field_stock_warehouse_oe7_id
 msgid "Odoo7 ID"
-msgstr "Odoo7 ID"
+msgstr "odoo7 ID"
 
 #. module: universal_connector
 #: model:ir.model.fields,field_description:universal_connector.field_account_account_oe8_id
@@ -858,7 +860,7 @@ msgstr "Odoo7 ID"
 #: model:ir.model.fields,field_description:universal_connector.field_stock_picking_transportation_reason_oe8_id
 #: model:ir.model.fields,field_description:universal_connector.field_stock_warehouse_oe8_id
 msgid "Odoo8 ID"
-msgstr "Odoo8 ID"
+msgstr "odoo8 ID"
 
 #. module: universal_connector
 #: selection:wizard.synchro.pull.records,sel_rec:0
@@ -986,7 +988,7 @@ msgstr "Campo protetto"
 #. module: universal_connector
 #: model:ir.ui.view,arch_db:universal_connector.wizard_pull_records_form_view
 msgid "Pull (import) record from counterpart"
-msgstr "ottenere (importare) registrazione da controparte"
+msgstr "Ottenere (importare) registrazione da controparte"
 
 #. module: universal_connector
 #: model:ir.ui.view,arch_db:universal_connector.view_synchro_channel_form
@@ -1054,7 +1056,7 @@ msgstr "Campo obbligatorio"
 #. module: universal_connector
 #: model:ir.ui.view,arch_db:universal_connector.view_synchro_channel_form
 msgid "Reset To draft Connection"
-msgstr "Reset a draft Connection"
+msgstr "Ripristina a bozza Connection"
 
 #. module: universal_connector
 #: model:ir.model,name:universal_connector.model_sale_order
@@ -1109,7 +1111,7 @@ msgid "Sequence to use in search record when not yet synchronized\n"
 "i.e. ([\"name\",\"company_id\"],[\"name\"])\n"
 "will search for record with name and company keys; if not foundsearch for "
 "record just with name"
-msgstr "sequenza da usare in ricerca record quando non ancora sincronizzato\n"
+msgstr "Sequenza da usare in ricerca record quando non ancora sincronizzato\n"
 "esempio ([\"name\",\"company_id\"],[\"name\"])\n"
 "cerca un record per nome e azienda; se non trovato cerca solo per nome"
 
@@ -1132,7 +1134,7 @@ msgstr "Set what system does with related record (*many records)\n"
 #. module: universal_connector
 #: model:ir.model.fields,field_description:universal_connector.field_synchro_channel_model_fields_spec
 msgid "Specific search"
-msgstr "Specific search"
+msgstr "Specific ricerca"
 
 #. module: universal_connector
 #: model:ir.model.fields,field_description:universal_connector.field_synchro_channel_model_model_spec
@@ -1147,17 +1149,17 @@ msgstr "Stato Federale"
 #. module: universal_connector
 #: selection:synchro.channel,tracelevel:0
 msgid "Statements"
-msgstr "Statements"
+msgstr "Estratti conto"
 
 #. module: universal_connector
 #: model:ir.model,name:universal_connector.model_stock_move
 msgid "Stock Move"
-msgstr "Movimento Magazzino"
+msgstr "Movimento di magazzino"
 
 #. module: universal_connector
 #: selection:synchro.channel.model.fields,spec:0
 msgid "Suplier"
-msgstr "Suplier"
+msgstr "SUPLIER"
 
 #. module: universal_connector
 #: selection:synchro.channel.model,model_spec:0
@@ -1195,12 +1197,12 @@ msgstr "Modello di sincronizzazione"
 #. module: universal_connector
 #: model:ir.ui.view,arch_db:universal_connector.view_synchro_model_tree
 msgid "Synchonization model"
-msgstr "Synchonization model"
+msgstr "Modello di sincronizzazione"
 
 #. module: universal_connector
 #: model:ir.model.fields,field_description:universal_connector.field_synchro_channel_model_synchro_channel_id
 msgid "Synchro channel id"
-msgstr "Synchro channel id"
+msgstr "Synchro per menzionare un canale id"
 
 #. module: universal_connector
 #: model:ir.ui.view,arch_db:universal_connector.view_account_account_synchro_form
@@ -1239,7 +1241,7 @@ msgstr "Sincronizzazione"
 #. module: universal_connector
 #: model:ir.actions.act_window,name:universal_connector.action_synchro_log
 msgid "Synchronization log"
-msgstr "Synchronization log"
+msgstr "Sincronizzazione elencazione"
 
 #. module: universal_connector
 #: model:ir.ui.view,arch_db:universal_connector.view_account_move_form_vg7
@@ -1259,7 +1261,7 @@ msgstr "Sincronizzare"
 #. module: universal_connector
 #: model:ir.ui.view,arch_db:universal_connector.view_invoice_line_synchro_form
 msgid "Syncronization"
-msgstr "Syncronization"
+msgstr "Sincronizzazione"
 
 #. module: universal_connector
 #: model:ir.model,name:universal_connector.model_account_tax
@@ -1307,13 +1309,13 @@ msgid ""
 "Trace data in log. Warning! Use this feature with caution; all sent data will "
 "be recorded in the log file.This feature must be used only to debug handshake"
 msgstr ""
-"Trace data in log. Warning! Use this feature with caution; all sent data will "
-"be recorded in the log file.This feature must be used only a debug handshake"
+"Traccia data in elencazione. Attenzione! Usa questo funzionalità with caution; "
+"tutto/i inviata data will be recorded in il modulo \" elencazione il file.Questo funzionalità devono be used solo un'imposta per fattura è supportata e debug handshake"
 
 #. module: universal_connector
 #: model:ir.model,name:universal_connector.model_stock_picking
 msgid "Transfer"
-msgstr "Trasferimento"
+msgstr "Prelievo Distinta"
 
 #. module: universal_connector
 #: model:ir.actions.act_window,name:universal_connector.action_synchro_tnl
@@ -1394,7 +1396,7 @@ msgstr "VG7 ID (2.nd)"
 #. module: universal_connector
 #: selection:synchro.channel,identity:0
 msgid "VG7 instance"
-msgstr "VG7 instance"
+msgstr "VG7 istanza"
 
 #. module: universal_connector
 #: model:ir.model,name:universal_connector.model_stock_warehouse
@@ -1404,7 +1406,7 @@ msgstr "Magazzino"
 #. module: universal_connector
 #: model:ir.model.fields,field_description:universal_connector.field_wizard_synchro_pull_records_sel_rec
 msgid "Which Records"
-msgstr "Which Records"
+msgstr "Which Record"
 
 #. module: universal_connector
 #: model:ir.model,name:universal_connector.model_ir_model_synchro
@@ -1414,7 +1416,7 @@ msgstr "ir.model.synchro"
 #. module: universal_connector
 #: model:ir.model,name:universal_connector.model_ir_model_synchro_apply
 msgid "ir.model.synchro.apply"
-msgstr "ir.model.synchro.apply"
+msgstr "ir.model.synchro.applicare"
 
 #. module: universal_connector
 #: model:ir.model,name:universal_connector.model_ir_model_synchro_cache
@@ -1424,12 +1426,12 @@ msgstr "ir.model.synchro.cache"
 #. module: universal_connector
 #: model:ir.model,name:universal_connector.model_ir_model_synchro_data
 msgid "ir.model.synchro.data"
-msgstr "ir.model.synchro.data"
+msgstr "ir.model.synchro.dati"
 
 #. module: universal_connector
 #: model:ir.model,name:universal_connector.model_ir_model_synchro_log
 msgid "ir.model.synchro.log"
-msgstr "ir.model.synchro.log"
+msgstr "ir.model.synchro.elencazione"
 
 #. module: universal_connector
 #: model:ir.model,name:universal_connector.model_ir_sequence

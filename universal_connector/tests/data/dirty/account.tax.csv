@@ -1,0 +1,6 @@
+_action,_identity,_only_reset,description,name
+d,,True,a15,
+d,,True,22%,
+,oe8:,,22v,Iva debito 22%
+,oe8:,,10v,Iva debito 10%
+,oe8:,,22a,Iva credito 22%

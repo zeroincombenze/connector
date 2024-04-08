@@ -585,13 +585,22 @@ class ExtTestEnv(object):
         )
         self.opt_args = parser.parse_args(*args)
 
-    def write_log(self, mesg, eol=True, echo=True, no_ts=False):
+    def write_log(self, mesg, eol=True, echo=True, no_ts=False, bb=0):
+        lines = bb * "\n"
         if echo:
-            print(mesg)
+            if not eol:
+                if sys.version[0] == 1:
+                    print(lines + mesg + " -> ",)
+                else:
+                    print(lines + mesg + " -> ", end="")
+            else:
+                print(lines + mesg)
         with open(self.logfn, "a") as fd:
             if no_ts:
-                fd.write(u" - ")
+                fd.write(u" -> ")
             else:
+                if lines:
+                    fd.write(lines)
                 fd.write(_u(datetime.strftime(datetime.now(), u"%Y-%m-%d %H:%M:%S ")))
             fd.write(mesg)
             if eol:
@@ -622,6 +631,12 @@ class ExtTestEnv(object):
         elif xref.startswith("z0bug.tax_"):
             return simulate_xref(name, "account.tax", by="description")
         return False
+
+    def search_4_xref(self, model, res_id):
+        ir_model = "ir.model.data"
+        return clodoo.searchL8(
+            self.ctx, ir_model, [("model", "=", model), ("res_id", "=", res_id)]
+        )
 
     @staticmethod
     def store_vg7id(model, loc_id, vg7_id):
@@ -794,11 +809,6 @@ class ExtTestEnv(object):
     def delete_record(
         self, model, domains, multi=False, action=None, childs=None, company_id=False
     ):
-        self.write_log(
-            "delete_record(%s, %s)" % (
-                model,
-                domains if domains != -1 and domains != [] else "all",
-                ))
         excl_list = [
             rec.res_id
             for rec in clodoo.browseL8(
@@ -867,22 +877,30 @@ class ExtTestEnv(object):
                             try:
                                 clodoo.executeL8(self.ctx, model, act, rec_ids)
                             except BaseException:
-                                print("Warning! Cannot execute %s.%s" % (model, act))
+                                self.write_log(
+                                    "Warning! Cannot execute %s.%s" % (model, act),
+                                    echo=True)
+
                 if childs:
                     for parent in clodoo.browseL8(self.ctx, model, rec_ids):
                         for rec in parent[childs]:
                             if rec.id in rec_ids:
                                 continue
+                            self.write_log("delete_record(%s, %s)" % (model, domains),
+                                           eol=False)
                             try:
                                 clodoo.unlinkL8(self.ctx, model, rec.id)
-                                self.write_log("%s.unlink(%s)" % (model, rec.id))
+                                self.write_log(str(rec.id), no_ts=True)
                             except BaseException as e:
-                                print("Error %s removing records ..." % e)
+                                self.write_log(
+                                    "Error %s removing records ..." % e, echo=True)
                 try:
+                    self.write_log("delete_record(%s, %s)" % (model, domains),
+                                   eol=False)
                     clodoo.unlinkL8(self.ctx, model, rec_ids)
-                    self.write_log("%s.unlink(%s)" % (model, rec_ids))
+                    self.write_log(str(rec_ids), no_ts=True)
                 except BaseException as e:
-                    print("Error %s removing records ..." % e)
+                    self.write_log("Error %s removing records ..." % e, echo=True)
                     if self.ask:
                         input("Press RET to continue")
                     else:
@@ -890,8 +908,6 @@ class ExtTestEnv(object):
 
     def write_record(
             self, model, domain, vals, company_id=False, create=None, unique=None):
-        self.write_log(
-            "write_record(%s, %s)" % (model, domain))
         if isinstance(domain, basestring):
             ids = self.env_ref(domain)
             ids = [ids] if ids else []
@@ -900,14 +916,17 @@ class ExtTestEnv(object):
                 domain.append(("company_id", "=", company_id))
             ids = clodoo.searchL8(self.ctx, model, domain)
         if ids:
+            self.write_log("write_record(%s, %s)" % (model, domain), eol=False)
+            self.write_log(str(ids), no_ts=True)
             clodoo.writeL8(self.ctx, model, ids, vals)
             if unique and len(ids) > 1:
                 self.write_log(
-                    "Warning: Too many records '%s(%s)'" % (model, domain),
-                    no_ts=True)
+                    "Warning: Too many records '%s(%s)'" % (model, domain))
                 self.delete_record(model, [("id", "in", ids[1:])])
         elif create:
+            self.write_log("%s.create(%s)" % (model, vals), no_ts=True)
             ids = [clodoo.createL8(self.ctx, model, vals)]
+            self.write_log(str(ids), no_ts=True)
         return ids
 
     def init_new_db(self):
@@ -1043,7 +1062,7 @@ class ExtTestEnv(object):
         model = "res.lang"
         if not clodoo.searchL8(self.ctx, model, [("code", "=", self.lang)]):
             vals = {"code": self.lang}
-            print("Installing language %s ..." % vals["code"])
+            self.write_log("Installing language %s ..." % vals["code"], echo=True)
             clodoo.executeL8(self.ctx, model, "synchro", vals)
 
     def assure_user(self, lang=None):
@@ -1067,7 +1086,10 @@ class ExtTestEnv(object):
 
     def assure_journals(self):
         for model, domain, self.company_id, vals in (
-            ("account.journal", [], self.company_id, {"update_posted": True}),
+            ("account.journal",
+             [("update_posted", "=", False)],
+             self.company_id,
+             {"update_posted": True}),
         ):
             self.write_record(model, domain, vals)
 
@@ -1098,41 +1120,10 @@ class ExtTestEnv(object):
             self.assure_user()
         return connector_installed
 
-    def delete_all_records(self):
-        self.write_log("delete_all_records()")
-        for model, domains, company_id, multi, childs, action in (
-            ("account.tax", [("description", "=", "a15")], self.company_id, True, None, None),
-        ):
-            self.delete_record(
-                model,
-                domains,
-                multi=multi,
-                action=action,
-                childs=childs,
-                company_id=company_id,
-            )
-
-        if not self.ctx.get("_cr"):
-            print("No sql support found!")
-            if self.ask:
-                input("Press RET to continue")
-        else:
-            for query in (
-                "delete from procurement_order",
-                "delete from stock_pack_operation",
-                # 'delete from stock_picking',
-                "delete from stock_move",
-                "stock_quant",
-                "stock_inventory",
-            ):
-                try:
-                    clodoo.exec_sql(self.ctx, query)
-                except BaseException:
-                    pass
-
     def setup(self):
         self.write_log("self.setup()")
         self.init_new_db()
+        self.prior_model = 0
         model = "ir.module.module"
         maxctr = len(MODULE_LIST)
         connector_installed = False
@@ -1159,13 +1150,13 @@ class ExtTestEnv(object):
                                "res.company",
                                self.company_id).due_cost_service_id:
             raise IOError("!!Missed bank cost in company!!")
-        self.delete_all_records()
 
     def teardown(self):
         for fqn in self.fqn_to_remove:
             if pth.isfile(fqn):
+                self.write_log("os.unlink(%s)" % fqn)
                 os.unlink(fqn)
-        self.write_log("%d tests %s SUCCESSFULLY ENDED" % (self.ctr, THIS_MODULE))
+        self.write_log("%d tests %s SUCCESSFULLY ENDED" % (self.ctr, THIS_MODULE), bb=2)
         # try:
         #     clodoo.executeL8(
         #         ctx,
@@ -1176,92 +1167,88 @@ class ExtTestEnv(object):
         # except BaseException:
         #     pass
 
+    def dirty_any_model(self, identity, model, code="code", domain=(), reset_id=False):
+        fqn = pth.join(self.get_csv_path("dirty"), model + ".csv")
+        if pth.isfile(fqn):
+            dirty_recs = self.load_csv_file(fqn)
+            for vals in dirty_recs:
+                if domain and domain != ():
+                    full_domain = [(code, "=", vals[code])] + list(domain)
+                else:
+                    full_domain = [(code, "=", vals[code])]
+                action = vals.get("_action", "update")
+                if "_action" in vals:
+                    del vals["_action"]
+                if identity != (vals.get("_identity") or identity):
+                    continue
+                if "_identity" in vals:
+                    del vals["_identity"]
+                if vals.get("_only_reset") and eval(vals["_only_reset"]) != reset_id:
+                    continue
+                if "_only_reset" in vals:
+                    del vals["_only_reset"]
+                if action.startswith("d"):
+                    self.delete_record(model, full_domain)
+                    continue
+                ids = clodoo.searchL8(self.ctx, model, full_domain)
+                if not ids:
+                    continue
+                self.write_log("%s.write(%s, %s)" % (model, ids, vals), echo=False)
+                clodoo.writeL8(self.ctx, model, ids, vals)
+
     def init_any_model(
             self, identity, model, code="code", name="name", domain=(), reset_id=False):
+        self.write_log("** Testing %s:%s **" % (identity, model),
+                       bb=0 if model == self.prior_model else 1)
+        self.prior_model = model
         if reset_id:
             ext_id_field = self.get_ext_id_field(identity)
-        fqn = pth.join(self.get_csv_path(), model + ".en_US.csv")
-        if not pth.isfile(fqn):
+        if identity.startswith("oe8"):
+            ctx = {"lang": "en_US"}
+            fqn = pth.join(self.get_csv_path(), model + ".en_US.csv")
+        if not identity.startswith("oe8") or not pth.isfile(fqn):
+            ctx = {}
             fqn = pth.join(self.get_csv_path(), model + ".csv")
         test_recs = self.load_csv_file(fqn)
         for rec in test_recs:
+            full_domain = [(code, "=", rec[code]), (name, "!=", rec[name])]
             if domain and domain != ():
-                ids = clodoo.searchL8(
-                    self.ctx, model, [(code, "=", rec[code]), domain])
-            else:
-                ids = clodoo.searchL8(self.ctx, model, [(code, "=", rec[code])])
-            vals = {"name": rec[name]}
+                full_domain += list(domain)
+            ids = clodoo.searchL8(self.ctx, model, full_domain)
+            if not ids:
+                continue
+            vals = {}
+            for res_id in ids:
+                if self.search_4_xref(model, res_id):
+                    vals = {"name": rec[name]}
+                    break
             if reset_id:
                 vals[ext_id_field] = False
                 if model == "res.partner" and identity.startswith("vg7"):
                     vals["vg72_id"] = False
-            clodoo.writeL8(self.ctx, model, ids, vals, context={"lang": "en_US"})
+            if vals:
+                self.write_log("%s.write(%s, %s, ctx=%s)" % (model, ids, vals, ctx),
+                               echo=False)
+                clodoo.writeL8(self.ctx, model, ids, vals, context=ctx)
+        self.dirty_any_model(
+            identity, model, code=code, domain=domain, reset_id=reset_id)
 
-    def init_res_country(self, identity, reset_id=False):
-        model = "res.country"
-        if self.ctx.get("_cr"):
-            query = (
-                "UPDATE ir_translation SET value='%s'"
-                " WHERE name='res.country,name' AND src='%s' AND lang='it_IT'")
-            for (value, src) in (
-                    ("Germania", "Germany"),
-                    ("Italia", "Italy"),
-                    ("Regno Unito", "United Kingdom"),
-            ):
-                try:
-                    clodoo.exec_sql(self.ctx, query % (value, src))
-                except BaseException:
-                    self.write_log("Cannot reset res.country", no_ts=True)
-        self.init_any_model(identity, model, reset_id=reset_id)
-
-    def reset_account_tax(self, identity, reset_id=False):
+    def init_account_tax(self, identity, reset_id=False):
         model = "account.tax"
         self.init_any_model(identity, model, code="description", reset_id=reset_id)
-
-    def dirty_account_tax(self):
-        model = "account.tax"
-        for (code, name) in (
-                ("22v", "Iva debito 22%"),
-                ("10v", "Iva debito 10%"),
-                ("22a", "Iva credito 22%"),
-        ):
-            ids = clodoo.searchL8(
-                self.ctx, model, [("description", "=", code)])
-            clodoo.writeL8(self.ctx, model, ids, {"name": name})
-
-    def reset_res_partner(self, identity, reset_id=False):
-        model = "res.partner"
-        self.init_any_model(identity, model, code="vat", reset_id=reset_id)
-
-    def dirty_res_partner(self):
-        for (vat, name) in (
-                ("IT00115719999", "Partner 1"),
-        ):
-            ids = clodoo.searchL8(
-                self.ctx, "res.partner", [("vat", "=", vat),
-                                          ("type", "=", "contact")])
-            clodoo.writeL8(self.ctx, "res.partner", ids, {"name": name})
-
-    def reset_ext_id(self, identity, model):
-        ext_id_field = self.get_ext_id_field(identity)
-        domain = [(ext_id_field, ">", 0)]
-        vals = {ext_id_field: False}
-        ids = clodoo.searchL8(self.ctx, model, domain)
-        for id in ids:
-            clodoo.writeL8(self.ctx, model, id, vals)
 
     def init_model(self, identity, model, reset_id=False):
         if not self.conai and "conai" in model:
             return
         actual_model = self.get_actual_model(model)
-        if actual_model == "res.country":
-            self.init_res_country(identity, reset_id=reset_id)
-        elif actual_model == "account.tax":
-            self.reset_account_tax(identity, reset_id=reset_id)
+        if actual_model == "account.tax":
+            self.init_account_tax(identity, reset_id=reset_id)
         elif actual_model == "res.partner":
-            self.reset_res_partner(identity, reset_id=reset_id)
-        elif actual_model == model and reset_id:
-            self.reset_ext_id(identity, model)
+            self.init_any_model(
+                identity, model,
+                code="vat", reset_id=reset_id, domain=[("type", "=", "contact")])
+        else:
+            self.init_any_model(identity, model, reset_id=reset_id)
 
     def prepare_rec(self, rec, main_ext_id):
         ext_id = False
@@ -1462,6 +1449,8 @@ class ExtTestEnv(object):
             fct_test=fct_test,
         )
 
+    def test_country_state(
+            self, mode=None, identity="vg7:", fct_test="synchro", reset_id=False):
         model = "res.country.state"
         self.init_model(identity, model, reset_id=reset_id)
         self.load_n_test_model(
@@ -1474,8 +1463,6 @@ class ExtTestEnv(object):
             self, mode=None, identity="vg7:", fct_test="synchro", reset_id=False):
         model = "res.partner"
         self.init_model(identity, model, reset_id=reset_id)
-        if reset_id:
-            self.dirty_res_partner()
         self.load_n_test_model(
             identity,
             model,
@@ -1486,8 +1473,6 @@ class ExtTestEnv(object):
             self, mode=None, identity="vg7:", fct_test="synchro", reset_id=False):
         model = "account.tax"
         self.init_model(identity, model, reset_id=reset_id)
-        if reset_id:
-            self.dirty_account_tax()
         self.load_n_test_model(
             identity,
             model,
@@ -1501,9 +1486,11 @@ def main(cli_args=[]):
     ext_test_env = ExtTestEnv(cli_args)
     ext_test_env.setup()
 
-    ext_test_env.write_log("*** Starting VG7 test ***", echo=True)
+    ext_test_env.write_log("*** Starting VG7 test ***", echo=True, bb=2)
     ext_test_env.test_country(identity="vg7:", reset_id=True)
     ext_test_env.test_country(identity="vg7:", fct_test="trigger")
+    ext_test_env.test_country_state(identity="vg7:", reset_id=True)
+    ext_test_env.test_country_state(identity="vg7:", fct_test="trigger")
     ext_test_env.test_partner(identity="vg7:", reset_id=True)
     ext_test_env.test_partner(identity="vg7:", fct_test="trigger")
     # In order to increase test coverage, from here trigger run before synchro test
@@ -1511,9 +1498,11 @@ def main(cli_args=[]):
     ext_test_env.test_tax(identity="vg7:")
 
 
-    ext_test_env.write_log("*** Starting OE8 test ***", echo=True)
+    ext_test_env.write_log("*** Starting OE8 test ***", echo=True, bb=2)
     ext_test_env.test_country(identity="oe8:", reset_id=True)
     ext_test_env.test_country(identity="oe8:", fct_test="trigger")
+    ext_test_env.test_country_state(identity="oe8:", reset_id=True)
+    ext_test_env.test_country_state(identity="oe8:", fct_test="trigger")
     ext_test_env.test_partner(identity="oe8:", reset_id=True)
     ext_test_env.test_partner(identity="oe8:", fct_test="trigger")
     # In order to increase test coverage, from here trigger run before synchro test

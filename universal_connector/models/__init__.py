@@ -29,6 +29,7 @@ from . import (
     res_currency,
     res_country,
     res_groups,
+    res_lang,
     res_partner,
     res_partner_bank,
     res_lang,

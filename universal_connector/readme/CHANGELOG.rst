@@ -1,7 +1,7 @@
-10.0.0.3.4 (2024-04-03)
+10.0.0.3.4 (2024-04-08)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-* [QUA] Test coverage 47% (4971: 2634+2337) [10 TestPoints] - quality rating 29 (target 100)
+* [QUA] Test coverage 38% (4971: 3065+1906) [10 TestPoints] - quality rating 24 (target 100)
 
 10.0.0.3.3 (2023-10-31)
 ~~~~~~~~~~~~~~~~~~~~~~~

@@ -1,71 +1,217 @@
-2024-04-03 17:51:54 self.setup()
-2024-04-03 17:52:03 check_if_module_installed(mk_test_env, 1/16)
-2024-04-03 17:52:04 res.company.write(1, {u'sale_note': u'Si prega di controllate i dati entro le 24h.'})
-2024-04-03 17:52:04 check_if_module_installed(universal_connector, 2/16)
-2024-04-03 17:52:04 check_if_module_installed(account, 3/16)
-2024-04-03 17:52:04 check_if_module_installed(account_payment_term_extension, 4/16)
-2024-04-03 17:52:04 check_if_module_installed(date_range, 5/16)
-2024-04-03 17:52:05 check_if_module_installed(purchase, 6/16)
-2024-04-03 17:52:05 check_if_module_installed(sale, 7/16)
-2024-04-03 17:52:05 check_if_module_installed(stock, 8/16)
-2024-04-03 17:52:05 check_if_module_installed(l10n_it_fiscal, 9/16)
-2024-04-03 17:52:05 check_if_module_installed(l10n_it_fiscalcode, 10/16)
-2024-04-03 17:52:05 check_if_module_installed(l10n_it_ddt, 11/16)
-2024-04-03 17:52:05 check_if_module_installed(l10n_it_einvoice_out, 12/16)
-2024-04-03 17:52:05 check_if_module_installed(l10n_it_ricevute_bancarie, 13/16)
-2024-04-03 17:52:05 check_if_module_installed(partner_bank, 14/16)
-2024-04-03 17:52:05 check_if_module_installed(l10n_it_conai, 15/16)
-2024-04-03 17:52:05 check_if_module_installed(connector_vg7_conai, 16/16)
-2024-04-03 17:52:05 write_record(account.journal, [])
-2024-04-03 17:52:05 delete_all_records()
-2024-04-03 17:52:05 delete_record(account.tax, [(u'description', u'=', u'a15')])
-2024-04-03 17:52:06 *** Starting VG7 test ***
-2024-04-03 17:52:06 load_n_test_model(vg7:, res.country, mode=None, fct=synchro)
-2024-04-03 17:52:06 synchro(res.country, {u'vg7:code': 'IT', u'vg7:description': 'Italia', u'vg7:id': 39}) - 110
-2024-04-03 17:52:07 check_record(vg7:, res.country, 110, {'code': 'IT', 'vg7_id': 39, 'oe8_id': 9, 'name': 'Italia'})
-2024-04-03 17:52:07 synchro(res.country, {u'vg7:code': 'DE', u'vg7:description': 'Germania', u'vg7:id': 49}) - 58
-2024-04-03 17:52:07 check_record(vg7:, res.country, 58, {'code': 'DE', 'vg7_id': 49, 'oe8_id': False, 'name': 'Germania'})
-2024-04-03 17:52:07 synchro(res.country, {u'vg7:code': 'GB', u'vg7:description': 'Inghilterra', u'vg7:id': 44}) - 233
-2024-04-03 17:52:07 check_record(vg7:, res.country, 233, {'code': 'GB', 'vg7_id': 44, 'oe8_id': 12, 'name': 'Regno Unito'})
-2024-04-03 17:52:07 load_n_test_model(vg7:, res.country.state, mode=None, fct=synchro)
-2024-04-03 17:52:07 synchro(res.country.state, {u'vg7:code': 'MI', u'vg7:description': 'Milano', u'vg7:id': 2}) - 363
-2024-04-03 17:52:07 check_record(vg7:, res.country.state, 363, {'code': 'MI', 'country_id': 110, 'vg7_id': 2, 'oe8_id': 102, 'name': 'Milano'})
-2024-04-03 17:52:07 synchro(res.country.state, {u'vg7:code': 'TO', u'vg7:description': 'Torino', u'vg7:id': 11}) - 402
-2024-04-03 17:52:07 check_record(vg7:, res.country.state, 402, {'code': 'TO', 'country_id': 110, 'vg7_id': 11, 'oe8_id': 111, 'name': 'Torino'})
-2024-04-03 17:52:07 synchro(res.country.state, {u'vg7:code': 'AL', u'vg7:description': 'alessandria', u'vg7:id': 15}) - 307
-2024-04-03 17:52:07 check_record(vg7:, res.country.state, 307, {'code': 'AL', 'country_id': 110, 'vg7_id': 15, 'oe8_id': 115, 'name': 'Alessandria'})
-2024-04-03 17:52:07 synchro(res.country.state, {u'vg7:code': 'BO', u'vg7:description': 'Bologna', u'vg7:id': 54}) - 320
-2024-04-03 17:52:07 check_record(vg7:, res.country.state, 320, {'code': 'BO', 'country_id': 110, 'vg7_id': 54, 'oe8_id': 154, 'name': 'Bologna'})
-2024-04-03 17:52:08 synchro(res.country.state, {u'vg7:code': 'NA', u'vg7:description': 'Napoli', u'vg7:id': 81}) - 366
-2024-04-03 17:52:08 check_record(vg7:, res.country.state, 366, {'code': 'NA', 'country_id': 110, 'vg7_id': 81, 'oe8_id': 181, 'name': 'Napoli'})
-2024-04-03 17:52:08 synchro(res.country.state, {u'vg7:code': 'CE', u'vg7:description': 'Caserta', u'vg7:id': 82}) - 328
-2024-04-03 17:52:08 check_record(vg7:, res.country.state, 328, {'code': 'CE', 'country_id': 110, 'vg7_id': 82, 'oe8_id': 182, 'name': 'Caserta'})
-2024-04-03 17:52:08 load_n_test_model(vg7:, res.country, mode=None, fct=trigger)
-2024-04-03 17:52:08 trigger_one_record(countries, 39, vg7:) - 110
-2024-04-03 17:52:08 check_record(vg7:, res.country, 110, {'code': 'IT', 'vg7_id': 39, 'oe8_id': 9, 'name': 'Italia'})
-2024-04-03 17:52:08 trigger_one_record(countries, 49, vg7:) - 58
-2024-04-03 17:52:08 check_record(vg7:, res.country, 58, {'code': 'DE', 'vg7_id': 49, 'oe8_id': False, 'name': 'Germania'})
-2024-04-03 17:52:08 trigger_one_record(countries, 44, vg7:) - 233
-2024-04-03 17:52:08 check_record(vg7:, res.country, 233, {'code': 'GB', 'vg7_id': 44, 'oe8_id': 12, 'name': 'Regno Unito'})
-2024-04-03 17:52:08 load_n_test_model(vg7:, res.country.state, mode=None, fct=trigger)
-2024-04-03 17:52:08 trigger_one_record(regions, 2, vg7:) - 363
-2024-04-03 17:52:08 check_record(vg7:, res.country.state, 363, {'code': 'MI', 'country_id': 110, 'vg7_id': 2, 'oe8_id': 102, 'name': 'Milano'})
-2024-04-03 17:52:08 trigger_one_record(regions, 11, vg7:) - 402
-2024-04-03 17:52:08 check_record(vg7:, res.country.state, 402, {'code': 'TO', 'country_id': 110, 'vg7_id': 11, 'oe8_id': 111, 'name': 'Torino'})
-2024-04-03 17:52:09 trigger_one_record(regions, 15, vg7:) - 307
-2024-04-03 17:52:09 check_record(vg7:, res.country.state, 307, {'code': 'AL', 'country_id': 110, 'vg7_id': 15, 'oe8_id': 115, 'name': 'Alessandria'})
-2024-04-03 17:52:09 trigger_one_record(regions, 54, vg7:) - 320
-2024-04-03 17:52:09 check_record(vg7:, res.country.state, 320, {'code': 'BO', 'country_id': 110, 'vg7_id': 54, 'oe8_id': 154, 'name': 'Bologna'})
-2024-04-03 17:52:09 trigger_one_record(regions, 81, vg7:) - 366
-2024-04-03 17:52:09 check_record(vg7:, res.country.state, 366, {'code': 'NA', 'country_id': 110, 'vg7_id': 81, 'oe8_id': 181, 'name': 'Napoli'})
-2024-04-03 17:52:09 trigger_one_record(regions, 82, vg7:) - 328
-2024-04-03 17:52:09 check_record(vg7:, res.country.state, 328, {'code': 'CE', 'country_id': 110, 'vg7_id': 82, 'oe8_id': 182, 'name': 'Caserta'})
-2024-04-03 17:52:10 load_n_test_model(vg7:, res.partner, mode=None, fct=synchro)
-2024-04-03 17:52:10 synchro(res.partner, {u'vg7:surename': '', u'vg7:name': 'Prima Alpha S.p.A.', u'vg7:piva': '00115719999', u'vg7:id': 101}) - 10
-2024-04-03 17:52:10 check_record(vg7:, res.partner, 10, {'vg7_id': 101, 'type': 'contact', 'oe8_id': 801, 'vat': 'IT00115719999', 'name': 'Prima Alpha S.p.A.'})
-2024-04-03 17:52:10 load_n_test_model(vg7:, res.partner, mode=None, fct=trigger)
-2024-04-03 17:52:10 trigger_one_record(customers, 101, vg7:) - 10
-2024-04-03 17:52:10 check_record(vg7:, res.partner, 10, {'vg7_id': 101, 'type': 'contact', 'oe8_id': 801, 'vat': 'IT00115719999', 'name': 'Prima Alpha S.p.A.'})
-2024-04-03 17:52:11 load_n_test_model(vg7:, account.tax, mode=None, fct=trigger)
-2024-04-03 17:52:11 trigger_one_record(tax_codes, 22, vg7:) - 180
-2024-04-03 17:52:11 check_record(vg7:, account.tax, 180, {'name': 'IVA 22% su vendite', 'vg7_id': 22, 'company_id': 1, 'type_tax_use': 'sale', 'amount': 22.0, 'oe8_id': 1, 'description': '22v'})
+2024-04-08 14:21:40 self.setup()
+2024-04-08 14:21:47 check_if_module_installed(mk_test_env, 1/16)
+2024-04-08 14:21:47 res.company.write(1, {u'sale_note': u'Si prega di controllate i dati entro le 24h.'})
+2024-04-08 14:21:47 check_if_module_installed(universal_connector, 2/16)
+2024-04-08 14:21:48 check_if_module_installed(account, 3/16)
+2024-04-08 14:21:48 check_if_module_installed(account_payment_term_extension, 4/16)
+2024-04-08 14:21:48 check_if_module_installed(date_range, 5/16)
+2024-04-08 14:21:48 check_if_module_installed(purchase, 6/16)
+2024-04-08 14:21:48 check_if_module_installed(sale, 7/16)
+2024-04-08 14:21:48 check_if_module_installed(stock, 8/16)
+2024-04-08 14:21:48 check_if_module_installed(l10n_it_fiscal, 9/16)
+2024-04-08 14:21:48 check_if_module_installed(l10n_it_fiscalcode, 10/16)
+2024-04-08 14:21:48 check_if_module_installed(l10n_it_ddt, 11/16)
+2024-04-08 14:21:48 check_if_module_installed(l10n_it_einvoice_out, 12/16)
+2024-04-08 14:21:48 check_if_module_installed(l10n_it_ricevute_bancarie, 13/16)
+2024-04-08 14:21:48 check_if_module_installed(partner_bank, 14/16)
+2024-04-08 14:21:48 check_if_module_installed(l10n_it_conai, 15/16)
+2024-04-08 14:21:48 check_if_module_installed(connector_vg7_conai, 16/16)
+2024-04-08 14:21:48 write_record(account.journal, [(u'update_posted', u'=', False)]) -> [1, 2, 3, 4, 6, 5, 7]
+
+
+2024-04-08 14:21:49 *** Starting VG7 test ***
+
+2024-04-08 14:21:49 ** Testing vg7::res.country **
+2024-04-08 14:21:49 res.country.write([58], {u'name': 'Germania', u'vg7_id': False}, ctx={})
+2024-04-08 14:21:49 res.country.write([233], {u'name': 'Regno Unito', u'vg7_id': False}, ctx={})
+2024-04-08 14:21:49 res.country.write([110], {u'name': 'Italia', u'vg7_id': False}, ctx={})
+2024-04-08 14:21:49 load_n_test_model(vg7:, res.country, mode=None, fct=synchro)
+2024-04-08 14:21:49 synchro(res.country, {u'vg7:code': 'IT', u'vg7:description': 'Italia', u'vg7:id': 39}) -> 110
+2024-04-08 14:21:49 check_record(vg7:, res.country, 110, {'code': 'IT', 'vg7_id': 39, 'oe8_id': 9, 'name': 'Italia'})
+2024-04-08 14:21:49 synchro(res.country, {u'vg7:code': 'DE', u'vg7:description': 'Germania', u'vg7:id': 49}) -> 58
+2024-04-08 14:21:49 check_record(vg7:, res.country, 58, {'code': 'DE', 'vg7_id': 49, 'oe8_id': False, 'name': 'Germania'})
+2024-04-08 14:21:49 synchro(res.country, {u'vg7:code': 'GB', u'vg7:description': 'Inghilterra', u'vg7:id': 44}) -> 233
+2024-04-08 14:21:49 check_record(vg7:, res.country, 233, {'code': 'GB', 'vg7_id': 44, 'oe8_id': 12, 'name': 'Regno Unito'})
+2024-04-08 14:21:49 ** Testing vg7::res.country **
+2024-04-08 14:21:49 load_n_test_model(vg7:, res.country, mode=None, fct=trigger)
+2024-04-08 14:21:49 trigger_one_record(countries, 39, vg7:) -> 110
+2024-04-08 14:21:49 check_record(vg7:, res.country, 110, {'code': 'IT', 'vg7_id': 39, 'oe8_id': 9, 'name': 'Italia'})
+2024-04-08 14:21:49 trigger_one_record(countries, 49, vg7:) -> 58
+2024-04-08 14:21:49 check_record(vg7:, res.country, 58, {'code': 'DE', 'vg7_id': 49, 'oe8_id': False, 'name': 'Germania'})
+2024-04-08 14:21:50 trigger_one_record(countries, 44, vg7:) -> 233
+2024-04-08 14:21:50 check_record(vg7:, res.country, 233, {'code': 'GB', 'vg7_id': 44, 'oe8_id': 12, 'name': 'Regno Unito'})
+
+2024-04-08 14:21:50 ** Testing vg7::res.country.state **
+2024-04-08 14:21:50 res.country.state.write([43], {u'name': 'Milano', u'vg7_id': False}, ctx={})
+2024-04-08 14:21:50 res.country.state.write([97, 462], {u'name': 'Torino', u'vg7_id': False}, ctx={})
+2024-04-08 14:21:50 res.country.state.write([9, 72, 99, 420], {u'name': 'Alessandria', u'vg7_id': False}, ctx={})
+2024-04-08 14:21:50 res.country.state.write([451], {u'name': 'Napoli', u'vg7_id': False}, ctx={})
+2024-04-08 14:21:50 res.country.state.write([76, 108, 431], {u'name': 'Caserta', u'vg7_id': False}, ctx={})
+2024-04-08 14:21:50 load_n_test_model(vg7:, res.country.state, mode=None, fct=synchro)
+2024-04-08 14:21:50 synchro(res.country.state, {u'vg7:code': 'MI', u'vg7:description': 'Milano', u'vg7:id': 2}) -> 363
+2024-04-08 14:21:50 check_record(vg7:, res.country.state, 363, {'code': 'MI', 'country_id': 110, 'vg7_id': 2, 'oe8_id': 102, 'name': 'Milano'})
+2024-04-08 14:21:50 synchro(res.country.state, {u'vg7:code': 'TO', u'vg7:description': 'Torino', u'vg7:id': 11}) -> 402
+2024-04-08 14:21:50 check_record(vg7:, res.country.state, 402, {'code': 'TO', 'country_id': 110, 'vg7_id': 11, 'oe8_id': 111, 'name': 'Torino'})
+2024-04-08 14:21:50 synchro(res.country.state, {u'vg7:code': 'AL', u'vg7:description': 'alessandria', u'vg7:id': 15}) -> 307
+2024-04-08 14:21:50 check_record(vg7:, res.country.state, 307, {'code': 'AL', 'country_id': 110, 'vg7_id': 15, 'oe8_id': 115, 'name': 'Alessandria'})
+2024-04-08 14:21:50 synchro(res.country.state, {u'vg7:code': 'BO', u'vg7:description': 'Bologna', u'vg7:id': 54}) -> 320
+2024-04-08 14:21:50 check_record(vg7:, res.country.state, 320, {'code': 'BO', 'country_id': 110, 'vg7_id': 54, 'oe8_id': 154, 'name': 'Bologna'})
+2024-04-08 14:21:50 synchro(res.country.state, {u'vg7:code': 'NA', u'vg7:description': 'Napoli', u'vg7:id': 81}) -> 366
+2024-04-08 14:21:51 check_record(vg7:, res.country.state, 366, {'code': 'NA', 'country_id': 110, 'vg7_id': 81, 'oe8_id': 181, 'name': 'Napoli'})
+2024-04-08 14:21:51 synchro(res.country.state, {u'vg7:code': 'CE', u'vg7:description': 'Caserta', u'vg7:id': 82}) -> 328
+2024-04-08 14:21:51 check_record(vg7:, res.country.state, 328, {'code': 'CE', 'country_id': 110, 'vg7_id': 82, 'oe8_id': 182, 'name': 'Caserta'})
+2024-04-08 14:21:51 ** Testing vg7::res.country.state **
+2024-04-08 14:21:51 load_n_test_model(vg7:, res.country.state, mode=None, fct=trigger)
+2024-04-08 14:21:51 trigger_one_record(regions, 2, vg7:) -> 363
+2024-04-08 14:21:51 check_record(vg7:, res.country.state, 363, {'code': 'MI', 'country_id': 110, 'vg7_id': 2, 'oe8_id': 102, 'name': 'Milano'})
+2024-04-08 14:21:51 trigger_one_record(regions, 11, vg7:) -> 402
+2024-04-08 14:21:51 check_record(vg7:, res.country.state, 402, {'code': 'TO', 'country_id': 110, 'vg7_id': 11, 'oe8_id': 111, 'name': 'Torino'})
+2024-04-08 14:21:51 trigger_one_record(regions, 15, vg7:) -> 307
+2024-04-08 14:21:51 check_record(vg7:, res.country.state, 307, {'code': 'AL', 'country_id': 110, 'vg7_id': 15, 'oe8_id': 115, 'name': 'Alessandria'})
+2024-04-08 14:21:51 trigger_one_record(regions, 54, vg7:) -> 320
+2024-04-08 14:21:51 check_record(vg7:, res.country.state, 320, {'code': 'BO', 'country_id': 110, 'vg7_id': 54, 'oe8_id': 154, 'name': 'Bologna'})
+2024-04-08 14:21:51 trigger_one_record(regions, 81, vg7:) -> 366
+2024-04-08 14:21:52 check_record(vg7:, res.country.state, 366, {'code': 'NA', 'country_id': 110, 'vg7_id': 81, 'oe8_id': 181, 'name': 'Napoli'})
+2024-04-08 14:21:52 trigger_one_record(regions, 82, vg7:) -> 328
+2024-04-08 14:21:52 check_record(vg7:, res.country.state, 328, {'code': 'CE', 'country_id': 110, 'vg7_id': 82, 'oe8_id': 182, 'name': 'Caserta'})
+
+2024-04-08 14:21:52 ** Testing vg7::res.partner **
+2024-04-08 14:21:52 res.partner.write([10], {'name': 'Partner 1', 'vat': 'IT00115719999'})
+2024-04-08 14:21:52 load_n_test_model(vg7:, res.partner, mode=None, fct=synchro)
+2024-04-08 14:21:52 synchro(res.partner, {u'vg7:surename': '', u'vg7:name': 'Prima Alpha S.p.A.', u'vg7:piva': '00115719999', u'vg7:id': 101}) -> 10
+2024-04-08 14:21:52 check_record(vg7:, res.partner, 10, {'vg7_id': 101, 'type': 'contact', 'oe8_id': 801, 'vat': 'IT00115719999', 'name': 'Prima Alpha S.p.A.'})
+2024-04-08 14:21:53 ** Testing vg7::res.partner **
+2024-04-08 14:21:53 res.partner.write([10], {'name': 'Partner 1', 'vat': 'IT00115719999'})
+2024-04-08 14:21:53 load_n_test_model(vg7:, res.partner, mode=None, fct=trigger)
+2024-04-08 14:21:53 trigger_one_record(customers, 101, vg7:) -> 10
+2024-04-08 14:21:53 check_record(vg7:, res.partner, 10, {'vg7_id': 101, 'type': 'contact', 'oe8_id': 801, 'vat': 'IT00115719999', 'name': 'Prima Alpha S.p.A.'})
+
+2024-04-08 14:21:53 ** Testing vg7::account.tax **
+2024-04-08 14:21:54 load_n_test_model(vg7:, account.tax, mode=None, fct=trigger)
+2024-04-08 14:21:54 trigger_one_record(tax_codes, 22, vg7:) -> 1
+2024-04-08 14:21:54 check_record(vg7:, account.tax, 1, {'name': 'IVA 22% su vendite', 'vg7_id': 22, 'company_id': 1, 'type_tax_use': 'sale', 'amount': 22.0, 'oe8_id': 1, 'description': '22v'})
+2024-04-08 14:21:54 trigger_one_record(tax_codes, 4, vg7:) -> 7
+2024-04-08 14:21:54 check_record(vg7:, account.tax, 7, {'name': 'IVA 4% su vendite', 'vg7_id': 4, 'company_id': 1, 'type_tax_use': 'sale', 'amount': 4.0, 'oe8_id': False, 'description': '4v'})
+2024-04-08 14:21:54 trigger_one_record(tax_codes, 101, vg7:) -> 172
+2024-04-08 14:21:55 check_record(vg7:, account.tax, 172, {'name': 'Forfettario art. 101', 'vg7_id': 101, 'company_id': 1, 'type_tax_use': 'sale', 'amount': 0.0, 'oe8_id': False, 'description': 'A1'})
+2024-04-08 14:21:55 trigger_one_record(tax_codes, 115, vg7:) -> 173
+2024-04-08 14:21:55 check_record(vg7:, account.tax, 173, {'name': 'Art. 15', 'vg7_id': 115, 'company_id': 1, 'type_tax_use': 'sale', 'amount': 0.0, 'oe8_id': False, 'description': 'a15'})
+2024-04-08 14:21:55 ** Testing vg7::account.tax **
+2024-04-08 14:21:55 load_n_test_model(vg7:, account.tax, mode=None, fct=synchro)
+2024-04-08 14:21:56 synchro(account.tax, {u'vg7:aliquota': '22', u'vg7:code': '22%', u'vg7:description': 'Iva 22%', u'vg7:id': 22}) -> 1
+2024-04-08 14:21:56 check_record(vg7:, account.tax, 1, {'name': 'IVA 22% su vendite', 'vg7_id': 22, 'company_id': 1, 'type_tax_use': 'sale', 'amount': 22.0, 'oe8_id': 1, 'description': '22v'})
+2024-04-08 14:21:56 synchro(account.tax, {u'vg7:aliquota': '4', u'vg7:code': '4%', u'vg7:description': '', u'vg7:id': 4}) -> 7
+2024-04-08 14:21:56 check_record(vg7:, account.tax, 7, {'name': 'IVA 4% su vendite', 'vg7_id': 4, 'company_id': 1, 'type_tax_use': 'sale', 'amount': 4.0, 'oe8_id': False, 'description': '4v'})
+2024-04-08 14:21:56 synchro(account.tax, {u'vg7:aliquota': '0', u'vg7:code': 'A1', u'vg7:description': 'Forfettario art. 101', u'vg7:id': 101}) -> 172
+2024-04-08 14:21:56 check_record(vg7:, account.tax, 172, {'name': 'Forfettario art. 101', 'vg7_id': 101, 'company_id': 1, 'type_tax_use': 'sale', 'amount': 0.0, 'oe8_id': False, 'description': 'A1'})
+2024-04-08 14:21:56 synchro(account.tax, {u'vg7:aliquota': '0', u'vg7:code': 'a15', u'vg7:description': 'Art. 15', u'vg7:id': 115}) -> 173
+2024-04-08 14:21:56 check_record(vg7:, account.tax, 173, {'name': 'Art. 15', 'vg7_id': 115, 'company_id': 1, 'type_tax_use': 'sale', 'amount': 0.0, 'oe8_id': False, 'description': 'a15'})
+
+
+2024-04-08 14:21:56 *** Starting OE8 test ***
+
+2024-04-08 14:21:56 ** Testing oe8::res.country **
+2024-04-08 14:21:56 res.country.write([110], {u'name': 'Italy', u'oe8_id': False}, ctx={u'lang': u'en_US'})
+2024-04-08 14:21:56 res.country.write([233], {u'name': 'United Kingdom', u'oe8_id': False}, ctx={u'lang': u'en_US'})
+2024-04-08 14:21:56 load_n_test_model(oe8:, res.country, mode=None, fct=synchro)
+2024-04-08 14:21:56 synchro(res.country, {u'oe8:code': 'AT', u'oe8:id': 3, u'oe8:name': 'Austria'}) -> 13
+2024-04-08 14:21:57 check_record(oe8:, res.country, 13, {'code': 'AT', 'vg7_id': False, 'oe8_id': 3, 'name': 'Austria'})
+2024-04-08 14:21:57 synchro(res.country, {u'oe8:code': 'AU', u'oe8:id': 6, u'oe8:name': 'Australia'}) -> 14
+2024-04-08 14:21:57 check_record(oe8:, res.country, 14, {'code': 'AU', 'vg7_id': False, 'oe8_id': 6, 'name': 'Australia'})
+2024-04-08 14:21:57 synchro(res.country, {u'oe8:code': 'IT', u'oe8:id': 9, u'oe8:name': 'Italia'}) -> 110
+2024-04-08 14:21:57 check_record(oe8:, res.country, 110, {'code': 'IT', 'vg7_id': 39, 'oe8_id': 9, 'name': 'Italia'})
+2024-04-08 14:21:57 synchro(res.country, {u'oe8:code': 'GB', u'oe8:id': 12, u'oe8:name': 'Regno Unito'}) -> 233
+2024-04-08 14:21:57 check_record(oe8:, res.country, 233, {'code': 'GB', 'vg7_id': 44, 'oe8_id': 12, 'name': 'Regno Unito'})
+2024-04-08 14:21:57 ** Testing oe8::res.country **
+2024-04-08 14:21:57 res.country.write([110], {u'name': 'Italy'}, ctx={u'lang': u'en_US'})
+2024-04-08 14:21:57 res.country.write([233], {u'name': 'United Kingdom'}, ctx={u'lang': u'en_US'})
+2024-04-08 14:21:57 load_n_test_model(oe8:, res.country, mode=None, fct=trigger)
+2024-04-08 14:21:57 trigger_one_record(res.country, 3, oe8:) -> 13
+2024-04-08 14:21:57 check_record(oe8:, res.country, 13, {'code': 'AT', 'vg7_id': False, 'oe8_id': 3, 'name': 'Austria'})
+2024-04-08 14:21:57 trigger_one_record(res.country, 6, oe8:) -> 14
+2024-04-08 14:21:57 check_record(oe8:, res.country, 14, {'code': 'AU', 'vg7_id': False, 'oe8_id': 6, 'name': 'Australia'})
+2024-04-08 14:21:57 trigger_one_record(res.country, 9, oe8:) -> 110
+2024-04-08 14:21:57 check_record(oe8:, res.country, 110, {'code': 'IT', 'vg7_id': 39, 'oe8_id': 9, 'name': 'Italia'})
+2024-04-08 14:21:57 trigger_one_record(res.country, 12, oe8:) -> 233
+2024-04-08 14:21:57 check_record(oe8:, res.country, 233, {'code': 'GB', 'vg7_id': 44, 'oe8_id': 12, 'name': 'Regno Unito'})
+
+2024-04-08 14:21:57 ** Testing oe8::res.country.state **
+2024-04-08 14:21:58 load_n_test_model(oe8:, res.country.state, mode=None, fct=synchro)
+2024-04-08 14:21:58 synchro(res.country.state, {u'oe8:name': 'Milano', u'oe8:id': 102, u'oe8:code': 'MI', u'oe8:country_id': '9'}) -> 363
+2024-04-08 14:21:58 check_record(oe8:, res.country.state, 363, {'code': 'MI', 'country_id': 110, 'vg7_id': 2, 'oe8_id': 102, 'name': 'Milano'})
+2024-04-08 14:21:58 synchro(res.country.state, {u'oe8:name': 'Torino', u'oe8:id': 111, u'oe8:code': 'TO', u'oe8:country_id': '9'}) -> 402
+2024-04-08 14:21:58 check_record(oe8:, res.country.state, 402, {'code': 'TO', 'country_id': 110, 'vg7_id': 11, 'oe8_id': 111, 'name': 'Torino'})
+2024-04-08 14:21:58 synchro(res.country.state, {u'oe8:name': 'Alessandria', u'oe8:id': 115, u'oe8:code': 'AL', u'oe8:country_id': '9'}) -> 307
+2024-04-08 14:21:58 check_record(oe8:, res.country.state, 307, {'code': 'AL', 'country_id': 110, 'vg7_id': 15, 'oe8_id': 115, 'name': 'Alessandria'})
+2024-04-08 14:21:58 synchro(res.country.state, {u'oe8:name': 'Bologna', u'oe8:id': 154, u'oe8:code': 'BO', u'oe8:country_id': '9'}) -> 320
+2024-04-08 14:21:58 check_record(oe8:, res.country.state, 320, {'code': 'BO', 'country_id': 110, 'vg7_id': 54, 'oe8_id': 154, 'name': 'Bologna'})
+2024-04-08 14:21:58 synchro(res.country.state, {u'oe8:name': 'Napoli', u'oe8:id': 181, u'oe8:code': 'NA', u'oe8:country_id': '9'}) -> 366
+2024-04-08 14:21:58 check_record(oe8:, res.country.state, 366, {'code': 'NA', 'country_id': 110, 'vg7_id': 81, 'oe8_id': 181, 'name': 'Napoli'})
+2024-04-08 14:21:58 synchro(res.country.state, {u'oe8:name': 'Caserta', u'oe8:id': 182, u'oe8:code': 'CE', u'oe8:country_id': '9'}) -> 328
+2024-04-08 14:21:58 check_record(oe8:, res.country.state, 328, {'code': 'CE', 'country_id': 110, 'vg7_id': 82, 'oe8_id': 182, 'name': 'Caserta'})
+2024-04-08 14:21:59 ** Testing oe8::res.country.state **
+2024-04-08 14:21:59 load_n_test_model(oe8:, res.country.state, mode=None, fct=trigger)
+2024-04-08 14:21:59 trigger_one_record(res.country.state, 102, oe8:) -> 363
+2024-04-08 14:21:59 check_record(oe8:, res.country.state, 363, {'code': 'MI', 'country_id': 110, 'vg7_id': 2, 'oe8_id': 102, 'name': 'Milano'})
+2024-04-08 14:21:59 trigger_one_record(res.country.state, 111, oe8:) -> 402
+2024-04-08 14:21:59 check_record(oe8:, res.country.state, 402, {'code': 'TO', 'country_id': 110, 'vg7_id': 11, 'oe8_id': 111, 'name': 'Torino'})
+2024-04-08 14:21:59 trigger_one_record(res.country.state, 115, oe8:) -> 307
+2024-04-08 14:21:59 check_record(oe8:, res.country.state, 307, {'code': 'AL', 'country_id': 110, 'vg7_id': 15, 'oe8_id': 115, 'name': 'Alessandria'})
+2024-04-08 14:21:59 trigger_one_record(res.country.state, 154, oe8:) -> 320
+2024-04-08 14:21:59 check_record(oe8:, res.country.state, 320, {'code': 'BO', 'country_id': 110, 'vg7_id': 54, 'oe8_id': 154, 'name': 'Bologna'})
+2024-04-08 14:21:59 trigger_one_record(res.country.state, 181, oe8:) -> 366
+2024-04-08 14:21:59 check_record(oe8:, res.country.state, 366, {'code': 'NA', 'country_id': 110, 'vg7_id': 81, 'oe8_id': 181, 'name': 'Napoli'})
+2024-04-08 14:22:00 trigger_one_record(res.country.state, 182, oe8:) -> 328
+2024-04-08 14:22:00 check_record(oe8:, res.country.state, 328, {'code': 'CE', 'country_id': 110, 'vg7_id': 82, 'oe8_id': 182, 'name': 'Caserta'})
+
+2024-04-08 14:22:00 ** Testing oe8::res.partner **
+2024-04-08 14:22:00 res.partner.write([10], {'name': 'Partner 1', 'vat': 'IT00115719999'})
+2024-04-08 14:22:00 res.partner.write([1], {'name': 'Test Company', 'vat': 'IT05111810015'})
+2024-04-08 14:22:00 load_n_test_model(oe8:, res.partner, mode=None, fct=synchro)
+2024-04-08 14:22:00 synchro(res.partner, {u'oe8:name': 'Test Company', u'oe8:vat': 'IT05111810015', u'oe8:type': 'contact', u'oe8:id': 3}) -> 1
+2024-04-08 14:22:01 check_record(oe8:, res.partner, 1, {'vg7_id': False, 'type': 'contact', 'oe8_id': 3, 'vat': 'IT05111810015', 'name': 'Test Company'})
+2024-04-08 14:22:01 synchro(res.partner, {u'oe8:name': 'Prima Alpha S.p.A.', u'oe8:vat': 'IT00115719999', u'oe8:type': 'contact', u'oe8:id': 801}) -> 10
+2024-04-08 14:22:01 check_record(oe8:, res.partner, 10, {'vg7_id': 101, 'type': 'contact', 'oe8_id': 801, 'vat': 'IT00115719999', 'name': 'Prima Alpha S.p.A.'})
+2024-04-08 14:22:01 ** Testing oe8::res.partner **
+2024-04-08 14:22:01 res.partner.write([10], {'name': 'Partner 1', 'vat': 'IT00115719999'})
+2024-04-08 14:22:01 res.partner.write([1], {'name': 'Test Company', 'vat': 'IT05111810015'})
+2024-04-08 14:22:01 load_n_test_model(oe8:, res.partner, mode=None, fct=trigger)
+2024-04-08 14:22:01 trigger_one_record(res.partner, 3, oe8:) -> 1
+2024-04-08 14:22:02 check_record(oe8:, res.partner, 1, {'vg7_id': False, 'type': 'contact', 'oe8_id': 3, 'vat': 'IT05111810015', 'name': 'Test Company'})
+2024-04-08 14:22:02 trigger_one_record(res.partner, 801, oe8:) -> 10
+2024-04-08 14:22:02 check_record(oe8:, res.partner, 10, {'vg7_id': 101, 'type': 'contact', 'oe8_id': 801, 'vat': 'IT00115719999', 'name': 'Prima Alpha S.p.A.'})
+
+2024-04-08 14:22:02 ** Testing oe8::account.tax **
+2024-04-08 14:22:02 delete_record(account.tax, [[(u'description', u'=', 'a15'), (u'id', u'not in', [171, 98, 101, 104, 106, 109, 112, 114, 115, 117, 120, 123, 126, 130, 133, 136, 140, 143, 147, 150, 153, 155, 158, 161, 164, 167, 169, 95, 70, 79, 4, 89, 71, 80, 3, 68, 99, 102, 105, 107, 110, 113, 116, 118, 121, 124, 127, 131, 134, 137, 141, 144, 148, 151, 154, 156, 159, 162, 165, 168, 170, 92, 72, 81, 91, 73, 82, 94, 74, 83, 93, 75, 84, 97, 2, 88, 76, 85, 54, 53, 1, 67, 100, 103, 108, 111, 119, 122, 125, 128, 132, 135, 138, 142, 145, 149, 152, 157, 160, 163, 166, 129, 139, 146, 96, 77, 86, 8, 90, 78, 87, 7, 69, 6, 5, 43, 55, 56, 44, 49, 50, 45, 46, 9, 11, 13, 14, 17, 19, 20, 22, 23, 25, 16, 10, 47, 48, 52, 51, 26, 28, 29, 31, 32, 34, 35, 33, 36, 38, 39, 40, 41, 42, 12, 18, 21, 24, 15, 27, 30, 37, 65, 66, 61, 62, 57, 58, 59, 60, 63, 64])]]) -> [173]
+2024-04-08 14:22:03 account.tax.write([1], {'description': '22v', 'name': 'Iva debito 22%'})
+2024-04-08 14:22:03 account.tax.write([3], {'description': '10v', 'name': 'Iva debito 10%'})
+2024-04-08 14:22:03 account.tax.write([2], {'description': '22a', 'name': 'Iva credito 22%'})
+2024-04-08 14:22:03 load_n_test_model(oe8:, account.tax, mode=None, fct=trigger)
+2024-04-08 14:22:03 trigger_one_record(account.tax, 1, oe8:) -> 1
+2024-04-08 14:22:03 check_record(oe8:, account.tax, 1, {'name': 'IVA 22% su vendite', 'vg7_id': 22, 'company_id': 1, 'type_tax_use': 'sale', 'amount': 22.0, 'oe8_id': 1, 'description': '22v'})
+2024-04-08 14:22:03 trigger_one_record(account.tax, 3, oe8:) -> 3
+2024-04-08 14:22:03 check_record(oe8:, account.tax, 3, {'name': 'IVA 10% su vendite', 'vg7_id': 10, 'company_id': 1, 'type_tax_use': 'sale', 'amount': 10.0, 'oe8_id': 3, 'description': '10v'})
+2024-04-08 14:22:04 trigger_one_record(account.tax, 2, oe8:) -> 2
+2024-04-08 14:22:04 check_record(oe8:, account.tax, 2, {'name': 'IVA 22% da acquisti', 'vg7_id': False, 'company_id': 1, 'type_tax_use': 'purchase', 'amount': 22.0, 'oe8_id': 2, 'description': '22a'})
+2024-04-08 14:22:04 ** Testing oe8::account.tax **
+2024-04-08 14:22:04 account.tax.write([1], {'description': '22v', 'name': 'Iva debito 22%'})
+2024-04-08 14:22:04 account.tax.write([3], {'description': '10v', 'name': 'Iva debito 10%'})
+2024-04-08 14:22:04 account.tax.write([2], {'description': '22a', 'name': 'Iva credito 22%'})
+2024-04-08 14:22:04 load_n_test_model(oe8:, account.tax, mode=None, fct=synchro)
+2024-04-08 14:22:04 synchro(account.tax, {u'oe8:name': 'IVA 22% su vendite', u'oe8:amount': '22', u'oe8:type_tax_use': 'sale', u'oe8:id': 1, u'oe8:description': '22v'}) -> 1
+2024-04-08 14:22:04 check_record(oe8:, account.tax, 1, {'name': 'IVA 22% su vendite', 'vg7_id': 22, 'company_id': 1, 'type_tax_use': 'sale', 'amount': 22.0, 'oe8_id': 1, 'description': '22v'})
+2024-04-08 14:22:04 synchro(account.tax, {u'oe8:name': 'IVA 10% su vendite', u'oe8:amount': '10', u'oe8:type_tax_use': 'sale', u'oe8:id': 3, u'oe8:description': '10v'}) -> 3
+2024-04-08 14:22:04 check_record(oe8:, account.tax, 3, {'name': 'IVA 10% su vendite', 'vg7_id': 10, 'company_id': 1, 'type_tax_use': 'sale', 'amount': 10.0, 'oe8_id': 3, 'description': '10v'})
+2024-04-08 14:22:05 synchro(account.tax, {u'oe8:name': 'IVA 22% da acquisti', u'oe8:amount': '22', u'oe8:type_tax_use': 'purchase', u'oe8:id': 2, u'oe8:description': '22a'}) -> 2
+2024-04-08 14:22:05 check_record(oe8:, account.tax, 2, {'name': 'IVA 22% da acquisti', 'vg7_id': False, 'company_id': 1, 'type_tax_use': 'purchase', 'amount': 22.0, 'oe8_id': 2, 'description': '22a'})
+2024-04-08 14:22:05 os.unlink(/home/odoo/10.0/connector/universal_connector/tests/res/vg7/countries.csv)
+2024-04-08 14:22:05 os.unlink(/home/odoo/10.0/connector/universal_connector/tests/res/vg7/regions.csv)
+2024-04-08 14:22:05 os.unlink(/home/odoo/10.0/connector/universal_connector/tests/res/vg7/customers.csv)
+2024-04-08 14:22:05 os.unlink(/home/odoo/10.0/connector/universal_connector/tests/res/vg7/tax_codes.csv)
+2024-04-08 14:22:05 os.unlink(/home/odoo/10.0/connector/universal_connector/tests/res/oe8/res.country.csv)
+2024-04-08 14:22:05 os.unlink(/home/odoo/10.0/connector/universal_connector/tests/res/oe8/res.country.state.csv)
+2024-04-08 14:22:05 os.unlink(/home/odoo/10.0/connector/universal_connector/tests/res/oe8/res.partner.csv)
+2024-04-08 14:22:05 os.unlink(/home/odoo/10.0/connector/universal_connector/tests/res/oe8/account.tax.csv)
+
+
+2024-04-08 14:22:05 245 tests universal_connector SUCCESSFULLY ENDED
