@@ -190,10 +190,16 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 ChangeLog History | Cronologia modifiche
 ----------------------------------------
 
-10.0.0.3.4 (2024-04-08)
+10.0.0.3.4 (2024-04-10)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-* [QUA] Test coverage 38% (4971: 3065+1906) [10 TestPoints] - quality rating 24 (target 100)
+* [FIX] Model res.lang
+* [IMP] Minor improvements: only minimal data is the default
+* [IMP] Model with sequences get data even if > 16 records
+* [IMP] Casting improvements
+* [IMP] New versioned dependency control
+* [REF] New concurrent tests
+* [QUA] Test coverage 53% (4973: 2331+2642) [10 TestPoints] - quality rating 33 (target 100)
 
 10.0.0.3.3 (2023-10-31)
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -272,7 +278,7 @@ La distribuzione `Zeroincombenze® <https://www.zeroincombenze.it/>`__ è proget
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2024-04-08
+Last Update / Ultimo aggiornamento: 2024-04-10
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status

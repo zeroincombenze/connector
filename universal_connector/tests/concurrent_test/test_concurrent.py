@@ -21,9 +21,9 @@ import re
 import csv
 
 try:
-    from python_plus.python_plus import _u
+    from python_plus.python_plus import _u, unicodes
 except ImportError:
-    from python_plus import _u
+    from python_plus import _u, unicodes
 try:
     from clodoo import clodoo
 except ImportError:
@@ -42,180 +42,6 @@ ref_ts_m_1 = "%s 12:34:56" % ref_dt_m_1
 
 EXT_COMPANY_ID = 1
 TEST_IBAN = "IT60X0542811101000000123456"
-MODEL_WITH_CHILD = (
-    "account.payment.term",
-    "account.invoice",
-    "account.move",
-    "sale.order",
-    "stock.picking.package.preparation",
-)
-MODEL_TO_COMMIT = (
-    "account.invoice",
-    "account.move",
-    "sale.order",
-    "stock.picking.package.preparation",
-)
-MODEL_WITH_COMPANY = (
-    "account.account",
-    "account.invoice",
-    "account.invoice.line",
-    "account.journal",
-    "account.payment.term",
-    "account.move",
-    "account.move.line",
-    "account.tax",
-    "res.partner.bank",
-    "sale.order",
-    "sale.order.line",
-    "stock.picking.package.preparation",
-    "stock.picking.package.preparation.line",
-)
-CANDIDATE_KEYS = (
-    "acc_number",
-    "login",
-    "default_code",
-    "code",
-    "key",
-    "serial_number",
-    "description",
-    "comment",
-    "name",
-    "dim_name",
-)
-M2M_FIELDS = ("bank_ids", "tax_ids", "tax_id", "invoice_line_tax_ids")
-M2O_FIELDS = ("product_uom", "payment_term")
-STATUS_VALUE = {
-    "vg7:order_state": {1: "draft", 2: "sale"},
-    "vg7:state": True,
-    "oe8:state": {"manual": "sale"},
-}
-UNCHECK_FIELDS = (
-    "vg7:date_scadenza",
-    "vg7:shipping",
-    "vg7:billing",
-    "vg7:surename",
-    "vg7:name",
-    "id",
-    "vg7:street_number",
-    "vg7:order_rows",
-    "oe8:line_id",
-    "oe8:line_ids",
-    "oe8:order_line",
-    "oe8:invoice_line",
-    "oe8:invoice_line_ids",
-    "vg7:order_id",
-    "vg7:order_row_id",  ## TO remove
-)
-UNCHECK_MODEL_FIELDS = {
-    "account.tax": ["vg7:description", "vg7:code"],
-    "account.payment.term.line": ["oe8:days", "oe8:value"],  # TODO
-}
-UNCHECK_DRAFT_FIELDS = {
-    "stock.picking.package.preparation.line": ["sale_id", "sale_line_id"]
-}
-WRONG_DATA = {
-    "region": ["TO", "(TO)"],
-    "street": ["", "Via Porta Vecchia"],
-    "shipping_name": ["$", "Agro Latte Due s.n.c."],
-    "name": ["CLIENTI", "Crediti v/clienti Italia"],
-    "order_state": [2, 1],
-    "product_name": ["Product Alpha", "Prodotto AA"],
-    "customer_shipping_id": [12, -1],
-    "description": ["RiBA 30GG/FM", "RB 30gg DFFM"],
-}
-FAILED_TRX = {
-    "vg7:res.partner:wrong": {7: -7},
-    "vg7:res.partner:None": {7: -7},
-    "vg7:res.partner.shipping:None": {102: -7},
-    # 'vg7:account.tax:only_amount': {101: -7, 115: -7},
-}
-# Default value to add before validation data
-SOME_DEFAULT = {
-    "res.country.state": [
-        {
-            "domain": ["code", "in", ["TO", "MI", "BO", "NA", "CE"]],
-            "value": ["country_id", "res.country.IT"],
-        }
-    ],
-    "product.product": [
-        {
-            "domain": ["default_code", "=~", "AA"],
-            "value": [":product_tmpl_id", "product.template.A"],
-        },
-        {
-            "domain": ["default_code", "=~", "BB"],
-            "value": [":product_tmpl_id", "product.template.B"],
-        },
-        {
-            "domain": ["default_code", "=~", "CC"],
-            "value": [":product_tmpl_id", "product.template.C"],
-        },
-    ],
-    "sale.order": [
-        {"domain": ["id", "in", [131, 210]], "value": ["note", "company_note"]}
-    ],
-    "stock.picking.package.preparation": [
-        {"domain": ["id", "=", 7], "value": ["state", "done"]}
-    ],
-}
-SET_DEFAULT_FROM_CTX = {
-    "res.country": [{"domain": ["code", "=", "IT"], "value": "res.country.IT"}],
-    "product.template": [
-        {"domain": ["default_code", "=~", "AA"], "value": "product.template.A"},
-        {"domain": ["default_code", "=~", "BB"], "value": "product.template.B"},
-        {"domain": ["default_code", "=~", "CC"], "value": "product.template.C"},
-    ],
-}
-NAME_REFS = {
-    "account.account.type": [
-        {"domain": ["name", "=", "Receivable"], "value": ["name", "Crediti clienti"]},
-        {"domain": ["name", "=", "Payable"], "value": ["name", "Debiti fornitori"]},
-        {"domain": ["name", "=", "Bank and Cash"], "value": ["name", "Banca o cassa"]},
-        {"domain": ["name", "=", "Credit Card"], "value": ["name", "Carta di Credito"]},
-        {
-            "domain": ["name", "=", "Current Assets"],
-            "value": ["name", "Attività correnti"],
-        },
-        {
-            "domain": ["name", "=", "Non-current Assets"],
-            "value": ["name", "Attività non correnti"],
-        },
-        {"domain": ["name", "=", "Prepayments"], "value": ["name", "Risconti"]},
-        {
-            "domain": ["name", "=", "Fixed Assets"],
-            "value": ["name", "Immobilizzazioni"],
-        },
-        {
-            "domain": ["name", "=", "Current Liabilities"],
-            "value": ["name", "Passività correnti"],
-        },
-        {
-            "domain": ["name", "=", "Non-current Liabilities"],
-            "value": ["name", "Passività non correnti"],
-        },
-        {"domain": ["name", "=", "Equity"], "value": ["name", "Capitale"]},
-        {
-            "domain": ["name", "=", "Current Year Earnings"],
-            "value": ["name", "Risultato operativo"],
-        },
-        {"domain": ["name", "=", "Income"], "value": ["name", "Ricavi"]},
-        {
-            "domain": ["name", "=", "Other Income"],
-            "value": ["name", "Altri ricavi operativi"],
-        },
-        {"domain": ["name", "=", "Depreciation"], "value": ["name", "Ammortamento"]},
-        {"domain": ["name", "=", "Expenses"], "value": ["name", "Costi"]},
-        {
-            "domain": ["name", "=", "Cost of Revenue"],
-            "value": ["name", "Costi operativi"],
-        },
-    ],
-    "product.template": [
-        {"domain": ["default_code", "=~", "AA"], "value": ["name", "Prodotto Alpha"]},
-        {"domain": ["default_code", "=~", "BB"], "value": ["name", "Prodotto Beta"]},
-        {"domain": ["default_code", "=~", "CC"], "value": ["name", "Prodotto Chi"]},
-    ],
-}
 
 TNL_VG7_TABLES = {
     "account.account": "",
@@ -256,11 +82,6 @@ TNL_VG7_TABLES = {
 }
 TNL_OE8_TABLES = {}
 MODEL_LIST = list(TNL_VG7_TABLES.keys())
-TNL_TEXT_2_M2 = {
-    "country_id": {"Italia": "base.it"},
-    "tax_id": {"22v": "z0bug.tax_22v"},
-    "state_id": {"TORINO": "base.state_it_pe", "MILANO": "base.state_it_mi"},
-}
 TNL_VG7_DICT = {
     "account.account": {},
     "account.invoice": {"number": "move_name"},
@@ -392,131 +213,6 @@ TNL_OE8_DICT = {
         "invoice_line_tax_id": "invoice_line_tax_ids",
     },
     "sale.order": {"payment_term": "payment_term_id"},
-}
-TABLE_OF_REF_FIELD = {
-    "account_id": "account.account",
-    "bank_id": "res.partner.bank",
-    "bank_ids": "res.partner.bank",
-    "company_id": "res.company",
-    "country_id": "res.country",
-    "conai_category_id": "italy.conai.product.category",
-    "goods_description_id": "stock.picking.goods_description",
-    "invoice_id": "account.invoice",
-    "journal_id": "account.journal",
-    "move_id": "account.move",
-    "order_id": "sale.order",
-    "partner_id": "res.partner",
-    "partner_invoice_id": "res.partner",
-    "partner_shipping_id": "res.partner",
-    "payment_id": "account.payment.term",
-    "payment_term_id": "account.payment.term",
-    "product_id": "product.product",
-    "product_uom": "product.uom",
-    "product_uom_id": "product.uom",
-    "product_tmpl_id": "product.template",
-    "property_payment_term_id": "account.payment.term",
-    "sale_id": "sale.order",
-    "sale_line_id": "sale.order.line",
-    "state_id": "res.country.state",
-    "supplier_taxes_id": "account.tax",
-    "taxes_id": "account.tax",
-    "tax_id": "account.tax",
-    "tax_ids": "account.tax",
-    "transportation_reason_id": "stock.picking.transportation_reason",
-    "uom_id": "product.uom",
-    "uom_po_id": "product.uom",
-    "uos_id": "product.uom",
-    "user_type_id": "account.account.type",
-}
-# Record structure:
-# 0:model, 1:child_ids, 2:parent_field, 3:ext_child_field, 4:function,
-# 5:rec_type, 6:multi-child
-TABLE_OF_REF_CHILD = {
-    "account.invoice": [
-        "account.invoice.line",
-        "invoice_line_ids",
-        "invoice_id",
-        {"oe8": "invoice_line"},
-        "get_invoice_line_vals",
-        False,
-        True,
-        {"oe8": "invoice_line"},
-        "get_invoice_line_vals",
-        False,
-        True,
-    ],
-    "account.move": [
-        "account.move.line",
-        "line_ids",
-        "move_id",
-        {"oe8": "line_id"},
-        "get_move_line_vals",
-        False,
-        True,
-    ],
-    "account.payment.term": [
-        "account.payment.term.line",
-        "line_ids",
-        "payment_id",
-        {"vg7": "date_scadenza", "oe8": "line_ids"},
-        "get_payment_term_line_vals",
-        False,
-        True,
-    ],
-    "product.product": [
-        "product.product",
-        False,
-        False,
-        False,
-        False,
-        "product",
-        False,
-    ],
-    "res.partner": [
-        "res.partner",
-        "child_ids",
-        "parent_id",
-        False,
-        False,
-        False,
-        False,
-    ],
-    "res.partner.shipping": [
-        "res.partner",
-        "child_ids",
-        "parent_id",
-        {"vg7": "shipping"},
-        "get_shipping_vals",
-        "delivery",
-        False,
-    ],
-    "res.partner.invoice": [
-        "res.partner",
-        "child_ids",
-        "parent_id",
-        {"vg7": "billing"},
-        "get_billing_vals",
-        "invoice",
-        False,
-    ],
-    "sale.order": [
-        "sale.order.line",
-        "order_line",
-        "order_id",
-        {"vg7": "order_rows", "oe8": "order_line"},
-        "get_sale_order_line_vals",
-        False,
-        True,
-    ],
-    "stock.picking.package.preparation": [
-        "stock.picking.package.preparation.line",
-        "line_ids",
-        "package_preparation_id",
-        {"vg7": "order_rows"},
-        "get_ddt_line_vals",
-        False,
-        True,
-    ],
 }
 THIS_MODULE = "universal_connector"
 MODULE_LIST = [
@@ -737,16 +433,20 @@ class ExtTestEnv(object):
     def cast_value(self, vals):
         res = {}
         for k, v in vals.items():
-            if k == "company_id" and not v:
+            if v in (r"\N", "None"):
+                continue
+            elif k == "company_id" and not v:
                 res[k] = self.user.company_id.id
+            elif k in ("shipping", "billing") and isinstance(v, basestring) and v:
+                res[k] = eval(v)
+            elif isinstance(v, dict):
+                res[k] = self.cast_value(v)
             elif isinstance(v, basestring) and re.match(r"[0-9]*\.[0-9]+$", v):
                 res[k] = eval(v)
             elif isinstance(v, basestring) and "." in v and " " not in v:
                 res[k] = self.env_ref(v)
-            elif k in ("id", "vg7_id", "oe8_id") and isinstance(v, basestring):
-                res[k] = int(v) if v else False
-            elif v in (r"\N", "None"):
-                continue
+            elif k.endswith("id") and isinstance(v, basestring):
+                res[k] = eval(v) if v else False
             else:
                 res[k] = v
         return res
@@ -1167,15 +867,28 @@ class ExtTestEnv(object):
         # except BaseException:
         #     pass
 
+    def get_domain(self, model, vals, code="code", name=None, domain=()):
+        if code in vals and name and name in vals:
+            full_domain = [(code, "=", vals[code]), (name, "!=", vals[name])]
+        elif code in vals:
+            full_domain = [(code, "=", vals[code])]
+        else:
+            full_domain = []
+        if vals.get("parent_id"):
+            full_domain += [("parent_id", "=", vals["parent_id"])]
+        if domain and domain != ():
+            full_domain += list(domain)
+        if not full_domain:
+            # NULL domain
+            full_domain = [("id", "<", 0)]
+        return full_domain
+
     def dirty_any_model(self, identity, model, code="code", domain=(), reset_id=False):
         fqn = pth.join(self.get_csv_path("dirty"), model + ".csv")
         if pth.isfile(fqn):
             dirty_recs = self.load_csv_file(fqn)
             for vals in dirty_recs:
-                if domain and domain != ():
-                    full_domain = [(code, "=", vals[code])] + list(domain)
-                else:
-                    full_domain = [(code, "=", vals[code])]
+                full_domain = self.get_domain(model, vals, code=code, domain=domain)
                 action = vals.get("_action", "update")
                 if "_action" in vals:
                     del vals["_action"]
@@ -1211,9 +924,8 @@ class ExtTestEnv(object):
             fqn = pth.join(self.get_csv_path(), model + ".csv")
         test_recs = self.load_csv_file(fqn)
         for rec in test_recs:
-            full_domain = [(code, "=", rec[code]), (name, "!=", rec[name])]
-            if domain and domain != ():
-                full_domain += list(domain)
+            full_domain = self.get_domain(
+                model, rec, code=code, name=name, domain=domain)
             ids = clodoo.searchL8(self.ctx, model, full_domain)
             if not ids:
                 continue
@@ -1266,38 +978,36 @@ class ExtTestEnv(object):
 
     def write_file_2_pull(self, identity, ext_model, vals, mode="w"):
         fqn = pth.join(self.get_exchange_path(identity), "%s.csv" % ext_model)
-        if mode == "a":
-            with open(fqn, "r") as fd:
-                ln = fd.read().split("\n")[0]
-            data = "%s\n" % ",".join([str(vals.get(x, "")) for x in ln.split(",")])
-        else:
-            data = "%s\n%s\n" % (
-                ",".join(vals.keys()),
-                ",".join(map(lambda x: str(vals[x]), vals.keys())),
-            )
-        with open(fqn, mode) as fd:
-            fd.write(data)
-        self.fqn_to_remove.append(fqn)
+        data = self.load_csv_file(fqn) + [vals] if mode == "a" else [vals]
+        with open(fqn, "wb") as fd:
+            writer = csv.DictWriter(fd, fieldnames=vals.keys())
+            writer.writeheader()
+            for vals in data:
+                writer.writerow(vals)
+        if fqn not in self.fqn_to_remove:
+            self.fqn_to_remove.append(fqn)
 
     def compare(self, loc_value, test_value, mode=None):
         if hasattr(loc_value, "id"):
-            loc_value = loc_value.id
+            loc_value = loc_value.id or False
         if mode == "nounknown":
             return not loc_value.startswith("Unknown")
         elif mode == "unknown":
             return loc_value.startswith("Unknown")
-        elif mode == "individual":
-            return loc_value in self.partner_MR_ids
+        # elif mode == "individual":
+        #     return loc_value in self.partner_MR_ids
+        elif mode == "delivery":
+            return loc_value == test_value + 100000000
+        elif mode == "invoice":
+            return loc_value == test_value + 200000000
+        elif test_value is None:
+            return True
         elif mode == "nocase":
             return loc_value.lower() == test_value.lower()
         elif mode and mode == test_value:
             if mode == "supplier":
                 return loc_value == "contact"
             return loc_value == test_value
-        elif mode == "delivery":
-            return loc_value == test_value + 100000000
-        elif mode == "invoice":
-            return loc_value == test_value + 200000000
         elif isinstance(loc_value, basestring) and isinstance(test_value, (int, long)):
             if loc_value.isdigit():
                 return int(loc_value) == test_value
@@ -1306,8 +1016,6 @@ class ExtTestEnv(object):
             if test_value.isdigit():
                 return loc_value == int(test_value)
             return str(loc_value) == test_value
-        elif test_value is None:
-            return True
         elif loc_value or test_value:
             return loc_value == test_value
         return True
@@ -1376,6 +1084,44 @@ class ExtTestEnv(object):
             self.store_ext_id(ext_model, rec_id, ext_id, identity)
         return rec_id
 
+    def merge_supplemetal_vals(self, identity, fn, parent_field, field, ext_recs):
+        ext2_recs = self.load_csv_file(
+            pth.join(self.get_csv_path(identity), fn))
+        for ext2_rec in ext2_recs:
+            ext2_rec, _, _ = self.prepare_rec(ext2_rec, 0)
+            checked = False
+            if parent_field in ext2_rec:
+                parent_id = ext2_rec[parent_field]
+                for ext_rec in ext_recs:
+                    if parent_id == ext_rec["id"]:
+                        ext_rec[field] = ext2_rec
+                        checked = True
+                        break
+            if not checked:
+                raise IOError("No match external id name for %s" % ext2_rec)
+
+    def load_ext_values(self, identity, model, ext_model=None, lang=None):
+        ext_model = ext_model or self.get_ext_model(model, identity)
+        if lang:
+            fqn = pth.join(self.get_csv_path(identity), ext_model + "." + lang + ".csv")
+        else:
+            fqn = pth.join(self.get_csv_path(identity), ext_model + ".csv")
+        ext_recs_image = self.load_csv_file(fqn)
+        if model == "res.partner" and identity.startswith("vg7"):
+            self.merge_supplemetal_vals(
+                identity,
+                "customers_shipping_addresses.csv",
+                "customer_id" ,
+                "shipping",
+                ext_recs_image)
+            self.merge_supplemetal_vals(
+                identity,
+                "customers_billing_addresses.csv",
+                "customer_id" ,
+                "billing",
+                ext_recs_image)
+        return ext_recs_image
+
     def load_n_test_model(
         self,
         identity,
@@ -1391,11 +1137,7 @@ class ExtTestEnv(object):
         )
 
         ext_model = ext_model or self.get_ext_model(model, identity)
-        if lang:
-            fqn = pth.join(self.get_csv_path(identity), ext_model + "." + lang + ".csv")
-        else:
-            fqn = pth.join(self.get_csv_path(identity), ext_model + ".csv")
-        ext_recs_image = self.load_csv_file(fqn)
+        ext_recs_image = self.load_ext_values(identity, model, lang=lang)
         if lang:
             fqn = pth.join(self.get_csv_path(), model + "." + lang + ".csv")
         else:
@@ -1405,14 +1147,6 @@ class ExtTestEnv(object):
         main_ext_id = False
         wa = "w"
         ext_id_field = self.get_ext_id_field(identity)
-        if not ext_id_field:
-            raise IOError("No match external id name for %s" % identity)
-        if fct_test == "trigger":
-            for ext_rec in ext_recs_image:
-                ext_rec, ext_id, main_ext_id = self.prepare_rec(ext_rec, main_ext_id)
-                self.write_file_2_pull(identity, ext_model, ext_rec, wa)
-                wa = "a"
-
         for ext_rec in ext_recs_image:
             loc_id = ext_id = -127
             if fct_test == "synchro":
@@ -1438,6 +1172,21 @@ class ExtTestEnv(object):
                 raise IOError(
                     "No match record found for %s=%s" % (ext_id_field, ext_id))
         return
+
+    def store_csv_response(self, identity, models, lang=None):
+        for model in models:
+            ext_model = self.get_ext_model(model, identity)
+            ext_recs_image = self.load_ext_values(
+                identity, model, ext_model=ext_model, lang=lang)
+            main_ext_id = False
+            wa = "w"
+            ext_id_field = self.get_ext_id_field(identity)
+            if not ext_id_field:
+                raise IOError("No match external id name for %s" % identity)
+            for ext_rec in ext_recs_image:
+                ext_rec, ext_id, main_ext_id = self.prepare_rec(ext_rec, main_ext_id)
+                self.write_file_2_pull(identity, ext_model, ext_rec, wa)
+                wa = "a"
 
     def test_country(
             self, mode=None, identity="vg7:", fct_test="synchro", reset_id=False):
@@ -1487,6 +1236,10 @@ def main(cli_args=[]):
     ext_test_env.setup()
 
     ext_test_env.write_log("*** Starting VG7 test ***", echo=True, bb=2)
+    ext_test_env.store_csv_response(
+        "vg7:",
+        ("res.country", "res.country.state", "res.partner", "account.tax")
+    )
     ext_test_env.test_country(identity="vg7:", reset_id=True)
     ext_test_env.test_country(identity="vg7:", fct_test="trigger")
     ext_test_env.test_country_state(identity="vg7:", reset_id=True)
@@ -1499,6 +1252,10 @@ def main(cli_args=[]):
 
 
     ext_test_env.write_log("*** Starting OE8 test ***", echo=True, bb=2)
+    ext_test_env.store_csv_response(
+        "oe8:",
+        ("res.country", "res.country.state", "res.partner", "account.tax")
+    )
     ext_test_env.test_country(identity="oe8:", reset_id=True)
     ext_test_env.test_country(identity="oe8:", fct_test="trigger")
     ext_test_env.test_country_state(identity="oe8:", reset_id=True)

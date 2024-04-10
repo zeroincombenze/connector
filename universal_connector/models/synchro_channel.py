@@ -412,6 +412,8 @@ class SynchroChannelModel(models.Model):
                             value = int(value)
                         elif value.startswith("[") and value.endswith("]"):
                             value = eval(value)
+                        elif value.startswith("{") and value.endswith("}"):
+                            value = eval(value)
                         elif value == "False":
                             value = False
                         elif value == "None":
