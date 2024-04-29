@@ -218,6 +218,8 @@ MODEL_KEYS = {
     "account.account.type": {"code": "name"},
     "account.account": {},
     "account.tax": {"code": "description"},
+    "product.product": {},
+    "product.template": {"code": "default_code"},
     "product.uom": {"code": "name"},
     "res.company": {"code": "vat"},
     "res.country": {},
@@ -971,7 +973,8 @@ class ExtTestEnv(object):
                 if model == "res.partner" and identity.startswith("vg7"):
                     vals["vg72_id"] = False
             if vals:
-                self.write_log("%s.write(%s, %s, ctx=%s)" % (model, ids, vals, ctx),
+                self.write_log("%s.write(%s, %s, ctx=%s) # %s"
+                               % (model, ids, vals, ctx, full_domain),
                                echo=False)
                 clodoo.writeL8(self.ctx, model, ids, vals, context=ctx)
         self.dirty_any_model(
@@ -1289,6 +1292,26 @@ class ExtTestEnv(object):
             fct_test=fct_test,
         )
 
+    def test_product_tmpl(
+            self, mode=None, identity="oe8:", fct_test="synchro", reset_id=False):
+        model = "product.template"
+        self.init_model(identity, model, reset_id=reset_id)
+        self.load_n_test_model(
+            identity,
+            model,
+            fct_test=fct_test,
+        )
+
+    def test_product(
+            self, mode=None, identity="vg7:", fct_test="synchro", reset_id=False):
+        model = "product.product"
+        self.init_model(identity, model, reset_id=reset_id)
+        self.load_n_test_model(
+            identity,
+            model,
+            fct_test=fct_test,
+        )
+
     def test_account_type(
             self, mode=None, identity="oe8:", fct_test="synchro", reset_id=False):
         model = "account.account.type"
@@ -1324,7 +1347,8 @@ def main(cli_args=[]):
             "res.country.state",
             "res.partner",
             "account.tax",
-            "product.uom")
+            "product.uom",
+            "product.product")
     )
     ext_test_env.test_country(identity="vg7:", reset_id=True)
     ext_test_env.test_country(identity="vg7:", fct_test="trigger")
@@ -1337,7 +1361,8 @@ def main(cli_args=[]):
     ext_test_env.test_tax(identity="vg7:")
     ext_test_env.test_uom(identity="vg7:", reset_id=True, fct_test="trigger")
     ext_test_env.test_uom(identity="vg7:")
-
+    ext_test_env.test_product(identity="vg7:", reset_id=True, fct_test="trigger")
+    ext_test_env.test_product(identity="vg7:")
 
     ext_test_env.write_log("*** Starting OE8 test ***", echo=True, bb=2)
     ext_test_env.store_csv_response(
@@ -1351,7 +1376,9 @@ def main(cli_args=[]):
             "res.company",
             "res.users",
             "account.tax",
-            "product.uom")
+            "product.uom",
+            "product.template",
+            "product.product")
     )
     ext_test_env.test_country(identity="oe8:", reset_id=True)
     ext_test_env.test_country(identity="oe8:", fct_test="trigger")
@@ -1372,6 +1399,10 @@ def main(cli_args=[]):
     ext_test_env.test_tax(identity="oe8:")
     ext_test_env.test_uom(identity="oe8:", reset_id=True, fct_test="trigger")
     ext_test_env.test_uom(identity="oe8:")
+    ext_test_env.test_product_tmpl(identity="oe8:", reset_id=True, fct_test="trigger")
+    ext_test_env.test_product_tmpl(identity="oe8:")
+    ext_test_env.test_product(identity="oe8:", reset_id=True, fct_test="trigger")
+    ext_test_env.test_product(identity="oe8:")
 
     ext_test_env.teardown()
 

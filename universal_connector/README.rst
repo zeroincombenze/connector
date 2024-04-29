@@ -199,7 +199,7 @@ ChangeLog History | Cronologia modifiche
 * [IMP] Casting improvements
 * [IMP] New versioned dependency control
 * [REF] New concurrent tests
-* [QUA] Test coverage 51% (4973: 2422+2551) [10 TestPoints] - quality rating 32 (target 100)
+* [QUA] Test coverage 54% (4973: 2299+2674) [10 TestPoints] - quality rating 33 (target 100)
 
 10.0.0.3.3 (2023-10-31)
 ~~~~~~~~~~~~~~~~~~~~~~~
