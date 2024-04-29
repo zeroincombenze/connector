@@ -214,6 +214,15 @@ TNL_OE8_DICT = {
     },
     "sale.order": {"payment_term": "payment_term_id"},
 }
+MODEL_KEYS = {
+    "account.tax": {"code": "description"},
+    "product.uom": {"code": "name"},
+    "res.company": {"code": "vat"},
+    "res.country": {},
+    "res.country.state": {},
+    "res.partner": {"code": "vat", "domain": [("type", "=", "contact")]},
+}
+
 THIS_MODULE = "universal_connector"
 MODULE_LIST = [
     "mk_test_env",
@@ -670,25 +679,32 @@ class ExtTestEnv(object):
         state = "uninstalled"
         if len(module_ids) == 1:
             state = clodoo.browseL8(self.ctx, model, module_ids[0]).state
+            if state.startswith("to "):
+                sleep(3.0)
+                state = clodoo.browseL8(self.ctx, model, module_ids[0]).state
         return state == "installed"
 
     def wait_4_module_uninstalled(self, modname):
+        tmo = 0.2
         installed = self.check_if_module_installed(modname)
         while installed:
             print("Module %s installed!" % modname)
             print("Please uninstall %s" % modname)
             input("Press RET to continue ...")
             installed = self.check_if_module_installed(modname)
-        sleep(1)
+            tmo = 1.0
+        sleep(tmo)
 
     def wait_4_module_installed(self, modname, ctr, maxctr):
+        tmo = 0.2
         installed = False
         while not installed:
             print("Module %s not installed!" % modname)
             print("Please install %s" % modname)
             input("Press RET to continue ...")
             installed = self.check_if_module_installed(modname, ctr=ctr, maxctr=maxctr)
-        sleep(1)
+            tmo = 1.0
+        sleep(tmo)
 
     def assure_company(self):
         self.company_id = self.env_ref("z0bug.mycompany")
@@ -850,6 +866,18 @@ class ExtTestEnv(object):
                                "res.company",
                                self.company_id).due_cost_service_id:
             raise IOError("!!Missed bank cost in company!!")
+        # TODO> **** TO REMOVE EAARLY ****
+        id = clodoo.searchL8(self.ctx, "synchro.channel.model",
+                             [("counterpart_name", "=", "tax_codes")])
+        clodoo.writeL8(self.ctx, "synchro.channel.model", id,
+                       {"search_keys":
+                            "[['description', 'company_id'],['name', 'company_id']"
+                            ",['dim_name', 'company_id'],['amount', 'company_id']]"})
+        id = clodoo.searchL8(self.ctx, "synchro.channel.model",
+                             [("counterpart_name", "=", "ums")])
+        clodoo.writeL8(self.ctx, "synchro.channel.model", id,
+                       {"search_keys": "[['name']]"})
+        # *** END WORKAROUND ***
 
     def teardown(self):
         for fqn in self.fqn_to_remove:
@@ -916,6 +944,7 @@ class ExtTestEnv(object):
         self.prior_model = model
         if reset_id:
             ext_id_field = self.get_ext_id_field(identity)
+        fqn = ""
         if identity.startswith("oe8"):
             ctx = {"lang": "en_US"}
             fqn = pth.join(self.get_csv_path(), model + ".en_US.csv")
@@ -945,22 +974,16 @@ class ExtTestEnv(object):
         self.dirty_any_model(
             identity, model, code=code, domain=domain, reset_id=reset_id)
 
-    def init_account_tax(self, identity, reset_id=False):
-        model = "account.tax"
-        self.init_any_model(identity, model, code="description", reset_id=reset_id)
-
     def init_model(self, identity, model, reset_id=False):
         if not self.conai and "conai" in model:
             return
-        actual_model = self.get_actual_model(model)
-        if actual_model == "account.tax":
-            self.init_account_tax(identity, reset_id=reset_id)
-        elif actual_model == "res.partner":
-            self.init_any_model(
-                identity, model,
-                code="vat", reset_id=reset_id, domain=[("type", "=", "contact")])
-        else:
-            self.init_any_model(identity, model, reset_id=reset_id)
+        self.init_any_model(
+            identity,
+            model,
+            code=MODEL_KEYS[model].get("code", "code"),
+            name=MODEL_KEYS[model].get("name", "name"),
+            domain=MODEL_KEYS[model].get("domain", []),
+            reset_id=reset_id)
 
     def prepare_rec(self, rec, main_ext_id):
         ext_id = False
@@ -1174,7 +1197,13 @@ class ExtTestEnv(object):
         return
 
     def store_csv_response(self, identity, models, lang=None):
+        ext_id_field = self.get_ext_id_field(identity)
         for model in models:
+            for id in clodoo.searchL8(
+                    self.ctx, model, [(ext_id_field, "!=", False)]):
+                self.write_log("write_record(%s, %s, {%s: False})"
+                               % (model, id, ext_id_field))
+                clodoo.writeL8(self.ctx, model, id, {ext_id_field: False})
             ext_model = self.get_ext_model(model, identity)
             ext_recs_image = self.load_ext_values(
                 identity, model, ext_model=ext_model, lang=lang)
@@ -1228,6 +1257,26 @@ class ExtTestEnv(object):
             fct_test=fct_test,
         )
 
+    def test_company(
+            self, mode=None, identity="oe8:", fct_test="synchro", reset_id=False):
+        model = "res.company"
+        self.init_model(identity, model, reset_id=reset_id)
+        self.load_n_test_model(
+            identity,
+            model,
+            fct_test=fct_test,
+        )
+
+    def test_uom(
+            self, mode=None, identity="oe8:", fct_test="synchro", reset_id=False):
+        model = "product.uom"
+        self.init_model(identity, model, reset_id=reset_id)
+        self.load_n_test_model(
+            identity,
+            model,
+            fct_test=fct_test,
+        )
+
 
 def main(cli_args=[]):
     if not cli_args:
@@ -1238,7 +1287,12 @@ def main(cli_args=[]):
     ext_test_env.write_log("*** Starting VG7 test ***", echo=True, bb=2)
     ext_test_env.store_csv_response(
         "vg7:",
-        ("res.country", "res.country.state", "res.partner", "account.tax")
+        (
+            "res.country",
+            "res.country.state",
+            "res.partner",
+            "account.tax",
+            "product.uom")
     )
     ext_test_env.test_country(identity="vg7:", reset_id=True)
     ext_test_env.test_country(identity="vg7:", fct_test="trigger")
@@ -1249,12 +1303,20 @@ def main(cli_args=[]):
     # In order to increase test coverage, from here trigger run before synchro test
     ext_test_env.test_tax(identity="vg7:", reset_id=True, fct_test="trigger")
     ext_test_env.test_tax(identity="vg7:")
+    ext_test_env.test_uom(identity="vg7:", reset_id=True, fct_test="trigger")
+    ext_test_env.test_uom(identity="vg7:")
 
 
     ext_test_env.write_log("*** Starting OE8 test ***", echo=True, bb=2)
     ext_test_env.store_csv_response(
         "oe8:",
-        ("res.country", "res.country.state", "res.partner", "account.tax")
+        (
+            "res.country",
+            "res.country.state",
+            "res.partner",
+            "res.company",
+            "account.tax",
+            "product.uom")
     )
     ext_test_env.test_country(identity="oe8:", reset_id=True)
     ext_test_env.test_country(identity="oe8:", fct_test="trigger")
@@ -1262,9 +1324,13 @@ def main(cli_args=[]):
     ext_test_env.test_country_state(identity="oe8:", fct_test="trigger")
     ext_test_env.test_partner(identity="oe8:", reset_id=True)
     ext_test_env.test_partner(identity="oe8:", fct_test="trigger")
+    ext_test_env.test_company(identity="oe8:", reset_id=True)
+    ext_test_env.test_company(identity="oe8:", fct_test="trigger")
     # In order to increase test coverage, from here trigger run before synchro test
     ext_test_env.test_tax(identity="oe8:", reset_id=True, fct_test="trigger")
     ext_test_env.test_tax(identity="oe8:")
+    ext_test_env.test_uom(identity="oe8:", reset_id=True, fct_test="trigger")
+    ext_test_env.test_uom(identity="oe8:")
 
     ext_test_env.teardown()
 

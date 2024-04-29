@@ -1,4 +1,4 @@
 id,vg7_id,oe8_id,name,vat,type,parent_id
-base.main_partner,,3,Test Company,IT05111810015,contact,False
+base.main_partner,,2,Test Company,IT05111810015,contact,False
 z0bug.res_partner_1,101,801,Prima Alpha S.p.A.,IT00115719999,contact,False
 \N,200000001,,\N,\N,delivery,z0bug.res_partner_1
