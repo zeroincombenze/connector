@@ -7,7 +7,7 @@
 * [IMP] Casting improvements
 * [IMP] New versioned dependency control
 * [REF] New concurrent tests
-* [QUA] Test coverage 38% (4973: 3078+1895) [10 TestPoints] - quality rating 24 (target 100)
+* [QUA] Test coverage 51% (4973: 2422+2551) [10 TestPoints] - quality rating 32 (target 100)
 
 10.0.0.3.3 (2023-10-31)
 ~~~~~~~~~~~~~~~~~~~~~~~

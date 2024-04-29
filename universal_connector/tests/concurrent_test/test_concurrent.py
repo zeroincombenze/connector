@@ -215,12 +215,15 @@ TNL_OE8_DICT = {
     "sale.order": {"payment_term": "payment_term_id"},
 }
 MODEL_KEYS = {
+    "account.account.type": {"code": "name"},
+    "account.account": {},
     "account.tax": {"code": "description"},
     "product.uom": {"code": "name"},
     "res.company": {"code": "vat"},
     "res.country": {},
     "res.country.state": {},
     "res.partner": {"code": "vat", "domain": [("type", "=", "contact")]},
+    "res.users": {"code": "login"},
 }
 
 THIS_MODULE = "universal_connector"
@@ -1266,10 +1269,39 @@ class ExtTestEnv(object):
             model,
             fct_test=fct_test,
         )
+    def test_user(
+            self, mode=None, identity="oe8:", fct_test="synchro", reset_id=False):
+        model = "res.users"
+        self.init_model(identity, model, reset_id=reset_id)
+        self.load_n_test_model(
+            identity,
+            model,
+            fct_test=fct_test,
+        )
 
     def test_uom(
             self, mode=None, identity="oe8:", fct_test="synchro", reset_id=False):
         model = "product.uom"
+        self.init_model(identity, model, reset_id=reset_id)
+        self.load_n_test_model(
+            identity,
+            model,
+            fct_test=fct_test,
+        )
+
+    def test_account_type(
+            self, mode=None, identity="oe8:", fct_test="synchro", reset_id=False):
+        model = "account.account.type"
+        self.init_model(identity, model, reset_id=reset_id)
+        self.load_n_test_model(
+            identity,
+            model,
+            fct_test=fct_test,
+        )
+
+    def test_account(
+            self, mode=None, identity="oe8:", fct_test="synchro", reset_id=False):
+        model = "account.account"
         self.init_model(identity, model, reset_id=reset_id)
         self.load_n_test_model(
             identity,
@@ -1311,10 +1343,13 @@ def main(cli_args=[]):
     ext_test_env.store_csv_response(
         "oe8:",
         (
+            "account.account.type",
+            "account.account",
             "res.country",
             "res.country.state",
             "res.partner",
             "res.company",
+            "res.users",
             "account.tax",
             "product.uom")
     )
@@ -1322,11 +1357,17 @@ def main(cli_args=[]):
     ext_test_env.test_country(identity="oe8:", fct_test="trigger")
     ext_test_env.test_country_state(identity="oe8:", reset_id=True)
     ext_test_env.test_country_state(identity="oe8:", fct_test="trigger")
+    ext_test_env.test_account_type(identity="oe8:", reset_id=True)
+    ext_test_env.test_account_type(identity="oe8:", fct_test="trigger")
     ext_test_env.test_partner(identity="oe8:", reset_id=True)
     ext_test_env.test_partner(identity="oe8:", fct_test="trigger")
     ext_test_env.test_company(identity="oe8:", reset_id=True)
     ext_test_env.test_company(identity="oe8:", fct_test="trigger")
+    ext_test_env.test_user(identity="oe8:", reset_id=True)
+    ext_test_env.test_user(identity="oe8:", fct_test="trigger")
     # In order to increase test coverage, from here trigger run before synchro test
+    ext_test_env.test_account(identity="oe8:", reset_id=True, fct_test="trigger")
+    ext_test_env.test_account(identity="oe8:")
     ext_test_env.test_tax(identity="oe8:", reset_id=True, fct_test="trigger")
     ext_test_env.test_tax(identity="oe8:")
     ext_test_env.test_uom(identity="oe8:", reset_id=True, fct_test="trigger")

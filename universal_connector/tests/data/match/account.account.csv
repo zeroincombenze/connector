@@ -1,0 +1,5 @@
+id,vg7_id,oe8_id,code,name,user_type_id
+\N,,152,152100,Crediti v/clienti Italia,account.data_account_type_receivable
+\N,,250,250100,Debiti v/fornitori Italia,account.data_account_type_payable
+\N,,180,180002,Bank,account.data_account_type_liquidity
+\N,,510,510000,Ricavi da merci e servizi,account.data_account_type_revenue

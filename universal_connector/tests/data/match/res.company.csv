@@ -1,2 +1,2 @@
-id,vg7_id,oe8_id,name,vat
-base.main_company,,3,Test Company,IT05111810015
+id,vg7_id,oe8_id,name,vat,partner_id
+base.main_company,,3,Test Company,IT05111810015,base.main_partner
