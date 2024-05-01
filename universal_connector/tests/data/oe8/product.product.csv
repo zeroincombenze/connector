@@ -1,4 +1,4 @@
-id,name,code,type,product_tmpl_id
+id,name,default_code,type,product_tmpl_id
 82,Prodotto Alpha,AAA,consu,81
 83,Prodotto Beta,BBB,consu,82
 99,Prodotto Rho,RRR,product,98

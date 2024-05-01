@@ -1,0 +1,6 @@
+id,vg7_id,oe8_id,payment_id,sequence,value,days
+,,,z0bug.payment_1,1,balance,30
+,,,z0bug.payment_2,1,percent,30
+,,,z0bug.payment_2,2,balance,60
+,,,z0bug.payment_3,1,balance,30
+,,,z0bug.payment_4,1,balance,30

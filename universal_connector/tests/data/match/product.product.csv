@@ -1,4 +1,4 @@
-id,vg7_id,oe8_id,name,code,type,product_tmpl_id
+id,vg7_id,oe8_id,name,default_code,type,product_tmpl_id
 z0bug.product_product_1,11,82,Prodotto Alpha,AAA,consu,z0bug.product_template_1
 z0bug.product_product_2,12,83,Prodotto Beta,BBB,consu,z0bug.product_template_2
 z0bug.product_product_18,28,99,Prodotto Rho,RRR,product,z0bug.product_template_18

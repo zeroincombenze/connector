@@ -1,0 +1,6 @@
+payment_id,days,value,sequence
+51,30,balance,1
+52,30,procent,1
+52,60,balance,2
+53,30,balance,1
+54,30,balance,1

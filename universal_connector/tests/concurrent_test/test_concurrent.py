@@ -1,6 +1,64 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # flake8: noqa
+"""Connector concurrent test
+
+This test is executed after ordinary Odoo module test, by zerobug; test connects to
+active Odoo instance. Notice: in order to execute a full clear and repeatable tests a
+new DB will be created and needed module installed on it.
+This test communicates with Odoo instance through odoorpc library. However, some actions
+are asked human operator.
+
+Test structure (for historical reason, counterparty are Odoo 8.0 and VG7):
+    1. Initialization (modules installing, data setting)
+    2. VG7 backend tests
+    3. Odoo 8.0 backend tests
+    4. Cleaning
+
+Every backend test executes test on a group of Odoo models (tables).
+Before running test, all models matched data are read and loaded in counterparty path
+in order to simulate counterparty instance.
+Then, Odoo model test stages are:
+    1. Load dirty data (if available)
+    2. For every record to test:
+        2.1 Calls synchro and trigger functions
+        2.2 Record is read from DB and matched against expected data
+
+All data (dirty, match and counterpaty instance) are stored in csv files, located in
+tests/data path which has the following structure:
+    tests/data/dirty -> files with dirty values to load before test
+    tests/data/match -> files with expected results
+    tests/data/oe8 -> files with simulated counterpaty Odoo8 instance
+    tests/data/vg7 -> files with simulated counterpaty vg7 instance
+
+Every csv file has the same name of the counterparty model and contains header
+counterparty names required by instance; i.e. "res,partner" model has "res.partner.csv"
+file and header can contain "name", "vat" and other field names.
+VG7 counterparty file is "customers.csv" that and header has "name" and "piva" fields.
+
+Every action run by test is logged in tests/concurrent_test/test_concurrent.log
+Odoo instance log file is tests/log/nohup_YYYYMMDD.txt where YYYYMMDD is the test date.
+This log is the logical concatenation of tests/log/universal_connector_YYYYMMDD.txt
+created da zerobug library during ordinary Odoo test.
+
+Notes on csv files.
+Data to load and match are stored in csv files. Every column of csv contains data list
+of the specific field named by header name; values in csv file are always text strings
+even for non text fields. Here conversion rules:
+
+* Integer: value is numeric text string, i.e. "123" for 123
+* Data: ISO format, i.e. "2024-06-26"
+* Many2one: line integer or else external ref, i.e. "base.main_partner"
+
+Empty values always become False. Special notation "\\N" (with just 1 backslash)
+on "id" field means <do not load any value>
+
+Magic fields for dirty files.
+Dirty csv files can have some magic fields:
+* _action -> may be "update" (default) or "delete"
+* _identity -> if not null, record is loaded only if matches the specific identity
+* _only_reset -> if not null, record is loaded only reset stage
+"""
 from __future__ import print_function, unicode_literals
 from __future__ import division
 from __future__ import absolute_import
@@ -35,14 +93,50 @@ except ImportError:
 # import pdb      # pylint: disable=deprecated-module
 
 __version__ = "10.0.0.2.5"
-ref_dt_today = date.today().strftime("%Y-%m-%d")
-ref_dt_m_1 = (date.today() - timedelta(33)).strftime("%Y-%m-%d")
-ref_dt_m_2 = (date.today() - timedelta(64)).strftime("%Y-%m-%d")
-ref_ts_m_1 = "%s 12:34:56" % ref_dt_m_1
 
-EXT_COMPANY_ID = 1
-TEST_IBAN = "IT60X0542811101000000123456"
-
+# TEST_IBAN = "IT60X0542811101000000123456"
+MODEL_KEYS = {
+    "account.account.type": {"code": "name"},
+    "account.account": {},
+    "account.journal": {},
+    "account.tax": {"code": "description"},
+    "product.product": {},
+    "product.template": {"code": "default_code"},
+    "product.uom": {"code": "name"},
+    "res.company": {"code": "vat"},
+    "res.country": {},
+    "res.country.state": {},
+    "res.partner": {"code": "vat", "domain": [("type", "=", "contact")]},
+    "res.users": {"code": "login"},
+}
+MODEL_WITH_CHILD = {
+    "account.payment.term": {
+        "child_model": "account.payment.term.line",
+        "child_field": "line_ids",
+        "child_key": "sequence",
+        "parent_field": "payment_id",
+    },
+    "account.invoice": {
+        "child_model": "account.invoice.line",
+        "child_field": "invoice_line_ids",
+        "parent_field": "invoice_id",
+    },
+    "account.move": {
+        "child_model": "account.move.line",
+        "child_field": "line_ids",
+        "parent_field": "move_id",
+    },
+    "sale.order": {
+        "child_model": "sale.order.line",
+        "child_field": "order_line",
+        "parent_field": "order_id",
+    },
+    "stock.picking.package.preparation": {
+        "child_model": "stock.picking.package.preparation.line",
+        "child_field": "line_ids",
+        "parent_field": "package_preparation_id",
+    },
+}
 TNL_VG7_TABLES = {
     "account.account": "",
     "account.account.type": "",
@@ -217,6 +311,8 @@ TNL_OE8_DICT = {
 MODEL_KEYS = {
     "account.account.type": {"code": "name"},
     "account.account": {},
+    "account.journal": {},
+    "account.payment.term": {"code": "name"},
     "account.tax": {"code": "description"},
     "product.product": {},
     "product.template": {"code": "default_code"},
@@ -348,36 +444,43 @@ class ExtTestEnv(object):
             self.ctx, ir_model, [("model", "=", model), ("res_id", "=", res_id)]
         )
 
-    @staticmethod
-    def store_vg7id(model, loc_id, vg7_id):
-        if model not in TNL_VG7_DICT:
-            TNL_VG7_DICT[model] = {}
-        if "EXT" not in TNL_VG7_DICT[model]:
-            TNL_VG7_DICT[model]["LOC"] = {}
-            TNL_VG7_DICT[model]["EXT"] = {}
-        if isinstance(vg7_id, basestring) and vg7_id.isdigit():
-            vg7_id = int(vg7_id)
-        TNL_VG7_DICT[model]["LOC"][loc_id] = vg7_id
-        TNL_VG7_DICT[model]["EXT"][vg7_id] = loc_id
+    def get_xref_from_id(self, model, res_id):
+        xmlid = self.search_4_xref(model, res_id)
+        if xmlid:
+            ir_model = "ir.model.data"
+            return clodoo.browseL8(self.ctx, ir_model, xmlid)
+        return None
 
-    @staticmethod
-    def store_oe8id(model, loc_id, oe8_id):
-        if model not in TNL_OE8_DICT:
-            TNL_OE8_DICT[model] = {}
-        if "EXT" not in TNL_OE8_DICT[model]:
-            TNL_OE8_DICT[model]["LOC"] = {}
-            TNL_OE8_DICT[model]["EXT"] = {}
-        if isinstance(oe8_id, basestring) and oe8_id.isdigit():
-            oe8_id = int(oe8_id)
-        TNL_OE8_DICT[model]["LOC"][loc_id] = oe8_id
-        TNL_OE8_DICT[model]["EXT"][oe8_id] = loc_id
+    # @staticmethod
+    # def store_vg7id(model, loc_id, vg7_id):
+    #     if model not in TNL_VG7_DICT:
+    #         TNL_VG7_DICT[model] = {}
+    #     if "EXT" not in TNL_VG7_DICT[model]:
+    #         TNL_VG7_DICT[model]["LOC"] = {}
+    #         TNL_VG7_DICT[model]["EXT"] = {}
+    #     if isinstance(vg7_id, basestring) and vg7_id.isdigit():
+    #         vg7_id = int(vg7_id)
+    #     TNL_VG7_DICT[model]["LOC"][loc_id] = vg7_id
+    #     TNL_VG7_DICT[model]["EXT"][vg7_id] = loc_id
+    #
+    # @staticmethod
+    # def store_oe8id(model, loc_id, oe8_id):
+    #     if model not in TNL_OE8_DICT:
+    #         TNL_OE8_DICT[model] = {}
+    #     if "EXT" not in TNL_OE8_DICT[model]:
+    #         TNL_OE8_DICT[model]["LOC"] = {}
+    #         TNL_OE8_DICT[model]["EXT"] = {}
+    #     if isinstance(oe8_id, basestring) and oe8_id.isdigit():
+    #         oe8_id = int(oe8_id)
+    #     TNL_OE8_DICT[model]["LOC"][loc_id] = oe8_id
+    #     TNL_OE8_DICT[model]["EXT"][oe8_id] = loc_id
 
-    def store_ext_id(self, model, loc_id, ext_id, identity):
-        if loc_id and ext_id:
-            if identity.startswith("vg7"):
-                self.store_vg7id(model, loc_id, ext_id)
-            elif identity.startswith("oe8"):
-                self.store_oe8id(model, loc_id, ext_id)
+    # def store_ext_id(self, model, loc_id, ext_id, identity):
+    #     if loc_id and ext_id:
+    #         if identity.startswith("vg7"):
+    #             self.store_vg7id(model, loc_id, ext_id)
+    #         elif identity.startswith("oe8"):
+    #             self.store_oe8id(model, loc_id, ext_id)
 
     @staticmethod
     def get_ext_id_field(identity):
@@ -444,25 +547,30 @@ class ExtTestEnv(object):
                 del vals[ext_ref]
         return vals
 
+    def cast_1_value(self, key, value):
+        if value in (r"\N", "None"):
+            value = None
+        elif key == "company_id" and not value:
+            value = self.user.company_id.id
+        elif key in ("shipping", "billing") and isinstance(value, basestring) and value:
+            value = eval(value)
+        elif isinstance(value, dict):
+            value = self.cast_value(value)
+        elif isinstance(value, basestring) and re.match(r"[0-9]*\.[0-9]+$", value):
+            value = eval(value)
+        elif isinstance(value, basestring) and "." in value and " " not in value:
+            value = self.env_ref(value)
+        elif key.endswith("id") and isinstance(value, basestring):
+            value = eval(value) if value else False
+        return value
+
     def cast_value(self, vals):
         res = {}
         for k, v in vals.items():
-            if v in (r"\N", "None"):
+            v = self.cast_1_value(k, v)
+            if v is None:
                 continue
-            elif k == "company_id" and not v:
-                res[k] = self.user.company_id.id
-            elif k in ("shipping", "billing") and isinstance(v, basestring) and v:
-                res[k] = eval(v)
-            elif isinstance(v, dict):
-                res[k] = self.cast_value(v)
-            elif isinstance(v, basestring) and re.match(r"[0-9]*\.[0-9]+$", v):
-                res[k] = eval(v)
-            elif isinstance(v, basestring) and "." in v and " " not in v:
-                res[k] = self.env_ref(v)
-            elif k.endswith("id") and isinstance(v, basestring):
-                res[k] = eval(v) if v else False
-            else:
-                res[k] = v
+            res[k] = v
         return res
 
     @staticmethod
@@ -520,9 +628,7 @@ class ExtTestEnv(object):
             raise IOError("Invalid cache lifetime setup!!!")
         self.ctr += 1
 
-    def delete_record(
-        self, model, domains, multi=False, action=None, childs=None, company_id=False
-    ):
+    def delete_record(self, model, domains):
         excl_list = [
             rec.res_id
             for rec in clodoo.browseL8(
@@ -532,12 +638,13 @@ class ExtTestEnv(object):
             )
         ]
         if model == "res.partner":
-            for rec in clodoo.browseL8(
-                self.ctx, "res.users",
-                    clodoo.searchL8(self.ctx, "res.users", [])
-            ):
-                if rec.partner_id.id not in excl_list:
-                    excl_list.append(rec.partner_id.id)
+            for submodel in ("res.users", "res.company"):
+                for rec in clodoo.browseL8(
+                    self.ctx, submodel,
+                        clodoo.searchL8(self.ctx, submodel, [])
+                ):
+                    if rec.partner_id.id not in excl_list:
+                        excl_list.append(rec.partner_id.id)
         if not isinstance(domains, (list, tuple)):
             domains = [domains]
         single_query = True
@@ -550,64 +657,14 @@ class ExtTestEnv(object):
         if single_query:
             domains = [domains]
         for domain in domains:
-            rec_ids = []
             if isinstance(domain, basestring):
                 rec_ids = self.env_ref(domain)
                 rec_ids = [rec_ids] if rec_ids else []
-            elif isinstance(domain, int):
-                full_domain = []
-                for test_prefix in ("vg7:", "oe8:"):
-                    ext_name = ("%s_id" % test_prefix.split(":")[0]
-                                if test_prefix else False)
-                    if domain == -1:
-                        leaf = [(ext_name, "!=", False), (ext_name, "!=", 0)]
-                    else:
-                        leaf = [(ext_name, "=", domain)]
-                    if not full_domain:
-                        full_domain = leaf
-                    else:
-                        if len(leaf) > 1:
-                            leaf.insert(0, "&")
-                        if len(full_domain) == 2:
-                            full_domain.insert(0, "&")
-                        full_domain.insert(0, "|")
-                        full_domain.extend(leaf)
-                domain = full_domain
-            if not rec_ids:
-                if company_id:
-                    domain.append(("company_id", "=", company_id))
+            else:
                 if excl_list:
                     domain.append(("id", "not in", excl_list))
                 rec_ids = clodoo.searchL8(self.ctx, model, domain)
-            if (not multi and len(rec_ids) == 1) or (multi and len(rec_ids)):
-                if action:
-                    if not isinstance(action, (list, tuple)):
-                        action = [action]
-                    for act in action:
-                        if act == "move_name=":
-                            clodoo.writeL8(
-                                self.ctx, model, rec_ids, {"move_name": ""})
-                        else:
-                            try:
-                                clodoo.executeL8(self.ctx, model, act, rec_ids)
-                            except BaseException:
-                                self.write_log(
-                                    "Warning! Cannot execute %s.%s" % (model, act),
-                                    echo=True)
-
-                if childs:
-                    for parent in clodoo.browseL8(self.ctx, model, rec_ids):
-                        for rec in parent[childs]:
-                            if rec.id in rec_ids:
-                                continue
-                            self.write_log("delete_record(%s, %s)" % (model, domains),
-                                           eol=False)
-                            try:
-                                clodoo.unlinkL8(self.ctx, model, rec.id)
-                                self.write_log(str(rec.id), no_ts=True)
-                            except BaseException as e:
-                                self.write_log(
-                                    "Error %s removing records ..." % e, echo=True)
+            if rec_ids:
                 try:
                     self.write_log("delete_record(%s, %s)" % (model, domains),
                                    eol=False)
@@ -619,6 +676,9 @@ class ExtTestEnv(object):
                         input("Press RET to continue")
                     else:
                         exit(1)
+            else:
+                self.write_log("No record to delete(%s, %s)" % (model, domains),
+                               echo=False)
 
     def write_record(
             self, model, domain, vals, company_id=False, create=None, unique=None):
@@ -844,7 +904,7 @@ class ExtTestEnv(object):
     def setup(self):
         self.write_log("self.setup()")
         self.init_new_db()
-        self.prior_model = 0
+        self.prior_model = self.prior_fct = ""
         model = "ir.module.module"
         maxctr = len(MODULE_LIST)
         connector_installed = False
@@ -901,10 +961,17 @@ class ExtTestEnv(object):
         #     pass
 
     def get_domain(self, model, vals, code="code", name=None, domain=()):
+        def build_expr(vals, field, op_not=False):
+            if isinstance(vals[field], basestring) and "%" in vals[field]:
+                return (field, "not ilike" if op_not else "ilike", vals[field])
+            return (field,
+                    "!=" if op_not else "=",
+                    self.cast_1_value(field, vals[field]))
+
         if code in vals and name and name in vals:
-            full_domain = [(code, "=", vals[code]), (name, "!=", vals[name])]
+            full_domain = [build_expr(vals, code), build_expr(vals, name, op_not=True)]
         elif code in vals:
-            full_domain = [(code, "=", vals[code])]
+            full_domain = [build_expr(vals, code)]
         else:
             full_domain = []
         if vals.get("parent_id"):
@@ -914,39 +981,103 @@ class ExtTestEnv(object):
         if not full_domain:
             # NULL domain
             full_domain = [("id", "<", 0)]
+        elif "company_id" in vals:
+            full_domain += ["|"]
+            full_domain += [("company_id", "=", False)]
+            full_domain += [build_expr(vals, "company_id")]
         return full_domain
+
+    def load_vals(self, vals, rec_vals):
+        for (k, v) in rec_vals.items():
+            if k in ("id", "vg7_id", "oe8_id"):
+                continue
+            vals[k] = self.cast_1_value(k, v)
+        return vals
+
+    def extract_action_from_vals(self, vals, identity, reset_id):
+        action = vals.get("_action", "update")
+        if "_action" in vals:
+            del vals["_action"]
+        if identity != (vals.get("_identity") or identity):
+            return False, vals
+        if "_identity" in vals:
+            del vals["_identity"]
+        if vals.get("_only_reset") and eval(vals["_only_reset"]) != reset_id:
+            return False, vals
+        if "_only_reset" in vals:
+            del vals["_only_reset"]
+        return action, vals
 
     def dirty_any_model(self, identity, model, code="code", domain=(), reset_id=False):
         fqn = pth.join(self.get_csv_path("dirty"), model + ".csv")
-        if pth.isfile(fqn):
-            dirty_recs = self.load_csv_file(fqn)
-            for vals in dirty_recs:
-                full_domain = self.get_domain(model, vals, code=code, domain=domain)
-                action = vals.get("_action", "update")
-                if "_action" in vals:
-                    del vals["_action"]
-                if identity != (vals.get("_identity") or identity):
-                    continue
-                if "_identity" in vals:
-                    del vals["_identity"]
-                if vals.get("_only_reset") and eval(vals["_only_reset"]) != reset_id:
-                    continue
-                if "_only_reset" in vals:
-                    del vals["_only_reset"]
-                if action.startswith("d"):
-                    self.delete_record(model, full_domain)
-                    continue
-                ids = clodoo.searchL8(self.ctx, model, full_domain)
-                if not ids:
-                    continue
-                self.write_log("%s.write(%s, %s)" % (model, ids, vals), echo=False)
-                clodoo.writeL8(self.ctx, model, ids, vals)
+        if not pth.isfile(fqn):
+            self.write_log("No dirty record to load for model %s)" % model, echo=False)
+            return
+        child_model = child_dirty_recs = None
+        if model in MODEL_WITH_CHILD:
+            child_model = MODEL_WITH_CHILD[model]["child_model"]
+            child_fqn = pth.join(self.get_csv_path(), child_model + ".csv")
+            child_dirty_recs = self.load_csv_file(child_fqn)
+        dirty_recs = self.load_csv_file(fqn)
+        for dirty_rec in dirty_recs:
+            full_domain = self.get_domain(model, dirty_rec, code=code, domain=domain)
+            action, dirty_rec = self.extract_action_from_vals(
+                dirty_rec, identity, reset_id)
+            if not action:
+                continue
+            if action.startswith("d"):
+                self.delete_record(model, full_domain)
+                continue
+            rec_ids = clodoo.searchL8(self.ctx, model, full_domain)
+            if not rec_ids:
+                continue
+            self.write_log("%s.write(%s, %s)" % (model, rec_ids, dirty_rec), echo=False)
+            clodoo.writeL8(self.ctx, model, rec_ids, dirty_rec)
+            if child_model:
+                if len(rec_ids) > 1:
+                    raise IOError(
+                        "!!Found too many records for model %s with %s!"
+                        % (model, full_domain)
+                    )
+                for child_dirty_rec in child_dirty_recs:
+                    rec_id = self.cast_1_value("id",  dirty_rec["id"])
+                    if (
+                            child_dirty_rec[MODEL_WITH_CHILD[model]["parent_field"]]
+                            ==
+                            rec_id
+                    ):
+                        child_key = MODEL_WITH_CHILD[model]["child_key"]
+                        child_domain = [
+                            (MODEL_WITH_CHILD[model]["parent_field"], "=", rec_id),
+                            (child_key, "=", self.cast_1_value(
+                                child_key, child_dirty_rec[child_key])),
+                        ]
+                        action, child_dirty_rec = self.extract_action_from_vals(
+                            child_dirty_rec, identity, reset_id)
+                        if not action:
+                            continue
+                        if action.startswith("d"):
+                            self.delete_record(child_model, child_domain)
+                            continue
+                        child_ids = clodoo.searchL8(self.ctx, child_model, child_domain)
+                        if not child_ids:
+                            continue
+                        self.write_log(
+                            "%s.write(%s, %s)"
+                            % (child_model, child_ids, child_dirty_rec),
+                            echo=False)
+                        clodoo.writeL8(
+                            self.ctx, child_model, child_ids, child_dirty_rec)
 
     def init_any_model(
             self, identity, model, code="code", name="name", domain=(), reset_id=False):
-        self.write_log("** Testing %s:%s **" % (identity, model),
-                       bb=0 if model == self.prior_model else 1)
-        self.prior_model = model
+        self.write_log("init_model(%s, %s, code=%s, name=%s, domain=%s)"
+                       % (identity, model, code, name, domain))
+        child_model = child_test_recs = None
+        if model in MODEL_WITH_CHILD:
+            child_model = MODEL_WITH_CHILD[model]["child_model"]
+            child_fqn = pth.join(self.get_csv_path(), child_model + ".csv")
+            child_test_recs = self.load_csv_file(child_fqn)
         if reset_id:
             ext_id_field = self.get_ext_id_field(identity)
         fqn = ""
@@ -957,26 +1088,66 @@ class ExtTestEnv(object):
             ctx = {}
             fqn = pth.join(self.get_csv_path(), model + ".csv")
         test_recs = self.load_csv_file(fqn)
-        for rec in test_recs:
-            full_domain = self.get_domain(
-                model, rec, code=code, name=name, domain=domain)
-            ids = clodoo.searchL8(self.ctx, model, full_domain)
-            if not ids:
-                continue
+        for test_rec in test_recs:
             vals = {}
-            for res_id in ids:
-                if self.search_4_xref(model, res_id):
-                    vals = {"name": rec[name]}
-                    break
+            if "id" in test_rec and test_rec["id"]:
+                rec_id = self.cast_1_value("id", test_rec["id"])
+                full_domain = [("id", "=", rec_id)]
+                vals = self.load_vals(vals, test_rec)
+                xref = self.get_xref_from_id(model, rec_id)
+                if xref:
+                    full_domain = [("id", "=", xref.complete_name)]
+                rec_ids = [rec_id]
+            else:
+                full_domain = self.get_domain(
+                    model, test_rec, code=code, name=name, domain=domain)
+                rec_ids = clodoo.searchL8(self.ctx, model, full_domain)
+                if not rec_ids:
+                    continue
+                for rec_id in rec_ids:
+                    xref = self.get_xref_from_id(model, rec_id)
+                    if xref:
+                        vals = self.load_vals(vals, test_rec)
+                        full_domain = [("id", "=", xref.complete_name)]
+                        break
             if reset_id:
                 vals[ext_id_field] = False
                 if model == "res.partner" and identity.startswith("vg7"):
                     vals["vg72_id"] = False
             if vals:
-                self.write_log("%s.write(%s, %s, ctx=%s) # %s"
-                               % (model, ids, vals, ctx, full_domain),
+                self.write_log("%s.write(%s, %s, ctx=%s)   # %s"
+                               % (model, rec_ids, vals, ctx, full_domain),
                                echo=False)
-                clodoo.writeL8(self.ctx, model, ids, vals, context=ctx)
+                clodoo.writeL8(self.ctx, model, rec_ids, vals, context=ctx)
+            if child_model:
+                if len(rec_ids) > 1:
+                    raise IOError(
+                        "!!Found too many records for model %s with %s!"
+                        % (model, full_domain)
+                    )
+                rec_id = rec_ids[0]
+                for child_test_rec in child_test_recs:
+                    child_vals = {}
+                    child_key = MODEL_WITH_CHILD[model]["child_key"]
+                    child_domain = [
+                        (MODEL_WITH_CHILD[model]["parent_field"], "=", rec_id),
+                        (child_key, "=", self.cast_1_value(child_key,
+                                                           child_test_rec[child_key])),
+                    ]
+                    child_ids = clodoo.searchL8(self.ctx, child_model, child_domain)
+                    if not child_ids:
+                        continue
+                    child_vals = self.load_vals(child_vals, child_test_rec)
+                    if reset_id:
+                        child_vals[ext_id_field] = False
+                    if not child_vals:
+                        continue
+                    self.write_log(
+                        "%s.write(%s, %s, ctx=%s) # %s"
+                        % (child_model, child_ids, child_vals, ctx, child_domain),
+                        echo=False)
+                    clodoo.writeL8(
+                        self.ctx, child_model, child_ids, child_vals, context=ctx)
         self.dirty_any_model(
             identity, model, code=code, domain=domain, reset_id=reset_id)
 
@@ -1094,8 +1265,8 @@ class ExtTestEnv(object):
         self.write_log("synchro(%s, %s)" % (model, vals), eol=False)
         rec_id = clodoo.executeL8(self.ctx, model, "synchro", vals)
         self.write_log(str(rec_id), no_ts=True)
-        if ext_id and rec_id > 0:
-            self.store_ext_id(model, rec_id, ext_id, identity)
+        # if ext_id and rec_id > 0:
+        #     self.store_ext_id(model, rec_id, ext_id, identity)
         return rec_id
 
     def test_function_trigger(self, ext_model, identity, ext_id):
@@ -1109,8 +1280,8 @@ class ExtTestEnv(object):
             ext_model, identity, ext_id
         )
         self.write_log(str(rec_id), no_ts=True)
-        if ext_id and rec_id > 0:
-            self.store_ext_id(ext_model, rec_id, ext_id, identity)
+        # if ext_id and rec_id > 0:
+        #     self.store_ext_id(ext_model, rec_id, ext_id, identity)
         return rec_id
 
     def merge_supplemetal_vals(self, identity, fn, parent_field, field, ext_recs):
@@ -1158,13 +1329,18 @@ class ExtTestEnv(object):
         mode=None,
         ext_model=None,
         fct_test="synchro",
-        lang=None
+        lang=None,
+        reset_id=False,
     ):
         self.write_log(
-            "load_n_test_model(%s, %s, mode=%s, fct=%s)"
+            "** load_n_test_model(%s, %s, mode=%s, fct=%s) **"
             % (identity, model, mode, fct_test),
+            bb=0 if model == self.prior_model and fct_test == self.prior_fct
+            else 1 if model == self.prior_model else 2
         )
-
+        self.prior_model = model
+        self.fct = fct_test
+        self.init_model(identity, model, reset_id=reset_id)
         ext_model = ext_model or self.get_ext_model(model, identity)
         ext_recs_image = self.load_ext_values(identity, model, lang=lang)
         if lang:
@@ -1203,11 +1379,13 @@ class ExtTestEnv(object):
         return
 
     def store_csv_response(self, identity, models, lang=None):
+        self.write_log(
+            "store_csv_response(%s, %s)" % (identity, models), echo=False)
         ext_id_field = self.get_ext_id_field(identity)
         for model in models:
             for id in clodoo.searchL8(
                     self.ctx, model, [(ext_id_field, "!=", False)]):
-                self.write_log("write_record(%s, %s, {%s: False})"
+                self.write_log("%s.write(%s, {%s: False})"
                                % (model, id, ext_id_field))
                 clodoo.writeL8(self.ctx, model, id, {ext_id_field: False})
             ext_model = self.get_ext_model(model, identity)
@@ -1223,114 +1401,35 @@ class ExtTestEnv(object):
                 self.write_file_2_pull(identity, ext_model, ext_rec, wa)
                 wa = "a"
 
-    def test_country(
-            self, mode=None, identity="vg7:", fct_test="synchro", reset_id=False):
-        model = "res.country"
-        self.init_model(identity, model, reset_id=reset_id)
-        self.load_n_test_model(
-            identity,
-            model,
-            fct_test=fct_test,
-        )
 
-    def test_country_state(
-            self, mode=None, identity="vg7:", fct_test="synchro", reset_id=False):
-        model = "res.country.state"
-        self.init_model(identity, model, reset_id=reset_id)
-        self.load_n_test_model(
+def run_full_identity_test(ext_test_env, model, test_prio, identity):
+    if test_prio == "synchro":
+        ext_test_env.load_n_test_model(
             identity,
             model,
-            fct_test=fct_test,
+            fct_test=test_prio,
+            reset_id=True
         )
-
-    def test_partner(
-            self, mode=None, identity="vg7:", fct_test="synchro", reset_id=False):
-        model = "res.partner"
-        self.init_model(identity, model, reset_id=reset_id)
-        self.load_n_test_model(
+        ext_test_env.load_n_test_model(
             identity,
             model,
-            fct_test=fct_test,
+            fct_test="trigger",
         )
-
-    def test_tax(
-            self, mode=None, identity="vg7:", fct_test="synchro", reset_id=False):
-        model = "account.tax"
-        self.init_model(identity, model, reset_id=reset_id)
-        self.load_n_test_model(
+        if model == "res.partner":
+            test_prio = "trigger"
+    else:
+        ext_test_env.load_n_test_model(
             identity,
             model,
-            fct_test=fct_test,
+            fct_test=test_prio,
+            reset_id=True
         )
-
-    def test_company(
-            self, mode=None, identity="oe8:", fct_test="synchro", reset_id=False):
-        model = "res.company"
-        self.init_model(identity, model, reset_id=reset_id)
-        self.load_n_test_model(
+        ext_test_env.load_n_test_model(
             identity,
             model,
-            fct_test=fct_test,
+            fct_test="synchro",
         )
-    def test_user(
-            self, mode=None, identity="oe8:", fct_test="synchro", reset_id=False):
-        model = "res.users"
-        self.init_model(identity, model, reset_id=reset_id)
-        self.load_n_test_model(
-            identity,
-            model,
-            fct_test=fct_test,
-        )
-
-    def test_uom(
-            self, mode=None, identity="oe8:", fct_test="synchro", reset_id=False):
-        model = "product.uom"
-        self.init_model(identity, model, reset_id=reset_id)
-        self.load_n_test_model(
-            identity,
-            model,
-            fct_test=fct_test,
-        )
-
-    def test_product_tmpl(
-            self, mode=None, identity="oe8:", fct_test="synchro", reset_id=False):
-        model = "product.template"
-        self.init_model(identity, model, reset_id=reset_id)
-        self.load_n_test_model(
-            identity,
-            model,
-            fct_test=fct_test,
-        )
-
-    def test_product(
-            self, mode=None, identity="vg7:", fct_test="synchro", reset_id=False):
-        model = "product.product"
-        self.init_model(identity, model, reset_id=reset_id)
-        self.load_n_test_model(
-            identity,
-            model,
-            fct_test=fct_test,
-        )
-
-    def test_account_type(
-            self, mode=None, identity="oe8:", fct_test="synchro", reset_id=False):
-        model = "account.account.type"
-        self.init_model(identity, model, reset_id=reset_id)
-        self.load_n_test_model(
-            identity,
-            model,
-            fct_test=fct_test,
-        )
-
-    def test_account(
-            self, mode=None, identity="oe8:", fct_test="synchro", reset_id=False):
-        model = "account.account"
-        self.init_model(identity, model, reset_id=reset_id)
-        self.load_n_test_model(
-            identity,
-            model,
-            fct_test=fct_test,
-        )
+    return test_prio
 
 
 def main(cli_args=[]):
@@ -1339,35 +1438,26 @@ def main(cli_args=[]):
     ext_test_env = ExtTestEnv(cli_args)
     ext_test_env.setup()
 
-    ext_test_env.write_log("*** Starting VG7 test ***", echo=True, bb=2)
-    ext_test_env.store_csv_response(
-        "vg7:",
-        (
-            "res.country",
-            "res.country.state",
-            "res.partner",
-            "account.tax",
-            "product.uom",
-            "product.product")
+    identity = "vg7:"
+    ext_test_env.write_log(
+        "*** Starting %s test ***" % identity.upper(), echo=True, bb=3)
+    MODELS = (
+        "res.country",
+        "res.country.state",
+        "res.partner",
+        "account.tax",
+        "product.uom",
+        "product.product",
     )
-    ext_test_env.test_country(identity="vg7:", reset_id=True)
-    ext_test_env.test_country(identity="vg7:", fct_test="trigger")
-    ext_test_env.test_country_state(identity="vg7:", reset_id=True)
-    ext_test_env.test_country_state(identity="vg7:", fct_test="trigger")
-    ext_test_env.test_partner(identity="vg7:", reset_id=True)
-    ext_test_env.test_partner(identity="vg7:", fct_test="trigger")
-    # In order to increase test coverage, from here trigger run before synchro test
-    ext_test_env.test_tax(identity="vg7:", reset_id=True, fct_test="trigger")
-    ext_test_env.test_tax(identity="vg7:")
-    ext_test_env.test_uom(identity="vg7:", reset_id=True, fct_test="trigger")
-    ext_test_env.test_uom(identity="vg7:")
-    ext_test_env.test_product(identity="vg7:", reset_id=True, fct_test="trigger")
-    ext_test_env.test_product(identity="vg7:")
+    ext_test_env.store_csv_response(identity, MODELS)
+    test_prio = "synchro"
+    for model in MODELS:
+        test_prio = run_full_identity_test(ext_test_env, model, test_prio, identity)
 
-    ext_test_env.write_log("*** Starting OE8 test ***", echo=True, bb=2)
-    ext_test_env.store_csv_response(
-        "oe8:",
-        (
+    identity = "oe8:"
+    ext_test_env.write_log(
+        "*** Starting %s test ***" % identity.upper(), echo=True, bb=3)
+    MODELS = (
             "account.account.type",
             "account.account",
             "res.country",
@@ -1376,33 +1466,17 @@ def main(cli_args=[]):
             "res.company",
             "res.users",
             "account.tax",
+            "account.journal",
+            # "account.payment.term",
+            # "account.payment.term.line",
             "product.uom",
             "product.template",
-            "product.product")
+            "product.product",
     )
-    ext_test_env.test_country(identity="oe8:", reset_id=True)
-    ext_test_env.test_country(identity="oe8:", fct_test="trigger")
-    ext_test_env.test_country_state(identity="oe8:", reset_id=True)
-    ext_test_env.test_country_state(identity="oe8:", fct_test="trigger")
-    ext_test_env.test_account_type(identity="oe8:", reset_id=True)
-    ext_test_env.test_account_type(identity="oe8:", fct_test="trigger")
-    ext_test_env.test_partner(identity="oe8:", reset_id=True)
-    ext_test_env.test_partner(identity="oe8:", fct_test="trigger")
-    ext_test_env.test_company(identity="oe8:", reset_id=True)
-    ext_test_env.test_company(identity="oe8:", fct_test="trigger")
-    ext_test_env.test_user(identity="oe8:", reset_id=True)
-    ext_test_env.test_user(identity="oe8:", fct_test="trigger")
-    # In order to increase test coverage, from here trigger run before synchro test
-    ext_test_env.test_account(identity="oe8:", reset_id=True, fct_test="trigger")
-    ext_test_env.test_account(identity="oe8:")
-    ext_test_env.test_tax(identity="oe8:", reset_id=True, fct_test="trigger")
-    ext_test_env.test_tax(identity="oe8:")
-    ext_test_env.test_uom(identity="oe8:", reset_id=True, fct_test="trigger")
-    ext_test_env.test_uom(identity="oe8:")
-    ext_test_env.test_product_tmpl(identity="oe8:", reset_id=True, fct_test="trigger")
-    ext_test_env.test_product_tmpl(identity="oe8:")
-    ext_test_env.test_product(identity="oe8:", reset_id=True, fct_test="trigger")
-    ext_test_env.test_product(identity="oe8:")
+    ext_test_env.store_csv_response(identity, MODELS)
+    test_prio = "synchro"
+    for model in MODELS:
+        test_prio = run_full_identity_test(ext_test_env, model, test_prio, identity)
 
     ext_test_env.teardown()
 
