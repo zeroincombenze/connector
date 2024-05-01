@@ -1,6 +1,5 @@
-payment_id,days,value,sequence
-51,30,balance,1
-52,30,procent,1
-52,60,balance,2
-53,30,balance,1
-54,30,balance,1
+payment_id,sequence,days,value,id
+51,1,30,balance,100
+52,1,30,procent,101
+52,2,60,balance,102
+53,1,30,balance,103

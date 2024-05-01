@@ -99,6 +99,7 @@ MODEL_KEYS = {
     "account.account.type": {"code": "name"},
     "account.account": {},
     "account.journal": {},
+    "account.payment.term": {"code": "name"},
     "account.tax": {"code": "description"},
     "product.product": {},
     "product.template": {"code": "default_code"},
@@ -1069,8 +1070,13 @@ class ExtTestEnv(object):
                         clodoo.writeL8(
                             self.ctx, child_model, child_ids, child_dirty_rec)
 
-    def init_any_model(
+    def init_model(
             self, identity, model, code="code", name="name", domain=(), reset_id=False):
+        if not self.conai and "conai" in model:
+            return
+        code = code or MODEL_KEYS[model].get("code", "code")
+        name = name or MODEL_KEYS[model].get("name", "name")
+        domain = domain or MODEL_KEYS[model].get("domain", [])
         self.write_log("init_model(%s, %s, code=%s, name=%s, domain=%s)"
                        % (identity, model, code, name, domain))
         child_model = child_test_recs = None
@@ -1126,9 +1132,9 @@ class ExtTestEnv(object):
                         % (model, full_domain)
                     )
                 rec_id = rec_ids[0]
+                child_key = MODEL_WITH_CHILD[model]["child_key"]
                 for child_test_rec in child_test_recs:
                     child_vals = {}
-                    child_key = MODEL_WITH_CHILD[model]["child_key"]
                     child_domain = [
                         (MODEL_WITH_CHILD[model]["parent_field"], "=", rec_id),
                         (child_key, "=", self.cast_1_value(child_key,
@@ -1150,17 +1156,6 @@ class ExtTestEnv(object):
                         self.ctx, child_model, child_ids, child_vals, context=ctx)
         self.dirty_any_model(
             identity, model, code=code, domain=domain, reset_id=reset_id)
-
-    def init_model(self, identity, model, reset_id=False):
-        if not self.conai and "conai" in model:
-            return
-        self.init_any_model(
-            identity,
-            model,
-            code=MODEL_KEYS[model].get("code", "code"),
-            name=MODEL_KEYS[model].get("name", "name"),
-            domain=MODEL_KEYS[model].get("domain", []),
-            reset_id=reset_id)
 
     def prepare_rec(self, rec, main_ext_id):
         ext_id = False
@@ -1467,8 +1462,7 @@ def main(cli_args=[]):
             "res.users",
             "account.tax",
             "account.journal",
-            # "account.payment.term",
-            # "account.payment.term.line",
+            "account.payment.term",
             "product.uom",
             "product.template",
             "product.product",
