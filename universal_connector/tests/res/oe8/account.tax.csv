@@ -1,0 +1,4 @@
+description,company_id,type_tax_use,amount,id,name
+22v,3,sale,22,1,IVA 22% su vendite
+10v,3,sale,10,3,IVA 10% su vendite
+22a,3,purchase,22,2,IVA 22% da acquisti

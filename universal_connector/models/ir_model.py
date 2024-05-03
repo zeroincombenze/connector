@@ -2146,7 +2146,7 @@ class IrModelSynchro(models.Model):
                             if ttype == "char" and "apply_set_tmp_name" not in fcts:
                                 fcts.append("apply_set_tmp_name")
                             elif (
-                                loc_name in (suppl_key, "company_id")
+                                loc_name in (suppl_key, "company_id", "country_id")
                                 and "apply_get_global" not in fcts
                             ):
                                 fcts.append("apply_get_global")

@@ -1,0 +1,5 @@
+product_tmpl_id,type,default_code,name,id
+81,consu,AAA,Prodotto Alpha,82
+82,consu,BBB,Prodotto Beta,83
+98,product,RRR,Prodotto Rho,99
+103,service,WWW,Special Worldwide service,104

@@ -1,0 +1,7 @@
+id,country_id,code,name
+base.state_it_mi,base.it,MI,Milano
+base.state_it_to,base.it,TO,Torino
+base.state_it_al,base.it,AL,Alessandria
+base.state_it_bo,base.it,BO,Bologna
+base.state_it_na,base.it,NA,Napoli
+base.state_it_ce,base.it,CE,Caserta

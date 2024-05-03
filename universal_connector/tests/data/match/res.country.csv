@@ -1,7 +1,7 @@
-vg7_id,oe8_id,code,name
-,3,AT,Austria
-,6,AU,Australia
-49,,DE,Germania
-44,12,GB,Regno Unito
-39,9,IT,Italia
-356,,MT,Malta
+id,vg7_id,oe8_id,code,name
+base.at,,3,AT,Austria
+base.au,,6,AU,Australia
+base.de,49,,DE,Germania
+base.uk,44,12,GB,Regno Unito
+base.it,39,9,IT,Italia
+base.mt,356,,MT,Malta

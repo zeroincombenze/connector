@@ -858,6 +858,10 @@ class IrModelSynchroCache(models.Model):
                 "oe12": "12.0",
                 "oe13": "13.0",
                 "oe14": "14.0",
+                "oe15": "15.0",
+                "oe16": "16.0",
+                "oe17": "17.0",
+                "oe18": "18.0",
             }.get(backend.prefix.split(":")[0], ""),
         )
         self.set_attr(backend.id, "IDENTITY", backend.identity)

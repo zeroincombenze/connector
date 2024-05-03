@@ -139,8 +139,8 @@ MODEL_WITH_CHILD = {
     },
 }
 TNL_VG7_TABLES = {
-    "account.account": "",
     "account.account.type": "",
+    "account.account": "",
     "account.invoice": "",
     "account.invoice.line": "",
     "account.journal": "",
@@ -176,7 +176,12 @@ TNL_VG7_TABLES = {
     "stock.picking.transportation_reason": "causals",
 }
 TNL_OE8_TABLES = {}
-MODEL_LIST = list(TNL_VG7_TABLES.keys())
+MODEL_LIST = (
+    "account.account.type",
+    "res.country",
+    "res.country.state",
+    "account.account"
+)
 TNL_VG7_DICT = {
     "account.account": {},
     "account.invoice": {"number": "move_name"},
@@ -326,16 +331,17 @@ MODEL_KEYS = {
 }
 
 THIS_MODULE = "universal_connector"
+COA_MODULE = "l10n_it_coa"
 MODULE_LIST = [
-    "mk_test_env",
+    # "mk_test_env",
     THIS_MODULE,
+    COA_MODULE,
     "account",
     "account_payment_term_extension",
     "date_range",
     "purchase",
     "sale",
     "stock",
-    "l10n_it_fiscal",
     "l10n_it_fiscalcode",
     "l10n_it_ddt",
     "l10n_it_einvoice_out",
@@ -351,15 +357,15 @@ class ExtTestEnv(object):
 
     def __init__(self, *args):
         self.parseoptargs(args)
-        for item in ("confn", "db_name", "lang"):
+        for item in ("confn", "db_name", "lang", "conai"):
             setattr(self, item, getattr(self.opt_args, item))
-        self.confn = self.confn or os.environ["TEST_CONFN"]
-        self.db_name = self.db_name or "connect10"
+        self.confn = os.environ.get("TEST_CONFN", self.confn)
+        self.db_name = os.environ.get("TEST_DB", self.db_name)
+        # self.db_name = "connect10"
         self.lang = self.lang or "it_IT"
         self.logfn = __file__.replace(".py", ".log")
-        self.conai = False
+        # TODO
         self.ask = False
-        self.module = False
         self.ctr = 0
         if pth.isfile(self.logfn):
             os.unlink(self.logfn)
@@ -389,6 +395,11 @@ class ExtTestEnv(object):
             "--lang",
             help="Language to test",
             metavar="ISO3166",
+        )
+        parser.add_argument(
+            "--conai",
+            action="store_true",
+            help="Test with CONAI module",
         )
         self.opt_args = parser.parse_args(*args)
 
@@ -548,16 +559,22 @@ class ExtTestEnv(object):
                 del vals[ext_ref]
         return vals
 
-    def cast_1_value(self, key, value):
+    def cast_1_value(self, key, value, keep_id=False):
         if value in (r"\N", "None"):
             value = None
+        elif key == "id" and keep_id:
+            pass
         elif key == "company_id" and not value:
-            value = self.user.company_id.id
+            value = self.company_id
         elif key in ("shipping", "billing") and isinstance(value, basestring) and value:
             value = eval(value)
         elif isinstance(value, dict):
             value = self.cast_value(value)
-        elif isinstance(value, basestring) and re.match(r"[0-9]*\.[0-9]+$", value):
+        elif (
+                isinstance(value, basestring)
+                and len(value) < 6
+                and re.match(r"[0-9]*\.[0-9]+$", value)
+        ):
             value = eval(value)
         elif isinstance(value, basestring) and "." in value and " " not in value:
             value = self.env_ref(value)
@@ -565,10 +582,10 @@ class ExtTestEnv(object):
             value = eval(value) if value else False
         return value
 
-    def cast_value(self, vals):
+    def cast_value(self, vals, keep_id=False):
         res = {}
         for k, v in vals.items():
-            v = self.cast_1_value(k, v)
+            v = self.cast_1_value(k, v, keep_id=keep_id)
             if v is None:
                 continue
             res[k] = v
@@ -601,7 +618,7 @@ class ExtTestEnv(object):
                     loc_name = loc_name[0]
         return loc_name, mode
 
-    def load_csv_file(self, fqn):
+    def load_csv_file(self, fqn, keep_id=False):
         datas = []
         if not pth.isfile(fqn):
             raise IOError("File %s not found!" % fqn)
@@ -612,7 +629,7 @@ class ExtTestEnv(object):
                 if not header:
                     header = row
                     continue
-                datas.append(self.cast_value(dict(zip(header, row))))
+                datas.append(self.cast_value(dict(zip(header, row)), keep_id=keep_id))
         return datas
 
     def reset_cache(self):
@@ -681,36 +698,18 @@ class ExtTestEnv(object):
                 self.write_log("No record to delete(%s, %s)" % (model, domains),
                                echo=False)
 
-    def write_record(
-            self, model, domain, vals, company_id=False, create=None, unique=None):
-        if isinstance(domain, basestring):
-            ids = self.env_ref(domain)
-            ids = [ids] if ids else []
-        else:
-            if company_id:
-                domain.append(("company_id", "=", company_id))
-            ids = clodoo.searchL8(self.ctx, model, domain)
-        if ids:
-            self.write_log("write_record(%s, %s)" % (model, domain), eol=False)
-            self.write_log(str(ids), no_ts=True)
-            clodoo.writeL8(self.ctx, model, ids, vals)
-            if unique and len(ids) > 1:
-                self.write_log(
-                    "Warning: Too many records '%s(%s)'" % (model, domain))
-                self.delete_record(model, [("id", "in", ids[1:])])
-        elif create:
-            self.write_log("%s.create(%s)" % (model, vals), no_ts=True)
-            ids = [clodoo.createL8(self.ctx, model, vals)]
-            self.write_log(str(ids), no_ts=True)
-        return ids
-
     def init_new_db(self):
-        # Temporary solution
+        self.write_log("init_new_db(%s, %s)" % (self.db_name, self.confn))
         print("Be patient, the universal connector full test takes a few time ...")
-        print("Please drop DB %s" % self.db_name)
-        input("Press RET to continue ...")
-        print("Now recreate DB %s (w/o demo data)" % self.db_name)
-        input("Press RET to continue ...")
+        if self.db_name != os.environ.get("TEST_DB", self.db_name):
+            if self.ask:
+                print("Please drop DB %s" % self.db_name)
+                input("Press RET to continue ...")
+                print("Now recreate DB %s (w/o demo data)" % self.db_name)
+                input("Press RET to continue ...")
+            else:
+                raise IOError("DB %s is different from %s"
+                              % (self.db_name, os.environ.get("TEST_DB", self.db_name)))
         with open(self.confn, "r") as fd:
             contents = fd.read()
         if "psycopg2 = 1" not in contents:
@@ -721,17 +720,24 @@ class ExtTestEnv(object):
             raise IOError("DB %s not connected via json/xmlrpc!" % self.db_name)
         self.user = self.ctx["user"]
 
-    def set_new_db(self):
-        company_id = self.env_ref("z0bug.mycompany")
-        while not company_id:
-            print("Activate Developer Mode and create full test environment")
-            print("lang=it_IT, no new company, CoA=Zero,%s CONAI ..."
-                  % " not" if self.conai else " ")
-            print("You need to create only chart of account, partners and products ...")
-            input("Press RET to continue ...")
-            company_id = self.env_ref("z0bug.mycompany")
+    def install_module(self, modname, connector_installed=False):
+        self.write_log("install_module(%s)" % modname)
+        model = "ir.module.module"
+        if connector_installed:
+            vals = {"name": modname}
+            res_id = clodoo.executeL8(self.ctx, model, "synchro", vals)
+            if res_id < 0:
+                raise IOError("!!Error %s installing %s!" % (res_id, modname))
+        else:
+            module_ids = clodoo.searchL8(self.ctx, model, [("name", "=", modname)])
+            if not module_ids:
+                raise IOError("Module %s does not exist!!!" % modname)
+            clodoo.executeL8(self.ctx,
+                             "ir.module.module",
+                             "button_immediate_install",
+                             module_ids)
 
-    def check_if_module_installed(self, modname, ctr=-1, maxctr=-1):
+    def check_if_module_installed(self, modname, ctr=-1, maxctr=-1, wait=False):
         if ctr >= 0 and maxctr >= 0:
             self.write_log(
                 "check_if_module_installed(%s, %d/%d)" % (modname, ctr + 1, maxctr),
@@ -744,53 +750,76 @@ class ExtTestEnv(object):
             raise IOError("Module %s does not exist!!!" % modname)
         state = "uninstalled"
         if len(module_ids) == 1:
-            state = clodoo.browseL8(self.ctx, model, module_ids[0]).state
-            if state.startswith("to "):
-                sleep(3.0)
+            ctr = 40 if wait else 1
+            while ctr > 0 and state != "installed":
                 state = clodoo.browseL8(self.ctx, model, module_ids[0]).state
+                ctr -= 2 if not state.startswith("to ") else 1
+                sleep(1.0)
+                # Following statement should clear the rcp cache
+                clodoo.searchL8(self.ctx, model, [])
         return state == "installed"
 
     def wait_4_module_uninstalled(self, modname):
-        tmo = 0.2
         installed = self.check_if_module_installed(modname)
         while installed:
             print("Module %s installed!" % modname)
             print("Please uninstall %s" % modname)
-            input("Press RET to continue ...")
-            installed = self.check_if_module_installed(modname)
-            tmo = 1.0
-        sleep(tmo)
+            if self.ask:
+                input("Press RET to continue ...")
+            installed = self.check_if_module_installed(modname, wait=True)
 
     def wait_4_module_installed(self, modname, ctr, maxctr):
-        tmo = 0.2
-        installed = False
+        installed = self.check_if_module_installed(modname)
         while not installed:
             print("Module %s not installed!" % modname)
             print("Please install %s" % modname)
-            input("Press RET to continue ...")
-            installed = self.check_if_module_installed(modname, ctr=ctr, maxctr=maxctr)
-            tmo = 1.0
-        sleep(tmo)
+            if self.ask:
+                input("Press RET to continue ...")
+            installed = self.check_if_module_installed(
+                modname, ctr=ctr, maxctr=maxctr, wait=True)
 
     def assure_company(self):
-        self.company_id = self.env_ref("z0bug.mycompany")
-        if not self.company_id:
-            raise IOError("!!Internal error: no company to test found!")
+        self.write_log("assure_company()")
         model = "res.company"
-        company = clodoo.browseL8(self.ctx, model, self.company_id)
-        if not company.country_id or company.name != "Test Company":
-            clodoo.writeL8(
-                self.ctx,
-                model,
-                self.company_id,
-                {"country_id": self.env_ref("base.it"), "name": "Test Company"},
-            )
+        xref = "z0bug.mycompany"
         self.company_note = "Si prega di controllate i dati entro le 24h."
-        vals = {"sale_note": self.company_note}
-        clodoo.writeL8(self.ctx, "res.company", self.company_id, vals)
-        self.write_log(
-            "res.company.write(%s, %s)" % (self.company_id, vals),
-        )
+        self.company_id = self.env_ref(xref)
+        if not self.company_id:
+            company = self.resource_browse(model, xref="base.main_company")
+            vals = {}
+            if company.name != "Test Company":
+                vals["name"] = "Test Company"
+            if vals:
+                vals["sale_note"] = self.company_note
+            if "Zero" in company.chart_template_id.name:
+                if not company.country_id:
+                    vals["country_id"] = self.env_ref("base.it")
+                self.company_id = company.id
+                self.resource_write(model, company.id, values=vals, xref=xref)
+            else:
+                vals["country_id"] = self.env_ref("base.it")
+                vals["currency_id"] = self.env_ref("base.EUR")
+                self.company_id = self.resource_create(model, values=vals, xref=xref)
+                company = self.resource_browse(model, self.company_id)
+        else:
+            company = self.resource_browse(model, self.company_id)
+            vals = {}
+            if company.name != "Test Company":
+                vals["name"] = "Test Company"
+            if not company.country_id:
+                vals["country_id"] = self.env_ref("base.it")
+            if vals:
+                vals["sale_note"] = self.company_note
+                self.resource_write(model, self.company_id, values=vals)
+        self.resource_write("res.partner",
+                            company.partner_id.id,
+                            {"lang": self.lang})
+        if self.db_name != os.environ.get("TEST_DB", self.db_name):
+            print("Activate Developer Mode and create full test environment")
+            print("lang=it_IT, no new company, CoA=Zero,%s CONAI ..."
+                  % " not" if self.conai else " ")
+            print("You need only chart of account, partners and products ...")
+            input("Press RET to continue ...")
 
     def assure_cache(self):
         clodoo.executeL8(self.ctx,
@@ -843,9 +872,15 @@ class ExtTestEnv(object):
     def assure_lang(self):
         model = "res.lang"
         if not clodoo.searchL8(self.ctx, model, [("code", "=", self.lang)]):
-            vals = {"code": self.lang}
-            self.write_log("Installing language %s ..." % vals["code"], echo=True)
+            id = clodoo.createL8(
+                self.ctx, "base.language.install", {"lang": self.lang})
+            clodoo.executeL8(
+                self.ctx, "base.language.install", "lang_install", [id])
+            vals = {"oe8:code": self.lang, "id": 59}
+            self.write_log("Installing language %s ..." % self.lang, echo=True)
             clodoo.executeL8(self.ctx, model, "synchro", vals)
+            self.ctx["lang"] = self.lang
+
 
     def assure_user(self, lang=None):
         model = "res.users"
@@ -854,59 +889,48 @@ class ExtTestEnv(object):
             raise IOError(
                 "!!Invalid current user id %s; set %s!" % (self.user.id, user_id)
             )
-        user = clodoo.browseL8(self.ctx, model, self.user.id)
+        user = self.resource_browse(model, self.user.id)
         vals = {}
-        if user.company_id.id != self.company_id:
-            vals["company_id"] = self.company_id
-        lang = lang or self.lang
-        if user.lang != lang:
-            vals["lang"] = lang
+        if self.company_id not in [x.id for x in user.company_ids]:
+            vals["company_ids"] = [(4, self.company_id)]
+        if user.lang != (lang or self.lang):
+            vals["lang"] = lang or self.lang
         if vals:
-            clodoo.writeL8(self.ctx, "res.users", self.user.id, vals)
-            self.write_log("res.users.write(%s, %s)" % (self.user.id, vals))
-            self.lang = clodoo.browseL8(self.ctx, model, self.user.id).lang
+            vals["tz"] = "Europe/Rome"
+            self.resource_write("res.users", self.user.id, vals)
+        if user.company_id.id != self.company_id:
+            vals = {"company_id": self.company_id}
+            self.resource_write("res.users", self.user.id, vals)
+        self.lang = clodoo.browseL8(self.ctx, model, self.user.id).lang
+        if self.ctx["lang"] != self.lang:
+            raise IOError(
+                "!!DB language %s is different from connection meta-data %s!"
+                % (self.lang, self.ctx["lang"])
+            )
 
     def assure_journals(self):
-        for model, domain, self.company_id, vals in (
+        for model, domain, company_id, vals in (
             ("account.journal",
              [("update_posted", "=", False)],
              self.company_id,
              {"update_posted": True}),
         ):
-            self.write_record(model, domain, vals)
+            self.resource_write(model, domain, vals)
 
     def action_after_installed(self, modname, connector_installed):
         if modname == "mk_test_env":
-            self.set_new_db()
-            self.assure_company()
-            tax_id = self.env_ref("z0bug.tax_22v")
-            while not tax_id:
-                print("Activate Developer Mode and Load Account records ...")
-                input("Press RET to continue ...")
-                tax_id = self.env_ref("z0bug.tax_22v")
-            partner_id = self.env_ref("z0bug.res_partner_1")
-            while not partner_id:
-                print("Activate Developer Mode and Load Partner records ...")
-                input("Press RET to continue ...")
-                partner_id = self.env_ref("z0bug.res_partner_1")
-            product_id = self.env_ref("z0bug.product_product_1")
-            while not product_id:
-                print("Activate Developer Mode and Load Products records ...")
-                input("Press RET to continue ...")
-                product_id = self.env_ref("z0bug.product_product_1")
+            pass
         elif modname == THIS_MODULE:
             connector_installed = True
             self.assure_cache()
             self.assure_all_backends()
-            self.assure_lang()
-            self.assure_user()
         return connector_installed
 
     def setup(self):
         self.write_log("self.setup()")
         self.init_new_db()
         self.prior_model = self.prior_fct = ""
-        model = "ir.module.module"
+        # model = "ir.module.module"
         maxctr = len(MODULE_LIST)
         connector_installed = False
         for ctr, modname in enumerate(MODULE_LIST):
@@ -915,24 +939,60 @@ class ExtTestEnv(object):
                 if installed:
                     self.wait_4_module_uninstalled(modname)
                 continue
-            if connector_installed and not installed:
-                vals = {"name": modname}
-                res_id = clodoo.executeL8(self.ctx, model, "synchro", vals)
-                if res_id < 0:
-                    raise IOError("!!Error %s installing %s!" % (res_id, modname))
-                module = clodoo.browseL8(self.ctx, model, res_id)
-                if module.state != "installed":
-                    raise IOError("Module %s not installed!!!" % modname)
             if not installed:
+                self.install_module(modname, connector_installed=connector_installed)
                 self.wait_4_module_installed(modname, ctr, maxctr)
             connector_installed = self.action_after_installed(
                 modname, connector_installed)
-        self.assure_journals()
-        if not clodoo.browseL8(self.ctx,
-                               "res.company",
-                               self.company_id).due_cost_service_id:
-            raise IOError("!!Missed bank cost in company!!")
-        # TODO> **** TO REMOVE EAARLY ****
+
+        self.assure_lang()
+        self.assure_company()
+        self.assure_user()
+
+        if self.ask:
+            input("Press RET to continue ...")
+        for model in MODEL_LIST:
+            fqn = pth.join(self.get_csv_path("setup"), model + ".csv")
+            if not pth.isfile(fqn):
+                self.write_log("No setup records for model %s)" % model, echo=False)
+                continue
+            setup_recs = self.load_csv_file(fqn, keep_id=True)
+            for setup_rec in setup_recs:
+                code = MODEL_KEYS[model].get("code", "code")
+                domain = MODEL_KEYS[model].get("domain", [])
+                xref = None
+                if "id" in setup_rec:
+                    xref = setup_rec["id"]
+                    full_domain = xref
+                    del setup_rec["id"]
+                if not xref:
+                    full_domain = self.get_domain(
+                        model, setup_rec, code=code, domain=domain)
+                self.resource_write(model, full_domain, setup_rec, create=True, xref=xref)
+            if model == "account.journal":
+                self.assure_journals()
+
+        # tax_id = self.env_ref("z0bug.tax_22v")
+        # while not tax_id:
+        #     print("Activate Developer Mode and Load Account records ...")
+        #     input("Press RET to continue ...")
+        #     tax_id = self.env_ref("z0bug.tax_22v")
+        # partner_id = self.env_ref("z0bug.res_partner_1")
+        # while not partner_id:
+        #     print("Activate Developer Mode and Load Partner records ...")
+        #     input("Press RET to continue ...")
+        #     partner_id = self.env_ref("z0bug.res_partner_1")
+        # product_id = self.env_ref("z0bug.product_product_1")
+        # while not product_id:
+        #     print("Activate Developer Mode and Load Products records ...")
+        #     input("Press RET to continue ...")
+        #     product_id = self.env_ref("z0bug.product_product_1")
+
+        # if not clodoo.browseL8(self.ctx,
+        #                        "res.company",
+        #                        self.company_id).due_cost_service_id:
+        #     raise IOError("!!Missed bank cost in company!!")
+        # TODO> **** TO REMOVE EARLY ****
         id = clodoo.searchL8(self.ctx, "synchro.channel.model",
                              [("counterpart_name", "=", "tax_codes")])
         clodoo.writeL8(self.ctx, "synchro.channel.model", id,
@@ -1032,8 +1092,7 @@ class ExtTestEnv(object):
             rec_ids = clodoo.searchL8(self.ctx, model, full_domain)
             if not rec_ids:
                 continue
-            self.write_log("%s.write(%s, %s)" % (model, rec_ids, dirty_rec), echo=False)
-            clodoo.writeL8(self.ctx, model, rec_ids, dirty_rec)
+            self.resource_write(model, rec_ids, dirty_rec)
             if child_model:
                 if len(rec_ids) > 1:
                     raise IOError(
@@ -1067,8 +1126,7 @@ class ExtTestEnv(object):
                             "%s.write(%s, %s)"
                             % (child_model, child_ids, child_dirty_rec),
                             echo=False)
-                        clodoo.writeL8(
-                            self.ctx, child_model, child_ids, child_dirty_rec)
+                        self.resource_write(child_model, child_ids, child_dirty_rec)
 
     def init_model(
             self, identity, model, code="code", name="name", domain=(), reset_id=False):
@@ -1232,7 +1290,7 @@ class ExtTestEnv(object):
         for ident in IDENTITY_LIST:
             if ident != identity:
                 fields_2_ignore.append(self.get_ext_id_field(ident))
-        loc_rec = clodoo.browseL8(self.ctx, model, loc_id)
+        loc_rec = self.resource_browse(model, loc_id)
         for field in [x for x in dir(loc_rec) if not x.startswith("_")]:
             loc_name = self.get_loc_name(model, field, identity)[0]
             if loc_name in fields_2_ignore:
@@ -1242,9 +1300,18 @@ class ExtTestEnv(object):
                         getattr(loc_rec, loc_name),
                         test_rec[loc_name],
                         spec):
+                    self.write_log(
+                        "!!Field %s[%s].%s: invalid value <%s> expected <%s>"
+                        % (model,
+                           loc_id,
+                           field,
+                           getattr(loc_rec, loc_name),
+                           test_rec[loc_name]),
+                        echo=False)
                     raise IOError(
                         "!!Field %s[%s].%s: invalid value <%s> expected <%s>"
-                        % (model, loc_id,
+                        % (model,
+                           loc_id,
                            field,
                            getattr(loc_rec, loc_name),
                            test_rec[loc_name])
@@ -1317,6 +1384,72 @@ class ExtTestEnv(object):
                 ext_recs_image)
         return ext_recs_image
 
+    def _add_xref(self, xref, xid, resource):
+        module, name = xref.split(".", 1)
+        if module == "external":
+            return False
+        ir_model = "ir.model.data"
+        values = {
+            "module": module,
+            "name": name,
+            "model": resource,
+            "res_id": xid,
+        }
+        xref_ids = clodoo.searchL8(
+            self.ctx,
+            ir_model,
+            [("module", "=", module), ("name", "=", name)])
+        if not xref_ids:
+            return clodoo.createL8(self.ctx, ir_model, values)
+        clodoo.writeL8(self.ctx, ir_model, xref_ids[0], values)
+        return xref_ids[0]
+
+    def resource_browse(self, resource, xref=None):
+        if isinstance(xref, basestring):
+            res_id = self.env_ref(xref)
+        else:
+            res_id = xref
+        self.write_log("resource_browse(%s, %d, xref=%s)" % (resource, res_id, xref))
+        return clodoo.browseL8(self.ctx, resource, res_id, context={"lang": self.lang})
+
+    def resource_create(self, resource, values=None, xref=None):
+        self.write_log("resource_create(%s, %s, xref=%s)" % (resource, values, xref),
+                       eol=False)
+        res_id = clodoo.createL8(self.ctx, resource, values)
+        self.write_log(str(res_id), no_ts=True)
+        if xref:
+            self._add_xref(xref, res_id, resource)
+        return res_id
+
+    def resource_write(self, resource, domain, values,
+                       company_id=False, create=None, unique=None, xref=None):
+        if xref:
+            unique = True
+        if isinstance(domain, basestring):
+            ids = self.env_ref(domain)
+            ids = [ids] if ids else []
+        elif isinstance(domain, (int, long)):
+            ids = [domain]
+        else:
+            if company_id:
+                domain.append(("company_id", "=", company_id))
+            ids = clodoo.searchL8(self.ctx, resource, domain)
+        if ids:
+            self.write_log("resource_write(%s, %s, %s, xref=%s)"
+                           % (resource, domain, values, xref),
+                           eol=False)
+            self.write_log(str(ids), no_ts=True)
+            clodoo.writeL8(self.ctx, resource, ids, values)
+            if unique and len(ids) > 1:
+                self.write_log(
+                    "Warning: Too many records '%s(%s)'" % (resource, domain))
+                self.delete_record(resource, [("id", "in", ids[1:])])
+            elif xref and isinstance(xref, basestring):
+                self._add_xref(xref, ids[0], resource)
+        elif create:
+            ids = [self.resource_create(resource, values, xref=xref)]
+        return ids
+
     def load_n_test_model(
         self,
         identity,
@@ -1345,7 +1478,7 @@ class ExtTestEnv(object):
         test_recs = self.load_csv_file(fqn)
 
         main_ext_id = False
-        wa = "w"
+        # wa = "w"
         ext_id_field = self.get_ext_id_field(identity)
         for ext_rec in ext_recs_image:
             loc_id = ext_id = -127
@@ -1439,10 +1572,10 @@ def main(cli_args=[]):
     MODELS = (
         "res.country",
         "res.country.state",
-        "res.partner",
-        "account.tax",
-        "product.uom",
-        "product.product",
+        # "res.partner",
+        # "account.tax",
+        # "product.uom",
+        # "product.product",
     )
     ext_test_env.store_csv_response(identity, MODELS)
     test_prio = "synchro"
@@ -1454,18 +1587,18 @@ def main(cli_args=[]):
         "*** Starting %s test ***" % identity.upper(), echo=True, bb=3)
     MODELS = (
             "account.account.type",
-            "account.account",
             "res.country",
             "res.country.state",
-            "res.partner",
-            "res.company",
-            "res.users",
-            "account.tax",
-            "account.journal",
-            "account.payment.term",
-            "product.uom",
-            "product.template",
-            "product.product",
+            "account.account",
+            # "res.partner",
+            # "res.company",
+            # "res.users",
+            # "account.tax",
+            # "account.journal",
+            # "account.payment.term",
+            # "product.uom",
+            # "product.template",
+            # "product.product",
     )
     ext_test_env.store_csv_response(identity, MODELS)
     test_prio = "synchro"
