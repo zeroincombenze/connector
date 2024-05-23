@@ -11,4 +11,8 @@ for port in 8272 8270; do
   [[ $ctr -eq 0 ]] && exit 1
 done
 [[ $ctr -eq 0 ]] && exit 1
+msg=""
+psql -Atl|grep -E "\|oca12\|" || msg="$msg DB oca12 not found!"
+psql -Atl|grep -E "\|oca10\|" || msg="$msg DB oca10 not found!"
+[[ -n $msg ]] && echo $msg && exit 1
 exit 0

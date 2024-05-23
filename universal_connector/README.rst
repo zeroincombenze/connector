@@ -1,5 +1,5 @@
 ===========================================================
-|icon| universal_connector/Connettore universale 10.0.0.3.3
+|icon| universal_connector/Connettore universale 10.0.0.3.4
 ===========================================================
 
 **Universal connector**
@@ -92,7 +92,7 @@ Questo modulo può essere usato per:
 
 |thumbnail|
 
-.. |thumbnail| image:: https://raw.githubusercontent.com/zeroincombenze/connector/10.0/universal_connector/static/description/description.png
+.. |thumbnail| image:: https://raw.githubusercontent.com/zeroincombenze/connector/10.0/universal_connector/static/description/
 
 
 Getting started | Primi passi
@@ -190,7 +190,7 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 ChangeLog History | Cronologia modifiche
 ----------------------------------------
 
-10.0.0.3.4 (2024-05-03)
+10.0.0.3.4 (2024-05-23)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 * [FIX] Model res.lang
@@ -199,7 +199,8 @@ ChangeLog History | Cronologia modifiche
 * [IMP] Casting improvements
 * [IMP] New versioned dependency control
 * [REF] New concurrent tests
-* [QUA] Test coverage 31% (4973: 3436+1537) [10 TestPoints] - quality rating 19 (target 100)
+* [IMP] Test trace "why"
+* [QUA] Test coverage 38% (4973: 3060+1913) [365 TestPoints] - quality rating 35 (target 100)
 
 10.0.0.3.3 (2023-10-31)
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -278,7 +279,7 @@ La distribuzione `Zeroincombenze® <https://www.zeroincombenze.it/>`__ è proget
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2024-05-03
+Last Update / Ultimo aggiornamento: 2024-05-23
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo (10.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-29 06:54+0000\n"
-"PO-Revision-Date: 2024-04-29 06:54+0000\n"
+"POT-Creation-Date: 2024-05-23 13:32+0000\n"
+"PO-Revision-Date: 2024-05-23 13:32+0000\n"
 "Last-Translator: Antonio M. Vigliotti <antoniomaria.vigliotti@gmail.com>\n"
 "Language-Team: Zeroincombenze (https://www.zeroincombenze.it)\n"
 "Language: it\n"
@@ -430,7 +430,7 @@ msgstr "Come i dati saranno inviati e ricevuti."
 #: model:ir.model.fields,field_description:universal_connector.field_synchro_channel_model_id
 #: model:ir.model.fields,field_description:universal_connector.field_wizard_synchro_pull_records_id
 msgid "ID"
-msgstr "Conto"
+msgstr "ID"
 
 #. module: universal_connector
 #: model:ir.model.fields,help:universal_connector.field_synchro_channel_exchange_path

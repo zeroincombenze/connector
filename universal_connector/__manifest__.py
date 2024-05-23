@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright 2019-22 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
+# Copyright 2019-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
 #
 # Contributions to development, thanks to:
 # * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
@@ -10,7 +10,7 @@
 {
     "name": "universal_connector",
     "summary": "Universal connector",
-    "version": "10.0.0.3.3",
+    "version": "10.0.0.3.4",
     "category": "Generic Modules",
     "author": "SHS-AV s.r.l.",
     "website": "https://www.zeroincombenze.it/",
@@ -26,7 +26,7 @@
     "external_dependencies": {
         "python": ["python_plus", "odoo_score", "os0", "clodoo", "z0lib", "unidecode"]
     },
-    "version_external_dependencies": ["clodoo>=2.0.10", "python_plus>=2.0.12"],
+    "version_external_dependencies": ["clodoo>=2.0.11", "python_plus>=2.0.12"],
     "data": [
         "security/ir.model.access.csv",
         "wizard/wizard_pull_records_view.xml",
