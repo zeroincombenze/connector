@@ -180,7 +180,8 @@ MODEL_LIST = (
     "account.account.type",
     "res.country",
     "res.country.state",
-    "account.account"
+    "account.account",
+    "account.tax",
 )
 TNL_VG7_DICT = {
     "account.account": {},
@@ -535,7 +536,7 @@ class ExtTestEnv(object):
         for ext_ref in vals.copy():
             if self.is_untranslable(ext_ref, vals):
                 continue
-            if not ext_ref.startswith((prefix, ":")):
+            if not ext_ref.startswith((prefix, ":", "_")):
                 ref = "%s%s" % (prefix, ext_ref)
                 if vals[ext_ref] in (r"\N", "None"):
                     vals[ref] = ""
@@ -673,7 +674,7 @@ class ExtTestEnv(object):
                 rec_ids = clodoo.searchL8(self.ctx, model, domain)
             if rec_ids:
                 try:
-                    self.write_log("delete_record(%s, %s)  #? %s"
+                    self.write_log("delete_record(%s, %s)  ##<%s>"
                                    % (model, domains, why),
                                    eol=False)
                     clodoo.unlinkL8(self.ctx, model, rec_ids)
@@ -685,7 +686,8 @@ class ExtTestEnv(object):
                     else:
                         exit(1)
             else:
-                self.write_log("No record to delete(%s, %s)" % (model, domains),
+                self.write_log("No record to delete(%s, %s)  ##<%s>"
+                               % (model, domains, why),
                                echo=False)
 
     def init_new_db(self):
@@ -893,6 +895,15 @@ class ExtTestEnv(object):
         if user.company_id.id != self.company_id:
             vals = {"company_id": self.company_id}
             self.resource_write("res.users", self.user.id, vals)
+            coa_id = self.env_ref("l10n_it_coa.l10n_chart_it_zeroincombenze")
+            clodoo.executeL8(self.ctx,
+                             "account.chart.template",
+                             "try_loading_for_current_company",
+                             coa_id)
+            self.write_log(
+                "try_loading_for_current_company(l10n_chart_it_zeroincombenze)",
+                echo=False)
+            sleep(1)
         self.lang = clodoo.browseL8(self.ctx, model, self.user.id).lang
         if self.ctx["lang"] != self.lang:
             raise IOError(
@@ -919,7 +930,7 @@ class ExtTestEnv(object):
         return connector_installed
 
     def setup(self):
-        self.write_log("self.setup()")
+        self.write_log("** self.setup() **")
         self.init_new_db()
         self.prior_model = self.prior_fct = ""
         # model = "ir.module.module"
@@ -937,6 +948,8 @@ class ExtTestEnv(object):
             connector_installed = self.action_after_installed(
                 modname, connector_installed)
 
+        if self.ask:
+            input("Press RET to continue")
         self.assure_lang()
         self.assure_company()
         self.assure_user()
@@ -944,6 +957,7 @@ class ExtTestEnv(object):
         if self.ask:
             input("Press RET to continue ...")
         for model in MODEL_LIST:
+            self.write_log("# setup(%s)" % model, echo=False)
             fqn = pth.join(self.get_csv_path("setup"), model + ".csv")
             if not pth.isfile(fqn):
                 self.write_log("No setup records for model %s)" % model, echo=False)
@@ -1023,8 +1037,8 @@ class ExtTestEnv(object):
                     "!=" if op_not else "=",
                     self.cast_1_value(field, vals[field]))
 
-        if code in vals and name and name in vals:
-            full_domain = [build_expr(vals, code), build_expr(vals, name, op_not=True)]
+        if code in vals and name and name in vals and not all_fields:
+            full_domain = [build_expr(vals, code), build_expr(vals, name)]
         elif code in vals:
             full_domain = [build_expr(vals, code)]
         else:
@@ -1037,7 +1051,9 @@ class ExtTestEnv(object):
             for (k, v) in vals.items():
                 if k not in ("id", "vg7_id", "oe8_id", name, code,
                              "parent_id", "_why"):
-                    full_domain += [(k, "=", v)]
+                    dom = [(k, "=", v)]
+                    if dom not in full_domain:
+                        full_domain += dom
         if not full_domain:
             # NULL domain
             full_domain = [("id", "<", 0)]
@@ -1129,7 +1145,7 @@ class ExtTestEnv(object):
                         self.resource_write(child_model, child_ids, child_dirty_rec)
 
     def init_model(
-            self, identity, model, code="code", name="name", domain=(), reset_id=False):
+            self, identity, model, code=None, name=None, domain=(), reset_id=False):
         if not self.conai and "conai" in model:
             return
         code = code or MODEL_KEYS[model].get("code", "code")
@@ -1187,7 +1203,11 @@ class ExtTestEnv(object):
                     vals["vg72_id"] = False
             if vals:
                 why, vals = self.extract_why(vals)
-                self.write_log("%s.write(%s, %s, ctx=%s)   # %s ? %s "
+                if len(rec_ids) == 1:
+                    rec = self.resource_browse(model, rec_ids[0])
+                    vals = self.purge_values(rec, vals)
+            if vals:
+                self.write_log("%s.write(%s, %s, ctx=%s)   # %s <%s>"
                                % (model, rec_ids, vals, ctx, full_domain, why),
                                echo=False)
                 clodoo.writeL8(self.ctx, model, rec_ids, vals, context=ctx)
@@ -1283,8 +1303,10 @@ class ExtTestEnv(object):
         return True
 
     def check_records(self, identity, model, loc_id, test_rec, mode=None, state=None):
+        why, test_rec = self.extract_why(test_rec)
         self.write_log(
-            "check_record(%s, %s, %s, %s)" % (identity, model, loc_id, test_rec),
+            "check_record(%s, %s, %s, %s)  ##<%s>"
+            % (identity, model, loc_id, test_rec, why),
             echo=False)
         spec = False
         if model.startswith("res.partner.") and model != "res.partner.bank":
@@ -1421,6 +1443,15 @@ class ExtTestEnv(object):
             why = ""
         return why, values
 
+    def purge_values(self, record, values):
+        for (k, v) in values.copy().items():
+            if k.startswith("_") or not hasattr(record, k):
+                continue
+            elif values[k] == record[k]:
+                del values[k]
+                continue
+        return values
+
     def resource_browse(self, resource, xref=None):
         if isinstance(xref, basestring):
             res_id = self.env_ref(xref)
@@ -1431,7 +1462,7 @@ class ExtTestEnv(object):
 
     def resource_create(self, resource, values=None, xref=None):
         why, values = self.extract_why(values)
-        self.write_log("resource_create(%s, %s, xref=%s)  #? %s"
+        self.write_log("resource_create(%s, %s, xref=%s)  ##<%s>"
                        % (resource, values, xref, why),
                        eol=False)
         res_id = clodoo.createL8(self.ctx, resource, values)
@@ -1455,17 +1486,21 @@ class ExtTestEnv(object):
                 domain.append(("company_id", "=", company_id))
             ids = clodoo.searchL8(self.ctx, resource, domain)
         if ids:
-            self.write_log("resource_write(%s, %s, %s, xref=%s)  #? %s"
-                           % (resource, domain, values, xref, why),
-                           eol=False)
-            self.write_log(str(ids), no_ts=True)
-            clodoo.writeL8(self.ctx, resource, ids, values)
-            if unique and len(ids) > 1:
-                self.write_log(
-                    "Warning: Too many records '%s(%s)'" % (resource, domain))
-                self.delete_record(resource, [("id", "in", ids[1:])])
-            elif xref and isinstance(xref, basestring):
-                self._add_xref(xref, ids[0], resource)
+            if len(ids) == 1:
+                rec = self.resource_browse(resource, ids[0])
+                values = self.purge_values(rec, values)
+            if len(ids) > 1 or values:
+                self.write_log("resource_write(%s, %s, %s, xref=%s)  ##<%s>"
+                               % (resource, domain, values, xref, why),
+                               eol=False)
+                self.write_log(str(ids), no_ts=True)
+                clodoo.writeL8(self.ctx, resource, ids, values)
+                if unique and len(ids) > 1:
+                    self.write_log(
+                        "Warning: Too many records '%s(%s)'" % (resource, domain))
+                    self.delete_record(resource, [("id", "in", ids[1:])])
+                elif xref and isinstance(xref, basestring):
+                    self._add_xref(xref, ids[0], resource)
         elif create:
             ids = [self.resource_create(resource, values, xref=xref)]
         return ids
@@ -1594,7 +1629,7 @@ def main(cli_args=[]):
         "res.country",
         "res.country.state",
         "res.partner",
-        # "account.tax",
+        "account.tax",
         # "product.uom",
         # "product.product",
     )
@@ -1614,7 +1649,7 @@ def main(cli_args=[]):
             "res.partner",
             "res.company",
             "res.users",
-            # "account.tax",
+            "account.tax",
             # "account.journal",
             # "account.payment.term",
             # "product.uom",
