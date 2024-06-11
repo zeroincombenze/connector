@@ -8,12 +8,14 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 #
 {
-    "name": "universal_connector",
-    "summary": "Universal connector",
+    "name": "Universal Connector",
     "version": "10.0.0.3.4",
     "category": "Generic Modules",
-    "author": "SHS-AV s.r.l.",
+    "summary": "Universal Connector",
+    "author": "SHS-AV s.r.l.,Odoo Community Association (OCA)",
     "website": "https://www.zeroincombenze.it/",
+    "development_status": "Beta",
+    "license": "LGPL-3",
     "depends": [
         "account",
         "base",
@@ -26,7 +28,10 @@
     "external_dependencies": {
         "python": ["python_plus", "odoo_score", "os0", "clodoo", "z0lib", "unidecode"]
     },
-    "version_external_dependencies": ["clodoo>=2.0.11", "python_plus>=2.0.12"],
+    "version_external_dependencies": [
+        "clodoo>=2.0.11",
+        "python_plus>=2.0.12",
+    ],
     "data": [
         "security/ir.model.access.csv",
         "wizard/wizard_pull_records_view.xml",
@@ -65,7 +70,6 @@
         "data/synchro_product.xml",
         "data/ir_cron.xml",
     ],
+    "maintainer": "Antonio M. Vigliotti <antoniomaria.vigliotti@gmail.com>",
     "installable": True,
-    "development_status": "Beta",
-    "pre_init_hook": "check_4_depending",
 }

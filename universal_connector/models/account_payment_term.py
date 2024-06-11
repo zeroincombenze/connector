@@ -73,7 +73,8 @@ class AccountPaymentTerm(models.Model):
                 rate = 100.0
             child_vals = []
             for num, line in enumerate(vals["vg7:date_scadenza"]):
-                seq = num + 1
+                # First Odoo sequence is 9
+                seq = num + 9
                 line_vals = {}
                 for item in line:
                     line_vals["vg7:%s" % item] = line[item]

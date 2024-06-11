@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo (10.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-23 13:32+0000\n"
-"PO-Revision-Date: 2024-05-23 13:32+0000\n"
+"POT-Creation-Date: 2024-06-11 12:56+0000\n"
+"PO-Revision-Date: 2024-06-11 12:56+0000\n"
 "Last-Translator: Antonio M. Vigliotti <antoniomaria.vigliotti@gmail.com>\n"
 "Language-Team: Zeroincombenze (https://www.zeroincombenze.it)\n"
 "Language: it\n"
@@ -420,7 +420,7 @@ msgstr "Come i dati saranno inviati e ricevuti."
 #: model:ir.model.fields,field_description:universal_connector.field_ir_model_synchro_data_id
 #: model:ir.model.fields,field_description:universal_connector.field_ir_model_synchro_id
 #: model:ir.model.fields,field_description:universal_connector.field_ir_model_synchro_log_id
-#: model:ir.model.fields,field_description:universal_connector.field_res_partner_bank_company_id_6093
+#: model:ir.model.fields,field_description:universal_connector.field_res_partner_bank_company_id_6098
 #: model:ir.model.fields,field_description:universal_connector.field_res_partner_invoice_id
 #: model:ir.model.fields,field_description:universal_connector.field_res_partner_shipping_id
 #: model:ir.model.fields,field_description:universal_connector.field_res_partner_supplier_id

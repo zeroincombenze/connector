@@ -553,22 +553,23 @@ class ExtTestEnv(object):
     def cast_1_value(self, key, value, keep_id=False):
         if value in (r"\N", "None"):
             value = None
-        elif key == "id" and keep_id:
-            pass
         elif key == "company_id" and not value:
             value = self.company_id
         elif key in ("shipping", "billing") and isinstance(value, basestring) and value:
             value = eval(value)
         elif isinstance(value, dict):
-            value = self.cast_value(value)
+            value = self.cast_value(value, keep_id=keep_id)
         elif (
                 isinstance(value, basestring)
                 and len(value) < 6
-                and re.match(r"[0-9]*\.[0-9]+$", value)
+                and re.match(r"([0-9]*\.)?[0-9]+$", value)
         ):
             value = eval(value)
         elif isinstance(value, basestring) and "." in value and " " not in value:
+            saved_value = value
             value = self.env_ref(value)
+            if not value and keep_id:
+                value = saved_value
         elif key.endswith("id") and isinstance(value, basestring):
             value = eval(value) if value else False
         return value
@@ -959,27 +960,60 @@ class ExtTestEnv(object):
         self.assure_company()
         self.assure_user()
         self.model_wkf = {}
+        ext_id_field_1 = self.get_ext_id_field("vg7:")
+        ext_id_field_2 = self.get_ext_id_field("oe8:")
+
 
         for model in MODEL_LIST:
-            self.write_log("# setup(%s)" % model, echo=False)
-            self.model_wkf[model] = 1
-            fqn = pth.join(self.get_csv_path("setup"), model + ".csv")
-            if not pth.isfile(fqn):
-                self.write_log("No setup records for model %s)" % model, echo=False)
-                continue
-            setup_recs = self.load_csv_file(fqn, keep_id=True)
+            setup_recs, child_setup_recs, child_model  = self.load_setup_recs(model)
+            parent_field = (MODEL_WITH_CHILD[model]["parent_field"]
+                            if model in MODEL_WITH_CHILD else "")
             for setup_rec in setup_recs:
+                vals = self.load_vals({}, setup_rec)
+                why, vals = self.extract_why(vals)
+                vals[ext_id_field_1] = False
+                vals[ext_id_field_2] = False
                 code = MODEL_KEYS[model].get("code", "code")
                 domain = MODEL_KEYS[model].get("domain", [])
                 xref = None
                 if "id" in setup_rec:
                     xref = setup_rec["id"]
                     full_domain = xref
-                    del setup_rec["id"]
                 if not xref:
                     full_domain = self.get_domain(
                         model, setup_rec, code=code, domain=domain)
-                self.resource_write(model, full_domain, setup_rec, create=True, xref=xref)
+                loc_id = self.resource_write(
+                    model, full_domain, vals, create=True, xref=xref)[0]
+                if child_model:
+                    child_domain = [
+                        (MODEL_WITH_CHILD[model]["parent_field"], "=", loc_id)]
+                    child_ids = clodoo.searchL8(self.ctx, child_model, child_domain)
+                    ctr = 0
+                    for ix, child_setup_rec in enumerate(child_setup_recs):
+                        if self.cast_1_value(
+                                parent_field, child_setup_rec[parent_field]) != loc_id:
+                            continue
+                        ctr += 1
+                        child_vals = self.load_vals({}, child_setup_rec)
+                        child_vals[ext_id_field_1] = False
+                        child_vals[ext_id_field_2] = False
+                        child_id = False
+                        if child_vals:
+                            why, child_vals = self.extract_why(child_vals)
+                            if ix < len(child_ids):
+                                child_id = child_ids[ix]
+                                child_rec = self.resource_browse(
+                                    child_model, child_id, quiet=True)
+                                child_vals = self.purge_values(child_rec, child_vals)
+                        if not child_vals:
+                            continue
+                        child_vals[parent_field] = loc_id
+                        self.resource_write(
+                            child_model, child_id,  child_vals, create=True)
+                    if ctr != len(child_ids):
+                        self.write_log(
+                            "DEVEL TROUBLE: found too many child record of %s"
+                            % child_model)
             if model == "account.journal":
                 self.assure_journals()
 
@@ -998,36 +1032,47 @@ class ExtTestEnv(object):
     def get_domain(
             self, model, vals, code="code", name=None, domain=(), all_fields=False):
         def build_expr(vals, field, op_not=False):
-            if isinstance(vals[field], basestring) and "%" in vals[field]:
-                return (field, "not ilike" if op_not else "ilike", vals[field])
-            return (field,
-                    "!=" if op_not else "=",
-                    self.cast_1_value(field, vals[field]))
+            value = self.cast_1_value(field, vals[field])
+            op = "="
+            dom = (field, op, value)
+            if field.startswith("_sel_"):
+                field = field[5:]
+                if value.startswith(("<", "=", ">", "!")):
+                    op, value = re.match("([<=>!]+)(.*)", value)
+                dom = (field, op, value)
+            elif isinstance(value, basestring) and "%" in value:
+                dom = (field, "not ilike" if op_not else "ilike", value)
+            return dom
 
-        if code in vals and name and name in vals and not all_fields:
-            full_domain = [build_expr(vals, code), build_expr(vals, name)]
-        elif code in vals:
-            full_domain = [build_expr(vals, code)]
-        else:
-            full_domain = []
+        full_domain = []
+        if code in vals:
+            full_domain += [build_expr(vals, code)]
+        if name and name in vals and not all_fields:
+            full_domain += [build_expr(vals, name)]
         if vals.get("parent_id"):
-            full_domain += [("parent_id", "=", vals["parent_id"])]
+            full_domain += [build_expr(vals, "parent_id")]
         if domain and domain != ():
             full_domain += list(domain)
-        if all_fields:
-            for (k, v) in vals.items():
-                if k not in ("id", "vg7_id", "oe8_id", name, code,
-                             "parent_id", "_why"):
-                    dom = [(k, "=", v)]
-                    if dom not in full_domain:
-                        full_domain += dom
-        if not full_domain:
-            # NULL domain
-            full_domain = [("id", "<", 0)]
-        elif "company_id" in vals:
+        if full_domain and "company_id" in vals and vals["company_id"]:
             full_domain += ["|"]
             full_domain += [("company_id", "=", False)]
             full_domain += [build_expr(vals, "company_id")]
+        for (k, v) in vals.items():
+            dom = []
+            if k.startswith("_sel_"):
+                k = k[5:]
+                if v.startswith(("<", "=", ">", "!")):
+                    op, v = re.match("([<=>!]+)(.*)", v).groups()
+                else:
+                    op = "="
+                dom = [(k, op, self.cast_1_value(k, v))]
+            elif all_fields and not k.startswith("_"):
+                dom = [build_expr(vals, k)]
+            if dom and dom not in full_domain:
+                full_domain += dom
+        if not full_domain:
+            # NULL domain, avoid all records
+            full_domain = [("id", "<", 0)]
         return full_domain
 
     def load_vals(self, vals, rec_vals):
@@ -1059,7 +1104,7 @@ class ExtTestEnv(object):
         child_model = child_dirty_recs = None
         if model in MODEL_WITH_CHILD:
             child_model = MODEL_WITH_CHILD[model]["child_model"]
-            child_fqn = pth.join(self.get_csv_path(), child_model + ".csv")
+            child_fqn = pth.join(self.get_csv_path("dirty"), child_model + ".csv")
             child_dirty_recs = self.load_csv_file(child_fqn)
         dirty_recs = self.load_csv_file(fqn)
         for dirty_rec in dirty_recs:
@@ -1072,26 +1117,25 @@ class ExtTestEnv(object):
                 why, dirty_rec = self.extract_why(dirty_rec)
                 self.delete_record(model, full_domain, why=why)
                 continue
-            rec_ids = clodoo.searchL8(self.ctx, model, full_domain)
-            if not rec_ids:
+            loc_ids = clodoo.searchL8(self.ctx, model, full_domain)
+            if not loc_ids:
                 continue
-            self.resource_write(model, rec_ids, dirty_rec)
+            self.resource_write(model, loc_ids, dirty_rec)
             if child_model:
-                if len(rec_ids) > 1:
+                if len(loc_ids) > 1:
                     raise IOError(
                         "!!Found too many records for model %s with %s!"
                         % (model, full_domain)
                     )
+                parent_field = MODEL_WITH_CHILD[model]["parent_field"]
                 for child_dirty_rec in child_dirty_recs:
-                    rec_id = self.cast_1_value("id",  dirty_rec["id"])
-                    if (
-                            child_dirty_rec[MODEL_WITH_CHILD[model]["parent_field"]]
-                            ==
-                            rec_id
-                    ):
+                    if parent_field not in child_dirty_rec:
+                        continue
+                    loc_id = self.cast_1_value("id",  dirty_rec["id"])
+                    if child_dirty_rec[parent_field] == loc_id:
                         child_key = MODEL_WITH_CHILD[model]["child_key"]
                         child_domain = [
-                            (MODEL_WITH_CHILD[model]["parent_field"], "=", rec_id),
+                            (parent_field, "=", loc_id),
                             (child_key, "=", self.cast_1_value(
                                 child_key, child_dirty_rec[child_key])),
                         ]
@@ -1105,11 +1149,101 @@ class ExtTestEnv(object):
                         child_ids = clodoo.searchL8(self.ctx, child_model, child_domain)
                         if not child_ids:
                             continue
-                        self.write_log(
-                            "%s.write(%s, %s)"
-                            % (child_model, child_ids, child_dirty_rec),
-                            echo=False)
                         self.resource_write(child_model, child_ids, child_dirty_rec)
+        if child_model:
+            parent_field = MODEL_WITH_CHILD[model]["parent_field"]
+            for child_dirty_rec in child_dirty_recs:
+                if (
+                        parent_field not in child_dirty_rec
+                        or not child_dirty_rec[parent_field]
+                ):
+                    child_key = MODEL_WITH_CHILD[model]["child_key"]
+                    child_domain = self.get_domain(child_model, child_dirty_rec, code=child_key)
+                    action, child_dirty_rec = self.extract_action_from_vals(
+                        child_dirty_rec, identity, reset_id)
+                    if not action:
+                        continue
+                    if action.startswith("d"):
+                        why, child_dirty_rec = self.extract_why(child_dirty_rec)
+                        self.delete_record(child_model, child_domain, why=why)
+                        continue
+                    child_ids = clodoo.searchL8(self.ctx, child_model, child_domain)
+                    if not child_ids:
+                        continue
+                    self.resource_write(child_model, child_ids, child_dirty_rec)
+
+    def load_test_recs(self, model, lang=None):
+        # Test records may be equal to setup records
+        child_model = child_test_recs = None
+        if model in MODEL_WITH_CHILD:
+            child_model = MODEL_WITH_CHILD[model]["child_model"]
+            if lang:
+                child_fqn = pth.join(
+                    self.get_csv_path(), child_model + "." + lang + ".csv")
+            else:
+                child_fqn = pth.join(self.get_csv_path(), child_model + ".csv")
+            if not os.path.isfile(child_fqn):
+                self.write_log("Match records for model %s are the same of setup"
+                               % child_model, echo=False)
+                if lang:
+                    child_fqn = pth.join(
+                        self.get_csv_path("setup"), child_model + "." + lang + ".csv")
+                else:
+                    child_fqn = pth.join(
+                        self.get_csv_path("setup"), child_model + ".csv")
+            if not os.path.isfile(child_fqn):
+                self.write_log("Missed match records for model %s)"
+                               % child_model, echo=False)
+            else:
+                child_test_recs = self.load_csv_file(child_fqn, keep_id=True)
+        if lang:
+            fqn = pth.join(self.get_csv_path(), model + "." + lang + ".csv")
+        else:
+            fqn = pth.join(self.get_csv_path(), model + ".csv")
+        if not os.path.isfile(fqn):
+            self.write_log("Match records for model %s are the same of setup"
+                           % model, echo=False)
+            if lang:
+                fqn = pth.join(self.get_csv_path("setup"), model + "." + lang + ".csv")
+            else:
+                fqn = pth.join(self.get_csv_path("setup"), model + ".csv")
+        if not os.path.isfile(fqn):
+            self.write_log("Missed match records for model %s)"
+                           % model, echo=False)
+            test_recs = []
+        else:
+            test_recs = self.load_csv_file(fqn, keep_id=True)
+        return test_recs, child_test_recs, child_model
+
+    def load_setup_recs(self, model, lang=None):
+        self.model_wkf[model] = 1
+        child_model = None
+        child_setup_recs = []
+        if model in MODEL_WITH_CHILD:
+            child_model = MODEL_WITH_CHILD[model]["child_model"]
+            if lang:
+                child_fqn = pth.join(
+                    self.get_csv_path("setup"), child_model + "." + lang + ".csv")
+            else:
+                child_fqn = pth.join(self.get_csv_path("setup"), child_model + ".csv")
+        if lang:
+            fqn = pth.join(self.get_csv_path("setup"), model + "." + lang + ".csv")
+        else:
+            fqn = pth.join(self.get_csv_path("setup"), model + ".csv")
+        if child_model:
+            self.write_log("# setup(%s, %s)" % (model, child_model))
+        else:
+            self.write_log("# setup(%s)" % model)
+        if not pth.isfile(fqn):
+            self.write_log("No setup records for model %s)" % model, echo=False)
+            return [], [], child_model
+        setup_recs = self.load_csv_file(fqn, keep_id=True)
+        if child_model:
+            if not pth.isfile(child_fqn):
+                self.write_log("No setup records for model %s)" % child_model, echo=False)
+            else:
+                child_setup_recs = self.load_csv_file(child_fqn, keep_id=True)
+        return setup_recs, child_setup_recs, child_model
 
     def init_model(
             self, identity, model,
@@ -1119,47 +1253,37 @@ class ExtTestEnv(object):
         code = code or MODEL_KEYS[model].get("code", "code")
         name = name or MODEL_KEYS[model].get("name", "name")
         domain = domain or MODEL_KEYS[model].get("domain", [])
+        ctx = {"lang": lang} if lang else {}
         self.write_log("* init_model(%s, %s, code=%s, name=%s, domain=%s, ctx=%s)"
-                       % (identity, model, code, name, domain, lang or {}))
-        child_model = child_test_recs = None
-        if model in MODEL_WITH_CHILD:
-            child_model = MODEL_WITH_CHILD[model]["child_model"]
-            child_fqn = pth.join(self.get_csv_path(), child_model + ".csv")
-            child_test_recs = self.load_csv_file(child_fqn)
+                       % (identity, model, code, name, domain, ctx))
         if reset_id:
             ext_id_field = self.get_ext_id_field(identity)
-        if lang:
-            ctx = {"lang": lang}
-            fqn = pth.join(self.get_csv_path(), model + "." + lang + ".csv")
-        else:
-            ctx = {}
-            fqn = pth.join(self.get_csv_path(), model + ".csv")
-        test_recs = self.load_csv_file(fqn, keep_id=True)
+        test_recs, child_test_recs, child_model = self.load_test_recs(model, lang=lang)
         for test_rec in test_recs:
             vals = {}
-            rec_id = False
+            loc_id = False
             if "id" in test_rec and test_rec["id"]:
-                rec_id = self.cast_1_value("id", test_rec["id"])
-            if rec_id:
-                full_domain = [("id", "=", rec_id)]
+                loc_id = self.cast_1_value("id", test_rec["id"])
+            if loc_id:
+                full_domain = [("id", "=", loc_id)]
                 vals = self.load_vals(vals, test_rec)
                 if isinstance(test_rec["id"], basestring):
                     full_domain = [("id", "=", test_rec["id"])]
                 else:
-                    xref = self.get_xref_from_id(model, rec_id)
+                    xref = self.get_xref_from_id(model, loc_id)
                     if xref:
                         full_domain = [("id", "=", xref.complete_name)]
-                rec_ids = [rec_id]
+                loc_ids = [loc_id]
             else:
                 # Avoid to initialize too many records
                 full_domain = self.get_domain(
                     model, test_rec,
                     code=code, name=name, domain=domain, all_fields=True)
-                rec_ids = clodoo.searchL8(self.ctx, model, full_domain, context=ctx)
-                if not rec_ids:
+                loc_ids = clodoo.searchL8(self.ctx, model, full_domain, context=ctx)
+                if not loc_ids:
                     continue
-                for rec_id in rec_ids:
-                    xref = self.get_xref_from_id(model, rec_id)
+                for loc_id in loc_ids:
+                    xref = self.get_xref_from_id(model, loc_id)
                     if xref:
                         vals = self.load_vals(vals, test_rec)
                         full_domain = [("id", "=", xref.complete_name)]
@@ -1170,35 +1294,40 @@ class ExtTestEnv(object):
                     vals["vg72_id"] = False
             if vals:
                 why, vals = self.extract_why(vals)
-                if len(rec_ids) == 1:
-                    rec = self.resource_browse(model, rec_ids[0], quiet=True)
+                if len(loc_ids) == 1:
+                    rec = self.resource_browse(model, loc_ids[0], quiet=True)
                     vals = self.purge_values(rec, vals)
             if vals:
                 self.write_log("%s.write(%s, %s, ctx=%s)   # %s <%s>"
-                               % (model, rec_ids, vals, ctx, full_domain, why),
+                               % (model, loc_ids, vals, ctx, full_domain, why),
                                echo=False)
-                clodoo.writeL8(self.ctx, model, rec_ids, vals, context=ctx)
-            if child_model:
-                if len(rec_ids) > 1:
+                clodoo.writeL8(self.ctx, model, loc_ids, vals, context=ctx)
+            if child_test_recs:
+                if len(loc_ids) > 1:
                     raise IOError(
                         "!!Found too many records for model %s with %s!"
                         % (model, full_domain)
                     )
-                rec_id = rec_ids[0]
+                loc_id = loc_ids[0]
                 child_key = MODEL_WITH_CHILD[model]["child_key"]
-                for child_test_rec in child_test_recs:
-                    child_vals = {}
-                    child_domain = [
-                        (MODEL_WITH_CHILD[model]["parent_field"], "=", rec_id),
-                        (child_key, "=", self.cast_1_value(child_key,
-                                                           child_test_rec[child_key])),
-                    ]
-                    child_ids = clodoo.searchL8(self.ctx, child_model, child_domain)
-                    if not child_ids:
+                child_domain = [(MODEL_WITH_CHILD[model]["parent_field"], "=", loc_id)]
+                parent_field = MODEL_WITH_CHILD[model]["parent_field"]
+                child_ids = clodoo.searchL8(
+                    self.ctx, child_model, child_domain, order=child_key)
+                for ix, child_test_rec in enumerate(child_test_recs):
+                    if self.cast_1_value(
+                            parent_field, child_test_rec[parent_field]) != loc_id:
                         continue
+                    child_vals = {}
                     child_vals = self.load_vals(child_vals, child_test_rec)
                     if reset_id:
                         child_vals[ext_id_field] = False
+                    if child_vals:
+                        why, child_vals = self.extract_why(child_vals)
+                        if ix < len(child_ids):
+                            child_rec = self.resource_browse(
+                                child_model, child_ids[ix], quiet=True)
+                            child_vals = self.purge_values(child_rec, child_vals)
                     if not child_vals:
                         continue
                     self.write_log(
@@ -1270,7 +1399,8 @@ class ExtTestEnv(object):
         return True
 
     def check_records(
-            self, identity, model, loc_id, test_rec, mode=None, state=None, lang=None):
+            self, identity, model, loc_id, test_rec, child_test_recs, child_model,
+            mode=None, state=None, lang=None):
         why, test_rec = self.extract_why(test_rec)
         self.write_log(
             "check_record(%s, %s, %s, %s)  ##<%s>"
@@ -1289,8 +1419,11 @@ class ExtTestEnv(object):
         for ident in IDENTITY_LIST:
             if ident != identity:
                 fields_2_ignore.append(self.get_ext_id_field(ident))
+        child_field = (MODEL_WITH_CHILD[model]["child_field"]
+                       if model in MODEL_WITH_CHILD else "")
         loc_rec = self.resource_browse(model, loc_id, lang=lang, quiet=True)
-        for field in [x for x in dir(loc_rec) if not x.startswith("_")]:
+        for field in [x for x in dir(loc_rec)
+                      if (not x.startswith("_") and x != child_field)]:
             loc_name = self.get_loc_name(model, field, identity)[0]
             if loc_name in fields_2_ignore:
                 continue
@@ -1316,6 +1449,50 @@ class ExtTestEnv(object):
                            test_rec[loc_name])
                     )
                 self.ctr += 1
+        if child_field:
+            parent_field = MODEL_WITH_CHILD[model]["parent_field"]
+            child_key = MODEL_WITH_CHILD[model]["child_key"]
+            for child_rec in sorted([x for x in loc_rec[child_field]],
+                                    key=lambda x: getattr(x, child_key)):
+                for child_test_rec in child_test_recs:
+                    if child_test_rec[parent_field] != loc_id:
+                        continue
+                    for field in [x for x in dir(child_rec)
+                                  if (not x.startswith("_") and x != parent_field)]:
+                        loc_name = self.get_loc_name(child_model, field, identity)[0]
+                        if (
+                                loc_name in fields_2_ignore
+                                or loc_name not in child_test_rec
+                                or loc_name == "id"
+                        ):
+                            continue
+                        if not self.compare(
+                                getattr(child_rec, loc_name),
+                                child_test_rec[loc_name],
+                                "id" if loc_name == "id" else spec):
+                            self.write_log(
+                                "!!Field %s[%s]/%s[%s].%s:"
+                                " invalid value <%s> expected <%s>"
+                                % (model,
+                                   loc_id,
+                                   child_model,
+                                   child_rec.id,
+                                   field,
+                                   getattr(child_rec, loc_name),
+                                   child_test_rec[loc_name]),
+                                echo=False)
+                            raise IOError(
+                                "!!Field %s[%s]/%s[%s].%s:"
+                                " invalid value <%s> expected <%s>"
+                                % (model,
+                                   loc_id,
+                                   child_model,
+                                   child_rec.id,
+                                   field,
+                                   getattr(child_rec, loc_name),
+                                   child_test_rec[loc_name])
+                            )
+                        self.ctr += 1
 
     def test_function_synchro(self, model, vals, identity=None, ext_id=None):
         """
@@ -1458,7 +1635,9 @@ class ExtTestEnv(object):
         why, values = self.extract_why(values)
         if xref:
             unique = True
-        if isinstance(domain, basestring):
+        if domain is False:
+            ids = []
+        elif isinstance(domain, basestring):
             ids = self.env_ref(domain)
             ids = [ids] if ids else []
         elif isinstance(domain, (int, long)):
@@ -1508,12 +1687,7 @@ class ExtTestEnv(object):
         self.init_model(identity, model, reset_id=reset_id, lang=lang)
         ext_model = ext_model or self.get_ext_model(model, identity)
         ext_recs_image = self.load_ext_values(identity, model, lang=lang)
-        if lang:
-            fqn = pth.join(self.get_csv_path(), model + "." + lang + ".csv")
-        else:
-            fqn = pth.join(self.get_csv_path(), model + ".csv")
-        test_recs = self.load_csv_file(fqn, keep_id=True)
-
+        test_recs, child_test_recs, child_model = self.load_test_recs(model, lang=lang)
         main_ext_id = False
         # wa = "w"
         ext_id_field = self.get_ext_id_field(identity)
@@ -1536,7 +1710,9 @@ class ExtTestEnv(object):
             checked = False
             for test_rec in test_recs:
                 if ext_id == test_rec[ext_id_field]:
-                    self.check_records(identity, model, loc_id, test_rec, lang=lang)
+                    self.check_records(
+                        identity, model, loc_id, test_rec, child_test_recs, child_model,
+                        lang=lang)
                     checked = True
                     break
             if not checked:

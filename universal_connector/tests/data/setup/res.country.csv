@@ -1,7 +1,7 @@
-id,code,name
-base.at,AT,Austria
-base.au,AU,Australia
-base.de,DE,Germania
-base.uk,GB,Regno Unito
-base.it,IT,Italia
-base.mt,MT,Malta
+id,vg7_id,oe8_id,code,name,_why
+base.at,,3,AT,Austria,Same name en_US and it_IT
+base.au,,6,AU,Australia,Only Odoo 8.0 not vg7
+base.de,49,,DE,Germania,,Only vg7 not Odoo 8.0
+base.uk,44,12,GB,Regno Unito,Different name in other DB
+base.it,39,9,IT,Italia,Different name en_US from it_IT
+base.mt,356,,MT,Malta,

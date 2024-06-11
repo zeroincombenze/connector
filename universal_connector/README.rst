@@ -1,8 +1,6 @@
 ===========================================================
-|icon| universal_connector/Connettore universale 10.0.0.3.4
+|icon| Universal Connector/Connettore universale 10.0.0.3.4
 ===========================================================
-
-**Universal connector**
 
 .. |icon| image:: https://raw.githubusercontent.com/zeroincombenze/connector/10.0/universal_connector/static/description/icon.png
 
@@ -190,7 +188,7 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 ChangeLog History | Cronologia modifiche
 ----------------------------------------
 
-10.0.0.3.4 (2024-05-26)
+10.0.0.3.4 (2024-06-11)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 * [FIX] Model res.lang
@@ -200,7 +198,7 @@ ChangeLog History | Cronologia modifiche
 * [IMP] New versioned dependency control
 * [REF] New concurrent tests
 * [IMP] Test trace "why"
-* [QUA] Test coverage 39% (4973: 3011+1962) [551 TestPoints] - quality rating 42 (target 100)
+* [QUA] Test coverage 32% (4973: 3393+1580) [551 TestPoints] - quality rating 37 (target 100)
 
 10.0.0.3.3 (2023-10-31)
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -245,6 +243,7 @@ Authors | Autori
 ----------------
 
 * `SHS-AV s.r.l. <https://www.zeroincombenze.it>`__
+* `Odoo Community Association (OCA) <https://odoo-community.org>`__
 
 
 
@@ -279,7 +278,7 @@ La distribuzione `Zeroincombenze® <https://www.zeroincombenze.it/>`__ è proget
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2024-05-26
+Last Update / Ultimo aggiornamento: 2024-06-11
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status
