@@ -101,7 +101,7 @@ MODEL_KEYS = {
     "account.journal": {},
     "account.payment.term": {"code": "name"},
     "account.tax": {"code": "description"},
-    "product.product": {},
+    "product.product": {"code": "default_code"},
     "product.template": {"code": "default_code"},
     "product.uom": {"code": "name"},
     "res.company": {"code": "vat"},
@@ -176,7 +176,7 @@ TNL_VG7_TABLES = {
     "stock.picking.transportation_reason": "causals",
 }
 TNL_OE8_TABLES = {}
-MODEL_LIST = (
+SETUP_MODEL_LIST = (
     "account.account.type",
     "account.account",
     "account.journal",
@@ -187,6 +187,7 @@ MODEL_LIST = (
     "res.country.state",
     "res.partner",
     "res.users",
+    "product.template",
 )
 TNL_VG7_DICT = {
     "account.account": {},
@@ -964,8 +965,8 @@ class ExtTestEnv(object):
         ext_id_field_2 = self.get_ext_id_field("oe8:")
 
 
-        for model in MODEL_LIST:
-            setup_recs, child_setup_recs, child_model  = self.load_setup_recs(model)
+        for model in SETUP_MODEL_LIST:
+            setup_recs, child_setup_recs, child_model = self.load_setup_recs(model)
             parent_field = (MODEL_WITH_CHILD[model]["parent_field"]
                             if model in MODEL_WITH_CHILD else "")
             for setup_rec in setup_recs:
@@ -1797,8 +1798,8 @@ def main(cli_args=[]):
         "res.partner",
         "account.tax",
         "account.payment.term",
-        # "product.uom",
-        # "product.product",
+        "product.uom",
+        "product.product",
     )
     ext_test_env.store_csv_response(identity, MODELS)
     test_prio = "synchro"
@@ -1819,9 +1820,9 @@ def main(cli_args=[]):
             "account.tax",
             "account.journal",
             "account.payment.term",
-            # "product.uom",
-            # "product.template",
-            # "product.product",
+            "product.uom",
+            "product.template",
+            "product.product",
     )
     ext_test_env.store_csv_response(identity, MODELS)
     test_prio = "synchro"
