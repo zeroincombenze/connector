@@ -1077,7 +1077,6 @@ class IrModelSynchro(models.Model):
             ]
             rec = self.env["ir.model.synchro.data"].search(domain)
             if rec:
-                # return cls.browse(rec.res_id), maybe_dif
                 return (
                     cls.with_context({"lang": self.env.user.lang}).browse(rec.res_id),
                     maybe_dif,
@@ -1085,7 +1084,6 @@ class IrModelSynchro(models.Model):
             return rec, maybe_dif
         if only_id:
             return exec_search(cls, req_domain, has_sequence, has_active), maybe_dif
-        # domain = [x for x in req_domain]
         domain = []
         rec = False
         if actual_model == "res.partner" and spec in ("delivery", "invoice"):
@@ -1696,7 +1694,7 @@ class IrModelSynchro(models.Model):
                     ctx=ctx,
                 )
             actual_model = self.get_actual_model(xmodel, only_name=True)
-            vals = cast_type(vals, actual_model, loc_name, loc_name)
+            vals = cast_type(vals, actual_model, loc_name, ext_ref)
             vals = rm_ext_value(vals, loc_name, ext_name, ext_ref, is_foreign)
             return vals
 
@@ -1780,6 +1778,9 @@ class IrModelSynchro(models.Model):
                 model=xmodel,
                 ctx={"id": vals[loc_name]},
             )
+
+        def pop_from_queue(backend_id, cache, xmodel, actual_model, ext_id):
+            cache.pop_id(backend_id, xmodel, actual_model, ext_id=ext_id)
 
         def cast_type(vals, actual_model, loc_name, ext_ref):
             if (
@@ -1892,6 +1893,8 @@ class IrModelSynchro(models.Model):
                             backend_id, xmodel, actual_model, ext_id=vals[ext_ref]
                         ):
                             ref_in_queue = found_ref_in_queue(xmodel, vals, ext_ref)
+                            pop_from_queue(
+                                backend_id, cache, xmodel, actual_model, vals[ext_ref])
                             break
                         else:
                             store_in_queue(backend_id, cache, ext_ref, xmodel, vals)
@@ -1984,6 +1987,8 @@ class IrModelSynchro(models.Model):
                             backend_id, xmodel, actual_model, ext_id=vals[ext_ref]
                         ):
                             ref_in_queue = found_ref_in_queue(xmodel, vals, ext_ref)
+                            pop_from_queue(
+                                backend_id, cache, xmodel, actual_model, vals[ext_ref])
                             break
                         else:
                             store_in_queue(backend_id, cache, ext_ref, xmodel, vals)
@@ -2001,6 +2006,8 @@ class IrModelSynchro(models.Model):
                         backend_id, xmodel, actual_model, loc_id=vals[ext_ref]
                     ):
                         ref_in_queue = found_ref_in_queue(xmodel, vals, ext_ref)
+                        pop_from_queue(
+                            backend_id, cache, xmodel, actual_model, vals[ext_ref])
                         break
                     else:
                         store_in_queue(backend_id, cache, ext_ref, xmodel, vals)
@@ -2256,6 +2263,16 @@ class IrModelSynchro(models.Model):
                         else:
                             domain = []
                             break
+                    elif (
+                            key == "amount"
+                            and isinstance(vals[key], basestring)
+                            and not eval(vals[key])
+                    ):
+                        domain = []
+                        break
+                    elif key == "amount" and not vals[key]:
+                        domain = []
+                        break
                     else:
                         domain.append((key, "=", os0.b(vals[key])))
                 if domain:

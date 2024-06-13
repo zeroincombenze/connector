@@ -1,4 +1,4 @@
-10.0.0.3.4 (2024-06-12)
+10.0.0.3.4 (2024-06-13)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 * [FIX] Model res.lang
@@ -8,7 +8,7 @@
 * [IMP] New versioned dependency control
 * [REF] New concurrent tests
 * [IMP] Test trace "why"
-* [QUA] Test coverage 32% (4973: 3381+1592) [745 TestPoints] - quality rating 44 (target 100)
+* [QUA] Test coverage 32% (4984: 3378+1606) [765 TestPoints] - quality rating 44 (target 100)
 
 10.0.0.3.3 (2023-10-31)
 ~~~~~~~~~~~~~~~~~~~~~~~

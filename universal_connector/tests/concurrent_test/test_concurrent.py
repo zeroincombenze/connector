@@ -109,6 +109,7 @@ MODEL_KEYS = {
     "res.country.state": {},
     "res.partner": {"code": "vat", "domain": [("type", "=", "contact")]},
     "res.users": {"code": "login"},
+    "sale.order": {"code": "name"},
 }
 MODEL_WITH_CHILD = {
     "account.payment.term": {
@@ -130,6 +131,7 @@ MODEL_WITH_CHILD = {
     "sale.order": {
         "child_model": "sale.order.line",
         "child_field": "order_line",
+        "child_key": "sequence",
         "parent_field": "order_id",
     },
     "stock.picking.package.preparation": {
@@ -325,20 +327,14 @@ TNL_OE8_DICT = {
 THIS_MODULE = "universal_connector"
 COA_MODULE = "l10n_it_coa"
 MODULE_LIST = [
-    # "mk_test_env",
     THIS_MODULE,
     COA_MODULE,
     "account",
     "account_payment_term_extension",
-    # "date_range",
     "purchase",
     "sale",
     "stock",
     "l10n_it_fiscalcode",
-    # "l10n_it_ddt",
-    # "l10n_it_einvoice_out",
-    # "l10n_it_ricevute_bancarie",
-    # "partner_bank",
     "l10n_it_conai",
     "connector_vg7_conai",
 ]
@@ -357,7 +353,7 @@ class ExtTestEnv(object):
         self.lang = self.lang or "it_IT"
         self.logfn = __file__.replace(".py", ".log")
         # TODO
-        self.ask = True
+        self.ask = False
         self.ctr = 0
         if pth.isfile(self.logfn):
             os.unlink(self.logfn)
@@ -1371,6 +1367,23 @@ class ExtTestEnv(object):
             loc_value = loc_value.id or False
         if mode == "id" and isinstance(test_value,basestring):
             test_value = self.cast_1_value(mode, loc_value)
+        elif isinstance(loc_value, datetime) and isinstance(test_value,basestring):
+            loc_value = datetime.strftime(loc_value, "%Y-%m-%d %H:%M:%S")
+        elif isinstance(loc_value, date) and isinstance(test_value,basestring):
+            loc_value = datetime.strftime(loc_value, "%Y-%m-%d")
+        elif (
+                isinstance(loc_value, basestring)
+                and loc_value.isdigit()
+                and isinstance(test_value, (int, long))
+        ):
+            loc_value = int(loc_value)
+        elif (
+                isinstance(loc_value, (int, long))
+                and isinstance(test_value, basestring)
+                and test_value.isdigit()
+        ):
+            test_value = int(test_value)
+
         if mode == "nounknown":
             return not loc_value.startswith("Unknown")
         elif mode == "unknown":
@@ -1387,14 +1400,6 @@ class ExtTestEnv(object):
             if mode == "supplier":
                 return loc_value == "contact"
             return loc_value == test_value
-        elif isinstance(loc_value, basestring) and isinstance(test_value, (int, long)):
-            if loc_value.isdigit():
-                return int(loc_value) == test_value
-            return loc_value == str(test_value)
-        elif isinstance(loc_value, (int, long)) and isinstance(test_value, basestring):
-            if test_value.isdigit():
-                return loc_value == int(test_value)
-            return str(loc_value) == test_value
         elif loc_value or test_value:
             return loc_value == test_value
         return True
@@ -1528,21 +1533,28 @@ class ExtTestEnv(object):
         self.write_log(str(rec_id), no_ts=True)
         return rec_id
 
-    def merge_supplemetal_vals(self, identity, fn, parent_field, field, ext_recs):
-        ext2_recs = self.load_csv_file(
+    def merge_supplemetal_vals(
+            self, identity, fn, parent_field, child_field, ext_recs, multi=False):
+        child_ext_recs = self.load_csv_file(
             pth.join(self.get_csv_path(identity), fn))
-        for ext2_rec in ext2_recs:
-            ext2_rec, _, _ = self.prepare_rec(ext2_rec, 0)
+        if multi:
+            for ext_rec in ext_recs:
+                ext_rec[child_field] = []
+        for child_ext_rec in child_ext_recs:
+            child_ext_rec, _, _ = self.prepare_rec(child_ext_rec, 0)
             checked = False
-            if parent_field in ext2_rec:
-                parent_id = ext2_rec[parent_field]
+            if parent_field in child_ext_rec:
+                parent_id = child_ext_rec[parent_field]
                 for ext_rec in ext_recs:
                     if parent_id == ext_rec["id"]:
-                        ext_rec[field] = ext2_rec
                         checked = True
+                        if not multi:
+                            ext_rec[child_field] = child_ext_rec
+                        else:
+                            ext_rec[child_field].append(child_ext_rec)
                         break
             if not checked:
-                raise IOError("No match external id name for %s" % ext2_rec)
+                raise IOError("No match external id name for %s" % child_ext_rec)
 
     def load_ext_values(self, identity, model, ext_model=None, lang=None):
         ext_model = ext_model or self.get_ext_model(model, identity)
@@ -1564,6 +1576,14 @@ class ExtTestEnv(object):
                 "customer_id" ,
                 "billing",
                 ext_recs_image)
+        elif model == "sale.order" and identity.startswith("vg7"):
+            self.merge_supplemetal_vals(
+                identity,
+                "orders.line.csv",
+                "order_id",
+                "order_rows",
+                ext_recs_image,
+                multi=True)
         return ext_recs_image
 
     def _add_xref(self, xref, xid, resource):
@@ -1800,6 +1820,7 @@ def main(cli_args=[]):
         "account.payment.term",
         "product.uom",
         "product.product",
+        "sale.order",
     )
     ext_test_env.store_csv_response(identity, MODELS)
     test_prio = "synchro"
