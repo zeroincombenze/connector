@@ -1,3 +1,4 @@
 id,vg7_id,oe8_id,name,partner_id,date_order,state,payment_term_id
-\N,131,,240131,z0bug.res_partner_1,2024-05-15 00:00:00,sale,z0bug.payment_3
-\N,210,,240210,z0bug.res_partner_1,2024-05-31 00:00:00,sale,z0bug.payment_1
+z0bug.sale_1,131,,240131,z0bug.res_partner_1,2024-05-15 00:00:00,sale,z0bug.payment_3
+z0bug.sale_2,210,,240210,z0bug.res_partner_1,2024-05-31 00:00:00,sale,z0bug.payment_1
+z0bug.sale_3,,80,SO080,z0bug.res_partner_1,2024-05-31 00:00:00,sale,z0bug.payment_1

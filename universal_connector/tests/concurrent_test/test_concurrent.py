@@ -353,7 +353,7 @@ class ExtTestEnv(object):
         self.lang = self.lang or "it_IT"
         self.logfn = __file__.replace(".py", ".log")
         # TODO
-        self.ask = False
+        self.ask = True
         self.ctr = 0
         if pth.isfile(self.logfn):
             os.unlink(self.logfn)
@@ -451,37 +451,6 @@ class ExtTestEnv(object):
             return clodoo.browseL8(self.ctx, ir_model, xmlid)
         return None
 
-    # @staticmethod
-    # def store_vg7id(model, loc_id, vg7_id):
-    #     if model not in TNL_VG7_DICT:
-    #         TNL_VG7_DICT[model] = {}
-    #     if "EXT" not in TNL_VG7_DICT[model]:
-    #         TNL_VG7_DICT[model]["LOC"] = {}
-    #         TNL_VG7_DICT[model]["EXT"] = {}
-    #     if isinstance(vg7_id, basestring) and vg7_id.isdigit():
-    #         vg7_id = int(vg7_id)
-    #     TNL_VG7_DICT[model]["LOC"][loc_id] = vg7_id
-    #     TNL_VG7_DICT[model]["EXT"][vg7_id] = loc_id
-    #
-    # @staticmethod
-    # def store_oe8id(model, loc_id, oe8_id):
-    #     if model not in TNL_OE8_DICT:
-    #         TNL_OE8_DICT[model] = {}
-    #     if "EXT" not in TNL_OE8_DICT[model]:
-    #         TNL_OE8_DICT[model]["LOC"] = {}
-    #         TNL_OE8_DICT[model]["EXT"] = {}
-    #     if isinstance(oe8_id, basestring) and oe8_id.isdigit():
-    #         oe8_id = int(oe8_id)
-    #     TNL_OE8_DICT[model]["LOC"][loc_id] = oe8_id
-    #     TNL_OE8_DICT[model]["EXT"][oe8_id] = loc_id
-
-    # def store_ext_id(self, model, loc_id, ext_id, identity):
-    #     if loc_id and ext_id:
-    #         if identity.startswith("vg7"):
-    #             self.store_vg7id(model, loc_id, ext_id)
-    #         elif identity.startswith("oe8"):
-    #             self.store_oe8id(model, loc_id, ext_id)
-
     @staticmethod
     def get_ext_id_field(identity):
         return identity.split(":")[0] + "_id"
@@ -525,6 +494,10 @@ class ExtTestEnv(object):
             return True
         return False
 
+    def is_xref(self, xref):
+        return (isinstance(xref, basestring)
+                and re.match(r"[a-z][a-z0-9_]{3,}\.[\w]+", xref))
+
     @staticmethod
     def get_actual_model(model):
         if model in (
@@ -552,23 +525,34 @@ class ExtTestEnv(object):
             value = None
         elif key == "company_id" and not value:
             value = self.company_id
-        elif key in ("shipping", "billing") and isinstance(value, basestring) and value:
-            value = eval(value)
         elif isinstance(value, dict):
             value = self.cast_value(value, keep_id=keep_id)
-        elif (
-                isinstance(value, basestring)
-                and len(value) < 6
-                and re.match(r"([0-9]*\.)?[0-9]+$", value)
-        ):
-            value = eval(value)
-        elif isinstance(value, basestring) and "." in value and " " not in value:
+        elif isinstance(value, (list, tuple)):
+            value = [self.cast_1_value(key, v, keep_id=keep_id) for v in value]
+        elif isinstance(value, basestring):
+            x = (re.search(r"[a-z][a-z0-9_]{3,}\.[\w]+", value)
+                 if " " not in value else None)
+            while x and not value[x.end():].startswith("."):
+                saved_value = self.env_ref(value[x.start():x.end()])
+                if not saved_value and keep_id:
+                    break
+                if isinstance(saved_value, (int, long, float)):
+                    value = value[:x.start()] + str(saved_value) + value[x.end():]
+                else:
+                    value = value[:x.start()] + "'" + saved_value + "'" + value[x.end():]
+                x = re.search("[\w]+\.[\w]+", value)
+            if value.isdigit() and (value.startswith("0") or len(value) > 9):
+                return value
+            if re.match("[0-9]{4}-[0-9]{2}-[0-9]{2}", value):
+                return value
             saved_value = value
-            value = self.env_ref(value)
-            if not value and keep_id:
+            try:
+                if key.endswith("id") and not value:
+                    value = False
+                else:
+                    value = eval(value)
+            except BaseException:
                 value = saved_value
-        elif key.endswith("id") and isinstance(value, basestring):
-            value = eval(value) if value else False
         return value
 
     def cast_value(self, vals, keep_id=False):
@@ -1087,7 +1071,10 @@ class ExtTestEnv(object):
             return False, vals
         if "_identity" in vals:
             del vals["_identity"]
-        if vals.get("_only_reset") and eval(vals["_only_reset"]) != reset_id:
+        if (
+                isinstance(vals.get("_only_reset"), bool)
+                and vals["_only_reset"] != reset_id
+        ):
             return False, vals
         if "_only_reset" in vals:
             del vals["_only_reset"]
@@ -1358,12 +1345,14 @@ class ExtTestEnv(object):
             writer.writeheader()
             for vals in data:
                 why, vals = self.extract_why(vals)
-                writer.writerow(vals)
+                writer.writerow(self.cast_value(vals, keep_id=False))
         if fqn not in self.fqn_to_remove:
             self.fqn_to_remove.append(fqn)
 
     def compare(self, loc_value, test_value, mode=None):
-        if hasattr(loc_value, "id"):
+        if hasattr(loc_value, "ids") and isinstance(test_value, (list, tuple)):
+            loc_value = loc_value.ids or False
+        elif hasattr(loc_value, "id"):
             loc_value = loc_value.id or False
         if mode == "id" and isinstance(test_value,basestring):
             test_value = self.cast_1_value(mode, loc_value)
@@ -1428,6 +1417,7 @@ class ExtTestEnv(object):
         child_field = (MODEL_WITH_CHILD[model]["child_field"]
                        if model in MODEL_WITH_CHILD else "")
         loc_rec = self.resource_browse(model, loc_id, lang=lang, quiet=True)
+        checked = False
         for field in [x for x in dir(loc_rec)
                       if (not x.startswith("_") and x != child_field)]:
             loc_name = self.get_loc_name(model, field, identity)[0]
@@ -1455,14 +1445,27 @@ class ExtTestEnv(object):
                            test_rec[loc_name])
                     )
                 self.ctr += 1
+                checked = True
+        if not checked:
+            self.write_log("No field matched for %s[%s]" % (model, loc_id))
         if child_field:
             parent_field = MODEL_WITH_CHILD[model]["parent_field"]
             child_key = MODEL_WITH_CHILD[model]["child_key"]
+            checked = False
             for child_rec in sorted([x for x in loc_rec[child_field]],
                                     key=lambda x: getattr(x, child_key)):
                 for child_test_rec in child_test_recs:
-                    if child_test_rec[parent_field] != loc_id:
+                    if self.cast_1_value(parent_field,
+                                         child_test_rec[parent_field]) != loc_id:
                         continue
+                    checked = True
+                    child_why, child_test_rec = self.extract_why(child_test_rec)
+                    self.write_log(
+                        "check_record(%s, %s, %s/%s, %s)  ##<%s>"
+                        % (identity, child_model, loc_id, child_test_rec[child_key],
+                           child_test_rec, child_why),
+                        echo=False)
+                    checked_field = False
                     for field in [x for x in dir(child_rec)
                                   if (not x.startswith("_") and x != parent_field)]:
                         loc_name = self.get_loc_name(child_model, field, identity)[0]
@@ -1499,6 +1502,13 @@ class ExtTestEnv(object):
                                    child_test_rec[loc_name])
                             )
                         self.ctr += 1
+                        checked_field = True
+                    if not checked_field:
+                        self.write_log(
+                            "No field matched for %s[%s/%s]"
+                            % (child_model,loc_id,  child_test_rec[child_key]))
+            if not checked:
+                self.write_log("No match child record %s[%s]" % (child_model, loc_id))
 
     def test_function_synchro(self, model, vals, identity=None, ext_id=None):
         """
@@ -1582,6 +1592,14 @@ class ExtTestEnv(object):
                 "orders.line.csv",
                 "order_id",
                 "order_rows",
+                ext_recs_image,
+                multi=True)
+        elif model == "sale.order" and identity.startswith("oe8"):
+            self.merge_supplemetal_vals(
+                identity,
+                "sale.order.line.csv",
+                "order_id",
+                "order_line",
                 ext_recs_image,
                 multi=True)
         return ext_recs_image
@@ -1731,6 +1749,8 @@ class ExtTestEnv(object):
             checked = False
             for test_rec in test_recs:
                 if ext_id == test_rec[ext_id_field]:
+                    if loc_id > 0 and isinstance(test_rec.get("id"), basestring):
+                        self._add_xref(test_rec["id"], loc_id, model)
                     self.check_records(
                         identity, model, loc_id, test_rec, child_test_recs, child_model,
                         lang=lang)
@@ -1844,6 +1864,7 @@ def main(cli_args=[]):
             "product.uom",
             "product.template",
             "product.product",
+            "sale.order",
     )
     ext_test_env.store_csv_response(identity, MODELS)
     test_prio = "synchro"

@@ -1,3 +1,4 @@
-id,vg7_id,oe8_id,order_id,name,quantity,unitary_price,tax_id
-\N,,1311,131,Prodotto Alpha - Azalea,50,1.05,z0bug.tax_22v
-\N,,2101,210,Prodotto Beta - Begonia,60,5.35,z0bug.tax_22v
+id,vg7_id,oe8_id,order_id,sequence,name,quantity,unitary_price,tax_id
+\N,1311,,z0bug.sale_1,10,Prodotto Alpha - Azalea,50,1.05,[z0bug.tax_22v]
+\N,2101,,z0bug.sale_2,10,Prodotto Beta - Begonia,60,5.35,[z0bug.tax_22v]
+\N,,8010,z0bug.sale_3,10,Prodotto Gamma - Golden wattle,50,0.60,[z0bug.tax_22v]
