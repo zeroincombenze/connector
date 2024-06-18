@@ -1,2 +1,2 @@
-id,order_id,sequence,name,quantity,unitary_price,tax_id
-8010,80,10,Prodotto Gamma - Golden wattle,50,0.60,[1]
+id,order_id,sequence,name,product_uom_qty,price_unit,tax_id,product_id,product_tmpl_id,discount
+8010,80,10,Prodotto Gamma - Golden wattle,50.0,0.60,[1],88,z0bug.product_template_7,0.0
