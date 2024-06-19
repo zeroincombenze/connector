@@ -1,0 +1,4 @@
+id,vg7_id,oe8_id,name,partner_id,date,state,payment_term_id,note
+z0bug.ddt_1,231,,24/231,z0bug.res_partner_1,2024-05-16 00:00:00,done,\N,Controllare la merce prima del ritiro
+z0bug.ddt_2,310,,24/310,z0bug.res_partner_1,2024-05-31 00:00:00,done,\N,Controllare la merce prima del ritiro
+z0bug.ddt_3,,180,DDT/24/180,z0bug.res_partner_1,2024-05-31 00:00:00,done,z0bug.payment_1,Opening 9-17

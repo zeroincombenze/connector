@@ -188,7 +188,7 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 ChangeLog History | Cronologia modifiche
 ----------------------------------------
 
-10.0.0.3.4 (2024-06-18)
+10.0.0.3.4 (2024-06-19)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 * [FIX] Model res.lang
@@ -198,7 +198,7 @@ ChangeLog History | Cronologia modifiche
 * [IMP] New versioned dependency control
 * [REF] New concurrent tests
 * [IMP] Test trace "why"
-* [QUA] Test coverage 40% (4984: 3012+1972) [869 TestPoints] - quality rating 52 (target 100)
+* [QUA] Test coverage 61% (4984: 1964+3020) [885 TestPoints] - quality rating 65 (target 100)
 
 10.0.0.3.3 (2023-10-31)
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -278,7 +278,7 @@ La distribuzione `Zeroincombenze® <https://www.zeroincombenze.it/>`__ è proget
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2024-06-18
+Last Update / Ultimo aggiornamento: 2024-06-19
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status

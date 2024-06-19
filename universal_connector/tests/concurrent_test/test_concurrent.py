@@ -110,6 +110,7 @@ MODEL_KEYS = {
     "res.partner": {"code": "vat", "domain": [("type", "=", "contact")]},
     "res.users": {"code": "login"},
     "sale.order": {"code": "name"},
+    "stock.picking.transportation_reason": {"code": "name"},
 }
 MODEL_WITH_CHILD = {
     "account.payment.term": {
@@ -180,16 +181,17 @@ TNL_VG7_TABLES = {
 TNL_OE8_TABLES = {}
 SETUP_MODEL_LIST = (
     "account.account.type",
-    "account.account",
-    "account.journal",
-    "account.tax",
-    "account.payment.term",
-    "res.company",
     "res.country",
     "res.country.state",
     "res.partner",
     "res.users",
+    "res.company",
+    "account.account",
+    "account.journal",
+    "account.tax",
+    "account.payment.term",
     "product.template",
+    "stock.picking.transportation_reason",
 )
 TNL_VG7_DICT = {
     "account.account": {},
@@ -1840,6 +1842,7 @@ def main(cli_args=[]):
         "account.payment.term",
         "product.uom",
         "product.product",
+        "stock.picking.transportation_reason",
         "sale.order",
     )
     ext_test_env.store_csv_response(identity, MODELS)
@@ -1864,6 +1867,7 @@ def main(cli_args=[]):
             "product.uom",
             "product.template",
             "product.product",
+            "stock.picking.transportation_reason",
             "sale.order",
     )
     ext_test_env.store_csv_response(identity, MODELS)
