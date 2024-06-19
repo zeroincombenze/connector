@@ -122,6 +122,11 @@ MODEL_WITH_CHILD = {
         "child_field": "line_ids",
         "child_key": "sequence",
         "parent_field": "payment_id",
+        # "oe8:": {
+        #     "fqn": "account.payment.term.line.csv",
+        #     "parent_field": "payment_id",
+        #     "child_field": "line_ids",
+        # },
     },
     "account.invoice": {
         "child_model": "account.invoice.line",
@@ -138,12 +143,32 @@ MODEL_WITH_CHILD = {
         "child_field": "order_line",
         "child_key": "sequence",
         "parent_field": "order_id",
+        "vg7:": {
+            "fqn": "orders.line.csv",
+            "parent_field": "order_id",
+            "child_field": "order_rows",
+        },
+        "oe8:": {
+            "fqn": "sale.order.line.csv",
+            "parent_field": "order_id",
+            "child_field": "order_line",
+        },
     },
     "stock.picking.package.preparation": {
         "child_model": "stock.picking.package.preparation.line",
         "child_field": "line_ids",
         "child_key": "sequence",
         "parent_field": "package_preparation_id",
+        "vg7:": {
+            "fqn": "ddt.line.csv",
+            "parent_field": "ddt_id",
+            "child_field": "order_rows",
+        },
+        "oe8:": {
+            "fqn": "stock.picking.package.preparation.line.csv",
+            "parent_field": "package_preparation_id",
+            "child_field": "line_ids",
+        },
     },
 }
 TNL_VG7_TABLES = {
@@ -364,7 +389,7 @@ class ExtTestEnv(object):
         self.lang = self.lang or "it_IT"
         self.logfn = __file__.replace(".py", ".log")
         # TODO
-        self.ask = True
+        self.ask = False
         self.ctr = 0
         if pth.isfile(self.logfn):
             os.unlink(self.logfn)
@@ -1599,36 +1624,12 @@ class ExtTestEnv(object):
                 "customer_id" ,
                 "billing",
                 ext_recs_image)
-        elif model == "sale.order" and identity.startswith("vg7"):
+        elif model in MODEL_WITH_CHILD and identity in MODEL_WITH_CHILD[model]:
             self.merge_supplemetal_vals(
                 identity,
-                "orders.line.csv",
-                "order_id",
-                "order_rows",
-                ext_recs_image,
-                multi=True)
-        elif model == "sale.order" and identity.startswith("oe8"):
-            self.merge_supplemetal_vals(
-                identity,
-                "sale.order.line.csv",
-                "order_id",
-                "order_line",
-                ext_recs_image,
-                multi=True)
-        elif model == "stock.picking.package.preparation" and identity.startswith("vg7"):
-            self.merge_supplemetal_vals(
-                identity,
-                "ddt.line.csv",
-                "ddt_id",
-                "order_rows",
-                ext_recs_image,
-                multi=True)
-        elif model == "stock.picking.package.preparation" and identity.startswith("oe8"):
-            self.merge_supplemetal_vals(
-                identity,
-                "stock.picking.package.preparation.line.csv",
-                "package_preparation_id",
-                "line_ids",
+                MODEL_WITH_CHILD[model][identity]["fqn"],
+                MODEL_WITH_CHILD[model][identity]["parent_field"],
+                MODEL_WITH_CHILD[model][identity]["child_field"],
                 ext_recs_image,
                 multi=True)
         return ext_recs_image

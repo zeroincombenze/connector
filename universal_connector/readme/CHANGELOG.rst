@@ -2,13 +2,16 @@
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 * [FIX] Model res.lang
+* [FIX] Model account.payment.term
+* [FIX] Automatic reset -9 status
+* [FIX] Search tax by amount only if amount > 0
 * [IMP] Minor improvements: only minimal data is the default
 * [IMP] Model with sequences get data even if > 16 records
 * [IMP] Casting improvements
 * [IMP] New versioned dependency control
 * [REF] New concurrent tests
 * [IMP] Test trace "why"
-* [QUA] Test coverage 32% (4993: 3376+1617) [1005 TestPoints] - quality rating 52 (target 100)
+* [QUA] Test coverage 32% (4993: 3373+1620) [1005 TestPoints] - quality rating 52 (target 100)
 
 10.0.0.3.3 (2023-10-31)
 ~~~~~~~~~~~~~~~~~~~~~~~
