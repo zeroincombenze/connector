@@ -111,6 +111,10 @@ MODEL_KEYS = {
     "res.users": {"code": "login"},
     "sale.order": {"code": "name"},
     "stock.picking.transportation_reason": {"code": "name"},
+    "stock.picking.carriage_condition": {"code": "name"},
+    "stock.picking.goods_description": {"code": "name"},
+    "stock.picking.transportation_method": {"code": "name"},
+    "stock.picking.package.preparation": {"code": "ddt_number"},
 }
 MODEL_WITH_CHILD = {
     "account.payment.term": {
@@ -138,6 +142,7 @@ MODEL_WITH_CHILD = {
     "stock.picking.package.preparation": {
         "child_model": "stock.picking.package.preparation.line",
         "child_field": "line_ids",
+        "child_key": "sequence",
         "parent_field": "package_preparation_id",
     },
 }
@@ -192,6 +197,10 @@ SETUP_MODEL_LIST = (
     "account.payment.term",
     "product.template",
     "stock.picking.transportation_reason",
+    "stock.picking.carriage_condition",
+    "stock.picking.goods_description",
+    "stock.picking.transportation_method",
+    # "stock.picking.package.preparation",
 )
 TNL_VG7_DICT = {
     "account.account": {},
@@ -544,6 +553,8 @@ class ExtTestEnv(object):
                     value = value[:x.start()] + "'" + saved_value + "'" + value[x.end():]
                 x = re.search("[\w]+\.[\w]+", value)
             if value.isdigit() and (value.startswith("0") or len(value) > 9):
+                return value
+            if re.match("[0-9]+[-+*/]+[0-9]+", value):
                 return value
             if re.match("[0-9]{4}-[0-9]{2}-[0-9]{2}", value):
                 return value
@@ -1604,6 +1615,22 @@ class ExtTestEnv(object):
                 "order_line",
                 ext_recs_image,
                 multi=True)
+        elif model == "stock.picking.package.preparation" and identity.startswith("vg7"):
+            self.merge_supplemetal_vals(
+                identity,
+                "ddt.line.csv",
+                "ddt_id",
+                "order_rows",
+                ext_recs_image,
+                multi=True)
+        elif model == "stock.picking.package.preparation" and identity.startswith("oe8"):
+            self.merge_supplemetal_vals(
+                identity,
+                "stock.picking.package.preparation.line.csv",
+                "package_preparation_id",
+                "line_ids",
+                ext_recs_image,
+                multi=True)
         return ext_recs_image
 
     def _add_xref(self, xref, xid, resource):
@@ -1844,6 +1871,7 @@ def main(cli_args=[]):
         "product.product",
         "stock.picking.transportation_reason",
         "sale.order",
+        "stock.picking.package.preparation",
     )
     ext_test_env.store_csv_response(identity, MODELS)
     test_prio = "synchro"
@@ -1868,7 +1896,11 @@ def main(cli_args=[]):
             "product.template",
             "product.product",
             "stock.picking.transportation_reason",
+            "stock.picking.carriage_condition",
+            "stock.picking.goods_description",
+            "stock.picking.transportation_method",
             "sale.order",
+            "stock.picking.package.preparation",
     )
     ext_test_env.store_csv_response(identity, MODELS)
     test_prio = "synchro"

@@ -1,0 +1,4 @@
+id,vg7_id,oe8_id,package_preparation_id,sequence,name,product_uom_qty,price_unit,tax_ids,product_id
+\N,2311,,z0bug.ddt_1,10,Prodotto Alpha - Azalea,50.0,1.05,\N,z0bug.product_product_1
+\N,3101,,z0bug.ddt_2,10,Prodotto Beta - Begonia,60.0,5.35,\N,z0bug.product_product_2
+\N,,8110,z0bug.ddt_3,10,Prodotto Gamma - Golden wattle,50.0,0.60,[z0bug.tax_22v],z0bug.product_product_7

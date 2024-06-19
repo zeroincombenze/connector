@@ -1,2 +1,2 @@
-id,name,partner_id,date,state,payment_term_id,note
-180,DDT/24/180,801,2024-05-31 00:00:00,done,51,Opening 9-17
+id,ddt_number,partner_id,date,state,note,transportation_reason_id,goods_description_id,transportation_method_id,carriage_condition_id
+180,DDT/24/180,801,2024-05-31 00:00:00,done,Opening 9-17,2,4,3,1

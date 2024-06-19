@@ -8,7 +8,7 @@
 * [IMP] New versioned dependency control
 * [REF] New concurrent tests
 * [IMP] Test trace "why"
-* [QUA] Test coverage 61% (4984: 1964+3020) [885 TestPoints] - quality rating 65 (target 100)
+* [QUA] Test coverage 32% (4993: 3376+1617) [1005 TestPoints] - quality rating 52 (target 100)
 
 10.0.0.3.3 (2023-10-31)
 ~~~~~~~~~~~~~~~~~~~~~~~

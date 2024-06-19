@@ -1,4 +1,4 @@
-id,vg7_id,oe8_id,name,partner_id,date,state,payment_term_id,note
-z0bug.ddt_1,231,,24/231,z0bug.res_partner_1,2024-05-16 00:00:00,done,\N,Controllare la merce prima del ritiro
-z0bug.ddt_2,310,,24/310,z0bug.res_partner_1,2024-05-31 00:00:00,done,\N,Controllare la merce prima del ritiro
-z0bug.ddt_3,,180,DDT/24/180,z0bug.res_partner_1,2024-05-31 00:00:00,done,z0bug.payment_1,Opening 9-17
+id,vg7_id,oe8_id,ddt_number,partner_id,date,state,note,transportation_reason_id,goods_description_id,transportation_method_id,carriage_condition_id
+z0bug.ddt_1,231,,24/231,z0bug.res_partner_1,2024-05-16 00:00:00,done,Controllare la merce prima del ritiro,l10n_it_ddt.transportation_reason_VEN,l10n_it_ddt.goods_description_CBA,l10n_it_ddt.transportation_method_COR,l10n_it_ddt.carriage_condition_PA,
+z0bug.ddt_2,310,,24/310,z0bug.res_partner_1,2024-05-31 00:00:00,done,Controllare la merce prima del ritiro,l10n_it_ddt.transportation_reason_VEN,l10n_it_ddt.goods_description_CBA,l10n_it_ddt.transportation_method_COR,l10n_it_ddt.carriage_condition_PA,
+z0bug.ddt_3,,180,DDT/24/180,z0bug.res_partner_1,2024-05-31 00:00:00,done,Opening 9-17,l10n_it_ddt.transportation_reason_VEN,l10n_it_ddt.goods_description_CAR,l10n_it_ddt.transportation_method_COR,l10n_it_ddt.carriage_condition_PA,

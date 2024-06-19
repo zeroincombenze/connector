@@ -143,6 +143,16 @@ class StockPickingGoods_description(models.Model):
             text = res
         return text
 
+    @api.model
+    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None):
+        return self.env["ir.model.synchro"].synchro(
+            self,
+            vals,
+            chk_in_queue=chk_in_queue,
+            only_minimal=only_minimal,
+            no_deep_fields=no_deep_fields,
+        )
+
 
 class StockPickingCarriageCondition(models.Model):
 
@@ -183,6 +193,16 @@ class StockPickingCarriageCondition(models.Model):
                     res += ch.lower()
             text = res
         return text
+
+    @api.model
+    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None):
+        return self.env["ir.model.synchro"].synchro(
+            self,
+            vals,
+            chk_in_queue=chk_in_queue,
+            only_minimal=only_minimal,
+            no_deep_fields=no_deep_fields,
+        )
 
 
 class StockPickingTransportationReason(models.Model):
@@ -275,3 +295,13 @@ class StockPickingTransportationMethod(models.Model):
                     res += ch.lower()
             text = res
         return text
+
+    @api.model
+    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None):
+        return self.env["ir.model.synchro"].synchro(
+            self,
+            vals,
+            chk_in_queue=chk_in_queue,
+            only_minimal=only_minimal,
+            no_deep_fields=no_deep_fields,
+        )
