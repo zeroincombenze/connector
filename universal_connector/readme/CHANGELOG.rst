@@ -1,3 +1,8 @@
+10.0.0.3.5 (2024-06-20)
+~~~~~~~~~~~~~~~~~~~~~~~
+
+* [FIX] No proce with VAT from VF7 order / Prezzo ordine VG7 senza scorporo IVA
+
 10.0.0.3.4 (2024-06-19)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -291,3 +296,4 @@
 
 * [IMP] Account Payment Term / Tabella termini di pagamento
 * [IMP] New protection level / Nuovo livello di protezione
+* [QUA] Test coverage 33% (4993: 3342+1651) [1037 TestPoints] - quality rating 54 (target 100)

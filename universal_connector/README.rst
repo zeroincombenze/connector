@@ -1,5 +1,5 @@
 ===========================================================
-|icon| Universal Connector/Connettore universale 10.0.0.3.4
+|icon| Universal Connector/Connettore universale 10.0.0.3.5
 ===========================================================
 
 .. |icon| image:: https://raw.githubusercontent.com/zeroincombenze/connector/10.0/universal_connector/static/description/icon.png
@@ -188,6 +188,11 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 ChangeLog History | Cronologia modifiche
 ----------------------------------------
 
+10.0.0.3.5 (2024-06-20)
+~~~~~~~~~~~~~~~~~~~~~~~
+
+* [FIX] No proce with VAT from VF7 order / Prezzo ordine VG7 senza scorporo IVA
+
 10.0.0.3.4 (2024-06-19)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -281,7 +286,7 @@ La distribuzione `Zeroincombenze® <https://www.zeroincombenze.it/>`__ è proget
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2024-06-19
+Last Update / Ultimo aggiornamento: 2024-06-20
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status

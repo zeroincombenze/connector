@@ -122,11 +122,11 @@ MODEL_WITH_CHILD = {
         "child_field": "line_ids",
         "child_key": "sequence",
         "parent_field": "payment_id",
-        # "oe8:": {
-        #     "fqn": "account.payment.term.line.csv",
-        #     "parent_field": "payment_id",
-        #     "child_field": "line_ids",
-        # },
+        "oe8:": {
+            "fqn": "account.payment.term.line.csv",
+            "parent_field": "payment_id",
+            "child_field": "line_ids",
+        },
     },
     "account.invoice": {
         "child_model": "account.invoice.line",
@@ -389,7 +389,7 @@ class ExtTestEnv(object):
         self.lang = self.lang or "it_IT"
         self.logfn = __file__.replace(".py", ".log")
         # TODO
-        self.ask = False
+        self.ask = True
         self.ctr = 0
         if pth.isfile(self.logfn):
             os.unlink(self.logfn)
@@ -1493,8 +1493,11 @@ class ExtTestEnv(object):
             for child_rec in sorted([x for x in loc_rec[child_field]],
                                     key=lambda x: getattr(x, child_key)):
                 for child_test_rec in child_test_recs:
-                    if self.cast_1_value(parent_field,
-                                         child_test_rec[parent_field]) != loc_id:
+                    if (
+                            self.cast_1_value(
+                                parent_field,child_test_rec[parent_field]) != loc_id
+                            or child_rec[child_key] != child_test_rec[child_key]
+                    ):
                         continue
                     checked = True
                     child_why, child_test_rec = self.extract_why(child_test_rec)
