@@ -278,11 +278,16 @@ class AccountAccountType(models.Model):
         name = vals.get("name", "")
         ref_id = type_name = False
         if name:
-            for regex in RE_TYPE_NAME_ID:
-                if re.search(regex, name):
-                    type_name = RE_TYPE_NAME_ID[regex]
-                    if not type_name.startswith("_"):
-                        ref_id = self.env.ref(type_name).id
+            if not isinstance(name, (list, tuple)):
+                name = [name]
+            for nm in name:
+                for regex in RE_TYPE_NAME_ID:
+                    if re.search(regex, nm):
+                        type_name = RE_TYPE_NAME_ID[regex]
+                        if not type_name.startswith("_"):
+                            ref_id = self.env.ref(type_name).id
+                        break
+                if ref_id:
                     break
         return ref_id, type_name
 

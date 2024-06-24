@@ -654,6 +654,37 @@ class IrModelSynchroApply(models.Model):
             vals[loc_name] = round(vals[ext_ref] * 0.82, 3)
         return vals
 
+    def apply_product_vg7_naming(
+        self,
+        backend_id,
+        vals,
+        loc_name,
+        ext_ref,
+        loc_ext_id_name,
+        default=None,
+        ctx=None,
+    ):
+        name_field = des_field = ""
+        for field in vals.keys():
+            if ":" in field and field.split(":")[1] == "name":
+                name_field = field
+            elif ":" in field and field.split(":")[1] == "description":
+                des_field = field
+            elif field == "name":
+                name_field = field
+            elif field == "description_sale":
+                name_field = field
+        if des_field and vals[des_field] and (not name_field or not vals[name_field]):
+            vals[name_field] = vals[des_field]
+            del vals[des_field]
+
+        if vals.get(ext_ref):
+            vals[loc_name] = vals[ext_ref]
+            del vals[ext_ref]
+        if ext_ref in vals:
+            del vals[ext_ref]
+        return vals
+
     ############################
     # ODOO MIGRATION FUNCTIONS #fstat
     ############################

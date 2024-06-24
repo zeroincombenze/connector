@@ -9,7 +9,7 @@
 #
 {
     "name": "Universal Connector",
-    "version": "10.0.0.3.5",
+    "version": "10.0.0.3.6",
     "category": "Generic Modules",
     "summary": "Universal Connector",
     "author": "SHS-AV s.r.l.,Odoo Community Association (OCA)",
@@ -26,7 +26,15 @@
         "stock_picking_package_preparation",
     ],
     "external_dependencies": {
-        "python": ["python_plus", "odoo_score", "os0", "clodoo", "z0lib", "unidecode"]
+        "python": [
+            "python_plus",
+            "odoo_score",
+            "os0",
+            "clodoo",
+            "z0lib",
+            "unidecode",
+            "Levenshtein"
+        ]
     },
     "version_external_dependencies": [
         "clodoo>=2.0.11",

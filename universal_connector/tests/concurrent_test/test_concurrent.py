@@ -556,9 +556,9 @@ class ExtTestEnv(object):
                 del vals[ext_ref]
         return vals
 
-    def cast_1_value(self, key, value, keep_id=False):
+    def cast_1_value(self, key, value, keep_id=False, keep_none=False):
         if value in (r"\N", "None"):
-            value = None
+            value = r"\N" if keep_none else None
         elif key == "company_id" and not value:
             value = self.company_id
         elif isinstance(value, dict):
@@ -593,10 +593,10 @@ class ExtTestEnv(object):
                 value = saved_value
         return value
 
-    def cast_value(self, vals, keep_id=False):
+    def cast_value(self, vals, keep_id=False, keep_none=False):
         res = {}
         for k, v in vals.items():
-            v = self.cast_1_value(k, v, keep_id=keep_id)
+            v = self.cast_1_value(k, v, keep_id=keep_id, keep_none=keep_none)
             if v is None:
                 continue
             res[k] = v
@@ -629,7 +629,7 @@ class ExtTestEnv(object):
                     loc_name = loc_name[0]
         return loc_name, mode
 
-    def load_csv_file(self, fqn, keep_id=False):
+    def load_csv_file(self, fqn, keep_id=False, keep_none=False):
         datas = []
         if not pth.isfile(fqn):
             raise IOError("File %s not found!" % fqn)
@@ -640,7 +640,8 @@ class ExtTestEnv(object):
                 if not header:
                     header = row
                     continue
-                datas.append(self.cast_value(dict(zip(header, row)), keep_id=keep_id))
+                datas.append(self.cast_value(dict(zip(header, row)),
+                                             keep_id=keep_id, keep_none=keep_none))
         return datas
 
     def reset_cache(self):
@@ -1377,13 +1378,13 @@ class ExtTestEnv(object):
 
     def write_file_2_pull(self, identity, ext_model, vals, mode="w"):
         fqn = pth.join(self.get_exchange_path(identity), "%s.csv" % ext_model)
-        data = self.load_csv_file(fqn) + [vals] if mode == "a" else [vals]
+        data = self.load_csv_file(fqn, keep_none=True) + [vals] if mode == "a" else [vals]
         with open(fqn, "wb") as fd:
             writer = csv.DictWriter(fd, fieldnames=vals.keys())
             writer.writeheader()
             for vals in data:
                 why, vals = self.extract_why(vals)
-                writer.writerow(self.cast_value(vals, keep_id=False))
+                writer.writerow(self.cast_value(vals, keep_id=False, keep_none=True))
         if fqn not in self.fqn_to_remove:
             self.fqn_to_remove.append(fqn)
 
@@ -1607,13 +1608,14 @@ class ExtTestEnv(object):
             if not checked:
                 raise IOError("No match external id name for %s" % child_ext_rec)
 
-    def load_ext_values(self, identity, model, ext_model=None, lang=None):
+    def load_ext_values(
+            self, identity, model, ext_model=None, lang=None, keep_none=False):
         ext_model = ext_model or self.get_ext_model(model, identity)
         if lang:
             fqn = pth.join(self.get_csv_path(identity), ext_model + "." + lang + ".csv")
         else:
             fqn = pth.join(self.get_csv_path(identity), ext_model + ".csv")
-        ext_recs_image = self.load_csv_file(fqn)
+        ext_recs_image = self.load_csv_file(fqn, keep_none=keep_none)
         if model == "res.partner" and identity.startswith("vg7"):
             self.merge_supplemetal_vals(
                 identity,
@@ -1810,7 +1812,7 @@ class ExtTestEnv(object):
                 clodoo.writeL8(self.ctx, model, id, {ext_id_field: False})
             ext_model = self.get_ext_model(model, identity)
             ext_recs_image = self.load_ext_values(
-                identity, model, ext_model=ext_model, lang=lang)
+                identity, model, ext_model=ext_model, lang=lang, keep_none=True)
             main_ext_id = False
             wa = "w"
             ext_id_field = self.get_ext_id_field(identity)

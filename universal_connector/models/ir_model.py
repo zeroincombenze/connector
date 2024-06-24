@@ -161,6 +161,7 @@ import time
 import csv
 
 import requests
+import Levenshtein as lev
 from odoo import api, fields, models, _
 from odoo import release
 from odoo.osv import expression
@@ -1470,12 +1471,7 @@ class IrModelSynchro(models.Model):
                 default="",
             )
         if default.endswith("()"):
-            apply4 = ""
-            for fct in default.split(","):
-                if not fct.startswith("not") or is_foreign:
-                    apply4 = "%s,%s" % (apply4, "apply_%s" % default[:-2])
-            if apply4.startswith(","):
-                apply4 = apply4[1:]
+            apply4 = ",".join(["apply_%s" % fct[:-2]for fct in default.split(",")])
             default = False
         elif default:
             apply4 = "apply_set_value"
@@ -1583,6 +1579,34 @@ class IrModelSynchro(models.Model):
                         break
         return diff
 
+    def translate_from_to(
+            self, tnldict, xmodel, src_value, ext_odoo_ver, fld_name=None):
+        value = os0.u(
+            transodoo.translate_from_to(
+                tnldict,
+                xmodel,
+                src_value,
+                ext_odoo_ver,
+                release.major_version,
+                type="value",
+                fld_name=fld_name,
+            )
+        )
+        if isinstance(value, (list, tuple)):
+            best = False
+            near = 1999999999
+            if isinstance(src_value, basestring):
+                src_value = src_value.lower()
+            for nm in value:
+                if isinstance(nm, basestring):
+                    dist = lev.distance(nm.lower(), src_value)
+                    if dist < near:
+                        best = nm
+                        near = dist
+            if best and near < 8:
+                value = best
+        return value
+
     def map_to_internal(
         self, backend_id, xmodel, vals, no_deep_fields=None, only_minimal=None
     ):
@@ -1616,17 +1640,9 @@ class IrModelSynchro(models.Model):
                     ext_odoo_ver = self.get_ext_odoo_ver(ext_ref.split(":")[0])
                     tnldict = self.get_tnldict(backend_id)
                     if ext_odoo_ver:
-                        vals[loc_name] = os0.u(
-                            transodoo.translate_from_to(
-                                tnldict,
-                                xmodel,
-                                vals[ext_ref],
-                                ext_odoo_ver,
-                                release.major_version,
-                                type="value",
-                                fld_name=loc_name,
-                            )
-                        )
+                        vals[loc_name] = self.translate_from_to(
+                            tnldict, xmodel, vals[ext_ref], ext_odoo_ver,
+                            fld_name=loc_name)
                     else:
                         vals[loc_name] = vals[ext_ref]
                     self.logmsg(
@@ -2417,13 +2433,8 @@ class IrModelSynchro(models.Model):
             if rec:
                 for field in cache.get_struct_attr(actual_model):
                     if ext_odoo_ver:
-                        ext_field = transodoo.translate_from_to(
-                            tnldict,
-                            actual_model,
-                            field,
-                            release.major_version,
-                            ext_odoo_ver,
-                        )
+                        ext_field = self.translate_from_to(
+                            tnldict, actual_model, field, ext_odoo_ver)
                     else:
                         ext_field = field
                     if field in ("id", "state") or (

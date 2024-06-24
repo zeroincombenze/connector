@@ -755,8 +755,10 @@ class IrModelSynchroCache(models.Model):
                     model, only_name=True
                 )
                 uname, skeys = self.get_default_keys(actual_model)
-                self.set_struct_model_attr(model, "SKEYS", skeys)
-                self.set_struct_model_attr(model, "MODEL_KEY", uname)
+                # self.set_struct_model_attr(model, "SKEYS", skeys)
+                self.set_struct_model_attr(model, "SKEYS", eval(rec.search_keys))
+                # self.set_struct_model_attr(model, "MODEL_KEY", uname)
+                self.set_struct_model_attr(model, "MODEL_KEY", rec.field_uname)
                 rec.write({"search_keys": skeys, "field_uname": uname})
                 self.env["ir.model.synchro"].logmsg(
                     "debug",

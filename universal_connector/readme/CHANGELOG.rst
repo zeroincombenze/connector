@@ -1,7 +1,19 @@
+10.0.0.3.6 (2024-06-24)
+~~~~~~~~~~~~~~~~~~~~~~~
+
+* [FIX] Double function after import
+* [FIX] No reset search keys
+* [FIX] Many2one fields from old Odoo with multiple matches
+* [IMP] Imported cvs/Excel: fields with None or \N are ignored
+* [IMP] Double product description and name / Descrizione prodotto doppia
+* [QUA] Test coverage 42% (5031: 2908+2123) [1051 TestPoints] - quality rating 59 (target 100)
+
 10.0.0.3.5 (2024-06-20)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-* [FIX] No proce with VAT from VF7 order / Prezzo ordine VG7 senza scorporo IVA
+* [IMP] This is the 1.st application with 1000+ test points!
+* [FIX] No price with VAT from VF7 order / Prezzo ordine VG7 senza scorporo IVA
+* [QUA] Test coverage 33% (4993: 3342+1651) [1037 TestPoints] - quality rating 54 (target 100)
 
 10.0.0.3.4 (2024-06-19)
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -296,4 +308,3 @@
 
 * [IMP] Account Payment Term / Tabella termini di pagamento
 * [IMP] New protection level / Nuovo livello di protezione
-* [QUA] Test coverage 33% (4993: 3342+1651) [1037 TestPoints] - quality rating 54 (target 100)

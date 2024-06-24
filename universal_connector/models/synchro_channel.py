@@ -416,7 +416,7 @@ class SynchroChannelModel(models.Model):
                             value = eval(value)
                         elif value == "False":
                             value = False
-                        elif value == "None":
+                        elif value in ("None", r"\N"):
                             value = None
                     if hdr[ix] == ext_id_name:
                         if not value:
@@ -428,7 +428,7 @@ class SynchroChannelModel(models.Model):
                         row_shipping[hdr[ix]] = value
                     elif hdr[ix].startswith("contact_"):
                         row_contact[hdr[ix]] = value
-                    else:
+                    elif value is not None:
                         row_res[hdr[ix]] = value
                 if row_billing:
                     if model == "res.partner.invoice":
