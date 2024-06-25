@@ -9,6 +9,8 @@
 #
 import logging
 from datetime import datetime, timedelta
+import re
+import itertools
 
 from odoo import models
 from odoo import release
@@ -25,9 +27,41 @@ except ImportError as err:
     _logger.error(err)
 
 
+def split_fragments(text, maxctr=3, minlen=2):
+    items = []
+    while True:
+        x = re.search(r"[^\w]+", text)
+        if not x:
+            if len(text) > minlen:
+                items.append(text.lower())
+            break
+        item = text[: x.start()].lower()
+        if len(item) > minlen:
+            items.append(item)
+        text = text[x.end():]
+    fragments = []
+    while len(fragments) < maxctr:
+        min_len = 0
+        candidate = ""
+        for item in items:
+            if item not in fragments and len(item) > min_len:
+                min_len = len(item)
+                candidate = item
+        if not candidate:
+            break
+        fragments.append(candidate)
+    return fragments
+
+
 class IrModelSynchroApply(models.Model):
     _name = "ir.model.synchro.apply"
     _inherit = "ir.model"
+
+    def is_purchase(self, vals, vmodel):
+        return (
+            vmodel == "purchase.order.line"
+            or vals.get("type") in ("in_invoice", "in_refund")
+        )
 
     def apply_set_value(
         self,
@@ -36,6 +70,7 @@ class IrModelSynchroApply(models.Model):
         loc_name,
         ext_ref,
         loc_ext_id_name,
+        vmodel,
         default=None,
         ctx=None,
     ):
@@ -53,6 +88,7 @@ class IrModelSynchroApply(models.Model):
         loc_name,
         ext_ref,
         loc_ext_id_name,
+        vmodel,
         default=None,
         ctx=None,
     ):
@@ -82,6 +118,7 @@ class IrModelSynchroApply(models.Model):
         loc_name,
         ext_ref,
         loc_ext_id_name,
+        vmodel,
         default=None,
         ctx=None,
     ):
@@ -99,6 +136,7 @@ class IrModelSynchroApply(models.Model):
         loc_name,
         ext_ref,
         loc_ext_id_name,
+        vmodel,
         default=None,
         ctx=None,
     ):
@@ -116,11 +154,27 @@ class IrModelSynchroApply(models.Model):
         loc_name,
         ext_ref,
         loc_ext_id_name,
+        vmodel,
         default=None,
         ctx=None,
     ):
         if ext_ref in vals:
-            vals[loc_name] = os0.str2bool(vals.get(ext_ref), False)
+            vals[loc_name] = os0.str2bool(vals[ext_ref], False)
+        return vals
+
+    def apply_str(
+        self,
+        backend_id,
+        vals,
+        loc_name,
+        ext_ref,
+        loc_ext_id_name,
+        vmodel,
+        default=None,
+        ctx=None,
+    ):
+        if ext_ref in vals:
+            vals[loc_name] = str(vals[ext_ref])
         return vals
 
     def apply_not(
@@ -130,6 +184,7 @@ class IrModelSynchroApply(models.Model):
         loc_name,
         ext_ref,
         loc_ext_id_name,
+        vmodel,
         default=None,
         ctx=None,
     ):
@@ -147,6 +202,7 @@ class IrModelSynchroApply(models.Model):
         loc_name,
         ext_ref,
         loc_ext_id_name,
+        vmodel,
         default=None,
         ctx=None,
     ):
@@ -185,6 +241,7 @@ class IrModelSynchroApply(models.Model):
         loc_name,
         ext_ref,
         loc_ext_id_name,
+        vmodel,
         default=None,
         ctx=None,
     ):
@@ -207,6 +264,7 @@ class IrModelSynchroApply(models.Model):
         loc_name,
         ext_ref,
         loc_ext_id_name,
+        vmodel,
         default=None,
         ctx=None,
     ):
@@ -228,6 +286,7 @@ class IrModelSynchroApply(models.Model):
         loc_name,
         ext_ref,
         loc_ext_id_name,
+        vmodel,
         default=None,
         ctx=None,
     ):
@@ -243,6 +302,7 @@ class IrModelSynchroApply(models.Model):
         loc_name,
         ext_ref,
         loc_ext_id_name,
+        vmodel,
         default=None,
         ctx=None,
     ):
@@ -259,27 +319,29 @@ class IrModelSynchroApply(models.Model):
         loc_name,
         ext_ref,
         loc_ext_id_name,
+        vmodel,
         default=None,
         ctx=None,
+        product=None,
     ):
-        if "journal_id" in vals:
-            journal_id = vals["journal_id"]
-        else:
-            journal_id = self.env["account.invoice"]._default_journal()
-        if "account_id" not in vals and "product_id" in vals:
-            product = self.env["product.product"].browse(vals["product_id"])
+        if loc_name not in vals and (product or "product_id" in vals):
+            product = product or self.env["product.product"].browse(vals["product_id"])
             accounts = product.product_tmpl_id._get_product_accounts()
             if accounts:
-                if vals.get("type") in ("in_invoice", "in_refund"):
-                    vals["account_id"] = accounts["expense"].id
+                if self.is_purchase(vals, vmodel):
+                    vals[loc_name] = accounts["expense"].id
                 else:
-                    vals["account_id"] = accounts["income"].id
+                    vals[loc_name] = accounts["income"].id
             else:
-                journal = self.env["account.journal"].browse(journal_id)
-                if vals.get("type") in ("in_invoice", "in_refund"):
-                    vals["account_id"] = journal.default_debit_account_id.id
+                if "journal_id" in vals:
+                    journal_id = vals["journal_id"]
                 else:
-                    vals["account_id"] = journal.default_credit_account_id.id
+                    journal_id = self.env["account.invoice"]._default_journal()
+                journal = self.env["account.journal"].browse(journal_id)
+                if self.is_purchase(vals, vmodel):
+                    vals[loc_name] = journal.default_debit_account_id.id
+                else:
+                    vals[loc_name] = journal.default_credit_account_id.id
         return vals
 
     def apply_uom(
@@ -289,11 +351,13 @@ class IrModelSynchroApply(models.Model):
         loc_name,
         ext_ref,
         loc_ext_id_name,
+        vmodel,
         default=None,
         ctx=None,
+        product=None,
     ):
-        if loc_name not in vals and "product_id" in vals:
-            product = self.env["product.product"].browse(vals["product_id"])
+        if loc_name not in vals and (product or "product_id" in vals):
+            product = product or self.env["product.product"].browse(vals["product_id"])
             vals[loc_name] = product.uom_id.id
         elif not vals.get(loc_name):
             vals[loc_name] = self.env.ref("product.product_uom_unit").id
@@ -306,12 +370,14 @@ class IrModelSynchroApply(models.Model):
         loc_name,
         ext_ref,
         loc_ext_id_name,
+        vmodel,
         default=None,
         ctx=None,
+        product=None,
     ):
-        if loc_name not in vals and "product_id" in vals:
-            product = self.env["product.product"].browse(vals["product_id"])
-            if vals.get("type") in ("in_invoice", "in_refund"):
+        if loc_name not in vals and (product or "product_id" in vals):
+            product = product or self.env["product.product"].browse(vals["product_id"])
+            if self.is_purchase(vals, vmodel):
                 tax = product.supplier_taxes_id
             else:
                 tax = product.taxes_id
@@ -326,6 +392,7 @@ class IrModelSynchroApply(models.Model):
         loc_name,
         ext_ref,
         loc_ext_id_name,
+        vmodel,
         default=None,
         ctx=None,
     ):
@@ -362,6 +429,7 @@ class IrModelSynchroApply(models.Model):
         loc_name,
         ext_ref,
         loc_ext_id_name,
+        vmodel,
         default=None,
         ctx=None,
     ):
@@ -403,6 +471,7 @@ class IrModelSynchroApply(models.Model):
         loc_name,
         ext_ref,
         loc_ext_id_name,
+        vmodel,
         default=None,
         ctx=None,
     ):
@@ -423,6 +492,7 @@ class IrModelSynchroApply(models.Model):
         loc_name,
         ext_ref,
         loc_ext_id_name,
+        vmodel,
         default=None,
         ctx=None,
     ):
@@ -454,6 +524,7 @@ class IrModelSynchroApply(models.Model):
         loc_name,
         ext_ref,
         loc_ext_id_name,
+        vmodel,
         default=None,
         ctx=None,
     ):
@@ -471,6 +542,7 @@ class IrModelSynchroApply(models.Model):
         loc_name,
         ext_ref,
         loc_ext_id_name,
+        vmodel,
         default=None,
         ctx=None,
     ):
@@ -493,6 +565,7 @@ class IrModelSynchroApply(models.Model):
         loc_name,
         ext_ref,
         loc_ext_id_name,
+        vmodel,
         default=None,
         ctx=None,
     ):
@@ -507,6 +580,7 @@ class IrModelSynchroApply(models.Model):
         loc_name,
         ext_ref,
         loc_ext_id_name,
+        vmodel,
         default=None,
         ctx=None,
     ):
@@ -523,6 +597,7 @@ class IrModelSynchroApply(models.Model):
         loc_name,
         ext_ref,
         loc_ext_id_name,
+        vmodel,
         default=None,
         ctx=None,
     ):
@@ -559,6 +634,7 @@ class IrModelSynchroApply(models.Model):
         loc_name,
         ext_ref,
         loc_ext_id_name,
+        vmodel,
         default=None,
         ctx=None,
     ):
@@ -574,6 +650,7 @@ class IrModelSynchroApply(models.Model):
         loc_name,
         ext_ref,
         loc_ext_id_name,
+        vmodel,
         default=None,
         ctx=None,
     ):
@@ -590,6 +667,7 @@ class IrModelSynchroApply(models.Model):
         loc_name,
         ext_ref,
         loc_ext_id_name,
+        vmodel,
         default=None,
         ctx=None,
     ):
@@ -629,6 +707,7 @@ class IrModelSynchroApply(models.Model):
         loc_name,
         ext_ref,
         loc_ext_id_name,
+        vmodel,
         default=None,
         ctx=None,
     ):
@@ -647,11 +726,122 @@ class IrModelSynchroApply(models.Model):
         loc_name,
         ext_ref,
         loc_ext_id_name,
+        vmodel,
         default=None,
         ctx=None,
     ):
         if vals.get(ext_ref):
             vals[loc_name] = round(vals[ext_ref] * 0.82, 3)
+        return vals
+
+    def apply_prod_by_name(
+        self,
+        backend_id,
+        vals,
+        loc_name,
+        ext_ref,
+        loc_ext_id_name,
+        vmodel,
+        default=None,
+        ctx=None,
+    ):
+        Product = self.env["product.product"]
+        field = ext_ref if vals.get(ext_ref) else "name"
+        fragments = split_fragments(vals[field])
+        if len(fragments) == 0:
+            prods = Product.search([("default_code", "=", "MISC")])
+        elif len(fragments) == 1:
+            prods = Product.search([("name", "ilike", fragments[0])])
+        else:
+            domain = []
+            for perms in itertools.permutations(fragments, len(fragments) - 1):
+                text = "%"
+                for perm in perms:
+                    text += (perm + "%")
+                domain.append(("name", "ilike", text))
+            for i in range(len(domain) - 1):
+                domain.insert(0, "|")
+            prods = Product.search(domain)
+        if not prods:
+            prods = Product.search([("default_code", "=", "MISC")])
+        if prods:
+            vals[loc_name] = prods[0].id
+        return vals
+
+    def apply_line_vals_from_prod(
+        self,
+        backend_id,
+        vals,
+        loc_name,
+        ext_ref,
+        loc_ext_id_name,
+        vmodel,
+        default=None,
+        ctx=None,
+    ):
+        if vals.get("product_id"):
+            Product = self.env["product.product"]
+            product = Product.browse(vals["product_id"])
+            if not vals.get("product_uom"):
+                vals = self.apply_uom(backend_id,
+                                      vals,
+                                      "product_uom",
+                                      None,
+                                      None,
+                                      vmodel,
+                                      product=product)
+            if (
+                    vmodel == "purchase.order.line"
+                    and not vals.get("taxes_id")
+            ):
+                vals = self.apply_tax(backend_id,
+                                      vals,
+                                      "taxes_id",
+                                      None,
+                                      None,
+                                      vmodel,
+                                      product=product)
+            elif (
+                    vmodel == "sale.order.line"
+                    and not vals.get("tax_id")
+            ):
+                vals = self.apply_tax(backend_id,
+                                      vals,
+                                      "tax_id",
+                                      None,
+                                      None,
+                                      vmodel,
+                                      product=product)
+            elif (
+                    vmodel == "account.invoice.line"
+                    and not vals.get("invoice_line_tax_ids")
+            ):
+                vals = self.apply_tax(backend_id,
+                                      vals,
+                                      "invoice_line_tax_ids",
+                                      None,
+                                      None,
+                                      vmodel,
+                                      product=product)
+            elif (
+                    vmodel == "stock.picking.package.preparation.line"
+                    and not vals.get("tax_ids")
+            ):
+                vals = self.apply_tax(backend_id,
+                                      vals,
+                                      "tax_ids",
+                                      None,
+                                      None,
+                                      vmodel,
+                                      product=product)
+            if vmodel == "account.invoice.line" and not vals.get("account_id"):
+                vals = self.apply_account(backend_id,
+                                          vals,
+                                          "account_id",
+                                          None,
+                                          None,
+                                          vmodel,
+                                          product=product)
         return vals
 
     def apply_product_vg7_naming(
@@ -661,6 +851,7 @@ class IrModelSynchroApply(models.Model):
         loc_name,
         ext_ref,
         loc_ext_id_name,
+        vmodel,
         default=None,
         ctx=None,
     ):
@@ -695,6 +886,7 @@ class IrModelSynchroApply(models.Model):
         loc_name,
         ext_ref,
         loc_ext_id_name,
+        vmodel,
         default=None,
         ctx=None,
     ):
@@ -719,6 +911,7 @@ class IrModelSynchroApply(models.Model):
         loc_name,
         ext_ref,
         loc_ext_id_name,
+        vmodel,
         default=None,
         ctx=None,
     ):
@@ -750,6 +943,7 @@ class IrModelSynchroApply(models.Model):
         loc_name,
         ext_ref,
         loc_ext_id_name,
+        vmodel,
         default=None,
         ctx=None,
     ):
@@ -766,11 +960,13 @@ class IrModelSynchroApply(models.Model):
         loc_name,
         ext_ref,
         loc_ext_id_name,
+        vmodel,
         default=None,
         ctx=None,
     ):
         if not vals.get(loc_name):
             vals[loc_name] = datetime.today().strftime("%Y-%m-%d")
+        return vals
 
     def apply_now(
         self,
@@ -779,11 +975,13 @@ class IrModelSynchroApply(models.Model):
         loc_name,
         ext_ref,
         loc_ext_id_name,
+        vmodel,
         default=None,
         ctx=None,
     ):
         if not vals.get(loc_name):
             vals[loc_name] = datetime.today().strftime("%Y-%m-%d %H:%M:%S")
+        return vals
 
     def apply_next_week_day(
         self,
@@ -792,6 +990,7 @@ class IrModelSynchroApply(models.Model):
         loc_name,
         ext_ref,
         loc_ext_id_name,
+        vmodel,
         default=None,
         ctx=None,
     ):
@@ -799,6 +998,7 @@ class IrModelSynchroApply(models.Model):
             vals[loc_name] = (datetime.today() + timedelta(7)).strftime(
                 "%Y-%m-%d %H:%M:%S"
             )
+        return vals
 
     def get_default_product(self):
         cache = self.env["ir.model.synchro.cache"]

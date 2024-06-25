@@ -34,18 +34,18 @@ class SaleOrder(models.Model):
 
     @api.model
     def __preprocess(self, backend_id, vals):
-        xmodel = "sale.order"
+        vmodel = "sale.order"
         stored_field = "agent_id"
-        _logger.info("%s.preprocess(%s)" % (xmodel, vals))
+        _logger.info("%s.preprocess(%s)" % (vmodel, vals))
         cache = self.env["ir.model.synchro.cache"]
-        cache.del_model_attr(backend_id, xmodel, stored_field)
+        cache.del_model_attr(backend_id, vmodel, stored_field)
         if "vg7:agent_id" in vals:
             agent_id, agent = self.bind_record(
-                backend_id, xmodel, {"vg7_id": int(vals["vg7:agent_id"])}
+                backend_id, vmodel, {"vg7_id": int(vals["vg7:agent_id"])}
             )
             if agent_id:
                 vals["user_id"] = agent_id
-                cache.set_model_attr(backend_id, xmodel, stored_field, agent_id)
+                cache.set_model_attr(backend_id, vmodel, stored_field, agent_id)
             del vals["vg7:agent_id"]
         elif "vg7:customer_id" in vals:
             partner_id, partner = self.bind_record(

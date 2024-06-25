@@ -1,4 +1,5 @@
-id,name,vat,type
-2,Test Company,IT05111810015,contact
-3,Administrator,,contact
-801,Prima Alpha S.p.A.,IT00115719999,contact
+id,name,vat,type,parent_id,customer,supplier,_why
+2,Test Company,IT05111810015,contact,Fasle,\N,\N,
+3,Administrator,,contact,False,\N,\N,
+801,Prima Alpha S.p.A.,IT00115719999,contact,False,True,False,
+803,Import Export Trifoglio s.r.l.,IT01234560017,contact,False,False,True,Supplier

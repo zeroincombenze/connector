@@ -47,21 +47,22 @@
         <field name="model_id" ref="purchase_order"/>
     </record>
 
-    <record forcecreate="1" id="purchase_order_id" model="synchro.channel.model.fields">
-        <field name="name">id</field>
+    <record forcecreate="1" id="purchase_order_name" model="synchro.channel.model.fields">
+        <field name="name">name</field>
         <field name="counterpart_name">order_id</field>
+        <field name="apply">str()</field>
+        <field name="model_id" ref="purchase_order"/>
+    </record>
+
+    <record forcecreate="1" id="purchase_order_partner_ref" model="synchro.channel.model.fields">
+        <field name="name">partner_ref</field>
+        <field name="counterpart_name">order_number</field>
         <field name="model_id" ref="purchase_order"/>
     </record>
 
     <record forcecreate="1" id="purchase_order_company_id" model="synchro.channel.model.fields">
         <field name="name">company_id</field>
         <field name="apply">set_global()</field>
-        <field name="model_id" ref="purchase_order"/>
-    </record>
-
-    <record forcecreate="1" id="purchase_order_name" model="synchro.channel.model.fields">
-        <field name="name">name</field>
-        <field name="counterpart_name">order_number</field>
         <field name="model_id" ref="purchase_order"/>
     </record>
 
@@ -85,6 +86,12 @@
         <field name="model_id" ref="purchase_order_line"/>
     </record>
 
+    <record forcecreate="1" id="purchase_order_line_date_planned" model="synchro.channel.model.fields">
+        <field name="name">date_planned</field>
+        <field name="apply">next_week_day()</field>
+        <field name="model_id" ref="purchase_order_line"/>
+    </record>
+
     <record forcecreate="1" id="purchase_order_line_price_unit" model="synchro.channel.model.fields">
         <field name="name">price_unit</field>
         <field name="counterpart_name">prezzo_unitario</field>
@@ -94,6 +101,7 @@
     <record forcecreate="1" id="purchase_order_line_product_id" model="synchro.channel.model.fields">
         <field name="name">product_id</field>
         <field name="counterpart_name">prodotto</field>
+        <field name="apply">prod_by_name(),line_vals_from_prod()</field>
         <field name="model_id" ref="purchase_order_line"/>
     </record>
 
@@ -112,6 +120,7 @@
     <record forcecreate="1" id="purchase_order_line_tax_id" model="synchro.channel.model.fields">
         <field name="name">taxes_id</field>
         <field name="counterpart_name">tax_code_id</field>
+        <field name="apply">tax()</field>
         <field name="model_id" ref="purchase_order_line"/>
     </record>
 

@@ -104,10 +104,18 @@ MODEL_KEYS = {
     "product.product": {"code": "default_code"},
     "product.template": {"code": "default_code"},
     "product.uom": {"code": "name"},
+    "purchase.order": {"code": "name"},
     "res.company": {"code": "vat"},
     "res.country": {},
     "res.country.state": {},
-    "res.partner": {"code": "vat", "domain": [("type", "=", "contact")]},
+    "res.partner": {
+        "code": "vat",
+        "domain": [("type", "=", "contact"), ("customer", "=", True)]
+    },
+    "res.partner.supplier": {
+        "code": "vat",
+        "domain": [("type", "=", "contact"),("supplier", "=", True)]
+    },
     "res.users": {"code": "login"},
     "sale.order": {"code": "name"},
     "stock.picking.transportation_reason": {"code": "name"},
@@ -137,6 +145,22 @@ MODEL_WITH_CHILD = {
         "child_model": "account.move.line",
         "child_field": "line_ids",
         "parent_field": "move_id",
+    },
+    "purchase.order": {
+        "child_model": "purchase.order.line",
+        "child_field": "order_line",
+        "child_key": "sequence",
+        "parent_field": "order_id",
+        "vg7:": {
+            "fqn": "purchase_orders.line.csv",
+            "parent_field": "order_id",
+            "child_field": "order_rows",
+        },
+        "oe8:": {
+            "fqn": "purchase.order.line.csv",
+            "parent_field": "order_id",
+            "child_field": "order_line",
+        },
     },
     "sale.order": {
         "child_model": "sale.order.line",
@@ -189,7 +213,7 @@ TNL_VG7_TABLES = {
     "product.product": "products",
     "product.template": "",
     "product.uom": "ums",
-    "purchase.order": "",
+    "purchase.order": "purchase_orders",
     "purchase.order.line": "",
     "res.company": "",
     "res.country": "countries",
@@ -214,6 +238,7 @@ SETUP_MODEL_LIST = (
     "res.country",
     "res.country.state",
     "res.partner",
+    "res.partner.supplier",
     "res.users",
     "res.company",
     "account.account",
@@ -389,7 +414,7 @@ class ExtTestEnv(object):
         self.lang = self.lang or "it_IT"
         self.logfn = __file__.replace(".py", ".log")
         # TODO
-        self.ask = True
+        self.ask = False
         self.ctr = 0
         if pth.isfile(self.logfn):
             os.unlink(self.logfn)
@@ -488,7 +513,9 @@ class ExtTestEnv(object):
         return None
 
     @staticmethod
-    def get_ext_id_field(identity):
+    def get_ext_id_field(identity, model=None):
+        if model == "res.partner.supplier" and identity == "vg7:":
+            return "vg72_id"
         return identity.split(":")[0] + "_id"
 
     @staticmethod
@@ -980,19 +1007,18 @@ class ExtTestEnv(object):
         self.assure_company()
         self.assure_user()
         self.model_wkf = {}
-        ext_id_field_1 = self.get_ext_id_field("vg7:")
-        ext_id_field_2 = self.get_ext_id_field("oe8:")
-
+        ext_id_field_oe8 = self.get_ext_id_field("oe8:")
 
         for model in SETUP_MODEL_LIST:
+            ext_id_field_vg7 = self.get_ext_id_field("vg7:", model=model)
             setup_recs, child_setup_recs, child_model = self.load_setup_recs(model)
             parent_field = (MODEL_WITH_CHILD[model]["parent_field"]
                             if model in MODEL_WITH_CHILD else "")
             for setup_rec in setup_recs:
                 vals = self.load_vals({}, setup_rec)
                 why, vals = self.extract_why(vals)
-                vals[ext_id_field_1] = False
-                vals[ext_id_field_2] = False
+                vals[ext_id_field_vg7] = False
+                vals[ext_id_field_oe8] = False
                 code = MODEL_KEYS[model].get("code", "code")
                 domain = MODEL_KEYS[model].get("domain", [])
                 xref = None
@@ -1015,8 +1041,8 @@ class ExtTestEnv(object):
                             continue
                         ctr += 1
                         child_vals = self.load_vals({}, child_setup_rec)
-                        child_vals[ext_id_field_1] = False
-                        child_vals[ext_id_field_2] = False
+                        child_vals[ext_id_field_vg7] = False
+                        child_vals[ext_id_field_oe8] = False
                         child_id = False
                         if child_vals:
                             why, child_vals = self.extract_why(child_vals)
@@ -1197,9 +1223,10 @@ class ExtTestEnv(object):
 
     def load_test_recs(self, model, lang=None):
         # Test records may be equal to setup records
+        actual_model = self.get_actual_model(model)
         child_model = child_test_recs = None
-        if model in MODEL_WITH_CHILD:
-            child_model = MODEL_WITH_CHILD[model]["child_model"]
+        if actual_model in MODEL_WITH_CHILD:
+            child_model = MODEL_WITH_CHILD[actual_model]["child_model"]
             if lang:
                 child_fqn = pth.join(
                     self.get_csv_path(), child_model + "." + lang + ".csv")
@@ -1220,19 +1247,19 @@ class ExtTestEnv(object):
             else:
                 child_test_recs = self.load_csv_file(child_fqn, keep_id=True)
         if lang:
-            fqn = pth.join(self.get_csv_path(), model + "." + lang + ".csv")
+            fqn = pth.join(self.get_csv_path(), actual_model + "." + lang + ".csv")
         else:
-            fqn = pth.join(self.get_csv_path(), model + ".csv")
+            fqn = pth.join(self.get_csv_path(), actual_model + ".csv")
         if not os.path.isfile(fqn):
             self.write_log("Match records for model %s are the same of setup"
-                           % model, echo=False)
+                           % actual_model, echo=False)
             if lang:
-                fqn = pth.join(self.get_csv_path("setup"), model + "." + lang + ".csv")
+                fqn = pth.join(self.get_csv_path("setup"), actual_model + "." + lang + ".csv")
             else:
-                fqn = pth.join(self.get_csv_path("setup"), model + ".csv")
+                fqn = pth.join(self.get_csv_path("setup"), actual_model + ".csv")
         if not os.path.isfile(fqn):
             self.write_log("Missed match records for model %s)"
-                           % model, echo=False)
+                           % actual_model, echo=False)
             test_recs = []
         else:
             test_recs = self.load_csv_file(fqn, keep_id=True)
@@ -1273,6 +1300,7 @@ class ExtTestEnv(object):
             code=None, name=None, domain=(), reset_id=False, lang=None):
         if not self.conai and "conai" in model:
             return
+        actual_model = self.get_actual_model(model)
         code = code or MODEL_KEYS[model].get("code", "code")
         name = name or MODEL_KEYS[model].get("name", "name")
         domain = domain or MODEL_KEYS[model].get("domain", [])
@@ -1280,7 +1308,7 @@ class ExtTestEnv(object):
         self.write_log("* init_model(%s, %s, code=%s, name=%s, domain=%s, ctx=%s)"
                        % (identity, model, code, name, domain, ctx))
         if reset_id:
-            ext_id_field = self.get_ext_id_field(identity)
+            ext_id_field = self.get_ext_id_field(identity, model=model)
         test_recs, child_test_recs, child_model = self.load_test_recs(model, lang=lang)
         for test_rec in test_recs:
             vals = {}
@@ -1293,38 +1321,38 @@ class ExtTestEnv(object):
                 if isinstance(test_rec["id"], basestring):
                     full_domain = [("id", "=", test_rec["id"])]
                 else:
-                    xref = self.get_xref_from_id(model, loc_id)
+                    xref = self.get_xref_from_id(actual_model, loc_id)
                     if xref:
                         full_domain = [("id", "=", xref.complete_name)]
                 loc_ids = [loc_id]
             else:
                 # Avoid to initialize too many records
                 full_domain = self.get_domain(
-                    model, test_rec,
+                    actual_model, test_rec,
                     code=code, name=name, domain=domain, all_fields=True)
-                loc_ids = clodoo.searchL8(self.ctx, model, full_domain, context=ctx)
+                loc_ids = clodoo.searchL8(self.ctx, actual_model, full_domain, context=ctx)
                 if not loc_ids:
                     continue
                 for loc_id in loc_ids:
-                    xref = self.get_xref_from_id(model, loc_id)
+                    xref = self.get_xref_from_id(actual_model, loc_id)
                     if xref:
                         vals = self.load_vals(vals, test_rec)
                         full_domain = [("id", "=", xref.complete_name)]
                         break
             if reset_id:
                 vals[ext_id_field] = False
-                if model == "res.partner" and identity.startswith("vg7"):
+                if model == "res.partner.supplier":
                     vals["vg72_id"] = False
             if vals:
                 why, vals = self.extract_why(vals)
                 if len(loc_ids) == 1:
-                    rec = self.resource_browse(model, loc_ids[0], quiet=True)
+                    rec = self.resource_browse(actual_model, loc_ids[0], quiet=True)
                     vals = self.purge_values(rec, vals)
             if vals:
                 self.write_log("%s.write(%s, %s, ctx=%s)   # %s <%s>"
                                % (model, loc_ids, vals, ctx, full_domain, why),
                                echo=False)
-                clodoo.writeL8(self.ctx, model, loc_ids, vals, context=ctx)
+                clodoo.writeL8(self.ctx, actual_model, loc_ids, vals, context=ctx)
             if child_test_recs:
                 if len(loc_ids) > 1:
                     raise IOError(
@@ -1452,7 +1480,7 @@ class ExtTestEnv(object):
         fields_2_ignore = []
         for ident in IDENTITY_LIST:
             if ident != identity:
-                fields_2_ignore.append(self.get_ext_id_field(ident))
+                fields_2_ignore.append(self.get_ext_id_field(ident, model=model))
         child_field = (MODEL_WITH_CHILD[model]["child_field"]
                        if model in MODEL_WITH_CHILD else "")
         loc_rec = self.resource_browse(model, loc_id, lang=lang, quiet=True)
@@ -1566,7 +1594,6 @@ class ExtTestEnv(object):
     def test_function_trigger(self, ext_model, identity, ext_id):
         fqn = pth.join(self.get_exchange_path(identity), "%s.csv" % ext_model)
         data = self.load_csv_file(fqn)
-        # ext_id_field = self.get_ext_id_field(identity)
         vals = {}
         for vals in data:
             if ext_id == vals["id"]:
@@ -1764,7 +1791,7 @@ class ExtTestEnv(object):
         test_recs, child_test_recs, child_model = self.load_test_recs(model, lang=lang)
         main_ext_id = False
         # wa = "w"
-        ext_id_field = self.get_ext_id_field(identity)
+        ext_id_field = self.get_ext_id_field(identity, model=model)
         self.write_log("# Starting %s tests on %s" % (fct_test, model), echo=False)
         for ext_rec in ext_recs_image:
             loc_id = ext_id = -127
@@ -1799,8 +1826,8 @@ class ExtTestEnv(object):
     def store_csv_response(self, identity, models, lang=None):
         self.write_log(
             "store_csv_response(%s, %s)" % (identity, models), echo=False)
-        ext_id_field = self.get_ext_id_field(identity)
         for model in models:
+            ext_id_field = self.get_ext_id_field(identity, model=model)
             if model not in self.model_wkf:
                 self.write_log(
                     "DEVEL TROUBLE: model %s without initialization" % model)
@@ -1815,9 +1842,9 @@ class ExtTestEnv(object):
                 identity, model, ext_model=ext_model, lang=lang, keep_none=True)
             main_ext_id = False
             wa = "w"
-            ext_id_field = self.get_ext_id_field(identity)
-            if not ext_id_field:
-                raise IOError("No match external id name for %s" % identity)
+            # ext_id_field = self.get_ext_id_field(identity, model=model)
+            # if not ext_id_field:
+            #    raise IOError("No match external id name for %s" % identity)
             for ext_rec in ext_recs_image:
                 ext_rec, ext_id, main_ext_id = self.prepare_rec(ext_rec, main_ext_id)
                 self.write_file_2_pull(identity, ext_model, ext_rec, wa)
@@ -1871,12 +1898,14 @@ def main(cli_args=[]):
         "res.country",
         "res.country.state",
         "res.partner",
-        "account.tax",
-        "account.payment.term",
+        "res.partner.supplier",
         "product.uom",
         "product.product",
+        "account.tax",
+        "account.payment.term",
         "stock.picking.transportation_reason",
         "sale.order",
+        "purchase.order",
         "stock.picking.package.preparation",
     )
     ext_test_env.store_csv_response(identity, MODELS)
@@ -1895,17 +1924,18 @@ def main(cli_args=[]):
             "res.partner",
             "res.company",
             "res.users",
-            "account.tax",
-            "account.journal",
-            "account.payment.term",
             "product.uom",
             "product.template",
             "product.product",
+            "account.tax",
+            "account.journal",
+            "account.payment.term",
             "stock.picking.transportation_reason",
             "stock.picking.carriage_condition",
             "stock.picking.goods_description",
             "stock.picking.transportation_method",
             "sale.order",
+            "purchase.order",
             "stock.picking.package.preparation",
     )
     ext_test_env.store_csv_response(identity, MODELS)

@@ -1,3 +1,11 @@
+10.0.0.3.7 (2024-06-27)
+~~~~~~~~~~~~~~~~~~~~~~~
+
+* [FIX] apply date/time functions
+* [FIX] Purchase orders
+* [IMP] Test on vg7 suppliers
+* [QUA] Test coverage 43% (5092: 2879+2213) [1189 TestPoints] - quality rating 64 (target 100)
+
 10.0.0.3.6 (2024-06-24)
 ~~~~~~~~~~~~~~~~~~~~~~~
 

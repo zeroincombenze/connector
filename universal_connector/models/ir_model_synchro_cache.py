@@ -121,6 +121,11 @@ class IrModelSynchroCache(models.Model):
         "base.config.settings",
         "base_import",
         "change.password.wizard",
+        "ir.actions.actions",
+        "ir.actions.act_window",
+        "ir.actions.act_window.view",
+        "ir.actions.report.xml",
+        "ir.actions.server",
         "ir.autovacuum",
         "ir.config_parameter",
         "ir.exports",
@@ -155,6 +160,7 @@ class IrModelSynchroCache(models.Model):
             # 'company_id': {'required': True},
             "create_date": {"readonly": True},
             "create_uid": {"readonly": True},
+            "display_name": {"readonly": True},
             "message_channel_ids": {"readonly": True},
             "message_follower_ids": {"readonly": True},
             "message_ids": {"readonly": True},
@@ -192,45 +198,77 @@ class IrModelSynchroCache(models.Model):
         "account.payment.term": {},
         "ir.sequence": {"number_next_actual": {"protect_update": 4}},
         "product.category": {},
-        "product.product": {"company_id": {"readonly": True}},
-        "product.template": {"company_id": {"readonly": True}},
+        "product.product": {
+            "company_id": {"readonly": True},
+            "type": {"protect_update": "3"},
+            "categ_id": {"protect_update": "3"},
+            "uom_id": {"protect_update": "3"},
+            "uom_po_id": {"protect_update": "3"},
+            "purchase_method": {"protect_update": "3"},
+            "invoice_policy": {"protect_update": "3"},
+        },
+        "product.template": {
+            "company_id": {"readonly": True},
+            "type": {"protect_update": "3"},
+            "categ_id": {"protect_update": "3"},
+            "uom_id": {"protect_update": "3"},
+            "uom_po_id": {"protect_update": "3"},
+            "purchase_method": {"protect_update": "3"},
+            "invoice_policy": {"protect_update": "3"},
+        },
         "purchase.order": {"name": {"required": False}},
         "res.company": {
             "default_picking_type_for_package_preparation_id": {"readonly": True},
             "due_cost_service_id": {"readonly": True},
+            "fiscalyear_last_month": {"ancillary": False},
+            "font": {"ancillary": False},
             "internal_transit_location_id": {"readonly": True},
-            "paperformat_id": {"readonly": True},
             "of_account_end_vat_statement_interest_account_id": {"readonly": True},
             "of_account_end_vat_statement_interest": {"readonly": True},
+            "paperformat_id": {"readonly": True},
+            "po_double_validation": {"ancillary": False},
+            "po_lock": {"ancillary": False},
             "parent_id": {"readonly": True},
             "po_lead": {"readonly": True},
             "project_time_mode_id": {"readonly": True},
+            "rml_paper_format": {"ancillary": False},
             "sp_account_id": {"readonly": True},
+            "tax_calculation_rounding_method": {"ancillary": False},
         },
-        "res.country": {"name": {"protect_update": 2}},
-        "res.country.state": {"name": {"protect_update": 2}},
+        "res.country": {
+            "code": {"protect_update": 3},
+            "name": {"protect_update": 2},
+        },
+        "res.country.state": {
+            "code": {"protect_update": 3},
+            "name": {"protect_update": 2},
+        },
         "res.currency": {
             "rate_ids": {"protect_update": 2},
             "rounding": {"protect_update": 2},
         },
         "res.partner": {
             "company_id": {"readonly": True},
+            "is_company": {"ancillary": True},
             "notify_email": {"readonly": True},
             "property_product_pricelist": {"readonly": True},
             "property_stock_customer": {"readonly": True},
             "property_stock_supplier": {"readonly": True},
             "title": {"readonly": True},
         },
-        "res.partner.bank": {"bank_name": {"readonly": False}},
+        "res.partner.bank": {
+            "bank_name": {"readonly": False},
+            # 'partner_id': {'ancillary': False},
+        },
         "res.users": {
-            "action_id": {"readonly": True},
+            "action_id": {"readonly": True, "protect_update": 3},
             "category_id": {"readonly": True},
             "company_id": {"readonly": True},
             "login_date": {"readonly": True},
-            "new_password": {"readonly": True},
+            "new_password": {"readonly": True, "protect_update": 3},
             "opt_out": {"readonly": True},
-            "password": {"readonly": True},
-            "password_crypt": {"readonly": True},
+            "password": {"readonly": True, "ancillary": False, "protect_update": 3},
+            "password_crypt": {"readonly": True, "protect_update": 3},
         },
         "sale.order": {"name": {"readonly": False, "required": False}},
         "stock.picking.package.preparation": {"ddt_number": {"required": False}},
@@ -240,7 +278,7 @@ class IrModelSynchroCache(models.Model):
     # Record cache management
     # -----------------------
     @api.model_cr_context
-    def expired_cache(self, backend_id, xmodel, model):
+    def expired_cache(self, backend_id, vmodel, model):
         cache_model = "_QUEUE_SYNC"
         if self.get_struct_model_attr(cache_model, "XPIRE"):
             self.set_struct_model(cache_model)
@@ -250,8 +288,8 @@ class IrModelSynchroCache(models.Model):
             self.CACHE.set_model_cache(self._cr.dbname, backend_id, cache_model)
 
     @api.model_cr_context
-    def push_id(self, backend_id, xmodel, model, loc_id=None, ext_id=None):
-        self.expired_cache(backend_id, xmodel, model)
+    def push_id(self, backend_id, vmodel, model, loc_id=None, ext_id=None):
+        self.expired_cache(backend_id, vmodel, model)
         cache_model = "_QUEUE_SYNC"
         if loc_id:
             rec_list = self.get_struct_model_attr(cache_model, model, default=[])
@@ -259,14 +297,14 @@ class IrModelSynchroCache(models.Model):
                 rec_list.append(loc_id)
                 self.set_struct_model_attr(cache_model, model, rec_list)
         if ext_id:
-            rec_list = self.get_model_attr(backend_id, cache_model, xmodel, default=[])
+            rec_list = self.get_model_attr(backend_id, cache_model, vmodel, default=[])
             if ext_id not in rec_list:
                 rec_list.append(ext_id)
-                self.set_model_attr(backend_id, cache_model, xmodel, rec_list)
+                self.set_model_attr(backend_id, cache_model, vmodel, rec_list)
 
     @api.model_cr_context
-    def pop_id(self, backend_id, xmodel, model, loc_id=None, ext_id=None):
-        self.expired_cache(backend_id, xmodel, model)
+    def pop_id(self, backend_id, vmodel, model, loc_id=None, ext_id=None):
+        self.expired_cache(backend_id, vmodel, model)
         cache_model = "_QUEUE_SYNC"
         if loc_id:
             rec_list = self.get_struct_model_attr(cache_model, model, default=[])
@@ -274,14 +312,14 @@ class IrModelSynchroCache(models.Model):
                 rec_list.pop(rec_list.index(loc_id))
                 self.set_struct_model_attr(cache_model, model, rec_list)
         if ext_id:
-            rec_list = self.get_model_attr(backend_id, cache_model, xmodel, default=[])
+            rec_list = self.get_model_attr(backend_id, cache_model, vmodel, default=[])
             if ext_id in rec_list:
                 rec_list.pop(rec_list.index(ext_id))
-                self.set_model_attr(backend_id, cache_model, xmodel, rec_list)
+                self.set_model_attr(backend_id, cache_model, vmodel, rec_list)
 
     @api.model_cr_context
-    def id_is_in_cache(self, backend_id, xmodel, model, loc_id=None, ext_id=None):
-        self.expired_cache(backend_id, xmodel, model)
+    def id_is_in_cache(self, backend_id, vmodel, model, loc_id=None, ext_id=None):
+        self.expired_cache(backend_id, vmodel, model)
         cache_model = "_QUEUE_SYNC"
         return (
             loc_id
@@ -289,7 +327,7 @@ class IrModelSynchroCache(models.Model):
         ) or (
             ext_id
             and ext_id
-            in self.get_model_attr(backend_id, cache_model, xmodel, default=[])
+            in self.get_model_attr(backend_id, cache_model, vmodel, default=[])
         )
 
     # -------------------------
@@ -984,9 +1022,9 @@ class IrModelSynchroCache(models.Model):
         them into memory"""
         self.env["ir.model.synchro"].logmsg(
             "any",
-            "$$$>>> %(model)s.setup_model_in_channels(%(xmodel)s)",
+            "$$$>>> %(model)s.setup_model_in_channels(%(vmodel)s)",
             model=model,
-            ctx={"xmodel": ext_model},
+            ctx={"vmodel": ext_model},
         )
         channel_model_model = self.env["synchro.channel.model"]
         if model:
@@ -1022,9 +1060,9 @@ class IrModelSynchroCache(models.Model):
         """Setup cache if needed, setup model cache if required and needed"""
         self.env["ir.model.synchro"].logmsg(
             "any",
-            "$$$>>> %(model)s.open(%(xmodel)s)",
+            "$$$>>> %(model)s.open(%(vmodel)s)",
             model=model,
-            ctx={"xmodel": ext_model},
+            ctx={"vmodel": ext_model},
         )
         ir_synchro_model = self.env["ir.model.synchro"]
         if backend and backend.identity == "odoo":

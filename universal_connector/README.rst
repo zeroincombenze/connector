@@ -1,5 +1,5 @@
 ===========================================================
-|icon| Universal Connector/Connettore universale 10.0.0.3.6
+|icon| Universal Connector/Connettore universale 10.0.0.3.7
 ===========================================================
 
 .. |icon| image:: https://raw.githubusercontent.com/zeroincombenze/connector/10.0/universal_connector/static/description/icon.png
@@ -188,6 +188,14 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 ChangeLog History | Cronologia modifiche
 ----------------------------------------
 
+10.0.0.3.7 (2024-06-27)
+~~~~~~~~~~~~~~~~~~~~~~~
+
+* [FIX] apply date/time functions
+* [FIX] Purchase orders
+* [IMP] Test on vg7 suppliers
+* [QUA] Test coverage 43% (5092: 2879+2213) [1189 TestPoints] - quality rating 64 (target 100)
+
 10.0.0.3.6 (2024-06-24)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -298,7 +306,7 @@ La distribuzione `Zeroincombenze® <https://www.zeroincombenze.it/>`__ è proget
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2024-06-24
+Last Update / Ultimo aggiornamento: 2024-06-27
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status
