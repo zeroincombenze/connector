@@ -397,6 +397,7 @@ MODULE_LIST = [
     "stock",
     "l10n_it_fiscalcode",
     "l10n_it_conai",
+    "l10n_it_einvoice_base",
     "connector_vg7_conai",
 ]
 IDENTITY_LIST = ["vg7:", "oe8:"]
@@ -419,6 +420,7 @@ class ExtTestEnv(object):
         if pth.isfile(self.logfn):
             os.unlink(self.logfn)
         self.fqn_to_remove = []
+        self.struct = {}
 
     def parseoptargs(self, args):
         parser = argparse.ArgumentParser(
@@ -583,15 +585,15 @@ class ExtTestEnv(object):
                 del vals[ext_ref]
         return vals
 
-    def cast_1_value(self, key, value, keep_id=False, keep_none=False):
+    def cast_1_value(self, model, key, value, keep_id=False, keep_none=False):
         if value in (r"\N", "None"):
             value = r"\N" if keep_none else None
         elif key == "company_id" and not value:
             value = self.company_id
         elif isinstance(value, dict):
-            value = self.cast_value(value, keep_id=keep_id)
+            value = self.cast_value(model, value, keep_id=keep_id)
         elif isinstance(value, (list, tuple)):
-            value = [self.cast_1_value(key, v, keep_id=keep_id) for v in value]
+            value = [self.cast_1_value(model, key, v, keep_id=keep_id) for v in value]
         elif isinstance(value, basestring):
             x = (re.search(r"[a-z][a-z0-9_]{3,}\.[\w]+", value)
                  if " " not in value else None)
@@ -604,7 +606,9 @@ class ExtTestEnv(object):
                 else:
                     value = value[:x.start()] + "'" + saved_value + "'" + value[x.end():]
                 x = re.search("[\w]+\.[\w]+", value)
-            if value.isdigit() and (value.startswith("0") or len(value) > 9):
+            if value.isdigit() and (value.startswith("0")
+                                    or len(value) > 9
+                                    or key == "zip"):
                 return value
             if re.match("[0-9]+[-+*/]+[0-9]+", value):
                 return value
@@ -620,10 +624,10 @@ class ExtTestEnv(object):
                 value = saved_value
         return value
 
-    def cast_value(self, vals, keep_id=False, keep_none=False):
+    def cast_value(self, model, vals, keep_id=False, keep_none=False):
         res = {}
         for k, v in vals.items():
-            v = self.cast_1_value(k, v, keep_id=keep_id, keep_none=keep_none)
+            v = self.cast_1_value(model, k, v, keep_id=keep_id, keep_none=keep_none)
             if v is None:
                 continue
             res[k] = v
@@ -656,7 +660,7 @@ class ExtTestEnv(object):
                     loc_name = loc_name[0]
         return loc_name, mode
 
-    def load_csv_file(self, fqn, keep_id=False, keep_none=False):
+    def load_csv_file(self, model, fqn, keep_id=False, keep_none=False):
         datas = []
         if not pth.isfile(fqn):
             raise IOError("File %s not found!" % fqn)
@@ -667,7 +671,7 @@ class ExtTestEnv(object):
                 if not header:
                     header = row
                     continue
-                datas.append(self.cast_value(dict(zip(header, row)),
+                datas.append(self.cast_value(model, dict(zip(header, row)),
                                              keep_id=keep_id, keep_none=keep_none))
         return datas
 
@@ -735,7 +739,7 @@ class ExtTestEnv(object):
                 except BaseException as e:
                     self.write_log("Error %s removing records ..." % e, echo=True)
                     if self.ask:
-                        input("Press RET to continue")
+                        input("Press RET to continue ...")
                     else:
                         exit(1)
             else:
@@ -1002,7 +1006,7 @@ class ExtTestEnv(object):
                 modname, connector_installed)
 
         if self.ask:
-            input("Press RET to continue")
+            input("Press RET to continue ...")
         self.assure_lang()
         self.assure_company()
         self.assure_user()
@@ -1015,7 +1019,7 @@ class ExtTestEnv(object):
             parent_field = (MODEL_WITH_CHILD[model]["parent_field"]
                             if model in MODEL_WITH_CHILD else "")
             for setup_rec in setup_recs:
-                vals = self.load_vals({}, setup_rec)
+                vals = self.load_vals(model, {}, setup_rec)
                 why, vals = self.extract_why(vals)
                 vals[ext_id_field_vg7] = False
                 vals[ext_id_field_oe8] = False
@@ -1037,10 +1041,12 @@ class ExtTestEnv(object):
                     ctr = 0
                     for ix, child_setup_rec in enumerate(child_setup_recs):
                         if self.cast_1_value(
-                                parent_field, child_setup_rec[parent_field]) != loc_id:
+                                child_model,
+                                parent_field,
+                                child_setup_rec[parent_field]) != loc_id:
                             continue
                         ctr += 1
-                        child_vals = self.load_vals({}, child_setup_rec)
+                        child_vals = self.load_vals(child_model,{}, child_setup_rec)
                         child_vals[ext_id_field_vg7] = False
                         child_vals[ext_id_field_oe8] = False
                         child_id = False
@@ -1078,7 +1084,7 @@ class ExtTestEnv(object):
     def get_domain(
             self, model, vals, code="code", name=None, domain=(), all_fields=False):
         def build_expr(vals, field, op_not=False):
-            value = self.cast_1_value(field, vals[field])
+            value = self.cast_1_value(model, field, vals[field])
             op = "="
             dom = (field, op, value)
             if field.startswith("_sel_"):
@@ -1111,7 +1117,7 @@ class ExtTestEnv(object):
                     op, v = re.match("([<=>!]+)(.*)", v).groups()
                 else:
                     op = "="
-                dom = [(k, op, self.cast_1_value(k, v))]
+                dom = [(k, op, self.cast_1_value(model, k, v))]
             elif all_fields and not k.startswith("_"):
                 dom = [build_expr(vals, k)]
             if dom and dom not in full_domain:
@@ -1121,15 +1127,15 @@ class ExtTestEnv(object):
             full_domain = [("id", "<", 0)]
         return full_domain
 
-    def load_vals(self, vals, rec_vals):
+    def load_vals(self, model, vals, rec_vals):
         for (k, v) in rec_vals.items():
             if k in ("id", "vg7_id", "oe8_id"):
                 continue
-            vals[k] = self.cast_1_value(k, v)
+            vals[k] = self.cast_1_value(model, k, v)
         return vals
 
     def extract_action_from_vals(self, vals, identity, reset_id):
-        action = vals.get("_action", "update")
+        action = vals.get("_action") or "update"
         if "_action" in vals:
             del vals["_action"]
         if identity != (vals.get("_identity") or identity):
@@ -1154,8 +1160,8 @@ class ExtTestEnv(object):
         if model in MODEL_WITH_CHILD:
             child_model = MODEL_WITH_CHILD[model]["child_model"]
             child_fqn = pth.join(self.get_csv_path("dirty"), child_model + ".csv")
-            child_dirty_recs = self.load_csv_file(child_fqn)
-        dirty_recs = self.load_csv_file(fqn)
+            child_dirty_recs = self.load_csv_file(child_model, child_fqn)
+        dirty_recs = self.load_csv_file(model, fqn)
         for dirty_rec in dirty_recs:
             full_domain = self.get_domain(model, dirty_rec, code=code, domain=domain)
             action, dirty_rec = self.extract_action_from_vals(
@@ -1180,13 +1186,13 @@ class ExtTestEnv(object):
                 for child_dirty_rec in child_dirty_recs:
                     if parent_field not in child_dirty_rec:
                         continue
-                    loc_id = self.cast_1_value("id",  dirty_rec["id"])
+                    loc_id = self.cast_1_value(child_model, "id",  dirty_rec["id"])
                     if child_dirty_rec[parent_field] == loc_id:
                         child_key = MODEL_WITH_CHILD[model]["child_key"]
                         child_domain = [
                             (parent_field, "=", loc_id),
                             (child_key, "=", self.cast_1_value(
-                                child_key, child_dirty_rec[child_key])),
+                                child_model, child_key, child_dirty_rec[child_key])),
                         ]
                         action, child_dirty_rec = self.extract_action_from_vals(
                             child_dirty_rec, identity, reset_id)
@@ -1245,7 +1251,8 @@ class ExtTestEnv(object):
                 self.write_log("Missed match records for model %s)"
                                % child_model, echo=False)
             else:
-                child_test_recs = self.load_csv_file(child_fqn, keep_id=True)
+                child_test_recs = self.load_csv_file(
+                    child_model, child_fqn, keep_id=True)
         if lang:
             fqn = pth.join(self.get_csv_path(), actual_model + "." + lang + ".csv")
         else:
@@ -1262,7 +1269,7 @@ class ExtTestEnv(object):
                            % actual_model, echo=False)
             test_recs = []
         else:
-            test_recs = self.load_csv_file(fqn, keep_id=True)
+            test_recs = self.load_csv_file(model, fqn, keep_id=True)
         return test_recs, child_test_recs, child_model
 
     def load_setup_recs(self, model, lang=None):
@@ -1287,12 +1294,14 @@ class ExtTestEnv(object):
         if not pth.isfile(fqn):
             self.write_log("No setup records for model %s)" % model, echo=False)
             return [], [], child_model
-        setup_recs = self.load_csv_file(fqn, keep_id=True)
+        setup_recs = self.load_csv_file(model, fqn, keep_id=True)
         if child_model:
             if not pth.isfile(child_fqn):
-                self.write_log("No setup records for model %s)" % child_model, echo=False)
+                self.write_log(
+                    "No setup records for model %s)" % child_model, echo=False)
             else:
-                child_setup_recs = self.load_csv_file(child_fqn, keep_id=True)
+                child_setup_recs = self.load_csv_file(
+                    child_model, child_fqn, keep_id=True)
         return setup_recs, child_setup_recs, child_model
 
     def init_model(
@@ -1301,6 +1310,9 @@ class ExtTestEnv(object):
         if not self.conai and "conai" in model:
             return
         actual_model = self.get_actual_model(model)
+        if actual_model not in self.struct:
+            self.struct[actual_model] = clodoo.executeL8(
+                self.ctx, actual_model, "fields_get")
         code = code or MODEL_KEYS[model].get("code", "code")
         name = name or MODEL_KEYS[model].get("name", "name")
         domain = domain or MODEL_KEYS[model].get("domain", [])
@@ -1314,10 +1326,10 @@ class ExtTestEnv(object):
             vals = {}
             loc_id = False
             if "id" in test_rec and test_rec["id"]:
-                loc_id = self.cast_1_value("id", test_rec["id"])
+                loc_id = self.cast_1_value(model,"id", test_rec["id"])
             if loc_id:
                 full_domain = [("id", "=", loc_id)]
-                vals = self.load_vals(vals, test_rec)
+                vals = self.load_vals(model, vals, test_rec)
                 if isinstance(test_rec["id"], basestring):
                     full_domain = [("id", "=", test_rec["id"])]
                 else:
@@ -1336,7 +1348,7 @@ class ExtTestEnv(object):
                 for loc_id in loc_ids:
                     xref = self.get_xref_from_id(actual_model, loc_id)
                     if xref:
-                        vals = self.load_vals(vals, test_rec)
+                        vals = self.load_vals(model, vals, test_rec)
                         full_domain = [("id", "=", xref.complete_name)]
                         break
             if reset_id:
@@ -1367,10 +1379,12 @@ class ExtTestEnv(object):
                     self.ctx, child_model, child_domain, order=child_key)
                 for ix, child_test_rec in enumerate(child_test_recs):
                     if self.cast_1_value(
-                            parent_field, child_test_rec[parent_field]) != loc_id:
+                            child_model,
+                            parent_field,
+                            child_test_rec[parent_field]) != loc_id:
                         continue
                     child_vals = {}
-                    child_vals = self.load_vals(child_vals, child_test_rec)
+                    child_vals = self.load_vals(child_model, child_vals, child_test_rec)
                     if reset_id:
                         child_vals[ext_id_field] = False
                     if child_vals:
@@ -1404,25 +1418,26 @@ class ExtTestEnv(object):
                 rec[field] = self.company_id
         return rec, ext_id, main_ext_id
 
-    def write_file_2_pull(self, identity, ext_model, vals, mode="w"):
+    def write_file_2_pull(self, identity, model, ext_model, vals, mode="w"):
         fqn = pth.join(self.get_exchange_path(identity), "%s.csv" % ext_model)
-        data = self.load_csv_file(fqn, keep_none=True) + [vals] if mode == "a" else [vals]
+        data = self.load_csv_file(
+            model, fqn, keep_none=True) + [vals] if mode == "a" else [vals]
         with open(fqn, "wb") as fd:
             writer = csv.DictWriter(fd, fieldnames=vals.keys())
             writer.writeheader()
             for vals in data:
                 why, vals = self.extract_why(vals)
-                writer.writerow(self.cast_value(vals, keep_id=False, keep_none=True))
+                writer.writerow(self.cast_value(model, vals, keep_id=False, keep_none=True))
         if fqn not in self.fqn_to_remove:
             self.fqn_to_remove.append(fqn)
 
-    def compare(self, loc_value, test_value, mode=None):
+    def compare(self, model, loc_value, test_value, mode=None):
         if hasattr(loc_value, "ids") and isinstance(test_value, (list, tuple)):
             loc_value = loc_value.ids or False
         elif hasattr(loc_value, "id"):
             loc_value = loc_value.id or False
         if mode == "id" and isinstance(test_value,basestring):
-            test_value = self.cast_1_value(mode, loc_value)
+            test_value = self.cast_1_value(model, mode, loc_value)
         elif isinstance(loc_value, datetime) and isinstance(test_value,basestring):
             loc_value = datetime.strftime(loc_value, "%Y-%m-%d %H:%M:%S")
         elif isinstance(loc_value, date) and isinstance(test_value,basestring):
@@ -1492,6 +1507,7 @@ class ExtTestEnv(object):
                 continue
             if loc_name in test_rec:
                 if not self.compare(
+                        model,
                         getattr(loc_rec, loc_name),
                         test_rec[loc_name],
                         "id" if loc_name == "id" else spec):
@@ -1524,7 +1540,9 @@ class ExtTestEnv(object):
                 for child_test_rec in child_test_recs:
                     if (
                             self.cast_1_value(
-                                parent_field,child_test_rec[parent_field]) != loc_id
+                                child_model,
+                                parent_field,
+                                child_test_rec[parent_field]) != loc_id
                             or child_rec[child_key] != child_test_rec[child_key]
                     ):
                         continue
@@ -1546,6 +1564,7 @@ class ExtTestEnv(object):
                         ):
                             continue
                         if not self.compare(
+                                child_model,
                                 getattr(child_rec, loc_name),
                                 child_test_rec[loc_name],
                                 "id" if loc_name == "id" else spec):
@@ -1591,9 +1610,9 @@ class ExtTestEnv(object):
         self.write_log(str(rec_id), no_ts=True)
         return rec_id
 
-    def test_function_trigger(self, ext_model, identity, ext_id):
+    def test_function_trigger(self, model, ext_model, identity, ext_id):
         fqn = pth.join(self.get_exchange_path(identity), "%s.csv" % ext_model)
-        data = self.load_csv_file(fqn)
+        data = self.load_csv_file(model, fqn)
         vals = {}
         for vals in data:
             if ext_id == vals["id"]:
@@ -1613,9 +1632,9 @@ class ExtTestEnv(object):
         return rec_id
 
     def merge_supplemetal_vals(
-            self, identity, fn, parent_field, child_field, ext_recs, multi=False):
+            self, identity, child_model, fn, parent_field, child_field, ext_recs, multi=False):
         child_ext_recs = self.load_csv_file(
-            pth.join(self.get_csv_path(identity), fn))
+            child_model, pth.join(self.get_csv_path(identity), fn))
         if multi:
             for ext_rec in ext_recs:
                 ext_rec[child_field] = []
@@ -1642,23 +1661,26 @@ class ExtTestEnv(object):
             fqn = pth.join(self.get_csv_path(identity), ext_model + "." + lang + ".csv")
         else:
             fqn = pth.join(self.get_csv_path(identity), ext_model + ".csv")
-        ext_recs_image = self.load_csv_file(fqn, keep_none=keep_none)
+        ext_recs_image = self.load_csv_file(model, fqn, keep_none=keep_none)
         if model == "res.partner" and identity.startswith("vg7"):
             self.merge_supplemetal_vals(
                 identity,
+                "res.partner",
                 "customers_shipping_addresses.csv",
-                "customer_id" ,
+                "customer_id",
                 "shipping",
                 ext_recs_image)
             self.merge_supplemetal_vals(
                 identity,
+                "res.partner",
                 "customers_billing_addresses.csv",
-                "customer_id" ,
+                "customer_id",
                 "billing",
                 ext_recs_image)
         elif model in MODEL_WITH_CHILD and identity in MODEL_WITH_CHILD[model]:
             self.merge_supplemetal_vals(
                 identity,
+                MODEL_WITH_CHILD[model]["child_model"],
                 MODEL_WITH_CHILD[model][identity]["fqn"],
                 MODEL_WITH_CHILD[model][identity]["parent_field"],
                 MODEL_WITH_CHILD[model][identity]["child_field"],
@@ -1705,6 +1727,16 @@ class ExtTestEnv(object):
             ):
                 del values[k]
                 continue
+            elif (
+                    isinstance(values[k], (int, long))
+                    and isinstance(record[k], basestring)
+                    and str(values[k]) == record[k]
+            ):
+                del values[k]
+                continue
+            elif values[k] is False and not record[k]:
+                del values[k]
+                continue
             elif values[k] == record[k]:
                 del values[k]
                 continue
@@ -1743,6 +1775,8 @@ class ExtTestEnv(object):
             ids = [ids] if ids else []
         elif isinstance(domain, (int, long)):
             ids = [domain]
+        elif isinstance(domain, (list, tuple)) and isinstance(domain[0], (int, long)):
+            ids = domain
         else:
             if company_id:
                 domain.append(("company_id", "=", company_id))
@@ -1803,7 +1837,7 @@ class ExtTestEnv(object):
             elif fct_test == "trigger":
                 ext_id = ext_rec["id"]
                 loc_id = self.test_function_trigger(
-                    ext_model, identity=identity, ext_id=ext_id
+                    model, ext_model, identity=identity, ext_id=ext_id
                 )
             if loc_id < 0:
                 raise IOError(
@@ -1847,7 +1881,7 @@ class ExtTestEnv(object):
             #    raise IOError("No match external id name for %s" % identity)
             for ext_rec in ext_recs_image:
                 ext_rec, ext_id, main_ext_id = self.prepare_rec(ext_rec, main_ext_id)
-                self.write_file_2_pull(identity, ext_model, ext_rec, wa)
+                self.write_file_2_pull(identity, model, ext_model, ext_rec, wa)
                 wa = "a"
 
 

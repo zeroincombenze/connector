@@ -140,12 +140,29 @@ class ResPartner(models.Model):
                         vals[ext_ref] = self.shirt_vals(vals[ext_ref], ext_ref)
                         if ext_ref == "vg7:shipping":
                             vals[ext_ref]["type"] = "delivery"
+                            diff = True
                         elif ext_ref == "vg7:billing":
                             vals[ext_ref]["type"] = "invoice"
+                            diff = False
                             if "vg7:id" not in vals[ext_ref] and "vg7:id" in vals:
                                 vals[ext_ref]["vg7:id"] = vals["vg7:id"]
                                 vals[ext_ref] = set_vg7_id(vals[ext_ref])
+                            check_4_diff = True
                             for nm in (
+                                "vg7:company",
+                                "vg7:name",
+                                "vg7:surename",
+                                "vg7:street",
+                                "vg7:street_number",
+                                "vg7:postal_code",
+                                "vg7:city",
+                                "vg7:region",
+                                "vg7:region_id",
+                                "vg7:email",
+                                "vg7:country",
+                                "vg7:country_id",
+                                "vg7:telephone",
+                                "vg7:telephone2",
                                 "vg7:type",
                                 "vg7:piva",
                                 "vg7:cf",
@@ -158,43 +175,17 @@ class ResPartner(models.Model):
                                 "vg7:pec",
                                 "bank_account_id",
                             ):
-                                if nm in vals[ext_ref] and (
+                                if nm == "vg7:type":
+                                    check_4_diff = False
+                                if nm not in vals[ext_ref]:
+                                    continue
+                                elif (
                                     nm not in vals
                                     or not vals[nm]
-                                    or vals[ext_ref][nm] == vals[nm]
                                 ):
                                     vals[nm] = vals[ext_ref][nm]
-                                    del vals[ext_ref][nm]
-                        for nm in (
-                            "vg7:company",
-                            "vg7:name",
-                            "vg7:surename",
-                            "vg7:street",
-                            "vg7:street_number",
-                            "vg7:postal_code",
-                            "vg7:city",
-                            "vg7:region",
-                            "vg7:region_id",
-                            "vg7:email",
-                            "vg7:country",
-                            "vg7:country_id",
-                            "vg7:telephone",
-                            "vg7:telephone2",
-                        ):
-                            if nm not in vals[ext_ref]:
-                                continue
-                            elif nm in ("vg7:company", "vg7:name", "vg7:surename"):
-                                if vals.get(nm) != vals[ext_ref].get(nm):
-                                    if ext_ref != "vg7:billing":
-                                        diff = True
-                                    elif not vals.get(nm):
-                                        vals[nm] = vals[ext_ref][nm]
-                                else:
-                                    vals[ext_ref][nm] = False
-                            elif nm in vals[ext_ref] and not vals.get(nm):
-                                vals[nm] = vals[ext_ref][nm]
-                            elif vals.get(nm) != vals[ext_ref].get(nm):
-                                diff = True
+                                if check_4_diff and vals[ext_ref][nm] != vals[nm]:
+                                    diff = True
                         if diff:
                             self.env["ir.model.synchro"].logmsg(
                                 "debug", ">>> store(%s,%s)" % (vals[ext_ref], ext_ref)
@@ -202,7 +193,7 @@ class ResPartner(models.Model):
                             cache.set_model_attr(
                                 backend_id, actual_model, ext_ref, vals[ext_ref]
                             )
-                        del vals[ext_ref]
+                            del vals[ext_ref]
                     else:
                         cache.set_model_attr(backend_id, actual_model, ext_ref, {})
         return vals, spec
@@ -247,9 +238,12 @@ class ResPartner(models.Model):
         elif rec and rec.parent_id:
             parent = rec.parent_id
 
-        vals["is_company"] = True
+        decl_is_company = True
+        if "is_company" not in vals:
+            vals["is_company"] = False if vals.get("individual") else True
+            decl_is_company = False
         if vals.get("type") in ("delivery", "invoice"):
-            if vals.get("individual"):
+            if not decl_is_company:
                 vals["is_company"] = False
             if parent and not isinstance(parent, (int, long)):
                 # if (
@@ -262,10 +256,8 @@ class ResPartner(models.Model):
                     or vals.get("name", "").startswith("Unknown")
                 ):
                     vals["name"] = False
-                    vals["is_company"] = False
                 elif not vals.get("name"):
                     vals["name"] = False
-                    vals["is_company"] = False
             if parent and not isinstance(parent, (int, long)):
                 for nm in (
                     "vat",

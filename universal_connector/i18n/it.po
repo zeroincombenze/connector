@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo (10.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-11 12:56+0000\n"
-"PO-Revision-Date: 2024-06-11 12:56+0000\n"
+"POT-Creation-Date: 2024-07-01 07:22+0000\n"
+"PO-Revision-Date: 2024-07-01 07:22+0000\n"
 "Last-Translator: Antonio M. Vigliotti <antoniomaria.vigliotti@gmail.com>\n"
 "Language-Team: Zeroincombenze (https://www.zeroincombenze.it)\n"
 "Language: it\n"
@@ -672,7 +672,7 @@ msgid "No interchange"
 msgstr "No interscambio"
 
 #. module: universal_connector
-#: code:addons/universal_connector/models/ir_model.py:1337
+#: code:addons/universal_connector/models/ir_model.py:1400
 #, python-format
 msgid "No relation for field %s of %s"
 msgstr "NO relation non valida in codice IVA campo %s of %s"

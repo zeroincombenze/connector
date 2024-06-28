@@ -1090,7 +1090,7 @@ class IrModelSynchro(models.Model):
         def atomic_search(cls, domain, has_sequence):
             self.logmsg(
                 "debug",
-                ">>> %(model)s.do_search(%(domain)s",
+                ">>> %(model)s.do_search(%(domain)s)",
                 model=cls.__class__.__name__,
                 ctx={"domain": domain},
             )
@@ -1163,15 +1163,15 @@ class IrModelSynchro(models.Model):
             rec = exec_search(cls, domain, has_sequence, has_active)
         if not rec:
             rec = exec_search(cls, req_domain, has_sequence, has_active)
-        if not rec:
-            if actual_model in ("res.partner", "product.product", "product.template"):
-                domain = reduce_domain(req_domain, (["company_id", "", ""]))
-                if domain:
-                    rec = exec_search(cls, domain, has_sequence, has_active)
-                if not rec:
-                    domain = reduce_domain(req_domain, (["type", "", ""]))
-                    if domain:
-                        rec = exec_search(cls, domain, has_sequence, has_active)
+        # if not rec:
+        #     if actual_model in ("res.partner", "product.product", "product.template"):
+        #         domain = reduce_domain(req_domain, (["company_id", "", ""]))
+        #         if domain:
+        #             rec = exec_search(cls, domain, has_sequence, has_active)
+        #         if not rec:
+        #             domain = reduce_domain(req_domain, (["type", "", ""]))
+        #             if domain:
+        #                 rec = exec_search(cls, domain, has_sequence, has_active)
         if rec:
             if not has_sequence and len(rec) > 16:
                 rec = False
@@ -2311,16 +2311,29 @@ class IrModelSynchro(models.Model):
                 if isinstance(keys, basestring):
                     keys = [keys]
                 for key in keys:
-                    if not vals.get(key):
+                    if key not in vals:
                         if key == "dim_name" and vals.get("name"):
-                            domain.append(
-                                ("dim_name", "=", self.dim_text(vals["name"]))
-                            )
+                            if vmodel in ("res.partner.shipping",
+                                          "res.partner.invoice"):
+                                domain.append(
+                                    ("commercial_company_name", "ilike", vals["name"])
+                                )
+                            else:
+                                domain.append(
+                                    ("dim_name", "=", self.dim_text(vals["name"]))
+                                )
                         elif key in ctx:
                             domain.append((key, "=", ctx[key]))
                         else:
                             domain = []
                             break
+                    elif (
+                            isinstance(vals[key], basestring)
+                            and vals[key] == ""
+                    ):
+                        domain.append("|")
+                        domain.append((key, "=", False))
+                        domain.append((key, "=", ""))
                     elif (
                             key == "amount"
                             and isinstance(vals[key], basestring)
@@ -3094,13 +3107,13 @@ class IrModelSynchro(models.Model):
                 )
                 rec = None
             if rec:
-                if vals:
-                    vals = self.drop_protected_fields(backend_id, vmodel, vals, rec)
                 if hasattr(cls, "assure_values"):
                     vals = actual_cls.assure_values(vals, rec)
                 if vals:
                     if has_active and not rec.active:
                         vals["active"] = True
+                    vals = self.drop_protected_fields(backend_id, vmodel, vals, rec)
+                if vals:
                     try:
                         if actual_model.startswith("account.move"):
                             rec.with_context(check_move_validity=False).write(vals)

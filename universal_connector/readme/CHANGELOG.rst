@@ -1,3 +1,12 @@
+10.0.0.3.8 (2024-07-01)
+~~~~~~~~~~~~~~~~~~~~~~~
+
+* [FIX] Search for shipping and invoice addresses / Migliorie ricerca indirizzi di spedizione e fatturazione
+* [FIX] Tax, account, uom in order lines / IVA, conto e um nelle righe ordini
+* [FIX] Flag is_company in res.partner / Indicatore azienda in nominativi
+* [IMP] uom from vg7 purchase orders
+* [QUA] Test coverage 64% (5084: 1855+3229) [1253 TestPoints] - quality rating 78 (target 100)
+
 10.0.0.3.7 (2024-06-27)
 ~~~~~~~~~~~~~~~~~~~~~~~
 

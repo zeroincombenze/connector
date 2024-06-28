@@ -107,6 +107,7 @@
 
     <record forcecreate="1" id="purchase_order_line_product_uom" model="synchro.channel.model.fields">
         <field name="name">product_uom</field>
+        <field name="counterpart_name">um_id</field>
         <field name="apply">uom()</field>
         <field name="model_id" ref="purchase_order_line"/>
     </record>

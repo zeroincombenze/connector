@@ -227,7 +227,9 @@ class IrModelSynchroApply(models.Model):
                         backend_id, vals, "name", ext_ref, loc_ext_id_name
                     )
                 vals["is_company"] = True
-                vals["individual"] = True
+                vals["individual"] = (True
+                                      if vals.get("lastname") and vals.get("firstname")
+                                      else False)
             if "lastname" in vals:
                 del vals["lastname"]
             if "firstname" in vals:
@@ -324,7 +326,10 @@ class IrModelSynchroApply(models.Model):
         ctx=None,
         product=None,
     ):
-        if loc_name not in vals and (product or "product_id" in vals):
+        if (
+                (loc_name not in vals or not vals.get(loc_name))
+                and (product or "product_id" in vals)
+        ):
             product = product or self.env["product.product"].browse(vals["product_id"])
             accounts = product.product_tmpl_id._get_product_accounts()
             if accounts:
@@ -356,11 +361,13 @@ class IrModelSynchroApply(models.Model):
         ctx=None,
         product=None,
     ):
-        if loc_name not in vals and (product or "product_id" in vals):
-            product = product or self.env["product.product"].browse(vals["product_id"])
-            vals[loc_name] = product.uom_id.id
-        elif not vals.get(loc_name):
-            vals[loc_name] = self.env.ref("product.product_uom_unit").id
+        if loc_name not in vals or not vals.get(loc_name):
+            if product or "product_id" in vals:
+                product = product or self.env["product.product"].browse(
+                    vals["product_id"])
+                vals[loc_name] = product.uom_id.id
+            else:
+                vals[loc_name] = self.env.ref("product.product_uom_unit").id
         return vals
 
     def apply_tax(
@@ -375,7 +382,10 @@ class IrModelSynchroApply(models.Model):
         ctx=None,
         product=None,
     ):
-        if loc_name not in vals and (product or "product_id" in vals):
+        if (
+                (loc_name not in vals or not vals.get(loc_name))
+                and (product or "product_id" in vals)
+        ):
             product = product or self.env["product.product"].browse(vals["product_id"])
             if self.is_purchase(vals, vmodel):
                 tax = product.supplier_taxes_id

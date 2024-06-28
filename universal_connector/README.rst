@@ -1,5 +1,5 @@
 ===========================================================
-|icon| Universal Connector/Connettore universale 10.0.0.3.7
+|icon| Universal Connector/Connettore universale 10.0.0.3.8
 ===========================================================
 
 .. |icon| image:: https://raw.githubusercontent.com/zeroincombenze/connector/10.0/universal_connector/static/description/icon.png
@@ -188,6 +188,15 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 ChangeLog History | Cronologia modifiche
 ----------------------------------------
 
+10.0.0.3.8 (2024-07-01)
+~~~~~~~~~~~~~~~~~~~~~~~
+
+* [FIX] Search for shipping and invoice addresses / Migliorie ricerca indirizzi di spedizione e fatturazione
+* [FIX] Tax, account, uom in order lines / IVA, conto e um nelle righe ordini
+* [FIX] Flag is_company in res.partner / Indicatore azienda in nominativi
+* [IMP] uom from vg7 purchase orders
+* [QUA] Test coverage 64% (5084: 1855+3229) [1253 TestPoints] - quality rating 78 (target 100)
+
 10.0.0.3.7 (2024-06-27)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -306,7 +315,7 @@ La distribuzione `Zeroincombenze® <https://www.zeroincombenze.it/>`__ è proget
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2024-06-27
+Last Update / Ultimo aggiornamento: 2024-07-01
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status
