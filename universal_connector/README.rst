@@ -255,16 +255,6 @@ ChangeLog History | Cronologia modifiche
 * [FIX] Ignore Odoo counterpart fields do not exist in local
 * [FIX] Wrong error messages
 
-10.0.0.2.9 (2022-07-27)
-~~~~~~~~~~~~~~~~~~~~~~~
-
-* [IMP] Enhanced search
-
-10.0.0.2.8 (2022-07-18)
-~~~~~~~~~~~~~~~~~~~~~~~
-
-* [FIX] Partner: check for parent_id / Controlli su import clienti
-
 
 
 Credits | Ringraziamenti
@@ -315,7 +305,7 @@ La distribuzione `Zeroincombenze® <https://www.zeroincombenze.it/>`__ è proget
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2024-07-01
+Last Update / Ultimo aggiornamento: 2024-08-03
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status

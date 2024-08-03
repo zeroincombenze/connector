@@ -1,2 +1,2 @@
-id,customer_billing_id,customer_id,billing_name,billing_surename,billing_street,billing_street_number,billing_country_id,billing_region_id,billing_postal_code,billing_city,billing_piva,billing_bank_id
-\N,\N,101,\N,\N,Via I Maggio,101,39,2,20022,Castano Primo,00115719999,\N
+id,customer_billing_id,customer_id,billing_name,billing_surename,billing_street,billing_street_number,billing_country_id,billing_region_id,billing_postal_code,billing_city,billing_piva,billing_bank_id,billing_codice_univoco,billing_esonerato_fe
+\N,\N,101,\N,\N,Via I Maggio,101,39,2,20022,Castano Primo,00115719999,\N,A1B2C3X,0

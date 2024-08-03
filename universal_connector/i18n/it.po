@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo (10.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-01 07:22+0000\n"
-"PO-Revision-Date: 2024-07-01 07:22+0000\n"
+"POT-Creation-Date: 2024-08-03 12:10+0000\n"
+"PO-Revision-Date: 2024-08-03 12:10+0000\n"
 "Last-Translator: Antonio M. Vigliotti <antoniomaria.vigliotti@gmail.com>\n"
 "Language-Team: Zeroincombenze (https://www.zeroincombenze.it)\n"
 "Language: it\n"
@@ -284,7 +284,7 @@ msgstr "Aspetto dei beni"
 #: model:ir.model.fields,field_description:universal_connector.field_synchro_channel_model_fields_display_name
 #: model:ir.model.fields,field_description:universal_connector.field_wizard_synchro_pull_records_display_name
 msgid "Display Name"
-msgstr "Nome visualizzato"
+msgstr "Mostrare nome"
 
 #. module: universal_connector
 #: selection:synchro.channel,state:0
@@ -396,7 +396,7 @@ msgstr ""
 #. module: universal_connector
 #: selection:synchro.channel.model,model_spec:0
 msgid "Generic Address"
-msgstr "Generic Address"
+msgstr "Indirizzo generico"
 
 #. module: universal_connector
 #: selection:synchro.channel,identity:0
@@ -439,7 +439,7 @@ msgstr "If method is CSV, path where file will be read e written"
 #. module: universal_connector
 #: model:ir.ui.view,arch_db:universal_connector.wizard_pull_records_form_view
 msgid "Import"
-msgstr "Importazione"
+msgstr "Importare"
 
 #. module: universal_connector
 #: model:ir.model.fields,field_description:universal_connector.field_synchro_channel_model_rec_counter
@@ -496,7 +496,7 @@ msgstr "Sezionale"
 #. module: universal_connector
 #: model:ir.model,name:universal_connector.model_account_move_line
 msgid "Journal Item"
-msgstr "Movimento contabile"
+msgstr "Riga contabile"
 
 #. module: universal_connector
 #: model:ir.model,name:universal_connector.model_res_lang
@@ -656,7 +656,7 @@ msgid "No Deep, minimal data"
 msgstr "Dati minimi senza approfondimento"
 
 #. module: universal_connector
-#: code:addons/universal_connector/models/ir_model.py:4069
+#: code:addons/universal_connector/models/ir_model.py:4155
 #, python-format
 msgid "No Error"
 msgstr "Nessun errore"
@@ -945,7 +945,7 @@ msgstr "Regola di approvvigionamento"
 #. module: universal_connector
 #: model:ir.model,name:universal_connector.model_product_product
 msgid "Product"
-msgstr "Prodotti"
+msgstr "Prodotto"
 
 #. module: universal_connector
 #: model:ir.model,name:universal_connector.model_product_category
