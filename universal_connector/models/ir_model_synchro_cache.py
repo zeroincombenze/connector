@@ -334,11 +334,11 @@ class IrModelSynchroCache(models.Model):
     # General purpose functions
     # -------------------------
     @api.model
-    def is_manageable(self, model):
-        return (
-            model not in self.SYSTEM_MODEL_ROOT
-            and model not in self.SYSTEM_MODELS
-            and model not in self.SYSTEM_UNMANAGED
+    def is_manageable(self, model_name):
+        return not (
+            any(map(lambda x: model_name.startswith(x), self.SYSTEM_MODEL_ROOT))
+            or model_name in self.SYSTEM_MODELS
+            or model_name in self.SYSTEM_UNMANAGED
         )
 
     @api.model
@@ -357,7 +357,8 @@ class IrModelSynchroCache(models.Model):
         cache = self.CACHE
         if lifetime:
             self.lifetime(lifetime)
-        for chn_id in self.get_channel_list():
+        for channel in self.get_channel_list():
+            chn_id = channel.id
             if not backend_id or chn_id == backend_id:
                 cache.init_channel(self._cr.dbname, chn_id)
         if model:
@@ -375,7 +376,8 @@ class IrModelSynchroCache(models.Model):
     @api.model_cr_context
     def set_loglevel(self, loglevel):
         self.setup_channels(all=True)
-        for channel_id in self.get_channel_list():
+        for channel in self.get_channel_list():
+            channel_id = channel.id
             self.set_attr(channel_id, "LOGLEVEL", loglevel)
         return True
 
@@ -397,7 +399,12 @@ class IrModelSynchroCache(models.Model):
     #
     @api.model_cr_context
     def get_channel_list(self):
-        return self.CACHE.get_channel_list(self._cr.dbname)
+        return [
+            x
+            for x in self.env["synchro.channel"].browse(
+                self.CACHE.get_channel_list(self._cr.dbname)
+            )
+        ]
 
     @api.model_cr_context
     def set_channel_base(self, backend_id):
@@ -776,7 +783,7 @@ class IrModelSynchroCache(models.Model):
     @api.model_cr_context
     def store_model_1_channel(self, backend_id, rec):
         model = rec.name
-        if rec.field_2complete:
+        if rec.cron_sync:
             self.set_model_attr(backend_id, model, "2PULL", True)
         if not self.get_attr(backend_id, "TNL"):
             tnldict = {}
@@ -849,7 +856,7 @@ class IrModelSynchroCache(models.Model):
         if (
             backend_id
             and backend_id == rec.synchro_channel_id.id
-            and backend_id in self.get_channel_list()
+            and backend_id in [x.id for x in self.get_channel_list()]
         ):
             self.env["ir.model.synchro"].logmsg("any", "$$$>>> ALREADY SET")
             return
@@ -1048,7 +1055,8 @@ class IrModelSynchroCache(models.Model):
                 )
         elif not recs and not backend:
             self.setup_channels(all=True)
-            for channel_id in self.get_channel_list():
+            for channel in self.get_channel_list():
+                channel_id = channel.id
                 backend = self.env["synchro.channel"].browse(channel_id)
                 if backend.identity == "odoo":
                     channel_model_model.build_odoo_synchro_model(channel_id, ext_model)

@@ -625,7 +625,7 @@ msgid "Model mapping for Synchonization"
 msgstr "Abbinamento modello per sincronizzazione"
 
 #. module: universal_connector
-#: model:ir.model.fields,field_description:universal_connector.field_synchro_channel_model_field_2complete
+#: model:ir.model.fields,field_description:universal_connector.field_synchro_channel_model_cron_sync
 msgid "Model to complete asynchronously"
 msgstr "Modello da completare in modo asincrono"
 

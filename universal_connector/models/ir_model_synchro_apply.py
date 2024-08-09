@@ -210,30 +210,51 @@ class IrModelSynchroApply(models.Model):
         if ext_ref in vals and loc_name != ext_ref:
             vals[loc_name] = vals[ext_ref]
             del vals[ext_ref]
-        if vals.get("lastname") or vals.get("firstname"):
-            if not vals.get("name") or vals.get("individual"):
-                # TODO> xx python bug?
-                xx = (
-                    "%s %s %s"
-                    % (
-                        vals.get("name", ""),
-                        vals.get("lastname", ""),
-                        vals.get("firstname", ""),
-                    )
-                ).strip()
-                vals["name"] = xx.replace("  ", " ")
-                if not vals["name"] and vals.get("individual"):
-                    vals = self.apply_set_tmp_name(
-                        backend_id, vals, "name", ext_ref, loc_ext_id_name
-                    )
-                vals["is_company"] = True
-                vals["individual"] = (True
-                                      if vals.get("lastname") and vals.get("firstname")
-                                      else False)
-            if "lastname" in vals:
-                del vals["lastname"]
-            if "firstname" in vals:
-                del vals["firstname"]
+        if (
+            vals.get("lastname", "") and vals.get("firstname", "")
+        ):
+            if self.env.user.company_id.partner_id.splitmode.startswith("F"):
+                vals["name"] = (
+                    vals.get("firstname", "")
+                    + " "
+                    + vals.get("lastname", "")
+                ).replace("  ", " ").strip()
+            else:
+                vals["name"] = (
+                    vals.get("lastname", "")
+                    + " "
+                    + vals.get("firstname", "")
+                ).replace("  ", " ").strip()
+            del vals["firstname"]
+            del vals["lastname"]
+            vals["is_company"] = True
+            vals["individual"] = True
+        elif (
+            not vals.get("name")
+            or vals.get("individual")
+        ):
+            if self.env.user.company_id.partner_id.splitmode.startswith("F"):
+                vals["name"] = (
+                    vals.get("name", "")
+                    + " "
+                    + vals.get("firstname", "")
+                    + " "
+                    + vals.get("lastname", "")
+                ).replace("  ", " ").strip()
+            else:
+                vals["name"] = (
+                    vals.get("name", "")
+                    + " "
+                    + vals.get("lastname", "")
+                    + " "
+                    + vals.get("firstname", "")
+                ).replace("  ", " ").strip()
+            if not vals["name"] and vals.get("individual"):
+                vals = self.apply_set_tmp_name(
+                    backend_id, vals, "name", ext_ref, loc_ext_id_name
+                )
+            vals["is_company"] = True
+            vals["individual"] = False
         return vals
 
     def apply_vat(

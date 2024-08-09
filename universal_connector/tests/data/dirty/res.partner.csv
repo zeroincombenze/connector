@@ -1,3 +1,4 @@
 id,_action,_identity,vat,name,street,city,electronic_invoice_subjected,_why
 z0bug.res_partner_1,,,IT00115719999,Partner 1,"","",False,Dirty customer
 z0bug.partner_mycompany,,oe8:,IT05111810015,Main Company,\N,\N,\N,Dirty company name
+z0bug.res_partner_9,,,,ROSSI,,,,Firstname+Lastname

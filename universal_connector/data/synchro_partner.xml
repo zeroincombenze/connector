@@ -17,7 +17,7 @@
                     ['vat', 'type', 'is_company'],
                     ['name', 'type', 'is_company'],
                     ['dim_name', 'type', 'is_company'],)</field>
-        <field name="field_2complete">True</field>
+        <field name="cron_sync">True</field>
         <field name="sequence">12</field>
     </record>
 
@@ -38,7 +38,7 @@
                     ['vat', 'is_company'],
                     ['name', 'is_company'],
                     ['name'])</field>
-        <field name="field_2complete">True</field>
+        <field name="cron_sync">True</field>
         <field name="sequence">14</field>
     </record>
 
@@ -77,7 +77,7 @@
                         ['vat'],
                         ['name'],
                         ['dim_name', 'type'])</field>
-        <field name="field_2complete">True</field>
+        <field name="cron_sync">True</field>
         <field name="sequence">14</field>
     </record>
 
@@ -115,7 +115,7 @@
 
     <record forcecreate="1" id="res_partner_customer" model="synchro.channel.model.fields">
         <field name="name">customer</field>
-        <field name="apply">true</field>
+        <field name="apply">True</field>
         <field name="model_id" ref="res_partner"/>
     </record>
 
@@ -154,7 +154,7 @@
 
     <record forcecreate="1" id="res_partner_is_company" model="synchro.channel.model.fields">
         <field name="name">is_company</field>
-        <field name="apply">true</field>
+        <field name="apply">True</field>
         <field name="model_id" ref="res_partner"/>
     </record>
 
@@ -228,7 +228,7 @@
 
     <record forcecreate="1" id="res_partner_supplier" model="synchro.channel.model.fields">
         <field name="name">supplier</field>
-        <field name="apply">false</field>
+        <field name="apply">False</field>
         <field name="model_id" ref="res_partner"/>
     </record>
 
@@ -330,7 +330,7 @@
 
     <record forcecreate="1" id="res_partner_shipping_is_company" model="synchro.channel.model.fields">
         <field name="name">is_company</field>
-        <field name="apply">true</field>
+        <field name="apply">False</field>
         <field name="model_id" ref="res_partner_shipping"/>
     </record>
 
@@ -441,7 +441,7 @@
 
     <record forcecreate="1" id="res_partner_invoice_is_company" model="synchro.channel.model.fields">
         <field name="name">is_company</field>
-        <field name="apply">true</field>
+        <field name="apply">True</field>
         <field name="model_id" ref="res_partner_invoice"/>
     </record>
 
@@ -547,13 +547,13 @@
 
     <record forcecreate="1" id="res_partner_supplier_is_company" model="synchro.channel.model.fields">
         <field name="name">is_company</field>
-        <field name="apply">true</field>
+        <field name="apply">True</field>
         <field name="model_id" ref="res_partner_supplier_rec"/>
     </record>
 
     <record forcecreate="1" id="res_partner_supplier_supplier" model="synchro.channel.model.fields">
         <field name="name">supplier</field>
-        <field name="apply">true</field>
+        <field name="apply">True</field>
         <field name="model_id" ref="res_partner_supplier_rec"/>
     </record>
 

@@ -9,7 +9,7 @@
 #
 {
     "name": "Universal Connector",
-    "version": "10.0.0.3.8",
+    "version": "10.0.0.3.9",
     "category": "Generic Modules",
     "summary": "Universal Connector",
     "author": "SHS-AV s.r.l.,Odoo Community Association (OCA)",

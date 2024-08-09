@@ -1,3 +1,10 @@
+10.0.0.3.9 (2024-08-10)
+~~~~~~~~~~~~~~~~~~~~~~~
+
+* [FIX] Import person from vg7
+* [IMP] Some internal field renamed
+* [QUA] Test coverage 64% (5068: 1832+3236) [1376 TestPoints] - quality rating 82 (target 100)
+
 10.0.0.3.8 (2024-07-01)
 ~~~~~~~~~~~~~~~~~~~~~~~
 

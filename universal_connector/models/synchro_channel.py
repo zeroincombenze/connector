@@ -128,7 +128,23 @@ class SynchroChannel(models.Model):
         "Import Counter", default=0, help="Last imported record number"
     )
     workflow_model = fields.Char("Current Workflow Model", readonly=True)
-    odoo_version = fields.Char("External Odoo version")
+    odoo_version = fields.Selection(
+        [
+            ("6.1", "Odoo 6.1 - Python2"),
+            ("7.0", "Odoo 7.0 - Python2"),
+            ("8.0", "Odoo 8.0 - Python2"),
+            ("9.0", "Odoo 9.0 - Python2"),
+            ("10.0", "Odoo 10.0 - Python2"),
+            ("11.0", "Odoo 11.0 - Python3"),
+            ("12.0", "Odoo 12.0 - Python3"),
+            ("13.0", "Odoo 13.0 - Python3"),
+            ("14.0", "Odoo 14.0 - Python3"),
+            ("15.0", "Odoo 15.0 - Python3"),
+            ("16.0", "Odoo 16.0 - Python3"),
+            ("17.0", "Odoo 17.0 - Python3"),
+            # ("18.0", "Odoo 18.0 - Python3"),
+        ], "External Odoo version"
+    )
 
     @api.multi
     def button_check_connection(self):
@@ -162,7 +178,8 @@ class SynchroChannel(models.Model):
             channel_ctr = 0
             if not cache.get_channel_list():
                 cache.setup_channels(all=True)
-            for channel_id in cache.get_channel_list():
+            for channel in cache.get_channel_list():
+                channel_id = channel.id
                 if channel_from:
                     break
                 channel_ctr += 1
@@ -359,7 +376,8 @@ class SynchroChannelModel(models.Model):
         ],
         string="Specific search domain",
     )
-    field_2complete = fields.Char("Model to complete asynchronously")
+    cron_sync = fields.Char("Model to complete asynchronously",
+                            oldname="field_2complete")
     sequence = fields.Integer("Priority", default=16)
     synchro_channel_id = fields.Many2one("synchro.channel")
     field_ids = fields.One2many(

@@ -98,6 +98,7 @@ __version__ = "10.0.0.2.5"
 MODEL_KEYS = {
     "account.account.type": {"code": "name"},
     "account.account": {},
+    "account.invoice": {"code": "number"},
     "account.journal": {},
     "account.payment.term": {"code": "name"},
     "account.tax": {"code": "description"},
@@ -139,7 +140,13 @@ MODEL_WITH_CHILD = {
     "account.invoice": {
         "child_model": "account.invoice.line",
         "child_field": "invoice_line_ids",
+        "child_key": "sequence",
         "parent_field": "invoice_id",
+        "oe8:": {
+            "fqn": "account.invoice.line.csv",
+            "parent_field": "invoice_id",
+            "child_field": "invoice_line",
+        },
     },
     "account.move": {
         "child_model": "account.move.line",
@@ -415,7 +422,7 @@ class ExtTestEnv(object):
         self.lang = self.lang or "it_IT"
         self.logfn = __file__.replace(".py", ".log")
         # TODO
-        self.ask = False
+        self.ask = True
         self.ctr = 0
         if pth.isfile(self.logfn):
             os.unlink(self.logfn)
@@ -1068,6 +1075,7 @@ class ExtTestEnv(object):
                             % child_model)
             if model == "account.journal":
                 self.assure_journals()
+        self.reset_cache()
 
     def teardown(self):
         for model in self.model_wkf:
@@ -1478,33 +1486,7 @@ class ExtTestEnv(object):
     def check_records(
             self, identity, model, loc_id, test_rec, child_test_recs, child_model,
             mode=None, state=None, lang=None):
-        why, test_rec = self.extract_why(test_rec)
-        self.write_log(
-            "check_record(%s, %s, %s, %s)  ##<%s>"
-            % (identity, model, loc_id, test_rec, why),
-            echo=False)
-        spec = False
-        if model.startswith("res.partner.") and model != "res.partner.bank":
-            spec = {
-                "shipping": "delivery",
-                "billing": "invoice",
-                "supplier": "supplier",
-                "company": "company",
-            }[model.split(".")[-1]]
-            model = "res.partner"
-        fields_2_ignore = []
-        for ident in IDENTITY_LIST:
-            if ident != identity:
-                fields_2_ignore.append(self.get_ext_id_field(ident, model=model))
-        child_field = (MODEL_WITH_CHILD[model]["child_field"]
-                       if model in MODEL_WITH_CHILD else "")
-        loc_rec = self.resource_browse(model, loc_id, lang=lang, quiet=True)
-        checked = False
-        for field in [x for x in dir(loc_rec)
-                      if (not x.startswith("_") and x != child_field)]:
-            loc_name = self.get_loc_name(model, field, identity)[0]
-            if loc_name in fields_2_ignore:
-                continue
+        def check_1_field():
             if loc_name in test_rec:
                 if not self.compare(
                         model,
@@ -1529,6 +1511,40 @@ class ExtTestEnv(object):
                     )
                 self.ctr += 1
                 checked = True
+
+        why, test_rec = self.extract_why(test_rec)
+        self.write_log(
+            "check_record(%s, %s, %s, %s)  ##<%s>"
+            % (identity, model, loc_id, test_rec, why),
+            echo=False)
+        spec = False
+        if model.startswith("res.partner.") and model != "res.partner.bank":
+            spec = {
+                "shipping": "delivery",
+                "billing": "invoice",
+                "supplier": "supplier",
+                "company": "company",
+            }[model.split(".")[-1]]
+            model = "res.partner"
+        fields_2_ignore = []
+        for ident in IDENTITY_LIST:
+            if ident != identity:
+                fields_2_ignore.append(self.get_ext_id_field(ident, model=model))
+        child_field = (MODEL_WITH_CHILD[model]["child_field"]
+                       if model in MODEL_WITH_CHILD else "")
+        loc_rec = self.resource_browse(model, loc_id, lang=lang, quiet=True)
+        check_name = checked = False
+        for field in [x for x in dir(loc_rec)
+                      if (not x.startswith("_") and x != child_field)]:
+            loc_name = self.get_loc_name(model, field, identity)[0]
+            if loc_name in fields_2_ignore:
+                continue
+            if loc_name in ("firstname", "lastname"):
+                check_name = True
+            check_1_field()
+        if check_name:
+            loc_name = "name"
+            check_1_field()
         if not checked:
             self.write_log("No field matched for %s[%s]" % (model, loc_id))
         if child_field:
@@ -1971,6 +1987,7 @@ def main(cli_args=[]):
             "sale.order",
             "purchase.order",
             "stock.picking.package.preparation",
+            "account.invoice",
     )
     ext_test_env.store_csv_response(identity, MODELS)
     test_prio = "synchro"

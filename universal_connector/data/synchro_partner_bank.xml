@@ -7,7 +7,7 @@
         <field name="counterpart_name">banks</field>
         <field name="synchro_channel_id" ref="channel_vg7"/>
         <field name="search_keys">(['acc_number', 'company_id'],)</field>
-        <field name="field_2complete">True</field>
+        <field name="cron_sync">True</field>
         <field name="sequence">8</field>
     </record>
 
@@ -18,7 +18,7 @@
         <field name="synchro_channel_id" ref="channel_vg7"/>
         <field name="model_spec">company</field>
         <field name="search_keys">(['acc_number', 'company_id'],)</field>
-        <field name="field_2complete">True</field>
+        <field name="cron_sync">True</field>
         <field name="sequence">8</field>
     </record>
 

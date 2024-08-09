@@ -44,6 +44,7 @@
                     <field name="name"/>
                     <field name="prefix"/>
                     <field name="identity"/>
+                    <field name="odoo_version" attrs="{'invisible': [('identity', '!=', 'odoo')]}"/>
                     <field name="method"/>
                     <field name="client_key"/>
                     <field name="password" password="True"/>
@@ -66,7 +67,7 @@
                         <field name="counterpart_name"/>
                         <field name="field_uname"/>
                         <field name="model_spec"/>
-                        <field name="field_2complete"/>
+                        <field name="cron_sync"/>
                         <field name="sequence"/>
                     </tree>
                 </field>
@@ -90,7 +91,7 @@
                 <field name="counterpart_name"/>
                 <field name="field_uname"/>
                 <field name="model_spec"/>
-                <field name="field_2complete"/>
+                <field name="cron_sync"/>
                 <field name="sequence"/>
                 <field name="synchro_channel_id"/>
             </tree>
@@ -108,7 +109,7 @@
                     <field name="field_uname"/>
                     <field name="search_keys"/>
                     <field name="model_spec"/>
-                    <field name="field_2complete"/>
+                    <field name="cron_sync"/>
                     <field name="sequence"/>
                     <field name="synchro_channel_id"/>
                     <field name="rec_counter"/>

@@ -14,6 +14,7 @@
     <record id="channel_odoo7" model="synchro.channel">
         <field name="name">Odoo 7.0</field>
         <field name="prefix">oe7</field>
+        <field name="odoo_version">7.0</field>
         <field name="identity">odoo</field>
         <field name="method">XML</field>
         <field name="client_key">zeroadm</field>
@@ -23,6 +24,7 @@
     <record id="channel_odoo8" model="synchro.channel">
         <field name="name">Odoo 8.0</field>
         <field name="prefix">oe8</field>
+        <field name="odoo_version">8.0</field>
         <field name="identity">odoo</field>
         <field name="client_key">zeroadm</field>
         <field name="active" eval="True"/>
@@ -31,6 +33,7 @@
     <record id="channel_odoo10" model="synchro.channel">
         <field name="name">Odoo 10.0</field>
         <field name="prefix">oe10</field>
+        <field name="odoo_version">10.0</field>
         <field name="identity">odoo</field>
         <field name="client_key">zeroadm</field>
         <field name="active" eval="True"/>

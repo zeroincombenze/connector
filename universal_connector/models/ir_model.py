@@ -169,23 +169,23 @@ from odoo.osv import expression
 _logger = logging.getLogger(__name__)
 try:
     from python_plus import unicodes
-except ImportError as err:
+except ImportError as err:  # pragma: no cover
     _logger.error(err)
 try:
     from unidecode import unidecode
-except ImportError as err:
+except ImportError as err:  # pragma: no cover
     _logger.error(err)
 try:
     from os0 import os0
-except ImportError as err:
+except ImportError as err:  # pragma: no cover
     _logger.error(err)
 try:
     from clodoo import transodoo
-except ImportError as err:
+except ImportError as err:  # pragma: no cover
     _logger.error(err)
 try:
     import oerplib
-except ImportError as err:
+except ImportError as err:  # pragma: no cover
     _logger.error(err)
 
 WORKFLOW = {
@@ -373,7 +373,7 @@ class IrModelSynchro(models.Model):
 
     def _build_unique_index(self, model, prefix):
         """Build unique index on table to <vg7>_id for performance"""
-        if isinstance(model, (list, tuple)):
+        if isinstance(model, (list, tuple)):    # pragma: no cover
             table = model[0].replace(".", "_")
         else:
             table = model.replace(".", "_")
@@ -392,9 +392,7 @@ class IrModelSynchro(models.Model):
         )
 
     def wep_text(self, text):
-        if text:
-            return unidecode(text).strip()
-        return text
+        return unidecode(text).strip() if text else text
 
     def dim_text(self, text):
         text = self.wep_text(text)
@@ -415,7 +413,7 @@ class IrModelSynchro(models.Model):
         if isinstance(loglevel, basestring):
             reqloglevel = loglevel
             curloglevel = self.LOGLEVEL
-        else:
+        else:       # pragma: no cover
             curloglevel = reqloglevel = self.LOGLEVEL
         loglevel2num = {
             "error": "4",
@@ -431,11 +429,11 @@ class IrModelSynchro(models.Model):
             curloglevel = loglevel2num.get(curloglevel, "3")
         try:
             full_msg = os0.u(msg_text % ctx)
-        except BaseException:
+        except BaseException:   # pragma: no cover
             full_msg = os0.u(msg_text)
         if reqloglevel >= curloglevel:
             _logger.info(full_msg)
-        if reqloglevel in ("!", "4"):
+        if reqloglevel in ("!", "4"):   # pragma: no cover
             return self.env["ir.model.synchro.log"].logger(
                 model, rec, full_msg, logrec=logrec, id=ctx["id"]
             )
@@ -481,7 +479,7 @@ class IrModelSynchro(models.Model):
             "res.partner.supplier",
             "res.partner.bank.company",
         ):
-            actual_model = ".".join([x for x in model.split(".")[:-1]])
+            actual_model = model.rsplit(".", 1)[0]
         if only_name:
             return actual_model
         return self.env[actual_model]
@@ -563,7 +561,7 @@ class IrModelSynchro(models.Model):
 
     def drop_fields(self, vals, to_delete):
         for name in to_delete:
-            if isinstance(vals, (list, tuple)):
+            if isinstance(vals, (list, tuple)):     # pragma: no cover
                 del vals[vals.index(name)]
             else:
                 del vals[name]
@@ -578,7 +576,7 @@ class IrModelSynchro(models.Model):
             if def_ext_id_name in vals and def_ext_id_name != ext_id_name:
                 saved_ext_id = vals[def_ext_id_name]
         actual_model = self.get_actual_model(vmodel, only_name=True)
-        if isinstance(vals, (list, tuple)):
+        if isinstance(vals, (list, tuple)):     # pragma: no cover
             to_delete = list(
                 set(vals) - set(cache.get_struct_attr(actual_model).keys())
             )
@@ -594,7 +592,7 @@ class IrModelSynchro(models.Model):
         cache = self.env["ir.model.synchro.cache"]
         actual_model = self.get_actual_model(vmodel, only_name=True)
         for field in vals.copy():
-            if field not in rec:
+            if field not in rec:    # pragma: no cover
                 del vals[field]
                 continue
             protect_update = max(
@@ -3478,7 +3476,8 @@ class IrModelSynchro(models.Model):
         cache = self.env["ir.model.synchro.cache"]
         cache.open()
         cache.setup_channels(all=True)
-        for channel_id in cache.get_channel_list().copy():
+        for channel in cache.get_channel_list().copy():
+            channel_id = channel
             if not cache.get_attr(channel_id, "COUNTERPART_URL") and not cache.get_attr(
                 channel_id, "EXCHANGE_PATH"
             ):
@@ -3850,7 +3849,8 @@ class IrModelSynchro(models.Model):
         cache.open(model=only_model)
         cache.setup_channels(all=True)
         local_ids = []
-        for channel_id in cache.get_channel_list().copy():
+        for channel in cache.get_channel_list().copy():
+            channel_id = channel.id
             if datetime.now() > datetime_stop:
                 break
             if not cache.get_attr(channel_id, "COUNTERPART_URL") and not cache.get_attr(
@@ -3950,7 +3950,8 @@ class IrModelSynchro(models.Model):
             if not cache.is_struct(model):
                 continue
             cache.setup_channels(all=True)
-            for backend_id in cache.get_channel_list().copy():
+            for backend in cache.get_channel_list():
+                backend_id = backend.id
                 channel = self.env["synchro.channel"].browse(backend_id)
                 cache.open(model=model, cls=cls, backend=channel)
                 identity = cache.get_attr(backend_id, "IDENTITY")
