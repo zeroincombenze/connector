@@ -1,0 +1,5 @@
+id,code,name,user_type,company_id
+152,152100,Crediti v/clienti Italia,1,3
+250,250100,Debiti v/fornitori Italia,2,3
+180,180002,Bank,3,3
+510,510000,Ricavi da merci e servizi,7,3

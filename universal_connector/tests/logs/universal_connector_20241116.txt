@@ -1,0 +1,1 @@
+2024-11-16 17:46:55,000 584391 DAEMON test_universal_connector_12 run_odoo_debug.sh: cd /home/odoo/12.0/venv_odoo && source ./bin/activate

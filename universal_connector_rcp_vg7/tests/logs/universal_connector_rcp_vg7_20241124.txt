@@ -1,0 +1,68 @@
+2024-11-24 14:55:56,131 429911 INFO ? odoo: Odoo version 10.0
+2024-11-24 14:55:56,131 429911 INFO ? odoo: Using configuration file at /home/odoo/10.0/connector/universal_connector_rcp_vg7/tests/logs/zero10.connector.universal_connector_rcp_vg7.conf
+2024-11-24 14:55:56,131 429911 INFO ? odoo: addons paths: ['/home/odoo/.local/share/Odoo10/addons/10.0', u'/home/odoo/10.0/odoo/addons', u'/home/odoo/10.0/addons', u'/home/odoo/.local/share/Odoo12/addons', u'/home/odoo/10.0/account-analytic', u'/home/odoo/10.0/account-budgeting', u'/home/odoo/10.0/account-closing', u'/home/odoo/10.0/account-consolidation', u'/home/odoo/10.0/account-financial-reporting', u'/home/odoo/10.0/account-financial-tools', u'/home/odoo/10.0/account-fiscal-rule', u'/home/odoo/10.0/account-invoice-reporting', u'/home/odoo/10.0/account-invoicing', u'/home/odoo/10.0/account-payment', u'/home/odoo/10.0/account-reconcile', u'/home/odoo/10.0/bank-payment', u'/home/odoo/10.0/bank-statement-import', u'/home/odoo/10.0/calendar', u'/home/odoo/10.0/commission', u'/home/odoo/10.0/community-data-files', u'/home/odoo/10.0/connector', u'/home/odoo/10.0/contract', u'/home/odoo/10.0/credit-control', u'/home/odoo/10.0/crm', u'/home/odoo/10.0/currency', u'/home/odoo/10.0/data-protection', u'/home/odoo/10.0/delivery-carrier', u'/home/odoo/10.0/e-commerce', u'/home/odoo/10.0/edi', u'/home/odoo/10.0/helpdesk', u'/home/odoo/10.0/hr', u'/home/odoo/10.0/intrastat-extrastat', u'/home/odoo/10.0/knowledge', u'/home/odoo/10.0/l10n-italy', u'/home/odoo/10.0/l10n-italy-supplemental', u'/home/odoo/10.0/maintenance', u'/home/odoo/10.0/management-system', u'/home/odoo/10.0/manufacture', u'/home/odoo/10.0/margin-analysis', u'/home/odoo/10.0/mis-builder', u'/home/odoo/10.0/multi-company', u'/home/odoo/10.0/partner-contact', u'/home/odoo/10.0/product-attribute', u'/home/odoo/10.0/product-kitting', u'/home/odoo/10.0/product-variant', u'/home/odoo/10.0/profiles', u'/home/odoo/10.0/project', u'/home/odoo/10.0/purchase-reporting', u'/home/odoo/10.0/purchase-workflow', u'/home/odoo/10.0/queue', u'/home/odoo/10.0/report-print-send', u'/home/odoo/10.0/reporting-engine', u'/home/odoo/10.0/rma', u'/home/odoo/10.0/sale-financial', u'/home/odoo/10.0/sale-reporting', u'/home/odoo/10.0/sale-workflow', u'/home/odoo/10.0/search-engine', u'/home/odoo/10.0/server-auth', u'/home/odoo/10.0/server-tools', u'/home/odoo/10.0/server-ux', u'/home/odoo/10.0/social', u'/home/odoo/10.0/stock-logistics-barcode', u'/home/odoo/10.0/stock-logistics-reporting', u'/home/odoo/10.0/stock-logistics-tracking', u'/home/odoo/10.0/stock-logistics-transport', u'/home/odoo/10.0/stock-logistics-warehouse', u'/home/odoo/10.0/stock-logistics-workflow', u'/home/odoo/10.0/storage', u'/home/odoo/10.0/timesheet', u'/home/odoo/10.0/uncovered', u'/home/odoo/10.0/web', u'/home/odoo/10.0/webhook', u'/home/odoo/10.0/website', u'/home/odoo/10.0/wms', u'/home/odoo/10.0/zerobug-test']
+2024-11-24 14:55:56,131 429911 INFO ? odoo: database: odoo10@localhost:5432
+2024-11-24 14:55:56,143 429911 INFO ? odoo.service.server: HTTP service (werkzeug) running on NB200Z0.:27010
+2024-11-24 14:55:56,157 429911 INFO test_universal_connector_rcp_vg7_10 odoo.modules.loading: loading 1 modules...
+2024-11-24 14:55:56,221 429911 INFO test_universal_connector_rcp_vg7_10 odoo.modules.loading: 1 modules loaded in 0.06s, 0 queries
+2024-11-24 14:55:58,048 429911 INFO test_universal_connector_rcp_vg7_10 odoo.modules.loading: loading 49 modules...
+2024-11-24 14:55:58,157 429911 INFO test_universal_connector_rcp_vg7_10 odoo.addons.report.models.report: Will use the Wkhtmltopdf binary at /home/odoo/10.0/venv_odoo/bin/wkhtmltopdf
+2024-11-24 14:55:58,355 429911 INFO test_universal_connector_rcp_vg7_10 odoo.modules.loading: 49 modules loaded in 0.31s, 0 queries
+2024-11-24 14:55:58,360 429911 INFO test_universal_connector_rcp_vg7_10 odoo.modules.loading: loading 50 modules...
+2024-11-24 14:55:58,734 429911 INFO test_universal_connector_rcp_vg7_10 odoo.modules.registry: module universal_connector_rcp_vg7: creating or updating database tables
+2024-11-24 14:55:58,884 429911 WARNING test_universal_connector_rcp_vg7_10 odoo.addons.base.module.module: module universal_connector_rcp_vg7: description is empty !
+2024-11-24 14:55:58,884 429911 INFO test_universal_connector_rcp_vg7_10 odoo.modules.loading: loading universal_connector_rcp_vg7/data/synchro_channel.xml
+2024-11-24 14:55:58,888 429911 INFO test_universal_connector_rcp_vg7_10 odoo.addons.universal_connector_base.models.ir_model_synchro_cache: > clean_cache(-1,None,-1)
+2024-11-24 14:55:58,896 429911 INFO test_universal_connector_rcp_vg7_10 odoo.modules.loading: loading universal_connector_rcp_vg7/data/synchro_partner.xml
+2024-11-24 14:55:59,167 429911 INFO test_universal_connector_rcp_vg7_10 odoo.modules.loading: loading universal_connector_rcp_vg7/data/synchro_account.xml
+2024-11-24 14:55:59,210 429911 INFO test_universal_connector_rcp_vg7_10 odoo.modules.loading: loading universal_connector_rcp_vg7/data/synchro_country.xml
+2024-11-24 14:55:59,276 429911 INFO test_universal_connector_rcp_vg7_10 odoo.modules.loading: loading universal_connector_rcp_vg7/data/synchro_account_invoice.xml
+2024-11-24 14:55:59,395 429911 INFO test_universal_connector_rcp_vg7_10 odoo.modules.loading: loading universal_connector_rcp_vg7/data/synchro_account_tax.xml
+2024-11-24 14:55:59,415 429911 INFO test_universal_connector_rcp_vg7_10 odoo.modules.loading: loading universal_connector_rcp_vg7/data/synchro_package_preparation.xml
+2024-11-24 14:55:59,522 429911 INFO test_universal_connector_rcp_vg7_10 odoo.modules.loading: loading universal_connector_rcp_vg7/data/synchro_partner_bank.xml
+2024-11-24 14:55:59,546 429911 INFO test_universal_connector_rcp_vg7_10 odoo.modules.loading: loading universal_connector_rcp_vg7/data/synchro_product.xml
+2024-11-24 14:55:59,611 429911 INFO test_universal_connector_rcp_vg7_10 odoo.modules.loading: loading universal_connector_rcp_vg7/data/synchro_purchase_order.xml
+2024-11-24 14:55:59,670 429911 INFO test_universal_connector_rcp_vg7_10 odoo.modules.loading: loading universal_connector_rcp_vg7/data/synchro_sale_order.xml
+2024-11-24 14:55:59,818 429911 INFO test_universal_connector_rcp_vg7_10 odoo.modules.module: odoo.addons.universal_connector_rcp_vg7.tests.test_backend running tests.
+2024-11-24 14:55:59,819 429911 INFO test_universal_connector_rcp_vg7_10 odoo.addons.universal_connector_rcp_vg7.tests.test_backend: test_01_connection (odoo.addons.universal_connector_rcp_vg7.tests.test_backend.MyTest)
+2024-11-24 14:55:59,897 429911 INFO test_universal_connector_rcp_vg7_10 odoo.addons.universal_connector_rcp_vg7.tests.testenv: 🎺🎺🎺 Starting test v2.0.21 (debug_level=0, commit=True)
+2024-11-24 14:55:59,899 429911 INFO test_universal_connector_rcp_vg7_10 odoo.addons.universal_connector_rcp_vg7.tests.testenv: 🎺🎺 Testing module: universal_connector_rcp_vg7 (10.0.0.3.10)
+2024-11-24 14:55:59,899 429911 INFO test_universal_connector_rcp_vg7_10 odoo.addons.universal_connector_rcp_vg7.tests.testenv: 🎺🎺 Loading data from: synchro.channel 
+2024-11-24 14:55:59,906 429911 INFO test_universal_connector_rcp_vg7_10 odoo.addons.universal_connector_base.models.ir_model_synchro_cache: > clean_cache(-1,None,-1)
+2024-11-24 14:55:59,912 429911 INFO test_universal_connector_rcp_vg7_10 odoo.addons.universal_connector_base.models.ir_model_synchro_cache: > clean_cache(-1,None,-1)
+2024-11-24 14:55:59,918 429911 INFO test_universal_connector_rcp_vg7_10 odoo.addons.universal_connector_base.models.ir_model_synchro_cache: > clean_cache(-1,None,-1)
+2024-11-24 14:55:59,921 429911 INFO test_universal_connector_rcp_vg7_10 odoo.addons.universal_connector_base.models.ir_model_synchro_cache: > clean_cache(-1,None,-1)
+2024-11-24 14:55:59,922 429911 INFO test_universal_connector_rcp_vg7_10 odoo.addons.universal_connector_base.models.ir_model_synchro_cache: > clean_cache(-1,None,-1)
+2024-11-24 14:55:59,925 429911 INFO test_universal_connector_rcp_vg7_10 odoo.addons.universal_connector_base.models.ir_model_synchro_cache: > clean_cache(-1,None,-1)
+2024-11-24 14:55:59,927 429911 INFO test_universal_connector_rcp_vg7_10 odoo.addons.universal_connector_base.models.ir_model_synchro_cache: > clean_cache(-1,None,-1)
+2024-11-24 14:55:59,929 429911 INFO test_universal_connector_rcp_vg7_10 odoo.addons.universal_connector_base.models.ir_model_synchro_cache: > clean_cache(-1,None,-1)
+2024-11-24 14:55:59,932 429911 INFO test_universal_connector_rcp_vg7_10 odoo.addons.universal_connector_base.models.ir_model_synchro_cache: > clean_cache(-1,None,-1)
+2024-11-24 14:55:59,933 429911 INFO test_universal_connector_rcp_vg7_10 odoo.addons.universal_connector_base.models.ir_model_synchro_cache: > clean_cache(-1,None,-1)
+2024-11-24 14:55:59,936 429911 INFO test_universal_connector_rcp_vg7_10 odoo.addons.universal_connector_base.models.ir_model_synchro_cache: > clean_cache(-1,None,-1)
+2024-11-24 14:55:59,938 429911 INFO test_universal_connector_rcp_vg7_10 odoo.addons.universal_connector_base.models.ir_model_synchro_cache: > clean_cache(-1,None,-1)
+2024-11-24 14:55:59,939 429911 INFO test_universal_connector_rcp_vg7_10 odoo.addons.universal_connector_rcp_vg7.tests.test_backend: 🎺 Starting connection test vg7
+2024-11-24 14:56:00,293 429911 INFO test_universal_connector_rcp_vg7_10 odoo.addons.universal_connector_base.models.ir_model_synchro_cache: > clean_cache(-1,None,-1)
+2024-11-24 14:56:00,301 429911 INFO test_universal_connector_rcp_vg7_10 odoo.addons.universal_connector_base.models.ir_model_synchro_cache: > clean_cache(-1,None,-1)
+2024-11-24 14:56:00,451 429911 INFO test_universal_connector_rcp_vg7_10 odoo.addons.universal_connector_base.models.ir_model_synchro_cache: > clean_cache(-1,None,-1)
+2024-11-24 14:56:00,759 429911 INFO test_universal_connector_rcp_vg7_10 odoo.addons.universal_connector_base.models.ir_model_synchro_log: |%d! Errror synchronizing record
+2024-11-24 14:56:00,764 429911 INFO test_universal_connector_rcp_vg7_10 odoo.addons.universal_connector_rcp_vg7.tests.testenv: 🏆🥇 [1;32m9 tests SUCCESSFULLY completed[0m
+2024-11-24 14:56:00,765 429911 INFO test_universal_connector_rcp_vg7_10 odoo.addons.universal_connector_rcp_vg7.tests.test_backend: Ran 1 test in 0.946s
+2024-11-24 14:56:00,765 429911 INFO test_universal_connector_rcp_vg7_10 odoo.addons.universal_connector_rcp_vg7.tests.test_backend: OK
+2024-11-24 14:56:00,786 429911 INFO test_universal_connector_rcp_vg7_10 odoo.modules.loading: 50 modules loaded in 2.43s, 116 queries
+2024-11-24 14:56:01,308 429911 INFO test_universal_connector_rcp_vg7_10 odoo.modules.loading: Modules loaded.
+2024-11-24 14:56:01,317 429911 INFO test_universal_connector_rcp_vg7_10 odoo.modules.loading: All post-tested in 0.00s, 0 queries
+2024-11-24 14:56:01,318 429911 INFO test_universal_connector_rcp_vg7_10 odoo.modules.registry: Registry changed, signaling through the database
+2024-11-24 14:56:01,319 429911 INFO test_universal_connector_rcp_vg7_10 odoo.service.server: Initiating shutdown
+2024-11-24 14:56:01,319 429911 INFO test_universal_connector_rcp_vg7_10 odoo.service.server: Hit CTRL-C again or send a second signal to force the shutdown.
+
++===================================================================
+| please test [36muniversal_connector_rcp_vg7[0m (10.0): [32mSUCCESS![0m
++===================================================================
+
+[1;37;44m[34;107mName                                                              Stmts   Miss  Cover   Missing
+-----------------------------------------------------------------------------------------------
+connector/universal_connector_rcp_vg7/models/synchro_api.py          53     34    36%   24-48, 51-56, 65, 75, 80, 87-90
+connector/universal_connector_rcp_vg7/models/synchro_channel.py       7      0   100%
+-----------------------------------------------------------------------------------------------
+TOTAL                                                                60     34    43%
+[0m

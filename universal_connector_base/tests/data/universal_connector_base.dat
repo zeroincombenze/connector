@@ -1,0 +1,35 @@
+# Data file for test
+#
+# Every line contains:
+# type,backed,loc.model,ext.model,loc.field,ext.field,ext_id,op,value,no_local
+#       type is "=" if record contains data to store or configure
+#       type is "?" if record contains data to compare
+#       backend may "*" for all backends (only for test to compare)
+#       op is "%" if test is <value in field> else is <value == field>
+#       no_local means record was not in local db before tests
+#
+"?","*","res.country","res.country","code","code",,"","",
+"?","z0bug.localhost-odoo12","res.country","res.country","code","code",233,"US","US",
+"?","z0bug.localhost-odoo10","res.country","res.country","code","code",235,"US","US",
+"?","z0bug.localhost-odoo8","res.country","res.country","code","code",235,"US","US",
+"?","*","res.currency","res.currency","name","name",1,"","EUR",
+"?","z0bug.localhost-odoo12","res.currency","res.currency","name","name",2,"","USD",
+"?","z0bug.localhost-odoo10","res.currency","res.currency","name","name",3,"","USD",
+"?","z0bug.localhost-odoo8","res.currency","res.currency","name","name",3,"","USD",
+"?","z0bug.localhost-odoo7","res.currency","res.currency","name","name",3,"","USD",
+"?","*","res.company","res.company","name","name",,"","",
+"?","*","res.partner","res.partner","city","city",,"","",
+"?","z0bug.localhost-odoo12","res.partner","res.partner","city","city",3,"","Scranton",
+"?","z0bug.localhost-odoo10","res.partner","res.partner","city","city",3,"","Scranton",
+"?","z0bug.localhost-odoo12","res.partner","res.partner","name","name",3,"%","Admin",  # Mitchell Admin
+"?","z0bug.localhost-odoo10","res.partner","res.partner","name","name",3,"%","Admin",
+"?","z0bug.localhost-odoo8","res.partner","res.partner","name","name",3,"%","Admin",
+"?","z0bug.localhost-odoo7","res.partner","res.partner","name","name",3,"%","Admin",
+"?","*","res.partner","res.partner","is_company","is_company",,"","",
+"?","z0bug.localhost-odoo12","res.partner","res.partner","name","name",13,"%","The Jackson Group",
+"?","z0bug.localhost-odoo10","res.partner","res.partner","name","name",11,"%","The Jackson Group",
+"?","z0bug.localhost-odoo8","res.partner","res.partner","name","name",15,"%","The Jackson Group",
+"?","z0bug.localhost-odoo12","res.partner","res.partner","name","name",9,"%","Wood Corner",1
+"?","z0bug.localhost-odoo10","res.partner","res.partner","name","name",7,"%","ASUSTeK",1
+"?","z0bug.localhost-odoo8","res.partner","res.partner","name","name",7,"%","Agrolait",1
+"?","*","res.users","res.users","login","login",,"","",

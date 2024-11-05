@@ -1,0 +1,108 @@
+2024-12-11 07:34:25,000 3349506 DAEMON test_universal_connector_by_csv_12 run_odoo_debug.sh: cd /home/odoo/12.0/venv_odoo && source ./bin/activate
+2024-12-11 06:35:00,889 3354922 INFO ? odoo: Odoo version 12.0 
+2024-12-11 06:35:00,889 3354922 INFO ? odoo: Using configuration file at /home/odoo/12.0/connector/universal_connector_by_csv/tests/logs/zero12.connector.universal_connector_by_csv.conf 
+2024-12-11 06:35:00,889 3354922 INFO ? odoo: addons paths: ['/home/odoo/.local/share/Odoo12/addons/12.0', '/home/odoo/12.0/odoo/addons', '/home/odoo/12.0/addons', '/home/odoo/.local/share/Odoo12/addons', '/home/odoo/12.0/account-analytic', '/home/odoo/12.0/account-budgeting', '/home/odoo/12.0/account-closing', '/home/odoo/12.0/account-consolidation', '/home/odoo/12.0/account-financial-reporting', '/home/odoo/12.0/account-financial-tools', '/home/odoo/12.0/account-fiscal-rule', '/home/odoo/12.0/account-invoice-reporting', '/home/odoo/12.0/account-invoicing', '/home/odoo/12.0/account-payment', '/home/odoo/12.0/account-reconcile', '/home/odoo/12.0/bank-payment', '/home/odoo/12.0/bank-statement-import', '/home/odoo/12.0/brand', '/home/odoo/12.0/calendar', '/home/odoo/12.0/commission', '/home/odoo/12.0/community-data-files', '/home/odoo/12.0/connector', '/home/odoo/12.0/contract', '/home/odoo/12.0/credit-control', '/home/odoo/12.0/crm', '/home/odoo/12.0/currency', '/home/odoo/12.0/data-protection', '/home/odoo/12.0/ddmrp', '/home/odoo/12.0/delivery-carrier', '/home/odoo/12.0/dms', '/home/odoo/12.0/e-commerce', '/home/odoo/12.0/edi', '/home/odoo/12.0/helpdesk', '/home/odoo/12.0/hr', '/home/odoo/12.0/intrastat-extrastat', '/home/odoo/12.0/knowledge', '/home/odoo/12.0/l10n-italy', '/home/odoo/12.0/l10n-italy-supplemental', '/home/odoo/12.0/maintenance', '/home/odoo/12.0/management-system', '/home/odoo/12.0/manufacture', '/home/odoo/12.0/margin-analysis', '/home/odoo/12.0/marketplace', '/home/odoo/12.0/mis-builder', '/home/odoo/12.0/multi-company', '/home/odoo/12.0/partner-contact', '/home/odoo/12.0/product-attribute', '/home/odoo/12.0/product-kitting', '/home/odoo/12.0/product-pack', '/home/odoo/12.0/product-variant', '/home/odoo/12.0/profiles', '/home/odoo/12.0/project', '/home/odoo/12.0/purchase-reporting', '/home/odoo/12.0/purchase-workflow', '/home/odoo/12.0/queue', '/home/odoo/12.0/report-print-send', '/home/odoo/12.0/reporting-engine', '/home/odoo/12.0/rma', '/home/odoo/12.0/sale-financial', '/home/odoo/12.0/sale-reporting', '/home/odoo/12.0/sale-workflow', '/home/odoo/12.0/search-engine', '/home/odoo/12.0/server-auth', '/home/odoo/12.0/server-backend', '/home/odoo/12.0/server-brand', '/home/odoo/12.0/server-env', '/home/odoo/12.0/server-tools', '/home/odoo/12.0/server-ux', '/home/odoo/12.0/social', '/home/odoo/12.0/stock-logistics-barcode', '/home/odoo/12.0/stock-logistics-reporting', '/home/odoo/12.0/stock-logistics-tracking', '/home/odoo/12.0/stock-logistics-transport', '/home/odoo/12.0/stock-logistics-warehouse', '/home/odoo/12.0/stock-logistics-workflow', '/home/odoo/12.0/storage', '/home/odoo/12.0/timesheet', '/home/odoo/12.0/uncovered', '/home/odoo/12.0/web', '/home/odoo/12.0/webhook', '/home/odoo/12.0/website', '/home/odoo/12.0/wms', '/home/odoo/12.0/zerobug-test', '/home/odoo/12.0/venv_odoo/lib/python3.7/site-packages/odoo/addons'] 
+2024-12-11 06:35:00,890 3354922 INFO ? odoo: database: odoo12@localhost:5432 
+2024-12-11 06:35:00,993 3354922 INFO ? odoo.addons.base.models.ir_actions_report: Will use the Wkhtmltopdf binary at /home/odoo/12.0/venv_odoo/bin/wkhtmltopdf 
+2024-12-11 06:35:01,073 3354922 INFO ? odoo.service.server: HTTP service (werkzeug) running on NB200Z0.:39863 
+2024-12-11 06:35:01,087 3354922 INFO test_universal_connector_by_csv_12 odoo.modules.loading: loading 1 modules... 
+2024-12-11 06:35:01,097 3354922 INFO test_universal_connector_by_csv_12 odoo.modules.loading: 1 modules loaded in 0.01s, 0 queries 
+2024-12-11 06:35:01,175 3354922 INFO test_universal_connector_by_csv_12 odoo.modules.loading: updating modules list 
+2024-12-11 06:35:01,177 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.base.models.ir_module: ALLOW access to module.update_list on [] to user __system__ #1 via n/a 
+2024-12-11 06:35:08,258 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.base.models.ir_module: ALLOW access to module.button_install on ['universal_connector_by_csv'] to user __system__ #1 via n/a 
+2024-12-11 06:35:08,449 3354922 INFO test_universal_connector_by_csv_12 odoo.modules.loading: loading 11 modules... 
+2024-12-11 06:35:08,595 3354922 WARNING test_universal_connector_by_csv_12 odoo.models: The model ir.model.synchro.cache has no _description 
+2024-12-11 06:35:08,595 3354922 WARNING test_universal_connector_by_csv_12 odoo.models: The model ir.model.synchro.log has no _description 
+2024-12-11 06:35:08,601 3354922 WARNING test_universal_connector_by_csv_12 odoo.models: The model ir.model.synchro.cache has no _description 
+2024-12-11 06:35:08,601 3354922 WARNING test_universal_connector_by_csv_12 odoo.models: The model ir.model.synchro.log has no _description 
+2024-12-11 06:35:08,617 3354922 WARNING test_universal_connector_by_csv_12 odoo.models: The model ir.model.synchro.cache has no _description 
+2024-12-11 06:35:08,617 3354922 WARNING test_universal_connector_by_csv_12 odoo.models: The model ir.model.synchro.log has no _description 
+2024-12-11 06:35:08,641 3354922 INFO test_universal_connector_by_csv_12 odoo.modules.loading: 11 modules loaded in 0.19s, 0 queries 
+2024-12-11 06:35:08,644 3354922 INFO test_universal_connector_by_csv_12 odoo.modules.loading: loading 12 modules... 
+2024-12-11 06:35:08,806 3354922 INFO test_universal_connector_by_csv_12 odoo.modules.registry: module universal_connector_by_csv: creating or updating database tables 
+2024-12-11 06:35:08,856 3354922 INFO test_universal_connector_by_csv_12 odoo.modules.loading: Module universal_connector_by_csv: loading demo 
+2024-12-11 06:35:09,171 3354922 INFO test_universal_connector_by_csv_12 odoo.modules.module: odoo.addons.universal_connector_by_csv.tests.test_backend running tests. 
+2024-12-11 06:35:09,171 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_by_csv.tests.test_backend: test_connection (odoo.addons.universal_connector_by_csv.tests.test_backend.MyTest) 
+2024-12-11 06:35:09,261 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_by_csv.tests.testenv: 🎺🎺🎺 Starting test v2.0.21 (debug_level=0, commit=True) 
+2024-12-11 06:35:09,263 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_by_csv.tests.testenv: 🎺🎺 Testing module: universal_connector_by_csv (12.0.0.3.10) 
+2024-12-11 06:35:09,263 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_by_csv.tests.testenv: 🎺🎺 Loading data from: synchro.channel  
+2024-12-11 06:35:09,322 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.channel[1].get_pypi_name_csv(): 
+2024-12-11 06:35:09,325 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.channel[1].get_pypi_name_csv(): 
+2024-12-11 06:35:09,330 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.channel[2].get_pypi_name_csv(): 
+2024-12-11 06:35:09,332 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.channel[2].get_pypi_name_csv(): 
+2024-12-11 06:35:09,337 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.channel[3].get_pypi_name_csv(): 
+2024-12-11 06:35:09,342 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.channel[4].get_pypi_name_csv(): 
+2024-12-11 06:35:09,347 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_by_csv.tests.test_backend: 🎺 Starting connection test on ports 8270 (db=oca10) and 8272 (db=oca12) and on ports 8167 (db=demo7) and 8168 (db=demo8) 
+2024-12-11 06:35:09,355 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.channel[1].button_check_connection(ep=http://admin@localhost:8270/xmlrpc/2/common,h=): 
+2024-12-11 06:35:11,113 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.channel[1].button_reset_to_draft(ep=http://admin@localhost:8270/xmlrpc/2/common,h=): 
+2024-12-11 06:35:11,127 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.channel[1].button_check_connection(ep=http://admin@localhost:8270/xmlrpc/2/common,h=): 
+2024-12-11 06:35:11,378 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.currency,oe10,remote_id=1, ttl=None) 
+2024-12-11 06:35:11,397 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.currency,oe10,remote_id=3, ttl=None) 
+2024-12-11 06:35:11,434 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.channel[2].button_check_connection(ep=http://admin@localhost:8272/xmlrpc/2/common,h=): 
+2024-12-11 06:35:13,065 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.channel[2].button_reset_to_draft(ep=http://admin@localhost:8272/xmlrpc/2/common,h=): 
+2024-12-11 06:35:13,078 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.channel[2].button_check_connection(ep=http://admin@localhost:8272/xmlrpc/2/common,h=): 
+2024-12-11 06:35:13,340 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.currency,oe12,remote_id=1, ttl=None) 
+2024-12-11 06:35:13,358 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.channel[3].button_check_connection(ep=,h=): 
+2024-12-11 06:35:14,991 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.channel[3].button_reset_to_draft(ep=,h=): 
+2024-12-11 06:35:15,005 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.channel[3].button_check_connection(ep=,h=): 
+2024-12-11 06:35:15,284 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.currency,oe7,remote_id=1, ttl=None) 
+2024-12-11 06:35:15,299 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.currency,oe7,remote_id=3, ttl=None) 
+2024-12-11 06:35:15,319 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.channel[4].button_check_connection(ep=,h=): 
+2024-12-11 06:35:16,968 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.channel[4].button_reset_to_draft(ep=,h=): 
+2024-12-11 06:35:16,982 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.channel[4].button_check_connection(ep=,h=): 
+2024-12-11 06:35:17,255 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.currency,oe8,remote_id=1, ttl=None) 
+2024-12-11 06:35:17,267 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.currency,oe8,remote_id=3, ttl=None) 
+2024-12-11 06:35:17,281 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.country,oe10,remote_id=235, ttl=None) 
+2024-12-11 06:35:17,305 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe12,remote_id=3, ttl=None) 
+2024-12-11 06:35:17,338 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.country,oe8,remote_id=235, ttl=None) 
+2024-12-11 06:35:17,353 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe10,remote_id=3, ttl=None) 
+2024-12-11 06:35:17,379 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe10,remote_id=3, ttl=None) 
+2024-12-11 06:35:17,397 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe10,remote_id=4, ttl=None) 
+2024-12-11 06:35:17,482 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.currency,oe10,remote_id=1, ttl=None) 
+2024-12-11 06:35:17,495 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.currency,oe10,remote_id=3, ttl=None) 
+2024-12-11 06:35:17,507 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.country,oe10,remote_id=235, ttl=None) 
+2024-12-11 06:35:17,520 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe10,remote_id=3, ttl=None) 
+2024-12-11 06:35:17,540 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe10,remote_id=4, ttl=None) 
+2024-12-11 06:35:17,564 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe12,remote_id=3, ttl=None) 
+2024-12-11 06:35:17,592 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe12,remote_id=4, ttl=None) 
+2024-12-11 06:35:17,616 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.currency,oe12,remote_id=1, ttl=None) 
+2024-12-11 06:35:17,632 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe12,remote_id=3, ttl=None) 
+2024-12-11 06:35:17,654 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe12,remote_id=4, ttl=None) 
+2024-12-11 06:35:17,676 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=3, ttl=None) 
+2024-12-11 06:35:17,706 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=3, ttl=None) 
+2024-12-11 06:35:17,730 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=4, ttl=None) 
+2024-12-11 06:35:17,757 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.currency,oe7,remote_id=1, ttl=None) 
+2024-12-11 06:35:17,771 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.currency,oe7,remote_id=3, ttl=None) 
+2024-12-11 06:35:17,784 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=3, ttl=None) 
+2024-12-11 06:35:17,803 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=4, ttl=None) 
+2024-12-11 06:35:17,830 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=3, ttl=None) 
+2024-12-11 06:35:17,858 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=3, ttl=None) 
+2024-12-11 06:35:17,879 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=4, ttl=None) 
+2024-12-11 06:35:17,903 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.currency,oe8,remote_id=1, ttl=None) 
+2024-12-11 06:35:17,914 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.currency,oe8,remote_id=3, ttl=None) 
+2024-12-11 06:35:17,925 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.country,oe8,remote_id=235, ttl=None) 
+2024-12-11 06:35:17,939 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=3, ttl=None) 
+2024-12-11 06:35:17,962 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=4, ttl=None) 
+2024-12-11 06:35:17,984 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_by_csv.tests.testenv: 🏆🥇 [1;32m312 tests SUCCESSFULLY completed[0m 
+2024-12-11 06:35:18,015 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_by_csv.tests.test_backend: Ran 1 test in 8.844s 
+2024-12-11 06:35:18,015 3354922 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_by_csv.tests.test_backend: OK 
+2024-12-11 06:35:18,015 3354922 INFO test_universal_connector_by_csv_12 odoo.modules.module: odoo.addons.universal_connector_by_csv.tests.test_backend tested in 8.84s, 9901 queries 
+2024-12-11 06:35:18,026 3354922 INFO test_universal_connector_by_csv_12 odoo.modules.loading: 12 modules loaded in 9.38s, 9901 queries 
+2024-12-11 06:35:18,200 3354922 INFO test_universal_connector_by_csv_12 odoo.modules.loading: Modules loaded. 
+2024-12-11 06:35:18,203 3354922 INFO test_universal_connector_by_csv_12 odoo.service.server: Starting post tests 
+2024-12-11 06:35:18,204 3354922 INFO test_universal_connector_by_csv_12 odoo.service.server: All post-tested in 0.00s, 0 queries 
+2024-12-11 06:35:18,204 3354922 INFO test_universal_connector_by_csv_12 odoo.service.server: Initiating shutdown 
+2024-12-11 06:35:18,204 3354922 INFO test_universal_connector_by_csv_12 odoo.service.server: Hit CTRL-C again or send a second signal to force the shutdown. 
+
++===================================================================
+| please test [36muniversal_connector_by_csv[0m (12.0): [32mSUCCESS![0m
++===================================================================
+
+[1;37;44m$ coverage report --rcfile=/home/odoo/12.0/connector/universal_connector_by_csv/tests/logs/coverage_universal_connector_by_csv_12rc -m
+[34;107mName                                                             Stmts   Miss  Cover   Missing
+----------------------------------------------------------------------------------------------
+connector/universal_connector_by_csv/models/synchro_api.py          50      3    94%   56, 69, 77
+connector/universal_connector_by_csv/models/synchro_channel.py      16      6    62%   27-29, 32-34
+----------------------------------------------------------------------------------------------
+TOTAL                                                               66      9    86%
+[0m

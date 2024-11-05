@@ -1,0 +1,1 @@
+2024-11-26 15:39:58,000 351221 DAEMON test_universal_connector_rcp_vg7_10 run_odoo_debug.sh: cd /home/odoo/10.0/venv_odoo && source ./bin/activate
