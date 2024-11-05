@@ -1,0 +1,2 @@
+id,name,partner_id,date_order,state,payment_term_id,partner_ref,notes,origin
+45,PO045,803,2024-05-31 00:00:00,purchase,51,PO-24616,Carrier Test,Test 8.0

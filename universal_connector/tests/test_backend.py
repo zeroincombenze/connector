@@ -1,0 +1,132 @@
+"""Universal connector tests
+*Warning*
+Universal connector module connect local Odoo instance with external instance.
+Without external running instance, these test CANNOT be executed
+
+**************************************************************************
+In order to run full test on the same host MUST be active follow instance:
+
+* Odoo 10.0 with OCA modules; http/xmlrpc port: 8270; DB name: oca10
+* Odoo 12.0 with OCA modules; http/xmlrpc port: 8272; DB name: oca12
+
+"""
+
+import logging
+from .testenv import MainTest as SingleTransactionCase
+
+_logger = logging.getLogger(__name__)
+
+TEST_SYNCHRO_CHANNEL = {
+    "z0bug.localhost-odoo10": {
+        "name": "odoo10",
+        "hostname": "localhost",
+        "identity": "odoo",
+        "database": "oca10",
+        "odoo_version": "10.0",
+        "method": "jsonrpc",
+        "port": 8270,
+        "login": "admin",
+        "password": "admin",
+        "counterpart_url": "admin@localhost:8270",
+        "prefix": "oe10",
+    },
+    "z0bug.localhost-odoo12": {
+        "name": "odoo12",
+        "hostname": "localhost",
+        "identity": "odoo",
+        "database": "oca12",
+        "odoo_version": "12.0",
+        "method": "jsonrpc",
+        "port": 8272,
+        "login": "admin",
+        "password": "admin",
+        "counterpart_url": "admin@localhost:8272",
+        "prefix": "oe12",
+    },
+    "z0bug.localhost-odoo7": {
+        "name": "odoo7",
+        "hostname": "localhost",
+        "identity": "odoo",
+        "database": "demo7",
+        "odoo_version": "7.0",
+        "method": "xmlrpc/http",
+        "port": 8167,
+        "login": "admin",
+        "password": "admin",
+        "exchange_path": "/xmlrpc/common",
+        "data_path": "/xmlrpc/object",
+        "counterpart_url": "http://admin@localhost:8167/xmlrpc/common",
+        "counterpart_data_url": "http://admin@localhost:8167/xmlrpc/object",
+        "prefix": "oe7",
+    },
+    "z0bug.localhost-odoo8": {
+        "name": "odoo8",
+        "hostname": "localhost",
+        "identity": "odoo",
+        "database": "demo8",
+        "odoo_version": "8.0",
+        "method": "xmlrpc/http",
+        "port": 8168,
+        "login": "admin",
+        "password": "admin",
+        "counterpart_url": "http://admin@localhost:8168/xmlrpc/common",
+        "counterpart_data_url": "http://admin@localhost:8168/xmlrpc/object",
+        "prefix": "oe8",
+    },
+}
+TEST_SETUP_LIST = [
+    "synchro.channel",
+]
+
+
+class MyTest(SingleTransactionCase):
+
+    def setUp(self):
+        super().setUp()
+        self.debug_level = 0
+        self.odoo_commit_data = False
+        self.setup_env()  # Create test environment
+
+    def tearDown(self):
+        super().tearDown()
+
+    def test_component_attrs(self):
+        _logger.info("🎺 Starting test w/o connection")
+        editing = False
+        for xref in self.get_resource_data_list("synchro.channel"):
+            backend = self.resource_browse(xref)
+            self.assertEqual(backend.state, "draft")
+            if not editing:
+                self.resource_edit(
+                    backend,
+                    web_changes=[("identity", backend.identity)],
+                )
+                editing = True
+            self.assertEqual(backend.state, "draft")
+
+    def test_connection(self):
+        # This test requires external Odoo instance active. See header
+        _logger.info(
+            "🎺 Starting connection test on ports 8270 (db=oca10) and 8272 (db=oca12)"
+            " and on ports 8167 (db=demo7) and 8168 (db=demo8)"
+        )
+        for xref in self.get_resource_data_list("synchro.channel"):
+            backend = self.resource_browse(xref)
+            self.resource_edit(
+                backend,
+                actions="button_check_connection",
+            )
+            self.assertEqual(backend.state, "checked")
+
+            self.resource_edit(
+                backend,
+                actions="button_reset_to_draft",
+            )
+            self.assertEqual(backend.state, "draft")
+
+            backend = self.resource_browse(xref)
+            self.resource_edit(
+                backend,
+                actions="button_check_connection",
+            )
+            self.assertEqual(backend.state, "checked")

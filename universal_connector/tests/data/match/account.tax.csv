@@ -1,0 +1,7 @@
+id,vg7_id,oe8_id,amount,description,type_tax_use,name,company_id,_why
+z0bug.tax_22v,22,1,22.0,22v,sale,IVA 22% su vendite,,Match with tax rate
+z0bug.tax_10v,10,3,10.0,10v,sale,IVA 10% su vendite,,
+z0bug.tax_4v,4,,4.0,4v,sale,IVA 4% su vendite,,
+\N,115,,0.0,a15,sale,Art. 15,,Match without tax rate
+z0bug.tax_22a,,2,22.0,22a,purchase,IVA 22% da acquisti,,
+\N,101,,0.0,A1,sale,Forfettario art. 101,,New tax record to found

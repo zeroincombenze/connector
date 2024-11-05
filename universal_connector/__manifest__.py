@@ -1,0 +1,70 @@
+#
+# Copyright 2019-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
+#
+# Contributions to development, thanks to:
+# * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
+#
+# License LGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+#
+{
+    "name": "Universal Connector",
+    "version": "12.0.0.3.10",
+    "category": "Generic Modules",
+    "summary": "Universal Connector",
+    "author": "SHS-AV s.r.l.",
+    "website": "https://www.zeroincombenze.it/",
+    "development_status": "Beta",
+    "license": "LGPL-3",
+    "depends": [
+        "universal_connector_base",
+        "universal_connector_by_xmlrpc",
+        "universal_connector_by_jsonrpc",
+        "universal_connector_by_http",
+        "universal_connector_by_csv",
+        "universal_connector_rcp_vg7",
+        "base",
+    ],
+    "external_dependencies": {
+        "python": [
+            "python_plus",
+            "odoo_score",
+            "os0",
+            "clodoo",
+            "z0lib",
+            "unidecode",
+            "Levenshtein",
+        ],
+    },
+    "version_external_dependencies": [
+        "clodoo>=2.0.11",
+        "python_plus>=2.0.12",
+    ],
+    "data": [
+        "security/ir.model.access.csv",
+        "wizard/wizard_pull_records_view.xml",
+        "views/country_view.xml",
+        "views/account_account_view.xml",
+        "views/account_fiscal_view.xml",
+        "views/partner_view.xml",
+        "views/user_view.xml",
+        "views/company_view.xml",
+        "views/currency_view.xml",
+        "views/lang_view.xml",
+        "views/product_view.xml",
+        "views/account_invoice_view.xml",
+        "views/stock_view.xml",
+        "views/sale_order_view.xml",
+        "views/purchase_order_view.xml",
+        "views/account_tax_view.xml",
+        "views/payment_term_view.xml",
+        "views/picking_view.xml",
+        "views/partner_bank_view.xml",
+        "views/sequence_view.xml",
+        "views/journal_view.xml",
+        "views/model_view.xml",
+        "views/account_move_view.xml",
+        "data/ir_cron.xml",
+    ],
+    "maintainer": "Antonio M. Vigliotti <antoniomaria.vigliotti@gmail.com>",
+    "installable": True,
+}

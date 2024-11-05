@@ -1,0 +1,4 @@
+id,vg7_id,oe8_id,code,name,type,company_id
+\N,,1,FAT,Fatture di vendita,sale,
+\N,,2,ACQ,Fatture di acquisto,purchase,
+\N,,3,MISC,Operazioni varie,general,

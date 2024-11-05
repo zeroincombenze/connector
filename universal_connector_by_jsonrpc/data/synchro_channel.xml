@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <record id="channel_odoo10" model="synchro.channel">
+        <field name="name">Odoo 10.0</field>
+        <field name="prefix">oe10</field>
+        <field name="odoo_version">10.0</field>
+        <field name="identity">odoo</field>
+        <field name="method">jsonrpc</field>
+        <field name="database">oca10</field>
+        <field name="counterpart_url">admin@localhost:8270</field>
+        <field name="active" eval="True"/>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="channel_odoo12" model="synchro.channel">
+        <field name="name">Odoo 12.0</field>
+        <field name="prefix">oe12</field>
+        <field name="odoo_version">12.0</field>
+        <field name="identity">odoo</field>
+        <field name="method">jsonrpc</field>
+        <field name="database">oca12</field>
+        <field name="counterpart_url">admin@localhost:8272</field>
+        <field name="active" eval="True"/>
+        <field name="sequence">12</field>
+    </record>
+
+</odoo>

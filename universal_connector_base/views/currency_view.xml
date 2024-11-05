@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="view_currency_synchro_form" model="ir.ui.view">
+        <field name="name">view.currency.synchro.form</field>
+        <field name="model">res.currency</field>
+        <field name="inherit_id" ref="base.view_currency_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[last()]" position="after">
+                <group string="Synchronization">
+                    <field name="oe16_id"/>
+                    <field name="oe12_id"/>
+                    <field name="oe10_id"/>
+                    <field name="oe8_id"/>
+                    <field name="oe7_id"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <!--
+    <record id="view_currency_rate_synchro_form" model="ir.ui.view">
+        <field name="name">view.currency.rate.synchro.form</field>
+        <field name="model">res.currency.rate</field>
+        <field name="inherit_id" ref="base.view_currency_rate_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='company_id]" position="after">
+                <field name="oe16_id"/>
+                <field name="oe12_id"/>
+                <field name="oe10_id"/>
+                <field name="oe8_id"/>
+                <field name="oe7_id"/>
+            </xpath>
+        </field>
+    </record>
+    -->
+
+</odoo>

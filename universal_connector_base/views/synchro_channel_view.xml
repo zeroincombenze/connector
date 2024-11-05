@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="view_synchro_channel_tree" model="ir.ui.view">
+        <field name="name">view.synchro.channel.tree</field>
+        <field name="model">synchro.channel</field>
+        <field name="arch" type="xml">
+            <tree string="Synchonization Channel">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="hostname"/>
+                <field name="database"/>
+                <field name="identity"/>
+                <field name="odoo_version"/>
+                <field name="method"/>
+                <field name="prefix"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_synchro_channel_form" model="ir.ui.view">
+        <field name="name">view.synchro.channel.form</field>
+        <field name="model">synchro.channel</field>
+        <field name="arch" type="xml">
+            <form string="Synchonization Channel">
+                <header>
+                    <button name="button_check_connection" type="object" class="oe_highlight" string="Check Connection" attrs="{'invisible':['|',('state','not in',['draft']),('active','=',False)]}"/>
+                    <button name="button_reset_to_draft" type="object" string="Reset to draft Connection" attrs="{'invisible':['|',('state','in',['draft']),('active','=',False)]}"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                            <field name="active" widget="boolean_button" options="{&quot;terminology&quot;: &quot;active&quot;}"/>
+                        </button>
+                        <button name="button_build_model_map" type="object" class="oe_stat_button" icon="fa-list" string="Build Models"/>
+                    </div>
+                    <label for="name"/>
+                    <h1>
+                        <field name="name" class="oe_inline"/>
+                    </h1>
+                    <group>
+                        <group>
+                            <field name="method"/>
+                            <field name="hostname"/>
+                            <field name="port"/>
+                            <field name="database"/>
+                            <field name="login"/>
+                            <field name="password" password="True"/>
+                            <field name="client_key" password="True"/>
+                            <field name="load_mode"/>
+                            <field name="auto_reconnect"/>
+                            <field name="pypi_sign" force_save="1"/>
+                        </group>
+                        <group>
+                            <field name="identity"/>
+                            <field name="odoo_version" attrs="{'invisible': [('identity', '!=', 'odoo')]}"/>
+                            <field name="prefix"/>
+                            <field name="exchange_path"/>
+                            <field name="data_path"/>
+                            <field name="tracelevel"/>
+                            <field name="default_lang_id"/>
+                            <field name="company_id"/>
+                            <field name="sequence"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="counterpart_url"/>
+                        <field name="counterpart_data_url"/>
+                    </group>
+                    <notebook colspan="4">
+                        <page name="models" string="Models">
+                            <field name="model_ids">
+                                <tree string="Model mapping" editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="model_spec"/>
+                                    <field name="counterpart_name"/>
+                                    <field name="auth_action"/>
+                                    <field name="field_uname"/>
+                                    <field name="parent_name"/>
+                                    <field name="childs_name"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page name="logs" string="Logs">
+                            <field name="log_ids">
+                                <tree string="Event Logs">
+                                    <field name="timestamp"/>
+                                    <field name="loglevel"/>
+                                    <field name="model"/>
+                                    <field name="errmsg"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page name="workflow" string="Workflow">
+                            <group>
+                                <field name="import_workflow"/>
+                                <field name="rec_counter"/>
+                                <field name="workflow_model"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_synchro_channel" model="ir.actions.act_window">
+        <field name="name">Synchonization Channel</field>
+        <field name="res_model">synchro.channel</field>
+        <field name="view_id" ref="view_synchro_channel_tree"/>
+    </record>
+
+    <menuitem id="menu_universal_connector" name="Universal connector" parent="base.next_id_9" groups="base.group_no_one"/>
+
+</odoo>

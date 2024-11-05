@@ -1,0 +1,6 @@
+id,name,default_code,type,product_tmpl_id,description_sale
+82,Prodotto Alpha,AAA,consu,81,
+83,Prodotto Beta,BBB,consu,82,Begonia baccata bianca
+88,Prodotto Gamma,GGG,consu,87,
+99,Prodotto Rho,RRR,product,98,
+104,Special Worldwide service,WWW,service,103,

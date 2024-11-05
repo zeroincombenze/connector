@@ -1,0 +1,82 @@
+2024-11-24 18:20:56,000 504010 DAEMON test_odoo_12 run_odoo_debug: cd /home/odoo/12.0/venv_odoo && source ./bin/activate
+2024-11-24 17:21:01,362 506265 INFO ? odoo: Odoo version 12.0 
+2024-11-24 17:21:01,362 506265 INFO ? odoo: Using configuration file at /home/odoo/12.0/connector/universal_connector_rcp_vg7/tests/logs/zero.connector.universal_connector_rcp_vg7.conf 
+2024-11-24 17:21:01,362 506265 INFO ? odoo: addons paths: ['/home/odoo/.local/share/Odoo12/addons/12.0', '/home/odoo/12.0/odoo/addons', '/home/odoo/12.0/addons', '/home/odoo/.local/share/Odoo12/addons', '/home/odoo/12.0/account-analytic', '/home/odoo/12.0/account-budgeting', '/home/odoo/12.0/account-closing', '/home/odoo/12.0/account-consolidation', '/home/odoo/12.0/account-financial-reporting', '/home/odoo/12.0/account-financial-tools', '/home/odoo/12.0/account-fiscal-rule', '/home/odoo/12.0/account-invoice-reporting', '/home/odoo/12.0/account-invoicing', '/home/odoo/12.0/account-payment', '/home/odoo/12.0/account-reconcile', '/home/odoo/12.0/bank-payment', '/home/odoo/12.0/bank-statement-import', '/home/odoo/12.0/brand', '/home/odoo/12.0/calendar', '/home/odoo/12.0/commission', '/home/odoo/12.0/community-data-files', '/home/odoo/12.0/connector', '/home/odoo/12.0/contract', '/home/odoo/12.0/credit-control', '/home/odoo/12.0/crm', '/home/odoo/12.0/currency', '/home/odoo/12.0/data-protection', '/home/odoo/12.0/ddmrp', '/home/odoo/12.0/delivery-carrier', '/home/odoo/12.0/dms', '/home/odoo/12.0/e-commerce', '/home/odoo/12.0/edi', '/home/odoo/12.0/helpdesk', '/home/odoo/12.0/hr', '/home/odoo/12.0/intrastat-extrastat', '/home/odoo/12.0/knowledge', '/home/odoo/12.0/l10n-italy', '/home/odoo/12.0/l10n-italy-supplemental', '/home/odoo/12.0/maintenance', '/home/odoo/12.0/management-system', '/home/odoo/12.0/manufacture', '/home/odoo/12.0/margin-analysis', '/home/odoo/12.0/marketplace', '/home/odoo/12.0/mis-builder', '/home/odoo/12.0/multi-company', '/home/odoo/12.0/partner-contact', '/home/odoo/12.0/product-attribute', '/home/odoo/12.0/product-kitting', '/home/odoo/12.0/product-pack', '/home/odoo/12.0/product-variant', '/home/odoo/12.0/profiles', '/home/odoo/12.0/project', '/home/odoo/12.0/purchase-reporting', '/home/odoo/12.0/purchase-workflow', '/home/odoo/12.0/queue', '/home/odoo/12.0/report-print-send', '/home/odoo/12.0/reporting-engine', '/home/odoo/12.0/rma', '/home/odoo/12.0/sale-financial', '/home/odoo/12.0/sale-reporting', '/home/odoo/12.0/sale-workflow', '/home/odoo/12.0/search-engine', '/home/odoo/12.0/server-auth', '/home/odoo/12.0/server-backend', '/home/odoo/12.0/server-brand', '/home/odoo/12.0/server-env', '/home/odoo/12.0/server-tools', '/home/odoo/12.0/server-ux', '/home/odoo/12.0/social', '/home/odoo/12.0/stock-logistics-barcode', '/home/odoo/12.0/stock-logistics-reporting', '/home/odoo/12.0/stock-logistics-tracking', '/home/odoo/12.0/stock-logistics-transport', '/home/odoo/12.0/stock-logistics-warehouse', '/home/odoo/12.0/stock-logistics-workflow', '/home/odoo/12.0/storage', '/home/odoo/12.0/timesheet', '/home/odoo/12.0/uncovered', '/home/odoo/12.0/web', '/home/odoo/12.0/webhook', '/home/odoo/12.0/website', '/home/odoo/12.0/wms', '/home/odoo/12.0/zerobug-test', '/home/odoo/12.0/venv_odoo/lib/python3.7/site-packages/odoo/addons'] 
+2024-11-24 17:21:01,363 506265 INFO ? odoo: database: odoo12@localhost:5432 
+2024-11-24 17:21:01,493 506265 INFO ? odoo.addons.base.models.ir_actions_report: Will use the Wkhtmltopdf binary at /home/odoo/12.0/venv_odoo/bin/wkhtmltopdf 
+2024-11-24 17:21:01,555 506265 INFO ? odoo.service.server: HTTP service (werkzeug) running on NB200Z0.:35851 
+2024-11-24 17:21:01,570 506265 INFO test_odoo_12 odoo.modules.loading: loading 1 modules... 
+2024-11-24 17:21:01,577 506265 INFO test_odoo_12 odoo.modules.loading: 1 modules loaded in 0.01s, 0 queries 
+2024-11-24 17:21:01,663 506265 INFO test_odoo_12 odoo.modules.loading: updating modules list 
+2024-11-24 17:21:01,666 506265 INFO test_odoo_12 odoo.addons.base.models.ir_module: ALLOW access to module.update_list on [] to user __system__ #1 via n/a 
+2024-11-24 17:21:09,080 506265 INFO test_odoo_12 odoo.addons.base.models.ir_module: ALLOW access to module.button_install on ['universal_connector_rcp_vg7'] to user __system__ #1 via n/a 
+2024-11-24 17:21:09,440 506265 INFO test_odoo_12 odoo.modules.loading: loading 51 modules... 
+2024-11-24 17:21:09,571 506265 WARNING test_odoo_12 odoo.models: The model ir.model.synchro.cache has no _description 
+2024-11-24 17:21:09,571 506265 WARNING test_odoo_12 odoo.models: The model ir.model.synchro.log has no _description 
+2024-11-24 17:21:09,580 506265 WARNING test_odoo_12 odoo.models: The model ir.model.synchro.cache has no _description 
+2024-11-24 17:21:09,580 506265 WARNING test_odoo_12 odoo.models: The model ir.model.synchro.log has no _description 
+2024-11-24 17:21:09,599 506265 WARNING test_odoo_12 odoo.models: The model ir.model.synchro.cache has no _description 
+2024-11-24 17:21:09,599 506265 WARNING test_odoo_12 odoo.models: The model ir.model.synchro.log has no _description 
+2024-11-24 17:21:09,978 506265 INFO test_odoo_12 odoo.modules.loading: 51 modules loaded in 0.54s, 0 queries 
+2024-11-24 17:21:09,982 506265 INFO test_odoo_12 odoo.modules.loading: loading 52 modules... 
+2024-11-24 17:21:10,564 506265 INFO test_odoo_12 odoo.modules.registry: module universal_connector_rcp_vg7: creating or updating database tables 
+2024-11-24 17:21:10,661 506265 INFO test_odoo_12 odoo.modules.loading: loading universal_connector_rcp_vg7/data/synchro_channel.xml 
+2024-11-24 17:21:10,665 506265 INFO test_odoo_12 odoo.addons.universal_connector_base.models.ir_model_synchro_cache: > clean_cache(-1,None,-1) 
+2024-11-24 17:21:10,671 506265 INFO test_odoo_12 odoo.modules.loading: loading universal_connector_rcp_vg7/data/synchro_partner.xml 
+2024-11-24 17:21:10,802 506265 INFO test_odoo_12 odoo.modules.loading: loading universal_connector_rcp_vg7/data/synchro_account.xml 
+2024-11-24 17:21:10,833 506265 INFO test_odoo_12 odoo.modules.loading: loading universal_connector_rcp_vg7/data/synchro_country.xml 
+2024-11-24 17:21:10,874 506265 INFO test_odoo_12 odoo.modules.loading: loading universal_connector_rcp_vg7/data/synchro_account_invoice.xml 
+2024-11-24 17:21:10,948 506265 INFO test_odoo_12 odoo.modules.loading: loading universal_connector_rcp_vg7/data/synchro_account_tax.xml 
+2024-11-24 17:21:10,961 506265 INFO test_odoo_12 odoo.modules.loading: loading universal_connector_rcp_vg7/data/synchro_package_preparation.xml 
+2024-11-24 17:21:11,019 506265 INFO test_odoo_12 odoo.modules.loading: loading universal_connector_rcp_vg7/data/synchro_partner_bank.xml 
+2024-11-24 17:21:11,033 506265 INFO test_odoo_12 odoo.modules.loading: loading universal_connector_rcp_vg7/data/synchro_purchase_order.xml 
+2024-11-24 17:21:11,056 506265 INFO test_odoo_12 odoo.modules.loading: loading universal_connector_rcp_vg7/data/synchro_sale_order.xml 
+2024-11-24 17:21:11,117 506265 INFO test_odoo_12 odoo.modules.loading: Module universal_connector_rcp_vg7: loading demo 
+2024-11-24 17:21:11,426 506265 INFO test_odoo_12 odoo.modules.module: odoo.addons.universal_connector_rcp_vg7.tests.test_backend running tests. 
+2024-11-24 17:21:11,426 506265 INFO test_odoo_12 odoo.addons.universal_connector_rcp_vg7.tests.test_backend: test_01_connection (odoo.addons.universal_connector_rcp_vg7.tests.test_backend.MyTest) 
+2024-11-24 17:21:11,524 506265 INFO test_odoo_12 odoo.addons.universal_connector_rcp_vg7.tests.testenv: 🎺🎺🎺 Starting test v2.0.21 (debug_level=0, commit=True) 
+2024-11-24 17:21:11,527 506265 INFO test_odoo_12 odoo.addons.universal_connector_rcp_vg7.tests.testenv: 🎺🎺 Testing module: universal_connector_rcp_vg7 (12.0.0.3.10) 
+2024-11-24 17:21:11,528 506265 INFO test_odoo_12 odoo.addons.universal_connector_rcp_vg7.tests.testenv: 🎺🎺 Loading data from: synchro.channel  
+2024-11-24 17:21:11,540 506265 INFO test_odoo_12 odoo.addons.universal_connector_base.models.ir_model_synchro_cache: > clean_cache(-1,None,-1) 
+2024-11-24 17:21:11,548 506265 INFO test_odoo_12 odoo.addons.universal_connector_base.models.ir_model_synchro_cache: > clean_cache(-1,None,-1) 
+2024-11-24 17:21:11,560 506265 INFO test_odoo_12 odoo.addons.universal_connector_base.models.ir_model_synchro_cache: > clean_cache(-1,None,-1) 
+2024-11-24 17:21:11,565 506265 INFO test_odoo_12 odoo.addons.universal_connector_base.models.ir_model_synchro_cache: > clean_cache(-1,None,-1) 
+2024-11-24 17:21:11,566 506265 INFO test_odoo_12 odoo.addons.universal_connector_base.models.ir_model_synchro_cache: > clean_cache(-1,None,-1) 
+2024-11-24 17:21:11,570 506265 INFO test_odoo_12 odoo.addons.universal_connector_base.models.ir_model_synchro_cache: > clean_cache(-1,None,-1) 
+2024-11-24 17:21:11,572 506265 INFO test_odoo_12 odoo.addons.universal_connector_base.models.ir_model_synchro_cache: > clean_cache(-1,None,-1) 
+2024-11-24 17:21:11,573 506265 INFO test_odoo_12 odoo.addons.universal_connector_base.models.ir_model_synchro_cache: > clean_cache(-1,None,-1) 
+2024-11-24 17:21:11,577 506265 INFO test_odoo_12 odoo.addons.universal_connector_base.models.ir_model_synchro_cache: > clean_cache(-1,None,-1) 
+2024-11-24 17:21:11,578 506265 INFO test_odoo_12 odoo.addons.universal_connector_base.models.ir_model_synchro_cache: > clean_cache(-1,None,-1) 
+2024-11-24 17:21:11,581 506265 INFO test_odoo_12 odoo.addons.universal_connector_base.models.ir_model_synchro_cache: > clean_cache(-1,None,-1) 
+2024-11-24 17:21:11,583 506265 INFO test_odoo_12 odoo.addons.universal_connector_base.models.ir_model_synchro_cache: > clean_cache(-1,None,-1) 
+2024-11-24 17:21:11,584 506265 INFO test_odoo_12 odoo.addons.universal_connector_rcp_vg7.tests.test_backend: 🎺 Starting connection test vg7 
+2024-11-24 17:21:11,727 506265 WARNING test_odoo_12 py.warnings: /home/odoo/12.0/venv_odoo/lib/python3.7/site-packages/cryptography/hazmat/backends/openssl/x509.py:17: CryptographyDeprecationWarning: This version of cryptography contains a temporary pyOpenSSL fallback path. Upgrade pyOpenSSL now.
+  utils.DeprecatedIn35,
+ 
+2024-11-24 17:21:12,087 506265 INFO test_odoo_12 odoo.addons.universal_connector_base.models.ir_model_synchro_cache: > clean_cache(-1,None,-1) 
+2024-11-24 17:21:12,097 506265 INFO test_odoo_12 odoo.addons.universal_connector_base.models.ir_model_synchro_cache: > clean_cache(-1,None,-1) 
+2024-11-24 17:21:12,295 506265 INFO test_odoo_12 odoo.addons.universal_connector_base.models.ir_model_synchro_cache: > clean_cache(-1,None,-1) 
+2024-11-24 17:21:12,665 506265 INFO test_odoo_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: |%d! Errror synchronizing record 
+2024-11-24 17:21:12,670 506265 INFO test_odoo_12 odoo.addons.universal_connector_rcp_vg7.tests.testenv: ✨ Test data available on database test_odoo_12 
+2024-11-24 17:21:12,670 506265 INFO test_odoo_12 odoo.addons.universal_connector_rcp_vg7.tests.testenv: 🏆🥇 [1;32m15 tests SUCCESSFULLY completed[0m 
+2024-11-24 17:21:12,814 506265 INFO test_odoo_12 odoo.addons.universal_connector_rcp_vg7.tests.test_backend: Ran 1 test in 1.388s 
+2024-11-24 17:21:12,814 506265 INFO test_odoo_12 odoo.addons.universal_connector_rcp_vg7.tests.test_backend: OK 
+2024-11-24 17:21:12,833 506265 INFO test_odoo_12 odoo.modules.loading: 52 modules loaded in 2.85s, 98 queries 
+2024-11-24 17:21:13,506 506265 INFO test_odoo_12 odoo.modules.loading: Modules loaded. 
+2024-11-24 17:21:13,518 506265 INFO test_odoo_12 odoo.service.server: Starting post tests 
+2024-11-24 17:21:13,519 506265 INFO test_odoo_12 odoo.service.server: All post-tested in 0.00s, 0 queries 
+2024-11-24 17:21:13,519 506265 INFO test_odoo_12 odoo.service.server: Initiating shutdown 
+2024-11-24 17:21:13,519 506265 INFO test_odoo_12 odoo.service.server: Hit CTRL-C again or send a second signal to force the shutdown. 
+
++===================================================================
+| please test [36muniversal_connector_rcp_vg7[0m (12.0): [32mSUCCESS![0m
++===================================================================
+
+[1;37;44m$ coverage report --rcfile=/home/odoo/12.0/connector/universal_connector_rcp_vg7/tests/logs/coverage_universal_connector_rcp_vg7rc -m
+[34;107mName                                                                              Stmts   Miss  Cover   Missing
+---------------------------------------------------------------------------------------------------------------
+/home/odoo/12.0/connector/universal_connector_rcp_vg7/models/synchro_api.py          53     34    36%   23-47, 50-55, 64, 74, 79, 86-89
+/home/odoo/12.0/connector/universal_connector_rcp_vg7/models/synchro_channel.py       7      0   100%
+---------------------------------------------------------------------------------------------------------------
+TOTAL                                                                                60     34    43%
+[0m

@@ -1,0 +1,4 @@
+id,vg7_id,oe8_id,partner_id,date_invoice,state,payment_term_id
+z0bug.inv_1,,91,z0bug.res_partner_1,2024-05-31,\N,z0bug.payment_3
+z0bug.inv_2,,92,z0bug.res_partner_1,2024-05-31,\N,z0bug.payment_1
+z0bug.inv_3,,93,z0bug.res_partner_1,2024-05-31,\N,z0bug.payment_1
