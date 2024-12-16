@@ -446,6 +446,10 @@ class MyTest(SingleTransactionCase):
                 else:
                     self.assertEqual(getattr(partner, loc_field), value)
 
+    def _test_03_purge(self):
+        _logger.info("🎺 Starting purge log test")
+        self.env["ir.model.synchro.log"].purge_log()
+
     def test_connection(self):
         # This test requires external Odoo instance active. See header
         _logger.info(

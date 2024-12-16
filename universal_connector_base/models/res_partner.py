@@ -137,12 +137,14 @@ class ResPartner(models.Model):
         backend=None,
         only_minimal=True,
         ttl=None,
+        running_in_queue=None,
     ):
         if only_minimal:
-            vals[":type"] = "contact"
+            vals[":type"] = vals.get(":type", "contact")
         return super().synchro(
             vals,
             backend=backend,
             only_minimal=only_minimal,
             ttl=ttl,
+            running_in_queue=running_in_queue,
         )

@@ -672,8 +672,8 @@ class SynchroChannel(models.Model):
         Cache = self.env["ir.model.synchro.cache"]
 
         if self.load_mode == "direct":
-            max_ctr = 1024
-            max_secs = 120
+            max_ctr = 2048
+            max_secs = 180
         else:
             # Priority is 1..3 or 0 (stopped)
             prio = prio or int(self.deferred_payload)
@@ -685,13 +685,6 @@ class SynchroChannel(models.Model):
             }[prio]
             max_ctr = max_recs or max_ctr
         max_ctr = min(max_ctr, Cache.que_waiting_len(self))
-        # if max_ctr > 0:
-        #     SynchroLog.logmsg(
-        #         "info",
-        #         "synchro_queue(%(backend)s)",
-        #         backend=self,
-        #         values={"max_ctr": max_ctr, "max_secs": max_secs},
-        #     )
         time_limit = datetime.now() + timedelta(max_secs)
         loaded_ctr = 0
         while max_ctr > 0:

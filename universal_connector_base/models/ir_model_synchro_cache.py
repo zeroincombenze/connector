@@ -410,11 +410,12 @@ class IrModelSynchroCache(models.Model):
         )
 
     @api.model_cr_context
-    def que_push(self, backend, action, model, values, ttl):
+    def que_push(self, backend, action, model, values, ttl, prio=2):
+        que_name = "IN_QUEUE%d" % prio
         ttl -= 1 if isinstance(ttl, int) else 0
         if ttl > 0:
             if action in ("synchro", "trigger", "push"):
-                in_queue = self.get_attr(backend.id, "IN_QUEUE") or []
+                in_queue = self.get_attr(backend.id, que_name) or []
                 found_in_que = False
                 for que_action, que_model, que_values, que_ttl in in_queue:
                     if (action, model, values) == (que_action, que_model, que_values):
@@ -422,41 +423,29 @@ class IrModelSynchroCache(models.Model):
                         break
                 if not found_in_que:
                     in_queue.append((action, model, values, ttl))
-                    self.set_attr(backend.id, "IN_QUEUE", in_queue)
-            else:
-                raise RuntimeError("Invalid action %s to push in queue" % action)
-
-    @api.model_cr_context
-    def que_priority_push(self, backend, action, model, values, ttl):
-        ttl -= 1 if isinstance(ttl, int) else 0
-        if ttl > 0:
-            if action in ("synchro", "trigger", "push"):
-                in_queue = self.get_attr(backend.id, "IN_QUEUE") or []
-                found_in_que = False
-                for que_action, que_model, que_values, que_ttl in in_queue:
-                    if (action, model, values) == (que_action, que_model, que_values):
-                        found_in_que = True
-                        break
-                if not found_in_que:
-                    in_queue.insert(0, (action, model, values, ttl))
-                    self.set_attr(backend.id, "IN_QUEUE", in_queue)
+                    self.set_attr(backend.id, que_name, in_queue)
             else:
                 raise RuntimeError("Invalid action %s to push in queue" % action)
 
     @api.model_cr_context
     def que_pop(self, backend):
-        in_queue = self.get_attr(backend.id, "IN_QUEUE") or []
-        if len(in_queue):
-            item = in_queue.pop(0)
-            self.set_attr(backend.id, "IN_QUEUE", in_queue)
-        else:
-            item = (False, False, False, False)
+        item = (False, False, False, False)
+        for prio in (1, 2, 3):
+            que_name = "IN_QUEUE%d" % prio
+            in_queue = self.get_attr(backend.id, que_name) or []
+            if len(in_queue):
+                item = in_queue.pop(0)
+                self.set_attr(backend.id, que_name, in_queue)
+                break
         return item
 
     @api.model_cr_context
     def que_waiting_len(self, backend):
-        in_queue = self.get_attr(backend.id, "IN_QUEUE") or []
-        return len(in_queue)
+        que_len = 0
+        for prio in (1, 2, 3):
+            que_name = "IN_QUEUE%d" % prio
+            que_len += len(self.get_attr(backend.id, que_name) or [])
+        return que_len
 
     # -------------------------
     # General purpose functions
@@ -486,6 +475,9 @@ class IrModelSynchroCache(models.Model):
             chn_id = channel.id
             if not backend_id or chn_id == backend_id:
                 cache.init_channel(self._cr.dbname, chn_id)
+                for prio in (1, 2, 3):
+                    que_name = "IN_QUEUE%d" % prio
+                    self.set_attr(chn_id, que_name, [])
         if model:
             cache.init_struct_model(self._cr.dbname, model)
         else:
@@ -603,57 +595,6 @@ class IrModelSynchroCache(models.Model):
     # --------------------------
     # Model structure primitives
     # --------------------------
-
-    def get_indexes(self, model):
-        query = """select c.name from ir_model m, ir_model_constraint c
-        where c.model = m.id and m.model = '%s'"""
-        self._cr.execute(query % model)  # pylint: disable=E8103
-        res = []
-        for row in self.env.cr.fetchall():
-            res.append(row[0])
-        return res
-
-    def get_index_fields(self, model, index_name=None):
-        # index_name = index_name.replace('.', '_') if index_name else None
-        # INDEX_FIELDS = """select pgc.conname as constraint_name,
-        #                   ccu.table_name,
-        #                   ccu.column_name,
-        #                   pgc.consrc as definition
-        # from pg_constraint pgc
-        # join pg_namespace nsp on nsp.oid = pgc.connamespace
-        # join pg_class  cls on pgc.conrelid = cls.oid
-        # left join information_schema.constraint_column_usage ccu
-        # on pgc.conname = ccu.constraint_name and
-        # nsp.nspname = ccu.constraint_schema
-        # where contype ='u' and table_name='%s'
-        # order by constraint_name,table_name"""
-        INDEX_FIELDS = """
-        select i.relname as index_name,
-               t.relname as table_name,
-               a.attname as column_name
-        from pg_class t,
-             pg_class i,
-             pg_index ix,
-             pg_attribute a
-        where
-             t.oid = ix.indrelid
-             and i.oid = ix.indexrelid
-             and a.attrelid = t.oid
-             and a.attnum = ANY(ix.indkey)
-             and t.relkind = 'r'
-             and t.relname = '%s'
-        order by t.relname, i.relname;"""
-        self._cr.execute(  # pylint: disable=E8103
-            INDEX_FIELDS % model.replace(".", "_")
-        )
-        res = {}
-        for row in self.env.cr.fetchall():
-            if index_name and index_name != row[0]:
-                continue
-            if row[0] not in res:
-                res[row[0]] = []
-            res[row[0]].append(row[2])
-        return res
 
     @api.model_cr_context
     def model_list(self):

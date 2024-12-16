@@ -6,6 +6,7 @@
 #
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 #
+from future.utils import PY3
 import logging
 import re
 import itertools
@@ -61,54 +62,33 @@ class IrModelSynchroApply(models.Model):
         if ext_ref in vals and loc_name != ext_ref:
             vals[loc_name] = vals[ext_ref]
             del vals[ext_ref]
-        if vals.get("lastname", "") and vals.get("firstname", ""):
-            if self.env.user.company_id.partner_id.splitmode.startswith("F"):
-                vals["name"] = (
-                    (vals.get("firstname", "") + " " + vals.get("lastname", ""))
-                    .replace("  ", " ")
-                    .strip()
-                )
+        if "firstname" in vals and vals["firstname"] is None:
+            del vals["firstname"]
+        if "lastname" in vals and vals["lastname"] is None:
+            del vals["lastname"]
+        if "firstname" in vals and "lastname" in vals:
+            if vals["firstname"] or vals["lastname"]:
+                if self.env.user.company_id.partner_id.splitmode.startswith("F"):
+                    vals["name"] = (
+                        (vals.get("firstname", "") + " " + vals.get("lastname", ""))
+                        .replace("  ", " ")
+                        .strip()
+                    )
+                else:
+                    vals["name"] = (
+                        (vals.get("lastname", "") + " " + vals.get("firstname", ""))
+                        .replace("  ", " ")
+                        .strip()
+                    )
+                vals["is_company"] = False
+                if not PY3:
+                    vals["individual"] = True
             else:
-                vals["name"] = (
-                    (vals.get("lastname", "") + " " + vals.get("firstname", ""))
-                    .replace("  ", " ")
-                    .strip()
-                )
+                vals["is_company"] = True
+                if not PY3:
+                    vals["individual"] = False
             del vals["firstname"]
             del vals["lastname"]
-            vals["is_company"] = True
-            vals["individual"] = True
-        elif not vals.get("name") or vals.get("individual"):
-            if self.env.user.company_id.partner_id.splitmode.startswith("F"):
-                vals["name"] = (
-                    (
-                        vals.get("name", "")
-                        + " "
-                        + vals.get("firstname", "")
-                        + " "
-                        + vals.get("lastname", "")
-                    )
-                    .replace("  ", " ")
-                    .strip()
-                )
-            else:
-                vals["name"] = (
-                    (
-                        vals.get("name", "")
-                        + " "
-                        + vals.get("lastname", "")
-                        + " "
-                        + vals.get("firstname", "")
-                    )
-                    .replace("  ", " ")
-                    .strip()
-                )
-            if not vals["name"] and vals.get("individual"):
-                vals = self.apply_set_tmp_name(
-                    backend, vals, "name", ext_ref, loc_ext_id_name
-                )
-            vals["is_company"] = True
-            vals["individual"] = False
         return vals
 
     def apply_street_number(

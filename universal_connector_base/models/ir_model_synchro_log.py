@@ -220,6 +220,8 @@ class IrModelSynchroLog(models.Model):
                 reqloglevel = int(self.loglevel2num.get(loglevel, "2"))
             else:
                 reqloglevel = int(loglevel)
+        if reqloglevel >= 4:
+            Cache.clean_cache()
         if reqloglevel >= 4 - curloglevel:
             try:
                 full_msg = _u(msg_text % ctx)

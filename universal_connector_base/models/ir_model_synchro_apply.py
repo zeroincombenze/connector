@@ -64,8 +64,6 @@ class IrModelSynchroApply(models.Model):
         elif default:
             vals[loc_name] = default
         elif loc_ext_id_name in vals:
-            # if not isinstance(vals[loc_ext_id_name], int):
-            #     vals[loc_ext_id_name] = int(vals[loc_ext_id_name])
             if loc_name in ("code", "default_code"):
                 vals[loc_name] = "code%s" % vals[loc_ext_id_name]
             else:

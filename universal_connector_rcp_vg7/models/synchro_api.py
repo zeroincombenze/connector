@@ -31,7 +31,7 @@ class SynchroApi(models.Model):
                 vals[new] = vals[old]
         return vals
 
-    def adapt_response_vg7(self, values, synchro_model):
+    def adapt_response_vg7(self, values, synchro_model, ext_id):
         Cache = self.env["ir.model.synchro.cache"]
         vmodel = synchro_model.name
         ext_model = synchro_model.counterpart_name
@@ -40,7 +40,7 @@ class SynchroApi(models.Model):
         row_billing = {}
         row_shipping = {}
         row_contact = {}
-        for key, value in values.items():
+        for key, value in values.copy().items():
             if isinstance(value, dict):
                 if key == "billing":
                     row_billing.update(value)
@@ -74,33 +74,35 @@ class SynchroApi(models.Model):
                     invoice_vals = self.manage_alias(invoice_vals)
                     if ext_key_id not in invoice_vals:
                         invoice_vals[ext_key_id] = values[ext_key_id]
-                    invoice_vals[":vals"] = "invoice"
-                    Cache.que_push(backend, "push", ext_model, invoice_vals, 2)
+                    invoice_vals[":type"] = "invoice"
+                    Cache.que_push(backend, "push", ext_model, invoice_vals, 2, prio=3)
             if row_shipping:
                 shipping_vals = {}
                 for key, value in row_shipping.items():
                     if key == "customer_shipping_id":
-                        key = ext_key_id
+                        pass
                     elif key.startswith("shipping_"):
                         key = key[9:]
                     shipping_vals[key] = value
                 if shipping_vals:
                     shipping_vals = self.manage_alias(shipping_vals)
+                    shipping_vals[":type"] = "delivery"
                     Cache.que_push(
                         backend,
                         "push",
                         "customers_shipping_addresses",
                         shipping_vals,
                         2,
+                        prio=2,
                     )
             # if row_contact:
             #     values["contact"] = row_contact
         return values
 
-    def adapt_responses_vg7(self, res, synchro_model):
+    def adapt_responses_vg7(self, res, synchro_model, ext_id):
         new_res = []
         for item in res:
-            new_res.append(self.adapt_response_vg7(item, synchro_model))
+            new_res.append(self.adapt_response_vg7(item, synchro_model, ext_id))
         return new_res
 
     def get_response_vg7_https(
@@ -117,7 +119,7 @@ class SynchroApi(models.Model):
         )
         if res:
             res[synchro_model.counterpart_pk] = ext_id
-            return [self.adapt_response_vg7(res, synchro_model)]
+            return [self.adapt_response_vg7(res, synchro_model, ext_id)]
         return res
 
     def get_response_vg7_http(
@@ -133,4 +135,4 @@ class SynchroApi(models.Model):
         res = self.get_response_csv(
             session, synchro_model, ext_id=ext_id, endpoint=endpoint, fields=fields
         )
-        return self.adapt_response_vg7(res, synchro_model)
+        return self.adapt_response_vg7(res, synchro_mode, ext_idl)

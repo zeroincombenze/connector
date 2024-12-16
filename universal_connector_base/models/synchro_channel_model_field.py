@@ -81,9 +81,13 @@ class SynchroChannelModelFields(models.Model):
         struct = self.env[actual_model].fields_get()
         field_def = Cache.TABLE_DEF.get(actual_model, {}).get(loc_name, {})
         global_def = Cache.TABLE_DEF.get("base", {}).get(loc_name, {})
-        if not Cache.is_manageable(actual_model):
+        if not Cache.is_manageable(actual_model) or not loc_name:
             # Field protect because model is not managed
             protect_update = "3"
+        elif loc_name not in struct:
+            raise EnvironmentError(
+                "Field %s does not exist in %s!" % (loc_name, actual_model)
+            )
         elif loc_name in (self.model_id.parent_name, self.model_id.get_loc_ext_id()):
             # External ID must be always updatable
             protect_update = "0"
@@ -105,7 +109,7 @@ class SynchroChannelModelFields(models.Model):
         # if loc_name in (self.model_id.parent_name, self.model_id.get_loc_ext_id()):
         #     # External ID is mandatory
         #     required = True
-        if loc_name in magic_fields:
+        if not loc_name or loc_name in magic_fields:
             required = False
         else:
             required = field_def.get(

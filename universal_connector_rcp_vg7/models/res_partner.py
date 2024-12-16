@@ -6,6 +6,7 @@
 #
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 #
+from future.utils import PY3
 import logging
 
 from odoo import api, fields, models
@@ -18,236 +19,76 @@ class ResPartner(models.Model):
 
     vg7_id = fields.Integer("VG7 ID", copy=False)
     vg72_id = fields.Integer("VG7 ID (2.nd)", copy=False)
-    oe7_id = fields.Integer("Odoo7 ID", copy=False)
-    oe8_id = fields.Integer("Odoo8 ID", copy=False)
-    oe10_id = fields.Integer("Odoo10 ID", copy=False)
-    timestamp = fields.Datetime("Timestamp", copy=False, readonly=True)
-    errmsg = fields.Char("Error message", copy=False, readonly=True)
 
     CONTRAINTS = [["id", "!=", "parent_id"]]
-
-    @api.model
-    def shirt_vals(self, vals, ext_ref):
-        self.env["ir.model.synchro.log"].logmsg(
-            "debug", ">>> res.partner.shirt_vals(%s,%s)" % (vals, ext_ref)
-        )
-        prefix1 = ext_ref.split(":")[0]
-        prefix2 = "%s_" % ext_ref.split(":")[1]
-        prefix = "%s:" % prefix1
-        for field in vals.copy():
-            if field.startswith(ext_ref):
-                name = "%s" % field.replace(prefix2, "")
-            elif field.startswith(prefix):
-                name = field
-            elif field.startswith(prefix2):
-                name = "%s:%s" % (prefix1, field.replace(prefix2, ""))
-            else:
-                name = "%s:%s" % (prefix1, field)
-            if name != field:
-                vals[name] = vals[field]
-                del vals[field]
-        for nm in ("vg7:company", "vg7:name", "vg7:surename"):
-            if nm in vals and (not isinstance(vals[nm], str) or not vals[nm].strip()):
-                del vals[nm]
-        return vals
-
-    @api.model
-    def preprocess(self, backend_id, vals):
-        def set_vg7_id(vals):
-            for nm in ("customer_shipping_id", "vg7:id", "vg7_id"):
-                if vals.get(nm):
-                    if isinstance(vals[nm], str):
-                        vals[nm] = int(vals[nm])
-                    if vals.get("type"):
-                        vals[nm] = self.env["ir.model.synchro"].get_offset_value(
-                            backend_id, "res.partner", vals[nm], spec=vals["type"]
-                        )
-            return vals
-
-        _logger.info(">>> preprocess(%s)" % vals)  # debug
-        cache = self.env["ir.model.synchro.cache"]
-        actual_model = "res.partner"
-        spec = ""
-        if cache.get_attr(backend_id, "PREFIX") == "vg7":
-            if vals.get("type") == "delivery":
-                vals = set_vg7_id(vals)
-                for ext_ref in (
-                    "vg7:piva",
-                    "vg7:cf",
-                    "vg7:esonerato_fe",
-                    "vg7:codice_univoco",
-                    "electronic_invoice_subjected",
-                ):
-                    if ext_ref in vals:
-                        del vals[ext_ref]
-                spec = vals["type"]
-            elif vals.get("type") == "invoice":
-                vals = set_vg7_id(vals)
-                spec = vals["type"]
-            else:
-                for ext_ref in ("parent_id", "type_inv_addr"):
-                    if ext_ref in vals:
-                        del vals[ext_ref]
-                for ext_ref in ("vg7:billing", "vg7:shipping"):
-                    # diff = True
-                    diff = False
-                    if ext_ref in vals:
-                        vals[":customer"] = True
-                        vals[ext_ref] = self.shirt_vals(vals[ext_ref], ext_ref)
-                        if ext_ref == "vg7:shipping":
-                            vals[ext_ref]["type"] = "delivery"
-                            diff = True
-                        elif ext_ref == "vg7:billing":
-                            vals[ext_ref]["type"] = "invoice"
-                            diff = False
-                            if "vg7:id" not in vals[ext_ref] and "vg7:id" in vals:
-                                vals[ext_ref]["vg7:id"] = vals["vg7:id"]
-                                vals[ext_ref] = set_vg7_id(vals[ext_ref])
-                            check_4_diff = True
-                            for nm in (
-                                "vg7:company",
-                                "vg7:name",
-                                "vg7:surename",
-                                "vg7:street",
-                                "vg7:street_number",
-                                "vg7:postal_code",
-                                "vg7:city",
-                                "vg7:region",
-                                "vg7:region_id",
-                                "vg7:email",
-                                "vg7:country",
-                                "vg7:country_id",
-                                "vg7:telephone",
-                                "vg7:telephone2",
-                                "vg7:type",
-                                "vg7:piva",
-                                "vg7:cf",
-                                "vg7:esonerato_fe",
-                                "vg7:codice_univoco",
-                                "vg7:bank",
-                                "vg7:bank_id",
-                                "vg7:payment",
-                                "vg7:payment_id",
-                                "vg7:pec",
-                                "bank_account_id",
-                            ):
-                                if nm == "vg7:type":
-                                    check_4_diff = False
-                                if nm not in vals[ext_ref]:
-                                    continue
-                                elif nm not in vals or not vals[nm]:
-                                    vals[nm] = vals[ext_ref][nm]
-                                if check_4_diff and vals[ext_ref][nm] != vals[nm]:
-                                    diff = True
-                        if diff:
-                            self.env["ir.model.synchro.log"].logmsg(
-                                "debug", ">>> store(%s,%s)" % (vals[ext_ref], ext_ref)
-                            )
-                            cache.set_model_attr(
-                                backend_id, actual_model, ext_ref, vals[ext_ref]
-                            )
-                            del vals[ext_ref]
-                    else:
-                        cache.set_model_attr(backend_id, actual_model, ext_ref, {})
-        return vals, spec
-
-    @api.model
-    def postprocess(self, backend_id, parent_id, vals):
-        _logger.info(">>> postprocess(%d,%s)" % (parent_id, vals))  # debug
-        cache = self.env["ir.model.synchro.cache"]
-        model = "res.partner"
-        done = False
-        for ext_ref in ("vg7:shipping", "vg7:billing"):
-            if cache.get_model_attr(backend_id, model, ext_ref):
-                vals = {}
-                for field in cache.get_model_attr(backend_id, model, ext_ref):
-                    vals[field] = cache.get_model_attr(backend_id, model, ext_ref)[
-                        field
-                    ]
-                vals["parent_id"] = parent_id
-                cache.del_model_attr(backend_id, model, ext_ref)
-                self.synchro(vals, chk_in_queue=True)
-                done = True
-        return done
 
     def assure_values(self, vals, rec):
         actual_model = "res.partner"
         actual_cls = self.env[actual_model]
         if rec:
-            for nm in ("type", "individual"):
+            for nm in ("type",) if PY3 else ("type", "individual"):
                 if nm not in vals:
                     vals[nm] = getattr(rec, nm)
             nm = "parent_id"
             if nm not in vals:
                 vals[nm] = getattr(rec, nm).id
-        parent = False
-        if vals.get("parent_id"):
-            parent_id = int(vals["parent_id"])
-            parent = actual_cls.search([("id", "=", parent_id)])
-            if parent:
-                parent = parent[0]
-            else:
-                del vals["parent_id"]
-        elif rec and rec.parent_id:
-            parent = rec.parent_id
+        if vals.get("type") not in ("delivery", "invoice"):
+            vals["parent_id"] = False
+        # elif rec and rec.parent_id:
+        #     parent = rec.parent_id
 
-        decl_is_company = True
-        if "is_company" not in vals:
-            vals["is_company"] = False if vals.get("individual") else True
-            decl_is_company = False
-        if vals.get("type") in ("delivery", "invoice"):
-            if not decl_is_company:
-                vals["is_company"] = False
-            if parent and not isinstance(parent, int):
-                # if (
-                #     not vals.get('name')
-                #     or vals['name'].startswith('Unknown')
-                #     or vals.get('name') == parent.name
-                # ):
-                if vals.get("name") and (
-                    vals.get("name") == parent.name
-                    or vals.get("name", "").startswith("Unknown")
-                ):
-                    vals["name"] = False
-                elif not vals.get("name"):
-                    vals["name"] = False
-            if parent and not isinstance(parent, int):
-                for nm in (
-                    "vat",
-                    "fiscalcode",
-                    "codice_destinatario",
-                    "country_id",
-                    "state_id",
-                    "electronic_invoice_subjected",
-                    "is_pa",
-                    "ipa_code",
-                ):
-                    if (
-                        not vals.get(nm)
-                        and parent[nm]
-                        and (not rec or (rec and not rec[nm]))
-                    ):
-                        if nm.endswith("_id"):
-                            vals[nm] = parent[nm].id
-                        else:
-                            vals[nm] = parent[nm]
-                if vals["type"] == "delivery":
-                    for nm in (
-                        "codice_destinatario",
-                        "electronic_invoice_subjected",
-                        "is_pa",
-                        "ipa_code",
-                    ):
-                        vals[nm] = False
-        else:
-            if not vals.get("name") and not rec:
-                if vals.get("vat") or vals.get("fiscalcode"):
-                    vals["name"] = "Unknown"
-                else:
-                    # Force error
-                    vals["name"] = None
-            if parent and vals.get("individual"):
-                vals["is_company"] = False
+        # decl_is_company = True
+        # if "is_company" not in vals:
+        #     vals["is_company"] = False if vals.get("individual") else True
+        #     decl_is_company = False
+        # if vals.get("type") in ("delivery", "invoice"):
+        #     if not decl_is_company:
+        #         vals["is_company"] = False
+        #     if parent and not isinstance(parent, int) and not PY3:
+        #         if vals.get("name") and (
+        #             vals.get("name") == parent.name
+        #             or vals.get("name", "").startswith("Unknown")
+        #         ):
+        #             vals["name"] = False
+        #         elif not vals.get("name"):
+        #             vals["name"] = False
+        #     if parent and not isinstance(parent, int):
+        #         for nm in (
+        #             "vat",
+        #             "fiscalcode",
+        #             "codice_destinatario",
+        #             "country_id",
+        #             "state_id",
+        #             "electronic_invoice_subjected",
+        #             "is_pa",
+        #             "ipa_code",
+        #         ):
+        #             if (
+        #                 not vals.get(nm)
+        #                 and parent[nm]
+        #                 and (not rec or (rec and not rec[nm]))
+        #             ):
+        #                 if nm.endswith("_id"):
+        #                     vals[nm] = parent[nm].id
+        #                 else:
+        #                     vals[nm] = parent[nm]
+        #         if vals["type"] == "delivery":
+        #             for nm in (
+        #                 "codice_destinatario",
+        #                 "electronic_invoice_subjected",
+        #                 "is_pa",
+        #                 "ipa_code",
+        #             ):
+        #                 vals[nm] = False
+        # else:
+        #     if not vals.get("name") and not rec:
+        #         if vals.get("vat") or vals.get("fiscalcode"):
+        #             vals["name"] = "Unknown"
+        #         else:
+        #             # Force error
+        #             vals["name"] = None
+        #     if parent and vals.get("individual"):
+        #         vals["is_company"] = False
 
         if "codice_destinatario" in vals and not vals["codice_destinatario"]:
             del vals["codice_destinatario"]
@@ -287,14 +128,15 @@ class ResPartnerShipping(models.Model):
         backend=None,
         only_minimal=True,
         ttl=None,
+        running_in_queue=None,
     ):
-        if only_minimal:
-            vals[":type"] = "delivery"
+        vals[":type"] = "delivery"
         return super().synchro(
             vals,
             backend=backend,
             only_minimal=only_minimal,
             ttl=ttl,
+            running_in_queue=running_in_queue,
         )
 
 
@@ -311,14 +153,15 @@ class ResPartnerInvoice(models.Model):
         backend=None,
         only_minimal=True,
         ttl=None,
+        running_in_queue=None,
     ):
-        if only_minimal:
-            vals[":type"] = "invoice"
+        vals[":type"] = "invoice"
         return super().synchro(
             vals,
             backend=backend,
             only_minimal=only_minimal,
             ttl=ttl,
+            running_in_queue=running_in_queue,
         )
 
 

@@ -11,7 +11,7 @@
 
     <record forcecreate="1" id="res_partner_shipping" model="synchro.channel.model">
         <field name="name">res.partner.shipping</field>
-        <field name="field_uname">name</field>
+        <field name="counterpart_pk">customer_shipping_id</field>
         <field name="counterpart_name">customers_shipping_addresses</field>
         <field name="model_spec">delivery</field>
         <field name="synchro_channel_id" ref="channel_vg7"/>
@@ -37,11 +37,13 @@
     </record>
 
 
+    <!--
     <record forcecreate="1" id="res_partner_parent_id" model="synchro.channel.model.field">
         <field name="name">parent_id</field>
         <field name="counterpart_name">customer_id</field>
         <field name="model_id" ref="res_partner"/>
     </record>
+    -->
 
     <record forcecreate="1" id="res_partner_city" model="synchro.channel.model.field">
         <field name="name">city</field>
@@ -87,11 +89,13 @@
         <field name="model_id" ref="res_partner"/>
     </record>
 
+    <!--
     <record forcecreate="1" id="res_partner_fax" model="synchro.channel.model.field">
         <field name="name">fax</field>
         <field name="counterpart_name">fax</field>
         <field name="model_id" ref="res_partner"/>
     </record>
+    -->
 
     <record forcecreate="1" id="res_partner_firstname" model="synchro.channel.model.field">
         <field name="name">firstname</field>
@@ -270,11 +274,13 @@
         <field name="model_id" ref="res_partner_shipping"/>
     </record>
 
+    <!--
     <record forcecreate="1" id="res_partner_shipping_fax" model="synchro.channel.model.field">
         <field name="name">fax</field>
         <field name="counterpart_name">fax</field>
         <field name="model_id" ref="res_partner_shipping"/>
     </record>
+    -->
 
     <record forcecreate="1" id="res_partner_shipping_firstname" model="synchro.channel.model.field">
         <field name="name">firstname</field>
@@ -381,11 +387,13 @@
         <field name="model_id" ref="res_partner_invoice"/>
     </record>
 
+    <!--
     <record forcecreate="1" id="res_partner_invoice_fax" model="synchro.channel.model.field">
         <field name="name">fax</field>
         <field name="counterpart_name">fax</field>
         <field name="model_id" ref="res_partner_invoice"/>
     </record>
+    -->
 
     <record forcecreate="1" id="res_partner_invoice_firstname" model="synchro.channel.model.field">
         <field name="name">firstname</field>
@@ -480,11 +488,13 @@
         <field name="model_id" ref="res_partner_supplier_rec"/>
     </record>
 
+    <!--
     <record forcecreate="1" id="res_partner_supplier_fax" model="synchro.channel.model.field">
         <field name="name">fax</field>
         <field name="counterpart_name">fax</field>
         <field name="model_id" ref="res_partner_supplier_rec"/>
     </record>
+    -->
 
     <record forcecreate="1" id="res_partner_supplier_firstname" model="synchro.channel.model.field">
         <field name="name">firstname</field>

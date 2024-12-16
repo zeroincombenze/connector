@@ -109,6 +109,18 @@ class SynchroChannelModel(models.Model):
             else "" or self.synchro_channel_id.get_loc_ext_id()
         )
 
+    def load_ctx(self):
+        company = self.synchro_channel_id.company_id or self.env.user.company_id
+        ctx = {"company_id": company.id}
+        if company.country_id:
+            ctx["country_id"] = company.country_id.id
+        if company.currency_id:
+            ctx["currency_id"] = company.currency_id
+        if self.name == "res.partner":
+            ctx["type"] = "contact"
+            ctx["is_company"] = True
+        return ctx
+
     def select_by_domain(self, vals, domain):
         # TODO
         return vals
@@ -200,6 +212,26 @@ class SynchroChannelModel(models.Model):
             "selection": struct.get(loc_name, {}).get("selection"),
         }
 
+    @api.model
+    def get_offset_value(self, ext_id):  # pragma: no cover
+        if isinstance(ext_id, int):
+            vmodel = self.name
+            if vmodel == "res.partner.invoice":
+                offset = 200000000
+            elif vmodel == "res.partner.shipping":
+                offset = 100000000
+            else:
+                offset = 0
+            if ext_id < offset:
+                return ext_id + offset
+        return ext_id
+
+    @api.model
+    def get_external_pk(self, ext_id):  # pragma: no cover
+        if isinstance(ext_id, int):
+            return ext_id % 100000000
+        return ext_id
+
     def priority_fields(self, vals, struct, spec=None):
         loc_ext_id = self.get_loc_ext_id()
         childs_name = self.childs_name
@@ -215,16 +247,17 @@ class SynchroChannelModel(models.Model):
         for ext_ref in field_list:
             field = self.synchro_field_from_ext_ref(ext_ref, struct, spec=spec)
             loc_name = field["loc_name"]
-            if loc_name == "company_id":
-                with_company_id = True
             # ext_name = field["ext_name"]
             ftype = field["type"]
             fields[ext_ref] = field
             if loc_name in (loc_ext_id, "id"):
                 list_1.append(ext_ref)
-            elif loc_name in ("country_id", "company_id"):
+            elif loc_name == "company_id":
+                with_company_id = True
                 list_2.append(ext_ref)
-            elif self.parent_name and loc_name in self.parent_name:
+            elif loc_name == "country_id":
+                list_2.append(ext_ref)
+            elif self.parent_name and loc_name == self.parent_name:
                 list_3.insert(0, ext_ref)
             elif (
                 loc_name
@@ -246,7 +279,7 @@ class SynchroChannelModel(models.Model):
         )
 
     def map_2many_to_local(
-        self, vals, field, ext_ref, ttl, only_minimal, incomplete_record
+        self, vals, field, ext_ref, ttl, only_minimal, incomplete_record, ctx=None
     ):
         Cache = self.env["ir.model.synchro.cache"]
         backend = self.synchro_channel_id
@@ -274,22 +307,14 @@ class SynchroChannelModel(models.Model):
                         if isinstance(item, int):
                             rec = self.env[comodel].bind_external_ref(loc_ext_id, item)
                             if not rec:
-                                if loc_name == self.childs_name:
-                                    Cache.que_priority_push(
-                                        backend,
-                                        "trigger",
-                                        synchro_comodel.counterpart_name,
-                                        item,
-                                        ttl,
-                                    )
-                                else:
-                                    Cache.que_push(
-                                        backend,
-                                        "trigger",
-                                        synchro_comodel.counterpart_name,
-                                        item,
-                                        ttl,
-                                    )
+                                Cache.que_push(
+                                    backend,
+                                    "trigger",
+                                    synchro_comodel.counterpart_name,
+                                    item,
+                                    ttl,
+                                    prio=1 if loc_name == self.childs_name else 2,
+                                )
                         elif isinstance(item, str) and "." in item and " " not in item:
                             # Item is external reference like 'module.reference'
                             rec = self.xmlid_to_object(item, raise_if_not_found=False)
@@ -300,21 +325,21 @@ class SynchroChannelModel(models.Model):
         return vals, incomplete_record
 
     def map_one2many_to_local(
-        self, vals, field, ext_ref, ttl, only_minimal, incomplete_record
+        self, vals, field, ext_ref, ttl, only_minimal, incomplete_record, ctx=None
     ):
         return self.map_2many_to_local(
-            vals, field, ext_ref, ttl, only_minimal, incomplete_record
+            vals, field, ext_ref, ttl, only_minimal, incomplete_record, ctx=ctx
         )
 
     def map_many2many_to_local(
-        self, vals, field, ext_ref, ttl, only_minimal, incomplete_record
+        self, vals, field, ext_ref, ttl, only_minimal, incomplete_record, ctx=None
     ):
         return self.map_2many_to_local(
-            vals, field, ext_ref, ttl, only_minimal, incomplete_record
+            vals, field, ext_ref, ttl, only_minimal, incomplete_record, ctx=ctx
         )
 
     def map_many2one_to_local(
-        self, vals, field, ext_ref, ttl, only_minimal, incomplete_record
+        self, vals, field, ext_ref, ttl, only_minimal, incomplete_record, ctx=None
     ):
         Cache = self.env["ir.model.synchro.cache"]
         backend = self.synchro_channel_id
@@ -343,23 +368,32 @@ class SynchroChannelModel(models.Model):
                         and loc_name == "company_id"
                         and backend.company_id
                         and field["id"].required
+                        and comodel
+                        not in (
+                            "res.partner",
+                            "res.users",
+                            "product.template",
+                            "product.product",
+                        )
                     ):
-                        vals[loc_name] = backend.company_id.id
+                        vals[loc_name] = ctx["company_id"]
                         Cache.que_push(
                             backend,
                             "trigger",
                             synchro_comodel.counterpart_name,
                             vals[ext_ref],
                             ttl,
+                            prio=1,
                         )
                         incomplete_record |= True
                     elif only_minimal and self.name not in MODEL_LAZY_COMPANY:
-                        Cache.que_priority_push(
+                        Cache.que_push(
                             backend,
                             "trigger",
                             synchro_comodel.counterpart_name,
                             vals[ext_ref],
                             ttl,
+                            prio=2,
                         )
                         incomplete_record |= True
                     else:
@@ -369,6 +403,7 @@ class SynchroChannelModel(models.Model):
                             synchro_comodel.counterpart_name,
                             vals[ext_ref],
                             ttl,
+                            prio=2,
                         )
                         incomplete_record = True
                 else:
@@ -378,7 +413,7 @@ class SynchroChannelModel(models.Model):
         return vals, incomplete_record
 
     def map_selection_to_local(
-        self, vals, field, ext_ref, ttl, only_minimal, incomplete_record
+        self, vals, field, ext_ref, ttl, only_minimal, incomplete_record, ctx=None
     ):
         Cache = self.env["ir.model.synchro.cache"]
         backend = self.synchro_channel_id
@@ -388,8 +423,8 @@ class SynchroChannelModel(models.Model):
             comodel = "res.lang"
             rec = self.env[comodel].search([("code", "=", vals[loc_name])])
             if not rec:
-                Cache.que_priority_push(
-                    backend, "synchro", comodel, {"code": vals[ext_ref]}, ttl
+                Cache.que_push(
+                    backend, "synchro", comodel, {"code": vals[ext_ref]}, ttl, prio=1
                 )
         valid = False
         for item in field["selection"]:
@@ -410,22 +445,17 @@ class SynchroChannelModel(models.Model):
         return vals, incomplete_record
 
     def map_base_to_local(
-        self, vals, field, ext_ref, ttl, only_minimal, incomplete_record
+        self, vals, field, ext_ref, ttl, only_minimal, incomplete_record, ctx=None
     ):
         vals[field["loc_name"]] = vals[ext_ref]
         return vals, incomplete_record
 
     @api.model
-    def map_to_internal(
-        self,
-        vals,
-        ttl,
-        only_minimal=None,
-        spec=None,
-    ):
+    def map_to_internal(self, vals, ttl, only_minimal=None, spec=None, ctx=None):
         self.ensure_one()
         Cache = self.env["ir.model.synchro.cache"]
         IrModel = self.env["ir.model.synchro"]
+        ctx = ctx or {}
         actual_model = self.get_actual_model_name(self.name)
         struct = self.env[actual_model].fields_get()
         magic_fields = []
@@ -439,9 +469,7 @@ class SynchroChannelModel(models.Model):
             and not with_company_id
             and actual_model not in MODEL_LAZY_COMPANY
         ):
-            vals["company_id"] = (
-                self.synchro_channel_id.company_id.id or self.env.user.company_id.id
-            )
+            vals["company_id"] = ctx["company_id"]
         incomplete_record = False
         for ext_ref in field_list:
             field = fields[ext_ref]
@@ -456,7 +484,9 @@ class SynchroChannelModel(models.Model):
                 or loc_name in magic_fields
             ):
                 if ext_name == self.counterpart_pk:
-                    vals[loc_ext_id] = vals[ext_ref]
+                    vals[loc_ext_id] = self.get_offset_value(
+                        IrModel.cast_type(vals[ext_ref], actual_model, field["type"])
+                    )
                 del vals[ext_ref]
                 continue
             vals[ext_ref] = IrModel.cast_type(
@@ -468,18 +498,19 @@ class SynchroChannelModel(models.Model):
                     field,
                     ext_ref,
                 )
-            if (
+            if ext_name == self.counterpart_pk:
+                vals[loc_name] = self.get_offset_value(vals[ext_ref])
+            elif (
                 loc_name not in vals
                 and ext_ref in vals
                 and vals[ext_ref]
                 and loc_name not in ("id", loc_ext_id)
-                and ext_name != self.counterpart_pk
                 and field["store"]
             ):
                 method = "map_%s_to_local" % ftype
                 method = method if hasattr(self, method) else "map_base_to_local"
                 vals, incomplete_record = getattr(self, method)(
-                    vals, field, ext_ref, ttl, only_minimal, incomplete_record
+                    vals, field, ext_ref, ttl, only_minimal, incomplete_record, ctx=ctx
                 )
             if ext_ref in vals and loc_name != ext_ref:
                 del vals[ext_ref]
@@ -642,6 +673,7 @@ class SynchroChannelModel(models.Model):
         unique_fields = []
         candidate_fields = []
         ancillary_fields = []
+        usable_fields = [x.name for x in self.field_ids if x.name in struct]
         skeys = []
         # From psql get indexes format [{"keys": keys}]
         unique_indexes = (
@@ -653,17 +685,20 @@ class SynchroChannelModel(models.Model):
             candidates = []
             keys = []
             for candidate in item["key"]:
-                if candidate not in ("company_id", "parent_id", self.parent_name):
+                if candidate in usable_fields and candidate not in (
+                    "company_id",
+                    "parent_id",
+                    self.parent_name,
+                ):
                     candidates.append(_c(candidate))
                     keys.append(_c("+" + candidate))
             if len(candidates) == 1 and candidates[0] not in unique_fields:
                 unique_fields.append(_c(candidates[0]))
             if keys:
-                # skeys.append(keys)
                 for key in keys:
                     key = actual_name(key)
-                    if is_classified(key):
-                        # Already classified
+                    if key not in usable_fields or is_classified(key):
+                        # Not usable or already classified
                         continue
                     if key in ANCILLARY_KEYS + ANCILLARY_LINE_KEYS:
                         ancillary_fields.append(_c(key))
@@ -674,7 +709,7 @@ class SynchroChannelModel(models.Model):
                         ancillary_fields.append(_c(key))
         for loc_name in CANDIDATE_KEYS:
             if (
-                loc_name in struct
+                loc_name in usable_fields
                 and not is_classified(loc_name)
                 and loc_name not in candidate_fields
             ):
@@ -689,7 +724,11 @@ class SynchroChannelModel(models.Model):
                 ancillary_fields.insert(0, self.parent_name)
             for loc_name in ANCILLARY_KEYS:
                 # TODO>
-                if loc_name in ANCILLARY_LINE_KEYS or is_classified(loc_name):
+                if (
+                    loc_name not in usable_fields
+                    or loc_name in ANCILLARY_LINE_KEYS
+                    or is_classified(loc_name)
+                ):
                     continue
                 if ignore_field(actual_model, loc_name):
                     continue

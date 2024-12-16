@@ -330,4 +330,4 @@ class MyTest(SingleTransactionCase):
             self._test_reset_connection(xref)
             self._test_check_connection(xref)
             self._test_check_models(xref)
-            # self._test_import_model(xref, "res.partner")
+            self._test_import_model(xref, "res.partner")

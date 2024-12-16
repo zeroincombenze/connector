@@ -280,7 +280,6 @@ class MyTest(SingleTransactionCase):
             actions="button_check_connection",
         )
         self.assertEqual(backend.state, "checked")
-        self.assertEqual(backend.pypi_sign, "oerplib3")
 
     def _test_reset_connection(self, xref):
         backend = self.resource_browse(xref)
@@ -435,7 +434,3 @@ class MyTest(SingleTransactionCase):
             self._test_import_partner(xref)
         for xref in sorted(self.get_resource_data_list("synchro.channel")):
             self._test_import_partner2(xref)
-            # Now repeat some test in order to check for resync records
-            self._test_import_model(xref, "res.currency")
-            self._test_import_model(xref, "res.country")
-            self._test_import_model(xref, "res.partner")

@@ -21,7 +21,7 @@
     </record>
 
     <record forcecreate="1" id="product_uom" model="synchro.channel.model">
-        <field name="name">product.uom</field>
+        <field name="name">uom.uom</field>
         <field name="field_uname">name</field>
         <field name="cron_sync">True</field>
         <field name="counterpart_name">ums</field>
@@ -116,36 +116,36 @@
 
     <record forcecreate="1" id="product_uom_category_id" model="synchro.channel.model.field">
         <field name="name">category_id</field>
-        <field name="apply" ref="product.product_uom_categ_unit"/>
+        <field name="apply" ref="uom.product_uom_categ_unit"/>
         <field name="model_id" ref="product_uom"/>
     </record>
 
 
     <record forcecreate="1" id="product_uom_N" model="synchro.channel.domain.translation">
-        <field name="model">product.uom</field>
+        <field name="model">uom.uom</field>
         <field name="key">name</field>
-        <field name="odoo_value" ref="product.product_uom_unit"/>
+        <field name="odoo_value" ref="uom.product_uom_unit"/>
         <field name="ext_value">N</field>
     </record>
 
     <record forcecreate="1" id="product_uom_N_" model="synchro.channel.domain.translation">
-        <field name="model">product.uom</field>
+        <field name="model">uom.uom</field>
         <field name="key">name</field>
-        <field name="odoo_value" ref="product.product_uom_unit"/>
+        <field name="odoo_value" ref="uom.product_uom_unit"/>
         <field name="ext_value">N.</field>
     </record>
 
     <record forcecreate="1" id="product_uom_NR" model="synchro.channel.domain.translation">
-        <field name="model">product.uom</field>
+        <field name="model">uom.uom</field>
         <field name="key">name</field>
-        <field name="odoo_value" ref="product.product_uom_unit"/>
+        <field name="odoo_value" ref="uom.product_uom_unit"/>
         <field name="ext_value">NR</field>
     </record>
 
     <record forcecreate="1" id="product_uom_PZ" model="synchro.channel.domain.translation">
-        <field name="model">product.uom</field>
+        <field name="model">uom.uom</field>
         <field name="key">name</field>
-        <field name="odoo_value" ref="product.product_uom_unit"/>
+        <field name="odoo_value" ref="uom.product_uom_unit"/>
         <field name="ext_value">PZ</field>
     </record>
 

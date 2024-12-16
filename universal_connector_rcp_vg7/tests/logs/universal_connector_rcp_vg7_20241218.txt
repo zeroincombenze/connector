@@ -1,0 +1,68 @@
+2024-12-18 20:14:45,620 18643 INFO ? odoo: Odoo version 10.0
+2024-12-18 20:14:45,620 18643 INFO ? odoo: Using configuration file at /home/odoo/10.0/connector/universal_connector_rcp_vg7/tests/logs/zero10.connector.universal_connector_rcp_vg7.conf
+2024-12-18 20:14:45,620 18643 INFO ? odoo: addons paths: ['/home/odoo/.local/share/Odoo10/addons/10.0', u'/home/odoo/10.0/odoo/addons', u'/home/odoo/10.0/addons', u'/home/odoo/.local/share/Odoo12/addons', u'/home/odoo/10.0/account-analytic', u'/home/odoo/10.0/account-budgeting', u'/home/odoo/10.0/account-closing', u'/home/odoo/10.0/account-consolidation', u'/home/odoo/10.0/account-financial-reporting', u'/home/odoo/10.0/account-financial-tools', u'/home/odoo/10.0/account-fiscal-rule', u'/home/odoo/10.0/account-invoice-reporting', u'/home/odoo/10.0/account-invoicing', u'/home/odoo/10.0/account-payment', u'/home/odoo/10.0/account-reconcile', u'/home/odoo/10.0/bank-payment', u'/home/odoo/10.0/bank-statement-import', u'/home/odoo/10.0/calendar', u'/home/odoo/10.0/commission', u'/home/odoo/10.0/community-data-files', u'/home/odoo/10.0/connector', u'/home/odoo/10.0/contract', u'/home/odoo/10.0/credit-control', u'/home/odoo/10.0/crm', u'/home/odoo/10.0/currency', u'/home/odoo/10.0/data-protection', u'/home/odoo/10.0/delivery-carrier', u'/home/odoo/10.0/e-commerce', u'/home/odoo/10.0/edi', u'/home/odoo/10.0/helpdesk', u'/home/odoo/10.0/hr', u'/home/odoo/10.0/intrastat-extrastat', u'/home/odoo/10.0/knowledge', u'/home/odoo/10.0/l10n-italy', u'/home/odoo/10.0/l10n-italy-supplemental', u'/home/odoo/10.0/maintenance', u'/home/odoo/10.0/management-system', u'/home/odoo/10.0/manufacture', u'/home/odoo/10.0/margin-analysis', u'/home/odoo/10.0/mis-builder', u'/home/odoo/10.0/multi-company', u'/home/odoo/10.0/partner-contact', u'/home/odoo/10.0/product-attribute', u'/home/odoo/10.0/product-kitting', u'/home/odoo/10.0/product-variant', u'/home/odoo/10.0/profiles', u'/home/odoo/10.0/project', u'/home/odoo/10.0/purchase-reporting', u'/home/odoo/10.0/purchase-workflow', u'/home/odoo/10.0/queue', u'/home/odoo/10.0/report-print-send', u'/home/odoo/10.0/reporting-engine', u'/home/odoo/10.0/rma', u'/home/odoo/10.0/sale-financial', u'/home/odoo/10.0/sale-reporting', u'/home/odoo/10.0/sale-workflow', u'/home/odoo/10.0/search-engine', u'/home/odoo/10.0/server-auth', u'/home/odoo/10.0/server-tools', u'/home/odoo/10.0/server-ux', u'/home/odoo/10.0/social', u'/home/odoo/10.0/stock-logistics-barcode', u'/home/odoo/10.0/stock-logistics-reporting', u'/home/odoo/10.0/stock-logistics-tracking', u'/home/odoo/10.0/stock-logistics-transport', u'/home/odoo/10.0/stock-logistics-warehouse', u'/home/odoo/10.0/stock-logistics-workflow', u'/home/odoo/10.0/storage', u'/home/odoo/10.0/timesheet', u'/home/odoo/10.0/uncovered', u'/home/odoo/10.0/web', u'/home/odoo/10.0/webhook', u'/home/odoo/10.0/website', u'/home/odoo/10.0/wms', u'/home/odoo/10.0/zerobug-test']
+2024-12-18 20:14:45,621 18643 INFO ? odoo: database: odoo10@localhost:5432
+2024-12-18 20:14:45,651 18643 INFO ? odoo.service.server: HTTP service (werkzeug) running on NB200Z0.:49875
+2024-12-18 20:14:45,684 18643 INFO test_odoo_10 odoo.modules.loading: loading 1 modules...
+2024-12-18 20:14:45,812 18643 INFO test_odoo_10 odoo.modules.loading: 1 modules loaded in 0.13s, 0 queries
+2024-12-18 20:14:48,090 18643 INFO test_odoo_10 odoo.modules.loading: loading 45 modules...
+2024-12-18 20:14:48,324 18643 INFO test_odoo_10 odoo.addons.report.models.report: Will use the Wkhtmltopdf binary at /home/odoo/10.0/venv_odoo/bin/wkhtmltopdf
+2024-12-18 20:14:48,753 18643 INFO test_odoo_10 odoo.modules.loading: 45 modules loaded in 0.66s, 0 queries
+2024-12-18 20:14:48,759 18643 INFO test_odoo_10 odoo.modules.loading: loading 46 modules...
+2024-12-18 20:14:49,352 18643 INFO test_odoo_10 odoo.modules.registry: module universal_connector_rcp_vg7: creating or updating database tables
+2024-12-18 20:14:49,534 18643 WARNING test_odoo_10 py.warnings: /home/odoo/10.0/odoo/models.py:362: UnicodeWarning: Unicode equal comparison failed to convert both arguments to Unicode - interpreting them as being unequal
+  elif not all(cols[field.name][key] == vals[key] for key in vals):
+
+2024-12-18 20:14:51,894 18643 INFO test_odoo_10 odoo.addons.auth_crypt.models.res_users: Hashing passwords, may be slow for databases with many users...
+2024-12-18 20:14:52,045 18643 INFO test_odoo_10 odoo.models: Storing computed values of res.partner.shipping fields commercial_company_name, commercial_partner_id, display_name, partner_share
+2024-12-18 20:14:52,047 18643 INFO test_odoo_10 odoo.models: Storing computed values of res.partner.invoice fields commercial_company_name, commercial_partner_id, display_name, partner_share
+2024-12-18 20:14:52,048 18643 INFO test_odoo_10 odoo.models: Storing computed values of res.partner.supplier fields commercial_company_name, commercial_partner_id, display_name, partner_share
+2024-12-18 20:14:52,117 18643 WARNING test_odoo_10 odoo.addons.base.module.module: module universal_connector_rcp_vg7: description is empty !
+2024-12-18 20:14:52,117 18643 INFO test_odoo_10 odoo.modules.loading: loading universal_connector_rcp_vg7/security/ir.model.access.csv
+2024-12-18 20:14:52,190 18643 INFO test_odoo_10 odoo.modules.loading: loading universal_connector_rcp_vg7/data/synchro_channel.xml
+2024-12-18 20:14:52,300 18643 INFO test_odoo_10 odoo.modules.loading: loading universal_connector_rcp_vg7/data/synchro_partner.xml
+2024-12-18 20:14:52,340 18643 WARNING test_odoo_10 odoo.models: synchro.channel.model.create() includes unknown fields: cron_sync
+2024-12-18 20:14:53,126 18643 INFO test_odoo_10 odoo.modules.loading: loading universal_connector_rcp_vg7/data/synchro_country.xml
+2024-12-18 20:14:53,454 18643 INFO test_odoo_10 odoo.modules.module: odoo.addons.universal_connector_rcp_vg7.tests.test_backend running tests.
+2024-12-18 20:14:53,454 18643 INFO test_odoo_10 odoo.addons.universal_connector_rcp_vg7.tests.test_backend: test_connection (odoo.addons.universal_connector_rcp_vg7.tests.test_backend.MyTest)
+2024-12-18 20:14:53,620 18643 INFO test_odoo_10 odoo.addons.universal_connector_rcp_vg7.tests.testenv: 🎺🎺🎺 Starting test v2.0.21 (debug_level=0, commit=True)
+2024-12-18 20:14:53,623 18643 INFO test_odoo_10 odoo.addons.universal_connector_rcp_vg7.tests.testenv: 🎺🎺 Testing module: universal_connector_rcp_vg7 (10.0.0.3.10)
+2024-12-18 20:14:53,624 18643 INFO test_odoo_10 odoo.addons.universal_connector_rcp_vg7.tests.testenv: 🎺🎺 Loading data from: synchro.channel 
+2024-12-18 20:14:53,652 18643 INFO test_odoo_10 odoo.addons.universal_connector_rcp_vg7.tests.test_backend: 🎺 Starting connection test on ports 8270 (db=oca10) and 8272 (db=oca12) and on ports 8167 (db=demo7) and 8168 (db=demo8)
+2024-12-18 20:14:54,093 18643 INFO test_odoo_10 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.channel[3].button_check_connection(ep=https://gestionale.paperservice.vg7progress.it/index.php,h=gestionale.paperservice.vg7progress.it):
+2024-12-18 20:14:54,728 18643 INFO test_odoo_10 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.channel[3].button_reset_to_draft(ep=https://gestionale.paperservice.vg7progress.it/index.php,h=gestionale.paperservice.vg7progress.it):
+2024-12-18 20:14:54,918 18643 INFO test_odoo_10 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.channel[3].button_check_connection(ep=https://gestionale.paperservice.vg7progress.it/index.php,h=gestionale.paperservice.vg7progress.it):
+2024-12-18 20:14:55,732 18643 INFO test_odoo_10 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(customers,vg7,remote_id=101, ttl=None)
+2024-12-18 20:14:56,711 18643 INFO test_odoo_10 odoo.addons.universal_connector_base.models.ir_model_synchro_log: !-1! ERROR Wrong value for res.partner.shipping.commercial_partner_id: res.partner.shipping(1,): res.partner.shipping.create({'message_follower_ids': [[0, 0, {'res_model': 'res.partner.shipping', 'subtype_ids': [(6, 0, [1])], 'res_id': 1, 'partner_id': 3}]], 'image_medium': False, 'name': '', u'vg7_id': u'109', 'image': False, 'image_small': False, 'type': u'delivery'})
+2024-12-18 20:14:56,741 18643 INFO test_odoo_10 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(countries,vg7,remote_id=166, ttl=1)
+2024-12-18 20:14:57,058 18643 INFO test_odoo_10 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(regions,vg7,remote_id=122, ttl=1)
+2024-12-18 20:14:57,313 18643 INFO test_odoo_10 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(customers,vg7,remote_id=101, ttl=1)
+2024-12-18 20:14:57,638 18643 INFO test_odoo_10 odoo.addons.universal_connector_base.models.ir_model_synchro_log: !-2! ERROR (u'You cannot create recursive Partner hierarchies.', None): res.partner.write({u'city': u'Ariano Irpino', u'codice_destinatario': u'J6URRTW', u'zip': u'83031', u'phone': u'3473844070', 'electronic_invoice_subjected': True, u'country_id': 110, u'parent_id': 45, u'street': u"VIA R. D'AFFLITTO, 59", 'company_name': False, 'is_company': True, u'email': u'bollella6@gmail.com', u'vat': u'IT02994470645', u'fiscalcode': u'02994470645'})
+2024-12-18 20:14:57,838 18643 INFO test_odoo_10 odoo.addons.universal_connector_base.models.ir_model_synchro_log: !-1! ERROR Wrong value for res.partner.shipping.commercial_partner_id: res.partner.shipping(2,): res.partner.shipping.create({'message_follower_ids': [[0, 0, {'res_model': 'res.partner.shipping', 'subtype_ids': [(6, 0, [1])], 'res_id': 2, 'partner_id': 3}]], 'image_medium': False, 'name': '', u'vg7_id': u'109', 'image': False, 'image_small': False, 'type': u'delivery'})
+2024-12-18 20:14:57,945 18643 INFO test_odoo_10 odoo.addons.universal_connector_base.models.ir_model_synchro_log: !-2! ERROR (u'You cannot create recursive Partner hierarchies.', None): res.partner.write({u'city': u'Ariano Irpino', u'codice_destinatario': u'J6URRTW', u'name': False, u'zip': u'83031', u'phone': u'3473844070', 'electronic_invoice_subjected': True, u'country_id': 110, u'parent_id': 45, u'street': u"VIA R. D'AFFLITTO, 59", 'company_name': False, 'type': u'invoice', u'email': u'bollella6@gmail.com', u'vat': u'IT02994470645', u'fiscalcode': u'02994470645'})
+2024-12-18 20:14:58,054 18643 INFO test_odoo_10 odoo.addons.universal_connector_base.models.ir_model_synchro_log: !-2! ERROR (u'You cannot create recursive Partner hierarchies.', None): res.partner.write({u'city': u'Ariano Irpino', u'codice_destinatario': u'J6URRTW', u'zip': u'83031', u'phone': u'3473844070', 'electronic_invoice_subjected': True, u'country_id': 110, u'parent_id': 45, u'street': u"VIA R. D'AFFLITTO, 59", 'company_name': False, 'is_company': True, u'email': u'bollella6@gmail.com', u'vat': u'IT02994470645', u'fiscalcode': u'02994470645'})
+2024-12-18 20:14:58,087 18643 INFO test_odoo_10 odoo.addons.universal_connector_rcp_vg7.tests.testenv: ✨ Test data available on database test_odoo_10
+2024-12-18 20:14:58,087 18643 INFO test_odoo_10 odoo.addons.universal_connector_rcp_vg7.tests.testenv: 🏆🥇 [1;32m9 tests SUCCESSFULLY completed[0m
+2024-12-18 20:14:58,090 18643 INFO test_odoo_10 odoo.addons.universal_connector_rcp_vg7.tests.test_backend: Ran 1 test in 4.635s
+2024-12-18 20:14:58,090 18643 INFO test_odoo_10 odoo.addons.universal_connector_rcp_vg7.tests.test_backend: OK
+2024-12-18 20:14:58,101 18643 INFO test_odoo_10 odoo.modules.loading: 46 modules loaded in 9.34s, 2277 queries
+2024-12-18 20:14:58,703 18643 INFO test_odoo_10 odoo.modules.loading: Modules loaded.
+2024-12-18 20:14:58,710 18643 INFO test_odoo_10 odoo.modules.loading: All post-tested in 0.00s, 0 queries
+2024-12-18 20:14:58,711 18643 INFO test_odoo_10 odoo.modules.registry: Registry changed, signaling through the database
+2024-12-18 20:14:58,713 18643 INFO test_odoo_10 odoo.service.server: Initiating shutdown
+2024-12-18 20:14:58,713 18643 INFO test_odoo_10 odoo.service.server: Hit CTRL-C again or send a second signal to force the shutdown.
+
++===================================================================
+| please test [36muniversal_connector_rcp_vg7[0m (10.0): [32mSUCCESS![0m
++===================================================================
+
+[1;37;44m[34;107mName                                                                                     Stmts   Miss  Cover   Missing
+----------------------------------------------------------------------------------------------------------------------
+/home/odoo/10.0/connector/universal_connector_rcp_vg7/models/ir_model_synchro_apply.py      54     44    19%   22-44, 371-392
+/home/odoo/10.0/connector/universal_connector_rcp_vg7/models/res_country.py                  9      0   100%
+/home/odoo/10.0/connector/universal_connector_rcp_vg7/models/res_partner.py                173    108    38%   27-51, 54-151, 179, 182, 190-192, 207-208, 225-228, 230-236, 239-243, 245, 248, 252-255, 257, 259-262, 264-268, 313-315
+/home/odoo/10.0/connector/universal_connector_rcp_vg7/models/synchro_api.py                 90     16    82%   32, 54-57, 59, 63, 104-107, 117, 124, 129, 136-139
+/home/odoo/10.0/connector/universal_connector_rcp_vg7/models/synchro_channel.py              7      0   100%
+----------------------------------------------------------------------------------------------------------------------
+TOTAL                                                                                      333    168    50%
+[0m

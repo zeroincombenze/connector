@@ -1,1 +1,1 @@
-less -R $(readlink -f $(dirname $0))/universal_connector_by_xmlrpc_20241211.txt
+less -R $(readlink -f $(dirname $0))/universal_connector_by_xmlrpc_20241216.txt

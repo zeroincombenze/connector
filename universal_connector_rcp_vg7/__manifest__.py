@@ -18,12 +18,8 @@
     "depends": [
         "universal_connector_base",
         "universal_connector_by_http",
-        "account",
-        "l10n_it_ddt",
-        "purchase",
-        "sale",
-        "stock",
-        "stock_picking_package_preparation",
+        "assigned_bank",
+        "l10n_it_fatturapa_out",
     ],
     "external_dependencies": {
         "python": [
@@ -32,17 +28,10 @@
     },
     "version_external_dependencies": ["python_plus>=2.0.12"],
     "data": [
+        "security/ir.model.access.csv",
         "data/synchro_channel.xml",
         "data/synchro_partner.xml",
-        "data/synchro_account.xml",
         "data/synchro_country.xml",
-        "data/synchro_account_invoice.xml",
-        "data/synchro_account_tax.xml",
-        "data/synchro_package_preparation.xml",
-        "data/synchro_partner_bank.xml",
-        "data/synchro_product.xml",
-        "data/synchro_purchase_order.xml",
-        "data/synchro_sale_order.xml",
     ],
     "maintainer": "Antonio M. Vigliotti <antoniomaria.vigliotti@gmail.com>",
     "installable": True,

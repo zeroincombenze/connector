@@ -35,6 +35,7 @@ class SynchroApi(models.Model):
         session = self.init_sesssion(
             login_endpoint=endpoint, data_endpoint=data_endpoint
         )
+        cnx = None
         try:
             if headers:
                 cnx = requests.get(endpoint, headers=headers, verify=verify)

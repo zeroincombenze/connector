@@ -21,6 +21,7 @@ class BaseModel(models.BaseModel):
         backend=None,
         only_minimal=True,
         ttl=None,
+        running_in_queue=None,
     ):
         return self.env["ir.model.synchro"].synchro(
             self,
@@ -28,6 +29,7 @@ class BaseModel(models.BaseModel):
             backend=backend,
             only_minimal=only_minimal,
             ttl=ttl,
+            running_in_queue=running_in_queue,
         )
 
     @api.multi
@@ -44,5 +46,5 @@ class BaseModel(models.BaseModel):
                 self.env["ir.model.synchro"].trigger_one_record(
                     synchro_model.counterpart_name,
                     backend.prefix,
-                    getattr(self, loc_ext_id),
+                    synchro_model.get_external_pk(getattr(self, loc_ext_id)),
                 )
