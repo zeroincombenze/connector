@@ -1,5 +1,5 @@
 #
-# Copyright 2019-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
+# Copyright 2018-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
 #
 # Contributions to development, thanks to:
 # * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
@@ -8,7 +8,7 @@
 #
 {
     "name": "Universal Connector VG7",
-    "version": "12.0.0.3.10",
+    "version": "12.0.0.3.11",
     "category": "Generic Modules",
     "summary": "Add Remote Counterparty VG7 to Universal Connector",
     "author": "SHS-AV s.r.l.",
@@ -21,6 +21,7 @@
         "assigned_bank",
         "l10n_it_fatturapa_out",
     ],
+    "version_depends": ["universal_connector_base>=10.0.0.3.11"],
     "external_dependencies": {
         "python": [
             "python_plus",
@@ -32,6 +33,8 @@
         "data/synchro_channel.xml",
         "data/synchro_partner.xml",
         "data/synchro_country.xml",
+        "views/country_view.xml",
+        "views/partner_view.xml",
     ],
     "maintainer": "Antonio M. Vigliotti <antoniomaria.vigliotti@gmail.com>",
     "installable": True,

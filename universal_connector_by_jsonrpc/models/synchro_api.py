@@ -1,5 +1,5 @@
 #
-# Copyright 2019-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
+# Copyright 2018-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
 #
 # Contributions to development, thanks to:
 # * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
@@ -78,9 +78,27 @@ class SynchroApi(models.Model):
     def get_response_odoo_jsonrpc(
         self, session, synchro_model, ext_id=False, endpoint=None, fields=None
     ):
+        ext_model = synchro_model.counterpart_name
         if ext_id:
-            vals = session["cnx_lgi"].env[synchro_model.name].read(ext_id, fields)[0]
+            vals = session["cnx_lgi"].env[ext_model].read(ext_id, fields)[0]
             if vals and synchro_model.counterpart_pk not in vals:
                 vals[synchro_model.counterpart_pk] = ext_id
             return [vals]
         return session["cnx_lgi"].env[synchro_model.name].search([])
+
+    def get_record_list_odoo_jsonrpc(self, session, synchro_model):
+        ext_model = synchro_model.counterpart_name
+        try:
+            values = session["cnx_lgi"].env[ext_model].search([])
+        except BaseException as e:  # pragma: no cover
+            self.env.cr.rollback()  # pylint: disable=invalid-commit
+            self.env["ir.model.synchro.log"].logmsg(
+                "error",
+                "!%(E)s! ERROR %(e)s reading(db=%(db)s, model=%(model)s, id=%(id)s)",
+                backend=synchro_model.synchro_channel_id,
+                res_model=ext_model,
+                errcode=-13,
+                errmsg=e,
+            )
+            return []
+        return values

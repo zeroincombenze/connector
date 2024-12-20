@@ -1,6 +1,6 @@
-12.0.0.3.10 (2024-12-16)
+12.0.0.3.10 (2024-12-22)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 * [IMP] Splited from universal_connector
 * [IMP] Minor aesthetic update
-* [QUA] Test coverage 88% (52: 6+46) [108 TestPoints] - quality rating 386 (target 100)
+* [QUA] Test coverage 90% (58: 6+52) [176 TestPoints] - quality rating 540 (target 100)

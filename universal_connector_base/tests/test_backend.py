@@ -1,5 +1,5 @@
 #
-# Copyright 2019-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
+# Copyright 2018-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
 #
 # Contributions to development, thanks to:
 # * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
@@ -314,7 +314,7 @@ class MyTest(SingleTransactionCase):
             backend,
             actions="button_check_connection",
         )
-        self.assertEqual(backend.state, "checked")
+        self.assertEqual(backend.state, "ready")
         self.assertEqual(backend.pypi_sign, "xmlrpc")
 
     def _test_reset_connection(self, xref):
@@ -361,13 +361,13 @@ class MyTest(SingleTransactionCase):
             rec_id = Synchro.trigger_one_record(ext_model, backend.prefix, ext_id)
             if loc_id:
                 self.assertEqual(rec_id, loc_id)
-            rec = self.env[loc_model].browse(rec_id)
-            self.assertEqual(getattr(rec, loc_ext_id), ext_id)
+            record = self.env[loc_model].browse(rec_id)
+            self.assertEqual(getattr(record, loc_ext_id), ext_id)
             for loc_field, op, value in self.get_test_pattern(xref, loc_model, ext_id):
                 if op == "%":
-                    self.assertIn(value, getattr(rec, loc_field))
+                    self.assertIn(value, getattr(record, loc_field))
                 else:
-                    self.assertEqual(getattr(rec, loc_field), value)
+                    self.assertEqual(getattr(record, loc_field), value)
 
     def _test_import_partner(self, xref):
         Synchro = self.env["ir.model.synchro"]
@@ -417,7 +417,7 @@ class MyTest(SingleTransactionCase):
             and int(backend.odoo_version.split(".")[0]) >= 12
         ):
             for ext_id in self.get_ext_id_list(xref, loc_model):
-                # This test load counterart record with local record which must be
+                # This test load counterpart record with local record which must be
                 # present in DB. If ext_if has no_local attribute means this test
                 # is to skip
                 if self.is_no_local(xref, loc_model, ext_id):
@@ -453,6 +453,49 @@ class MyTest(SingleTransactionCase):
                 else:
                     self.assertEqual(getattr(partner, loc_field), value)
 
+    def _test_country_state_ca(self, xref):
+        # res.country.state requires country_id; in order to check this configuration
+        # we have to test a record which can exist in 2+ countries. We use 'CA' used in
+        # "Delta PC" partner; "CA" means California in the USA and Cagliari in Italy
+        loc_modeL = "res.country.state"
+        backend = self.resource_browse(xref)
+        loc_ext_id = "%s_id" % backend.prefix
+        recs = self.env[loc_modeL].search([("code", "=", "CA")])
+        for record in recs:
+            ext_id = getattr(record, loc_ext_id)
+            if record.country_id.code == "US":
+                self.assertGreater(ext_id, 0)
+            else:
+                self.assertEqual(ext_id, False)
+
+    def _test_pull_record(self, xref, loc_model):
+        for ext_id in self.get_ext_id_list(xref, loc_model):
+            # This test run pull_record function of existent and synchronized record.
+            # If ext_if has no_local attribute we cannot find record to pull
+            if self.is_no_local(xref, loc_model, ext_id):
+                continue
+            loc_id = self.get_loc_id(xref, loc_model, ext_id)
+            record = self.env[loc_model].browse(loc_id)
+            do_test = False
+            for loc_field, op, value in self.get_test_pattern(xref, loc_model, ext_id):
+                if loc_field == "name":
+                    record.write({"name": "wrong"})
+                    do_test = True
+                    break
+            if do_test:
+                self.resource_edit(
+                    record,
+                    actions="pull_record",
+                )
+                record = self.env[loc_model].browse(loc_id)
+                for loc_field, op, value in self.get_test_pattern(
+                    xref, loc_model, ext_id
+                ):
+                    if op == "%":
+                        self.assertIn(value, getattr(record, loc_field))
+                    else:
+                        self.assertEqual(getattr(record, loc_field), value)
+
     def _test_03_purge(self):
         _logger.info("🎺 Starting purge log test")
         self.env["ir.model.synchro.log"].purge_log()
@@ -478,4 +521,7 @@ class MyTest(SingleTransactionCase):
             self._test_import_model(xref, "res.currency")
             self._test_import_model(xref, "res.country")
             self._test_import_model(xref, "res.partner")
+        for xref in sorted(self.get_resource_data_list("synchro.channel")):
+            # self._test_country_state_ca(xref)
+            self._test_pull_record(xref, "res.partner")
         self._test_03_purge()

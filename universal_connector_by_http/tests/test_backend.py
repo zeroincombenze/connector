@@ -1,5 +1,5 @@
 #
-# Copyright 2019-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
+# Copyright 2018-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
 #
 # Contributions to development, thanks to:
 # * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
@@ -308,7 +308,7 @@ class MyTest(SingleTransactionCase):
             backend,
             actions="button_check_connection",
         )
-        self.assertEqual(backend.state, "checked")
+        self.assertEqual(backend.state, "ready")
 
     def _test_reset_connection(self, xref):
         backend = self.resource_browse(xref)
@@ -445,10 +445,6 @@ class MyTest(SingleTransactionCase):
                     self.assertIn(value, getattr(partner, loc_field))
                 else:
                     self.assertEqual(getattr(partner, loc_field), value)
-
-    def _test_03_purge(self):
-        _logger.info("🎺 Starting purge log test")
-        self.env["ir.model.synchro.log"].purge_log()
 
     def test_connection(self):
         # This test requires external Odoo instance active. See header

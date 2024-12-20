@@ -29,7 +29,12 @@
 "?","z0bug.localhost-odoo12","res.partner","res.partner","name","name",13,"%","The Jackson Group",
 "?","z0bug.localhost-odoo10","res.partner","res.partner","name","name",11,"%","The Jackson Group",
 "?","z0bug.localhost-odoo8","res.partner","res.partner","name","name",15,"%","The Jackson Group",
+"?","z0bug.localhost-odoo12","res.partner","res.partner","name","name",12,"%","Ready Mat",1
+"?","z0bug.localhost-odoo10","res.partner","res.partner","name","name",10,"%","Delta PC",1
+"?","z0bug.localhost-odoo8","res.partner","res.partner","name","name",9,"%","Delta PC",1
+"?","z0bug.localhost-odoo7","res.partner","res.partner","name","name",8,"%","Delta PC",1
 "?","z0bug.localhost-odoo12","res.partner","res.partner","name","name",9,"%","Wood Corner",1
 "?","z0bug.localhost-odoo10","res.partner","res.partner","name","name",7,"%","ASUSTeK",1
 "?","z0bug.localhost-odoo8","res.partner","res.partner","name","name",7,"%","Agrolait",1
+"?","z0bug.localhost-odoo7","res.partner","res.partner","name","name",7,"%","China Export",1
 "?","*","res.users","res.users","login","login",,"","",

@@ -11,11 +11,11 @@
                     <button name="pull_record" string="Synchronize" type="object"/>
                     <group>
                         <field name="timestamp"/>
-                        <field name="oe16_id"/>
-                        <field name="oe12_id"/>
-                        <field name="oe10_id"/>
-                        <field name="oe8_id"/>
                         <field name="oe7_id"/>
+                        <field name="oe8_id"/>
+                        <field name="oe10_id"/>
+                        <field name="oe12_id"/>
+                        <field name="oe16_id"/>
                         <field name="errmsg"/>
                     </group>
                 </page>
@@ -23,4 +23,18 @@
         </field>
     </record>
 
+    <record id="view_partner_category_form" model="ir.ui.view">
+        <field name="name">Contact Tags</field>
+        <field name="model">res.partner.category</field>
+        <field name="inherit_id" ref="base.view_partner_category_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='parent_id']" position="after">
+                <field name="oe7_id"/>
+                <field name="oe8_id"/>
+                <field name="oe10_id"/>
+                <field name="oe12_id"/>
+                <field name="oe16_id"/>
+            </xpath>
+        </field>
+    </record>
 </odoo>

@@ -1,11 +1,12 @@
 #
-# Copyright 2019-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
+# Copyright 2018-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
 #
 # Contributions to development, thanks to:
 # * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
 #
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 #
+from future.utils import PY3
 import logging
 from datetime import datetime, timedelta
 
@@ -32,16 +33,13 @@ class IrModelSynchroApply(models.Model):
         vals,
         loc_name,
         ext_ref,
-        loc_ext_id_name,
+        loc_ext_id,
         vmodel,
         default=None,
         ctx=None,
     ):
-        if loc_name not in vals:
-            if vals.get(ext_ref):
-                vals[loc_name] = vals[ext_ref]
-            elif default:
-                vals[loc_name] = default
+        if loc_name not in vals and not vals.get(ext_ref) and default:
+            vals[ext_ref] = default
         return vals
 
     def apply_set_tmp_name(
@@ -50,26 +48,29 @@ class IrModelSynchroApply(models.Model):
         vals,
         loc_name,
         ext_ref,
-        loc_ext_id_name,
+        loc_ext_id,
         vmodel,
         default=None,
         ctx=None,
     ):
         if loc_name in vals and vals[loc_name]:
             return vals
-        if vals.get("type") in ("delivery", "invoice"):  # pragma: no cover
+        if (
+            not PY3
+            and vmodel.startswith("res.partner")
+            and vals.get("type") in ("delivery", "invoice")
+        ):  # pragma: no cover
             return vals
-        if vals.get(ext_ref):
-            vals[loc_name] = vals[ext_ref]
-        elif default:
-            vals[loc_name] = default
-        elif loc_ext_id_name in vals:
-            if loc_name in ("code", "default_code"):
-                vals[loc_name] = "code%s" % vals[loc_ext_id_name]
+        if not vals.get(ext_ref):
+            if default:
+                vals[ext_ref] = default
+            elif loc_ext_id in vals:
+                if loc_name in ("code", "default_code"):
+                    vals[ext_ref] = "code%s" % vals[loc_ext_id]
+                else:
+                    vals[ext_ref] = "Unknown %s" % vals[loc_ext_id]
             else:
-                vals[loc_name] = "Unknown %s" % vals[loc_ext_id_name]
-        else:
-            vals[loc_name] = "Unknown %s" % loc_name
+                vals[ext_ref] = "Unknown %s" % loc_name
         return vals
 
     def apply_upper(
@@ -78,16 +79,13 @@ class IrModelSynchroApply(models.Model):
         vals,
         loc_name,
         ext_ref,
-        loc_ext_id_name,
+        loc_ext_id,
         vmodel,
         default=None,
         ctx=None,
     ):  # pragma: no cover
-        if ext_ref in vals:
-            if isinstance(vals[ext_ref], str):
-                vals[loc_name] = vals[ext_ref].upper()
-            else:
-                vals[loc_name] = vals[ext_ref]
+        if ext_ref in vals and isinstance(vals[ext_ref], str):
+            vals[ext_ref] = vals[ext_ref].upper()
         return vals
 
     def apply_lower(
@@ -96,16 +94,13 @@ class IrModelSynchroApply(models.Model):
         vals,
         loc_name,
         ext_ref,
-        loc_ext_id_name,
+        loc_ext_id,
         vmodel,
         default=None,
         ctx=None,
     ):  # pragma: no cover
-        if ext_ref in vals:
-            if isinstance(vals[ext_ref], str):
-                vals[loc_name] = vals[ext_ref].lower()
-            else:
-                vals[loc_name] = vals[ext_ref]
+        if ext_ref in vals and isinstance(vals[ext_ref], str):
+            vals[ext_ref] = vals[ext_ref].lower()
         return vals
 
     def apply_bool(
@@ -114,13 +109,13 @@ class IrModelSynchroApply(models.Model):
         vals,
         loc_name,
         ext_ref,
-        loc_ext_id_name,
+        loc_ext_id,
         vmodel,
         default=None,
         ctx=None,
     ):
         if ext_ref in vals:
-            vals[loc_name] = str2bool(vals[ext_ref], False)
+            vals[ext_ref] = str2bool(vals[ext_ref], False)
         return vals
 
     def apply_str(
@@ -129,13 +124,13 @@ class IrModelSynchroApply(models.Model):
         vals,
         loc_name,
         ext_ref,
-        loc_ext_id_name,
+        loc_ext_id,
         vmodel,
         default=None,
         ctx=None,
     ):  # pragma: no cover
         if ext_ref in vals:
-            vals[loc_name] = str(vals[ext_ref])
+            vals[ext_ref] = str(vals[ext_ref])
         return vals
 
     def apply_not(
@@ -144,16 +139,16 @@ class IrModelSynchroApply(models.Model):
         vals,
         loc_name,
         ext_ref,
-        loc_ext_id_name,
+        loc_ext_id,
         vmodel,
         default=None,
         ctx=None,
     ):  # pragma: no cover
         if ext_ref in vals:
             if isinstance(vals[ext_ref], (int, bool)):
-                vals[loc_name] = not vals[ext_ref]
+                vals[ext_ref] = not vals[ext_ref]
             else:
-                vals[loc_name] = not str2bool(vals[ext_ref], True)
+                vals[ext_ref] = not str2bool(vals[ext_ref], True)
         return vals
 
     def apply_vat(
@@ -162,21 +157,16 @@ class IrModelSynchroApply(models.Model):
         vals,
         loc_name,
         ext_ref,
-        loc_ext_id_name,
+        loc_ext_id,
         vmodel,
         default=None,
         ctx=None,
     ):
         """External vat may not contain ISO code"""
-        if ext_ref in vals:
-            if isinstance(vals[ext_ref], str):
-                vals[ext_ref] = vals[ext_ref].strip()
-                if len(vals[ext_ref]) == 11 and vals[ext_ref].isdigit():
-                    vals[loc_name] = "IT%s" % vals[ext_ref]
-                elif vals[ext_ref]:
-                    vals[loc_name] = vals[ext_ref]
-            elif vals[ext_ref]:
-                vals[loc_name] = vals[ext_ref]
+        if ext_ref in vals and isinstance(vals[ext_ref], str):
+            vals[ext_ref] = vals[ext_ref].strip()
+            if len(vals[ext_ref]) == 11 and vals[ext_ref].isdigit():
+                vals[ext_ref] = "IT%s" % vals[ext_ref]
         return vals
 
     def apply_invoice_number(
@@ -185,7 +175,7 @@ class IrModelSynchroApply(models.Model):
         vals,
         loc_name,
         ext_ref,
-        loc_ext_id_name,
+        loc_ext_id,
         vmodel,
         default=None,
         ctx=None,
@@ -201,7 +191,7 @@ class IrModelSynchroApply(models.Model):
         vals,
         loc_name,
         ext_ref,
-        loc_ext_id_name,
+        loc_ext_id,
         vmodel,
         default=None,
         ctx=None,
@@ -218,7 +208,7 @@ class IrModelSynchroApply(models.Model):
         vals,
         loc_name,
         ext_ref,
-        loc_ext_id_name,
+        loc_ext_id,
         vmodel,
         default=None,
         ctx=None,
@@ -252,7 +242,7 @@ class IrModelSynchroApply(models.Model):
         vals,
         loc_name,
         ext_ref,
-        loc_ext_id_name,
+        loc_ext_id,
         vmodel,
         default=None,
         ctx=None,
@@ -274,7 +264,7 @@ class IrModelSynchroApply(models.Model):
         vals,
         loc_name,
         ext_ref,
-        loc_ext_id_name,
+        loc_ext_id,
         vmodel,
         default=None,
         ctx=None,
@@ -298,7 +288,7 @@ class IrModelSynchroApply(models.Model):
         vals,
         loc_name,
         ext_ref,
-        loc_ext_id_name,
+        loc_ext_id,
         vmodel,
         default=None,
         ctx=None,
@@ -340,7 +330,7 @@ class IrModelSynchroApply(models.Model):
         vals,
         loc_name,
         ext_ref,
-        loc_ext_id_name,
+        loc_ext_id,
         vmodel,
         default=None,
         ctx=None,
@@ -361,7 +351,7 @@ class IrModelSynchroApply(models.Model):
         vals,
         loc_name,
         ext_ref,
-        loc_ext_id_name,
+        loc_ext_id,
         vmodel,
         default=None,
         ctx=None,
@@ -393,16 +383,15 @@ class IrModelSynchroApply(models.Model):
         vals,
         loc_name,
         ext_ref,
-        loc_ext_id_name,
+        loc_ext_id,
         vmodel,
         default=None,
         ctx=None,
     ):
-        if loc_name in vals:
-            return vals
-        ctx = ctx or {}
-        if loc_name in ctx:
-            vals[loc_name] = ctx[loc_name]
+        if loc_name not in vals and not vals.get(ext_ref):
+            ctx = ctx or {}
+            if loc_name in ctx:
+                vals[ext_ref] = ctx[loc_name]
         return vals
 
     def apply_datetime(
@@ -411,15 +400,13 @@ class IrModelSynchroApply(models.Model):
         vals,
         loc_name,
         ext_ref,
-        loc_ext_id_name,
+        loc_ext_id,
         vmodel,
         default=None,
         ctx=None,
     ):
-        if vals.get(ext_ref):
-            vals[loc_name] = vals[ext_ref]
-            if len(vals[ext_ref].split(" ")) == 1:
-                vals[loc_name] = "%s 00:00:00" % vals[ext_ref]
+        if vals.get(ext_ref) and len(vals[ext_ref].split(" ")) == 1:
+            vals[ext_ref] = "%s 00:00:00" % vals[ext_ref]
         return vals
 
     def apply_line_vals_from_prod(
@@ -428,7 +415,7 @@ class IrModelSynchroApply(models.Model):
         vals,
         loc_name,
         ext_ref,
-        loc_ext_id_name,
+        loc_ext_id,
         vmodel,
         default=None,
         ctx=None,
@@ -481,7 +468,7 @@ class IrModelSynchroApply(models.Model):
         vals,
         loc_name,
         ext_ref,
-        loc_ext_id_name,
+        loc_ext_id,
         vmodel,
         default=None,
         ctx=None,
@@ -501,7 +488,7 @@ class IrModelSynchroApply(models.Model):
         vals,
         loc_name,
         ext_ref,
-        loc_ext_id_name,
+        loc_ext_id,
         vmodel,
         default=None,
         ctx=None,
@@ -528,7 +515,7 @@ class IrModelSynchroApply(models.Model):
         vals,
         loc_name,
         ext_ref,
-        loc_ext_id_name,
+        loc_ext_id,
         vmodel,
         default=None,
         ctx=None,
@@ -545,13 +532,13 @@ class IrModelSynchroApply(models.Model):
         vals,
         loc_name,
         ext_ref,
-        loc_ext_id_name,
+        loc_ext_id,
         vmodel,
         default=None,
         ctx=None,
     ):  # pragma: no cover
         if not vals.get(loc_name):
-            vals[loc_name] = datetime.today().strftime("%Y-%m-%d")
+            vals[ext_ref] = datetime.today().strftime("%Y-%m-%d")
         return vals
 
     def apply_now(
@@ -560,13 +547,13 @@ class IrModelSynchroApply(models.Model):
         vals,
         loc_name,
         ext_ref,
-        loc_ext_id_name,
+        loc_ext_id,
         vmodel,
         default=None,
         ctx=None,
     ):  # pragma: no cover
         if not vals.get(loc_name):
-            vals[loc_name] = datetime.today().strftime("%Y-%m-%d %H:%M:%S")
+            vals[ext_ref] = datetime.today().strftime("%Y-%m-%d %H:%M:%S")
         return vals
 
     def apply_next_week_day(
@@ -575,13 +562,13 @@ class IrModelSynchroApply(models.Model):
         vals,
         loc_name,
         ext_ref,
-        loc_ext_id_name,
+        loc_ext_id,
         vmodel,
         default=None,
         ctx=None,
     ):
         if not vals.get(loc_name):
-            vals[loc_name] = (datetime.today() + timedelta(7)).strftime(
+            vals[ext_ref] = (datetime.today() + timedelta(7)).strftime(
                 "%Y-%m-%d %H:%M:%S"
             )
         return vals

@@ -1,5 +1,5 @@
 #
-# Copyright 2019-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
+# Copyright 2018-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
 #
 # Contributions to development, thanks to:
 # * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
@@ -264,7 +264,7 @@ class MyTest(SingleTransactionCase):
             backend,
             actions="button_check_connection",
         )
-        self.assertEqual(backend.state, "checked")
+        self.assertEqual(backend.state, "ready")
         self.assertEqual(backend.pypi_sign, "requests")
 
     def _test_reset_connection(self, xref):

@@ -1,5 +1,5 @@
 #
-# Copyright 2019-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
+# Copyright 2018-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
 #
 # Contributions to development, thanks to:
 # * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
@@ -23,8 +23,8 @@ class ResPartner(models.Model):
     CONTRAINTS = [["id", "!=", "parent_id"]]
 
     def assure_values(self, vals, rec):
-        actual_model = "res.partner"
-        actual_cls = self.env[actual_model]
+        binding_model = "res.partner"
+        actual_cls = self.env[binding_model]
         if rec:
             for nm in ("type",) if PY3 else ("type", "individual"):
                 if nm not in vals:
@@ -34,61 +34,6 @@ class ResPartner(models.Model):
                 vals[nm] = getattr(rec, nm).id
         if vals.get("type") not in ("delivery", "invoice"):
             vals["parent_id"] = False
-        # elif rec and rec.parent_id:
-        #     parent = rec.parent_id
-
-        # decl_is_company = True
-        # if "is_company" not in vals:
-        #     vals["is_company"] = False if vals.get("individual") else True
-        #     decl_is_company = False
-        # if vals.get("type") in ("delivery", "invoice"):
-        #     if not decl_is_company:
-        #         vals["is_company"] = False
-        #     if parent and not isinstance(parent, int) and not PY3:
-        #         if vals.get("name") and (
-        #             vals.get("name") == parent.name
-        #             or vals.get("name", "").startswith("Unknown")
-        #         ):
-        #             vals["name"] = False
-        #         elif not vals.get("name"):
-        #             vals["name"] = False
-        #     if parent and not isinstance(parent, int):
-        #         for nm in (
-        #             "vat",
-        #             "fiscalcode",
-        #             "codice_destinatario",
-        #             "country_id",
-        #             "state_id",
-        #             "electronic_invoice_subjected",
-        #             "is_pa",
-        #             "ipa_code",
-        #         ):
-        #             if (
-        #                 not vals.get(nm)
-        #                 and parent[nm]
-        #                 and (not rec or (rec and not rec[nm]))
-        #             ):
-        #                 if nm.endswith("_id"):
-        #                     vals[nm] = parent[nm].id
-        #                 else:
-        #                     vals[nm] = parent[nm]
-        #         if vals["type"] == "delivery":
-        #             for nm in (
-        #                 "codice_destinatario",
-        #                 "electronic_invoice_subjected",
-        #                 "is_pa",
-        #                 "ipa_code",
-        #             ):
-        #                 vals[nm] = False
-        # else:
-        #     if not vals.get("name") and not rec:
-        #         if vals.get("vat") or vals.get("fiscalcode"):
-        #             vals["name"] = "Unknown"
-        #         else:
-        #             # Force error
-        #             vals["name"] = None
-        #     if parent and vals.get("individual"):
-        #         vals["is_company"] = False
 
         if "codice_destinatario" in vals and not vals["codice_destinatario"]:
             del vals["codice_destinatario"]
@@ -121,6 +66,8 @@ class ResPartnerShipping(models.Model):
 
     CONTRAINTS = ["id", "!=", "parent_id"]
 
+    vg7_id = fields.Integer("VG7 ID", copy=False)
+
     @api.model
     def synchro(
         self,
@@ -129,6 +76,8 @@ class ResPartnerShipping(models.Model):
         only_minimal=True,
         ttl=None,
         running_in_queue=None,
+        jacket=None,
+        ctx=None,
     ):
         vals[":type"] = "delivery"
         return super().synchro(
@@ -137,6 +86,8 @@ class ResPartnerShipping(models.Model):
             only_minimal=only_minimal,
             ttl=ttl,
             running_in_queue=running_in_queue,
+            jacket=jacket,
+            ctx=ctx,
         )
 
 
@@ -146,6 +97,8 @@ class ResPartnerInvoice(models.Model):
 
     CONTRAINTS = ["id", "!=", "parent_id"]
 
+    vg7_id = fields.Integer("VG7 ID", copy=False)
+
     @api.model
     def synchro(
         self,
@@ -154,6 +107,8 @@ class ResPartnerInvoice(models.Model):
         only_minimal=True,
         ttl=None,
         running_in_queue=None,
+        jacket=None,
+        ctx=None,
     ):
         vals[":type"] = "invoice"
         return super().synchro(
@@ -162,9 +117,13 @@ class ResPartnerInvoice(models.Model):
             only_minimal=only_minimal,
             ttl=ttl,
             running_in_queue=running_in_queue,
+            jacket=jacket,
+            ctx=ctx,
         )
 
 
 class ResPartnerSupplier(models.Model):
     _name = "res.partner.supplier"
     _inherit = "res.partner"
+
+    vg72_id = fields.Integer("VG7 ID", copy=False)

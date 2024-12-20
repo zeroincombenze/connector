@@ -1,5 +1,5 @@
 #
-# Copyright 2019-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
+# Copyright 2018-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
 #
 # Contributions to development, thanks to:
 # * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
@@ -75,7 +75,9 @@ class SynchroApi(models.Model):
                     if ext_key_id not in invoice_vals:
                         invoice_vals[ext_key_id] = values[ext_key_id]
                     invoice_vals[":type"] = "invoice"
-                    Cache.que_push(backend, "push", ext_model, invoice_vals, 2, prio=3)
+                    Cache.que_push(
+                        backend, "push", ext_model, invoice_vals, 2, {}, prio=3
+                    )
             if row_shipping:
                 shipping_vals = {}
                 for key, value in row_shipping.items():
@@ -93,6 +95,7 @@ class SynchroApi(models.Model):
                         "customers_shipping_addresses",
                         shipping_vals,
                         2,
+                        {},
                         prio=2,
                     )
             # if row_contact:
@@ -135,4 +138,4 @@ class SynchroApi(models.Model):
         res = self.get_response_csv(
             session, synchro_model, ext_id=ext_id, endpoint=endpoint, fields=fields
         )
-        return self.adapt_response_vg7(res, synchro_mode, ext_idl)
+        return self.adapt_response_vg7(res, synchro_model, ext_id)

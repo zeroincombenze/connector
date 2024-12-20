@@ -1,5 +1,5 @@
 #
-# Copyright 2019-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
+# Copyright 2018-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
 #
 # Contributions to development, thanks to:
 # * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
@@ -75,4 +75,30 @@ class SynchroApi(models.Model):
                     res = [row_res]
                     break
                 res.append(row_res)
+        return res
+
+    def get_record_list_csv(self, session, synchro_model):
+        backend = synchro_model.synchro_channel_id
+        exchange_path = backend.exchange_path
+        ext_key_id = synchro_model.counterpart_pk
+        file_csv = os.path.join(exchange_path, synchro_model.counterpart_name + ".csv")
+        res = []
+        if not os.path.isfile(file_csv):
+            return res
+        with open(file_csv, "r") as fd:
+            hdr = False
+            reader = csv.DictReader(fd, fieldnames=[], restkey="undef_name")
+            for line in reader:
+                row = line["undef_name"]
+                if not hdr:
+                    row_id = 0
+                    hdr = row
+                    continue
+                row_id += 1
+                row_res = dict(zip(hdr, [self.simple_cast(x) for x in row]))
+                if ext_key_id not in row_res:
+                    row_res[ext_key_id] = row_id
+                else:
+                    row_id = row_res[ext_key_id]
+                res.append(row_id)
         return res

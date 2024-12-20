@@ -1,5 +1,5 @@
 #
-# Copyright 2019-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
+# Copyright 2018-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
 #
 # Contributions to development, thanks to:
 # * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
@@ -8,7 +8,7 @@
 #
 {
     "name": "Universal Connector protocol csv",
-    "version": "12.0.0.3.10",
+    "version": "12.0.0.3.11",
     "category": "Generic Modules",
     "summary": "Add import data from csv to Universal Connector",
     "author": "SHS-AV s.r.l.",

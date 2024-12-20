@@ -1,5 +1,5 @@
 #
-# Copyright 2019-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
+# Copyright 2018-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
 #
 # Contributions to development, thanks to:
 # * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
@@ -410,26 +410,26 @@ class IrModelSynchroCache(models.Model):
         )
 
     @api.model_cr_context
-    def que_push(self, backend, action, model, values, ttl, prio=2):
+    def que_push(self, backend, action, model, values, ttl, ctx, prio=2):
         que_name = "IN_QUEUE%d" % prio
         ttl -= 1 if isinstance(ttl, int) else 0
         if ttl > 0:
             if action in ("synchro", "trigger", "push"):
                 in_queue = self.get_attr(backend.id, que_name) or []
                 found_in_que = False
-                for que_action, que_model, que_values, que_ttl in in_queue:
+                for que_action, que_model, que_values, que_ttl, que_ctx in in_queue:
                     if (action, model, values) == (que_action, que_model, que_values):
                         found_in_que = True
                         break
                 if not found_in_que:
-                    in_queue.append((action, model, values, ttl))
+                    in_queue.append((action, model, values, ttl, ctx))
                     self.set_attr(backend.id, que_name, in_queue)
             else:
                 raise RuntimeError("Invalid action %s to push in queue" % action)
 
     @api.model_cr_context
     def que_pop(self, backend):
-        item = (False, False, False, False)
+        item = (False, False, False, False, False)
         for prio in (1, 2, 3):
             que_name = "IN_QUEUE%d" % prio
             in_queue = self.get_attr(backend.id, que_name) or []

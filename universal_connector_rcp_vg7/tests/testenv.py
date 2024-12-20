@@ -53,7 +53,7 @@ Model data declaration
 Each model is declared in a csv file or xlsx file in test/data directory of the
 module. The file name is the same of model name with dots replaced by undescore.
 
-i.e. below the contents of res_partner.csv file:
+i.e. below the contents of res_parter.csv file:
 
     id,name,street
     z0bug.partner1,Alpha,"1, First Avenue"

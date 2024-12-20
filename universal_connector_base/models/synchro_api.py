@@ -1,5 +1,5 @@
 #
-# Copyright 2019-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
+# Copyright 2018-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
 #
 # Contributions to development, thanks to:
 # * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
@@ -25,53 +25,40 @@ class SynchroApi(models.Model):
     This model communicates with remote counterparty through backend protocol.
     Each counterparty has its own structure and every protocol has it own handshake
     rules so it is very difficult to manage all counterparties.
-    Trick is merging protocol addons and identity addons in order to make avaialble all
+    Trick is merging protocol addons and identity addons in order to make available all
     the needing API.
     This model declare generic API; inheritance is implemented by naming. A generic API
     function is overloaded by function name like
-    <indent_name>_<protocol_name>_<funcion_name>
-    or <funcion_name>_<indent_name>_<protocol_name>; if function does not exit a
-    function named <protocol_name>_<funcion_name> or <funcion_name>_<protocol_name>
+    <identity_name>_<protocol_name>_<function_name>
+    or <function_name>_<identity_name>_<protocol_name>; if function does not exit a
+    function named <protocol_name>_<function_name> or <function_name>_<protocol_name>
     is searched; if function does not yet exit a function named
-    <indent_name>_<funcion_name> or <funcion_name>_<indent_name> is searched.
+    <identity_name>_<function_name> or <function_name>_<indent_name> is searched.
 
     Model methods:
-    default(backend): return default values load on backend
+    get_default(backend): return default values load on backend
     get_data_endpoint(backend, exchange_path=None):
             return exchange endpoint from login endpoint
     get_login_endpoint(backend,with_port=None,rebuild=None)
     get_pypi_name(): return python library name
     session(backend): return counterpart session (connect + login)
-    get_list(session,backend): return list with couple (local model, remote table)
+    get_model_list(session,backend): return list with couple (local model, remote table)
+    get_field_list(session,backend,model,magic_fields=None):
+            return field list of Odoo model that can be synchronized with counterparty
     get_response(session,synchro_model,ext_id=None,endpoint=None,fields=None):
             return remote data from remote table (specific id or all)
+    get_record_list(session,synchro_model): return record list of remote table
+
     Usually session calls connect() and login() functions with internal parameters.
     """
 
     _name = "synchro.api"
     _description = "API for Odoo Backend"
 
-    def init_sesssion(self, login_endpoint=False, data_endpoint=False):
-        # Session object: will be become an object. Dict items are:
-        # cnx_lgi, cnx_data, login_endpoint, data_endpoint, session
-        return {
-            "login_endpoint": login_endpoint,
-            "data_endpoint": data_endpoint,
-            "cnx_lgi": False,
-            "cnx_data": False,
-            "session": False,
-        }
-
-    def session_is_active(self, session):
-        return (
-            session
-            and session["cnx_lgi"] is not False
-            and session["session"] is not False
-        )
-
     def get_overridden_fct(
         self, backend, name, identity=None, method=None, major_version=None
     ):
+        """Search for specific function to call"""
         identity = identity or backend.identity
         method = (method or backend.method or "").replace("/", "_")
         major_version = str(
@@ -94,7 +81,33 @@ class SynchroApi(models.Model):
                 return fct
         return False  # pragma: no cover
 
+    # ----------------------------------------------------
+    # Session functions: session will be become an object
+    # Dict items are:
+    #   cnx_lgi, cnx_data, login_endpoint, data_endpoint,
+    #   comm_session
+    # ----------------------------------------------------
+    def init_sesssion(self, login_endpoint=False, data_endpoint=False):
+        """Initialize sessione with defautl values"""
+        return {
+            "login_endpoint": login_endpoint,
+            "data_endpoint": data_endpoint,
+            "cnx_lgi": False,
+            "cnx_data": False,
+            "session": False,
+        }
+
+    def session_is_active(self, session):
+        # Return True if session is active
+        return (
+            session
+            and session["cnx_lgi"] is not False
+            and session["session"] is not False
+        )
+
     def simple_cast(self, value):
+        """Execute the simple field casting. From remote counterparty all field may
+        be all strings; here may be converted to integer or list or dictionary"""
         if isinstance(value, (list, tuple)):
             new_vals = []
             for i, x in enumerate(value):
@@ -115,12 +128,23 @@ class SynchroApi(models.Model):
     def adapt_values(self, values, with_cast=False):
         return unicodes(values)
 
-    def odoo_xmlrpc_https_get_data_endpoint(self, backend, exchange_path=None):
-        if backend.counterpart_url:
-            return backend.counterpart_url.replace("/common", "/object")
-        return False  # pragma: no cover
+    # ------------------------------------------------------
+    # API methods to be overridden by inherited classes
+    # Inheritance method is not standard python inheritance
+    # but is based on function name
+    # ------------------------------------------------------
+
+    def get_default(self, backend):
+        """
+        Return default protocol, port, database, login pwd, lgi_path, exchange_path
+        """
+        fct = self.get_overridden_fct(backend, "default")
+        if not fct:  # pragma: no cover
+            return False, False, False, False, False, False, False
+        return getattr(self, fct)(backend)
 
     def get_data_endpoint(self, backend, exchange_path=None):
+        """Retunr data (exchange) end point"""
         fct = self.get_overridden_fct(backend, "get_data_endpoint")
         if fct:
             return _u(getattr(self, fct)(backend, exchange_path=exchange_path))
@@ -135,10 +159,218 @@ class SynchroApi(models.Model):
             endpoint += exchange_path
         return endpoint
 
-    def odoo_xmlrpc_http_get_data_endpoint(self, backend, exchange_path=None):
-        return self.odoo_xmlrpc_https_get_data_endpoint(
-            backend, exchange_path=exchange_path
+    def get_login_endpoint(self, backend, with_port=None, rebuild=False):
+        """Retunr login endpoint"""
+        fct = self.get_overridden_fct(backend, "get_login_endpoint")
+        if fct:  # pragma: no cover
+            return _u(getattr(self, fct)(backend, with_port=with_port, rebuild=rebuild))
+        if not rebuild and backend.counterpart_url and not backend.hostname:
+            endpoint = backend.counterpart_url
+        elif backend.hostname:
+            endpoint = backend.get_protocol_from_method(backend.method) or ""
+            if backend.login:
+                endpoint += "://" + backend.login + "@" + backend.hostname
+            else:
+                endpoint += "://" + backend.hostname
+            if with_port and backend.port:
+                endpoint += ":%d" % backend.port
+            if backend.lgi_path:
+                endpoint += backend.lgi_path
+        else:
+            endpoint = ""
+        return endpoint
+
+    def get_pypi_name(self, backend, method=None):
+        """Return the python library name to communicate with remote"""
+        fct = self.get_overridden_fct(backend, "get_pypi_name", method=method)
+        if not fct:  # pragma: no cover
+            return fct
+        self.env["ir.model.synchro.log"].logmsg(
+            "debug",
+            "%(model)s[%(id)s].%(fct)s():",
+            res_rec=backend,
+            backend=backend,
+            ctx={"fct": fct},
         )
+        return _u(getattr(self, fct)())
+
+    def get_session(self, backend, force_connect=None):
+        """Return the current session object, used to communicate with remote
+        Based on backend configuration or if requested, can execute a connect()
+        """
+        Cache = self.env["ir.model.synchro.cache"]
+        session = Cache.get_attr(self.id, "CNX")
+        if not force_connect:
+            if not self.session_is_active(session) and backend.auto_reconnect:
+                force_connect = True
+        if force_connect:
+            fct = self.get_overridden_fct(backend, "session")
+            if not fct:  # pragma: no cover
+                session = False
+            else:
+                session = getattr(self, fct)(backend)
+            Cache.set_attr(backend.id, "CNX", session)
+            Cache.set_attr(backend.id, "SESSION", session)
+        return session
+
+    def connect(self, backend):
+        """Connect to remote counterparty using backend configuration"""
+        return self.get_session(backend, force_connect=True)
+
+    def get_model_list(self, session, backend):
+        """Return list of (local model, remote model) to manage"""
+        fct = self.get_overridden_fct(backend, "get_model_list")
+        if not fct:  # pragma: no cover
+            return []
+        values = unicodes(getattr(self, fct)(session, backend))
+        self.env["ir.model.synchro.log"].logmsg(
+            "debug",
+            "%(model)s[%(id)s].%(fct)s():",
+            res_rec=backend,
+            backend=backend,
+            values=values,
+            ctx={"fct": fct},
+        )
+        return values
+
+    def get_field_list(self, session, backend, model, magic_fields=None):
+        """Return field list of Odoo model that can be synchronized with counterparty"""
+        fct = self.get_overridden_fct(backend, "get_field_list")
+        if not fct:  # pragma: no cover
+            return []
+        return unicodes(
+            getattr(self, fct)(session, backend, model, magic_fields=magic_fields)
+        )
+
+    def get_record_list(self, session, synchro_model):
+        "Get record list of model from remote counterparty"
+        fct = self.get_overridden_fct(
+            synchro_model.synchro_channel_id, "get_record_list"
+        )
+        if not fct:  # pragma: no cover
+            return []
+        return getattr(self, fct)(session, synchro_model)
+
+    def get_response(self, session, synchro_model, ext_id=False, endpoint=None):
+        """Get response from remote counterparty, usually is a remote record
+        with specific remote id"""
+        fct = self.get_overridden_fct(synchro_model.synchro_channel_id, "get_response")
+        if not fct:  # pragma: no cover
+            return fct
+        ext_model = synchro_model.counterpart_name
+        binding_model = synchro_model.get_binding_model_name(synchro_model.name)
+        struct = self.env[binding_model].fields_get()
+        fields = []
+        for synchro_field in synchro_model.field_ids:
+            if synchro_field.counterpart_name and synchro_field.name in struct:
+                fields.append(synchro_field.counterpart_name)
+        values = self.adapt_values(
+            getattr(self, fct)(
+                session, synchro_model, ext_id=ext_id, endpoint=endpoint, fields=fields
+            )
+        )
+        self.env["ir.model.synchro.log"].logmsg(
+            "debug",
+            "%(model)s.get_response(%(backend)s,%(xmodel)s,%(xid)s,ep=%(ep)s,f=%(f)s)",
+            backend=synchro_model.synchro_channel_id,
+            values=values,
+            ctx={"ep": endpoint or "", "xmodel": ext_model, "xid": ext_id, "f": fields},
+        )
+        return values
+
+    # -----------------------------------------------------------
+    # Odoo migration translater
+    # Function to implement simple translation for Odoo migration
+    # path. They have the same purpose of openupgrade but are
+    # bidirectional, so the implement the back-migrate
+    # -----------------------------------------------------------
+
+    def get_tnldict(self):
+        Cache = self.env["ir.model.synchro.cache"]
+        tnldict = Cache.get_attr(1, "TNL")
+        if not tnldict:
+            tnldict = {}
+            transodoo.read_stored_dict(tnldict)
+            Cache.set_attr(1, "TNL", tnldict)
+        return tnldict
+
+    def odoo_tnl_value_from_to(self, backend, binding_model, source, fld_name):
+        return transodoo.translate_from_to(
+            self.get_tnldict(),
+            binding_model,
+            source,
+            release.major_version,
+            backend.odoo_version,
+            type="value",
+            fld_name=fld_name,
+        )
+
+    def odoo_tnl_local_model_to_ext(self, backend, binding_model):
+        ext_model = transodoo.translate_from_to(
+            self.get_tnldict(),
+            "ir.model",
+            binding_model,
+            release.major_version,
+            backend.odoo_version,
+            ttype="model",
+        )
+        if ext_model == binding_model:
+            ext_model = transodoo.translate_from_to(
+                self.get_tnldict(),
+                "ir.model",
+                binding_model,
+                release.major_version,
+                backend.odoo_version,
+                ttype="merge",
+            )
+        return ext_model
+
+    def odoo_tnl_ext_model_to_local(self, backend, ext_model):
+        binding_model = transodoo.translate_from_to(
+            self.get_tnldict(),
+            "ir.model",
+            ext_model,
+            backend.odoo_version,
+            release.major_version,
+            ttype="model",
+        )
+        if ext_model == binding_model:
+            binding_model = transodoo.translate_from_to(
+                self.get_tnldict(),
+                "ir.model",
+                ext_model,
+                backend.odoo_version,
+                release.major_version,
+                ttype="merge",
+            )
+        return binding_model
+
+    def odoo_tnl_local_field_to_ext(self, backend, model, fldname):
+        ext_name = transodoo.translate_from_to(
+            self.get_tnldict(),
+            model,
+            fldname,
+            release.major_version,
+            backend.odoo_version,
+            ttype="field",
+        )
+        # if ext_name == fldname:
+        #     ext_name = transodoo.translate_from_to(
+        #         self.get_tnldict(),
+        #         model,
+        #         fldname,
+        #         release.major_version,
+        #         backend.odoo_version,
+        #         ttype="merge",
+        #     )
+        return ext_name
+
+    # -----------------------------------------------------------
+    # Specific implementation of API function for odoo identity
+    # and json-http protocol, which are integrated in this module
+    # Addons module should copy following functions to implement
+    # specific identities or new protocols
+    # -----------------------------------------------------------
 
     def odoo6_xmlrpc_https_default(self, backend):
         return [
@@ -180,12 +412,15 @@ class SynchroApi(models.Model):
     def odoo_xmlrpc_http_default(self, backend):
         return ["http"] + self.odoo_xmlrpc_https_default(backend)[1:]
 
-    def get_default(self, backend):
-        # Return default protocol, port, database, login pwd, lgi_path, exchange_path
-        fct = self.get_overridden_fct(backend, "default")
-        if not fct:  # pragma: no cover
-            return False, False, False, False, False, False, False
-        return getattr(self, fct)(backend)
+    def odoo_xmlrpc_https_get_data_endpoint(self, backend, exchange_path=None):
+        if backend.counterpart_url:
+            return backend.counterpart_url.replace("/common", "/object")
+        return False  # pragma: no cover
+
+    def odoo_xmlrpc_http_get_data_endpoint(self, backend, exchange_path=None):
+        return self.odoo_xmlrpc_https_get_data_endpoint(
+            backend, exchange_path=exchange_path
+        )
 
     def get_default_prot_port(self, backend):
         return self.get_default(backend)[:2]
@@ -201,19 +436,6 @@ class SynchroApi(models.Model):
 
     def get_pypi_name_odoo_xmlrpc_http(self):
         return "xmlrpc"
-
-    def get_pypi_name(self, backend, method=None):
-        fct = self.get_overridden_fct(backend, "get_pypi_name", method=method)
-        if not fct:  # pragma: no cover
-            return fct
-        self.env["ir.model.synchro.log"].logmsg(
-            "debug",
-            "%(model)s[%(id)s].%(fct)s():",
-            res_rec=backend,
-            backend=backend,
-            ctx={"fct": fct},
-        )
-        return _u(getattr(self, fct)())
 
     def _odoo_xmlrpc_x_connect(self, login_endpoint, data_endpoint):
         session = self.init_sesssion(
@@ -295,25 +517,6 @@ class SynchroApi(models.Model):
             backend,
         )
 
-    def get_session(self, backend, force_connect=None):
-        Cache = self.env["ir.model.synchro.cache"]
-        session = Cache.get_attr(self.id, "CNX")
-        if not force_connect:
-            if not self.session_is_active(session) and backend.auto_reconnect:
-                force_connect = True
-        if force_connect:
-            fct = self.get_overridden_fct(backend, "session")
-            if not fct:  # pragma: no cover
-                session = False
-            else:
-                session = getattr(self, fct)(backend)
-            Cache.set_attr(backend.id, "CNX", session)
-            Cache.set_attr(backend.id, "SESSION", session)
-        return session
-
-    def connect(self, backend):
-        return self.get_session(backend, force_connect=True)
-
     def get_response_odoo6_xmlrpc_https(
         self, session, synchro_model, ext_id=False, endpoint=None, fields=None
     ):
@@ -390,6 +593,7 @@ class SynchroApi(models.Model):
     def get_response_odoo_xmlrpc_https(
         self, session, synchro_model, ext_id=False, endpoint=None, fields=None
     ):
+        backend = (synchro_model.synchro_channel_id,)
         ext_model = synchro_model.counterpart_name
         try:
             values = session["cnx_data"].execute_kw(
@@ -406,7 +610,7 @@ class SynchroApi(models.Model):
             self.env["ir.model.synchro.log"].logmsg(
                 "error",
                 "!%(E)s! ERROR %(e)s reading(db=%(db)s, model=%(model)s, id=%(id)s)",
-                backend=synchro_model.synchro_channel_id,
+                backend=backend,
                 res_model=ext_model,
                 id=ext_id,
                 errcode=-13,
@@ -422,32 +626,7 @@ class SynchroApi(models.Model):
             session, synchro_model, ext_id=ext_id, endpoint=None, fields=fields
         )
 
-    def get_response(self, session, synchro_model, ext_id=False, endpoint=None):
-        fct = self.get_overridden_fct(synchro_model.synchro_channel_id, "get_response")
-        if not fct:  # pragma: no cover
-            return fct
-        ext_model = synchro_model.counterpart_name
-        actual_model = synchro_model.get_actual_model_name(synchro_model.name)
-        struct = self.env[actual_model].fields_get()
-        fields = []
-        for synchro_field in synchro_model.field_ids:
-            if synchro_field.counterpart_name and synchro_field.name in struct:
-                fields.append(synchro_field.counterpart_name)
-        values = self.adapt_values(
-            getattr(self, fct)(
-                session, synchro_model, ext_id=ext_id, endpoint=endpoint, fields=fields
-            )
-        )
-        self.env["ir.model.synchro.log"].logmsg(
-            "debug",
-            "%(model)s.get_response(%(backend)s,%(xmodel)s,%(xid)s,ep=%(ep)s,f=%(f)s)",
-            backend=synchro_model.synchro_channel_id,
-            values=values,
-            ctx={"ep": endpoint or "", "xmodel": ext_model, "xid": ext_id, "f": fields},
-        )
-        return values
-
-    def odoo_get_list(self, session, backend):
+    def odoo_get_model_list(self, session, backend):
         loc_ext_id = backend.get_loc_ext_id()
         Cache = self.env["ir.model.synchro.cache"]
         model_list = []
@@ -459,21 +638,6 @@ class SynchroApi(models.Model):
             ext_name = self.odoo_tnl_local_model_to_ext(backend, model._name)
             model_list.append((name, ext_name))
         return model_list
-
-    def get_list(self, session, backend):
-        fct = self.get_overridden_fct(backend, "get_list")
-        if not fct:  # pragma: no cover
-            return []
-        values = unicodes(getattr(self, fct)(session, backend))
-        self.env["ir.model.synchro.log"].logmsg(
-            "debug",
-            "%(model)s[%(id)s].%(fct)s():",
-            res_rec=backend,
-            backend=backend,
-            values=values,
-            ctx={"fct": fct},
-        )
-        return values
 
     def get_login_endpoint_odoo_https(self, backend, with_port=None, rebuild=False):
         if not rebuild and backend.counterpart_url and not backend.hostname:
@@ -494,26 +658,6 @@ class SynchroApi(models.Model):
             backend, with_port=with_port, rebuild=rebuild
         )
 
-    def get_login_endpoint(self, backend, with_port=None, rebuild=False):
-        fct = self.get_overridden_fct(backend, "get_login_endpoint")
-        if fct:  # pragma: no cover
-            return _u(getattr(self, fct)(backend, with_port=with_port, rebuild=rebuild))
-        if not rebuild and backend.counterpart_url and not backend.hostname:
-            endpoint = backend.counterpart_url
-        elif backend.hostname:
-            endpoint = backend.get_protocol_from_method(backend.method) or ""
-            if backend.login:
-                endpoint += "://" + backend.login + "@" + backend.hostname
-            else:
-                endpoint += "://" + backend.hostname
-            if with_port and backend.port:
-                endpoint += ":%d" % backend.port
-            if backend.lgi_path:
-                endpoint += backend.lgi_path
-        else:
-            endpoint = ""
-        return endpoint
-
     def odoo_get_field_list(self, session, backend, model, magic_fields=None):
         magic_fields = magic_fields or []
         loc_ext_id = backend.get_loc_ext_id()
@@ -526,90 +670,29 @@ class SynchroApi(models.Model):
                 res.append((loc_name, ext_name))
         return res
 
-    def get_field_list(self, session, backend, model, magic_fields=None):
-        fct = self.get_overridden_fct(backend, "get_field_list")
-        if not fct:  # pragma: no cover
-            return []
-        return unicodes(
-            getattr(self, fct)(session, backend, model, magic_fields=magic_fields)
-        )
-
-    def get_tnldict(self):
-        Cache = self.env["ir.model.synchro.cache"]
-        tnldict = Cache.get_attr(1, "TNL")
-        if not tnldict:
-            tnldict = {}
-            transodoo.read_stored_dict(tnldict)
-            Cache.set_attr(1, "TNL", tnldict)
-        return tnldict
-
-    def odoo_tnl_value_from_to(self, backend, actual_model, source, fld_name):
-        return transodoo.translate_from_to(
-            self.get_tnldict(),
-            actual_model,
-            source,
-            release.major_version,
-            backend.odoo_version,
-            type="value",
-            fld_name=fld_name,
-        )
-
-    def odoo_tnl_local_model_to_ext(self, backend, actual_model):
-        ext_model = transodoo.translate_from_to(
-            self.get_tnldict(),
-            "ir.model",
-            actual_model,
-            release.major_version,
-            backend.odoo_version,
-            ttype="model",
-        )
-        if ext_model == actual_model:
-            ext_model = transodoo.translate_from_to(
-                self.get_tnldict(),
-                "ir.model",
-                actual_model,
-                release.major_version,
-                backend.odoo_version,
-                ttype="merge",
-            )
-        return ext_model
-
-    def odoo_tnl_ext_model_to_local(self, backend, ext_model):
-        actual_model = transodoo.translate_from_to(
-            self.get_tnldict(),
-            "ir.model",
-            ext_model,
-            backend.odoo_version,
-            release.major_version,
-            ttype="model",
-        )
-        if ext_model == actual_model:
-            actual_model = transodoo.translate_from_to(
-                self.get_tnldict(),
-                "ir.model",
+    def get_record_list_odoo_xmlrpc_https(self, session, synchro_model):
+        ext_model = synchro_model.counterpart_name
+        try:
+            values = session["cnx_data"].execute_kw(
+                synchro_model.synchro_channel_id.database,
+                session["session"],
+                synchro_model.synchro_channel_id.password,
                 ext_model,
-                backend.odoo_version,
-                release.major_version,
-                ttype="merge",
+                "search",
+                [[]],
             )
-        return actual_model
+        except BaseException as e:  # pragma: no cover
+            self.env.cr.rollback()  # pylint: disable=invalid-commit
+            self.env["ir.model.synchro.log"].logmsg(
+                "error",
+                "!%(E)s! ERROR %(e)s reading(db=%(db)s, model=%(model)s, id=%(id)s)",
+                backend=synchro_model.synchro_channel_id,
+                res_model=ext_model,
+                errcode=-13,
+                errmsg=e,
+            )
+            return []
+        return values
 
-    def odoo_tnl_local_field_to_ext(self, backend, model, fldname):
-        ext_name = transodoo.translate_from_to(
-            self.get_tnldict(),
-            model,
-            fldname,
-            release.major_version,
-            backend.odoo_version,
-            ttype="field",
-        )
-        # if ext_name == fldname:
-        #     ext_name = transodoo.translate_from_to(
-        #         self.get_tnldict(),
-        #         model,
-        #         fldname,
-        #         release.major_version,
-        #         backend.odoo_version,
-        #         ttype="merge",
-        #     )
-        return ext_name
+    def get_record_list_odoo_xmlrpc_http(self, session, synchro_model):
+        return self.get_record_list_odoo_xmlrpc_https(session, synchro_model)

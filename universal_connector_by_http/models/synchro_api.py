@@ -1,5 +1,5 @@
 #
-# Copyright 2019-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
+# Copyright 2018-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
 #
 # Contributions to development, thanks to:
 # * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
@@ -35,7 +35,6 @@ class SynchroApi(models.Model):
         session = self.init_sesssion(
             login_endpoint=endpoint, data_endpoint=data_endpoint
         )
-        cnx = None
         try:
             if headers:
                 cnx = requests.get(endpoint, headers=headers, verify=verify)

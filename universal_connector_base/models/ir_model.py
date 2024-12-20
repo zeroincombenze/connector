@@ -22,6 +22,8 @@ class BaseModel(models.BaseModel):
         only_minimal=True,
         ttl=None,
         running_in_queue=None,
+        jacket=None,
+        ctx=None,
     ):
         return self.env["ir.model.synchro"].synchro(
             self,
@@ -30,6 +32,8 @@ class BaseModel(models.BaseModel):
             only_minimal=only_minimal,
             ttl=ttl,
             running_in_queue=running_in_queue,
+            jacket=jacket,
+            ctx=ctx,
         )
 
     @api.multi

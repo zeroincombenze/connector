@@ -1,5 +1,5 @@
 #
-# Copyright 2019-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
+# Copyright 2018-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
 #
 # Contributions to development, thanks to:
 # * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
@@ -8,7 +8,7 @@
 #
 {
     "name": "Universal Connector Base",
-    "version": "12.0.0.3.10",
+    "version": "12.0.0.3.11",
     "category": "Generic Modules",
     "summary": "Basic features for Universal Connector",
     "author": "SHS-AV s.r.l.",
@@ -32,10 +32,10 @@
     ],
     "data": [
         "security/ir.model.access.csv",
-        "views/synchro_channel_view.xml",
-        "views/synchro_channel_model_view.xml",
+        "data/synchro_backend.xml",
+        "views/synchro_backend_view.xml",
+        "views/synchro_backend_model_view.xml",
         "views/ir_model_synchro_log_view.xml",
-        "data/synchro_channel.xml",
         "views/country_view.xml",
         "views/currency_view.xml",
         "views/partner_view.xml",

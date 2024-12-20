@@ -1,5 +1,5 @@
 #
-# Copyright 2019-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
+# Copyright 2018-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
 #
 # Contributions to development, thanks to:
 # * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
@@ -109,13 +109,14 @@ class SynchroChannelModel(models.Model):
             else "" or self.synchro_channel_id.get_loc_ext_id()
         )
 
-    def load_ctx(self):
+    def load_ctx(self, ctx):
+        ctx = ctx or {}
         company = self.synchro_channel_id.company_id or self.env.user.company_id
-        ctx = {"company_id": company.id}
+        ctx["company_id"] = ctx.get("company_id", company.id)
         if company.country_id:
-            ctx["country_id"] = company.country_id.id
+            ctx["country_id"] = ctx.get("country_id", company.country_id.id)
         if company.currency_id:
-            ctx["currency_id"] = company.currency_id
+            ctx["currency_id"] = ctx.get("currency_id", company.currency_id.id)
         if self.name == "res.partner":
             ctx["type"] = "contact"
             ctx["is_company"] = True
@@ -307,14 +308,25 @@ class SynchroChannelModel(models.Model):
                         if isinstance(item, int):
                             rec = self.env[comodel].bind_external_ref(loc_ext_id, item)
                             if not rec:
-                                Cache.que_push(
-                                    backend,
-                                    "trigger",
-                                    synchro_comodel.counterpart_name,
-                                    item,
-                                    ttl,
-                                    prio=1 if loc_name == self.childs_name else 2,
-                                )
+                                if (
+                                    not synchro_comodel.counterpart_name
+                                ):  # pragma: no cover
+                                    self.env["ir.model.synchro.log"].logmsg(
+                                        "warning",
+                                        "No counterpart table for %(model)s",
+                                        res_model=comodel,
+                                        errcode=-8,
+                                    )
+                                else:
+                                    Cache.que_push(
+                                        backend,
+                                        "trigger",
+                                        synchro_comodel.counterpart_name,
+                                        item,
+                                        ttl,
+                                        ctx,
+                                        prio=1 if loc_name == self.childs_name else 2,
+                                    )
                         elif isinstance(item, str) and "." in item and " " not in item:
                             # Item is external reference like 'module.reference'
                             rec = self.xmlid_to_object(item, raise_if_not_found=False)
@@ -363,53 +375,70 @@ class SynchroChannelModel(models.Model):
                     rec = self.env[comodel].bind_external_ref(loc_ext_id, vals[ext_ref])
                     if rec:
                         vals[loc_name] = rec.id
-                    elif (
-                        only_minimal
-                        and loc_name == "company_id"
-                        and backend.company_id
-                        and field["id"].required
-                        and comodel
-                        not in (
-                            "res.partner",
-                            "res.users",
-                            "product.template",
-                            "product.product",
+                    elif synchro_comodel.counterpart_name:
+                        if (
+                            only_minimal
+                            and loc_name == "company_id"
+                            and backend.company_id
+                            and field["id"].required
+                            and comodel
+                            not in (
+                                "res.partner",
+                                "res.users",
+                                "product.template",
+                                "product.product",
+                            )
+                        ):
+                            vals[loc_name] = ctx["company_id"]
+                            Cache.que_push(
+                                backend,
+                                "trigger",
+                                synchro_comodel.counterpart_name,
+                                vals[ext_ref],
+                                ttl,
+                                ctx,
+                                prio=1,
+                            )
+                            incomplete_record |= True
+                        elif only_minimal and self.name not in MODEL_LAZY_COMPANY:
+                            Cache.que_push(
+                                backend,
+                                "trigger",
+                                synchro_comodel.counterpart_name,
+                                vals[ext_ref],
+                                ttl,
+                                ctx,
+                                prio=2,
+                            )
+                            incomplete_record |= True
+                        else:
+                            Cache.que_push(
+                                backend,
+                                "trigger",
+                                synchro_comodel.counterpart_name,
+                                vals[ext_ref],
+                                ttl,
+                                ctx,
+                                prio=2,
+                            )
+                            incomplete_record = True
+                    else:  # pragma: no cover
+                        self.env["ir.model.synchro.log"].logmsg(
+                            "warning",
+                            "No counterpart table for %(model)s",
+                            res_model=comodel,
+                            errcode=-8,
                         )
-                    ):
-                        vals[loc_name] = ctx["company_id"]
-                        Cache.que_push(
-                            backend,
-                            "trigger",
-                            synchro_comodel.counterpart_name,
-                            vals[ext_ref],
-                            ttl,
-                            prio=1,
-                        )
-                        incomplete_record |= True
-                    elif only_minimal and self.name not in MODEL_LAZY_COMPANY:
-                        Cache.que_push(
-                            backend,
-                            "trigger",
-                            synchro_comodel.counterpart_name,
-                            vals[ext_ref],
-                            ttl,
-                            prio=2,
-                        )
-                        incomplete_record |= True
-                    else:
-                        Cache.que_push(
-                            backend,
-                            "trigger",
-                            synchro_comodel.counterpart_name,
-                            vals[ext_ref],
-                            ttl,
-                            prio=2,
-                        )
-                        incomplete_record = True
                 else:
                     rec = self.env[comodel].search([("id", "=", vals[ext_ref])])
                     if rec:
                         vals[loc_name] = rec.id
+            if (
+                loc_name in vals
+                and vals[loc_name]
+                and loc_name in ("company_id", "country_id", "currency_id")
+            ):
+                ctx[loc_name] = vals[loc_name]
         return vals, incomplete_record
 
     def map_selection_to_local(
@@ -423,8 +452,15 @@ class SynchroChannelModel(models.Model):
             comodel = "res.lang"
             rec = self.env[comodel].search([("code", "=", vals[loc_name])])
             if not rec:
+                synchro_comodel = self.get_synchro_model_from_loc(backend, comodel)
                 Cache.que_push(
-                    backend, "synchro", comodel, {"code": vals[ext_ref]}, ttl, prio=1
+                    backend,
+                    "synchro",
+                    synchro_comodel,
+                    {"code": vals[ext_ref]},
+                    ttl,
+                    ctx,
+                    prio=1,
                 )
         valid = False
         for item in field["selection"]:

@@ -1,12 +1,12 @@
 #
-# Copyright 2019-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
+# Copyright 2018-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
 #
 # Contributions to development, thanks to:
 # * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
 #
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 #
-"""Universal connector base tests (cvs)
+"""Universal connector base tests (csv)
 *Warning*
 Universal connector (csv) module connect local Odoo instance with external instance.
 Without external running instance, these test CANNOT be executed
@@ -301,7 +301,8 @@ class MyTest(SingleTransactionCase):
             backend,
             actions="button_check_connection",
         )
-        self.assertEqual(backend.state, "checked")
+        self.assertEqual(backend.state, "ready")
+        self.assertEqual(backend.pypi_sign, "csv")
 
     def _test_reset_connection(self, xref):
         backend = self.resource_browse(xref)
@@ -369,7 +370,7 @@ class MyTest(SingleTransactionCase):
             and int(backend.odoo_version.split(".")[0]) >= 12
         ):
             for ext_id in self.get_ext_id_list(xref, loc_model):
-                # This test load counterart record with local record which must be
+                # This test load counterpart record with local record which must be
                 # present in DB. If ext_if has no_local attribute means this test
                 # is to skip
                 if self.is_no_local(xref, loc_model, ext_id):
@@ -403,7 +404,7 @@ class MyTest(SingleTransactionCase):
             and int(backend.odoo_version.split(".")[0]) >= 12
         ):
             for ext_id in self.get_ext_id_list(xref, loc_model):
-                # This test load counterart record with local record which must be
+                # This test load counterpart record with local record which must be
                 # present in DB. If ext_if has no_local attribute means this test
                 # is to skip
                 if self.is_no_local(xref, loc_model, ext_id):
@@ -439,10 +440,6 @@ class MyTest(SingleTransactionCase):
                 else:
                     self.assertEqual(getattr(partner, loc_field), value)
 
-    def _test_03_purge(self):
-        _logger.info("🎺 Starting purge log test")
-        self.env["ir.model.synchro.log"].purge_log()
-
     def test_connection(self):
         # This test requires external Odoo instance active. See header
         _logger.info(
@@ -460,3 +457,7 @@ class MyTest(SingleTransactionCase):
             self._test_import_partner(xref)
         for xref in sorted(self.get_resource_data_list("synchro.channel")):
             self._test_import_partner2(xref)
+            # Now repeat some test in order to check for resync records
+            self._test_import_model(xref, "res.currency")
+            self._test_import_model(xref, "res.country")
+            self._test_import_model(xref, "res.partner")

@@ -1,5 +1,5 @@
 #
-# Copyright 2019-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
+# Copyright 2018-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
 #
 # Contributions to development, thanks to:
 # * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
@@ -432,6 +432,50 @@ class SynchroChannel(models.Model):
                 "UPDATE %s set %s_id=NULL where %s_id=0" % (table, prefix, prefix)
             )  # pylint: disable=E8103
 
+    def _synchronize_company(self):
+        self.ensure_one()
+        synchro_model = self.env["synchro.channel.model"].get_synchro_model_from_loc(
+            self, "res.company"
+        )
+        if synchro_model.counterpart_name:
+            for company_id in (1, 2, 3):
+                self.env["ir.model.synchro.cache"].que_push(
+                    self,
+                    "trigger",
+                    synchro_model.counterpart_name,
+                    1,
+                    3,
+                    {},
+                    prio=2,
+                )
+                self.synchro_queue()
+                loc_ext_id = synchro_model.get_loc_ext_id()
+                synchronized = False
+                for company in self.env["res.company"].search([]):
+                    if getattr(company, loc_ext_id) == company_id:
+                        synchronized = True
+                        break
+                if synchronized:
+                    break
+            if not synchronized:
+                self.env["ir.model.synchro.log"].logmsg(
+                    "error",
+                    "No company synchronized!",
+                    res_model=self._name,
+                    id=self.id,
+                    errcode=-13,
+                )
+                self.state = "failed"
+        elif not self.company_id:
+            self.env["ir.model.synchro.log"].logmsg(
+                "error",
+                "No company assigned to backend!",
+                res_model=self._name,
+                id=self.id,
+                errcode=-13,
+            )
+            self.state = "failed"
+
     @api.multi
     def button_check_connection(self):
         """This function applies for remote login using remote API"""
@@ -451,6 +495,7 @@ class SynchroChannel(models.Model):
                 self.button_build_model_map()
             for synchro_model in self.model_ids:
                 synchro_model.analyze_synchro_model()
+            self._synchronize_company()
 
     @api.multi
     def button_reset_to_draft(self):
@@ -473,7 +518,7 @@ class SynchroChannel(models.Model):
             self.env["synchro.api"].session_is_active(session)
             and self.state == "checked"
         ):
-            remote_list = self.env["synchro.api"].get_list(session, self)
+            remote_list = self.env["synchro.api"].get_model_list(session, self)
             for actual_model, remote_model in remote_list:
                 if actual_model and actual_model not in self.env:
                     continue
@@ -668,7 +713,6 @@ class SynchroChannel(models.Model):
     def synchro_queue(self, prio=None, max_recs=0, mode=None):
         if mode and mode != self.load_mode:
             return
-        # SynchroLog = self.env["ir.model.synchro.log"]
         Cache = self.env["ir.model.synchro.cache"]
 
         if self.load_mode == "direct":
@@ -691,32 +735,34 @@ class SynchroChannel(models.Model):
             if datetime.now() > time_limit:
                 break
             max_ctr -= 1
-            action, model, values, ttl = Cache.que_pop(self)
+            action, model, values, ttl, ctx = Cache.que_pop(self)
             if not action or not model or not values:
                 continue
             if action == "synchro":
-                id = self.env["ir.model.synchro"].generic_synchro(
+                id = self.env["ir.model.synchro"].synchro(
                     self.env[model],
                     values,
-                    jacket=True,
                     backend=self,
                     only_minimal=False,
                     ttl=ttl,
+                    running_in_queue=True,
+                    jacket=True,
+                    ctx=ctx,
                 )
             elif action == "trigger":
                 id = self.env["ir.model.synchro"].trigger_one_record(
-                    model, self.prefix, values, ttl=ttl
+                    model, self.prefix, values, ttl=ttl, running_in_queue=True, ctx=ctx
                 )
             elif action == "push":
-                id = self.env["ir.model.synchro"].push_one_record(
-                    model, self.prefix, values, ttl=ttl
+                id = self.env["ir.model.synchro"].pull_one_record(
+                    model, self.prefix, values, ttl=ttl, running_in_queue=True, ctx=ctx
                 )
             else:
                 id = -1
-            # if id < 1:
-            #     break
             if id > 0:
                 loaded_ctr += 1
+        if self.state == "production":
+            self.state = "checked"
         if loaded_ctr > 0:
             self.env.cr.commit()  # pylint: disable=invalid-commit
 

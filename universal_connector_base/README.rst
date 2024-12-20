@@ -1,5 +1,5 @@
 ======================================================================
-|icon| Universal Connector Base/Base connettore universale 12.0.0.3.10
+|icon| Universal Connector Base/Base connettore universale 12.0.0.3.11
 ======================================================================
 
 **Basic features for Universal Connector**
@@ -219,12 +219,21 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 ChangeLog History | Cronologia modifiche
 ----------------------------------------
 
-12.0.0.3.10 (2024-12-19)
+12.0.0.3.11 (2024-12-22)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [FIX] Context values / Valori in contesto
+* [IMP] Concatenate function on field / Funzioni concateante per campo
+* [IMP] Warning for comodel w/o counterparty / Segnalazione per modelli senza controparte
+* [IMP] New tests / Nuovi test
+* [QUA] Test coverage 77% (2144: 490+1654) [344 TestPoints] - quality rating 72 (target 100)
+
+12.0.0.3.10 (2024-12-20)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 * [IMP] Split from universal_connector
-* [IMP] Minor aesthetic update
-* [QUA] Test coverage 74% (2186: 576+1610) [311 TestPoints] - quality rating 67 (target 100)
+* [IMP] Full refactoring
+* [QUA] Test coverage 74% (2186: 578+1608) [215 TestPoints] - quality rating 60 (target 100)
 
 
 
@@ -275,7 +284,7 @@ La distribuzione `Zeroincombenze® <https://www.zeroincombenze.it/>`__ è proget
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2024-12-19
+Last Update / Ultimo aggiornamento: 2024-12-22
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status
