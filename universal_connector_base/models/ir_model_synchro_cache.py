@@ -9,17 +9,10 @@
 import logging
 from datetime import datetime
 
-# import itertools
-
-from odoo import api, models
-
-# from odoo import release
+from odoo import _, api, models
+from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
-# try:
-#     from clodoo import transodoo
-# except ImportError as err:  # pragma: no cover
-#     _logger.error(err)
 try:
     from odoo_score import odoo_score
 except ImportError as err:  # pragma: no cover
@@ -112,6 +105,7 @@ ANCILLARY_LINE_KEYS = [
 
 class IrModelSynchroCache(models.Model):
     _name = "ir.model.synchro.cache"
+    _description = "Internal Universal Connector cache"
 
     CACHE = odoo_score.SingletonCache()
     SYSTEM_MODEL_ROOT = [
@@ -126,6 +120,7 @@ class IrModelSynchroCache(models.Model):
         "ir.model.",
         "ir.module.",
         "ir.qweb.",
+        "ir.ui.",
         "report.",
         "res.config.",
         "web_editor.",
@@ -138,11 +133,11 @@ class IrModelSynchroCache(models.Model):
         "base.config.settings",
         "base_import",
         "change.password.wizard",
-        "ir.actions.actions",
-        "ir.actions.act_window",
-        "ir.actions.act_window.view",
-        "ir.actions.report.xml",
-        "ir.actions.server",
+        # "ir.actions.actions",
+        # "ir.actions.act_window",
+        # "ir.actions.act_window.view",
+        # "ir.actions.report.xml",
+        # "ir.actions.server",
         "ir.autovacuum",
         "ir.config_parameter",
         "ir.exports",
@@ -155,8 +150,8 @@ class IrModelSynchroCache(models.Model):
         "ir.qweb",
         "ir.rule",
         "ir.translation",
-        "ir.ui.menu",
-        "ir.ui.view",
+        # "ir.ui.menu",
+        # "ir.ui.view",
         "ir.values",
         "mail.alias",
         "mail.followers",
@@ -170,6 +165,12 @@ class IrModelSynchroCache(models.Model):
         "res.users.log",
         "web_tour",
         "workflow",
+    ]
+    SYSTEM_MODELS_2_MAP = [
+        "ir.model.data",
+        "ir.module.module",
+        "res.groups",
+        "res.company",
     ]
     SYSTEM_UNMANAGED = []
     BITTER_COLUMNS = [
@@ -357,57 +358,11 @@ class IrModelSynchroCache(models.Model):
     # Record cache management
     # -----------------------
     @api.model_cr_context
-    def expired_cache(self, backend_id, vmodel, model):  # pragma: no cover
-        cache_model = "_QUEUE_SYNC"
-        if self.get_struct_model_attr(cache_model, "XPIRE"):
-            self.set_struct_model(cache_model)
-            self.CACHE.set_struct_cache(self._cr.dbname, cache_model)
-        if self.get_model_attr(backend_id, cache_model, "XPIRE"):
-            self.set_attr(backend_id, cache_model, {})
-            self.CACHE.set_model_cache(self._cr.dbname, backend_id, cache_model)
-
-    @api.model_cr_context
-    def push_id(self, backend_id, vmodel, model, loc_id=None, ext_id=None):
-        self.expired_cache(backend_id, vmodel, model)
-        cache_model = "_QUEUE_SYNC"
-        if loc_id:
-            rec_list = self.get_struct_model_attr(cache_model, model, default=[])
-            if loc_id not in rec_list:
-                rec_list.append(loc_id)
-                self.set_struct_model_attr(cache_model, model, rec_list)
-        if ext_id:
-            rec_list = self.get_model_attr(backend_id, cache_model, vmodel, default=[])
-            if ext_id not in rec_list:
-                rec_list.append(ext_id)
-                self.set_model_attr(backend_id, cache_model, vmodel, rec_list)
-
-    @api.model_cr_context
-    def pop_id(self, backend_id, vmodel, model, loc_id=None, ext_id=None):
-        self.expired_cache(backend_id, vmodel, model)
-        cache_model = "_QUEUE_SYNC"
-        if loc_id:
-            rec_list = self.get_struct_model_attr(cache_model, model, default=[])
-            if loc_id in rec_list:
-                rec_list.pop(rec_list.index(loc_id))
-                self.set_struct_model_attr(cache_model, model, rec_list)
-        if ext_id:
-            rec_list = self.get_model_attr(backend_id, cache_model, vmodel, default=[])
-            if ext_id in rec_list:
-                rec_list.pop(rec_list.index(ext_id))
-                self.set_model_attr(backend_id, cache_model, vmodel, rec_list)
-
-    @api.model_cr_context
-    def id_is_in_cache(self, backend_id, vmodel, model, loc_id=None, ext_id=None):
-        self.expired_cache(backend_id, vmodel, model)
-        cache_model = "_QUEUE_SYNC"
-        return (
-            loc_id
-            and loc_id in self.get_struct_model_attr(cache_model, model, default=[])
-        ) or (
-            ext_id
-            and ext_id
-            in self.get_model_attr(backend_id, cache_model, vmodel, default=[])
-        )
+    def que_expired(self, backend):  # pragma: no cover
+        for prio in (1, 2, 3):
+            que_name = "IN_QUEUE%d" % prio
+            if self.get_struct_model_attr(que_name, "XPIRE"):
+                self.set_attr(backend.id, que_name, [])
 
     @api.model_cr_context
     def que_push(self, backend, action, model, values, ttl, ctx, prio=2):
@@ -425,10 +380,11 @@ class IrModelSynchroCache(models.Model):
                     in_queue.append((action, model, values, ttl, ctx))
                     self.set_attr(backend.id, que_name, in_queue)
             else:
-                raise RuntimeError("Invalid action %s to push in queue" % action)
+                raise UserError(_("Invalid action %s to push in queue" % action))
 
     @api.model_cr_context
     def que_pop(self, backend):
+        self.que_expired(backend)
         item = (False, False, False, False, False)
         for prio in (1, 2, 3):
             que_name = "IN_QUEUE%d" % prio
@@ -441,22 +397,36 @@ class IrModelSynchroCache(models.Model):
 
     @api.model_cr_context
     def que_waiting_len(self, backend):
+        self.que_expired(backend)
         que_len = 0
         for prio in (1, 2, 3):
             que_name = "IN_QUEUE%d" % prio
             que_len += len(self.get_attr(backend.id, que_name) or [])
         return que_len
 
+    @api.model_cr_context
+    def get_que_list(self, backend):
+        self.que_expired(backend)
+        que_list = []
+        for prio in (1, 2, 3):
+            que_name = "IN_QUEUE%d" % prio
+            que_list += self.get_attr(backend.id, que_name) or []
+        return que_list
+
     # -------------------------
     # General purpose functions
     # -------------------------
     @api.model
     def is_manageable(self, model_name):
-        return not (
+        return model_name in self.SYSTEM_MODELS_2_MAP or not (
             any(map(lambda x: model_name.startswith(x), self.SYSTEM_MODEL_ROOT))
             or model_name in self.SYSTEM_MODELS
             or model_name in self.SYSTEM_UNMANAGED
         )
+
+    @api.model
+    def only_to_map(self, model_name):
+        return model_name in self.SYSTEM_MODELS_2_MAP
 
     @api.model
     def set_unmanageable(self, model):  # pragma: no cover
@@ -471,17 +441,16 @@ class IrModelSynchroCache(models.Model):
         cache = self.CACHE
         if lifetime:
             self.lifetime(lifetime)
-        for channel in self.get_channel_list():
-            chn_id = channel.id
-            if not backend_id or chn_id == backend_id:
-                cache.init_channel(self._cr.dbname, chn_id)
-                for prio in (1, 2, 3):
-                    que_name = "IN_QUEUE%d" % prio
-                    self.set_attr(chn_id, que_name, [])
         if model:
             cache.init_struct_model(self._cr.dbname, model)
         else:
             cache.init_struct(self._cr.dbname)
+            for bend in self.get_channel_list():
+                bend_id = bend.id
+                if not backend_id or bend_id == backend_id:
+                    for prio in (1, 2, 3):
+                        que_name = "IN_QUEUE%d" % prio
+                        cache.init_struct_model(self._cr.dbname, que_name)
         return self.lifetime(0)
 
     @api.model_cr_context
@@ -580,6 +549,10 @@ class IrModelSynchroCache(models.Model):
         return self.CACHE.set_model_field_attr(
             self._cr.dbname, backend_id, model, field, attrib, value
         )
+
+    @api.model_cr_context
+    def age_model(self, backend_id, model):
+        self.CACHE.age_model(self._cr.dbname, backend_id, model)
 
     @api.model_cr_context
     def init_model(self, backend_id, model):

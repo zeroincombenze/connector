@@ -19,6 +19,7 @@ _logger = logging.getLogger(__name__)
 
 class IrModelSynchroLog(models.Model):
     _name = "ir.model.synchro.log"
+    _description = "Universal Connector Logger"
     _order = "timestamp desc, id desc"
 
     LOGLEVEL = "3"
@@ -82,6 +83,7 @@ class IrModelSynchroLog(models.Model):
         errmsg,
         errcode,
         loglevel,
+        recloglevel,
         logrec=None,
         res_id=None,
         backend=None,
@@ -97,11 +99,12 @@ class IrModelSynchroLog(models.Model):
                 if res_model in self.env
                 else res_rec._namme if res_rec else False
             ),
-            "res_id": res_id,
             "errcode": errcode,
         }
+        if res_id:
+            vals["res_id"] = res_id
         for name, lev in self.loglevel2num.items():
-            if int(lev) == loglevel:
+            if int(lev) == (recloglevel or loglevel):
                 vals["loglevel"] = name
                 break
         if backend:
@@ -110,14 +113,14 @@ class IrModelSynchroLog(models.Model):
             vals["backend_id"] = vals["res_id"]
         vals["values"] = self.pretty_print(values) if values else False
         if logrec:
-            # logrec should be delete if prior rollback
+            # logrec should be deleted if prior rollback
             try:
                 getattr(logrec, "errmsg")
             except BaseException:
                 self.env.cr.rollback()  # pylint: disable=invalid-commit
                 logrec = None
         if logrec:
-            if errmsg:
+            if errmsg and loglevel >= recloglevel:
                 vals["errmsg"] = logrec.errmsg + " | " + errmsg
             logrec.write(vals)
         else:
@@ -215,25 +218,36 @@ class IrModelSynchroLog(models.Model):
             Cache.set_loglevel(curloglevel)
         else:
             curloglevel = Cache.get_attr(1, "LOGLEVEL", loglevel)
+        if not isinstance(curloglevel, int):
+            curloglevel = 4
+        reqloglevel = 0
         if isinstance(loglevel, str):
             if not loglevel.isdigit():
                 reqloglevel = int(self.loglevel2num.get(loglevel, "2"))
             else:
                 reqloglevel = int(loglevel)
+        recloglevel = 0
+        if logrec and isinstance(logrec.loglevel, str):
+            if not logrec.loglevel.isdigit():
+                recloglevel = int(logrec.loglevel2num.get(logrec.loglevel, "0"))
+            else:
+                recloglevel = int(logrec.loglevel)
         if reqloglevel >= 4:
             Cache.clean_cache()
-        if reqloglevel >= 4 - curloglevel:
+        if max(reqloglevel, recloglevel) >= 4 - curloglevel:
             try:
                 full_msg = _u(msg_text % ctx)
             except BaseException:  # pragma: no cover
                 full_msg = _u(msg_text)
-            _logger.info(full_msg)
+            if reqloglevel >= 4 - curloglevel:
+                _logger.info(full_msg)
             return self.logger(
                 ctx["model"],
                 res_rec,
                 full_msg,
                 errcode,
                 reqloglevel,
+                recloglevel,
                 logrec=logrec,
                 res_id=ctx["id"],
                 backend=backend,

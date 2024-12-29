@@ -2587,7 +2587,7 @@ class IrModelSynchro(models.Model):
             [("synchro_channel_id", "=", backend_id), ("name", "=", model_child)]
         ):
             if cache.get_attr(backend_id, "IDENTITY") == "odoo":
-                self.env["synchro.channel.model"].build_odoo_synchro_model(
+                self.env["synchro.channel.model"].build_odoo_dir_mapper(
                     backend_id, model_child
                 )
             else:
@@ -3580,7 +3580,7 @@ class IrModelSynchro(models.Model):
                     if identity == "odoo":
                         if not self.env[
                             "synchro.channel.model"
-                        ].build_odoo_synchro_model(channel_id, None, model=vmodel):
+                        ].build_odoo_dir_mapper(channel_id, None, model=vmodel):
                             continue
                     else:
                         continue

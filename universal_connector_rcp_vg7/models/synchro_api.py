@@ -31,12 +31,12 @@ class SynchroApi(models.Model):
                 vals[new] = vals[old]
         return vals
 
-    def adapt_response_vg7(self, values, synchro_model, ext_id):
+    def adapt_response_vg7(self, values, dir_mapper, ext_id):
         Cache = self.env["ir.model.synchro.cache"]
-        vmodel = synchro_model.name
-        ext_model = synchro_model.counterpart_name
-        backend = synchro_model.synchro_channel_id
-        ext_key_id = synchro_model.counterpart_pk
+        vmodel = dir_mapper.name
+        ext_model = dir_mapper.counterpart_name
+        backend = dir_mapper.synchro_channel_id
+        ext_key_id = dir_mapper.counterpart_pk
         row_billing = {}
         row_shipping = {}
         row_contact = {}
@@ -96,46 +96,46 @@ class SynchroApi(models.Model):
                         shipping_vals,
                         2,
                         {},
-                        prio=2,
+                        prio=3,
                     )
             # if row_contact:
             #     values["contact"] = row_contact
         return values
 
-    def adapt_responses_vg7(self, res, synchro_model, ext_id):
+    def adapt_responses_vg7(self, res, dir_mapper, ext_id):
         new_res = []
         for item in res:
-            new_res.append(self.adapt_response_vg7(item, synchro_model, ext_id))
+            new_res.append(self.adapt_response_vg7(item, dir_mapper, ext_id))
         return new_res
 
     def get_response_vg7_https(
-        self, session, synchro_model, ext_id=False, endpoint=None, fields=None
+        self, session, dir_mapper, ext_id=False, endpoint=None, fields=None
     ):
-        ext_model = synchro_model.counterpart_name
+        ext_model = dir_mapper.counterpart_name
         endpoint = session["data_endpoint"]
         if ext_id:
             endpoint = os.path.join(endpoint, ext_model, str(ext_id))
         else:
             endpoint = os.path.join(endpoint, ext_model)
         res = self.get_response_https(
-            session, synchro_model, ext_id=ext_id, endpoint=endpoint
+            session, dir_mapper, ext_id=ext_id, endpoint=endpoint
         )
         if res:
-            res[synchro_model.counterpart_pk] = ext_id
-            return [self.adapt_response_vg7(res, synchro_model, ext_id)]
+            res[dir_mapper.counterpart_pk] = ext_id
+            return [self.adapt_response_vg7(res, dir_mapper, ext_id)]
         return res
 
     def get_response_vg7_http(
-        self, session, synchro_model, ext_id=False, endpoint=None, fields=None
+        self, session, dir_mapper, ext_id=False, endpoint=None, fields=None
     ):
         return self.get_response_vg7_https(
-            session, synchro_model, ext_id=ext_id, endpoint=endpoint, fields=fields
+            session, dir_mapper, ext_id=ext_id, endpoint=endpoint, fields=fields
         )
 
     def get_response_vg7_csv(
-        self, session, synchro_model, ext_id=False, endpoint=None, fields=None
+        self, session, dir_mapper, ext_id=False, endpoint=None, fields=None
     ):
         res = self.get_response_csv(
-            session, synchro_model, ext_id=ext_id, endpoint=endpoint, fields=fields
+            session, dir_mapper, ext_id=ext_id, endpoint=endpoint, fields=fields
         )
-        return self.adapt_response_vg7(res, synchro_model, ext_id)
+        return self.adapt_response_vg7(res, dir_mapper, ext_id)

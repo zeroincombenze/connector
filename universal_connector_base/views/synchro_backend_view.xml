@@ -5,7 +5,7 @@
         <field name="name">view.synchro.channel.tree</field>
         <field name="model">synchro.channel</field>
         <field name="arch" type="xml">
-            <tree string="Synchonization Channel">
+            <tree string="Synchonization Backend">
                 <field name="sequence" widget="handle"/>
                 <field name="name"/>
                 <field name="hostname"/>
@@ -23,7 +23,7 @@
         <field name="name">view.synchro.channel.form</field>
         <field name="model">synchro.channel</field>
         <field name="arch" type="xml">
-            <form string="Synchonization Channel">
+            <form string="Synchonization Backend">
                 <header>
                     <button name="button_check_connection" type="object" class="oe_highlight" string="Check Connection" attrs="{'invisible':['|',('state','not in',['draft']),('active','=',False)]}"/>
                     <button name="button_reset_to_draft" type="object" string="Reset to draft Connection" attrs="{'invisible':['|',('state','in',['draft']),('active','=',False)]}"/>
@@ -59,8 +59,9 @@
                             <field name="prefix"/>
                             <field name="lgi_path"/>
                             <field name="exchange_path"/>
-                            <field name="tracelevel"/>
                             <field name="default_lang_id"/>
+                            <field name="deferred_payload"/>
+                            <field name="tracelevel"/>
                             <field name="company_id"/>
                             <field name="sequence"/>
                         </group>
@@ -77,6 +78,7 @@
                                     <field name="name"/>
                                     <field name="model_spec"/>
                                     <field name="counterpart_name"/>
+                                    <field name="use_remote_xref"/>
                                     <field name="auth_action"/>
                                     <field name="field_uname"/>
                                     <field name="parent_name"/>
@@ -96,6 +98,9 @@
                                 </tree>
                             </field>
                         </page>
+                        <page name="que_jobs" string="Queue Jobs">
+                            <field name="queue_jobs"/>
+                        </page>
                         <page name="workflow" string="Workflow">
                             <group>
                                 <field name="import_workflow"/>
@@ -110,7 +115,7 @@
     </record>
 
     <record id="action_synchro_channel" model="ir.actions.act_window">
-        <field name="name">Synchonization Channel</field>
+        <field name="name">Synchonization Backend</field>
         <field name="res_model">synchro.channel</field>
         <field name="view_id" ref="view_synchro_channel_tree"/>
     </record>

@@ -23,6 +23,7 @@ class BaseModel(models.BaseModel):
         ttl=None,
         running_in_queue=None,
         jacket=None,
+        logrec=None,
         ctx=None,
     ):
         return self.env["ir.model.synchro"].synchro(
@@ -33,22 +34,22 @@ class BaseModel(models.BaseModel):
             ttl=ttl,
             running_in_queue=running_in_queue,
             jacket=jacket,
+            logrec=logrec,
             ctx=ctx,
         )
 
     @api.multi
     def pull_record(self):
-        SynchroModel = self.env["synchro.channel.model"]
         for backend in self.env["synchro.channel"].search(
             [], order="sequence desc,name desc"
         ):
-            synchro_model = SynchroModel.get_synchro_model_from_loc(backend, self._name)
-            if not synchro_model:
+            dir_mapper = backend.get_dir_mapper(model=self._name)
+            if not dir_mapper:
                 continue
-            loc_ext_id = synchro_model.get_loc_ext_id()
+            loc_ext_id = dir_mapper.get_loc_ext_id()
             if hasattr(self, loc_ext_id) and getattr(self, loc_ext_id):
                 self.env["ir.model.synchro"].trigger_one_record(
-                    synchro_model.counterpart_name,
+                    dir_mapper.counterpart_name,
                     backend.prefix,
-                    synchro_model.get_external_pk(getattr(self, loc_ext_id)),
+                    dir_mapper.get_external_pk(getattr(self, loc_ext_id)),
                 )

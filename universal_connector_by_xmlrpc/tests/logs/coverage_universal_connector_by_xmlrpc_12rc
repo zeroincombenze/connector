@@ -10,7 +10,7 @@ omit = *system_site_packages*, *site-packages*, *virtualenv*, *venv_odoo*
 include =
 #    ${TRAVIS_BUILD_DIR}/*
 #    *.py
-    /home/odoo/12.0/connector/universal_connector_by_xmlrpc/*
+    /home/odoo/12.0/__old_connector/universal_connector_by_xmlrpc/*
 
 omit =
     */scenario/*

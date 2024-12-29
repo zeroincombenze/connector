@@ -7,8 +7,7 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 #
 from . import ir_model
-
-# from . import ir_model_field
+from . import ir_model_to_map
 from . import ir_model_synchro
 from . import ir_model_synchro_cache
 from . import ir_model_synchro_log

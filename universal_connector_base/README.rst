@@ -14,51 +14,54 @@
 Overview | Panoramica
 =====================
 
-|en| This module makes available some functions to synchronize external data
-with Odoo data.
+|en| This module is base for Universal Connector suite and makes available some functions
+to synchronize external data with Odoo data.
 
-Characteristics
-~~~~~~~~~~~~~~~
+Site Characteristics
+~~~~~~~~~~~~~~~~~~~~
 
-* Multi-channels interchange
-* JSON, XMLRPC and CSV files protocols
+* Multi-backend interchange
+* Multi-protocols, like JSON, XMLRPC and CSV
 * Push and/or Pull logic
-* Many2one, One2Many and Many2Many managed with external references
-* Automatic field value translation
-* Odoo version from 6.1 to 12.0 field name and values automatic translation
+* Many2one, One2Many and Many2Many acquired with remote references
+* Recognition by external reference (only remote Odoo)
+* Updatable configuration by GUI
 * Anti-recurse checks
 * Two phases create in order to create hierarchical record structure
-* Dynamic translation database
+* Dynamic database migration for Odoo since 6.1
 
 This module can be used for:
 
-* Upgrade Odoo DB from a version to another version (even beck upgrade)
-* Import data from files without duplicating records
-* Connect Odoo with other software (current version supports until 4 counterparts)
-* Populate Odoo DB in the first installation migrated from another software
+* Migrate Odoo DB from a version to another version, like openupgrade, (even back upgrade)
+* Import data from files in specific location using user configuration
+* Create demo and test environment based on csv files
+* Connect just in time Odoo with other software or other Odoo instnces
+* Populate database when Oddo requires to migrate from another software
 
 
-|it| Questo modulo rende disponibile alcune funzioni per sincronizzare con l'esterno.
+|it| Questo modulo è base della suite Universal Connector e rende disponibile alcune
+funzioni per sincronizzare con l'esterno.
 
-Caratteristiche
-~~~~~~~~~~~~~~~
+Caratteristiche della suite
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-* Scambio multi-canale
-* Protocolli JSON, XMLRPC e file CSV
+* Scambio multi-dorsale
+* Multi-protocollo come JSON, XMLRPC e CSV
 * Logica Push o Pull
-* Many2one, One2Many e Many2Many gestiti con referenze esterne
-* Traduzione automatica dei campi
-* Traduzione automatica dei campi e dei valori di Odoo dalla 6.1 alla 12.0
+* Many2one, One2Many e Many2Many acquisiti con riferimenti remoti
+* Riconosicmento con referenze esterne (solo istanze remote Odoo)
+* Configurazione modificabile da GUI
 * Controllo anti-ricorsione
-* Creazione a due fasi
-* Traduttore dinamico
+* Creazione a due fasi per gestire le gerarchie
+* Migratore dinamico database da Odoo 6.1
 
 Questo modulo può essere usato per:
 
-* Aggiornare database di Odoo tra versioni (anche all'indietro)
-* Importare dati da file senza duplicazioni
-* Connettere Odoo con altri software (sino a 4 contemporaneamente)
-* Popolare il DB di Odoo nella prima installazione quando migrazione da altro software
+* Migrare database di Odoo tra versioni come openupgrade (anche all'indietro)
+* Importare dati da file in locazioni specifiche usando configurazione utente
+* Creare ambienti di demo e test partendo da file csv
+* Connettere in tempo reale Odoo con altri software o altre istanze Odoo
+* Popolare il database quando Odoo necessita di migrare da altro software
 
 
 |thumbnail|
@@ -73,7 +76,7 @@ Configuration | Configurazione
 
 Set backend parameters to connect with remote counterparty and then click on
 button [Check Connection].
-If Odoo can connect with remote counterparty, backend state is set to checked.
+If Odoo can connect with remote counterparty, backend state is set to "Ready".
 
 Parameters depend on remote identity and protocol to use.
 
@@ -81,43 +84,41 @@ Parameters depend on remote identity and protocol to use.
 
 This protocol, called XML-RPC, is available with current module and it is implemented
 by `python client xmlrpc <https://docs.python.org/3/library/xmlrpc.client.html>`__,
-so no package is required to be installed. This protocol is more simple than REST and
-SOAP by design.
+so no additional python package is required to be installed. This protocol is more
+simple than REST and SOAP by design.
 
-The typical endpoint to login remote Odoo instance should be "https://admin@localhost:8069"
-and authentication is based on username/password.
-
-You have to use this protocol to connect remote identities different from Odoo.
+The typical endpoint to login remote Odoo instance should
+be "https://admin@localhost:8069/xmlrpc/2/common" and authentication is based on
+username/password; this endppoint uses json rather than xml.
+If remote Odoo version is 6.0, 6.1 or 7.0, the typical endpoint should
+be "https://admin@localhost:8069/xmlrpc/common".
 
 **http/https**
 
 This protocol is another way to use XML-RPC over http/https. It is supplied by
-"universal_connector_by_http" plugin and it is implemented
+*universal_connector_by_http* plugin and it is implemented
 by `python requests <https://requests.readthedocs.io/en/latest/>`__,
 so the `PYPI requests <https://pypi.org/project/requests/>`__ package has to be
 installed.
-
-The typical endpoint to login remote Odoo instance should be "https://admin@localhost:8069"
-and authentication can be based on username/password or authorization client token.
 
 You have to use this protocol to connect remote identities different from Odoo.
 
 **jsonrpc**
 
-This protocol, called JSON-RPC, is like XML-RPC but use JSON representation instead of
+This protocol, called JSON-RPC, is like XML-RPC but use JSON representation rather than
 XML and it is designed just for Odoo remote identities. It is supplied by
-"universal_connector_by_json" plugin and it is implemented
+*universal_connector_by_json* plugin and it is implemented
 by `odoorpc <https://pythonhosted.org/OdooRPC/>`__,
 so the `PYPI odoorpc <https://pypi.org/project/OdooRPC/>`__ package has to be
 installed.
 
 **xmlrpc**
 
-his protocol is another way to use XML-RPC over http/https and it is designed just
+This protocol is another way to use XML-RPC over http/https and it is designed just
 for Odoo remote identities. It is supplied by
-"universal_connector_by_xmlrpc" plugin and it is implemented
+*universal_connector_by_xmlrpc* plugin and it is implemented
 by `oerplib <https://pythonhosted.org/OERPLib/>`__,
-so the `PYPI oerplib <https://pypi.org/project/oerplib3/>`__ package has to be
+so the `PYPI oerplib3 <https://pypi.org/project/oerplib3/>`__ package has to be
 installed.
 
 You must use this protocol to connect old Odoo instance (before Odoo 10.0).
@@ -219,14 +220,18 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 ChangeLog History | Cronologia modifiche
 ----------------------------------------
 
-12.0.0.3.11 (2024-12-22)
+12.0.0.3.11 (2024-12-29)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 * [FIX] Context values / Valori in contesto
+* [FIX] Language management / Gestione valori in lingua
+* [IMP] On connect synchronize company / Sincronizazione azienda alla connessione
+* [IMP] New feature: sync by external reference / Sincronizzazione con riferimento esterno
 * [IMP] Concatenate function on field / Funzioni concateante per campo
 * [IMP] Warning for comodel w/o counterparty / Segnalazione per modelli senza controparte
+* [IMP] Best log messages / Migliorie messaggi di log
 * [IMP] New tests / Nuovi test
-* [QUA] Test coverage 77% (2144: 490+1654) [344 TestPoints] - quality rating 72 (target 100)
+* [QUA] Test coverage 80% (2256: 453+1803) [244 TestPoints] - quality rating 66 (target 100)
 
 12.0.0.3.10 (2024-12-20)
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -284,7 +289,7 @@ La distribuzione `Zeroincombenze® <https://www.zeroincombenze.it/>`__ è proget
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2024-12-22
+Last Update / Ultimo aggiornamento: 2024-12-29
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status

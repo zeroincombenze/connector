@@ -24,7 +24,7 @@ class ResPartner(models.Model):
 
     def assure_values(self, vals, rec):
         binding_model = "res.partner"
-        actual_cls = self.env[binding_model]
+        Binder = self.env[binding_model]
         if rec:
             for nm in ("type",) if PY3 else ("type", "individual"):
                 if nm not in vals:
@@ -52,7 +52,7 @@ class ResPartner(models.Model):
             else:
                 vals["is_pa"] = False
         if vals.get("rea_code"):
-            ids = actual_cls.search([("rea_code", "=", vals["rea_code"])])
+            ids = Binder.search([("rea_code", "=", vals["rea_code"])])
             if ids:
                 if not rec or ids[0].id != rec.id:
                     _logger.info("Duplicate REA Code %s" % vals["rea_code"])
@@ -77,6 +77,7 @@ class ResPartnerShipping(models.Model):
         ttl=None,
         running_in_queue=None,
         jacket=None,
+        logrec=None,
         ctx=None,
     ):
         vals[":type"] = "delivery"
@@ -87,6 +88,7 @@ class ResPartnerShipping(models.Model):
             ttl=ttl,
             running_in_queue=running_in_queue,
             jacket=jacket,
+            logrec=logrec,
             ctx=ctx,
         )
 
@@ -108,6 +110,7 @@ class ResPartnerInvoice(models.Model):
         ttl=None,
         running_in_queue=None,
         jacket=None,
+        logrec=None,
         ctx=None,
     ):
         vals[":type"] = "invoice"
@@ -118,6 +121,7 @@ class ResPartnerInvoice(models.Model):
             ttl=ttl,
             running_in_queue=running_in_queue,
             jacket=jacket,
+            logrec=logrec,
             ctx=ctx,
         )
 

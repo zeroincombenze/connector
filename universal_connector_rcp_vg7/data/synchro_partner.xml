@@ -15,7 +15,6 @@
         <field name="counterpart_name">customers_shipping_addresses</field>
         <field name="model_spec">delivery</field>
         <field name="synchro_channel_id" ref="channel_vg7"/>
-        <field name="cron_sync">True</field>
         <field name="sequence">14</field>
     </record>
 
@@ -89,13 +88,11 @@
         <field name="model_id" ref="res_partner"/>
     </record>
 
-    <!--
     <record forcecreate="1" id="res_partner_fax" model="synchro.channel.model.field">
         <field name="name">fax</field>
         <field name="counterpart_name">fax</field>
         <field name="model_id" ref="res_partner"/>
     </record>
-    -->
 
     <record forcecreate="1" id="res_partner_firstname" model="synchro.channel.model.field">
         <field name="name">firstname</field>
@@ -238,6 +235,26 @@
         <field name="model_id" ref="res_partner"/>
     </record>
 
+    <record forcecreate="1" id="res_partner_invoice_warn" model="synchro.channel.model.field">
+        <field name="name">invoice_warn</field>
+        <field name="model_id" ref="res_partner"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_notify_email" model="synchro.channel.model.field">
+        <field name="name">notify_email</field>
+        <field name="model_id" ref="res_partner"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_property_account_receivable_id" model="synchro.channel.model.field">
+        <field name="name">property_account_receivable_id</field>
+        <field name="model_id" ref="res_partner"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_property_account_payable_id" model="synchro.channel.model.field">
+        <field name="name">property_account_payable_id</field>
+        <field name="model_id" ref="res_partner"/>
+    </record>
+
 
     <record forcecreate="1" id="res_partner_shipping_id" model="synchro.channel.model.field">
         <field name="name">vg7_id</field>
@@ -351,6 +368,26 @@
         <field name="model_id" ref="res_partner_shipping"/>
     </record>
 
+    <record forcecreate="1" id="res_partner_shipping_invoice_warn" model="synchro.channel.model.field">
+        <field name="name">invoice_warn</field>
+        <field name="model_id" ref="res_partner_shipping"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_shipping_notify_email" model="synchro.channel.model.field">
+        <field name="name">notify_email</field>
+        <field name="model_id" ref="res_partner_shipping"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_shipping_property_account_receivable_id" model="synchro.channel.model.field">
+        <field name="name">property_account_receivable_id</field>
+        <field name="model_id" ref="res_partner_shipping"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_shipping_property_account_payable_id" model="synchro.channel.model.field">
+        <field name="name">property_account_payable_id</field>
+        <field name="model_id" ref="res_partner_shipping"/>
+    </record>
+
 
     <record forcecreate="1" id="res_partner_invoice_id" model="synchro.channel.model.field">
         <field name="name">vg7_id</field>
@@ -461,6 +498,26 @@
     <record forcecreate="1" id="res_partner_invoice_zip" model="synchro.channel.model.field">
         <field name="name">zip</field>
         <field name="counterpart_name">postal_code</field>
+        <field name="model_id" ref="res_partner_invoice"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_invoice_invoice_warn" model="synchro.channel.model.field">
+        <field name="name">invoice_warn</field>
+        <field name="model_id" ref="res_partner_invoice"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_invoice_notify_email" model="synchro.channel.model.field">
+        <field name="name">notify_email</field>
+        <field name="model_id" ref="res_partner_invoice"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_invoice_property_account_receivable_id" model="synchro.channel.model.field">
+        <field name="name">property_account_receivable_id</field>
+        <field name="model_id" ref="res_partner_invoice"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_invoice_property_account_payable_id" model="synchro.channel.model.field">
+        <field name="name">property_account_payable_id</field>
         <field name="model_id" ref="res_partner_invoice"/>
     </record>
 
@@ -591,5 +648,24 @@
         <field name="model_id" ref="res_partner_supplier_rec"/>
     </record>
     -->
+    <record forcecreate="1" id="res_partner_supplier_invoice_warn" model="synchro.channel.model.field">
+        <field name="name">invoice_warn</field>
+        <field name="model_id" ref="res_partner_supplier_rec"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_supplier_notify_email" model="synchro.channel.model.field">
+        <field name="name">notify_email</field>
+        <field name="model_id" ref="res_partner_supplier_rec"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_supplier_property_account_receivable_id" model="synchro.channel.model.field">
+        <field name="name">property_account_receivable_id</field>
+        <field name="model_id" ref="res_partner_supplier_rec"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_supplier_property_account_payable_id" model="synchro.channel.model.field">
+        <field name="name">property_account_payable_id</field>
+        <field name="model_id" ref="res_partner_supplier_rec"/>
+    </record>
 
 </odoo>

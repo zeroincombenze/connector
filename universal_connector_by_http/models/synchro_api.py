@@ -102,9 +102,9 @@ class SynchroApi(models.Model):
         return self.https_session(backend)
 
     def get_response_https(
-        self, session, synchro_model, ext_id=False, endpoint=None, fields=None
+        self, session, dir_mapper, ext_id=False, endpoint=None, fields=None
     ):
-        backend = synchro_model.synchro_channel_id
+        backend = dir_mapper.synchro_channel_id
         values = []
         if backend.client_key:
             headers = {"Authorization": "access_token %s" % backend.client_key}
@@ -122,12 +122,12 @@ class SynchroApi(models.Model):
         return values
 
     def get_response_http(
-        self, session, synchro_model, ext_id=False, endpoint=None, fields=None
+        self, session, dir_mapper, ext_id=False, endpoint=None, fields=None
     ):
         return self.get_response_https(
             self,
             session,
-            synchro_model,
+            dir_mapper,
             ext_id=ext_id,
             endpoint=endpoint,
             fields=fields,

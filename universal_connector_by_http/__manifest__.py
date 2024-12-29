@@ -8,7 +8,7 @@
 #
 {
     "name": "Universal Connector protocol xmlrpc",
-    "version": "12.0.0.3.10",
+    "version": "12.0.0.3.11",
     "category": "Generic Modules",
     "summary": "Add protocol xmlrpc (Odoo 6/7/8) to Universal Connector",
     "author": "SHS-AV s.r.l.",

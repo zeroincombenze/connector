@@ -891,9 +891,9 @@ class IrModelSynchroApply(models.Model):
         default=None,
         ctx=None,
     ):
-        synchro_model = self.env["ir.model.synchro"]
-        tnldict = synchro_model.get_tnldict(backend_id)
-        ext_odoo_ver = synchro_model.get_ext_odoo_ver(ext_ref.split(":")[0])
+        IrModelSynchro = self.env["ir.model.synchro"]
+        tnldict = IrModelSynchro.get_tnldict(backend_id)
+        ext_odoo_ver = IrModelSynchro.get_ext_odoo_ver(ext_ref.split(":")[0])
         vals[loc_name] = transodoo.translate_from_to(
             tnldict,
             "account.tax",
@@ -917,9 +917,9 @@ class IrModelSynchroApply(models.Model):
         ctx=None,
     ):
         if not vals.get(loc_name):
-            synchro_model = self.env["ir.model.synchro"]
-            tnldict = synchro_model.get_tnldict(backend_id)
-            ext_odoo_ver = synchro_model.get_ext_odoo_ver(ext_ref.split(":")[0])
+            IrModelSynchro = self.env["ir.model.synchro"]
+            tnldict = IrModelSynchro.get_tnldict(backend_id)
+            ext_odoo_ver = IrModelSynchro.get_ext_odoo_ver(ext_ref.split(":")[0])
             names = transodoo.translate_from_to(
                 tnldict,
                 "account.account.type",

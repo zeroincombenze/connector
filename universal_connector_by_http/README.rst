@@ -1,5 +1,5 @@
 =======================================================================================
-|icon| Universal Connector protocol xmlrpc/Xmlrpc per connettore universale 12.0.0.3.10
+|icon| Universal Connector protocol xmlrpc/Xmlrpc per connettore universale 12.0.0.3.11
 =======================================================================================
 
 **Add protocol xmlrpc (Odoo 6/7/8) to Universal Connector**
@@ -172,12 +172,18 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 ChangeLog History | Cronologia modifiche
 ----------------------------------------
 
-12.0.0.3.10 (2024-12-22)
+12.0.0.3.11 (2024-12-29)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] Minor aesthetic update
+* [QUA] Test coverage 70% (74: 22+52) [84 TestPoints] - quality rating 224 (target 100)
+
+12.0.0.3.10 (2024-12-16)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 * [IMP] Splited from universal_connector
 * [IMP] Minor aesthetic update
-* [QUA] Test coverage 70% (74: 22+52) [84 TestPoints] - quality rating 224 (target 100)
+* [QUA] Test coverage 70% (74: 22+52) [60 TestPoints] - quality rating 172 (target 100)
 
 
 
@@ -228,7 +234,7 @@ La distribuzione `Zeroincombenze® <https://www.zeroincombenze.it/>`__ è proget
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2024-12-22
+Last Update / Ultimo aggiornamento: 2024-12-29
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status

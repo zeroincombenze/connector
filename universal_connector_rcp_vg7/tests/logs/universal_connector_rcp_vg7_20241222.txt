@@ -1,1 +1,67 @@
-2024-12-22 08:40:43,000 523060 DAEMON test_universal_connector_rcp_vg7_12 run_odoo_debug.sh: cd /home/odoo/12.0/venv_odoo && source ./bin/activate
+2024-12-22 08:09:34,405 641090 INFO ? odoo: Odoo version 10.0
+2024-12-22 08:09:34,406 641090 INFO ? odoo: Using configuration file at /home/odoo/10.0/connector/universal_connector_rcp_vg7/tests/logs/zero10.connector.universal_connector_rcp_vg7.conf
+2024-12-22 08:09:34,406 641090 INFO ? odoo: addons paths: ['/home/odoo/.local/share/Odoo10/addons/10.0', u'/home/odoo/10.0/odoo/addons', u'/home/odoo/10.0/addons', u'/home/odoo/.local/share/Odoo12/addons', u'/home/odoo/10.0/account-analytic', u'/home/odoo/10.0/account-budgeting', u'/home/odoo/10.0/account-closing', u'/home/odoo/10.0/account-consolidation', u'/home/odoo/10.0/account-financial-reporting', u'/home/odoo/10.0/account-financial-tools', u'/home/odoo/10.0/account-fiscal-rule', u'/home/odoo/10.0/account-invoice-reporting', u'/home/odoo/10.0/account-invoicing', u'/home/odoo/10.0/account-payment', u'/home/odoo/10.0/account-reconcile', u'/home/odoo/10.0/bank-payment', u'/home/odoo/10.0/bank-statement-import', u'/home/odoo/10.0/calendar', u'/home/odoo/10.0/commission', u'/home/odoo/10.0/community-data-files', u'/home/odoo/10.0/connector', u'/home/odoo/10.0/contract', u'/home/odoo/10.0/credit-control', u'/home/odoo/10.0/crm', u'/home/odoo/10.0/currency', u'/home/odoo/10.0/data-protection', u'/home/odoo/10.0/delivery-carrier', u'/home/odoo/10.0/e-commerce', u'/home/odoo/10.0/edi', u'/home/odoo/10.0/helpdesk', u'/home/odoo/10.0/hr', u'/home/odoo/10.0/intrastat-extrastat', u'/home/odoo/10.0/knowledge', u'/home/odoo/10.0/l10n-italy', u'/home/odoo/10.0/l10n-italy-supplemental', u'/home/odoo/10.0/maintenance', u'/home/odoo/10.0/management-system', u'/home/odoo/10.0/manufacture', u'/home/odoo/10.0/margin-analysis', u'/home/odoo/10.0/mis-builder', u'/home/odoo/10.0/multi-company', u'/home/odoo/10.0/partner-contact', u'/home/odoo/10.0/product-attribute', u'/home/odoo/10.0/product-kitting', u'/home/odoo/10.0/product-variant', u'/home/odoo/10.0/profiles', u'/home/odoo/10.0/project', u'/home/odoo/10.0/purchase-reporting', u'/home/odoo/10.0/purchase-workflow', u'/home/odoo/10.0/queue', u'/home/odoo/10.0/report-print-send', u'/home/odoo/10.0/reporting-engine', u'/home/odoo/10.0/rma', u'/home/odoo/10.0/sale-financial', u'/home/odoo/10.0/sale-reporting', u'/home/odoo/10.0/sale-workflow', u'/home/odoo/10.0/search-engine', u'/home/odoo/10.0/server-auth', u'/home/odoo/10.0/server-tools', u'/home/odoo/10.0/server-ux', u'/home/odoo/10.0/social', u'/home/odoo/10.0/stock-logistics-barcode', u'/home/odoo/10.0/stock-logistics-reporting', u'/home/odoo/10.0/stock-logistics-tracking', u'/home/odoo/10.0/stock-logistics-transport', u'/home/odoo/10.0/stock-logistics-warehouse', u'/home/odoo/10.0/stock-logistics-workflow', u'/home/odoo/10.0/storage', u'/home/odoo/10.0/timesheet', u'/home/odoo/10.0/uncovered', u'/home/odoo/10.0/web', u'/home/odoo/10.0/webhook', u'/home/odoo/10.0/website', u'/home/odoo/10.0/wms', u'/home/odoo/10.0/zerobug-test']
+2024-12-22 08:09:34,406 641090 INFO ? odoo: database: odoo10@localhost:5432
+2024-12-22 08:09:34,419 641090 INFO ? odoo.service.server: HTTP service (werkzeug) running on NB200Z0.:29871
+2024-12-22 08:09:34,436 641090 INFO test_odoo_10 odoo.modules.loading: loading 1 modules...
+2024-12-22 08:09:34,507 641090 INFO test_odoo_10 odoo.modules.loading: 1 modules loaded in 0.07s, 0 queries
+2024-12-22 08:09:35,861 641090 INFO test_odoo_10 odoo.modules.loading: loading 45 modules...
+2024-12-22 08:09:36,007 641090 INFO test_odoo_10 odoo.addons.report.models.report: Will use the Wkhtmltopdf binary at /home/odoo/10.0/venv_odoo/bin/wkhtmltopdf
+2024-12-22 08:09:36,229 641090 INFO test_odoo_10 odoo.modules.loading: 45 modules loaded in 0.37s, 0 queries
+2024-12-22 08:09:36,233 641090 INFO test_odoo_10 odoo.modules.loading: loading 46 modules...
+2024-12-22 08:09:36,594 641090 INFO test_odoo_10 odoo.modules.registry: module universal_connector_rcp_vg7: creating or updating database tables
+2024-12-22 08:09:36,675 641090 WARNING test_odoo_10 py.warnings: /home/odoo/10.0/odoo/models.py:362: UnicodeWarning: Unicode equal comparison failed to convert both arguments to Unicode - interpreting them as being unequal
+  elif not all(cols[field.name][key] == vals[key] for key in vals):
+
+2024-12-22 08:09:38,102 641090 INFO test_odoo_10 odoo.addons.auth_crypt.models.res_users: Hashing passwords, may be slow for databases with many users...
+2024-12-22 08:09:38,180 641090 INFO test_odoo_10 odoo.models: Storing computed values of res.partner.shipping fields commercial_company_name, commercial_partner_id, display_name, partner_share
+2024-12-22 08:09:38,181 641090 INFO test_odoo_10 odoo.models: Storing computed values of res.partner.invoice fields commercial_company_name, commercial_partner_id, display_name, partner_share
+2024-12-22 08:09:38,182 641090 INFO test_odoo_10 odoo.models: Storing computed values of res.partner.supplier fields commercial_company_name, commercial_partner_id, display_name, partner_share
+2024-12-22 08:09:38,211 641090 INFO test_odoo_10 odoo.modules.loading: loading universal_connector_rcp_vg7/security/ir.model.access.csv
+2024-12-22 08:09:38,252 641090 INFO test_odoo_10 odoo.modules.loading: loading universal_connector_rcp_vg7/data/synchro_channel.xml
+2024-12-22 08:09:38,347 641090 INFO test_odoo_10 odoo.modules.loading: loading universal_connector_rcp_vg7/data/synchro_partner.xml
+2024-12-22 08:09:38,390 641090 WARNING test_odoo_10 odoo.models: synchro.channel.model.create() includes unknown fields: cron_sync
+2024-12-22 08:09:38,784 641090 INFO test_odoo_10 odoo.modules.loading: loading universal_connector_rcp_vg7/data/synchro_country.xml
+2024-12-22 08:09:38,855 641090 INFO test_odoo_10 odoo.modules.loading: loading universal_connector_rcp_vg7/views/country_view.xml
+2024-12-22 08:09:38,904 641090 INFO test_odoo_10 odoo.modules.loading: loading universal_connector_rcp_vg7/views/partner_view.xml
+2024-12-22 08:09:39,189 641090 INFO test_odoo_10 odoo.modules.module: odoo.addons.universal_connector_rcp_vg7.tests.test_backend running tests.
+2024-12-22 08:09:39,189 641090 INFO test_odoo_10 odoo.addons.universal_connector_rcp_vg7.tests.test_backend: test_connection (odoo.addons.universal_connector_rcp_vg7.tests.test_backend.MyTest)
+2024-12-22 08:09:39,270 641090 INFO test_odoo_10 odoo.addons.universal_connector_rcp_vg7.tests.testenv: 🎺🎺🎺 Starting test v2.0.21 (debug_level=0, commit=True)
+2024-12-22 08:09:39,272 641090 INFO test_odoo_10 odoo.addons.universal_connector_rcp_vg7.tests.testenv: 🎺🎺 Testing module: universal_connector_rcp_vg7 (10.0.0.3.11)
+2024-12-22 08:09:39,272 641090 INFO test_odoo_10 odoo.addons.universal_connector_rcp_vg7.tests.testenv: 🎺🎺 Loading data from: synchro.channel 
+2024-12-22 08:09:39,299 641090 INFO test_odoo_10 odoo.addons.universal_connector_rcp_vg7.tests.test_backend: 🎺 Starting connection test on ports 8270 (db=oca10) and 8272 (db=oca12) and on ports 8167 (db=demo7) and 8168 (db=demo8)
+2024-12-22 08:09:39,505 641090 INFO test_odoo_10 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.channel[3].button_check_connection(ep=https://gestionale.paperservice.vg7progress.it/index.php,h=gestionale.paperservice.vg7progress.it):
+2024-12-22 08:09:39,896 641090 INFO test_odoo_10 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.channel[3].button_reset_to_draft(ep=https://gestionale.paperservice.vg7progress.it/index.php,h=gestionale.paperservice.vg7progress.it):
+2024-12-22 08:09:40,089 641090 INFO test_odoo_10 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.channel[3].button_check_connection(ep=https://gestionale.paperservice.vg7progress.it/index.php,h=gestionale.paperservice.vg7progress.it):
+2024-12-22 08:09:40,621 641090 INFO test_odoo_10 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(customers,vg7,remote_id=101, ttl=None)
+2024-12-22 08:09:41,156 641090 INFO test_odoo_10 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(countries,vg7,remote_id=166, ttl=1)
+2024-12-22 08:09:41,446 641090 INFO test_odoo_10 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(regions,vg7,remote_id=122, ttl=1)
+2024-12-22 08:09:41,741 641090 INFO test_odoo_10 odoo.sql_db: bad query: INSERT INTO "res_country_state" ("id", "code", "name", "vg7_id", "create_uid", "write_uid", "create_date", "write_date") VALUES(nextval('res_country_state_id_seq'), 'AV', 'AVELLINO', 122, 1, 1, (now() at time zone 'UTC'), (now() at time zone 'UTC')) RETURNING id
+2024-12-22 08:09:41,743 641090 INFO test_odoo_10 odoo.addons.universal_connector_base.models.ir_model_synchro_log: !-1! ERROR null value in column "country_id" violates not-null constraint
+DETAIL:  Failing row contains (646, 1, AV, AVELLINO, null, 1, 2024-12-22 08:09:41.156003, 2024-12-22 08:09:41.156003, null, null, null, null, null, 122).
+: res.country.state.create({u'code': u'AV', u'name': u'AVELLINO', u'vg7_id': 122})
+2024-12-22 08:09:41,758 641090 INFO test_odoo_10 odoo.addons.universal_connector_rcp_vg7.tests.testenv: ✨ Test data available on database test_odoo_10
+2024-12-22 08:09:41,758 641090 INFO test_odoo_10 odoo.addons.universal_connector_rcp_vg7.tests.testenv: 🏆🥇 [1;32m9 tests SUCCESSFULLY completed[0m
+2024-12-22 08:09:41,760 641090 INFO test_odoo_10 odoo.addons.universal_connector_rcp_vg7.tests.test_backend: Ran 1 test in 2.571s
+2024-12-22 08:09:41,760 641090 INFO test_odoo_10 odoo.addons.universal_connector_rcp_vg7.tests.test_backend: OK
+2024-12-22 08:09:41,772 641090 INFO test_odoo_10 odoo.modules.loading: 46 modules loaded in 5.54s, 1452 queries
+2024-12-22 08:09:42,147 641090 INFO test_odoo_10 odoo.modules.loading: Modules loaded.
+2024-12-22 08:09:42,151 641090 INFO test_odoo_10 odoo.modules.loading: All post-tested in 0.00s, 0 queries
+2024-12-22 08:09:42,151 641090 INFO test_odoo_10 odoo.modules.registry: Registry changed, signaling through the database
+2024-12-22 08:09:42,152 641090 INFO test_odoo_10 odoo.service.server: Initiating shutdown
+2024-12-22 08:09:42,152 641090 INFO test_odoo_10 odoo.service.server: Hit CTRL-C again or send a second signal to force the shutdown.
+
++===================================================================
+| please test [36muniversal_connector_rcp_vg7[0m (10.0): [32mSUCCESS![0m
++===================================================================
+
+[1;37;44m[34;107mName                                                                     Stmts   Miss  Cover   Missing
+------------------------------------------------------------------------------------------------------
+connector/universal_connector_rcp_vg7/models/ir_model_synchro_apply.py      55     44    20%   23-45, 347-368
+connector/universal_connector_rcp_vg7/models/res_country.py                  9      0   100%
+connector/universal_connector_rcp_vg7/models/res_partner.py                 62     34    45%   27-61, 83-84, 114-115
+connector/universal_connector_rcp_vg7/models/synchro_api.py                 90     16    82%   32, 54-57, 59, 63, 107-110, 120, 127, 132, 139-142
+connector/universal_connector_rcp_vg7/models/synchro_backend.py              7      0   100%
+------------------------------------------------------------------------------------------------------
+TOTAL                                                                      223     94    58%
+[0m

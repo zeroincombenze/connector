@@ -24,7 +24,7 @@ except ImportError:
 
 
 class SynchroChannel(models.Model):
-    """Model for Odoo Backends"""
+    """Odoo Backends"""
 
     _name = "synchro.channel"
     _description = "Odoo Backend"
@@ -99,7 +99,7 @@ class SynchroChannel(models.Model):
     state = fields.Selection(
         selection=[
             ("draft", "Draft"),
-            ("ready", "Ready to Download/Upload"),
+            ("ready", "Ready"),
             ("run", "Data downloading/uploading"),
             ("failed", "Connection failed"),
         ],
@@ -115,13 +115,17 @@ class SynchroChannel(models.Model):
             ("oe8", "oe8"),
             ("oe7", "oe7"),
         ],
-        "Prefix for field names",
+        "Download Prefix",
         required=True,
-        help="Prefix to add to model field name to recognize "
-        "counterpart ID.Format must be [a-zA-Z]{2}[a-zA-Z0-9]+\n"
-        "i.e. with prefix='oe10'\n"
-        "<partner_id> means ID in Odoo\n"
-        "<oe10:partner_id> means counterpart field name and value\n",
+        help="Download prefix which counterparty must use to identify itself.\n"
+        "Format is [a-zA-Z]{2}[a-zA-Z0-9]+\n"
+        "Counterparty have to issue this prefix when calls trigger_one_record();"
+        "it has to add this prefix in data dictionary when calls synchro()"
+        " to issue its internal field name and field value.\n"
+        "Prefix activates the right translation functions of Universal Connector."
+        "i.e. with prefix='odoo8'\n"
+        "<partner_id> means ID of current Odoo database\n"
+        "<odoo8:partner_id> means counterpart partner ID and name\n",
         readonly=True,
         states={"draft": [("readonly", False)]},
     )
@@ -133,7 +137,7 @@ class SynchroChannel(models.Model):
         "Counterpart identity",
         required=True,
         default="odoo",
-        help="Remote identity like Odoo or Magento or others",
+        help="Counterpart identity for specific behavior; i.e. 'Odoo', 'Magento'",
         readonly=True,
         states={"draft": [("readonly", False)]},
     )
@@ -145,7 +149,7 @@ class SynchroChannel(models.Model):
         "Send/Receive protocol",
         required=True,
         default="xmlrpc/https",
-        help="Communication Protocol to load data from remote counterparty",
+        help="Communication Protocol to load data from/to remote counterparty",
         readonly=True,
         states={"draft": [("readonly", False)]},
     )
@@ -160,18 +164,18 @@ class SynchroChannel(models.Model):
         help=(
             "Every record to load can have fields that refer to another model, i.e"
             " partner has country reference. These record must be loaded from"
-            " counterparty in order to set all field values.\n"
+            " counterparty in order to set right field values.\n"
             " Load can be executed inside current web session (default) or by cron\n"
             " Direct mode is immediate but is limited by Odoo parameters.\n"
-            " Cron mode is delayed and can all recursive referenced records.\n"
+            " Cron mode is delayed and can load all recursive referenced records.\n"
         ),
         readonly=True,
         states={"draft": [("readonly", False)]},
     )
     deferred_payload = fields.Selection(
         [
-            ("0", "Suspended"),
-            ("1", "High priority"),
+            ("0", "Only for test & debug (Very harmful)"),
+            ("1", "High priority (May be harmful)"),
             ("2", "Ordinary priority"),
             ("3", "Low priority"),
         ],
@@ -180,8 +184,8 @@ class SynchroChannel(models.Model):
         default="2",
         help=(
             "When load mode 'cron', every cron event can interrupt CPU."
-            " This value ste how the cron interrupt is heavy on CPU execution.\n"
-            " Warning! Suspended payload disables cron load!"
+            " This value, by cron interrupts, impacts on CPU execution.\n"
+            " Warning! Do not use 'test' payload! May be dangerous!"
         ),
         readonly=True,
         states={"draft": [("readonly", False)]},
@@ -195,21 +199,21 @@ class SynchroChannel(models.Model):
     )
     hostname = fields.Char(
         string="Hostname",
-        help="Host name without protocol; may be an IP address",
+        help="Counterpart host name without protocol; may be an IP address",
         default=_default_hostname,
         readonly=True,
         states={"draft": [("readonly", False)]},
     )
     lgi_path = fields.Char(
-        "Exchange directory path",
-        help="Login path when load by rpc over https",
+        "RPC login path",
+        help="Counterpart login path when load by rpc over https",
         default=_default_path,
         readonly=True,
         states={"draft": [("readonly", False)]},
     )
     exchange_path = fields.Char(
-        "rpc over https data path",
-        help="Data path when load by rpc over https"
+        "Exchange directory data path",
+        help="Counterpart data path when load by rpc over https"
         " or where file will be read and written when load by csv",
         default=_default_exchange_path,
         readonly=True,
@@ -217,7 +221,7 @@ class SynchroChannel(models.Model):
     )
     login = fields.Char(
         string="Username / Client id",
-        help="Username to login remote counterpart or Client ID.",
+        help="Username to login remote counterparty.",
         default=_default_login,
         readonly=True,
         states={"draft": [("readonly", False)]},
@@ -225,45 +229,45 @@ class SynchroChannel(models.Model):
     port = fields.Integer(
         string="Communication Port",
         default=_default_port,
-        help="Port to comunicate with remote counterparty; Odoo uses 8069",
+        help="Port to communicate with remote counterparty; Odoo uses 8069",
         readonly=True,
         states={"draft": [("readonly", False)]},
     )
     database = fields.Char(
         string="Database",
-        help="Database name",
+        help="Counterpart Database name",
         readonly=True,
         states={"draft": [("readonly", False)]},
     )
     client_key = fields.Char(
         "Client key",
-        help="Client key assigned by 3th Party Sender",
+        help="Client Key assigned by Counterparty",
         copy=False,
         readonly=True,
         states={"draft": [("readonly", False)]},
     )
     password = fields.Char(
-        "Password",
+        "Counterpart Password",
         copy=False,
         readonly=True,
         states={"draft": [("readonly", False)]},
     )
     counterpart_url = fields.Char(
         "Counterpart login endpoint",
-        help="3th Party Sender URL to connect;\n"
+        help="Counterparty URL to connect;\n"
         "format should be [https://][username@]url[:port]/login_path",
         readonly=True,
         states={"draft": [("readonly", False)]},
     )
     counterpart_data_url = fields.Char(
-        "Counterpart data endpoint",
+        "Counterparty data endpoint",
         help="3th Party Sender URL to get data;\n"
         "format should be [https://][username@]url[:port]/exchange_path",
         readonly=True,
         states={"draft": [("readonly", False)]},
     )
     auto_reconnect = fields.Boolean(
-        string="Automatically reconnnect to remote counterpaty",
+        string="Automatically reconnect to remote counterparty",
         default=True,
         readonly=True,
         states={"draft": [("readonly", False)]},
@@ -277,11 +281,12 @@ class SynchroChannel(models.Model):
         "res.company",
         "Company",
         default=lambda self: self.env.user.company_id.id,
-        help="Set company, if specific company backend",
+        help="Set company, if specific company backend\n"
+        "It is required if counterparty does not manage company.",
     )
     default_lang_id = fields.Many2one(
         comodel_name="res.lang",
-        string="Default Language",
+        string="Counterparty Language",
         required=True,
         default=_default_language,
     )
@@ -298,7 +303,7 @@ class SynchroChannel(models.Model):
         default="2",
         help="Trace data in log. Warning! Use this feature with caution; "
         "all sent data will be recorded in the log file."
-        "This feature must be used only to debug handshake",
+        "This feature can slow data interchange.",
     )
     model_ids = fields.One2many(
         "synchro.channel.model",
@@ -306,6 +311,11 @@ class SynchroChannel(models.Model):
         string="Model mapping",
         readonly=True,
         states={"draft": [("readonly", False)]},
+    )
+    queue_jobs = fields.Html(
+        "Queue Jobs",
+        compute=lambda self: self._compute_queue_jobs(),
+        help="Current Queue Jobs. Value in this field update in time.",
     )
     import_workflow = fields.Integer("Import Workflow", default=0, help="Import status")
     rec_counter = fields.Integer(
@@ -318,6 +328,20 @@ class SynchroChannel(models.Model):
         string="Logs",
     )
 
+    @api.depends("model", "res_id")
+    def _compute_queue_jobs(self):  # pragma: no cover
+        que_list = self.env["ir.model.synchro.cache"].get_que_list(self)
+        html = "<table>"
+        for que_action, que_model, que_values, que_ttl, que_ctx in que_list:
+            html += "<tr>"
+            html += "<td>" + que_action + "</td>"
+            html += "<td>" + que_model + "</td>"
+            html += "<td>" + str(que_values) + "</td>"
+            html += "<td>" + str(que_ttl) + "</td>"
+            html += "<td>" + str(que_ctx) + "</td>"
+            html += "</tr>"
+        html += "</table>"
+
     @api.model
     def _compute_counterpart_url(self):
         countepart_url = self.get_login_endpoint(with_port=True, rebuild=True)
@@ -326,6 +350,21 @@ class SynchroChannel(models.Model):
 
     @api.onchange("method")
     def _onchange_method(self):
+        prot = self.get_protocol_from_method(self.method)
+        if prot == "http" and self.counterpart_url:
+            if self.counterpart_url.startswith("https:"):
+                self.counterpart_url = self.counterpart_url.replace("https", "http", 1)
+            if self.counterpart_data_url.startswith("https:"):
+                self.counterpart_data_url = self.counterpart_data_url.replace(
+                    "https", "http", 1
+                )
+        elif prot == "https" and self.counterpart_url:
+            if self.counterpart_url.startswith("http:"):
+                self.counterpart_url = self.counterpart_url.replace("http", "https", 1)
+            if self.counterpart_data_url.startswith("http:"):
+                self.counterpart_data_url = self.counterpart_data_url.replace(
+                    "http", "https", 1
+                )
         self.init_backend()
         # 10.0 bugfix
         if hasattr(self, "_origin") and self._origin and self._origin.id:
@@ -431,7 +470,7 @@ class SynchroChannel(models.Model):
             backend._onchange_odoo_version()
 
     def _build_all_indexes(self, cls):
-        """Build unique index on table to <vg7>_id for performance"""
+        """Build unique index on table to <gamma>_id for performance"""
         for prefix, _x in self.selection_for_prefix():
             if not hasattr(cls, prefix):
                 continue
@@ -452,32 +491,26 @@ class SynchroChannel(models.Model):
 
     def _synchronize_company(self):
         self.ensure_one()
-        synchro_model = self.env["synchro.channel.model"].get_synchro_model_from_loc(
-            self, "res.company"
-        )
-        if synchro_model.counterpart_name:
+        dir_mapper = self.get_dir_mapper(model="res.company")
+        if dir_mapper.counterpart_name:
             session = self.get_session()
-            company_ids = self.env["synchro.api"].get_record_list(
-                session, synchro_model
-            )
+            company_ids = self.env["synchro.api"].get_record_list(session, dir_mapper)
             synchronized = False if len(company_ids) else True
             for company_id in company_ids:
                 self.env["ir.model.synchro.cache"].que_push(
                     self,
                     "trigger",
-                    synchro_model.counterpart_name,
+                    dir_mapper.counterpart_name,
                     company_id,
                     2,
                     {},
                     prio=2,
                 )
-                self.synchro_queue()
-                loc_ext_id = synchro_model.get_loc_ext_id()
-                for company in self.env["res.company"].search([]):
-                    if getattr(company, loc_ext_id) == company_id:
-                        synchronized = True
-                        break
-                if synchronized:
+            self.synchro_queue()
+            loc_ext_id = dir_mapper.get_loc_ext_id()
+            for company in self.env["res.company"].search([]):
+                if getattr(company, loc_ext_id) in company_ids:
+                    synchronized = True
                     break
             if not synchronized:
                 self.env["ir.model.synchro.log"].logmsg(
@@ -498,6 +531,52 @@ class SynchroChannel(models.Model):
             )
             self.state = "failed"
 
+    def _build_models_info(self, dir_mappers, dir_mapper, depth=1):
+        if depth > 0 and dir_mapper.name:
+            struct = self.env[dir_mapper.name].fields_get()
+            if dir_mapper not in dir_mappers:
+                dir_mappers[dir_mapper] = {"depends": set()}
+            for mapper in dir_mapper.field_ids:
+                if not mapper.name or struct[mapper.name]["type"] in (
+                    "one2many",
+                    "many2many",
+                ):
+                    continue
+                comodel = struct[mapper.name].get("relation")
+                if comodel and comodel != dir_mapper.name:
+                    dir_mappers[dir_mapper]["depends"].add(comodel)
+            for model in dir_mappers[dir_mapper]["depends"]:
+                dir_mapper = self.get_dir_mapper(model=model)
+                if dir_mapper and dir_mapper not in dir_mappers:
+                    dir_mappers = self._build_models_info(
+                        dir_mappers,
+                        dir_mapper,
+                        depth=depth - 1,
+                    )
+        return dir_mappers
+
+    def _walk_mapper_tree(self, dir_mappers, managed_models, min_seq_valid=99):
+        for dir_mapper in dir_mappers.keys():
+            dir_mappers[dir_mapper]["sequence"] = (
+                len(dir_mappers[dir_mapper]["depends"]) + 3
+            )
+        return dir_mappers
+
+    def _set_model_priority(self, managed_models):
+        dir_mappers = {}
+        for dir_mapper in self.model_ids:
+            dir_mappers = self._build_models_info(dir_mappers, dir_mapper, depth=99)
+        dir_mappers = self._walk_mapper_tree(dir_mappers, managed_models)
+        for dir_mapper, item in dir_mappers.items():
+            dir_mapper.sequence = {
+                "ir.module.module": 2,
+                "res.company": 3,
+                "res.users": 3,
+            }.get(
+                dir_mapper.name,
+                96 if dir_mapper.name.startswith("ir.") else item["sequence"],
+            )
+
     @api.multi
     def button_check_connection(self):
         """This function applies for remote login using remote API"""
@@ -512,8 +591,14 @@ class SynchroChannel(models.Model):
             )
             if self.identity == "odoo" and not self.model_ids:
                 self.button_build_model_map()
-            for synchro_model in self.model_ids:
-                synchro_model.analyze_synchro_model()
+            managed_models = set([x.name for x in self.model_ids])
+            for dir_mapper in self.model_ids:
+                if self.identity != "odoo":
+                    dir_mapper.complete_dir_mapper(
+                        self, dir_mapper.counterpart_name, model=dir_mapper.name
+                    )
+                dir_mapper.analyze_dir_mapper(managed_models)
+            self._set_model_priority(managed_models)
             self._synchronize_company()
 
     @api.multi
@@ -534,24 +619,26 @@ class SynchroChannel(models.Model):
         self.ensure_one()
         session = self.get_session()
         if self.env["synchro.api"].session_is_active(session) and self.state == "ready":
-            remote_list = self.env["synchro.api"].get_model_list(session, self)
-            for binding_model, remote_model in remote_list:
+            model_list = self.env["synchro.api"].get_model_list(session, self)
+            for binding_model, remote_model in model_list:
                 if binding_model and binding_model not in self.env:
                     continue
                 if self.identity == "odoo":
-                    self.env["synchro.channel.model"].build_odoo_synchro_model(
+                    self.env["synchro.channel.model"].build_odoo_dir_mapper(
                         self, remote_model, model=binding_model
                     )
-                for synchro_model in self.model_ids:
-                    synchro_model.analyze_synchro_model()
+                else:
+                    self.env["synchro.channel.model"].complete_dir_mapper(
+                        self, remote_model, model=binding_model
+                    )
 
     def get_loc_ext_id(self):
         return "%s_id" % self.prefix
 
     def get_method_from_protocol(self, prot):
         return {
-            "sftp": "FTP",
-            "ftps": "FTP",
+            "https": "xmlrpc/https",
+            "http": "xmlrpc/http",
         }.get(prot) or False
 
     def get_protocol_from_method(self, method):
@@ -702,6 +789,7 @@ class SynchroChannel(models.Model):
                 jvals["%s:%s" % (prefix, name)] = vals[name]
         return jvals
 
+    @api.model
     def assign_backend(self, vals):
         backend = False
         for ext_ref in list(vals.keys()):
@@ -725,6 +813,25 @@ class SynchroChannel(models.Model):
         return backend
 
     @api.model
+    def get_magic_fields(self):
+        magic_fields = []
+        for backend in self.search([]):
+            magic_fields.append(backend.get_loc_ext_id())
+        return magic_fields
+
+    def get_dir_mapper(self, model=None, ext_model=None, spec=None):
+        DirMapper = self.env["synchro.channel.model"]
+        domain = [("synchro_channel_id", "=", self.id)]
+        if model:
+            domain.append(("name", "=", model))
+        if ext_model:
+            domain.append(("counterpart_name", "=", ext_model))
+        if spec is not None:
+            domain.append(("model_spec", "=", spec))
+        dir_mapper = DirMapper.search(domain)
+        return dir_mapper if len(dir_mapper) == 1 else DirMapper
+
+    @api.model
     def synchro_queue(self, prio=None, max_recs=0, mode=None):
         if mode and mode != self.load_mode:
             return
@@ -733,18 +840,23 @@ class SynchroChannel(models.Model):
         if self.load_mode == "direct":
             max_ctr = 2048
             max_secs = 180
+            commit_rate = 1024
         else:
-            # Priority is 1..3 or 0 (stopped)
+            # Priority is 1..3 or 0 (debug mode)
             prio = prio or int(self.deferred_payload)
             max_ctr, max_secs = {
-                0: (0, 0),
+                0: (1024, 30),
                 1: (64, 30),
                 2: (32, 20),
                 3: (16, 10),
             }[prio]
+            commit_rate = max_ctr
             max_ctr = max_recs or max_ctr
-        max_ctr = min(max_ctr, Cache.que_waiting_len(self))
-        time_limit = datetime.now() + timedelta(max_secs)
+
+        # In order to test module, load_mode is "direct" and deferred_payload="0"
+        if self.load_mode == "direct" and self.deferred_payload == "0":
+            max_secs = 270
+        time_limit = datetime.now() + timedelta(seconds=max_secs)
         loaded_ctr = 0
         while max_ctr > 0:
             if datetime.now() > time_limit:
@@ -752,7 +864,9 @@ class SynchroChannel(models.Model):
             max_ctr -= 1
             action, model, values, ttl, ctx = Cache.que_pop(self)
             if not action or not model or not values:
-                continue
+                if Cache.que_waiting_len(self):
+                    continue
+                break
             if action == "synchro":
                 id = self.env["ir.model.synchro"].synchro(
                     self.env[model],
@@ -778,7 +892,7 @@ class SynchroChannel(models.Model):
                 loaded_ctr += 1
         if self.state == "run":
             self.state = "ready"
-        if loaded_ctr > 0:
+        if loaded_ctr > commit_rate:
             self.env.cr.commit()  # pylint: disable=invalid-commit
 
     @api.model

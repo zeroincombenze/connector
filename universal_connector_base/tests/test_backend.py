@@ -105,7 +105,7 @@ class MyTest(SingleTransactionCase):
         self.setup_env()
         self.env["ir.model.synchro.cache"].set_loglevel(self.debug_level + 1)
         self.env["synchro.channel"].search([]).write(
-            {"tracelevel": str(self.debug_level + 1)}
+            {"tracelevel": str(self.debug_level + 1), "deferred_payload": "0"}
         )
 
     def tearDown(self):
@@ -339,7 +339,9 @@ class MyTest(SingleTransactionCase):
                     ("synchro_channel_id", "=", backend.id),
                 ]
             )
-            self.assertEqual(len(backend_model), 1)
+            self.assertEqual(
+                len(backend_model), 1, msg="Too many ext model %s" % ext_model
+            )
 
             for loc_name, ext_name in self.get_field_list(xref, model):
                 backend_field = self.env["synchro.channel.model.field"].search(
@@ -349,7 +351,11 @@ class MyTest(SingleTransactionCase):
                         ("model_id", "=", backend_model[0].id),
                     ]
                 )
-                self.assertEqual(len(backend_field), 1)
+                self.assertEqual(
+                    len(backend_field),
+                    1,
+                    msg="Too many field for %s.%s" % (ext_model, ext_name),
+                )
 
     def _test_import_model(self, xref, loc_model):
         Synchro = self.env["ir.model.synchro"]
@@ -360,14 +366,26 @@ class MyTest(SingleTransactionCase):
             loc_id = self.get_loc_id(xref, loc_model, ext_id)
             rec_id = Synchro.trigger_one_record(ext_model, backend.prefix, ext_id)
             if loc_id:
-                self.assertEqual(rec_id, loc_id)
+                self.assertEqual(rec_id, loc_id, msg="Unexpected local record ID")
             record = self.env[loc_model].browse(rec_id)
-            self.assertEqual(getattr(record, loc_ext_id), ext_id)
+            self.assertEqual(
+                getattr(record, loc_ext_id), ext_id, msg="Synchronization failed"
+            )
             for loc_field, op, value in self.get_test_pattern(xref, loc_model, ext_id):
                 if op == "%":
-                    self.assertIn(value, getattr(record, loc_field))
+                    self.assertIn(
+                        value,
+                        getattr(record, loc_field),
+                        msg="Unexpected value %s for %s.%s"
+                        % (getattr(record, loc_field), loc_model, loc_field),
+                    )
                 else:
-                    self.assertEqual(getattr(record, loc_field), value)
+                    self.assertEqual(
+                        getattr(record, loc_field),
+                        value,
+                        msg="Unexpected value %s for %s.%s"
+                        % (getattr(record, loc_field), loc_model, loc_field),
+                    )
 
     def _test_import_partner(self, xref):
         Synchro = self.env["ir.model.synchro"]
@@ -392,16 +410,28 @@ class MyTest(SingleTransactionCase):
                 loc_id = self.get_loc_id(xref, loc_model, ext_id)
                 rec_id = Synchro.trigger_one_record(ext_model, backend.prefix, ext_id)
                 if loc_id:
-                    self.assertEqual(rec_id, loc_id)
+                    self.assertEqual(rec_id, loc_id, msg="Unexpected local record ID")
                 partner = self.env[loc_model].browse(rec_id)
-                self.assertEqual(getattr(partner, loc_ext_id), ext_id)
+                self.assertEqual(
+                    getattr(partner, loc_ext_id), ext_id, msg="Synchronization failed"
+                )
                 for loc_field, op, value in self.get_test_pattern(
                     xref, loc_model, ext_id
                 ):
                     if op == "%":
-                        self.assertIn(value, getattr(partner, loc_field))
+                        self.assertIn(
+                            value,
+                            getattr(partner, loc_field),
+                            msg="Unexpected value %s for %s.%s"
+                            % (getattr(partner, loc_field), loc_model, loc_field),
+                        )
                     else:
-                        self.assertEqual(getattr(partner, loc_field), value)
+                        self.assertEqual(
+                            getattr(partner, loc_field),
+                            value,
+                            msg="Unexpected value %s for %s.%s"
+                            % (getattr(partner, loc_field), loc_model, loc_field),
+                        )
 
     def _test_import_partner2(self, xref):
         Synchro = self.env["ir.model.synchro"]
@@ -428,30 +458,54 @@ class MyTest(SingleTransactionCase):
                 partner = self.env[loc_model].browse(loc_id)
                 partner.write({"%s_id" % backend.prefix: ext_id})
                 rec_id = Synchro.trigger_one_record(ext_model, backend.prefix, ext_id)
-                self.assertEqual(rec_id, loc_id)
+                self.assertEqual(rec_id, loc_id, msg="Unexpected local record ID")
                 partner = self.env[loc_model].browse(rec_id)
-                self.assertEqual(getattr(partner, loc_ext_id), ext_id)
+                self.assertEqual(
+                    getattr(partner, loc_ext_id), ext_id, msg="Synchronization failed"
+                )
                 for loc_field, op, value in self.get_test_pattern(
                     xref, loc_model, ext_id
                 ):
                     if op == "%":
-                        self.assertIn(value, getattr(partner, loc_field))
+                        self.assertIn(
+                            value,
+                            getattr(partner, loc_field),
+                            msg="Unexpected value %s for %s.%s"
+                            % (getattr(partner, loc_field), loc_model, loc_field),
+                        )
                     else:
-                        self.assertEqual(getattr(partner, loc_field), value)
+                        self.assertEqual(
+                            getattr(partner, loc_field),
+                            value,
+                            msg="Unexpected value %s for %s.%s"
+                            % (getattr(partner, loc_field), loc_model, loc_field),
+                        )
 
         for ext_id in self.get_ext_id_list(xref, loc_model):
             ext_model = self.get_ext_model(xref, loc_model)
             loc_id = self.get_loc_id(xref, loc_model, ext_id)
             rec_id = Synchro.trigger_one_record(ext_model, backend.prefix, ext_id)
             if loc_id:
-                self.assertEqual(rec_id, loc_id)
+                self.assertEqual(rec_id, loc_id, msg="Unexpected local record ID")
             partner = self.env[loc_model].browse(rec_id)
-            self.assertEqual(getattr(partner, loc_ext_id), ext_id)
+            self.assertEqual(
+                getattr(partner, loc_ext_id), ext_id, msg="Synchronization failed"
+            )
             for loc_field, op, value in self.get_test_pattern(xref, loc_model, ext_id):
                 if op == "%":
-                    self.assertIn(value, getattr(partner, loc_field))
+                    self.assertIn(
+                        value,
+                        getattr(partner, loc_field),
+                        msg="Unexpected value %s for %s.%s"
+                        % (getattr(partner, loc_field), loc_model, loc_field),
+                    )
                 else:
-                    self.assertEqual(getattr(partner, loc_field), value)
+                    self.assertEqual(
+                        getattr(partner, loc_field),
+                        value,
+                        msg="Unexpected value %s for %s.%s"
+                        % (getattr(partner, loc_field), loc_model, loc_field),
+                    )
 
     def _test_country_state_ca(self, xref):
         # res.country.state requires country_id; in order to check this configuration
@@ -464,9 +518,9 @@ class MyTest(SingleTransactionCase):
         for record in recs:
             ext_id = getattr(record, loc_ext_id)
             if record.country_id.code == "US":
-                self.assertGreater(ext_id, 0)
+                self.assertGreater(ext_id, 0, msg="No US country synchronized")
             else:
-                self.assertEqual(ext_id, False)
+                self.assertEqual(ext_id, False, msg="Wrong country synchronization")
 
     def _test_pull_record(self, xref, loc_model):
         for ext_id in self.get_ext_id_list(xref, loc_model):
@@ -492,9 +546,19 @@ class MyTest(SingleTransactionCase):
                     xref, loc_model, ext_id
                 ):
                     if op == "%":
-                        self.assertIn(value, getattr(record, loc_field))
+                        self.assertIn(
+                            value,
+                            getattr(record, loc_field),
+                            msg="Unexpected value %s for %s.%s"
+                            % (getattr(record, loc_field), loc_model, loc_field),
+                        )
                     else:
-                        self.assertEqual(getattr(record, loc_field), value)
+                        self.assertEqual(
+                            getattr(record, loc_field),
+                            value,
+                            msg="Unexpected value %s for %s.%s"
+                            % (getattr(record, loc_field), loc_model, loc_field),
+                        )
 
     def _test_03_purge(self):
         _logger.info("🎺 Starting purge log test")

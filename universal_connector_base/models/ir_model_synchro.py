@@ -141,20 +141,21 @@ Log message level are:
 RETURN CODES
 
 Return code are:
-    -1: error creating record
-    -2: error writing record
-    -3: record with passed id does not exist
-    -4: unmodifiable record
-    -5: invalid structure header/details
-    -6: unrecognized backend
-    -7: no valid data supplied
-    -8: unrecognized external table
-    -9: Record already in queue
+    -1: Error creating record
+    -2: Error writing record
+    -3: Record with passed id does not exist
+    -4: Insufficient permission to update record
+    -5: Invalid structure header/details
+    -6: No backend to manage counterparty
+    -7: Unrecognized counterparty
+    -8: Unrecognized external table
+    -9: No data updated
    -10: Cannot update record state
    -11: Unmanaged table
    -12: Internal error
    -13: Invalid remote response
-   -14: invalid company
+   -14: No enough data to create record
+   -15: Invalid company
   -100: if return code < -100 means error on child records
 """
 from future.utils import PY3
@@ -162,8 +163,7 @@ from datetime import datetime
 import logging
 
 from odoo import api, models
-from odoo.osv import expression
-from python_plus import str2bool, unicodes, _u
+from python_plus import str2bool, _u
 
 from .ir_model_synchro_cache import MODEL_LAZY_COMPANY
 
@@ -173,6 +173,7 @@ _logger = logging.getLogger(__name__)
 class IrModelSynchro(models.Model):
     _name = "ir.model.synchro"
     _inherit = "ir.model"
+    _description = "Additional model functions"
 
     def preprocess(self, backend, vmodel, vals):
         return vals, ""
@@ -256,247 +257,18 @@ class IrModelSynchro(models.Model):
         method = method if hasattr(self, method) else "_cast_field_base"
         return getattr(self, method)(binding_model, value)
 
-    def browse_from_id_in_vals(self, actual_cls, vals):
-        id = 0
-        rec = False
-        if "id" in vals:
-            id = vals.pop("id")
-            if isinstance(id, str):  # pragma: no cover
-                rec = self.xmlid_to_object(id, raise_if_not_found=False)
-            else:
-                recs = actual_cls.with_context({"lang": self.env.user.lang}).search(
-                    [("id", "=", id)]
-                )
-                if recs:
-                    rec = recs[0]
-                    self.env["ir.model.synchro.log"].logmsg(
-                        "debug",
-                        "Found record %(model)s[%(id)s]",
-                        res_rec=rec,
-                    )
-        if id and not rec:
-            self.env["ir.model.synchro.log"].logmsg(
-                "error",
-                "Record %(model)s[%(id)s] not found!",
-                res_model=actual_cls._name,
-                id=id,
-            )
-        return rec
-
-    def browse_from_ext_id_in_vals(self, synchro_model, actual_cls, vals):
-        loc_ext_id = synchro_model.get_loc_ext_id()
-        rec = False
-        if loc_ext_id in vals:
-            ext_id = vals[loc_ext_id]
-            recs = actual_cls.bind_external_ref(loc_ext_id, ext_id)
-            if recs:
-                rec = recs[0]
-                self.env["ir.model.synchro.log"].logmsg(
-                    "debug",
-                    "Found record %(model)s[%(id)s](ext_id=%(ext_id)s)",
-                    res_rec=rec,
-                    ctx={"ext_id": ext_id},
-                )
-        return rec
-
-    def atomic_search(self, cls, domain, company_id=None, company_lev=0):
-        if not domain:
-            return []
-        if company_id is None:
-            full_domain = domain
-        elif company_lev == 0:
-            full_domain = domain + [("company_id", "=", company_id)]
-        elif company_lev == 1:
-            full_domain = domain + [("company_id", "=", False)]
-        else:
-            full_domain = domain + [
-                "|",
-                ("company_id", "=", company_id),
-                ("company_id", "=", False),
-            ]
-        try:
-            if hasattr(cls, "sequence"):
-                rec = cls.search(
-                    full_domain, order="sequence,id", limit=2 if company_lev < 2 else 16
-                )
-            else:
-                rec = cls.search(full_domain, limit=2 if company_lev < 2 else 16)
-        except BaseException as e:  # pragma: no cover
-            self.env.cr.rollback()  # pylint: disable=invalid-commit
-            self.env["ir.model.synchro.log"].logmsg(
-                "error",
-                "!%(E)s! ERROR %(e)s: %(model)s.atomic_search(%(domain)s)",
-                res_model=cls._name,
-                errmsg=e,
-                ctx={"domain": domain},
-            )
-            return []
-        if len(rec) != 1 and company_id is not None and not company_lev < 2:
-            return self.atomic_search(
-                cls,
-                domain,
-                company_id=company_id,
-                company_lev=company_lev + 1 if company_lev else company_lev + 2,
-            )
-        self.env["ir.model.synchro.log"].logmsg(
-            "debug",
-            "%(model)s.atomic_search(%(domain)s)",
-            res_rec=rec,
-            res_model=cls._name,
-            ctx={"domain": full_domain},
-        )
-        return rec
-
-    def exec_search(self, cls, domain, company_id=None):
-        rec = self.atomic_search(cls, domain, company_id=company_id)
-        if not rec and hasattr(cls, "active"):
-            rec = self.atomic_search(
-                cls,
-                expression.AND([domain, [("active", "=", False)]]),
-            )
-        return rec
-
-    def bind_record(self, synchro_model, actual_cls, vals, ctx=None):
-        rec = self.browse_from_id_in_vals(actual_cls, vals)
-        if rec:
-            return rec
-        rec = self.browse_from_ext_id_in_vals(synchro_model, actual_cls, vals)
-        if rec:
-            return rec
-        ctx = ctx or {}
-        loc_ext_id = synchro_model.get_loc_ext_id()
-        candidate = None
-        if synchro_model.name == "res.company":
-            rec = actual_cls.search(
-                ["|", (loc_ext_id, "=", False), (loc_ext_id, "=", 0)]
-            )
-            if len(rec) == 1:
-                candidate = rec[0]
-                rec = []
-        prio = 8
-        for keys in unicodes(eval(synchro_model.search_keys)):
-            domain = []
-            if isinstance(keys, str):
-                keys = [keys]
-            for key in keys:
-                ilike = False
-                if key.startswith("!"):
-                    key = key[1:]
-                    domain.append((key, "=", False))
-                    continue
-                if key.startswith(("%", "_", "?", "+")):
-                    ilike = key[0]
-                    key = key[1:]
-                if key not in vals:
-                    if key in ctx:
-                        domain.append((key, "=", ctx[key]))
-                    else:
-                        domain = []
-                        break
-                elif isinstance(vals[key], str) and vals[key] == "" and ilike == "?":
-                    domain.append("|")
-                    domain.append((key, "=", False))
-                    domain.append((key, "=", ""))
-                # elif (
-                #     key == "amount"
-                #     and isinstance(vals[key], str)
-                #     and not eval(vals[key])
-                #     and ilike != "?"
-                # ):
-                #     domain = []
-                #     break
-                # elif key == "amount" and not vals[key] and ilike != "?":
-                #     domain = []
-                #     break
-                elif ilike == "+" and not vals[key]:
-                    domain = []
-                    break
-                elif ilike and ilike not in ("?", "+"):
-                    domain.append(
-                        (
-                            key,
-                            "ilike",
-                            vals[key].replace(" ", ilike).replace(".", ilike),
-                        )
-                    )
-                else:
-                    domain.append((key, "=", vals[key]))
-            if domain:
-                if loc_ext_id in vals:
-                    domain.append("|")
-                    domain.append((loc_ext_id, "=", False))
-                    domain.append((loc_ext_id, "=", 0))
-                company_id = None
-                if synchro_model.search_with_company:
-                    if vals.get("company_id"):
-                        company_id = vals["company_id"]
-                    elif ctx.get("company_id"):
-                        company_id = ctx["company_id"]
-                    elif synchro_model.name not in MODEL_LAZY_COMPANY:
-                        company_id = False
-                rec = self.exec_search(actual_cls, domain, company_id=company_id)
-                if len(rec) == 1:
-                    break
-                elif 1 < len(rec) < prio:
-                    candidate = rec[0]
-                    rec = []
-                    prio = len(rec)
-                else:
-                    rec = []
-        if not rec and candidate:
-            rec = candidate
-        return rec
-
     @api.model
-    def drop_protected_equal_fields(self, backend, vals, rec):
-        SynchroModel = self.env["synchro.channel.model"]
-        synchro_model = SynchroModel.get_synchro_model_from_loc(backend, rec._name)
-        struct = self.env[rec._name].fields_get()
-        for loc_name, value in vals.copy().items():
-            if loc_name not in struct:  # pragma: no cover
-                del vals[loc_name]
-                continue
-            SynchroField = self.env["synchro.channel.model.field"]
-            synchro_field = SynchroField.get_synchro_field(
-                synchro_model, loc_name=loc_name
-            )
-            protect_update = synchro_field.protect_update
-            if (
-                protect_update == "3"
-                or (
-                    protect_update == "4"
-                    and rec[loc_name]
-                    and int(vals[loc_name]) <= int(rec[loc_name])
-                )
-                or (protect_update == "2" and rec[loc_name])
-                or (protect_update == "1" and not vals[loc_name])
-            ):
-                del vals[loc_name]
-                continue
-            ftype = struct[loc_name]["type"]
-            if not hasattr(rec, loc_name):
-                del vals[loc_name]
-            elif ftype == "many2one":
-                if rec[loc_name] and vals[loc_name] == rec[loc_name].id:
-                    del vals[loc_name]
-            elif ftype in ("one2many", "many2many"):
-                pass
-            elif vals[loc_name] == rec[loc_name]:
-                del vals[loc_name]
-        return vals
-
-    @api.model
-    def create_new(self, actual_cls, vals, only_minimal=False, ctx=None):
+    def create_new(self, Binder, vals, only_minimal=False, ctx=None):
         SynchroLog = self.env["ir.model.synchro.log"]
-        if not only_minimal and hasattr(actual_cls, "assure_values"):
-            vals = actual_cls.assure_values(vals, False)
-        if actual_cls._name.startswith("account.move") and not ctx:
+        if not only_minimal and hasattr(Binder, "assure_values"):
+            vals = Binder.assure_values(vals, False)
+        if Binder._name.startswith("account.move") and not ctx:
             ctx = {"check_move_validity": False}
         try:
             if ctx:
-                rec = actual_cls.with_context(ctx).create(vals)
+                rec = Binder.create(vals)
             else:
-                rec = actual_cls.create(vals)
+                rec = Binder.create(vals)
             SynchroLog.logmsg(
                 "warning", "", res_rec=rec, logrec=self.logrec, values=vals
             )
@@ -506,20 +278,22 @@ class IrModelSynchro(models.Model):
             SynchroLog.logmsg(
                 "error",
                 "!%(E)s! ERROR %(e)s: %(model)s.create(%(vals)s)",
-                res_model=actual_cls._name,
+                res_model=Binder._name,
                 values=vals,
                 errmsg=e,
                 errcode=-1,
             )
         return rec
 
-    def rewrite(self, rec, vals, backend, only_minimal=False, ctx=None):
+    def rewrite(self, rec, vals, dir_mapper, only_minimal=False, ctx=None):
         SynchroLog = self.env["ir.model.synchro.log"]
-        if not only_minimal and hasattr(rec, "assure_values"):
+        if (
+            not only_minimal
+            and hasattr(rec, "assure_values")
+            and dir_mapper.auth_action != "sync"
+        ):
             vals = rec.assure_values(vals, rec)
-        if hasattr(rec, "active") and not rec.active and "active" not in vals:
-            vals["active"] = True
-        vals = self.drop_protected_equal_fields(backend, vals, rec)
+        vals = dir_mapper.drop_protected_equal_fields(vals, rec)
         if vals:
             try:
                 if rec._name.startswith("account.move"):
@@ -540,6 +314,10 @@ class IrModelSynchro(models.Model):
                     errcode=-2,
                 )
                 return -2
+            else:
+                SynchroLog.logmsg(
+                    "warning", "", res_rec=rec, logrec=self.logrec, errcode=-9
+                )
         return rec
 
     @api.model
@@ -552,11 +330,12 @@ class IrModelSynchro(models.Model):
         ttl=None,
         running_in_queue=None,
         jacket=None,
+        logrec=None,
         ctx=None,
     ):
         Cache = self.env["ir.model.synchro.cache"]
         SynchroLog = self.env["ir.model.synchro.log"]
-        SynchroModel = self.env["synchro.channel.model"]
+        DirMapper = self.env["synchro.channel.model"]
 
         if isinstance(jacket, str):
             vals = self.env["synchro.channel"].vals_with_jacket(vals, prefix=jacket)
@@ -569,48 +348,54 @@ class IrModelSynchro(models.Model):
                 res_model=vcls._name,
                 values=vals,
                 errcode=-7,
+                logrec=logrec,
             )
 
         vmodel = vcls._name
-        binding_model = SynchroModel.get_binding_model_name(vmodel)
-        actual_cls = self.env[binding_model]
+        binding_model = DirMapper.get_binding_model_name(vmodel)
         if not binding_model:  # pragma: no cover
             SynchroLog.logmsg(
                 "error",
-                "!%(E)s! Invalid or unknown actual model for %(model)s!",
+                "!%(E)s! Invalid or unknown model %(model)s!",
                 res_model=vmodel,
                 values=vals,
                 errcode=-11,
+                logrec=logrec,
             )
             return -11
+        Binder = self.env[binding_model].with_context(
+            {"lang": backend.default_lang_id.code}
+        )
         backend = backend or self.env["synchro.channel"].assign_backend(vals)
         if not backend:  # pragma: no cover
             Cache.clean_cache()
             SynchroLog.logmsg(
                 "error",
-                "!%(E)s! No channel found!",
+                "!%(E)s! No backend found!",
                 values=vals,
                 errcode=-6,
+                logrec=logrec,
             )
             return -6
         if backend.state == "ready":
             backend.write({"state": "run"})
 
-        ttl = ttl or (2 if only_minimal else 4)
+        ttl = ttl or (4 if only_minimal else 2)
         self.logrec = SynchroLog.logmsg(
             "warning",
             "%(model)s.synchro(%(vals)s,backend=%(backend)s,min=%(m)s),ttl=%(t)s",
             res_model=vmodel,
             values=vals,
             backend=backend,
+            logrec=logrec,
             ctx={"m": only_minimal, "t": ttl},
         )
 
-        synchro_model = SynchroModel.get_synchro_model_from_loc(backend, vmodel)
-        spec = ""
+        dir_mapper = backend.get_dir_mapper(model=vmodel)
+        spec = False
         saved_vals = vals.copy()
-        ctx = synchro_model.load_ctx(ctx if running_in_queue else {})
-        vals, incomplete_record = synchro_model.map_to_internal(
+        ctx = dir_mapper.load_ctx(ctx if running_in_queue else {})
+        vals, incomplete_record = dir_mapper.map_to_internal(
             vals,
             ttl,
             only_minimal=only_minimal,
@@ -623,30 +408,23 @@ class IrModelSynchro(models.Model):
             and vals["company_id"]
             and vals["company_id"] != backend.company_id.id
         ):  # pragma: no cover
-            rec = -14
+            rec = -15
             return rec
-        rec = (
-            self.bind_record(synchro_model, actual_cls, vals, ctx=ctx) if vals else None
-        )
+        postponed = False
+        rec = dir_mapper.bind_record(Binder, vals, ctx=ctx) if vals else None
         if not rec:
-            rec = -1
-            loc_ext_id = synchro_model.get_loc_ext_id()
+            rec = -14
+            loc_ext_id = dir_mapper.get_loc_ext_id()
             min_vals = {}
-            if synchro_model.auth_action not in ("upd", "lock"):
+            if dir_mapper.auth_action not in ("upd", "lock"):
                 if only_minimal or incomplete_record:
-                    if synchro_model.auth_action == "sync":
-                        if loc_ext_id in vals:
-                            min_vals[loc_ext_id] = vals[loc_ext_id]
-                    else:
-                        for loc_name in vals.keys():
-                            synchro_field = self.env[
-                                "synchro.channel.model.field"
-                            ].get_synchro_field(synchro_model, loc_name=loc_name)
-                            if synchro_field.required or loc_name in (
-                                loc_ext_id,
-                                synchro_model.parent_name,
-                            ):
-                                min_vals[loc_name] = vals[loc_name]
+                    for loc_name in vals.keys():
+                        mapper = dir_mapper.get_mapper(loc_name=loc_name, spec=spec)
+                        if mapper.required or loc_name in (
+                            loc_ext_id,
+                            dir_mapper.parent_name,
+                        ):
+                            min_vals[loc_name] = vals[loc_name]
                     struct = self.env[binding_model].fields_get()
                     valid = True if min_vals else False
                     if valid and incomplete_record:
@@ -656,12 +434,10 @@ class IrModelSynchro(models.Model):
                                 and binding_model in MODEL_LAZY_COMPANY
                             ):
                                 continue
-                            synchro_field = self.env[
-                                "synchro.channel.model.field"
-                            ].get_synchro_field(synchro_model, loc_name=loc_name)
+                            mapper = dir_mapper.get_mapper(loc_name=loc_name, spec=spec)
                             if (
-                                synchro_field.required
-                                or loc_name in (loc_ext_id, synchro_model.parent_name)
+                                mapper.required
+                                or loc_name in (loc_ext_id, dir_mapper.parent_name)
                             ) and loc_name not in min_vals:
                                 valid = False
                                 break
@@ -676,22 +452,36 @@ class IrModelSynchro(models.Model):
                             prio=3 if valid else 2,
                         )
                     if valid:
-                        rec = self.create_new(actual_cls, min_vals, only_minimal=True)
+                        rec = self.create_new(Binder, min_vals, only_minimal=True)
+                    else:
+                        SynchroLog.logmsg(
+                            "warning",
+                            "No enough data to create record",
+                            logrec=self.logrec,
+                        )
+                        if not running_in_queue and backend.load_mode == "direct":
+                            postponed = vals
                 elif vals:
-                    rec = self.create_new(actual_cls, vals, only_minimal=False)
+                    rec = self.create_new(Binder, vals, only_minimal=False)
         else:
-            if synchro_model.auth_action in ("ins", "lock"):
-                rec = -2
+            if dir_mapper.auth_action in ("ins", "lock"):
+                rec = -4
             elif vals:
-                rec = self.rewrite(rec, vals, backend, only_minimal=False)
-        if (
-            not running_in_queue
-            and backend.load_mode == "direct"
-            and Cache.que_waiting_len(backend)
-        ):
-            # commit every table to avoid too big transaction
-            self.env.cr.commit()  # pylint: disable=invalid-commit
-            backend.synchro_queue()
+                rec = self.rewrite(rec, vals, dir_mapper, only_minimal=False)
+        if not running_in_queue and backend.load_mode == "direct":
+            if Cache.que_waiting_len(backend):
+                commit_rate = 16 if backend.deferred_payload > "0" else 1024
+                if Cache.que_waiting_len(backend) > commit_rate:
+                    # commit every table to avoid too big transaction
+                    self.env.cr.commit()  # pylint: disable=invalid-commit
+                backend.synchro_queue()
+                # Sometimes record cannot be created due missed required fields that
+                # could be loaded by above synchro_que(); inside queue current record
+                # can be created so we should test for this case
+                if postponed and rec == -14:
+                    rec = dir_mapper.bind_record(Binder, postponed, ctx=ctx)
+            if self.state == "run":
+                self.state = "ready"
         return rec.id if hasattr(rec, "id") else rec
 
     def pull_one_record(
@@ -701,23 +491,21 @@ class IrModelSynchro(models.Model):
         vals,
         ttl=None,
         ctx=None,
-        synchro_model=None,
+        dir_mapper=None,
         running_in_queue=None,
+        logrec=None,
     ):
-        SynchroModel = self.env["synchro.channel.model"]
         SynchroLog = self.env["ir.model.synchro.log"]
         Cache = self.env["ir.model.synchro.cache"]
 
-        if synchro_model:
-            backend = synchro_model.synchro_channel_id
+        if dir_mapper:
+            backend = dir_mapper.synchro_channel_id
         else:  # pragma: no cover
             backend = self.env["synchro.channel"].assign_backend(
                 {"%s:" % prefix: prefix}
             )
             if backend:
-                synchro_model = SynchroModel.get_synchro_model_from_ext(
-                    backend, ext_model
-                )
+                dir_mapper = backend.get_dir_mapper(ext_model=ext_model)
         if not backend:  # pragma: no cover
             SynchroLog.logmsg(
                 "error",
@@ -725,9 +513,10 @@ class IrModelSynchro(models.Model):
                 res_model=ext_model,
                 values=vals,
                 errcode=-6,
+                logrec=logrec,
             )
             return -6
-        if not synchro_model:  # pragma: no cover
+        if not dir_mapper:  # pragma: no cover
             Cache.clean_cache()
             SynchroLog.logmsg(
                 "error",
@@ -735,29 +524,31 @@ class IrModelSynchro(models.Model):
                 res_model=ext_model,
                 values=vals,
                 errcode=-8,
+                logrec=logrec,
                 ctx={"t": ttl},
             )
             return -8
         # Cache.open(backend=backend, ext_model=ext_model)
-        if (isinstance(vals, dict) and synchro_model.counterpart_pk not in vals) or (
-            not isinstance(vals, dict)
-            and not hasattr(vals, synchro_model.counterpart_pk)
+        if (isinstance(vals, dict) and dir_mapper.counterpart_pk not in vals) or (
+            not isinstance(vals, dict) and not hasattr(vals, dir_mapper.counterpart_pk)
         ):  # pragma: no cover
             SynchroLog.logmsg(
                 "error",
                 "!%(E)s! Data of model %(model)s received w/o %(pk)s",
                 backend=backend,
-                res_model=synchro_model._name,
-                ctx={"pk": synchro_model.counterpart_pk},
+                res_model=dir_mapper._name,
+                logrec=logrec,
+                ctx={"pk": dir_mapper.counterpart_pk},
             )
             return -13
-        vmodel = synchro_model.name
+        vmodel = dir_mapper.name
         return self.env[vmodel].synchro(
             vals,
             backend=backend,
             running_in_queue=running_in_queue,
             jacket=True,
             ttl=ttl,
+            logrec=logrec,
             ctx=ctx,
         )
 
@@ -765,7 +556,6 @@ class IrModelSynchro(models.Model):
     def trigger_one_record(
         self, ext_model, prefix, ext_id, ttl=None, running_in_queue=None, ctx=None
     ):
-        SynchroModel = self.env["synchro.channel.model"]
         SynchroLog = self.env["ir.model.synchro.log"]
         Cache = self.env["ir.model.synchro.cache"]
 
@@ -788,9 +578,9 @@ class IrModelSynchro(models.Model):
                 errcode=-6,
             )
             return -6
-        # Cache.open(backend=backend, ext_model=ext_model)
-        synchro_model = SynchroModel.get_synchro_model_from_ext(backend, ext_model)
-        if not synchro_model:  # pragma: no cover
+
+        dir_mapper = backend.get_dir_mapper(ext_model=ext_model)
+        if not dir_mapper:  # pragma: no cover
             Cache.clean_cache()
             SynchroLog.logmsg(
                 "error",
@@ -801,14 +591,14 @@ class IrModelSynchro(models.Model):
                 ctx={"t": ttl},
             )
             return -8
-        SynchroLog.logmsg(
+        logrec = SynchroLog.logmsg(
             "info",
             "trigger_one_record(%(xmodel)s,%(pfx)s,remote_id=%(xid)s, ttl=%(t)s)",
-            res_model=synchro_model.name,
+            res_model=dir_mapper.name,
             backend=backend,
             ctx={"xmodel": ext_model, "xid": ext_id, "t": ttl},
         )
-        vals = synchro_model.get_counterpart_response(ext_id)
+        vals = dir_mapper.get_counterpart_response(ext_id)
         if not vals or len(vals) != 1:
             return -13  # pragma: no cover
         if isinstance(vals, (tuple, list)):
@@ -819,8 +609,9 @@ class IrModelSynchro(models.Model):
             vals,
             ttl=ttl,
             ctx=ctx,
-            synchro_model=synchro_model,
+            dir_mapper=dir_mapper,
             running_in_queue=running_in_queue,
+            logrec=logrec,
         )
 
     @api.model

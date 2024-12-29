@@ -20,6 +20,7 @@ _logger = logging.getLogger(__name__)
 class IrModelSynchroApply(models.Model):
     _name = "ir.model.synchro.apply"
     _inherit = "ir.model"
+    _description = "Functions to convert field data"
 
     def is_purchase(self, vals, vmodel):
         return vmodel == "purchase.order.line" or vals.get("type") in (
@@ -236,28 +237,6 @@ class IrModelSynchroApply(models.Model):
                     vals[loc_name] = journal.default_credit_account_id.id
         return vals
 
-    def apply_uom(
-        self,
-        backend,
-        vals,
-        loc_name,
-        ext_ref,
-        loc_ext_id,
-        vmodel,
-        default=None,
-        ctx=None,
-        product=None,
-    ):
-        if loc_name not in vals or not vals.get(loc_name):
-            if product or "product_id" in vals:
-                product = product or self.env["product.product"].browse(
-                    vals["product_id"]
-                )
-                vals[loc_name] = product.uom_id.id
-            else:
-                vals[loc_name] = self.env.ref("uom.product_uom_unit").id
-        return vals
-
     def apply_tax(
         self,
         backend,
@@ -409,56 +388,6 @@ class IrModelSynchroApply(models.Model):
             vals[ext_ref] = "%s 00:00:00" % vals[ext_ref]
         return vals
 
-    def apply_line_vals_from_prod(
-        self,
-        backend,
-        vals,
-        loc_name,
-        ext_ref,
-        loc_ext_id,
-        vmodel,
-        default=None,
-        ctx=None,
-    ):
-        if vals.get("product_id"):
-            Product = self.env["product.product"]
-            product = Product.browse(vals["product_id"])
-            if not vals.get("product_uom"):
-                vals = self.apply_uom(
-                    backend, vals, "product_uom", None, None, vmodel, product=product
-                )
-            if vmodel == "purchase.order.line" and not vals.get("taxes_id"):
-                vals = self.apply_tax(
-                    backend, vals, "taxes_id", None, None, vmodel, product=product
-                )
-            elif vmodel == "sale.order.line" and not vals.get("tax_id"):
-                vals = self.apply_tax(
-                    backend, vals, "tax_id", None, None, vmodel, product=product
-                )
-            elif vmodel == "account.invoice.line" and not vals.get(
-                "invoice_line_tax_ids"
-            ):
-                vals = self.apply_tax(
-                    backend,
-                    vals,
-                    "invoice_line_tax_ids",
-                    None,
-                    None,
-                    vmodel,
-                    product=product,
-                )
-            elif vmodel == "stock.picking.package.preparation.line" and not vals.get(
-                "tax_ids"
-            ):
-                vals = self.apply_tax(
-                    backend, vals, "tax_ids", None, None, vmodel, product=product
-                )
-            if vmodel == "account.invoice.line" and not vals.get("account_id"):
-                vals = self.apply_account(
-                    backend, vals, "account_id", None, None, vmodel, product=product
-                )
-        return vals
-
     ############################
     # ODOO MIGRATION FUNCTIONS #
     ############################
@@ -474,11 +403,9 @@ class IrModelSynchroApply(models.Model):
         ctx=None,
     ):
         Api = self.env["synchro.api"]
-        synchro_model = self.env["ir.model.synchro"].get_synchro_model_from_loc(
-            backend, vmodel
-        )
-        vals[loc_name] = Api.odoo_tnl_value_from_to(
-            backend, synchro_model, vals[ext_ref], loc_name
+        dir_mappper = backend.get_dir_mapper(model=vmodel)
+        vals[loc_name] = Api.odoo_tnl_value_from_loc_to_ext(
+            backend, dir_mappper, vals[ext_ref], loc_name
         )
         return vals
 
@@ -495,11 +422,9 @@ class IrModelSynchroApply(models.Model):
     ):
         if not vals.get(loc_name):
             Api = self.env["synchro.api"]
-            synchro_model = self.env["ir.model.synchro"].get_synchro_model_from_loc(
-                backend, vmodel
-            )
-            names = Api.odoo_tnl_value_from_to(
-                backend, synchro_model, vals[ext_ref], loc_name
+            dir_mapper = backend.get_dir_mapper(model=vmodel)
+            names = Api.odoo_tnl_value_from_loc_to_ext(
+                backend, dir_mapper, vals[ext_ref], loc_name
             )
             name = vals.get("name", "").lower()
             if isinstance(names, list):
@@ -572,28 +497,3 @@ class IrModelSynchroApply(models.Model):
                 "%Y-%m-%d %H:%M:%S"
             )
         return vals
-
-    def get_default_product(self):
-        Cache = self.env["ir.model.synchro.cache"]
-        product = Cache.get_struct_model_attr("product.product", "DEF_REC")
-        if product:
-            return product
-        product = self.env["product.product"].search([("default_code", "=", "MISC")])
-        if not product:
-            product = self.env["product.product"].search([], limit=1)
-        if product:
-            product = product[0]
-        Cache.set_struct_model_attr("product.product", "DEF_REC", product)
-        return product
-
-    def get_default_location_id(self):
-        Cache = self.env["ir.model.synchro.cache"]
-        location = Cache.get_struct_model_attr("stock.location", "DEF_ID")
-        if location:
-            return location.id
-        location = self.env["stock.location"].search([], limit=1, order="id")
-        if location:
-            location = location[0]
-            Cache.set_struct_model_attr("product.product", "DEF_ID", location.id)
-            return location.id
-        return False

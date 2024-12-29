@@ -41,6 +41,7 @@ class ResPartner(models.Model):
         ttl=None,
         running_in_queue=None,
         jacket=None,
+        logrec=None,
         ctx=None,
     ):
         if only_minimal:
@@ -52,6 +53,7 @@ class ResPartner(models.Model):
             ttl=ttl,
             running_in_queue=running_in_queue,
             jacket=jacket,
+            logrec=logrec,
             ctx=ctx,
         )
 

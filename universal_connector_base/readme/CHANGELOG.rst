@@ -1,11 +1,15 @@
-12.0.0.3.11 (2024-12-22)
+12.0.0.3.11 (2024-12-29)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 * [FIX] Context values / Valori in contesto
+* [FIX] Language management / Gestione valori in lingua
+* [IMP] On connect synchronize company / Sincronizazione azienda alla connessione
+* [IMP] New feature: sync by external reference / Sincronizzazione con riferimento esterno
 * [IMP] Concatenate function on field / Funzioni concateante per campo
 * [IMP] Warning for comodel w/o counterparty / Segnalazione per modelli senza controparte
+* [IMP] Best log messages / Migliorie messaggi di log
 * [IMP] New tests / Nuovi test
-* [QUA] Test coverage 77% (2144: 490+1654) [344 TestPoints] - quality rating 72 (target 100)
+* [QUA] Test coverage 80% (2256: 453+1803) [244 TestPoints] - quality rating 66 (target 100)
 
 12.0.0.3.10 (2024-12-20)
 ~~~~~~~~~~~~~~~~~~~~~~~~

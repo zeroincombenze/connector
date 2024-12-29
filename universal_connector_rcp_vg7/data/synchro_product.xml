@@ -23,7 +23,6 @@
     <record forcecreate="1" id="product_uom" model="synchro.channel.model">
         <field name="name">uom.uom</field>
         <field name="field_uname">name</field>
-        <field name="cron_sync">True</field>
         <field name="counterpart_name">ums</field>
         <field name="sequence">9</field>
         <field name="synchro_channel_id" ref="channel_vg7"/>

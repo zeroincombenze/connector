@@ -7,7 +7,8 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 #
 import logging
-from odoo import api, fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import UserError
 
 from python_plus import str2bool
 
@@ -16,8 +17,16 @@ _logger = logging.getLogger(__name__)
 
 class SynchroChannelModelFields(models.Model):
     _name = "synchro.channel.model.field"
-    _description = "Field mapping for Synchonization"
+    _description = "Field mapping for Synchronization"
     _order = "name"
+
+    _sql_constraints = [
+        (
+            "field_uniq",
+            "unique (model_id,name,spec,counterpart_name)",
+            "Local field name, spec and counterpart name must be unique per model!",
+        )
+    ]
 
     name = fields.Char("Odoo field name")
     counterpart_name = fields.Char("Counterpart field name")
@@ -33,11 +42,16 @@ class SynchroChannelModelFields(models.Model):
         [
             ("delivery", "Delivery Address"),
             ("invoice", "Invoice Address"),
+            ("address", "Generic Address"),
             ("customer", "Customer"),
-            ("supplier", "Suplier"),
+            ("supplier", "Supplier"),
             ("company", "Company"),
         ],
-        string="Specific search",
+        string="Model variant",
+        help=(
+            "Variant for model when Odoo model and counterpart table relationship"
+            " is not one 2 one"
+        ),
     )
     protect_update = fields.Selection(
         [
@@ -47,7 +61,7 @@ class SynchroChannelModelFields(models.Model):
             ("3", "Protected field"),
             ("4", "Max counter"),
         ],
-        string="Protect field against update",
+        string="Protect against update",
         default="0",
     )
     required = fields.Boolean("Required field", default=False)
@@ -57,7 +71,7 @@ class SynchroChannelModelFields(models.Model):
             ("candidate", "Search keys candidate"),
             ("ancillary", "Ancillary search file"),
         ],
-        string="Field role in search keys",
+        string="Role in search keys",
     )
     model_id = fields.Many2one("synchro.channel.model")
     model_counterpart_name = fields.Char(
@@ -85,8 +99,8 @@ class SynchroChannelModelFields(models.Model):
             # Field protect because model is not managed
             protect_update = "3"
         elif loc_name not in struct:
-            raise EnvironmentError(
-                "Field %s does not exist in %s!" % (loc_name, binding_model)
+            raise UserError(
+                _("Field %s does not exist in %s!" % (loc_name, binding_model))
             )
         elif loc_name in (self.model_id.parent_name, self.model_id.get_loc_ext_id()):
             # External ID must be always updatable
@@ -122,37 +136,32 @@ class SynchroChannelModelFields(models.Model):
             fix_required if fix_required is not None else required,
         )
 
-    def build_odoo_synchro_model_field(
+    def build_odoo_mapper(
         self,
-        synchro_model,
+        dir_mapper,
         loc_name,
         ext_name,
         fix_protect_update=None,
         fix_required=None,
         magic_fields=None,
+        spec=None,
     ):
-        if not synchro_model.id:
+        if not dir_mapper.id:
             return False
-        synchro_field = self.search(
-            [
-                ("model_id", "=", synchro_model.id),
-                ("name", "=", loc_name),
-                ("counterpart_name", "=", ext_name),
-            ]
-        )
-        if not synchro_field:
-            synchro_field = self.create(
+        mapper = dir_mapper.get_mapper(loc_name=loc_name, ext_name=ext_name, spec=spec)
+        if not mapper:
+            mapper = self.create(
                 {
-                    "model_id": synchro_model.id,
+                    "model_id": dir_mapper.id,
                     "name": loc_name,
-                    "spec": "",
+                    "spec": spec,
                     "counterpart_name": ext_name,
                 }
             )
         magic_fields = magic_fields or []
-        binding_model = synchro_model.get_binding_model_name(synchro_model.name)
+        binding_model = dir_mapper.get_binding_model_name(dir_mapper.name)
         struct = self.env[binding_model].fields_get()
-        protect_update, required = synchro_field.get_default_protection(
+        protect_update, required = mapper.get_default_protection(
             fix_protect_update=fix_protect_update,
             fix_required=fix_required,
             magic_fields=magic_fields,
@@ -164,7 +173,7 @@ class SynchroChannelModelFields(models.Model):
             apply4 += ",bool()"
         if struct[loc_name].get("relation") in ("res.company", "res.country"):
             apply4 += ",get_global()"
-        if struct[loc_name].get("relation") in ("product.uom", "product.uom"):
+        if struct[loc_name].get("relation") in ("uom.uom",):
             apply4 += ",uom()"
         if struct[loc_name].get("relation") == "account.tax":
             apply4 += ",oe_account_tax_amount(),tax()"
@@ -174,40 +183,19 @@ class SynchroChannelModelFields(models.Model):
             apply4 += ",vat()"
         if apply4.startswith(","):
             apply4 = apply4[1:]
-        synchro_field.write(
+        mapper.write(
             {
                 "apply": apply4,
                 "protect_update": protect_update,
                 "required": required,
             }
         )
-        return synchro_field
-
-    def get_synchro_field(self, synchro_model, loc_name=None, ext_name=None, spec=None):
-        domain = [
-            ("model_id", "=", synchro_model.id),
-        ]
-        if loc_name:
-            domain.append(("name", "=", loc_name))
-        if ext_name:
-            domain.append(("counterpart_name", "=", ext_name))
-        if spec:
-            domain.append(("spec", "=", spec))
-        return self.search(domain)
+        return mapper
 
     @api.model
     def get_default_n_apply(self, ftype=None):
         if len(self) != 1:
             return True if ftype == "boolean" else "", "", ""
-        # Cache = self.env["ir.model.synchro.cache"]
-        # synchro_model = self.model_id
-        # backend = synchro_model.synchro_channel_id
-        # vmodel = synchro_model.name
-        # if not Cache.get_attr(backend.id, vmodel):
-        #     Cache.open(
-        #         backend=backend.id,
-        #         model=vmodel,
-        #     )
         default = self.apply or ""
         if default.endswith("()"):
             apply4 = ",".join(["apply_%s" % fct[:-2] for fct in default.split(",")])
@@ -231,14 +219,14 @@ class SynchroChannelModelFields(models.Model):
         self.ensure_one()
         IrApply = self.env["ir.model.synchro.apply"]
         Api = self.env["synchro.api"]
-        synchro_model = self.model_id
-        backend = synchro_model.synchro_channel_id
-        vmodel = synchro_model.name
+        dir_mapper = self.model_id
+        backend = dir_mapper.synchro_channel_id
+        vmodel = dir_mapper.name
         loc_name = field["loc_name"]
         for fct in field["apply4"].split(","):
             if fct == "apply_odoo_migrate":
-                vals[loc_name] = Api.odoo_tnl_value_from_to(
-                    backend, synchro_model, vals[ext_ref], loc_name
+                vals[loc_name] = Api.odoo_tnl_value_from_loc_to_ext(
+                    backend, dir_mapper, vals[ext_ref], loc_name
                 )
             elif hasattr(IrApply, fct):
                 vals = getattr(IrApply, fct)(

@@ -1,22 +1,23 @@
-This module makes available some functions to synchronize external data
-with Odoo data.
+This module is base for Universal Connector suite and makes available some functions
+to synchronize external data with Odoo data.
 
-Characteristics
-~~~~~~~~~~~~~~~
+Site Characteristics
+~~~~~~~~~~~~~~~~~~~~
 
-* Multi-channels interchange
-* JSON, XMLRPC and CSV files protocols
+* Multi-backend interchange
+* Multi-protocols, like JSON, XMLRPC and CSV
 * Push and/or Pull logic
-* Many2one, One2Many and Many2Many managed with external references
-* Automatic field value translation
-* Odoo version from 6.1 to 12.0 field name and values automatic translation
+* Many2one, One2Many and Many2Many acquired with remote references
+* Recognition by external reference (only remote Odoo)
+* Updatable configuration by GUI
 * Anti-recurse checks
 * Two phases create in order to create hierarchical record structure
-* Dynamic translation database
+* Dynamic database migration for Odoo since 6.1
 
 This module can be used for:
 
-* Upgrade Odoo DB from a version to another version (even beck upgrade)
-* Import data from files without duplicating records
-* Connect Odoo with other software (current version supports until 4 counterparts)
-* Populate Odoo DB in the first installation migrated from another software
+* Migrate Odoo DB from a version to another version, like openupgrade, (even back upgrade)
+* Import data from files in specific location using user configuration
+* Create demo and test environment based on csv files
+* Connect just in time Odoo with other software or other Odoo instnces
+* Populate database when Oddo requires to migrate from another software

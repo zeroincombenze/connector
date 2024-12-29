@@ -1,0 +1,14 @@
+# Data file for test
+#
+# Every line contains:
+# type,backed,loc.model,ext.model,loc.field,ext.field,ext_id,op,value,no_local
+#       type is "=" if record contains data to store or configure
+#       type is "?" if record contains data to compare
+#       backend may "*" for all backends (only for test to compare)
+#       op is "%" if test is <value in field> else is <value == field>
+#       no_local means record was not in local db before tests
+#
+"?","z0bug.localhost-odoo12","product.template","product.template","name","name",9,"%","Customizable Desk",1
+"?","z0bug.localhost-odoo10","product.template","product.template","name","name",10,"%","iPad Retina Display",1
+"?","z0bug.localhost-odoo8","product.template","product.template","name","name",5,"%","iPad Retina Display",1
+"?","z0bug.localhost-odoo7","product.template","product.template","name","name",4,"%","PC Assemble SC234",1

@@ -45,12 +45,12 @@ class SynchroApi(models.Model):
         )
 
     def get_response_csv(
-        self, session, synchro_model, ext_id=False, endpoint=None, fields=None
+        self, session, dir_mapper, ext_id=False, endpoint=None, fields=None
     ):
-        backend = synchro_model.synchro_channel_id
+        backend = dir_mapper.synchro_channel_id
         exchange_path = backend.exchange_path
-        ext_key_id = synchro_model.counterpart_pk
-        file_csv = os.path.join(exchange_path, synchro_model.counterpart_name + ".csv")
+        ext_key_id = dir_mapper.counterpart_pk
+        file_csv = os.path.join(exchange_path, dir_mapper.counterpart_name + ".csv")
         res = []
         if not os.path.isfile(file_csv):
             return res
@@ -77,11 +77,11 @@ class SynchroApi(models.Model):
                 res.append(row_res)
         return res
 
-    def get_record_list_csv(self, session, synchro_model):
-        backend = synchro_model.synchro_channel_id
+    def get_record_list_csv(self, session, dir_mapper):
+        backend = dir_mapper.synchro_channel_id
         exchange_path = backend.exchange_path
-        ext_key_id = synchro_model.counterpart_pk
-        file_csv = os.path.join(exchange_path, synchro_model.counterpart_name + ".csv")
+        ext_key_id = dir_mapper.counterpart_pk
+        file_csv = os.path.join(exchange_path, dir_mapper.counterpart_name + ".csv")
         res = []
         if not os.path.isfile(file_csv):
             return res

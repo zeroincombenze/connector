@@ -6,7 +6,6 @@
 #
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 #
-
 import logging
 
 from odoo import models
@@ -76,18 +75,18 @@ class SynchroApi(models.Model):
         )
 
     def get_response_odoo_jsonrpc(
-        self, session, synchro_model, ext_id=False, endpoint=None, fields=None
+        self, session, dir_mapper, ext_id=False, endpoint=None, fields=None
     ):
-        ext_model = synchro_model.counterpart_name
+        ext_model = dir_mapper.counterpart_name
         if ext_id:
             vals = session["cnx_lgi"].env[ext_model].read(ext_id, fields)[0]
-            if vals and synchro_model.counterpart_pk not in vals:
-                vals[synchro_model.counterpart_pk] = ext_id
+            if vals and dir_mapper.counterpart_pk not in vals:
+                vals[dir_mapper.counterpart_pk] = ext_id
             return [vals]
-        return session["cnx_lgi"].env[synchro_model.name].search([])
+        return session["cnx_lgi"].env[dir_mapper.name].search([])
 
-    def get_record_list_odoo_jsonrpc(self, session, synchro_model):
-        ext_model = synchro_model.counterpart_name
+    def get_record_list_odoo_jsonrpc(self, session, dir_mapper):
+        ext_model = dir_mapper.counterpart_name
         try:
             values = session["cnx_lgi"].env[ext_model].search([])
         except BaseException as e:  # pragma: no cover
@@ -95,7 +94,28 @@ class SynchroApi(models.Model):
             self.env["ir.model.synchro.log"].logmsg(
                 "error",
                 "!%(E)s! ERROR %(e)s reading(db=%(db)s, model=%(model)s, id=%(id)s)",
-                backend=synchro_model.synchro_channel_id,
+                backend=dir_mapper.synchro_channel_id,
+                res_model=ext_model,
+                errcode=-13,
+                errmsg=e,
+            )
+            return []
+        return values
+
+    def get_id_from_ext_ref_odoo_jsonrpc(self, session, dir_mapper, ext_id):
+        ext_model = dir_mapper.counterpart_name
+        try:
+            values = (
+                session["cnx_lgi"]
+                .env["ir.model.data"]
+                .search([("model", "=", ext_model), ("res_id", "=", ext_id)])
+            )
+        except BaseException as e:  # pragma: no cover
+            self.env.cr.rollback()  # pylint: disable=invalid-commit
+            self.env["ir.model.synchro.log"].logmsg(
+                "error",
+                "!%(E)s! ERROR %(e)s reading(db=%(db)s, model=%(model)s, id=%(id)s)",
+                backend=dir_mapper.synchro_channel_id,
                 res_model=ext_model,
                 errcode=-13,
                 errmsg=e,
