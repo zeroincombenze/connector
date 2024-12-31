@@ -1,9 +1,20 @@
+12.0.0.3.13 (2025-01-04)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [QUA] Test coverage 88% (104: 12+92) [190 TestPoints] - quality rating 346 (target 100)
+
+12.0.0.3.12 (2025-01-03)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] Dependign on version check / Controllo versione dipendenze
+* [QUA] Test coverage 88% (104: 12+92) [190 TestPoints] - quality rating 346 (target 100)
+
 12.0.0.3.11 (2024-12-29)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 * [IMP] New API get_record_list
 * [IMP] Minor aesthetic update
-* [QUA] Test coverage 90% (90: 9+81) [312 TestPoints] - quality rating 609 (target 100)
+* [QUA] Test coverage 93% (90: 6+84) [190 TestPoints] - quality rating 394 (target 100)
 
 12.0.0.3.10 (2024-12-17)
 ~~~~~~~~~~~~~~~~~~~~~~~~

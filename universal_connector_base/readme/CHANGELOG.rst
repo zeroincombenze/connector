@@ -1,3 +1,18 @@
+12.0.0.3.13 (2025-01-05)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [QUA] Test coverage 80% (2317: 452+1865) [244 TestPoints] - quality rating 66 (target 100)
+
+12.0.0.3.12 (2025-01-03)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] Message log improvements / Migliorie elencazione messeggi
+* [IMP] Partner recognition by e-mail too / Riconoscimento nominativo anche da e-mail
+* [IMP] Backend does not operate when 'draft' / Dorsale non operative se in 'bozza'
+* [IMP] New policy "Only Recent" / Nuova politica "Aggiornamento più recenti"
+* [IMP] Button "Pull record" / Bottone "Prelevare dati"
+* [QUA] Test coverage 80% (2330: 455+1875) [244 TestPoints] - quality rating 66 (target 100)
+
 12.0.0.3.11 (2024-12-29)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 

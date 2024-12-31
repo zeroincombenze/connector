@@ -1,6 +1,12 @@
+☰ Configurazione > Attivare la modalità sviluppatore
+
 ☰ Configurazione > Funzioni tecniche > Dorsale di sincronizzazione
 
-Impostare i parametri di sincronizzazione della dorsale e poi fare click sul
-bottone [Check Connection].
-Se Odoo riesce a connettersi con la controparte remote, lo stato della dorsale è
-modificato in checked.
+#. Impostare protocollo "csv"
+#. Impostare "localhost" per Nome Host
+#. Dichiarare identità (usare Odoo per auto-configurazione)
+#. Dichiarare versione di Odoo di controparte, se necessario
+#. Dichiarare la cartella di scambio
+#. Fare click su bottone [Verificare Connessione]
+
+Se Odoo riesce a connettersi con controparte, lo stato della dorsale diventa "Pronto".

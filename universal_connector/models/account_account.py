@@ -1,5 +1,5 @@
 #
-# Copyright 2019-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
+# Copyright 2019-25 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
 #
 # Contributions to development, thanks to:
 # * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
@@ -198,7 +198,9 @@ class AccountAccount(models.Model):
         elif not rec:
             vals["user_type_id"] = self.env.ref(RE_NAME_2_UTYPE[""]).id
             self.env["ir.model.synchro.log"].logmsg(
-                "warning", "### Undefined account user type", model="account.account"
+                "warning",
+                "### Undefined account user type",
+                res_model="account.account",
             )
         return vals
 
@@ -310,7 +312,9 @@ class AccountAccountType(models.Model):
                 vals["type"] = "other"
         if "type" not in vals:
             self.env["ir.model.synchro.log"].logmsg(
-                "warning", "### Undefined account type", model="account.account.type"
+                "warning",
+                "### Undefined account type",
+                res_model="account.account.type",
             )
             if not rec:
                 vals["type"] = "other"

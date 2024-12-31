@@ -1,25 +1,14 @@
 #
-# Copyright 2018-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
+# Copyright 2018-25 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
 #
 # Contributions to development, thanks to:
 # * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
 #
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 #
-import sys
-import logging
+import oerplib3 as oerplib
 
 from odoo import models
-
-_logger = logging.getLogger(__name__)
-
-try:
-    if sys.version_info[0] < 3:
-        import oerplib
-    else:
-        import oerplib3 as oerplib
-except ImportError as err:  # pragma: no cover
-    _logger.error(err)
 
 
 class SynchroApi(models.Model):
@@ -31,10 +20,7 @@ class SynchroApi(models.Model):
         return ["xmlrpc", 8069, "demo", "admin", "admin", "", ""]
 
     def get_pypi_name_odoo_xmlrpc(self):
-        if sys.version_info[0] < 3:
-            return "oerplib"
-        else:
-            return "oerplib3"
+        return "oerplib3"
 
     def odoo_xmlrpc_connect(self, hostname, port):
         session = self.init_sesssion()
@@ -50,6 +36,7 @@ class SynchroApi(models.Model):
             cnx = False
         session["cnx_lgi"] = cnx
         session["cnx_data"] = cnx
+        session["server_version"] = cnx.db.server_version() if cnx else False
         return session
 
     def odoo_xmlrpc_login(self, cnx, database, login, password):

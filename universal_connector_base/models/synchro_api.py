@@ -1,5 +1,5 @@
 #
-# Copyright 2018-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
+# Copyright 2018-25 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
 #
 # Contributions to development, thanks to:
 # * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
@@ -96,6 +96,7 @@ class SynchroApi(models.Model):
             "cnx_lgi": False,
             "cnx_data": False,
             "session": False,
+            "server_version": False,
         }
 
     def session_is_active(self, session):
@@ -105,26 +106,6 @@ class SynchroApi(models.Model):
             and session["cnx_lgi"] is not False
             and session["session"] is not False
         )
-
-    def simple_cast(self, value):
-        """Execute the simple field casting. From remote counterparty all field may
-        be all strings; here may be converted to integer or list or dictionary"""
-        if isinstance(value, (list, tuple)):
-            new_vals = []
-            for i, x in enumerate(value):
-                new_vals.append(self.adapt_values(x))
-            value = new_vals
-        elif isinstance(value, str):
-            try:
-                if value.isdigit() and not value.startswith("0") and len(value) < 10:
-                    value = int(value)
-                elif value.startswith("[") and value.endswith("]"):
-                    value = self.adapt_values(eval(value))
-                elif value.startswith("{") and value.endswith("}"):
-                    value = self.adapt_values(eval(value))
-            except BaseException:  # pragma: no cover
-                pass
-        return _u(value)
 
     def adapt_values(self, values, with_cast=False):
         return unicodes(values)
@@ -145,7 +126,7 @@ class SynchroApi(models.Model):
         return getattr(self, fct)(backend)
 
     def get_data_endpoint(self, backend, exchange_path=None):
-        """Retunr data (exchange) end point"""
+        """Return data (exchange) end point"""
         fct = self.get_overridden_fct(backend, "get_data_endpoint")
         if fct:
             return _u(getattr(self, fct)(backend, exchange_path=exchange_path))
@@ -161,7 +142,7 @@ class SynchroApi(models.Model):
         return endpoint
 
     def get_login_endpoint(self, backend, with_port=None, rebuild=False):
-        """Retunr login endpoint"""
+        """Return login endpoint"""
         fct = self.get_overridden_fct(backend, "get_login_endpoint")
         if fct:  # pragma: no cover
             return _u(getattr(self, fct)(backend, with_port=with_port, rebuild=rebuild))
@@ -257,7 +238,7 @@ class SynchroApi(models.Model):
         if not fct:  # pragma: no cover
             return fct
         ext_model = dir_mapper.counterpart_name
-        binding_model = dir_mapper.get_binding_model_name(dir_mapper.name)
+        binding_model = dir_mapper.split_binding_model_n_spec(dir_mapper.name)[0]
         struct = self.env[binding_model].fields_get()
         fields = []
         for mapper in dir_mapper.field_ids:
@@ -407,7 +388,7 @@ class SynchroApi(models.Model):
     def odoo6_xmlrpc_https_default(self, backend):
         return [
             "https",
-            8069,
+            0,
             "demo",
             "admin",
             "admin",
@@ -433,7 +414,7 @@ class SynchroApi(models.Model):
     def odoo_xmlrpc_https_default(self, backend):
         return [
             "https",
-            8069,
+            0,
             "demo",
             "admin",
             "admin",
@@ -570,7 +551,7 @@ class SynchroApi(models.Model):
                 "!%(E)s! ERROR %(e)s reading(db=%(db)s, model=%(model)s, id=%(id)s)",
                 backend=dir_mapper.synchro_channel_id,
                 res_model=ext_model,
-                id=ext_id,
+                res_id=ext_id,
                 errcode=-13,
                 errmsg=e,
             )
@@ -592,7 +573,7 @@ class SynchroApi(models.Model):
                 "!%(E)s! ERROR %(e)s reading(db=%(db)s, model=%(model)s, id=%(id)s)",
                 backend=dir_mapper.synchro_channel_id,
                 res_model=ext_model,
-                id=ext_id,
+                res_id=ext_id,
                 errcode=-13,
                 errmsg=e,
             )
@@ -644,7 +625,7 @@ class SynchroApi(models.Model):
                 "!%(E)s! ERROR %(e)s reading(db=%(db)s, model=%(model)s, id=%(id)s)",
                 backend=backend,
                 res_model=ext_model,
-                id=ext_id,
+                res_id=ext_id,
                 errcode=-13,
                 errmsg=e,
             )
@@ -666,7 +647,7 @@ class SynchroApi(models.Model):
         for name, model in self.env.items():
             if not Cache.is_manageable(name) or not hasattr(model, loc_ext_id):
                 continue
-            if SynchroModel.get_binding_model_name(model._name) != model._name:
+            if SynchroModel.split_binding_model_n_spec(model._name)[0] != model._name:
                 continue  # pragma: no cover
             ext_name = self.odoo_tnl_local_model_to_ext(backend, model._name)
             model_list.append((name, ext_name))

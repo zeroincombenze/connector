@@ -1,5 +1,5 @@
 #
-# Copyright 2018-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
+# Copyright 2018-25 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
 #
 # Contributions to development, thanks to:
 # * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
@@ -8,17 +8,35 @@
 #
 import os
 import csv
-import logging
 
 from odoo import models
-
-_logger = logging.getLogger(__name__)
+from python_plus import _u
 
 
 class SynchroApi(models.Model):
     """API for Odoo Backends"""
 
     _inherit = "synchro.api"
+
+    def simple_cast(self, value):
+        """Execute the simple field casting. From remote counterparty all field may
+        be all strings; here may be converted to integer or list or dictionary"""
+        if isinstance(value, (list, tuple)):
+            new_vals = []
+            for i, x in enumerate(value):
+                new_vals.append(self.adapt_values(x))
+            value = new_vals
+        elif isinstance(value, str):
+            try:
+                if value.isdigit() and not value.startswith("0") and len(value) < 10:
+                    value = int(value)
+                elif value.startswith("[") and value.endswith("]"):
+                    value = self.adapt_values(eval(value))
+                elif value.startswith("{") and value.endswith("}"):
+                    value = self.adapt_values(eval(value))
+            except BaseException:  # pragma: no cover
+                pass
+        return _u(value)
 
     def csv_default(self, backend):
         return ["csv", 0, "demo", "admin", "admin", "", ""]

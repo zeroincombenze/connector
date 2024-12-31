@@ -1,5 +1,5 @@
 #
-# Copyright 2018-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
+# Copyright 2018-25 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
 #
 # Contributions to development, thanks to:
 # * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
@@ -17,6 +17,8 @@ class ProductTemplate(models.Model):
     oe10_id = fields.Integer("Odoo10 ID", copy=False)
     oe12_id = fields.Integer("Odoo12 ID", copy=False)
     oe16_id = fields.Integer("Odoo16 ID", copy=False)
+    timestamp = fields.Datetime("Timestamp", copy=False, readonly=True)
+    errmsg = fields.Char("Error message", copy=False, readonly=True)
 
     @api.model_cr_context
     def _auto_init(self):
@@ -33,6 +35,8 @@ class ProductProduct(models.Model):
     oe10_id = fields.Integer("Odoo10 ID", copy=False)
     oe12_id = fields.Integer("Odoo12 ID", copy=False)
     oe16_id = fields.Integer("Odoo16 ID", copy=False)
+    timestamp = fields.Datetime("Timestamp", copy=False, readonly=True)
+    errmsg = fields.Char("Error message", copy=False, readonly=True)
 
     @api.model_cr_context
     def _auto_init(self):

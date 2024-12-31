@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
 
-    <record id="view_synchro_channel_tree" model="ir.ui.view">
-        <field name="name">view.synchro.channel.tree</field>
+    <record id="view_synchro_backend_tree" model="ir.ui.view">
+        <field name="name">view.synchro.backend.tree</field>
         <field name="model">synchro.channel</field>
         <field name="arch" type="xml">
             <tree string="Synchonization Backend">
@@ -19,22 +19,23 @@
         </field>
     </record>
 
-    <record id="view_synchro_channel_form" model="ir.ui.view">
-        <field name="name">view.synchro.channel.form</field>
+    <record id="view_synchro_backend_form" model="ir.ui.view">
+        <field name="name">view.synchro.backend.form</field>
         <field name="model">synchro.channel</field>
         <field name="arch" type="xml">
             <form string="Synchonization Backend">
                 <header>
-                    <button name="button_check_connection" type="object" class="oe_highlight" string="Check Connection" attrs="{'invisible':['|',('state','not in',['draft']),('active','=',False)]}"/>
-                    <button name="button_reset_to_draft" type="object" string="Reset to draft Connection" attrs="{'invisible':['|',('state','in',['draft']),('active','=',False)]}"/>
+                    <button name="button_check_connection" type="object" class="oe_highlight" string="Check Connection" attrs="{'invisible':['|',('state','!=','draft'),('active','=',False)]}"/>
+                    <button name="button_reset_to_draft" type="object" string="Reset to draft Connection" attrs="{'invisible':['|',('state','=','draft'),('active','=',False)]}"/>
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
-                        <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                        <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive" attrs="{'invisible':[('state','!=','draft')]}">
                             <field name="active" widget="boolean_button" options="{&quot;terminology&quot;: &quot;active&quot;}"/>
                         </button>
-                        <button name="button_build_model_map" type="object" class="oe_stat_button" icon="fa-list" string="Build Models"/>
+                        <button name="button_build_model_map" type="object" class="oe_stat_button" icon="fa-briefcase" string="Build Models" attrs="{'invisible':['|',('state','in',['draft','failed']),('active','=',False)]}"/>
+                        <button name="%(action_wizard_pull_records)d" type="action" class="oe_stat_button" icon="fa-download" string="Pull Records" attrs="{'invisible':['|',('state','=','draft'),('active','=',False)]}"/>
                     </div>
                     <label for="name"/>
                     <h1>
@@ -55,7 +56,7 @@
                         </group>
                         <group>
                             <field name="identity"/>
-                            <field name="odoo_version" attrs="{'invisible': [('identity', '!=', 'odoo')]}"/>
+                            <field name="odoo_version"/>
                             <field name="prefix"/>
                             <field name="lgi_path"/>
                             <field name="exchange_path"/>
@@ -91,7 +92,7 @@
                                 <tree string="Event Logs">
                                     <field name="timestamp"/>
                                     <field name="loglevel"/>
-                                    <field name="model"/>
+                                    <field name="res_model"/>
                                     <field name="res_id"/>
                                     <field name="errcode"/>
                                     <field name="errmsg"/>
@@ -114,10 +115,10 @@
         </field>
     </record>
 
-    <record id="action_synchro_channel" model="ir.actions.act_window">
+    <record id="action_synchro_backend" model="ir.actions.act_window">
         <field name="name">Synchonization Backend</field>
         <field name="res_model">synchro.channel</field>
-        <field name="view_id" ref="view_synchro_channel_tree"/>
+        <field name="view_id" ref="view_synchro_backend_tree"/>
     </record>
 
     <menuitem id="menu_universal_connector" name="Universal connector" parent="base.next_id_9" groups="base.group_no_one"/>

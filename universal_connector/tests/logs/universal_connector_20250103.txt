@@ -1,0 +1,61 @@
+2025-01-03 19:59:33,488 2943548 INFO ? odoo: Odoo version 10.0
+2025-01-03 19:59:33,488 2943548 INFO ? odoo: Using configuration file at /home/odoo/10.0/connector/universal_connector/tests/logs/zero10.connector.universal_connector.conf
+2025-01-03 19:59:33,489 2943548 INFO ? odoo: addons paths: ['/home/odoo/.local/share/Odoo10/addons/10.0', u'/home/odoo/10.0/odoo/addons', u'/home/odoo/10.0/addons', u'/home/odoo/10.0/account-analytic', u'/home/odoo/10.0/account-budgeting', u'/home/odoo/10.0/account-closing', u'/home/odoo/10.0/account-consolidation', u'/home/odoo/10.0/account-financial-reporting', u'/home/odoo/10.0/account-financial-tools', u'/home/odoo/10.0/account-fiscal-rule', u'/home/odoo/10.0/account-invoice-reporting', u'/home/odoo/10.0/account-invoicing', u'/home/odoo/10.0/account-payment', u'/home/odoo/10.0/account-reconcile', u'/home/odoo/10.0/bank-payment', u'/home/odoo/10.0/bank-statement-import', u'/home/odoo/10.0/calendar', u'/home/odoo/10.0/commission', u'/home/odoo/10.0/community-data-files', u'/home/odoo/10.0/connector', u'/home/odoo/10.0/contract', u'/home/odoo/10.0/credit-control', u'/home/odoo/10.0/crm', u'/home/odoo/10.0/currency', u'/home/odoo/10.0/data-protection', u'/home/odoo/10.0/delivery-carrier', u'/home/odoo/10.0/e-commerce', u'/home/odoo/10.0/edi', u'/home/odoo/10.0/helpdesk', u'/home/odoo/10.0/hr', u'/home/odoo/10.0/intrastat-extrastat', u'/home/odoo/10.0/knowledge', u'/home/odoo/10.0/l10n-italy', u'/home/odoo/10.0/l10n-italy-supplemental', u'/home/odoo/10.0/maintenance', u'/home/odoo/10.0/management-system', u'/home/odoo/10.0/manufacture', u'/home/odoo/10.0/margin-analysis', u'/home/odoo/10.0/mis-builder', u'/home/odoo/10.0/multi-company', u'/home/odoo/10.0/partner-contact', u'/home/odoo/10.0/product-attribute', u'/home/odoo/10.0/product-kitting', u'/home/odoo/10.0/product-variant', u'/home/odoo/10.0/profiles', u'/home/odoo/10.0/project', u'/home/odoo/10.0/purchase-reporting', u'/home/odoo/10.0/purchase-workflow', u'/home/odoo/10.0/queue', u'/home/odoo/10.0/report-print-send', u'/home/odoo/10.0/reporting-engine', u'/home/odoo/10.0/rma', u'/home/odoo/10.0/sale-financial', u'/home/odoo/10.0/sale-reporting', u'/home/odoo/10.0/sale-workflow', u'/home/odoo/10.0/search-engine', u'/home/odoo/10.0/server-auth', u'/home/odoo/10.0/server-tools', u'/home/odoo/10.0/server-ux', u'/home/odoo/10.0/social', u'/home/odoo/10.0/stock-logistics-barcode', u'/home/odoo/10.0/stock-logistics-reporting', u'/home/odoo/10.0/stock-logistics-tracking', u'/home/odoo/10.0/stock-logistics-transport', u'/home/odoo/10.0/stock-logistics-warehouse', u'/home/odoo/10.0/stock-logistics-workflow', u'/home/odoo/10.0/storage', u'/home/odoo/10.0/timesheet', u'/home/odoo/10.0/uncovered', u'/home/odoo/10.0/web', u'/home/odoo/10.0/webhook', u'/home/odoo/10.0/website', u'/home/odoo/10.0/wms', u'/home/odoo/10.0/zerobug-test']
+2025-01-03 19:59:33,489 2943548 INFO ? odoo: database: odoo10@localhost:5432
+2025-01-03 19:59:33,501 2943548 INFO ? odoo.service.server: HTTP service (werkzeug) running on NB200Z0.:51244
+2025-01-03 19:59:33,510 2943548 INFO test_universal_connector_10 odoo.modules.loading: loading 1 modules...
+2025-01-03 19:59:33,583 2943548 INFO test_universal_connector_10 odoo.modules.loading: 1 modules loaded in 0.07s, 0 queries
+2025-01-03 19:59:35,117 2943548 INFO test_universal_connector_10 odoo.modules.loading: loading 53 modules...
+2025-01-03 19:59:35,271 2943548 INFO test_universal_connector_10 odoo.addons.report.models.report: Will use the Wkhtmltopdf binary at /home/odoo/10.0/venv_odoo/bin/wkhtmltopdf
+2025-01-03 19:59:35,537 2943548 INFO test_universal_connector_10 odoo.modules.loading: 53 modules loaded in 0.42s, 0 queries
+2025-01-03 19:59:35,543 2943548 INFO test_universal_connector_10 odoo.modules.loading: loading 54 modules...
+2025-01-03 19:59:35,981 2943548 INFO test_universal_connector_10 odoo.modules.registry: module universal_connector: creating or updating database tables
+2025-01-03 19:59:36,120 2943548 INFO test_universal_connector_10 odoo.modules.module: odoo.addons.universal_connector.tests.test_backend running tests.
+2025-01-03 19:59:36,121 2943548 INFO test_universal_connector_10 odoo.addons.universal_connector.tests.test_backend: test_connection (odoo.addons.universal_connector.tests.test_backend.MyTest)
+2025-01-03 19:59:36,202 2943548 INFO test_universal_connector_10 odoo.addons.universal_connector.tests.testenv: 🎺🎺🎺 Starting test v2.0.21 (debug_level=0, commit=True)
+2025-01-03 19:59:36,203 2943548 INFO test_universal_connector_10 odoo.addons.universal_connector.tests.testenv: 🎺🎺 Testing module: universal_connector (10.0.0.3.11)
+2025-01-03 19:59:36,203 2943548 INFO test_universal_connector_10 odoo.addons.universal_connector.tests.testenv: 🎺🎺 Loading data from: synchro.channel 
+2025-01-03 19:59:36,280 2943548 INFO test_universal_connector_10 odoo.addons.universal_connector.tests.test_backend: 🎺 Starting connection test on ports 8270 (db=oca10) and 8272 (db=oca12) and on ports 8167 (db=demo7) and 8168 (db=demo8)
+2025-01-03 19:59:36,367 2943548 INFO test_universal_connector_10 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.channel.button_check_connection(ep=http://admin@localhost:8270/xmlrpc/2/common,h=localhost)
+2025-01-03 19:59:38,537 2943548 INFO test_universal_connector_10 odoo.addons.universal_connector_base.models.ir_model_synchro_log: Function oe_account_tax_amount(),tax() not found for field product.product.supplier_taxes_id
+2025-01-03 19:59:38,772 2943548 INFO test_universal_connector_10 odoo.addons.universal_connector_base.models.ir_model_synchro_log: Function oe_account_tax_amount(),tax() not found for field product.product.taxes_id
+2025-01-03 19:59:40,444 2943548 INFO test_universal_connector_10 odoo.addons.universal_connector_base.models.ir_model_synchro_log: Function oe_account_tax_amount(),tax() not found for field product.template.supplier_taxes_id
+2025-01-03 19:59:40,626 2943548 INFO test_universal_connector_10 odoo.addons.universal_connector_base.models.ir_model_synchro_log: Function oe_account_tax_amount(),tax() not found for field product.template.taxes_id
+2025-01-03 19:59:47,421 2943548 INFO test_universal_connector_10 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.company,oe10,remote_id=3,ttl=1)
+2025-01-03 19:59:47,710 2943548 INFO test_universal_connector_10 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.company,oe10,remote_id=1,ttl=1)
+2025-01-03 19:59:48,012 2943548 INFO test_universal_connector_10 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.channel.button_reset_to_draft(ep=http://admin@localhost:8270/xmlrpc/2/common,h=localhost):
+2025-01-03 19:59:48,099 2943548 INFO test_universal_connector_10 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.channel.button_check_connection(ep=http://admin@localhost:8270/xmlrpc/2/common,h=localhost)
+2025-01-03 19:59:48,183 2943548 ERROR test_universal_connector_10 odoo.addons.universal_connector.tests.test_backend: ERROR
+2025-01-03 19:59:48,183 2943548 INFO test_universal_connector_10 odoo.addons.universal_connector.tests.testenv: 🏆🥇 [1;32m3 tests SUCCESSFULLY completed[0m
+2025-01-03 19:59:48,185 2943548 INFO test_universal_connector_10 odoo.addons.universal_connector.tests.test_backend: ======================================================================
+2025-01-03 19:59:48,185 2943548 ERROR test_universal_connector_10 odoo.addons.universal_connector.tests.test_backend: ERROR: test_connection (odoo.addons.universal_connector.tests.test_backend.MyTest)
+2025-01-03 19:59:48,185 2943548 ERROR test_universal_connector_10 odoo.addons.universal_connector.tests.test_backend: Traceback (most recent call last):
+2025-01-03 19:59:48,185 2943548 ERROR test_universal_connector_10 odoo.addons.universal_connector.tests.test_backend: `   File "/home/odoo/10.0/connector/universal_connector/tests/test_backend.py", line 577, in test_connection
+2025-01-03 19:59:48,185 2943548 ERROR test_universal_connector_10 odoo.addons.universal_connector.tests.test_backend: `     self._test_check_connection(xref)
+2025-01-03 19:59:48,185 2943548 ERROR test_universal_connector_10 odoo.addons.universal_connector.tests.test_backend: `   File "/home/odoo/10.0/connector/universal_connector/tests/test_backend.py", line 316, in _test_check_connection
+2025-01-03 19:59:48,185 2943548 ERROR test_universal_connector_10 odoo.addons.universal_connector.tests.test_backend: `     actions="button_check_connection",
+2025-01-03 19:59:48,185 2943548 ERROR test_universal_connector_10 odoo.addons.universal_connector.tests.test_backend: `   File "/home/odoo/10.0/connector/universal_connector/tests/testenv.py", line 3176, in resource_edit
+2025-01-03 19:59:48,185 2943548 ERROR test_universal_connector_10 odoo.addons.universal_connector.tests.test_backend: `     ctx=ctx,
+2025-01-03 19:59:48,185 2943548 ERROR test_universal_connector_10 odoo.addons.universal_connector.tests.test_backend: `   File "/home/odoo/10.0/connector/universal_connector/tests/testenv.py", line 2033, in _exec_action
+2025-01-03 19:59:48,185 2943548 ERROR test_universal_connector_10 odoo.addons.universal_connector.tests.test_backend: `     act_windows = getattr(record, action)()
+2025-01-03 19:59:48,185 2943548 ERROR test_universal_connector_10 odoo.addons.universal_connector.tests.test_backend: `   File "/home/odoo/10.0/connector/universal_connector_base/models/synchro_backend.py", line 606, in button_check_connection
+2025-01-03 19:59:48,185 2943548 ERROR test_universal_connector_10 odoo.addons.universal_connector.tests.test_backend: `     dir_mapper.analyze_dir_mapper(managed_models)
+2025-01-03 19:59:48,185 2943548 ERROR test_universal_connector_10 odoo.addons.universal_connector.tests.test_backend: `   File "/home/odoo/10.0/connector/universal_connector_base/models/synchro_backend_model.py", line 811, in analyze_dir_mapper
+2025-01-03 19:59:48,185 2943548 ERROR test_universal_connector_10 odoo.addons.universal_connector.tests.test_backend: `     _("Missed mapping for field %s of %s" % (missed_fields, binding_model))
+2025-01-03 19:59:48,185 2943548 ERROR test_universal_connector_10 odoo.addons.universal_connector.tests.test_backend: ` UserError: (u"Missed mapping for field ['property_account_receivable_id', 'property_account_payable_id'] of res.partner", '')
+2025-01-03 19:59:48,185 2943548 INFO test_universal_connector_10 odoo.addons.universal_connector.tests.test_backend: Ran 1 test in 12.064s
+2025-01-03 19:59:48,185 2943548 ERROR test_universal_connector_10 odoo.addons.universal_connector.tests.test_backend: FAILED
+2025-01-03 19:59:48,185 2943548 INFO test_universal_connector_10 odoo.addons.universal_connector.tests.test_backend:  (errors=1)
+2025-01-03 19:59:48,185 2943548 INFO test_universal_connector_10 odoo.modules.module: odoo.addons.universal_connector.tests.test_backend tested in 12.07s, 12680 queries
+2025-01-03 19:59:48,186 2943548 ERROR test_universal_connector_10 odoo.modules.module: Module universal_connector: 0 failures, 1 errors
+2025-01-03 19:59:48,193 2943548 INFO test_universal_connector_10 odoo.modules.loading: 54 modules loaded in 12.65s, 12685 queries
+2025-01-03 19:59:48,562 2943548 ERROR test_universal_connector_10 odoo.modules.loading: At least one test failed when loading the modules.
+2025-01-03 19:59:48,566 2943548 INFO test_universal_connector_10 odoo.modules.loading: All post-tested in 0.00s, 0 queries
+2025-01-03 19:59:48,567 2943548 INFO test_universal_connector_10 odoo.modules.registry: Registry changed, signaling through the database
+2025-01-03 19:59:48,568 2943548 INFO test_universal_connector_10 odoo.service.server: Initiating shutdown
+2025-01-03 19:59:48,568 2943548 INFO test_universal_connector_10 odoo.service.server: Hit CTRL-C again or send a second signal to force the shutdown.
+
++===================================================================
+| please test [36muniversal_connector[0m (10.0): [31mFAILED![0m
++===================================================================
+

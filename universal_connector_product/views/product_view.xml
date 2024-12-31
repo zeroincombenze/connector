@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="view_product_template_synchro_form" model="ir.ui.view">
+        <field name="name">product_template.synchro.form</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[last()]" position="after">
+                <page name="synchro" string="Synchronization">
+                    <button name="pull_record" string="Synchronize" type="object"/>
+                    <group>
+                        <field name="timestamp"/>
+                        <field name="oe7_id"/>
+                        <field name="oe8_id"/>
+                        <field name="oe10_id"/>
+                        <field name="oe12_id"/>
+                        <field name="oe16_id"/>
+                        <field name="errmsg"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_product_uom_synchro_form" model="ir.ui.view">
+        <field name="name">product.uom.synchro.form</field>
+        <field name="model">uom.uom</field>
+        <field name="inherit_id" ref="uom.product_uom_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <group>
+                    <field name="oe7_id"/>
+                    <field name="oe8_id"/>
+                    <field name="oe10_id"/>
+                    <field name="oe12_id"/>
+                    <field name="oe16_id"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_product_uom_categ_synchro_form" model="ir.ui.view">
+        <field name="name">product.uom.categ.synchro.form</field>
+        <field name="model">uom.category</field>
+        <field name="inherit_id" ref="uom.product_uom_categ_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <group>
+                    <field name="oe7_id"/>
+                    <field name="oe8_id"/>
+                    <field name="oe10_id"/>
+                    <field name="oe12_id"/>
+                    <field name="oe16_id"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_product_category_synchro_form" model="ir.ui.view">
+        <field name="name">product_category.synchro.form</field>
+        <field name="model">product.category</field>
+        <field name="inherit_id" ref="product.product_category_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='first']" position="after">
+                <group>
+                    <field name="oe7_id"/>
+                    <field name="oe8_id"/>
+                    <field name="oe10_id"/>
+                    <field name="oe12_id"/>
+                    <field name="oe16_id"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_product_pricelist_view" model="ir.ui.view">
+        <field name="name">product.pricelist.view</field>
+        <field name="model">product.pricelist</field>
+        <field name="inherit_id" ref="product.product_pricelist_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <group>
+                    <field name="oe7_id"/>
+                    <field name="oe8_id"/>
+                    <field name="oe10_id"/>
+                    <field name="oe12_id"/>
+                    <field name="oe16_id"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

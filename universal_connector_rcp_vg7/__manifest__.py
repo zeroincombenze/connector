@@ -1,5 +1,5 @@
 #
-# Copyright 2018-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
+# Copyright 2018-25 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
 #
 # Contributions to development, thanks to:
 # * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
@@ -8,20 +8,21 @@
 #
 {
     "name": "Universal Connector VG7",
-    "version": "12.0.0.3.11",
+    "version": "12.0.0.3.13",
     "category": "Generic Modules",
     "summary": "Add Remote Counterparty VG7 to Universal Connector",
     "author": "SHS-AV s.r.l.",
-    "website": "https://www.zeroincombenze.it/",
+    "website": "https://www.zeroincombenze.it/crm",
     "development_status": "Beta",
     "license": "LGPL-3",
     "depends": [
         "universal_connector_base",
         "universal_connector_by_http",
+        "universal_connector_product",
         "assigned_bank",
         "l10n_it_fatturapa_out",
     ],
-    "version_depends": ["universal_connector_base>=10.0.0.3.11"],
+    "version_depends": ["universal_connector_base>=12.0.0.3.13"],
     "external_dependencies": {
         "python": [
             "python_plus",

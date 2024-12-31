@@ -1,0 +1,434 @@
+2024-12-29 14:49:27,307 550651 INFO ? odoo: Odoo version 10.0
+2024-12-29 14:49:27,307 550651 INFO ? odoo: Using configuration file at /home/odoo/10.0/connector/universal_connector/tests/logs/zero10.connector.universal_connector.conf
+2024-12-29 14:49:27,307 550651 INFO ? odoo: addons paths: ['/home/odoo/.local/share/Odoo10/addons/10.0', u'/home/odoo/10.0/odoo/addons', u'/home/odoo/10.0/addons', u'/home/odoo/10.0/account-analytic', u'/home/odoo/10.0/account-budgeting', u'/home/odoo/10.0/account-closing', u'/home/odoo/10.0/account-consolidation', u'/home/odoo/10.0/account-financial-reporting', u'/home/odoo/10.0/account-financial-tools', u'/home/odoo/10.0/account-fiscal-rule', u'/home/odoo/10.0/account-invoice-reporting', u'/home/odoo/10.0/account-invoicing', u'/home/odoo/10.0/account-payment', u'/home/odoo/10.0/account-reconcile', u'/home/odoo/10.0/bank-payment', u'/home/odoo/10.0/bank-statement-import', u'/home/odoo/10.0/calendar', u'/home/odoo/10.0/commission', u'/home/odoo/10.0/community-data-files', u'/home/odoo/10.0/connector', u'/home/odoo/10.0/contract', u'/home/odoo/10.0/credit-control', u'/home/odoo/10.0/crm', u'/home/odoo/10.0/currency', u'/home/odoo/10.0/data-protection', u'/home/odoo/10.0/delivery-carrier', u'/home/odoo/10.0/e-commerce', u'/home/odoo/10.0/edi', u'/home/odoo/10.0/helpdesk', u'/home/odoo/10.0/hr', u'/home/odoo/10.0/intrastat-extrastat', u'/home/odoo/10.0/knowledge', u'/home/odoo/10.0/l10n-italy', u'/home/odoo/10.0/l10n-italy-supplemental', u'/home/odoo/10.0/maintenance', u'/home/odoo/10.0/management-system', u'/home/odoo/10.0/manufacture', u'/home/odoo/10.0/margin-analysis', u'/home/odoo/10.0/mis-builder', u'/home/odoo/10.0/multi-company', u'/home/odoo/10.0/partner-contact', u'/home/odoo/10.0/product-attribute', u'/home/odoo/10.0/product-kitting', u'/home/odoo/10.0/product-variant', u'/home/odoo/10.0/profiles', u'/home/odoo/10.0/project', u'/home/odoo/10.0/purchase-reporting', u'/home/odoo/10.0/purchase-workflow', u'/home/odoo/10.0/queue', u'/home/odoo/10.0/report-print-send', u'/home/odoo/10.0/reporting-engine', u'/home/odoo/10.0/rma', u'/home/odoo/10.0/sale-financial', u'/home/odoo/10.0/sale-reporting', u'/home/odoo/10.0/sale-workflow', u'/home/odoo/10.0/search-engine', u'/home/odoo/10.0/server-auth', u'/home/odoo/10.0/server-tools', u'/home/odoo/10.0/server-ux', u'/home/odoo/10.0/social', u'/home/odoo/10.0/stock-logistics-barcode', u'/home/odoo/10.0/stock-logistics-reporting', u'/home/odoo/10.0/stock-logistics-tracking', u'/home/odoo/10.0/stock-logistics-transport', u'/home/odoo/10.0/stock-logistics-warehouse', u'/home/odoo/10.0/stock-logistics-workflow', u'/home/odoo/10.0/storage', u'/home/odoo/10.0/timesheet', u'/home/odoo/10.0/uncovered', u'/home/odoo/10.0/web', u'/home/odoo/10.0/webhook', u'/home/odoo/10.0/website', u'/home/odoo/10.0/wms', u'/home/odoo/10.0/zerobug-test']
+2024-12-29 14:49:27,307 550651 INFO ? odoo: database: odoo10@localhost:5432
+2024-12-29 14:49:27,324 550651 INFO ? odoo.service.server: HTTP service (werkzeug) running on NB200Z0.:60755
+2024-12-29 14:49:27,334 550651 INFO test_odoo_10 odoo.modules.loading: loading 1 modules...
+2024-12-29 14:49:27,405 550651 INFO test_odoo_10 odoo.modules.loading: 1 modules loaded in 0.07s, 0 queries
+2024-12-29 14:49:28,889 550651 INFO test_odoo_10 odoo.modules.loading: loading 40 modules...
+2024-12-29 14:49:29,038 550651 INFO test_odoo_10 odoo.addons.report.models.report: Will use the Wkhtmltopdf binary at /home/odoo/10.0/venv_odoo/bin/wkhtmltopdf
+2024-12-29 14:49:29,120 550651 INFO test_odoo_10 odoo.modules.loading: 40 modules loaded in 0.23s, 0 queries
+2024-12-29 14:49:29,135 550651 INFO test_odoo_10 odoo.modules.loading: loading 50 modules...
+2024-12-29 14:49:29,470 550651 INFO test_odoo_10 odoo.modules.registry: module stock: creating or updating database tables
+2024-12-29 14:49:30,157 550651 INFO test_odoo_10 odoo.addons.auth_crypt.models.res_users: Hashing passwords, may be slow for databases with many users...
+2024-12-29 14:49:30,194 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/security/stock_security.xml
+2024-12-29 14:49:31,226 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/security/ir.model.access.csv
+2024-12-29 14:49:32,080 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/views/stock_menu_views.xml
+2024-12-29 14:49:32,200 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/report/report_stock_forecast.xml
+2024-12-29 14:49:32,257 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/report/stock_report_views.xml
+2024-12-29 14:49:32,310 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/report/report_stock_view.xml
+2024-12-29 14:49:32,377 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/report/report_package_barcode.xml
+2024-12-29 14:49:32,405 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/report/report_lot_barcode.xml
+2024-12-29 14:49:32,423 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/report/report_location_barcode.xml
+2024-12-29 14:49:32,459 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/report/report_stockpicking_operations.xml
+2024-12-29 14:49:32,552 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/report/report_deliveryslip.xml
+2024-12-29 14:49:32,603 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/report/report_stockinventory.xml
+2024-12-29 14:49:32,626 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/wizard/stock_change_product_qty_views.xml
+2024-12-29 14:49:32,661 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/wizard/stock_picking_return_views.xml
+2024-12-29 14:49:32,704 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/wizard/make_procurement_views.xml
+2024-12-29 14:49:32,745 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/wizard/procurement_orderpoint_compute_views.xml
+2024-12-29 14:49:32,778 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/wizard/stock_immediate_transfer_views.xml
+2024-12-29 14:49:32,797 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/wizard/stock_backorder_confirmation_views.xml
+2024-12-29 14:49:32,819 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/views/stock_scrap_views.xml
+2024-12-29 14:49:32,920 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/views/res_partner_views.xml
+2024-12-29 14:49:33,054 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/views/product_strategy_views.xml
+2024-12-29 14:49:33,093 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/views/stock_inventory_views.xml
+2024-12-29 14:49:33,245 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/views/stock_incoterms_views.xml
+2024-12-29 14:49:33,303 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/views/stock_production_lot_views.xml
+2024-12-29 14:49:33,381 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/views/stock_picking_views.xml
+2024-12-29 14:49:33,680 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/views/stock_quant_views.xml
+2024-12-29 14:49:33,880 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/views/stock_location_views.xml
+2024-12-29 14:49:34,106 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/views/procurement_views.xml
+2024-12-29 14:49:34,269 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/views/stock_warehouse_views.xml
+2024-12-29 14:49:34,421 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/views/stock_move_views.xml
+2024-12-29 14:49:34,666 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/views/stock_pack_operation_views.xml
+2024-12-29 14:49:34,754 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/views/product_views.xml
+2024-12-29 14:49:35,210 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/views/stock_config_settings_views.xml
+2024-12-29 14:49:35,245 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/data/default_barcode_patterns.xml
+2024-12-29 14:49:35,261 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/data/stock_data.xml
+2024-12-29 14:49:35,568 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/data/stock_data.yml
+2024-12-29 14:49:35,619 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/data/stock_incoterms_data.xml
+2024-12-29 14:49:35,662 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/data/stock_sequence_data.xml
+2024-12-29 14:49:35,678 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/data/web_planner_data.xml
+2024-12-29 14:49:35,714 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/data/stock_demo_pre.yml
+2024-12-29 14:49:35,761 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/data/stock_demo.xml
+2024-12-29 14:49:36,909 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/data/procurement_demo.xml
+2024-12-29 14:49:37,108 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/data/stock_orderpoint_demo.xml
+2024-12-29 14:49:37,151 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/data/stock_orderpoint_demo.yml
+2024-12-29 14:49:37,155 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/data/stock_demo.yml
+2024-12-29 14:49:42,464 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.pack.operation records with IDs: [4]
+2024-12-29 14:49:42,869 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [4]
+2024-12-29 14:49:42,885 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [10]
+2024-12-29 14:49:43,135 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/data/stock_location_demo_cpu1.xml
+2024-12-29 14:49:43,150 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/data/stock_location_demo_cpu3.yml
+2024-12-29 14:49:44,167 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/test/procrule.yml
+2024-12-29 14:49:45,291 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/test/stock_users.yml
+2024-12-29 14:49:45,794 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/test/packing.yml
+2024-12-29 14:49:46,320 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.pack.operation records with IDs: [15]
+2024-12-29 14:49:46,395 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [13]
+2024-12-29 14:49:46,412 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [14, 15, 16]
+2024-12-29 14:49:46,867 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.pack.operation records with IDs: [19, 20, 21]
+2024-12-29 14:49:46,940 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [23, 24, 25]
+2024-12-29 14:49:47,556 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.pack.operation records with IDs: [25, 26]
+2024-12-29 14:49:47,599 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.pack.operation records with IDs: [27, 28]
+2024-12-29 14:49:47,656 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [33, 34]
+2024-12-29 14:49:47,792 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/test/packingneg.yml
+2024-12-29 14:49:48,304 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [37]
+2024-12-29 14:49:48,330 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [38, 39, 40]
+2024-12-29 14:49:48,809 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [44, 45, 46]
+2024-12-29 14:49:48,832 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [47, 48, 49, 50]
+2024-12-29 14:49:49,633 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [56]
+2024-12-29 14:49:49,647 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [57]
+2024-12-29 14:49:49,677 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.quant records with IDs: [35]
+2024-12-29 14:49:49,684 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.quant records with IDs: [39]
+2024-12-29 14:49:49,733 550651 INFO test_odoo_10 odoo.modules.loading: loading stock/test/wiseoperator.yml
+2024-12-29 14:49:50,273 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.pack.operation records with IDs: [39]
+2024-12-29 14:49:50,314 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [60]
+2024-12-29 14:49:50,328 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [61, 62]
+2024-12-29 14:49:51,121 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [65, 66, 67]
+2024-12-29 14:49:51,143 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [68, 69]
+2024-12-29 14:49:51,284 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [72, 73]
+2024-12-29 14:49:51,522 550651 INFO test_odoo_10 odoo.modules.module: odoo.addons.stock.tests.test_product running tests.
+2024-12-29 14:49:53,297 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_product: test_with_owner (odoo.addons.stock.tests.test_product.TestVirtualAvailable)
+2024-12-29 14:49:53,713 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_product: test_without_owner (odoo.addons.stock.tests.test_product.TestVirtualAvailable)
+2024-12-29 14:49:54,155 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_product: Ran 2 tests in 2.633s
+2024-12-29 14:49:54,155 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_product: OK
+2024-12-29 14:49:54,156 550651 INFO test_odoo_10 odoo.modules.module: odoo.addons.stock.tests.test_shipment running tests.
+2024-12-29 14:49:55,712 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_shipment: test_shipment (odoo.addons.stock.tests.test_shipment.TestInventory)
+2024-12-29 14:49:55,951 550651 INFO test_odoo_10 odoo.models.unlink: User #13 deleted stock.move.operation.link records with IDs: [80]
+2024-12-29 14:49:56,608 550651 INFO test_odoo_10 odoo.models.unlink: User #13 deleted stock.pack.operation records with IDs: [50]
+2024-12-29 14:49:56,673 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [83]
+2024-12-29 14:49:56,775 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [84]
+2024-12-29 14:49:56,847 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_shipment: Ran 1 test in 2.692s
+2024-12-29 14:49:56,848 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_shipment: OK
+2024-12-29 14:49:56,848 550651 INFO test_odoo_10 odoo.modules.module: odoo.addons.stock.tests.test_stock_flow running tests.
+2024-12-29 14:49:56,848 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_stock_flow: test_00_picking_create_and_transfer_quantity (odoo.addons.stock.tests.test_stock_flow.TestStockFlow)
+2024-12-29 14:49:56,848 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_stock_flow: ` Basic stock operation on incoming and outgoing shipment.
+2024-12-29 14:49:58,049 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.pack.operation records with IDs: [53, 54, 55, 56]
+2024-12-29 14:49:58,141 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [92, 93, 94, 95, 96]
+2024-12-29 14:49:58,301 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [97, 98, 99, 100, 101, 102]
+2024-12-29 14:49:58,847 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.pack.operation records with IDs: [63, 64]
+2024-12-29 14:49:59,226 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.pack.operation records with IDs: [67, 68, 69, 70]
+2024-12-29 14:49:59,296 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [125, 126, 127, 128, 129, 130, 131, 132]
+2024-12-29 14:49:59,428 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [133, 134, 135, 136, 137, 138, 139]
+2024-12-29 14:50:00,281 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.pack.operation records with IDs: [65, 66]
+2024-12-29 14:50:00,353 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [151, 152, 153]
+2024-12-29 14:50:00,534 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [154, 155, 156, 157, 158, 159]
+2024-12-29 14:50:00,748 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.pack.operation records with IDs: [77, 78]
+2024-12-29 14:50:00,786 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [169, 170, 171]
+2024-12-29 14:50:01,406 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_stock_flow: test_10_pickings_transfer_with_different_uom (odoo.addons.stock.tests.test_stock_flow.TestStockFlow)
+2024-12-29 14:50:01,407 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_stock_flow: ` Picking transfer with diffrent unit of meassure.
+2024-12-29 14:50:02,577 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.pack.operation records with IDs: [90, 91, 92, 93, 94]
+2024-12-29 14:50:02,624 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [182, 183, 184, 185, 186]
+2024-12-29 14:50:02,647 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [187, 188, 189, 190, 191]
+2024-12-29 14:50:03,154 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.pack.operation records with IDs: [100, 101, 102, 103, 104]
+2024-12-29 14:50:03,218 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [202, 203, 204, 205, 206]
+2024-12-29 14:50:03,384 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [207, 208, 209, 210, 211, 212]
+2024-12-29 14:50:03,828 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.pack.operation records with IDs: [111]
+2024-12-29 14:50:04,190 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.pack.operation records with IDs: [113]
+2024-12-29 14:50:04,224 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [224, 225]
+2024-12-29 14:50:04,244 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [226, 227]
+2024-12-29 14:50:04,770 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.pack.operation records with IDs: [115, 116, 117, 118, 119]
+2024-12-29 14:50:04,825 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [236, 237, 238, 239, 240, 241]
+2024-12-29 14:50:05,004 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.pack.operation records with IDs: [112]
+2024-12-29 14:50:05,032 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [248]
+2024-12-29 14:50:05,045 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [249]
+2024-12-29 14:50:05,372 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.pack.operation records with IDs: [126]
+2024-12-29 14:50:05,403 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [252]
+2024-12-29 14:50:05,417 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [253]
+2024-12-29 14:50:05,720 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.pack.operation records with IDs: [128]
+2024-12-29 14:50:05,755 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [256]
+2024-12-29 14:50:05,772 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [257]
+2024-12-29 14:50:06,157 550651 ERROR test_odoo_10 odoo.addons.stock.tests.test_stock_flow: FAIL
+2024-12-29 14:50:06,159 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_stock_flow: test_20_create_inventory_with_different_uom (odoo.addons.stock.tests.test_stock_flow.TestStockFlow)
+2024-12-29 14:50:06,159 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_stock_flow: ` Create inventory with different unit of measure.
+2024-12-29 14:50:08,360 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_stock_flow: test_30_check_with_no_incoming_lot (odoo.addons.stock.tests.test_stock_flow.TestStockFlow)
+2024-12-29 14:50:08,360 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_stock_flow: ` Picking in without lots and picking out with
+2024-12-29 14:50:09,640 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [260]
+2024-12-29 14:50:09,657 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [261]
+2024-12-29 14:50:10,023 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [263]
+2024-12-29 14:50:10,048 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [264]
+2024-12-29 14:50:10,147 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [265]
+2024-12-29 14:50:10,229 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_stock_flow: test_40_pack_in_pack (odoo.addons.stock.tests.test_stock_flow.TestStockFlow)
+2024-12-29 14:50:10,229 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_stock_flow: ` Put a pack in pack
+2024-12-29 14:50:11,494 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [268]
+2024-12-29 14:50:11,517 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [269]
+2024-12-29 14:50:11,530 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [270]
+2024-12-29 14:50:11,672 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [272]
+2024-12-29 14:50:11,694 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [273]
+2024-12-29 14:50:11,832 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [275]
+2024-12-29 14:50:11,852 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [276]
+2024-12-29 14:50:11,926 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_stock_flow: test_50_create_in_out_with_product_pack_lines (odoo.addons.stock.tests.test_stock_flow.TestStockFlow)
+2024-12-29 14:50:13,005 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.pack.operation records with IDs: [136]
+2024-12-29 14:50:13,052 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [279]
+2024-12-29 14:50:13,070 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [280, 281]
+2024-12-29 14:50:13,337 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [284]
+2024-12-29 14:50:13,354 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [285, 286]
+2024-12-29 14:50:13,432 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_stock_flow: test_60_create_in_out_with_product_pack_lines (odoo.addons.stock.tests.test_stock_flow.TestStockFlow)
+2024-12-29 14:50:14,468 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.pack.operation records with IDs: [141]
+2024-12-29 14:50:14,512 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [290]
+2024-12-29 14:50:14,526 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [291, 292]
+2024-12-29 14:50:14,799 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [295, 296]
+2024-12-29 14:50:14,864 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_stock_flow: test_70_picking_state_all_at_once_reserve (odoo.addons.stock.tests.test_stock_flow.TestStockFlow)
+2024-12-29 14:50:14,865 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_stock_flow: ` This test will check that the state of the picking is correctly computed according to the state of its move lines and its move type.
+2024-12-29 14:50:16,055 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_stock_flow: test_71_picking_state_all_at_once_force_assign (odoo.addons.stock.tests.test_stock_flow.TestStockFlow)
+2024-12-29 14:50:16,055 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_stock_flow: ` This test will check that the state of the picking is correctly computed according to the state of its move lines and its move type.
+2024-12-29 14:50:17,102 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_stock_flow: test_72_picking_state_partial_reserve (odoo.addons.stock.tests.test_stock_flow.TestStockFlow)
+2024-12-29 14:50:17,102 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_stock_flow: ` This test will check that the state of the picking is correctly computed according to the state of its move lines and its move type.
+2024-12-29 14:50:18,539 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.pack.operation records with IDs: [148]
+2024-12-29 14:50:18,576 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_stock_flow: test_73_picking_state_partial_force_assign (odoo.addons.stock.tests.test_stock_flow.TestStockFlow)
+2024-12-29 14:50:18,576 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_stock_flow: ` This test will check that the state of the picking is correctly computed according to the state of its move lines and its move type.
+2024-12-29 14:50:19,679 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_stock_flow: test_74_move_state_waiting_mto (odoo.addons.stock.tests.test_stock_flow.TestStockFlow)
+2024-12-29 14:50:19,679 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_stock_flow: ` This test will check that when a move is unreserved, its state changes to 'waiting' if it has ancestors or if it has a 'procure_method' equal to 'make_to_order' else the state changes to 'confirmed'.
+2024-12-29 14:50:20,863 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_stock_flow: ======================================================================
+2024-12-29 14:50:20,863 550651 ERROR test_odoo_10 odoo.addons.stock.tests.test_stock_flow: FAIL: test_10_pickings_transfer_with_different_uom (odoo.addons.stock.tests.test_stock_flow.TestStockFlow)
+2024-12-29 14:50:20,863 550651 ERROR test_odoo_10 odoo.addons.stock.tests.test_stock_flow: ` Picking transfer with diffrent unit of meassure.
+2024-12-29 14:50:20,864 550651 ERROR test_odoo_10 odoo.addons.stock.tests.test_stock_flow: Traceback (most recent call last):
+2024-12-29 14:50:20,864 550651 ERROR test_odoo_10 odoo.addons.stock.tests.test_stock_flow: `   File "/home/odoo/10.0/addons/stock/tests/test_stock_flow.py", line 953, in test_10_pickings_transfer_with_different_uom
+2024-12-29 14:50:20,864 550651 ERROR test_odoo_10 odoo.addons.stock.tests.test_stock_flow: `     self.assertEqual(sum(total_qty), 999.9995, 'Expecting 999.9995 kg , got %.4f kg on location stock!' % (sum(total_qty)))
+2024-12-29 14:50:20,864 550651 ERROR test_odoo_10 odoo.addons.stock.tests.test_stock_flow: ` AssertionError: 999.9994999999999 != 999.9995 : Expecting 999.9995 kg , got 999.9995 kg on location stock!
+2024-12-29 14:50:20,864 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_stock_flow: Ran 12 tests in 24.015s
+2024-12-29 14:50:20,864 550651 ERROR test_odoo_10 odoo.addons.stock.tests.test_stock_flow: FAILED
+2024-12-29 14:50:20,864 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_stock_flow:  (failures=1)
+2024-12-29 14:50:20,864 550651 INFO test_odoo_10 odoo.modules.module: odoo.addons.stock.tests.test_stock_flow tested in 24.02s, 56293 queries
+2024-12-29 14:50:20,864 550651 ERROR test_odoo_10 odoo.modules.module: Module stock: 1 failures, 0 errors
+2024-12-29 14:50:20,864 550651 INFO test_odoo_10 odoo.modules.module: odoo.addons.stock.tests.test_stock_scrap running tests.
+2024-12-29 14:50:20,864 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_stock_scrap: test_stock_scrap_01 (odoo.addons.stock.tests.test_stock_scrap.TestStockScrap)
+2024-12-29 14:50:20,865 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_stock_scrap: ` Standalone scrap a stockable product
+2024-12-29 14:50:21,154 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_stock_scrap: test_stock_scrap_02 (odoo.addons.stock.tests.test_stock_scrap.TestStockScrap)
+2024-12-29 14:50:21,154 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_stock_scrap: ` Scrap a stockable product from a picking
+2024-12-29 14:50:21,565 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_stock_scrap: test_stock_scrap_03 (odoo.addons.stock.tests.test_stock_scrap.TestStockScrap)
+2024-12-29 14:50:21,565 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_stock_scrap: ` Standalone scrap a consumable product
+2024-12-29 14:50:21,877 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_stock_scrap: test_stock_scrap_04 (odoo.addons.stock.tests.test_stock_scrap.TestStockScrap)
+2024-12-29 14:50:21,877 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_stock_scrap: ` Scrap a consumable product from a picking
+2024-12-29 14:50:22,278 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_stock_scrap: Ran 4 tests in 1.414s
+2024-12-29 14:50:22,279 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_stock_scrap: OK
+2024-12-29 14:50:22,279 550651 INFO test_odoo_10 odoo.modules.module: odoo.addons.stock.tests.test_warehouse running tests.
+2024-12-29 14:50:23,874 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_warehouse: test_basic_move (odoo.addons.stock.tests.test_warehouse.TestInventory)
+2024-12-29 14:50:24,113 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.quant records with IDs: [134]
+2024-12-29 14:50:24,120 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.quant records with IDs: [136]
+2024-12-29 14:50:24,326 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_warehouse: test_inventory_adjustment_and_negative_quants_1 (odoo.addons.stock.tests.test_warehouse.TestInventory)
+2024-12-29 14:50:24,326 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_warehouse: ` Make sure negative quants from returns get wiped out with an inventory adjustment
+2024-12-29 14:50:24,619 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [306]
+2024-12-29 14:50:24,634 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [307]
+2024-12-29 14:50:25,037 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.pack.operation records with IDs: [152]
+2024-12-29 14:50:25,075 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [310]
+2024-12-29 14:50:25,220 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.quant records with IDs: [139]
+2024-12-29 14:50:25,226 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.quant records with IDs: [141]
+2024-12-29 14:50:25,246 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_warehouse: test_inventory_adjustment_and_negative_quants_2 (odoo.addons.stock.tests.test_warehouse.TestInventory)
+2024-12-29 14:50:25,246 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_warehouse: ` Make sure negative quants get wiped out with an inventory adjustment
+2024-12-29 14:50:25,546 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [312]
+2024-12-29 14:50:25,560 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [313]
+2024-12-29 14:50:25,684 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.quant records with IDs: [142]
+2024-12-29 14:50:25,691 550651 INFO test_odoo_10 odoo.models.unlink: User #1 deleted stock.quant records with IDs: [144]
+2024-12-29 14:50:25,704 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_warehouse: test_inventory_product (odoo.addons.stock.tests.test_warehouse.TestInventory)
+2024-12-29 14:50:25,926 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_warehouse: test_inventory_wizard (odoo.addons.stock.tests.test_warehouse.TestInventory)
+2024-12-29 14:50:27,511 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_warehouse: test_resupply_from_wh (odoo.addons.stock.tests.test_warehouse.TestResupply)
+2024-12-29 14:50:28,333 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_warehouse: Ran 6 tests in 6.054s
+2024-12-29 14:50:28,334 550651 INFO test_odoo_10 odoo.addons.stock.tests.test_warehouse: OK
+2024-12-29 14:50:28,334 550651 INFO test_odoo_10 odoo.modules.module: odoo.addons.stock.tests.test_warehouse tested in 6.05s, 13813 queries
+2024-12-29 14:50:28,544 550651 INFO test_odoo_10 odoo.modules.registry: module l10n_it_fiscal_payment_term: creating or updating database tables
+2024-12-29 14:50:28,659 550651 INFO test_odoo_10 odoo.modules.loading: loading l10n_it_fiscal_payment_term/security/ir.model.access.csv
+2024-12-29 14:50:28,706 550651 INFO test_odoo_10 odoo.modules.loading: loading l10n_it_fiscal_payment_term/views/payment_term_view.xml
+2024-12-29 14:50:28,788 550651 INFO test_odoo_10 odoo.modules.loading: loading l10n_it_fiscal_payment_term/views/payment_method_view.xml
+2024-12-29 14:50:28,841 550651 INFO test_odoo_10 odoo.modules.loading: loading l10n_it_fiscal_payment_term/data/fatturapa_data.xml
+2024-12-29 14:50:29,099 550651 INFO test_odoo_10 odoo.modules.registry: module l10n_it_fiscalcode: creating or updating database tables
+2024-12-29 14:50:29,349 550651 INFO test_odoo_10 odoo.addons.auth_crypt.models.res_users: Hashing passwords, may be slow for databases with many users...
+2024-12-29 14:50:29,362 550651 INFO test_odoo_10 odoo.models: Storing computed values of res.company fields fiscalcode
+2024-12-29 14:50:29,404 550651 INFO test_odoo_10 odoo.modules.loading: loading l10n_it_fiscalcode/views/fiscalcode_view.xml
+2024-12-29 14:50:29,538 550651 INFO test_odoo_10 odoo.modules.loading: loading l10n_it_fiscalcode/wizard/compute_fc_view.xml
+2024-12-29 14:50:29,637 550651 INFO test_odoo_10 odoo.modules.loading: loading l10n_it_fiscalcode/data/res.city.it.code.csv
+2024-12-29 14:50:55,544 550651 INFO test_odoo_10 odoo.modules.loading: loading l10n_it_fiscalcode/security/ir.model.access.csv
+2024-12-29 14:50:55,771 550651 INFO test_odoo_10 odoo.modules.module: odoo.addons.l10n_it_fiscalcode.tests.test_fiscalcode running tests.
+2024-12-29 14:50:55,771 550651 INFO test_odoo_10 odoo.addons.l10n_it_fiscalcode.tests.test_fiscalcode: test_fiscalcode_compute (odoo.addons.l10n_it_fiscalcode.tests.test_fiscalcode.TestFiscalCode)
+2024-12-29 14:50:55,914 550651 INFO test_odoo_10 odoo.addons.l10n_it_fiscalcode.tests.test_fiscalcode: Ran 1 test in 0.143s
+2024-12-29 14:50:55,914 550651 INFO test_odoo_10 odoo.addons.l10n_it_fiscalcode.tests.test_fiscalcode: OK
+2024-12-29 14:50:56,181 550651 INFO test_odoo_10 odoo.modules.registry: module stock_account: creating or updating database tables
+2024-12-29 14:50:56,662 550651 INFO test_odoo_10 odoo.modules.loading: loading stock_account/security/stock_account_security.xml
+2024-12-29 14:50:56,915 550651 INFO test_odoo_10 odoo.modules.loading: loading stock_account/security/ir.model.access.csv
+2024-12-29 14:50:57,033 550651 INFO test_odoo_10 odoo.modules.loading: loading stock_account/wizard/stock_change_standard_price_views.xml
+2024-12-29 14:50:57,058 550651 INFO test_odoo_10 odoo.modules.loading: loading stock_account/wizard/wizard_valuation_history_views.xml
+2024-12-29 14:50:57,090 550651 INFO test_odoo_10 odoo.modules.loading: loading stock_account/views/product_views.xml
+2024-12-29 14:50:57,184 550651 INFO test_odoo_10 odoo.modules.loading: loading stock_account/views/stock_account_views.xml
+2024-12-29 14:50:57,278 550651 INFO test_odoo_10 odoo.modules.loading: loading stock_account/views/stock_config_settings_views.xml
+2024-12-29 14:50:57,304 550651 INFO test_odoo_10 odoo.modules.loading: loading stock_account/report/stock_history_views.xml
+2024-12-29 14:50:57,381 550651 INFO test_odoo_10 odoo.modules.loading: loading stock_account/data/product_data.xml
+2024-12-29 14:50:57,397 550651 INFO test_odoo_10 odoo.modules.loading: loading stock_account/data/stock_account_data.xml
+2024-12-29 14:50:57,415 550651 INFO test_odoo_10 odoo.modules.loading: loading stock_account/data/stock_account_data_post_install.yml
+2024-12-29 14:50:57,421 550651 INFO test_odoo_10 odoo.modules.loading: loading stock_account/data/stock_account_demo.yml
+2024-12-29 14:50:57,796 550651 INFO test_odoo_10 odoo.modules.registry: module universal_connector_product: creating or updating database tables
+2024-12-29 14:50:58,188 550651 INFO test_odoo_10 odoo.modules.module: odoo.addons.universal_connector_product.tests.test_backend running tests.
+2024-12-29 14:50:58,188 550651 INFO test_odoo_10 odoo.addons.universal_connector_product.tests.test_backend: test_connection (odoo.addons.universal_connector_product.tests.test_backend.MyTest)
+2024-12-29 14:50:58,272 550651 INFO test_odoo_10 odoo.addons.universal_connector_product.tests.testenv: 🎺🎺🎺 Starting test v2.0.21 (debug_level=0, commit=True)
+2024-12-29 14:50:58,274 550651 INFO test_odoo_10 odoo.addons.universal_connector_product.tests.testenv: 🎺🎺 Testing module: universal_connector_product (10.0.0.3.11)
+2024-12-29 14:50:58,274 550651 INFO test_odoo_10 odoo.addons.universal_connector_product.tests.testenv: 🎺🎺 Loading data from: synchro.channel 
+2024-12-29 14:50:58,353 550651 INFO test_odoo_10 odoo.addons.universal_connector_product.tests.test_backend: 🎺 Starting connection test on ports 8270 (db=oca10) and 8272 (db=oca12) and on ports 8167 (db=demo7) and 8168 (db=demo8)
+2024-12-29 14:50:58,491 550651 INFO test_odoo_10 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.channel[7].button_check_connection(ep=http://admin@localhost:8270/xmlrpc/2/common,h=localhost):
+2024-12-29 14:51:08,523 550651 INFO test_odoo_10 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.company,oe10,remote_id=3, ttl=1)
+2024-12-29 14:51:08,843 550651 INFO test_odoo_10 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.company,oe10,remote_id=1, ttl=1)
+2024-12-29 14:51:09,129 550651 INFO test_odoo_10 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.channel[7].button_reset_to_draft(ep=http://admin@localhost:8270/xmlrpc/2/common,h=localhost):
+2024-12-29 14:51:09,216 550651 INFO test_odoo_10 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.channel[7].button_check_connection(ep=http://admin@localhost:8270/xmlrpc/2/common,h=localhost):
+2024-12-29 14:51:09,311 550651 ERROR test_odoo_10 odoo.addons.universal_connector_product.tests.test_backend: ERROR
+2024-12-29 14:51:09,313 550651 INFO test_odoo_10 odoo.addons.universal_connector_product.tests.testenv: ✨ Test data available on database test_odoo_10
+2024-12-29 14:51:09,313 550651 INFO test_odoo_10 odoo.addons.universal_connector_product.tests.testenv: 🏆🥇 [1;32m2 tests SUCCESSFULLY completed[0m
+2024-12-29 14:51:09,314 550651 INFO test_odoo_10 odoo.addons.universal_connector_product.tests.test_backend: ======================================================================
+2024-12-29 14:51:09,314 550651 ERROR test_odoo_10 odoo.addons.universal_connector_product.tests.test_backend: ERROR: test_connection (odoo.addons.universal_connector_product.tests.test_backend.MyTest)
+2024-12-29 14:51:09,314 550651 ERROR test_odoo_10 odoo.addons.universal_connector_product.tests.test_backend: Traceback (most recent call last):
+2024-12-29 14:51:09,314 550651 ERROR test_odoo_10 odoo.addons.universal_connector_product.tests.test_backend: `   File "/home/odoo/10.0/connector/universal_connector_product/tests/test_backend.py", line 429, in test_connection
+2024-12-29 14:51:09,314 550651 ERROR test_odoo_10 odoo.addons.universal_connector_product.tests.test_backend: `     self._test_check_connection(xref)
+2024-12-29 14:51:09,314 550651 ERROR test_odoo_10 odoo.addons.universal_connector_product.tests.test_backend: `   File "/home/odoo/10.0/connector/universal_connector_product/tests/test_backend.py", line 316, in _test_check_connection
+2024-12-29 14:51:09,314 550651 ERROR test_odoo_10 odoo.addons.universal_connector_product.tests.test_backend: `     actions="button_check_connection",
+2024-12-29 14:51:09,314 550651 ERROR test_odoo_10 odoo.addons.universal_connector_product.tests.test_backend: `   File "/home/odoo/10.0/connector/universal_connector_product/tests/testenv.py", line 3176, in resource_edit
+2024-12-29 14:51:09,314 550651 ERROR test_odoo_10 odoo.addons.universal_connector_product.tests.test_backend: `     ctx=ctx,
+2024-12-29 14:51:09,314 550651 ERROR test_odoo_10 odoo.addons.universal_connector_product.tests.test_backend: `   File "/home/odoo/10.0/connector/universal_connector_product/tests/testenv.py", line 2033, in _exec_action
+2024-12-29 14:51:09,314 550651 ERROR test_odoo_10 odoo.addons.universal_connector_product.tests.test_backend: `     act_windows = getattr(record, action)()
+2024-12-29 14:51:09,314 550651 ERROR test_odoo_10 odoo.addons.universal_connector_product.tests.test_backend: `   File "/home/odoo/10.0/connector/universal_connector_base/models/synchro_backend.py", line 601, in button_check_connection
+2024-12-29 14:51:09,314 550651 ERROR test_odoo_10 odoo.addons.universal_connector_product.tests.test_backend: `     dir_mapper.analyze_dir_mapper(managed_models)
+2024-12-29 14:51:09,314 550651 ERROR test_odoo_10 odoo.addons.universal_connector_product.tests.test_backend: `   File "/home/odoo/10.0/connector/universal_connector_base/models/synchro_backend_model.py", line 791, in analyze_dir_mapper
+2024-12-29 14:51:09,314 550651 ERROR test_odoo_10 odoo.addons.universal_connector_product.tests.test_backend: `     _("Missed mapping for field %s of %s" % (missed_fields, binding_model)))
+2024-12-29 14:51:09,314 550651 ERROR test_odoo_10 odoo.addons.universal_connector_product.tests.test_backend: ` UserError: (u"Missed mapping for field ['property_account_receivable_id', 'property_account_payable_id'] of res.partner", '')
+2024-12-29 14:51:09,314 550651 INFO test_odoo_10 odoo.addons.universal_connector_product.tests.test_backend: Ran 1 test in 11.126s
+2024-12-29 14:51:09,314 550651 ERROR test_odoo_10 odoo.addons.universal_connector_product.tests.test_backend: FAILED
+2024-12-29 14:51:09,314 550651 INFO test_odoo_10 odoo.addons.universal_connector_product.tests.test_backend:  (errors=1)
+2024-12-29 14:51:09,315 550651 INFO test_odoo_10 odoo.modules.module: odoo.addons.universal_connector_product.tests.test_backend tested in 11.13s, 11895 queries
+2024-12-29 14:51:09,315 550651 ERROR test_odoo_10 odoo.modules.module: Module universal_connector_product: 0 failures, 1 errors
+2024-12-29 14:51:09,474 550651 INFO test_odoo_10 odoo.modules.registry: module l10n_it_fiscal_ipa: creating or updating database tables
+2024-12-29 14:51:09,512 550651 WARNING test_odoo_10 py.warnings: /home/odoo/10.0/odoo/models.py:362: UnicodeWarning: Unicode equal comparison failed to convert both arguments to Unicode - interpreting them as being unequal
+  elif not all(cols[field.name][key] == vals[key] for key in vals):
+
+2024-12-29 14:51:09,601 550651 INFO test_odoo_10 odoo.addons.auth_crypt.models.res_users: Hashing passwords, may be slow for databases with many users...
+2024-12-29 14:51:09,633 550651 INFO test_odoo_10 odoo.modules.loading: loading l10n_it_fiscal_ipa/view/partner_view.xml
+2024-12-29 14:51:10,143 550651 INFO test_odoo_10 odoo.modules.registry: module l10n_it_einvoice_base: creating or updating database tables
+2024-12-29 14:51:11,519 550651 INFO test_odoo_10 odoo.addons.auth_crypt.models.res_users: Hashing passwords, may be slow for databases with many users...
+2024-12-29 14:51:11,672 550651 INFO test_odoo_10 odoo.modules.loading: loading l10n_it_einvoice_base/security/ir.model.access.csv
+2024-12-29 14:51:11,950 550651 INFO test_odoo_10 odoo.modules.loading: loading l10n_it_einvoice_base/data/fatturapa_fiscal_position.xml
+2024-12-29 14:51:11,985 550651 INFO test_odoo_10 odoo.modules.loading: loading l10n_it_einvoice_base/data/fatturapa_data.xml
+2024-12-29 14:51:11,993 550651 INFO test_odoo_10 odoo.modules.loading: loading l10n_it_einvoice_base/data/welfare.fund.type.xml
+2024-12-29 14:51:12,036 550651 INFO test_odoo_10 odoo.modules.loading: loading l10n_it_einvoice_base/data/italy_ade_sender_data.xml
+2024-12-29 14:51:12,048 550651 INFO test_odoo_10 odoo.modules.loading: loading l10n_it_einvoice_base/views/account_invoice_view.xml
+2024-12-29 14:51:12,282 550651 INFO test_odoo_10 odoo.modules.loading: loading l10n_it_einvoice_base/views/company_view.xml
+2024-12-29 14:51:12,318 550651 INFO test_odoo_10 odoo.modules.loading: loading l10n_it_einvoice_base/views/regime_fiscale_view.xml
+2024-12-29 14:51:12,367 550651 INFO test_odoo_10 odoo.modules.loading: loading l10n_it_einvoice_base/views/fiscal_position_view.xml
+2024-12-29 14:51:12,394 550651 INFO test_odoo_10 odoo.modules.loading: loading l10n_it_einvoice_base/views/fetchmail_view.xml
+2024-12-29 14:51:12,420 550651 INFO test_odoo_10 odoo.modules.loading: loading l10n_it_einvoice_base/views/mail_server_view.xml
+2024-12-29 14:51:12,442 550651 INFO test_odoo_10 odoo.modules.loading: loading l10n_it_einvoice_base/views/sender_view.xml
+2024-12-29 14:51:12,489 550651 INFO test_odoo_10 odoo.modules.loading: loading l10n_it_einvoice_base/views/welfare_fund_type_view.xml
+2024-12-29 14:51:12,613 550651 INFO test_odoo_10 odoo.modules.loading: loading l10n_it_einvoice_base/wizard/set_invoice_type_view.xml
+2024-12-29 14:51:13,159 550651 INFO test_odoo_10 odoo.modules.registry: module l10n_it_einvoice_out: creating or updating database tables
+2024-12-29 14:51:13,431 550651 INFO test_odoo_10 odoo.models: Storing computed values of fatturapa.attachment.out fields date_invoice0, has_pdf_invoice_print, invoice_partner_id, invoices_number, invoices_total
+2024-12-29 14:51:13,461 550651 INFO test_odoo_10 odoo.modules.loading: loading l10n_it_einvoice_out/wizard/wizard_export_fatturapa_view.xml
+2024-12-29 14:51:13,500 550651 INFO test_odoo_10 odoo.modules.loading: loading l10n_it_einvoice_out/wizard/attachment_refresh_info_view.xml
+2024-12-29 14:51:13,525 550651 INFO test_odoo_10 odoo.modules.loading: loading l10n_it_einvoice_out/views/attachment_view.xml
+2024-12-29 14:51:13,597 550651 INFO test_odoo_10 odoo.modules.loading: loading l10n_it_einvoice_out/views/account_view.xml
+2024-12-29 14:51:13,669 550651 INFO test_odoo_10 odoo.modules.loading: loading l10n_it_einvoice_out/security/ir.model.access.csv
+2024-12-29 14:51:13,904 550651 INFO test_odoo_10 odoo.modules.module: odoo.addons.l10n_it_einvoice_out.tests.test_fattura running tests.
+2024-12-29 14:51:13,904 550651 INFO test_odoo_10 odoo.addons.l10n_it_einvoice_out.tests.test_fattura: test_account_invoice (odoo.addons.l10n_it_einvoice_out.tests.test_fattura.TestInvoice)
+2024-12-29 14:51:14,021 550651 INFO test_odoo_10 odoo.addons.l10n_it_einvoice_out.tests.testenv: ⚠ xref 'z0bug.mycompany' -> 'base.main_company'
+2024-12-29 14:51:14,021 550651 INFO test_odoo_10 odoo.addons.l10n_it_einvoice_out.tests.testenv: ⚠ xref 'z0bug.partner_mycompany' -> 'base.main_partner'
+2024-12-29 14:51:14,023 550651 ERROR test_odoo_10 odoo.addons.l10n_it_einvoice_out.tests.test_fattura: ERROR
+2024-12-29 14:51:14,025 550651 INFO test_odoo_10 odoo.addons.l10n_it_einvoice_out.tests.test_fattura: ======================================================================
+2024-12-29 14:51:14,025 550651 ERROR test_odoo_10 odoo.addons.l10n_it_einvoice_out.tests.test_fattura: ERROR: test_account_invoice (odoo.addons.l10n_it_einvoice_out.tests.test_fattura.TestInvoice)
+2024-12-29 14:51:14,025 550651 ERROR test_odoo_10 odoo.addons.l10n_it_einvoice_out.tests.test_fattura: Traceback (most recent call last):
+2024-12-29 14:51:14,025 550651 ERROR test_odoo_10 odoo.addons.l10n_it_einvoice_out.tests.test_fattura: `   File "/home/odoo/10.0/l10n-italy/l10n_it_einvoice_out/tests/test_fattura.py", line 223, in setUp
+2024-12-29 14:51:14,025 550651 ERROR test_odoo_10 odoo.addons.l10n_it_einvoice_out.tests.test_fattura: `     "country_id": "base.it",
+2024-12-29 14:51:14,025 550651 ERROR test_odoo_10 odoo.addons.l10n_it_einvoice_out.tests.test_fattura: `   File "/home/odoo/10.0/l10n-italy/l10n_it_einvoice_out/tests/testenv.py", line 2956, in setup_company
+2024-12-29 14:51:14,025 550651 ERROR test_odoo_10 odoo.addons.l10n_it_einvoice_out.tests.test_fattura: `     "property_account_receivable_id",
+2024-12-29 14:51:14,025 550651 ERROR test_odoo_10 odoo.addons.l10n_it_einvoice_out.tests.test_fattura: `   File "/home/odoo/10.0/l10n-italy/l10n_it_einvoice_out/tests/testenv.py", line 2919, in store_acc_alias
+2024-12-29 14:51:14,025 550651 ERROR test_odoo_10 odoo.addons.l10n_it_einvoice_out.tests.test_fattura: `     self._add_xref(xref, acc_ids[0].id, "account.account")
+2024-12-29 14:51:14,025 550651 ERROR test_odoo_10 odoo.addons.l10n_it_einvoice_out.tests.test_fattura: `   File "/home/odoo/10.0/odoo/models.py", line 5276, in __getitem__
+2024-12-29 14:51:14,025 550651 ERROR test_odoo_10 odoo.addons.l10n_it_einvoice_out.tests.test_fattura: `     return self._browse((self._ids[key],), self.env)
+2024-12-29 14:51:14,025 550651 ERROR test_odoo_10 odoo.addons.l10n_it_einvoice_out.tests.test_fattura: ` IndexError: tuple index out of range
+2024-12-29 14:51:14,025 550651 INFO test_odoo_10 odoo.addons.l10n_it_einvoice_out.tests.test_fattura: Ran 1 test in 0.121s
+2024-12-29 14:51:14,025 550651 ERROR test_odoo_10 odoo.addons.l10n_it_einvoice_out.tests.test_fattura: FAILED
+2024-12-29 14:51:14,025 550651 INFO test_odoo_10 odoo.addons.l10n_it_einvoice_out.tests.test_fattura:  (errors=1)
+2024-12-29 14:51:14,025 550651 ERROR test_odoo_10 odoo.modules.module: Module l10n_it_einvoice_out: 0 failures, 1 errors
+2024-12-29 14:51:14,250 550651 INFO test_odoo_10 odoo.modules.registry: module universal_connector_rcp_vg7: creating or updating database tables
+2024-12-29 14:51:15,781 550651 INFO test_odoo_10 odoo.addons.auth_crypt.models.res_users: Hashing passwords, may be slow for databases with many users...
+2024-12-29 14:51:15,890 550651 INFO test_odoo_10 odoo.models: Storing computed values of res.partner.shipping fields commercial_company_name, commercial_partner_id, display_name, partner_share
+2024-12-29 14:51:15,892 550651 INFO test_odoo_10 odoo.models: Storing computed values of res.partner.invoice fields commercial_company_name, commercial_partner_id, display_name, partner_share
+2024-12-29 14:51:15,893 550651 INFO test_odoo_10 odoo.models: Storing computed values of res.partner.supplier fields commercial_company_name, commercial_partner_id, display_name, partner_share
+2024-12-29 14:51:15,935 550651 INFO test_odoo_10 odoo.modules.loading: loading universal_connector_rcp_vg7/security/ir.model.access.csv
+2024-12-29 14:51:15,980 550651 INFO test_odoo_10 odoo.modules.loading: loading universal_connector_rcp_vg7/data/synchro_channel.xml
+2024-12-29 14:51:16,000 550651 INFO test_odoo_10 odoo.modules.loading: loading universal_connector_rcp_vg7/data/synchro_partner.xml
+2024-12-29 14:51:16,476 550651 INFO test_odoo_10 odoo.modules.loading: loading universal_connector_rcp_vg7/data/synchro_country.xml
+2024-12-29 14:51:16,548 550651 INFO test_odoo_10 odoo.modules.loading: loading universal_connector_rcp_vg7/views/country_view.xml
+2024-12-29 14:51:16,599 550651 INFO test_odoo_10 odoo.modules.loading: loading universal_connector_rcp_vg7/views/partner_view.xml
+2024-12-29 14:51:16,893 550651 INFO test_odoo_10 odoo.modules.module: odoo.addons.universal_connector_rcp_vg7.tests.test_backend running tests.
+2024-12-29 14:51:16,893 550651 INFO test_odoo_10 odoo.addons.universal_connector_rcp_vg7.tests.test_backend: test_connection (odoo.addons.universal_connector_rcp_vg7.tests.test_backend.MyTest)
+2024-12-29 14:51:16,912 550651 INFO test_odoo_10 odoo.addons.universal_connector_rcp_vg7.tests.testenv: 🎺🎺🎺 Starting test v2.0.21 (debug_level=0, commit=True)
+2024-12-29 14:51:16,916 550651 INFO test_odoo_10 odoo.addons.universal_connector_rcp_vg7.tests.testenv: 🎺🎺 Testing module: universal_connector_rcp_vg7 (10.0.0.3.11)
+2024-12-29 14:51:16,916 550651 INFO test_odoo_10 odoo.addons.universal_connector_rcp_vg7.tests.testenv: 🎺🎺 Loading data from: synchro.channel 
+2024-12-29 14:51:16,938 550651 INFO test_odoo_10 odoo.addons.universal_connector_rcp_vg7.tests.test_backend: 🎺 Starting connection test on ports 8270 (db=oca10) and 8272 (db=oca12) and on ports 8167 (db=demo7) and 8168 (db=demo8)
+2024-12-29 14:51:17,406 550651 INFO test_odoo_10 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.channel[9].button_check_connection(ep=https://gestionale.paperservice.vg7progress.it/index.php,h=gestionale.paperservice.vg7progress.it):
+2024-12-29 14:51:17,943 550651 INFO test_odoo_10 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.channel[9].button_reset_to_draft(ep=https://gestionale.paperservice.vg7progress.it/index.php,h=gestionale.paperservice.vg7progress.it):
+2024-12-29 14:51:18,101 550651 INFO test_odoo_10 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.channel[9].button_check_connection(ep=https://gestionale.paperservice.vg7progress.it/index.php,h=gestionale.paperservice.vg7progress.it):
+2024-12-29 14:51:18,759 550651 INFO test_odoo_10 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(customers,vg7,remote_id=101, ttl=None)
+2024-12-29 14:51:19,115 550651 INFO test_odoo_10 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(countries,vg7,remote_id=166, ttl=3)
+2024-12-29 14:51:19,359 550651 INFO test_odoo_10 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(regions,vg7,remote_id=122, ttl=3)
+2024-12-29 14:51:19,675 550651 WARNING test_odoo_10 odoo.models: res.partner.create() includes unknown fields: vg7:bank, vg7:customer_id, vg7:region, vg7:shipping_addresses, vg7:tax_code_id, vg7:type
+2024-12-29 14:51:19,700 550651 INFO test_odoo_10 odoo.addons.base_vat.models.res_partner: Importing VAT Number [994470645] is not valid !
+2024-12-29 14:51:19,702 550651 INFO test_odoo_10 odoo.addons.universal_connector_base.models.ir_model_synchro_log: !-1! ERROR (u"\nThe VAT number [02994470645] for partner [INSIGNA SRL (REGAL CASA)] does not seem to be valid. \nNote: the expected format is 'CC##' (CC=Country Code, ##=VAT Number)", None): res.partner.create({'message_follower_ids': [[0, 0, {'res_model': 'res.partner', 'subtype_ids': [(6, 0, [1])], 'res_id': 63, 'partner_id': 3}]], u'vg7:bank': u'', u'country_id': 110, 'image': False, 'is_pa': False, u'street': u"VIA R. D'AFFLITTO, 59", u'vg7:tax_code_id': 0, u'city': u'Ariano Irpino', u'zip': u'83031', u'vg7:region': u'AVELLINO', 'electronic_invoice_subjected': True, 'parent_id': False, u'vg7:shipping_addresses': [], u'email': u'bollella6@gmail.com', u'vat': u'02994470645', u'fiscalcode': u'02994470645', u'codice_destinatario': u'J6URRTW', u'vg7_id': 101, u'vg7:type': 1, u'phone': u'3473844070', 'image_medium': False, u'name': u'INSIGNA SRL (REGAL CASA)', 'image_small': False, 'individual': False, 'is_company': True, u'state_id': 313, u'vg7:customer_id': 101})
+2024-12-29 14:51:19,706 550651 INFO test_odoo_10 odoo.addons.universal_connector_base.models.ir_model_synchro_log: !-8! Unmanaged model push_one_record(customers,{u'region_id': u'122', u'telephone': u'3473844070', u'street': u"VIA R. D'AFFLITTO", u'postal_code': u'83031', u'id': 101, u'city': u'Ariano Irpino', u'codice_univoco': u'J6URRTW', u'street_number': u'59', u'country_id': 166, u'tax_code_id': 0, u'esonerato_fe': u'0', u'telephone2': None, u'customer_id': 101, u'type': 0, u'email': u'bollella6@gmail.com', u'pec': None, u'fax': None, u'company': u'INSIGNA SRL (REGAL CASA)', u'cf': u'02994470645', u'payment': None, u'bank': u'', ':type': 'invoice', u'payment_id': None, u'name': u'', u'region': u'AVELLINO', u'bank_id': None, u'piva': u'02994470645', u'surename': u''},1)
+2024-12-29 14:51:19,709 550651 INFO test_odoo_10 odoo.addons.universal_connector_base.models.ir_model_synchro_log: !-8! Unmanaged model push_one_record(customers_shipping_addresses,{u'city': u'Ariano Irpino', u'fax': None, u'addresses': [], u'name': None, u'street_number': u'59', u'region': u'AVELLINO', u'country_id': 166, u'telephone': u'3473844070', u'email': u'bollella6@gmail.coom', u'street': u"VIA R. D'AFFLITTO", u'postal_code': u'83031', u'customer_shipping_id': u'109', u'telephone2': None, u'surename': None, u'customer_id': u'101', u'company': u'INSIGNA SRL (REGAL CASA)', ':type': 'delivery', u'region_id': u'122'},1)
+2024-12-29 14:51:19,723 550651 ERROR test_odoo_10 odoo.addons.universal_connector_rcp_vg7.tests.test_backend: FAIL
+2024-12-29 14:51:19,725 550651 INFO test_odoo_10 odoo.addons.universal_connector_rcp_vg7.tests.testenv: ✨ Test data available on database test_odoo_10
+2024-12-29 14:51:19,725 550651 INFO test_odoo_10 odoo.addons.universal_connector_rcp_vg7.tests.testenv: 🏆🥇 [1;32m8 tests SUCCESSFULLY completed[0m
+2024-12-29 14:51:19,726 550651 INFO test_odoo_10 odoo.addons.universal_connector_rcp_vg7.tests.test_backend: ======================================================================
+2024-12-29 14:51:19,726 550651 ERROR test_odoo_10 odoo.addons.universal_connector_rcp_vg7.tests.test_backend: FAIL: test_connection (odoo.addons.universal_connector_rcp_vg7.tests.test_backend.MyTest)
+2024-12-29 14:51:19,727 550651 ERROR test_odoo_10 odoo.addons.universal_connector_rcp_vg7.tests.test_backend: Traceback (most recent call last):
+2024-12-29 14:51:19,727 550651 ERROR test_odoo_10 odoo.addons.universal_connector_rcp_vg7.tests.test_backend: `   File "/home/odoo/10.0/connector/universal_connector_rcp_vg7/tests/test_backend.py", line 334, in test_connection
+2024-12-29 14:51:19,727 550651 ERROR test_odoo_10 odoo.addons.universal_connector_rcp_vg7.tests.test_backend: `     self._test_import_model(xref, "res.partner")
+2024-12-29 14:51:19,727 550651 ERROR test_odoo_10 odoo.addons.universal_connector_rcp_vg7.tests.test_backend: `   File "/home/odoo/10.0/connector/universal_connector_rcp_vg7/tests/test_backend.py", line 316, in _test_import_model
+2024-12-29 14:51:19,727 550651 ERROR test_odoo_10 odoo.addons.universal_connector_rcp_vg7.tests.test_backend: `     self.assertEqual(getattr(rec, loc_ext_id), ext_id)
+2024-12-29 14:51:19,727 550651 ERROR test_odoo_10 odoo.addons.universal_connector_rcp_vg7.tests.test_backend: `   File "/home/odoo/10.0/connector/universal_connector_rcp_vg7/tests/testenv.py", line 807, in assertEqual
+2024-12-29 14:51:19,727 550651 ERROR test_odoo_10 odoo.addons.universal_connector_rcp_vg7.tests.test_backend: `     return super(MainTest, self).assertEqual(first, second, msg=msg)
+2024-12-29 14:51:19,727 550651 ERROR test_odoo_10 odoo.addons.universal_connector_rcp_vg7.tests.test_backend: ` AssertionError: 0 != 101
+2024-12-29 14:51:19,727 550651 INFO test_odoo_10 odoo.addons.universal_connector_rcp_vg7.tests.test_backend: Ran 1 test in 2.833s
+2024-12-29 14:51:19,728 550651 ERROR test_odoo_10 odoo.addons.universal_connector_rcp_vg7.tests.test_backend: FAILED
+2024-12-29 14:51:19,728 550651 INFO test_odoo_10 odoo.addons.universal_connector_rcp_vg7.tests.test_backend:  (failures=1)
+2024-12-29 14:51:19,728 550651 ERROR test_odoo_10 odoo.modules.module: Module universal_connector_rcp_vg7: 1 failures, 0 errors
+2024-12-29 14:51:19,903 550651 INFO test_odoo_10 odoo.modules.registry: module universal_connector: creating or updating database tables
+2024-12-29 14:51:20,047 550651 INFO test_odoo_10 odoo.modules.module: odoo.addons.universal_connector.tests.test_backend running tests.
+2024-12-29 14:51:20,047 550651 INFO test_odoo_10 odoo.addons.universal_connector.tests.test_backend: test_connection (odoo.addons.universal_connector.tests.test_backend.MyTest)
+2024-12-29 14:51:20,065 550651 INFO test_odoo_10 odoo.addons.universal_connector.tests.testenv: 🎺🎺🎺 Starting test v2.0.21 (debug_level=0, commit=True)
+2024-12-29 14:51:20,067 550651 INFO test_odoo_10 odoo.addons.universal_connector.tests.testenv: 🎺🎺 Testing module: universal_connector (10.0.0.3.11)
+2024-12-29 14:51:20,067 550651 INFO test_odoo_10 odoo.addons.universal_connector.tests.testenv: 🎺🎺 Loading data from: synchro.channel 
+2024-12-29 14:51:20,107 550651 INFO test_odoo_10 odoo.addons.universal_connector.tests.test_backend: 🎺 Starting connection test on ports 8270 (db=oca10) and 8272 (db=oca12) and on ports 8167 (db=demo7) and 8168 (db=demo8)
+2024-12-29 14:51:20,214 550651 INFO test_odoo_10 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.channel[7].button_check_connection(ep=http://admin@localhost:8270/xmlrpc/2/common,h=localhost):
+2024-12-29 14:51:20,285 550651 ERROR test_odoo_10 odoo.addons.universal_connector.tests.test_backend: ERROR
+2024-12-29 14:51:20,288 550651 INFO test_odoo_10 odoo.addons.universal_connector.tests.testenv: ✨ Test data available on database test_odoo_10
+2024-12-29 14:51:20,288 550651 INFO test_odoo_10 odoo.addons.universal_connector.tests.testenv: 🏆🥇 [1;32m0 tests SUCCESSFULLY completed[0m
+2024-12-29 14:51:20,290 550651 INFO test_odoo_10 odoo.addons.universal_connector.tests.test_backend: ======================================================================
+2024-12-29 14:51:20,291 550651 ERROR test_odoo_10 odoo.addons.universal_connector.tests.test_backend: ERROR: test_connection (odoo.addons.universal_connector.tests.test_backend.MyTest)
+2024-12-29 14:51:20,291 550651 ERROR test_odoo_10 odoo.addons.universal_connector.tests.test_backend: Traceback (most recent call last):
+2024-12-29 14:51:20,291 550651 ERROR test_odoo_10 odoo.addons.universal_connector.tests.test_backend: `   File "/home/odoo/10.0/connector/universal_connector/tests/test_backend.py", line 575, in test_connection
+2024-12-29 14:51:20,291 550651 ERROR test_odoo_10 odoo.addons.universal_connector.tests.test_backend: `     self._test_check_connection(xref)
+2024-12-29 14:51:20,291 550651 ERROR test_odoo_10 odoo.addons.universal_connector.tests.test_backend: `   File "/home/odoo/10.0/connector/universal_connector/tests/test_backend.py", line 316, in _test_check_connection
+2024-12-29 14:51:20,291 550651 ERROR test_odoo_10 odoo.addons.universal_connector.tests.test_backend: `     actions="button_check_connection",
+2024-12-29 14:51:20,291 550651 ERROR test_odoo_10 odoo.addons.universal_connector.tests.test_backend: `   File "/home/odoo/10.0/connector/universal_connector/tests/testenv.py", line 3176, in resource_edit
+2024-12-29 14:51:20,291 550651 ERROR test_odoo_10 odoo.addons.universal_connector.tests.test_backend: `     ctx=ctx,
+2024-12-29 14:51:20,291 550651 ERROR test_odoo_10 odoo.addons.universal_connector.tests.test_backend: `   File "/home/odoo/10.0/connector/universal_connector/tests/testenv.py", line 2033, in _exec_action
+2024-12-29 14:51:20,291 550651 ERROR test_odoo_10 odoo.addons.universal_connector.tests.test_backend: `     act_windows = getattr(record, action)()
+2024-12-29 14:51:20,291 550651 ERROR test_odoo_10 odoo.addons.universal_connector.tests.test_backend: `   File "/home/odoo/10.0/connector/universal_connector_base/models/synchro_backend.py", line 601, in button_check_connection
+2024-12-29 14:51:20,291 550651 ERROR test_odoo_10 odoo.addons.universal_connector.tests.test_backend: `     dir_mapper.analyze_dir_mapper(managed_models)
+2024-12-29 14:51:20,291 550651 ERROR test_odoo_10 odoo.addons.universal_connector.tests.test_backend: `   File "/home/odoo/10.0/connector/universal_connector_base/models/synchro_backend_model.py", line 791, in analyze_dir_mapper
+2024-12-29 14:51:20,291 550651 ERROR test_odoo_10 odoo.addons.universal_connector.tests.test_backend: `     _("Missed mapping for field %s of %s" % (missed_fields, binding_model)))
+2024-12-29 14:51:20,291 550651 ERROR test_odoo_10 odoo.addons.universal_connector.tests.test_backend: ` UserError: (u"Missed mapping for field ['fatturapa_preview_style'] of res.company", '')
+2024-12-29 14:51:20,291 550651 INFO test_odoo_10 odoo.addons.universal_connector.tests.test_backend: Ran 1 test in 0.243s
+2024-12-29 14:51:20,291 550651 ERROR test_odoo_10 odoo.addons.universal_connector.tests.test_backend: FAILED
+2024-12-29 14:51:20,291 550651 INFO test_odoo_10 odoo.addons.universal_connector.tests.test_backend:  (errors=1)
+2024-12-29 14:51:20,291 550651 ERROR test_odoo_10 odoo.modules.module: Module universal_connector: 0 failures, 1 errors
+2024-12-29 14:51:20,301 550651 INFO test_odoo_10 odoo.modules.loading: 50 modules loaded in 111.17s, 99674 queries
+2024-12-29 14:51:20,753 550651 ERROR test_odoo_10 odoo.modules.loading: At least one test failed when loading the modules.
+2024-12-29 14:51:20,762 550651 INFO test_odoo_10 odoo.modules.loading: All post-tested in 0.00s, 0 queries
+2024-12-29 14:51:20,762 550651 INFO test_odoo_10 odoo.models: Computing parent left and right for table ir_ui_menu...
+2024-12-29 14:51:20,810 550651 INFO test_odoo_10 odoo.models: Computing parent left and right for table stock_location...
+2024-12-29 14:51:20,821 550651 INFO test_odoo_10 odoo.models: Computing parent left and right for table stock_quant_package...
+2024-12-29 14:51:20,825 550651 INFO test_odoo_10 odoo.modules.registry: Registry changed, signaling through the database
+2024-12-29 14:51:20,825 550651 INFO test_odoo_10 odoo.service.server: Initiating shutdown
+2024-12-29 14:51:20,826 550651 INFO test_odoo_10 odoo.service.server: Hit CTRL-C again or send a second signal to force the shutdown.
+
++===================================================================
+| please test [36muniversal_connector[0m (10.0): [31mFAILED![0m
++===================================================================
+

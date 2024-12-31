@@ -1,21 +1,9 @@
-Questo modulo rende disponibile alcune funzioni per sincronizzare con l'esterno.
+Questo modulo abilita l'importazione da un'istanza remota di Odoo usando xmlrpc.
+Questo protocollo è una variante di XML-RPC over http/https ed è progettato
+specificatamente per istanze remote di Odoo. Viene fornito dal
+modulo *universal_connector_by_xmlrpc*
+attraverso `oerplib <https://pythonhosted.org/OERPLib/>`__,
+quindi il package python `PYPI oerplib3 <https://pypi.org/project/oerplib3/>`__ deve
+essere installato.
 
-Caratteristiche
-~~~~~~~~~~~~~~~
-
-* Scambio multi-canale
-* Protocolli JSON, XMLRPC e file CSV
-* Logica Push o Pull
-* Many2one, One2Many e Many2Many gestiti con referenze esterne
-* Traduzione automatica dei campi
-* Traduzione automatica dei campi e dei valori di Odoo dalla 6.1 alla 12.0
-* Controllo anti-ricorsione
-* Creazione a due fasi
-* Traduttore dinamico
-
-Questo modulo può essere usato per:
-
-* Aggiornare database di Odoo tra versioni (anche all'indietro)
-* Importare dati da file senza duplicazioni
-* Connettere Odoo con altri software (sino a 4 contemporaneamente)
-* Popolare il DB di Odoo nella prima installazione quando migrazione da altro software
+Usare questo protocollo per connettere vecchie versioni di Odoo (precedenti alla 10.0).

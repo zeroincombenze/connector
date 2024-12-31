@@ -1,5 +1,5 @@
 #
-# Copyright 2018-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
+# Copyright 2018-25 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
 #
 # Contributions to development, thanks to:
 # * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
@@ -61,8 +61,7 @@ class SynchroChannel(models.Model):
             return lang_ids[0]
         return self.env["res.lang"].search([("code", "=", "en_US")])[0]
 
-    def _remote_sw_selection(self):
-        # if self.identity == "odoo":
+    def selection_for_version(self):
         return [
             ("6.1", "Odoo 6.1 - Python2"),
             ("7.0", "Odoo 7.0 - Python2"),
@@ -100,7 +99,7 @@ class SynchroChannel(models.Model):
         selection=[
             ("draft", "Draft"),
             ("ready", "Ready"),
-            ("run", "Data downloading/uploading"),
+            ("run", "Data Transfer"),
             ("failed", "Connection failed"),
         ],
         string="State",
@@ -191,7 +190,7 @@ class SynchroChannel(models.Model):
         states={"draft": [("readonly", False)]},
     )
     odoo_version = fields.Selection(
-        _remote_sw_selection,
+        lambda self: self.selection_for_version(),
         "Counterpart software version",
         default="8.0",
         readonly=True,
@@ -290,6 +289,13 @@ class SynchroChannel(models.Model):
         required=True,
         default=_default_language,
     )
+    update_only_recent = fields.Boolean(
+        string="Update Only Recent",
+        default=False,
+        states={"draft": [("readonly", False)]},
+        help="If active, before update, check for last update date",
+    )
+    last_counterpart_update = fields.Datetime("Last Update", copy=False, readonly=True)
     product_without_variants = fields.Boolean("Products without variants")
     tracelevel = fields.Selection(
         [
@@ -349,7 +355,7 @@ class SynchroChannel(models.Model):
             self.counterpart_url = countepart_url
 
     @api.onchange("method")
-    def _onchange_method(self):
+    def _onchange_method(self):  # pragma: no cover
         prot = self.get_protocol_from_method(self.method)
         if prot == "http" and self.counterpart_url:
             if self.counterpart_url.startswith("https:"):
@@ -366,24 +372,15 @@ class SynchroChannel(models.Model):
                     "http", "https", 1
                 )
         self.init_backend()
-        # 10.0 bugfix
-        if hasattr(self, "_origin") and self._origin and self._origin.id:
-            self.env["ir.model.synchro.cache"].set_attr(
-                self._origin.id, "PYPI", self.pypi_sign
-            )
 
     @api.onchange("counterpart_url")
     def _onchange_login_endpoint(self):
         self.init_backend()
-        if not self.counterpart_url:
+        if not self.counterpart_url:  # pragma: no cover
             return
         prot, hostname, port, database, login, passwd, path = self.parse_endpoint(
             with_path="login",
         )
-        if prot:
-            method = self.get_method_from_protocol(prot)
-            if method and method != self.method:
-                self.method = method
         if hostname and hostname != self.hostname:
             self.hostname = hostname
         if path != self.lgi_path:
@@ -394,48 +391,21 @@ class SynchroChannel(models.Model):
             self.port = port
         if database and database != self.database:
             self.database = database
-        self.counterpart_data_url = self.get_login_endpoint(
-            with_port=True, rebuild=True
-        )
-
-    @api.multi
-    @api.depends("counterpart_url")
-    def _update_login_endpoint(self):  # pragma: no cover
-        for backend in self:
-            backend._onchange_login_endpoint()
 
     @api.onchange("hostname")
     def _onchange_hostname(self):
         if self.hostname:
             self._compute_counterpart_url()
 
-    @api.multi
-    @api.depends("hostname")
-    def _update_hostname(self):  # pragma: no cover
-        for backend in self:
-            backend._onchange_hostname()
-
     @api.onchange("login")
     def _onchange_login(self):
         if self.login:
             self._compute_counterpart_url()
 
-    @api.multi
-    @api.depends("login")
-    def _update_login(self):
-        for backend in self:  # pragma: no cover
-            backend._onchange_login()
-
     @api.onchange("port")
-    def _onchange_port(self):
+    def _onchange_port(self):  # pragma: no cover
         if self.port:
             self._compute_counterpart_url()
-
-    @api.multi
-    @api.depends("port")
-    def _update_port(self):
-        for backend in self:  # pragma: no cover
-            backend._onchange_port()
 
     @api.onchange("odoo_version")
     def _onchange_odoo_version(self):
@@ -462,12 +432,6 @@ class SynchroChannel(models.Model):
                 self.prefix = candidate
             else:
                 self.prefix = v
-
-    @api.multi
-    @api.depends("odoo_version")
-    def _update_odoo_version(self):
-        for backend in self:  # pragma: no cover
-            backend._onchange_odoo_version()
 
     def _build_all_indexes(self, cls):
         """Build unique index on table to <gamma>_id for performance"""
@@ -512,12 +476,11 @@ class SynchroChannel(models.Model):
                 if getattr(company, loc_ext_id) in company_ids:
                     synchronized = True
                     break
-            if not synchronized:
+            if not synchronized:  # pragma: no cover
                 self.env["ir.model.synchro.log"].logmsg(
                     "error",
                     "No company synchronized!",
-                    res_model=self._name,
-                    id=self.id,
+                    res_rec=self,
                     errcode=-13,
                 )
                 self.state = "failed"
@@ -525,8 +488,7 @@ class SynchroChannel(models.Model):
             self.env["ir.model.synchro.log"].logmsg(
                 "error",
                 "No company assigned to backend!",
-                res_model=self._name,
-                id=self.id,
+                res_rec=self,
                 errcode=-13,
             )
             self.state = "failed"
@@ -585,7 +547,7 @@ class SynchroChannel(models.Model):
         if self.env["synchro.api"].session_is_active(session) and self.state == "ready":
             self.env["ir.model.synchro.log"].logmsg(
                 "info",
-                "%(model)s[%(id)s].button_check_connection(ep=%(lgi_ep)s,h=%(host)s):",
+                "%(model)s.button_check_connection(ep=%(lgi_ep)s,h=%(host)s)",
                 res_rec=self,
                 backend=self,
             )
@@ -593,7 +555,7 @@ class SynchroChannel(models.Model):
                 self.button_build_model_map()
             managed_models = set([x.name for x in self.model_ids])
             for dir_mapper in self.model_ids:
-                if self.identity != "odoo":
+                if self.identity != "odoo":  # pragma: no cover
                     dir_mapper.complete_dir_mapper(
                         self, dir_mapper.counterpart_name, model=dir_mapper.name
                     )
@@ -607,7 +569,7 @@ class SynchroChannel(models.Model):
         if self.state != "draft":
             self.env["ir.model.synchro.log"].logmsg(
                 "info",
-                "%(model)s[%(id)s].button_reset_to_draft(ep=%(lgi_ep)s,h=%(host)s):",
+                "%(model)s.button_reset_to_draft(ep=%(lgi_ep)s,h=%(host)s):",
                 res_rec=self,
                 backend=self,
             )
@@ -732,9 +694,8 @@ class SynchroChannel(models.Model):
         else:  # pragma: no cover
             self.env["ir.model.synchro.log"].logmsg(
                 "error",
-                "!%(E)s! Connection to %(model)s[%(id)s] failed!",
-                res_model=self._name,
-                id=self.id,
+                "!%(E)s! Connection to %(model)s failed!",
+                res_rec=self,
                 errcode=-13,
             )
             self.state = "failed"
@@ -823,8 +784,14 @@ class SynchroChannel(models.Model):
         DirMapper = self.env["synchro.channel.model"]
         domain = [("synchro_channel_id", "=", self.id)]
         if model:
+            if ext_model:
+                domain.append("|")
+                domain.append(("name", "=", False))
             domain.append(("name", "=", model))
         if ext_model:
+            if model:
+                domain.append("|")
+                domain.append(("counterpart_name", "=", False))
             domain.append(("counterpart_name", "=", ext_model))
         if spec is not None:
             domain.append(("model_spec", "=", spec))
@@ -832,16 +799,17 @@ class SynchroChannel(models.Model):
         return dir_mapper if len(dir_mapper) == 1 else DirMapper
 
     @api.model
-    def synchro_queue(self, prio=None, max_recs=0, mode=None):
+    def synchro_queue(self, prio=None, max_recs=0, mode=None, commit=False):
+        local_ids = []
         if mode and mode != self.load_mode:
-            return
+            return local_ids
         Cache = self.env["ir.model.synchro.cache"]
 
         if self.load_mode == "direct":
             max_ctr = 2048
             max_secs = 180
             commit_rate = 1024
-        else:
+        else:  # pragma: no cover
             # Priority is 1..3 or 0 (debug mode)
             prio = prio or int(self.deferred_payload)
             max_ctr, max_secs = {
@@ -882,18 +850,20 @@ class SynchroChannel(models.Model):
                 id = self.env["ir.model.synchro"].trigger_one_record(
                     model, self.prefix, values, ttl=ttl, running_in_queue=True, ctx=ctx
                 )
-            elif action == "push":
-                id = self.env["ir.model.synchro"].pull_one_record(
+            elif action == "pull":
+                id = self.env["ir.model.synchro"].pull_1_record(
                     model, self.prefix, values, ttl=ttl, running_in_queue=True, ctx=ctx
                 )
             else:
                 id = -1
             if id > 0:
                 loaded_ctr += 1
+                local_ids.append(id)
         if self.state == "run":
             self.state = "ready"
-        if loaded_ctr > commit_rate:
+        if commit or loaded_ctr > commit_rate:
             self.env.cr.commit()  # pylint: disable=invalid-commit
+        return local_ids
 
     @api.model
     def create(self, vals):

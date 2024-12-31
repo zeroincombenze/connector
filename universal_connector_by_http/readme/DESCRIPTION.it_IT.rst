@@ -1,21 +1,6 @@
-Questo modulo rende disponibile alcune funzioni per sincronizzare con l'esterno.
+Questo protocollo è una variante di XML-RPC over http/https. Viene fornito
+attraverso `python requests <https://requests.readthedocs.io/en/latest/>`__,
+quindi il package python `PYPI requests <https://pypi.org/project/requests/>`__ deve
+essere installato.
 
-Caratteristiche
-~~~~~~~~~~~~~~~
-
-* Scambio multi-canale
-* Protocolli JSON, XMLRPC e file CSV
-* Logica Push o Pull
-* Many2one, One2Many e Many2Many gestiti con referenze esterne
-* Traduzione automatica dei campi
-* Traduzione automatica dei campi e dei valori di Odoo dalla 6.1 alla 12.0
-* Controllo anti-ricorsione
-* Creazione a due fasi
-* Traduttore dinamico
-
-Questo modulo può essere usato per:
-
-* Aggiornare database di Odoo tra versioni (anche all'indietro)
-* Importare dati da file senza duplicazioni
-* Connettere Odoo con altri software (sino a 4 contemporaneamente)
-* Popolare il DB di Odoo nella prima installazione quando migrazione da altro software
+Usare questo protocollo per identità diverse da Odoo.

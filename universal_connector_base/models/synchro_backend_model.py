@@ -1,5 +1,5 @@
 #
-# Copyright 2018-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
+# Copyright 2018-25 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
 #
 # Contributions to development, thanks to:
 # * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
@@ -84,6 +84,7 @@ class SynchroChannelModel(models.Model):
     auth_action = fields.Selection(
         [
             ("all", "Everything"),
+            # ("i+u", "New + recent Update"),
             ("ins", "Only new records"),
             ("upd", "Only update"),
             ("sync", "Only ext.ID"),
@@ -92,6 +93,13 @@ class SynchroChannelModel(models.Model):
         string="Authorized actions",
         required=True,
         default="all",
+        help="This field can limit action on record; values are:\n"
+        "Eveything: no limits, records can be update or created\n"
+        "New + recent Update: record can be created; update only more recent\n"
+        "Only new records: record can be created but not updated\n"
+        "Only update: record can be updated but not created\n"
+        "Only ext.ID: no action on record, only set counterpart ID\n"
+        "Locked: no action on record, model is protected\n",
     )
     prefix = fields.Selection(
         [
@@ -153,6 +161,7 @@ class SynchroChannelModel(models.Model):
 
     def load_ctx(self, ctx):
         ctx = ctx or {}
+        ctx["logrec"] = ctx.get("logrec") or self.env["ir.model.synchro.log"]
         company = self.synchro_channel_id.company_id or self.env.user.company_id
         ctx["company_id"] = ctx.get("company_id", company.id)
         if company.country_id:
@@ -174,29 +183,30 @@ class SynchroChannelModel(models.Model):
         return vals
 
     @api.model
-    def get_binding_model_name(self, model):  # pragma: no cover
+    def split_binding_model_n_spec(self, model):  # pragma: no cover
         binding_model = model
+        spec = False
         if model in (
             "res.partner.shipping",
             "res.partner.invoice",
             "res.partner.supplier",
             "res.partner.bank.company",
         ):
-            binding_model = model.rsplit(".", 1)[0]
-        return binding_model
+            binding_model, spec = model.rsplit(".", 1)
+        return binding_model, spec
 
     def get_mapper(self, loc_name=None, ext_name=None, spec=None):
         Mapper = self.env["synchro.channel.model.field"]
-        domain = [
-            ("model_id", "=", self.id),
-        ]
+        domain = [("model_id", "=", self.id)]
         if loc_name:
-            # domain.append("|")
-            # domain.append(("name", "=", False))
+            if ext_name:
+                domain.append("|")
+                domain.append(("name", "=", False))
             domain.append(("name", "=", loc_name))
         if ext_name:
-            # domain.append("|")
-            # domain.append(("counterpart_name", "=", False))
+            if loc_name:
+                domain.append("|")
+                domain.append(("counterpart_name", "=", False))
             domain.append(("counterpart_name", "=", ext_name))
         if spec is not None:
             domain.append(("spec", "=", spec))
@@ -249,7 +259,7 @@ class SynchroChannelModel(models.Model):
             else:
                 ext_name = loc_name = ext_ref
         ftype = struct.get(loc_name, {}).get("type", "char")
-        default, apply4, spec2 = mapper.get_default_n_apply(ftype=ftype)
+        default, apply4, spec2 = mapper.extract_default_n_apply(ftype=ftype)
         return {
             "id": mapper,
             "loc_name": loc_name,
@@ -407,7 +417,7 @@ class SynchroChannelModel(models.Model):
                     for item in vals[ext_ref]:
                         if isinstance(item, int):
                             rec = self.env[comodel].bind_external_ref(loc_ext_id, item)
-                            if not rec:
+                            if not rec and field["id"].protect_update != "3":
                                 if (
                                     not synchro_comodel.counterpart_name
                                 ):  # pragma: no cover
@@ -425,7 +435,7 @@ class SynchroChannelModel(models.Model):
                                         item,
                                         ttl,
                                         ctx,
-                                        prio=1 if loc_name == self.childs_name else 2,
+                                        prio=1 if loc_name == self.childs_name else 3,
                                     )
                         elif isinstance(item, str) and "." in item and " " not in item:
                             # Item is external reference like 'module.reference'
@@ -500,7 +510,11 @@ class SynchroChannelModel(models.Model):
                                 prio=1,
                             )
                             incomplete_record |= True
-                        elif only_minimal and self.name not in MODEL_LAZY_COMPANY:
+                        elif (
+                            only_minimal
+                            and self.name not in MODEL_LAZY_COMPANY
+                            and field["id"].protect_update != "3"
+                        ):
                             Cache.que_push(
                                 backend,
                                 "trigger",
@@ -587,7 +601,7 @@ class SynchroChannelModel(models.Model):
         Cache = self.env["ir.model.synchro.cache"]
         IrModel = self.env["ir.model.synchro"]
         ctx = ctx or {}
-        binding_model = self.get_binding_model_name(self.name)
+        binding_model = self.split_binding_model_n_spec(self.name)[0]
         struct = self.env[binding_model].fields_get()
         magic_fields = self.synchro_channel_id.get_magic_fields()
         field_list, with_company_id, maps = self.priority_fields(
@@ -673,7 +687,14 @@ class SynchroChannelModel(models.Model):
                 protect_update, required = mapper.get_default_protection(
                     magic_fields=magic_fields
                 )
-                mapper.write({"protect_update": protect_update, "required": required})
+                apply4 = mapper.get_default_apply(magic_fields=magic_fields)
+                mapper.write(
+                    {
+                        "protect_update": protect_update,
+                        "required": required,
+                        "apply": apply4,
+                    }
+                )
             else:
                 mapper.write({"name": False, "protect_update": "3", "required": False})
         return dir_mapper
@@ -694,7 +715,7 @@ class SynchroChannelModel(models.Model):
         dir_mapper = backend.get_dir_mapper(model=model, ext_model=ext_model, spec=spec)
         if not dir_mapper:
             if model:
-                binding_model = self.get_binding_model_name(model)
+                binding_model, spec = self.split_binding_model_n_spec(model)
                 ext_model = SynchroApi.odoo_tnl_local_model_to_ext(
                     backend, binding_model
                 )
@@ -823,15 +844,6 @@ class SynchroChannelModel(models.Model):
                 ):
                     self.parent_name = mapper.name
                     break
-        #
-        # if self.synchro_channel_id.identity != "odoo":
-        #     # For Odoo model, protection was set by build_odoo_mapper()
-        #     for mapper in self.field_ids:
-        #         protect_update, required = mapper.get_default_protection(
-        #             magic_fields=magic_fields
-        #         )
-        #         mapper.write({"protect_update": protect_update, "required": required})
-
         #
         # Try to build the search keys rules; avery rules is a set of search fields,
         # Field are in 3 categories: unique keys, candidate keys and ancillary keys
@@ -1109,7 +1121,7 @@ class SynchroChannelModel(models.Model):
             res = result
         return res
 
-    def atomic_search(self, cls, domain, company_id=None, company_lev=0):
+    def atomic_search(self, Binder, domain, company_id=None, company_lev=0):
         if not domain:
             return []
         if company_id is None:
@@ -1125,25 +1137,25 @@ class SynchroChannelModel(models.Model):
                 ("company_id", "=", False),
             ]
         try:
-            if hasattr(cls, "sequence"):
-                rec = cls.search(
+            if hasattr(Binder, "sequence"):
+                rec = Binder.search(
                     full_domain, order="sequence,id", limit=2 if company_lev < 2 else 16
                 )
             else:
-                rec = cls.search(full_domain, limit=2 if company_lev < 2 else 16)
+                rec = Binder.search(full_domain, limit=2 if company_lev < 2 else 16)
         except BaseException as e:  # pragma: no cover
             self.env.cr.rollback()  # pylint: disable=invalid-commit
             self.env["ir.model.synchro.log"].logmsg(
                 "error",
                 "!%(E)s! ERROR %(e)s: %(model)s.atomic_search(%(domain)s)",
-                res_model=cls._name,
+                res_model=Binder._name,
                 errmsg=e,
                 ctx={"domain": domain},
             )
             return []
         if len(rec) != 1 and company_id is not None and not company_lev < 2:
             return self.atomic_search(
-                cls,
+                Binder,
                 domain,
                 company_id=company_id,
                 company_lev=company_lev + 1 if company_lev else company_lev + 2,
@@ -1152,7 +1164,7 @@ class SynchroChannelModel(models.Model):
             "debug",
             "%(model)s.atomic_search(%(domain)s)",
             res_rec=rec,
-            res_model=cls._name,
+            res_model=Binder._name,
             ctx={"domain": full_domain},
         )
         return rec
@@ -1187,7 +1199,7 @@ class SynchroChannelModel(models.Model):
                 "error",
                 "Record %(model)s[%(id)s] not found!",
                 res_model=Binder._name,
-                id=id,
+                res_id=id,
             )
         return rec
 

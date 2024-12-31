@@ -1,0 +1,15 @@
+12.0.0.3.13 (2025-01-05)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [QUA] Test coverage 100% (22: 0+22) [0 TestPoints] - quality rating 61 (target 100)
+
+12.0.0.3.12 (2025-01-03)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [QUA] Test coverage 100% (22: 0+22) [0 TestPoints] - quality rating 61 (target 100)
+
+12.0.0.3.11 (2024-12-29)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] Splited from universal_connector
+* [QUA] Test coverage 59% (136: 56+80) [28 TestPoints] - quality rating 69 (target 100)

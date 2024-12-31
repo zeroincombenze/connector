@@ -65,7 +65,7 @@
     <record forcecreate="1" id="res_partner_country_id" model="synchro.channel.model.field">
         <field name="name">country_id</field>
         <field name="counterpart_name">country_id</field>
-        <field name="apply">set_global()</field>
+        <field name="apply">get_global()</field>
         <field name="model_id" ref="res_partner"/>
     </record>
 

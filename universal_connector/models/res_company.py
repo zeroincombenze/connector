@@ -1,5 +1,5 @@
 #
-# Copyright 2019-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
+# Copyright 2019-25 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
 #
 # Contributions to development, thanks to:
 # * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
@@ -39,9 +39,9 @@ class ResCompany(models.Model):
         model = "res.company"
         stored_field = "__%s" % model
         for ext_ref in vals:
-            ext_name, loc_name, is_foreign = self.env["ir.model.synchro"].name_from_ref(
-                backend_id, model, ext_ref
-            )
+            ext_name, loc_name, is_foreign = self.env[
+                "ir.model.synchro"
+            ].get_map_from_ext_ref(backend_id, model, ext_ref)
             if ext_name == "id":
                 ext_id = vals[ext_ref]
                 loc_ext_id = loc_name

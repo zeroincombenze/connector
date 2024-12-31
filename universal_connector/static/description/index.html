@@ -6,16 +6,16 @@
                 <img src="/l10n_uk/static/description/icon.png" alt="English" style="width:16px;height:16px;"/>
                 <img src="/l10n_us/static/description/icon.png" alt="English" style="width:16px;height:16px;"/>
             </p>
-            <h2 class="oe_slogan" style="color:#162832;">Universal Connector</h2>
+            <h2 class="oe_slogan" style="color:#162832;">Universal Connector complete suite</h2>
         </div>
         <div class="oe_span6">
             <p align="center">
                 <img src="/l10n_it/static/description/icon.png" alt="Italiano" style="width:16px;height:16px;"/>
             </p>
-            <h2 class="oe_slogan" style="color:#162832;">Connettore universale</h2>
+            <h2 class="oe_slogan" style="color:#162832;">Suite completa del Connettore universale</h2>
         </div>
         <div class="oe_demo oe_screenshot">
-            Unknown description_img
+            <img src="description.gif" alt="Universal Connector" style="width:98%;max-width:1140px"/>
         </div>
     </div>
 </section>
@@ -27,64 +27,33 @@
                 <img src="/l10n_uk/static/description/icon.png" alt="English" style="width:16px;height:16px;"/>
                 <img src="/l10n_us/static/description/icon.png" alt="English" style="width:16px;height:16px;"/>
             </p>
-            <p class="oe_mt16" align="justify">This module makes available some functions to synchronize external data
-with Odoo data.
+            <p class="oe_mt16" align="justify">This module is Universal Connector suite. Itself does nothing, it is a bunch of all Universal Connector modules.
+For furthemore info read documentation of specific modules.
 <p align="justify">
-<h4>Characteristics</h4>
+<h4>Suite Characteristics</h4>
 </p><p align="justify">
 <ul>
-<li>Multi-channels interchange</li>
-<li>JSON, XMLRPC and CSV files protocols</li>
+<li>Multi-backend interchange</li>
+<li>Multi-protocols, like JSON, XMLRPC and CSV</li>
 <li>Push and/or Pull logic</li>
-<li>Many2one, One2Many and Many2Many managed with external references</li>
-<li>Automatic field value translation</li>
-<li>Odoo version from 6.1 to 12.0 field name and values automatic translation</li>
+<li>Many2one, One2Many and Many2Many acquired with remote references</li>
+<li>Recognition by external reference (only remote Odoo)</li>
+<li>Updatable configuration by GUI</li>
 <li>Anti-recurse checks</li>
-<li>Two phases create in order to create hierarchical record structure</li>
-<li>Dynamic translation database</li>
+<li>Create in two phases in order to keep hierarchical record structure</li>
+<li>Dynamic database migration for Odoo since 6.1</li>
+<li>Configurable protection rules</li>
 </ul>
 </p><p align="justify">
-This module can be used for:
+This suit can be used for:
 </p><p align="justify">
 <ul>
-<li>Upgrade Odoo DB from a version to another version (even beck upgrade)</li>
-<li>Import data from files without duplicating records</li>
-<li>Connect Odoo with other software (current version supports until 4 counterparts)</li>
-<li>Populate Odoo DB in the first installation migrated from another software</li>
-</ul>
-</p><p align="justify">
-</p><p align="justify">
-<h4>Synchro</h4>
-</p><p align="justify">
-The function synchro return the ID of record found or created. Negative values
-are error codes.
-</p><p align="justify">
-The function synchro accepts a data dictionary with field values, like create
-and write functions.
-</p><p align="justify">
-Every field name may be:
-</p><p align="justify">
-<ul>
-<li>`id` (integer): the Odoo ID of record; if supplied means write specific existent record (deprecated)</li>
-<li>`PFX_id` (integer): the external partner ID of record (PFX is the channel prefix)</li>
-<li>External name as format `PFX:FIELD` where PFX is the channel prefix and FIELD is the external name which is translated into Odoo name based on dictionary</li>
-</ul>
-</p><p align="justify">
-Every field value may be:
-</p><p align="justify">
-<ul>
-<li>Value as is, i.e. partner name; the value is acquired as is</li>
-<li>External references: ID of external reference</li>
-<li>Text of reference: key of reference key, i.e. "admin" in user_id field</li>
-</ul>
-</p><p align="justify">
-Synchronizer behavior:
-</p><p align="justify">
-<ul>
-<li>If `PFX_id` field is supplied, record with `PFX_id` is searched</li>
-<li>Otherwise Synchronizer search for a record matching values passed; the function execute a fallback search algorithm</li>
-<li>If record found, Synchronizer executes the Odoo function write</li>
-<li>If record not found, Synchronizer executes the Odoo function create and assign external 'id' to `PFX_id`</li>
+<li><b>Migrate Odoo Database</b> from a version to another version (like openupgrade but even back upgrade)</li>
+<li><b>Import data</b> from files in specific location using user configuration (alternative to standard import)</li>
+<li><b>Create demo and test environment</b> based on csv files</li>
+<li><b>Connect just in time</b> Odoo with other software or other Odoo instances</li>
+<li><b>Populate database from another dataset</b> when Odoo replace another software</li>
+<li><b>Interchange Support Centre</b> to manage interactive EDI with couterparties</li>
 </ul>
 </p></p>
         </div>
@@ -92,30 +61,220 @@ Synchronizer behavior:
             <p align="center">
                 <img src="/l10n_it/static/description/icon.png" alt="Italiano" style="width:16px;height:16px;"/>
             </p>
-            <p class="oe_mt16" align="justify">Questo modulo rende disponibile alucne funzioni per sincronizzare con l'esterno.
+            <p class="oe_mt16" align="justify">Questo modulo &#232; la suite Universal Connector. Di per s&#233; non fa nulla, &#232; un insieme
+di tutti i moduli Universal Connector. Per ulteriori informazioni,
+leggere la documentazione dei moduli specifici.
 <p align="justify">
-<h4>Caratteristiche</h4>
+<h4>Caratteristiche della suite</h4>
 </p><p align="justify">
 <ul>
-<li>Scambio multi-canale</li>
-<li>Protocolli JSON, XMLRPC e file CSV</li>
-<li>Logica Push o Pull</li>
-<li>Many2one, One2Many e Many2Many gestiti con referenze esterne</li>
-<li>Traduzione automatica dei campi</li>
-<li>Traduzione automatica dei campi e dei valori di Odoo dalla 6.1 alla 12.0</li>
-<li>Controllo anti-ricorsione</li>
-<li>Creazione a due fasi</li>
-<li>Traduttore dinamico</li>
+<li>Scambio multi-dorsale</li>
+<li>Multi-protocollo, come JSON, XMLRPC e CSV</li>
+<li>Logica push e/o pull</li>
+<li>Many2one, One2Many e Many2Many acquisiti con riferimenti remoti</li>
+<li>Riconoscimento tramite riferimento esterno (solo Odoo remoto)</li>
+<li>Configurazione aggiornabile tramite GUI</li>
+<li>Controlli anti-ricorsione</li>
+<li>Creazione a due fasi per mantenere la struttura gerarchica dei record</li>
+<li>Migrazione dinamica del database per Odoo dalla versione 6.1</li>
+<li>Regole di protezione configurabili</li>
 </ul>
 </p><p align="justify">
-Questo modulo pu&#242; essere usato per:
+Questa suite pu&#242; essere utilizzata per:
 </p><p align="justify">
 <ul>
-<li>Aggiornare database di Odoo tra versioni (anche all'indietro)</li>
-<li>Importare dati da file senza duplicazioni</li>
-<li>Connettere Odoo con altri software (sino a 4 contemporaneamente)</li>
-<li>Popolare il DB di Odoo nella prima installazione quando migrazione da altro software</li>
+<li><b>Migrare il database Odoo</b> da una versione a un'altra versione (come openupgrade ma anche all'indietro)</li>
+<li><b>Importare dati</b> da file in una posizione specifica utilizzando la configurazione utente (alternativa all'importazione standard)</li>
+<li><b>Creare un ambiente demo e di test</b> basato su file csv</li>
+<li><b>Connettersi in tempo reale</b> Odoo con altri software o altre istanze Odoo</li>
+<li><b>Popolare il database da un altro set di dati</b> quando Odoo sostituisce un altro software</li>
+<li><b>Centro di supporto per lo scambio</b> per gestire EDI interattivo con le controparti</li>
 </ul>
+</p></p>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="oe_row oe_spaced">
+        <h3 align="center" style="color:#162832;font-size: 26px;font-weight: 300;">Configuration | Configurazione</h3>
+        <div class="oe_span6">
+            <p align="center">
+                <img src="/l10n_uk/static/description/icon.png" alt="English" style="width:16px;height:16px;"/>
+                <img src="/l10n_us/static/description/icon.png" alt="English" style="width:16px;height:16px;"/>
+            </p>
+            <p class="oe_mt16" align="justify"><span class="fa fa-th-large" style="color:#7C7BAD"/> Settings &#187; Activate the developer mode
+<p align="justify">
+<span class="fa fa-th-large" style="color:#7C7BAD"/> Settings &#187; Technical &#187; Synchronization Backend
+</p><p align="justify">
+<ol>
+<li> Set protocol to "By xmlrpc over https" or "By xmlrpc over http" or other</li>
+<li> Set Host Name, if needed (for xmlrpc over http set endpoint)</li>
+<li> Set communication port, if needed</li>
+<li> Declare remote database name. if needed</li>
+<li> Declare remote user and password (password is not visible)</li>
+<li> Some protocols require Client Key rather than password</li>
+<li> Declare identity</li>
+<li> Declare remote version, if needed</li>
+<li> Choose prefix for this backend</li>
+<li> Declare remote user language</li>
+<li> Set Endpoint, if needed (required for xmlrpc over http)</li>
+<li> Click on button <span style="color:white;background-color:#7C7BAD">Check&#160;Connection</span></li>
+</ol>
+</p><p align="justify">
+If Odoo can connect with remote counterparty, backend state is set to "Ready".
+</p><p align="justify">
+Some parameters depend on chosen protocol and identity. Below a short list of most used
+protocols.
+</p><p align="justify">
+<b>xmlrpc over http/https</b>
+</p><p align="justify">
+Read info from required <i>universal_connector_base</i> plugin.
+</p><p align="justify">
+<b>http/https</b>
+</p><p align="justify">
+Read info from required <i>universal_connector_by_http</i> plugin.
+</p><p align="justify">
+<b>jsonrpc</b>
+</p><p align="justify">
+Read info from required <i>universal_connector_by_json</i> plugin.
+</p><p align="justify">
+<b>xmlrpc</b>
+</p><p align="justify">
+Read info from required <i>universal_connector_by_xmlrpc</i> plugin.
+</p><p align="justify">
+<b>csv</b>
+</p><p align="justify">
+Read info from required <i>universal_connector_by_jcsv</i> plugin.
+</p></p>
+        </div>
+        <div class="oe_span6">
+            <p align="center">
+                <img src="/l10n_it/static/description/icon.png" alt="Italiano" style="width:16px;height:16px;"/>
+            </p>
+            <p class="oe_mt16" align="justify"><span class="fa fa-th-large" style="color:#7C7BAD"/> Configurazione &#187; Attivare la modalit&#224; sviluppatore
+<p align="justify">
+<span class="fa fa-th-large" style="color:#7C7BAD"/> Configurazione &#187; Funzioni tecniche &#187; Dorsale di sincronizzazione
+</p><p align="justify">
+<ol>
+<li> Impostare il protocollo "By xmlrpc over https" o "By xmlrpc over http" or altro</li>
+<li> Impostare nome host, se necessario (per xmlrpc over http impostare endpoint)</li>
+<li> Impostare porta di comunicazione, se necessario</li>
+<li> Dichiarare nome database remoto, se necessario</li>
+<li> Dichiarare nome utente remoto e password (la password non &#232; visibile)</li>
+<li> Per alcuni protocolli &#232; richiesta una Client Key al posto della password</li>
+<li> Dichiarare identit&#224;</li>
+<li> Dichiarare la versione remota, se necessario</li>
+<li> Scegliere il prefisso per questa dorsale</li>
+<li> Dichiarare la lingua usata da utente remoto</li>
+<li> Impostare Endpoint, se necessario (richiesto per xmlrpc over http)</li>
+<li> Fare click su bottone <span style="color:white;background-color:#7C7BAD">Verificare&#160;Connessione</span></li>
+</ol>
+</p><p align="justify">
+Se Odoo riesce a connettersi con controparte, lo stato della dorsale diventa "Pronto".
+</p></p>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="oe_row oe_spaced">
+        <h3 align="center" style="color:#162832;font-size: 26px;font-weight: 300;">Usage | Utilizzo</h3>
+        <div class="oe_span6">
+            <p align="center">
+                <img src="/l10n_uk/static/description/icon.png" alt="English" style="width:16px;height:16px;"/>
+                <img src="/l10n_us/static/description/icon.png" alt="English" style="width:16px;height:16px;"/>
+            </p>
+            <p class="oe_mt16" align="justify">If you want comunicate with Odoo form remote you can use 2 functions:
+<p align="justify">
+<ul>
+<li><code>ir.model.synchro.trigger_one_record(ext_model, prefix, ext_id)</code></li>
+<li><code>odoo_model.synchro(vals)</code></li>
+</ul>
+</p><p align="justify">
+All the functions return the ID of record found or created. Negative values are error codes.
+</p><p align="justify">
+<h4>synchro</h4>
+</p><p align="justify">
+The function synchro accepts a data dictionary with field values, like RPC create
+and RPC write functions.
+</p><p align="justify">
+Every field name may be:
+</p><p align="justify">
+<ul>
+<li><code>id</code> (integer): the Odoo ID of record, supplied if write specific existent record</li>
+<li><code>PFX_id</code> (integer): the external partner ID of record (PFX is the backend prefix)</li>
+<li>External name as format <code>"PFX:FIELD"</code> where PFX is the backend prefix and <code>FIELD</code></li>
+</ul>
+is the external name which is converted into Odoo name and value, based on backend
+configuration.
+</p><p align="justify">
+Synchronizer behavior:
+</p><p align="justify">
+<ul>
+<li>If <code>PFX_id</code> field is supplied, record with <code>PFX_id</code> is searched</li>
+<li>Otherwise Synchronizer search for a record matching values passed; the function execute a fallback search algorithm</li>
+<li>If record found, Synchronizer executes the Odoo function write</li>
+<li>If record not found, Synchronizer executes the Odoo function create and assign external 'id' to <code>PFX_id</code></li>
+</ul>
+</p><p align="justify">
+</p><p align="justify">
+<h4>trigger_one_recod</h4>
+</p><p align="justify">
+This function may be used if counterparty make available an interface to read record.
+This is automatic (with JSON-RPC and XML-RPC) for Odoo remote instances.
+Other software must publish the interchange interface
+like <a href="https://swagger.io/">Swagger</a>
+Swagger is avaialable on Odoo too, example <a href="https://github.com/ychirino/openapi">Swagger for Odoo</a>
+and <a href="https://github.com/OCA/rest-framework">Odoo REST framework</a>
+For furthermore info read <a href="https://www.odoo.com/it_IT/forum/assistenza-1/generate-swagger-yaml-from-route-methods-192911">Generate swagger yaml from route methods</a>
+</p></p>
+        </div>
+        <div class="oe_span6">
+            <p align="center">
+                <img src="/l10n_it/static/description/icon.png" alt="Italiano" style="width:16px;height:16px;"/>
+            </p>
+            <p class="oe_mt16" align="justify">Per comunicare con Odoo da remoto &#232; possibile usare 2 funzioni:
+<p align="justify">
+<ul>
+<li><code>ir.model.synchro.trigger_one_record(ext_model, prefix, ext_id)</code></li>
+<li><code>odoo_model.synchro(vals)</code></li>
+</ul>
+</p><p align="justify">
+Tutte le funzioni restituiscono l'ID del record trovato o creato.
+I valori negativi sono codici di errore.
+</p><p align="justify">
+<h4>synchro</h4>
+</p><p align="justify">
+La funzione synchro accetta un dizionario dati con valori di campo, come le funzioni
+RPC create e RPC write.
+</p><p align="justify">
+Ogni nome di campo pu&#242; essere:
+</p><p align="justify">
+<ul>
+<li><code>id</code> (intero): l'ID Odoo del record, fornito se si scrive uno specifico record esistente</li>
+<li><code>PFX_id</code> (intero): l'ID partner esterno del record (PFX &#232; il prefisso della dorsale)</li>
+<li>Nome esterno nel formato <code>"PFX:FIELD"</code> dove PFX &#232; il prefisso dorsale e <code>FIELD</code></li>
+</ul>
+&#232; il nome esterno che viene convertito nel nome e nel valore Odoo, in base alla configurazione della dorsale.
+</p><p align="justify">
+Comportamento del sincronizzatore:
+</p><p align="justify">
+<ul>
+<li>Se viene fornito il campo <code>PFX_id</code>, viene ricercato il record con <code>PFX_id</code></li>
+<li>Altrimenti, il sincronizzatore cerca un record corrispondente ai valori passati; la funzione esegue un algoritmo di ricerca di fallback</li>
+<li>Se il record &#232; stato trovato, Synchronizer esegue la funzione Odoo write</li>
+<li>Se il record non &#232; stato trovato, Synchronizer esegue la funzione Odoo create e assegna un 'id' esterno a <code>PFX_id</code></li>
+</ul>
+</p><p align="justify">
+<h4>trigger_one_recod</h4>
+</p><p align="justify">
+Questa funzione pu&#242; essere utilizzata se la controparte rende disponibile un'interfaccia per leggere i record.
+Questo &#232; automatico (con JSON-RPC e XML-RPC) per le istanze remote di Odoo. Altri software devono pubblicare
+l'interfaccia di interscambio come <a href="https://swagger.io/">Swagger</a>
+Swagger &#232; disponibile anche su Odoo, ad esempio <a href="https://github.com/ychirino/openapi">Swagger per Odoo</a>
+e <a href="https://github.com/OCA/rest-framework">Odoo REST framework</a>
+Per ulteriori informazioni leggere <a href="https://www.odoo.com/it_IT/forum/assistenza-1/genera-swagger-yaml-da-metodi-di-route-192911">Genera swagger yaml da metodi di route</a>
 </p></p>
         </div>
     </div>
@@ -125,11 +284,33 @@ Questo modulo pu&#242; essere usato per:
     <div class="oe_row oe_spaced">
         <h3 align="center" style="color:#162832;font-size: 26px;font-weight: 300;">ChangeLog History | Cronologia modifiche</h3>
         <div class="oe_span12">
-<h4>10.0.0.3.10 (2024-11-15)</h4>
+<h4>10.0.0.3.13 (2025-01-04)</h4>
 <p align="justify">
 <ul>
+<li>[IMP] New improvements of modules / Migliorie dei singoli moduli</li>
+<li>[QUA] Test coverage 80% (2330: 455+1875) [244 TestPoints] - quality rating 66 (target 100)</li>
+</ul>
+</p><p align="justify">
+<h4>10.0.0.3.12 (2025-01-03)</h4>
+</p><p align="justify">
+<ul>
+<li>[IMP] New improvements of modules / Migliorie dei singoli moduli</li>
+<li>[QUA] Test coverage 80% (2330: 455+1875) [244 TestPoints] - quality rating 66 (target 100)</li>
+</ul>
+</p><p align="justify">
+<h4>10.0.0.3.11 (2024-12-29)</h4>
+</p><p align="justify">
+<ul>
+<li>[IMP] Full refactoring: most functions moved in specific modules</li>
+<li>[IMP] New tests / Nuovi test</li>
+<li>[QUA] Test coverage 80% (2256: 453+1803) [244 TestPoints] - quality rating 66 (target 100)</li>
+</ul>
+</p><p align="justify">
+<h4>10.0.0.3.10 (2024-11-16)</h4>
+</p><p align="justify">
+<ul>
 <li>[IMP] Minor aesthetic update</li>
-<li>[QUA] Test coverage 28% (3933: 2850+1083) [0 TestPoints] - quality rating 17 (target 100)</li>
+<li>[QUA] Test coverage 28% (3919: 2836+1083) [20 TestPoints] - quality rating 18 (target 100)</li>
 </ul>
 </p><p align="justify">
 <h4>10.0.0.3.9 (2024-08-10)</h4>
@@ -207,13 +388,6 @@ Questo modulo pu&#242; essere usato per:
 <li>[IMP] Pull records sto last remote pulled record id</li>
 <li>[FIX] Excel backend with connected test</li>
 </ul>
-</p><p align="justify">
-<h4>10.0.0.3.1 (2023-02-26)</h4>
-</p><p align="justify">
-<ul>
-<li>[FIX] Ignore Odoo counterpart fields do not exist in local</li>
-<li>[FIX] Wrong error messages</li>
-</ul>
 </p>
         </div>
     </div>
@@ -242,6 +416,6 @@ Questo modulo pu&#242; essere usato per:
     </div>
     <div class="oe_row oe_spaced">
         <p>This module is part of <a href="https://github.com/zeroincombenze/connector">connector</a> project.</p>
-        <p>Published information on | Informazioni pubblicate: 2024-11-15</p>
+        <p>Published information on | Informazioni pubblicate: 2025-01-04</p>
     </div>
 </section>

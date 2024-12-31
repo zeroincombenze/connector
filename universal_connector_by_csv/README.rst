@@ -1,8 +1,8 @@
 =================================================================================
-|icon| Universal Connector protocol csv/Connettore universale con csv 12.0.0.3.11
+|icon| Universal Connector protocol csv/Connettore universale con csv 12.0.0.3.13
 =================================================================================
 
-**Add import data from csv to Universal Connector**
+**Add importing data from csv for Universal Connector**
 
 .. |icon| image:: https://raw.githubusercontent.com/zeroincombenze/connector/12.0/universal_connector_by_csv/static/description/icon.png
 
@@ -14,51 +14,32 @@
 Overview | Panoramica
 =====================
 
-|en| This module makes available some functions to synchronize external data
-with Odoo data.
+|en| This module enable the importing from csv files. The csv files must be located in
+directory declared in backend configuration
 
-Characteristics
-~~~~~~~~~~~~~~~
+The first line of csv file must contains the field labels. User can configure the
+mapping of the field labels with internal Odoo fields; user can declare conversion
+function for every field.
 
-* Multi-channels interchange
-* JSON, XMLRPC and CSV files protocols
-* Push and/or Pull logic
-* Many2one, One2Many and Many2Many managed with external references
-* Automatic field value translation
-* Odoo version from 6.1 to 12.0 field name and values automatic translation
-* Anti-recurse checks
-* Two phases create in order to create hierarchical record structure
-* Dynamic translation database
+If user declare counterpart Odoo version, after connection, the mapping between
+current Odoo version e declared Odoo version will be loaded.
 
-This module can be used for:
-
-* Upgrade Odoo DB from a version to another version (even beck upgrade)
-* Import data from files without duplicating records
-* Connect Odoo with other software (current version supports until 4 counterparts)
-* Populate Odoo DB in the first installation migrated from another software
+If csv file contains the column "id", the value is used to avoid data replication.
+Without this column, the line number is used as "id".
 
 
-|it| Questo modulo rende disponibile alcune funzioni per sincronizzare con l'esterno.
+|it| Questo modulo abilita l'importazione dati da file csv. I file csv devono essere
+presenti in una cartella dichiarata nella configurazione della dorsale.
 
-Caratteristiche
-~~~~~~~~~~~~~~~
+La prima riga del file csv deve contenere le etichette di campo. L'utente può associare
+l'etichetta del campo ad un campo interno di Odoo; l'utente può anche dichiarare una
+funzione di conversione da eseguire.
 
-* Scambio multi-canale
-* Protocolli JSON, XMLRPC e file CSV
-* Logica Push o Pull
-* Many2one, One2Many e Many2Many gestiti con referenze esterne
-* Traduzione automatica dei campi
-* Traduzione automatica dei campi e dei valori di Odoo dalla 6.1 alla 12.0
-* Controllo anti-ricorsione
-* Creazione a due fasi
-* Traduttore dinamico
+Se l'utente dichiara una versione di Odoo di controparte, l'associazione tra i campi
+della version corrente e quella dichiarata verrò caricata.
 
-Questo modulo può essere usato per:
-
-* Aggiornare database di Odoo tra versioni (anche all'indietro)
-* Importare dati da file senza duplicazioni
-* Connettere Odoo con altri software (sino a 4 contemporaneamente)
-* Popolare il DB di Odoo nella prima installazione quando migrazione da altro software
+Se il file csv contiene la colonna "id", il valore di questa colonna sarà usato per
+evitare duplicazioni di dati. Senza questa colonna sarà usato il numero di riga.
 
 
 |thumbnail|
@@ -69,11 +50,19 @@ Questo modulo può essere usato per:
 Configuration | Configurazione
 ------------------------------
 
-☰ Settings > Technical > Synchronizarion Backend
+☰ Settings > Activate the developer mode
 
-Set backend parameters to connect with remote counterparty and then click on
-button [Check Connection].
-If Odoo can connect with remote counterparty, backend state is set to checked.
+☰ Settings > Technical > Synchronization Backend
+
+#. Set protocol to "csv"
+#. Set "localhost" for Host Name
+#. Declare identity (use Odoo if you want auto-configuration)
+#. Declare counterpart Odoo version, if needed
+#. Choose prefix for this backend
+#. Declare exchange directory
+#. Click on button [Check Connection]
+
+If Odoo can connect with remote counterparty, backend state is set to "Ready".
 
 
 
@@ -172,12 +161,23 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 ChangeLog History | Cronologia modifiche
 ----------------------------------------
 
+12.0.0.3.13 (2025-01-04)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [QUA] Test coverage 88% (104: 12+92) [190 TestPoints] - quality rating 346 (target 100)
+
+12.0.0.3.12 (2025-01-03)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] Dependign on version check / Controllo versione dipendenze
+* [QUA] Test coverage 88% (104: 12+92) [190 TestPoints] - quality rating 346 (target 100)
+
 12.0.0.3.11 (2024-12-29)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 * [IMP] New API get_record_list
 * [IMP] Minor aesthetic update
-* [QUA] Test coverage 90% (90: 9+81) [312 TestPoints] - quality rating 609 (target 100)
+* [QUA] Test coverage 93% (90: 6+84) [190 TestPoints] - quality rating 394 (target 100)
 
 12.0.0.3.10 (2024-12-17)
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -235,7 +235,7 @@ La distribuzione `Zeroincombenze® <https://www.zeroincombenze.it/>`__ è proget
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2024-12-29
+Last Update / Ultimo aggiornamento: 2025-01-05
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status

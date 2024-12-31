@@ -1,11 +1,24 @@
+☰ Configurazione > Attivare la modalità sviluppatore
+
 ☰ Configurazione > Funzioni tecniche > Dorsale di sincronizzazione
 
-Impostare i parametri di sincronizzazione della dorsale e poi fare click sul
-bottone [Check Connection].
-Se Odoo riesce a connettersi con la controparte remota, lo stato della dorsale è
-modificato in "Pronto".
+#. Impostare il protocollo "By xmlrpc over https" o "By xmlrpc over http" or altro
+#. Impostare nome host, se necessario (per xmlrpc over http impostare endpoint)
+#. Impostare porta di comunicazione, se necessario
+#. Dichiarare nome database remoto, se necessario
+#. Dichiarare nome utente remoto e password (la password non è visibile)
+#. Per alcuni protocolli è richiesta una Client Key al posto della password
+#. Dichiarare identità
+#. Dichiarare la versione remota, se necessario
+#. Scegliere il prefisso per questa dorsale
+#. Dichiarare la lingua usata da utente remoto
+#. Impostare Endpoint, se necessario (richiesto per xmlrpc over http)
+#. Fare click su bottone [Verificare Connessione]
 
-I parametri dipendono dal tipo di protocollo utilizzato e dall'indenità remota.
+Se Odoo riesce a connettersi con controparte, lo stato della dorsale diventa "Pronto".
+
+I parametri dipendono dal tipo di protocollo utilizzato e dall'indenità remota. Qui a
+sequito una breve lista dei più comuni.
 
 **xmlrpc over http/https**
 
@@ -21,31 +34,16 @@ essere "https://admin@localhost:8069/xmlrpc/common".
 
 **http/https**
 
-Questo protocollo è una variante di XML-RPC over http/https. Vine fornito dal modulo
-*universal_connector_by_http*
-attraverso `python requests <https://requests.readthedocs.io/en/latest/>`__,
-quindi il package python `PYPI requests <https://pypi.org/project/requests/>`__ deve
-essere installato.
-
-Usare questo protocollo per identità diverse da Odoo.
+Leggere info dal modulo *universal_connector_by_http*
 
 **jsonrpc**
 
-Questo protocollo, chiamato JSON-RPC, è simile a XML-RPC ma usa la rappresentazione
-JSON invece di XML ed è progettato specificatamente per istanze remote di Odoo.
-Viene fornito dal modulo *universal_connector_by_json*
-attraverso `odoorpc <https://pythonhosted.org/OdooRPC/>`__,
-quindi il package python `PYPI odoorpc <https://pypi.org/project/OdooRPC/>`__ deve
-essere installato.
+Leggere info dal modulo *universal_connector_by_json*
 
 **xmlrpc**
 
-Questo protocollo è una variante di XML-RPC over http/https ed è progettato
-specificatamente per istanze remote di Odoo. Viene fornito dal
-modulo *universal_connector_by_xmlrpc*
-attraverso `oerplib <https://pythonhosted.org/OERPLib/>`__,
-quindi il package python `PYPI oerplib3 <https://pypi.org/project/oerplib3/>`__ deve
-essere installato.
+Leggere info dal modulo *universal_connector_by_xmlrpc*
 
-Usare questo protocollo per connettere vecchie versioni di Odoo (precedenti alla 10.0).
+**csv**
 
+Leggere info dal modulo *universal_connector_by_jcsv*

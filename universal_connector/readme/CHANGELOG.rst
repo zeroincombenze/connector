@@ -1,8 +1,27 @@
-12.0.0.3.10 (2024-11-15)
+12.0.0.3.13 (2025-01-04)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] New improvements of modules / Migliorie dei singoli moduli
+* [QUA] Test coverage 80% (2330: 455+1875) [244 TestPoints] - quality rating 66 (target 100)
+
+12.0.0.3.12 (2025-01-03)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] New improvements of modules / Migliorie dei singoli moduli
+* [QUA] Test coverage 80% (2330: 455+1875) [244 TestPoints] - quality rating 66 (target 100)
+
+12.0.0.3.11 (2024-12-29)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] Full refactoring: most functions moved in specific modules
+* [IMP] New tests / Nuovi test
+* [QUA] Test coverage 80% (2256: 453+1803) [244 TestPoints] - quality rating 66 (target 100)
+
+12.0.0.3.10 (2024-11-16)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 * [IMP] Minor aesthetic update
-* [QUA] Test coverage 28% (3933: 2850+1083) [0 TestPoints] - quality rating 17 (target 100)
+* [QUA] Test coverage 28% (3919: 2836+1083) [20 TestPoints] - quality rating 18 (target 100)
 
 12.0.0.3.9 (2024-08-10)
 ~~~~~~~~~~~~~~~~~~~~~~~

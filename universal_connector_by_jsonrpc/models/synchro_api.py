@@ -1,5 +1,5 @@
 #
-# Copyright 2018-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
+# Copyright 2018-25 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
 #
 # Contributions to development, thanks to:
 # * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
@@ -49,6 +49,7 @@ class SynchroApi(models.Model):
             cnx = False
         session["cnx_lgi"] = cnx
         session["cnx_data"] = cnx
+        session["server_version"] = cnx.version if cnx else False
         return session
 
     def odoo_jsonrpc_login(self, cnx, database, login, password):

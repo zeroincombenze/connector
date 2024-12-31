@@ -1,5 +1,5 @@
 #
-# Copyright 2018-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
+# Copyright 2018-25 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
 #
 # Contributions to development, thanks to:
 # * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
@@ -29,20 +29,6 @@ from .testenv import MainTest as SingleTransactionCase
 _logger = logging.getLogger(__name__)
 
 TEST_SYNCHRO_CHANNEL = {
-    "z0bug.localhost-odoo10": {
-        "name": "Test Odoo 10.0",
-        "hostname": "localhost",
-        "identity": "odoo",
-        "database": "oca10",
-        "odoo_version": "10.0",
-        "method": "xmlrpc/http",
-        "port": 8270,
-        "login": "admin",
-        "password": "admin",
-        "counterpart_url": "http://admin@localhost:8270/xmlrpc/2/common",
-        "counterpart_data_url": "http://admin@localhost:8270/xmlrpc/2/object",
-        "prefix": "oe10",
-    },
     "z0bug.localhost-odoo12": {
         "name": "Test Odoo 12.0",
         "hostname": "localhost",
@@ -56,22 +42,22 @@ TEST_SYNCHRO_CHANNEL = {
         "counterpart_url": "http://admin@localhost:8272/xmlrpc/2/common",
         "counterpart_data_url": "http://admin@localhost:8272/xmlrpc/2/object",
         "prefix": "oe12",
+        "sequence": 12,
     },
-    "z0bug.localhost-odoo7": {
-        "name": "Test Odoo 7.0",
+    "z0bug.localhost-odoo10": {
+        "name": "Test Odoo 10.0",
         "hostname": "localhost",
         "identity": "odoo",
-        "database": "demo7",
-        "odoo_version": "7.0",
+        "database": "oca10",
+        "odoo_version": "10.0",
         "method": "xmlrpc/http",
-        "port": 8167,
+        "port": 8270,
         "login": "admin",
         "password": "admin",
-        "lgi_path": "/xmlrpc/common",
-        "exchange_path": "/xmlrpc/object",
-        "counterpart_url": "http://admin@localhost:8167/xmlrpc/common",
-        "counterpart_data_url": "http://admin@localhost:8167/xmlrpc/object",
-        "prefix": "oe7",
+        "counterpart_url": "http://admin@localhost:8270/xmlrpc/2/common",
+        "counterpart_data_url": "http://admin@localhost:8270/xmlrpc/2/object",
+        "prefix": "oe10",
+        "sequence": 14,
     },
     "z0bug.localhost-odoo8": {
         "name": "Test Odoo 8.0",
@@ -88,6 +74,24 @@ TEST_SYNCHRO_CHANNEL = {
         "counterpart_url": "http://admin@localhost:8168/xmlrpc/common",
         "counterpart_data_url": "http://admin@localhost:8168/xmlrpc/object",
         "prefix": "oe8",
+        "sequence": 18,
+    },
+    "z0bug.localhost-odoo7": {
+        "name": "Test Odoo 7.0",
+        "hostname": "localhost",
+        "identity": "odoo",
+        "database": "demo7",
+        "odoo_version": "7.0",
+        "method": "xmlrpc/http",
+        "port": 8167,
+        "login": "admin",
+        "password": "admin",
+        "lgi_path": "/xmlrpc/common",
+        "exchange_path": "/xmlrpc/object",
+        "counterpart_url": "http://admin@localhost:8167/xmlrpc/common",
+        "counterpart_data_url": "http://admin@localhost:8167/xmlrpc/object",
+        "prefix": "oe7",
+        "sequence": 20,
     },
 }
 TEST_SETUP_LIST = [
@@ -107,6 +111,7 @@ class MyTest(SingleTransactionCase):
         self.env["synchro.channel"].search([]).write(
             {"tracelevel": str(self.debug_level + 1), "deferred_payload": "0"}
         )
+        self.backend_full_checked = False
 
     def tearDown(self):
         super().tearDown()
@@ -310,12 +315,18 @@ class MyTest(SingleTransactionCase):
 
     def _test_check_connection(self, xref):
         backend = self.resource_browse(xref)
+        if self.backend_full_checked:
+            for mapper in self.env["synchro.channel.model.field"].search(
+                [("name", "=", "state_id"), ("protect_update", "!=", "3")]
+            ):
+                mapper.write({"protect_update": "3"})
         self.resource_edit(
             backend,
             actions="button_check_connection",
         )
         self.assertEqual(backend.state, "ready")
         self.assertEqual(backend.pypi_sign, "xmlrpc")
+        self.backend_full_checked = True
 
     def _test_reset_connection(self, xref):
         backend = self.resource_browse(xref)

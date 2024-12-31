@@ -1,5 +1,5 @@
 #
-# Copyright 2018-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
+# Copyright 2018-25 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
 #
 # Contributions to development, thanks to:
 # * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
@@ -68,7 +68,9 @@ class IrModelSynchroApply(models.Model):
             del vals["lastname"]
         if "firstname" in vals and "lastname" in vals:
             if vals["firstname"] or vals["lastname"]:
-                if self.env.user.company_id.partner_id.splitmode.startswith("F"):
+                if hasattr(
+                    self.env.user.company_id.partner_id, "splitmode"
+                ) and self.env.user.company_id.partner_id.splitmode.startswith("F"):
                     vals["name"] = (
                         (vals.get("firstname", "") + " " + vals.get("lastname", ""))
                         .replace("  ", " ")

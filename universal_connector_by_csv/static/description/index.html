@@ -6,13 +6,13 @@
                 <img src="/l10n_uk/static/description/icon.png" alt="English" style="width:16px;height:16px;"/>
                 <img src="/l10n_us/static/description/icon.png" alt="English" style="width:16px;height:16px;"/>
             </p>
-            <h2 class="oe_slogan" style="color:#162832;">Add import data from csv to Universal Connector</h2>
+            <h2 class="oe_slogan" style="color:#162832;">Add importing data from csv for Universal Connector</h2>
         </div>
         <div class="oe_span6">
             <p align="center">
                 <img src="/l10n_it/static/description/icon.png" alt="Italiano" style="width:16px;height:16px;"/>
             </p>
-            <h2 class="oe_slogan" style="color:#162832;">Aggiunge importazione da csv a connettore universale</h2>
+            <h2 class="oe_slogan" style="color:#162832;">Aggiunge l'importazione da csv per il connettore universale</h2>
         </div>
         <div class="oe_demo oe_screenshot">
             <img src="description.png" alt="Universal Connector protocol csv" style="width:98%;max-width:1140px"/>
@@ -27,61 +27,36 @@
                 <img src="/l10n_uk/static/description/icon.png" alt="English" style="width:16px;height:16px;"/>
                 <img src="/l10n_us/static/description/icon.png" alt="English" style="width:16px;height:16px;"/>
             </p>
-            <p class="oe_mt16" align="justify">This module makes available some functions to synchronize external data
-with Odoo data.
+            <p class="oe_mt16" align="justify">This module enable the importing from csv files. The csv files must be located in
+directory declared in backend configuration
 <p align="justify">
-<h4>Characteristics</h4>
+The first line of csv file must contains the field labels. User can configure the
+mapping of the field labels with internal Odoo fields; user can declare conversion
+function for every field.
 </p><p align="justify">
-<ul>
-<li>Multi-channels interchange</li>
-<li>JSON, XMLRPC and CSV files protocols</li>
-<li>Push and/or Pull logic</li>
-<li>Many2one, One2Many and Many2Many managed with external references</li>
-<li>Automatic field value translation</li>
-<li>Odoo version from 6.1 to 12.0 field name and values automatic translation</li>
-<li>Anti-recurse checks</li>
-<li>Two phases create in order to create hierarchical record structure</li>
-<li>Dynamic translation database</li>
-</ul>
+If user declare counterpart Odoo version, after connection, the mapping between
+current Odoo version e declared Odoo version will be loaded.
 </p><p align="justify">
-This module can be used for:
-</p><p align="justify">
-<ul>
-<li>Upgrade Odoo DB from a version to another version (even beck upgrade)</li>
-<li>Import data from files without duplicating records</li>
-<li>Connect Odoo with other software (current version supports until 4 counterparts)</li>
-<li>Populate Odoo DB in the first installation migrated from another software</li>
-</ul>
+If csv file contains the column "id", the value is used to avoid data replication.
+Without this column, the line number is used as "id".
 </p></p>
         </div>
         <div class="oe_span6">
             <p align="center">
                 <img src="/l10n_it/static/description/icon.png" alt="Italiano" style="width:16px;height:16px;"/>
             </p>
-            <p class="oe_mt16" align="justify">Questo modulo rende disponibile alcune funzioni per sincronizzare con l'esterno.
+            <p class="oe_mt16" align="justify">Questo modulo abilita l'importazione dati da file csv. I file csv devono essere
+presenti in una cartella dichiarata nella configurazione della dorsale.
 <p align="justify">
-<h4>Caratteristiche</h4>
+La prima riga del file csv deve contenere le etichette di campo. L'utente pu&#242; associare
+l'etichetta del campo ad un campo interno di Odoo; l'utente pu&#242; anche dichiarare una
+funzione di conversione da eseguire.
 </p><p align="justify">
-<ul>
-<li>Scambio multi-canale</li>
-<li>Protocolli JSON, XMLRPC e file CSV</li>
-<li>Logica Push o Pull</li>
-<li>Many2one, One2Many e Many2Many gestiti con referenze esterne</li>
-<li>Traduzione automatica dei campi</li>
-<li>Traduzione automatica dei campi e dei valori di Odoo dalla 6.1 alla 12.0</li>
-<li>Controllo anti-ricorsione</li>
-<li>Creazione a due fasi</li>
-<li>Traduttore dinamico</li>
-</ul>
+Se l'utente dichiara una versione di Odoo di controparte, l'associazione tra i campi
+della version corrente e quella dichiarata verr&#242; caricata.
 </p><p align="justify">
-Questo modulo pu&#242; essere usato per:
-</p><p align="justify">
-<ul>
-<li>Aggiornare database di Odoo tra versioni (anche all'indietro)</li>
-<li>Importare dati da file senza duplicazioni</li>
-<li>Connettere Odoo con altri software (sino a 4 contemporaneamente)</li>
-<li>Popolare il DB di Odoo nella prima installazione quando migrazione da altro software</li>
-</ul>
+Se il file csv contiene la colonna "id", il valore di questa colonna sar&#224; usato per
+evitare duplicazioni di dati. Senza questa colonna sar&#224; usato il numero di riga.
 </p></p>
         </div>
     </div>
@@ -95,23 +70,41 @@ Questo modulo pu&#242; essere usato per:
                 <img src="/l10n_uk/static/description/icon.png" alt="English" style="width:16px;height:16px;"/>
                 <img src="/l10n_us/static/description/icon.png" alt="English" style="width:16px;height:16px;"/>
             </p>
-            <p class="oe_mt16" align="justify"><span class="fa fa-th-large" style="color:#7C7BAD"/> Settings &#187; Technical &#187; Synchronizarion Backend
+            <p class="oe_mt16" align="justify"><span class="fa fa-th-large" style="color:#7C7BAD"/> Settings &#187; Activate the developer mode
 <p align="justify">
-Set backend parameters to connect with remote counterparty and then click on
-button <span style="color:white;background-color:#7C7BAD">Check&#160;Connection</span>.
-If Odoo can connect with remote counterparty, backend state is set to checked.
+<span class="fa fa-th-large" style="color:#7C7BAD"/> Settings &#187; Technical &#187; Synchronization Backend
+</p><p align="justify">
+<ol>
+<li> Set protocol to "csv"</li>
+<li> Set "localhost" for Host Name</li>
+<li> Declare identity (use Odoo if you want auto-configuration)</li>
+<li> Declare counterpart Odoo version, if needed</li>
+<li> Choose prefix for this backend</li>
+<li> Declare exchange directory</li>
+<li> Click on button <span style="color:white;background-color:#7C7BAD">Check&#160;Connection</span></li>
+</ol>
+</p><p align="justify">
+If Odoo can connect with remote counterparty, backend state is set to "Ready".
 </p></p>
         </div>
         <div class="oe_span6">
             <p align="center">
                 <img src="/l10n_it/static/description/icon.png" alt="Italiano" style="width:16px;height:16px;"/>
             </p>
-            <p class="oe_mt16" align="justify"><span class="fa fa-th-large" style="color:#7C7BAD"/> Configurazione &#187; Funzioni tecniche &#187; Dorsale di sincronizzazione
+            <p class="oe_mt16" align="justify"><span class="fa fa-th-large" style="color:#7C7BAD"/> Configurazione &#187; Attivare la modalit&#224; sviluppatore
 <p align="justify">
-Impostare i parametri di sincronizzazione della dorsale e poi fare click sul
-bottone <span style="color:white;background-color:#7C7BAD">Check&#160;Connection</span>.
-Se Odoo riesce a connettersi con la controparte remote, lo stato della dorsale &#232;
-modificato in checked.
+<span class="fa fa-th-large" style="color:#7C7BAD"/> Configurazione &#187; Funzioni tecniche &#187; Dorsale di sincronizzazione
+</p><p align="justify">
+<ol>
+<li> Impostare protocollo "csv"</li>
+<li> Impostare "localhost" per Nome Host</li>
+<li> Dichiarare identit&#224; (usare Odoo per auto-configurazione)</li>
+<li> Dichiarare versione di Odoo di controparte, se necessario</li>
+<li> Dichiarare la cartella di scambio</li>
+<li> Fare click su bottone <span style="color:white;background-color:#7C7BAD">Verificare&#160;Connessione</span></li>
+</ol>
+</p><p align="justify">
+Se Odoo riesce a connettersi con controparte, lo stato della dorsale diventa "Pronto".
 </p></p>
         </div>
     </div>
@@ -121,12 +114,25 @@ modificato in checked.
     <div class="oe_row oe_spaced">
         <h3 align="center" style="color:#162832;font-size: 26px;font-weight: 300;">ChangeLog History | Cronologia modifiche</h3>
         <div class="oe_span12">
-<h4>12.0.0.3.11 (2024-12-29)</h4>
+<h4>12.0.0.3.13 (2025-01-04)</h4>
 <p align="justify">
+<ul>
+<li>[QUA] Test coverage 88% (104: 12+92) [190 TestPoints] - quality rating 346 (target 100)</li>
+</ul>
+</p><p align="justify">
+<h4>12.0.0.3.12 (2025-01-03)</h4>
+</p><p align="justify">
+<ul>
+<li>[IMP] Dependign on version check / Controllo versione dipendenze</li>
+<li>[QUA] Test coverage 88% (104: 12+92) [190 TestPoints] - quality rating 346 (target 100)</li>
+</ul>
+</p><p align="justify">
+<h4>12.0.0.3.11 (2024-12-29)</h4>
+</p><p align="justify">
 <ul>
 <li>[IMP] New API get_record_list</li>
 <li>[IMP] Minor aesthetic update</li>
-<li>[QUA] Test coverage 90% (90: 9+81) [312 TestPoints] - quality rating 609 (target 100)</li>
+<li>[QUA] Test coverage 93% (90: 6+84) [190 TestPoints] - quality rating 394 (target 100)</li>
 </ul>
 </p><p align="justify">
 <h4>12.0.0.3.10 (2024-12-17)</h4>
@@ -164,6 +170,6 @@ modificato in checked.
     </div>
     <div class="oe_row oe_spaced">
         <p>This module is part of <a href="https://github.com/zeroincombenze/connector">connector</a> project.</p>
-        <p>Published information on | Informazioni pubblicate: 2024-12-29</p>
+        <p>Published information on | Informazioni pubblicate: 2025-01-05</p>
     </div>
 </section>

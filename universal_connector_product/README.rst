@@ -1,6 +1,6 @@
-==============================================================================================
-|icon| Universal Connector: product managemente/Prodotti per connettore universale 12.0.0.3.11
-==============================================================================================
+=============================================================================================
+|icon| Universal Connector: product management/Prodotti per connettore universale 12.0.0.3.13
+=============================================================================================
 
 **Add product models to Universal Connector**
 
@@ -17,9 +17,23 @@ Overview | Panoramica
 |en| This module makes available product management in order to download or upload
 product.template, product.product and all product models with counterparty.
 
+Synchronizable models are:
+
+* Product (product.template and product.product)
+* UoM (product.uom/uom.uom and product.uom.categ/uom.category)
+* Category (product.category)
+* Pricelist (product.pricelist)
+
 
 |it| Questo modulo permette di sincronizzare product.template, product.product e tutte gli
 altri modelli relativi al prodotto.
+
+I modelli sincronizzabili sono:
+
+* Prodotto (product.template and product.product)
+* UM (product.uom/uom.uom and product.uom.categ/uom.category)
+* Categoria (product.category)
+* Listino (product.pricelist)
 
 
 |thumbnail|
@@ -30,11 +44,24 @@ altri modelli relativi al prodotto.
 Configuration | Configurazione
 ------------------------------
 
-☰ Settings > Technical > Synchronizarion Backend
+☰ Settings > Activate the developer mode
 
-Set backend parameters to connect with remote counterparty and then click on
-button [Check Connection].
-If Odoo can connect with remote counterparty, backend state is set to checked.
+☰ Settings > Technical > Synchronization Backend
+
+#. Set protocol to "By xmlrpc over https" or "By xmlrpc over http" or other
+#. Set Host Name, if needed (for xmlrpc over http set endpoint)
+#. Set communication port, if needed
+#. Declare remote database name. if needed
+#. Declare remote user and password (password is not visible)
+#. Some protocols require Client Key rather than password
+#. Declare identity
+#. Declare remote version, if needed
+#. Choose prefix for this backend
+#. Declare remote user language
+#. Set Endpoint, if needed (required for xmlrpc over http)
+#. Click on button [Check Connection]
+
+If Odoo can connect with remote counterparty, backend state is set to "Ready".
 
 
 
@@ -133,11 +160,22 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 ChangeLog History | Cronologia modifiche
 ----------------------------------------
 
+12.0.0.3.13 (2025-01-04)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [QUA] Test coverage 60% (139: 56+83) [28 TestPoints] - quality rating 69 (target 100)
+
+12.0.0.3.12 (2025-01-03)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] Dependign on version check / Controllo versione dipendenze
+* [QUA] Test coverage 60% (139: 56+83) [28 TestPoints] - quality rating 69 (target 100)
+
 12.0.0.3.11 (2024-12-29)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 * [IMP] Splited from universal_connector
-* [QUA] Test coverage 59% (136: 56+80) [52 TestPoints] - quality rating 97 (target 100)
+* [QUA] Test coverage 59% (136: 56+80) [28 TestPoints] - quality rating 69 (target 100)
 
 
 
@@ -188,7 +226,7 @@ La distribuzione `Zeroincombenze® <https://www.zeroincombenze.it/>`__ è proget
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2024-12-29
+Last Update / Ultimo aggiornamento: 2025-01-05
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status

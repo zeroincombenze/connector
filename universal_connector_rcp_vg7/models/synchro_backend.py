@@ -1,5 +1,5 @@
 #
-# Copyright 2018-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
+# Copyright 2018-25 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
 #
 # Contributions to development, thanks to:
 # * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
@@ -27,3 +27,10 @@ class SynchroChannel(models.Model):
             ("vg7", "vg7"),
         ],
     )
+
+    def selection_for_version(self):
+        res = super().selection_for_version()
+        return res + [
+            ("1.0", "VG7 v1"),
+            ("2.0", "VG/ v2"),
+        ]

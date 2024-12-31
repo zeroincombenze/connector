@@ -104,7 +104,7 @@ MODEL_KEYS = {
     "account.tax": {"code": "description"},
     "product.product": {"code": "default_code"},
     "product.template": {"code": "default_code"},
-    "uom.uom": {"code": "name"},
+    "product.uom": {"code": "name"},
     "purchase.order": {"code": "name"},
     "res.company": {"code": "vat"},
     "res.country": {},
@@ -219,7 +219,7 @@ TNL_VG7_TABLES = {
     "italy.conai.partner.category": "esenzione_conai",
     "product.product": "products",
     "product.template": "",
-    "uom.uom": "ums",
+    "product.uom": "ums",
     "purchase.order": "purchase_orders",
     "purchase.order.line": "",
     "res.company": "",
@@ -288,7 +288,7 @@ TNL_VG7_DICT = {
         "code": "default_code",
         "description": "name",
     },
-    "uom.uom": {"code": "name"},
+    "product.uom": {"code": "name"},
     "res.country": {"description": ["name", "nocase"]},
     "res.country.state": {"description": ["name", "nocase"]},
     "res.partner": {
@@ -925,9 +925,9 @@ class ExtTestEnv(object):
             clodoo.executeL8(
                 self.ctx, model, "button_check_connection", backend.id)
             backend = clodoo.browseL8(self.ctx, model, backend.id)
-            if backend.state != "checked":
+            if backend.state != "ready":
                 raise IOError(
-                    "!!Backend %s[%s] not checked!" % (backend.name, backend.id))
+                    "!!Backend %s[%s] not ready!" % (backend.name, backend.id))
 
     def assure_lang(self):
         model = "res.lang"
@@ -1514,7 +1514,7 @@ class ExtTestEnv(object):
                            test_rec[loc_name])
                     )
                 self.ctr += 1
-                checked = True
+                ready = True
 
         why, test_rec = self.extract_why(test_rec)
         self.write_log(
@@ -1537,7 +1537,7 @@ class ExtTestEnv(object):
         child_field = (MODEL_WITH_CHILD[model]["child_field"]
                        if model in MODEL_WITH_CHILD else "")
         loc_rec = self.resource_browse(model, loc_id, lang=lang, quiet=True)
-        check_name = checked = False
+        check_name = ready = False
         for field in [x for x in dir(loc_rec)
                       if (not x.startswith("_") and x != child_field)]:
             loc_name = self.get_loc_name(model, field, identity)[0]
@@ -1549,12 +1549,12 @@ class ExtTestEnv(object):
         if check_name:
             loc_name = "name"
             check_1_field()
-        if not checked:
+        if not ready:
             self.write_log("No field matched for %s[%s]" % (model, loc_id))
         if child_field:
             parent_field = MODEL_WITH_CHILD[model]["parent_field"]
             child_key = MODEL_WITH_CHILD[model]["child_key"]
-            checked = False
+            ready = False
             for child_rec in sorted([x for x in loc_rec[child_field]],
                                     key=lambda x: getattr(x, child_key)):
                 for child_test_rec in child_test_recs:
@@ -1566,7 +1566,7 @@ class ExtTestEnv(object):
                             or child_rec[child_key] != child_test_rec[child_key]
                     ):
                         continue
-                    checked = True
+                    ready = True
                     child_why, child_test_rec = self.extract_why(child_test_rec)
                     self.write_log(
                         "check_record(%s, %s, %s/%s, %s)  ##<%s>"
@@ -1616,7 +1616,7 @@ class ExtTestEnv(object):
                         self.write_log(
                             "No field matched for %s[%s/%s]"
                             % (child_model,loc_id,  child_test_rec[child_key]))
-            if not checked:
+            if not ready:
                 self.write_log("No match child record %s[%s]" % (child_model, loc_id))
 
     def test_function_synchro(self, model, vals, identity=None, ext_id=None):
@@ -1953,7 +1953,7 @@ def main(cli_args=[]):
         "res.country.state",
         "res.partner",
         "res.partner.supplier",
-        "uom.uom",
+        "product.uom",
         "product.product",
         "account.tax",
         "account.payment.term",
@@ -1978,7 +1978,7 @@ def main(cli_args=[]):
             "res.partner",
             "res.company",
             "res.users",
-            "uom.uom",
+            "product.uom",
             "product.template",
             "product.product",
             "account.tax",

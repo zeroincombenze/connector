@@ -1,5 +1,5 @@
 #
-# Copyright 2018-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
+# Copyright 2018-25 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
 #
 # Contributions to development, thanks to:
 # * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
@@ -76,7 +76,7 @@ class SynchroApi(models.Model):
                         invoice_vals[ext_key_id] = values[ext_key_id]
                     invoice_vals[":type"] = "invoice"
                     Cache.que_push(
-                        backend, "push", ext_model, invoice_vals, 2, {}, prio=3
+                        backend, "pull", ext_model, invoice_vals, 2, {}, prio=3
                     )
             if row_shipping:
                 shipping_vals = {}
@@ -91,7 +91,7 @@ class SynchroApi(models.Model):
                     shipping_vals[":type"] = "delivery"
                     Cache.que_push(
                         backend,
-                        "push",
+                        "pull",
                         "customers_shipping_addresses",
                         shipping_vals,
                         2,

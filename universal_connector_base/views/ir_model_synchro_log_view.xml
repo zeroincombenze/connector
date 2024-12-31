@@ -11,9 +11,9 @@
                         <field name="timestamp"/>
                         <field name="loglevel"/>
                         <field name="backend_id"/>
-                        <field name="model"/>
+                        <field name="res_model"/>
                         <field name="res_id"/>
-                        <field name="reference" widget="reference" string="Record" attrs="{'invisible': [('model', '=', 'synchro.channel')]}"/>
+                        <field name="reference" widget="reference" string="Record" attrs="{'invisible': [('res_model', '=', 'synchro.channel')]}"/>
                         <field name="errcode"/>
                         <field name="errmsg"/>
                         <field name="values"/>
@@ -31,7 +31,7 @@
                 <field name="timestamp"/>
                 <field name="loglevel"/>
                 <field name="backend_id"/>
-                <field name="model"/>
+                <field name="res_model"/>
                 <field name="res_id"/>
                 <field name="errcode"/>
                 <field name="errmsg"/>
@@ -45,6 +45,6 @@
         <field name="view_id" ref="view_synchro_log_tree"/>
     </record>
 
-    <menuitem id="menu_synchro_log" name="Synchonization Log" action="action_synchro_log" parent="menu_universal_connector" groups="base.group_no_one"/>
+    <menuitem id="menu_synchro_log" name="Synchonization Log" action="action_synchro_log" parent="menu_universal_connector" groups="base.group_no_one" sequence="56"/>
 
 </odoo>

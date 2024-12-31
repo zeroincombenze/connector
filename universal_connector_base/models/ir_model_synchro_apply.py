@@ -1,5 +1,5 @@
 #
-# Copyright 2018-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
+# Copyright 2018-25 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
 #
 # Contributions to development, thanks to:
 # * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
@@ -19,7 +19,7 @@ _logger = logging.getLogger(__name__)
 
 class IrModelSynchroApply(models.Model):
     _name = "ir.model.synchro.apply"
-    _inherit = "ir.model"
+    # _inherit = "ir.model"
     _description = "Functions to convert field data"
 
     def is_purchase(self, vals, vmodel):

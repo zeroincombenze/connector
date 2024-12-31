@@ -27,61 +27,29 @@
                 <img src="/l10n_uk/static/description/icon.png" alt="English" style="width:16px;height:16px;"/>
                 <img src="/l10n_us/static/description/icon.png" alt="English" style="width:16px;height:16px;"/>
             </p>
-            <p class="oe_mt16" align="justify">This module makes available some functions to synchronize external data
-with Odoo data.
+            <p class="oe_mt16" align="justify">This module enable the importing from remote Odoo instance using jsonrpc.
+This protocol, called JSON-RPC, is like XML-RPC but use JSON representation rather than
+XML and it is designed just for Odoo remote identities. It is implemented
+by <a href="https://pythonhosted.org/OdooRPC/">odoorpc</a>,
+so the <a href="https://pypi.org/project/OdooRPC/">PYPI odoorpc</a> package has to be
+installed before install this module.
 <p align="justify">
-<h4>Characteristics</h4>
-</p><p align="justify">
-<ul>
-<li>Multi-channels interchange</li>
-<li>JSON, XMLRPC and CSV files protocols</li>
-<li>Push and/or Pull logic</li>
-<li>Many2one, One2Many and Many2Many managed with external references</li>
-<li>Automatic field value translation</li>
-<li>Odoo version from 6.1 to 12.0 field name and values automatic translation</li>
-<li>Anti-recurse checks</li>
-<li>Two phases create in order to create hierarchical record structure</li>
-<li>Dynamic translation database</li>
-</ul>
-</p><p align="justify">
-This module can be used for:
-</p><p align="justify">
-<ul>
-<li>Upgrade Odoo DB from a version to another version (even beck upgrade)</li>
-<li>Import data from files without duplicating records</li>
-<li>Connect Odoo with other software (current version supports until 4 counterparts)</li>
-<li>Populate Odoo DB in the first installation migrated from another software</li>
-</ul>
+Use this protocol to connect another Odoo (From 10.0+).
 </p></p>
         </div>
         <div class="oe_span6">
             <p align="center">
                 <img src="/l10n_it/static/description/icon.png" alt="Italiano" style="width:16px;height:16px;"/>
             </p>
-            <p class="oe_mt16" align="justify">Questo modulo rende disponibile alcune funzioni per sincronizzare con l'esterno.
+            <p class="oe_mt16" align="justify">Questo modulo abilita l'importazione da un'istanza remota di Odoo usando jsonrpc.
+Questo protocollo &#232; una variante di XML-RPC over http/https ed &#232; progettato
+specificatamente per istanze remote di Odoo. Viene fornito dal
+modulo <i>universal_connector_by_xmlrpc</i>
+attraverso <a href="https://pythonhosted.org/OERPLib/">oerplib</a>,
+quindi il package python <a href="https://pypi.org/project/oerplib3/">PYPI oerplib3</a> deve
+essere installato.
 <p align="justify">
-<h4>Caratteristiche</h4>
-</p><p align="justify">
-<ul>
-<li>Scambio multi-canale</li>
-<li>Protocolli JSON, XMLRPC e file CSV</li>
-<li>Logica Push o Pull</li>
-<li>Many2one, One2Many e Many2Many gestiti con referenze esterne</li>
-<li>Traduzione automatica dei campi</li>
-<li>Traduzione automatica dei campi e dei valori di Odoo dalla 6.1 alla 12.0</li>
-<li>Controllo anti-ricorsione</li>
-<li>Creazione a due fasi</li>
-<li>Traduttore dinamico</li>
-</ul>
-</p><p align="justify">
-Questo modulo pu&#242; essere usato per:
-</p><p align="justify">
-<ul>
-<li>Aggiornare database di Odoo tra versioni (anche all'indietro)</li>
-<li>Importare dati da file senza duplicazioni</li>
-<li>Connettere Odoo con altri software (sino a 4 contemporaneamente)</li>
-<li>Popolare il DB di Odoo nella prima installazione quando migrazione da altro software</li>
-</ul>
+Usare questo protocollo per connettere un altro Odoo (Da 10.0+).
 </p></p>
         </div>
     </div>
@@ -95,23 +63,48 @@ Questo modulo pu&#242; essere usato per:
                 <img src="/l10n_uk/static/description/icon.png" alt="English" style="width:16px;height:16px;"/>
                 <img src="/l10n_us/static/description/icon.png" alt="English" style="width:16px;height:16px;"/>
             </p>
-            <p class="oe_mt16" align="justify"><span class="fa fa-th-large" style="color:#7C7BAD"/> Settings &#187; Technical &#187; Synchronizarion Backend
+            <p class="oe_mt16" align="justify"><span class="fa fa-th-large" style="color:#7C7BAD"/> Settings &#187; Activate the developer mode
 <p align="justify">
-Set backend parameters to connect with remote counterparty and then click on
-button <span style="color:white;background-color:#7C7BAD">Check&#160;Connection</span>.
-If Odoo can connect with remote counterparty, backend state is set to checked.
+<span class="fa fa-th-large" style="color:#7C7BAD"/> Settings &#187; Technical &#187; Synchronization Backend
+</p><p align="justify">
+<ol>
+<li> Set protocol to "By Odoo JSON-RPC (odoorpc)"</li>
+<li> Set Host Name where remote Odoo instance is running</li>
+<li> Set communication port (usually Odoo uses 8069)</li>
+<li> Declare remote database name</li>
+<li> Declare remote user and password (password is not visible)</li>
+<li> Declare identity Odoo</li>
+<li> Declare remote Odoo version</li>
+<li> Choose prefix for this backend</li>
+<li> Declare remote user language</li>
+<li> Click on button <span style="color:white;background-color:#7C7BAD">Check&#160;Connection</span></li>
+</ol>
+</p><p align="justify">
+If Odoo can connect with remote counterparty, backend state is set to "Ready".
 </p></p>
         </div>
         <div class="oe_span6">
             <p align="center">
                 <img src="/l10n_it/static/description/icon.png" alt="Italiano" style="width:16px;height:16px;"/>
             </p>
-            <p class="oe_mt16" align="justify"><span class="fa fa-th-large" style="color:#7C7BAD"/> Configurazione &#187; Funzioni tecniche &#187; Dorsale di sincronizzazione
+            <p class="oe_mt16" align="justify"><span class="fa fa-th-large" style="color:#7C7BAD"/> Configurazione &#187; Attivare la modalit&#224; sviluppatore
 <p align="justify">
-Impostare i parametri di sincronizzazione della dorsale e poi fare click sul
-bottone <span style="color:white;background-color:#7C7BAD">Check&#160;Connection</span>.
-Se Odoo riesce a connettersi con la controparte remote, lo stato della dorsale &#232;
-modificato in checked.
+<span class="fa fa-th-large" style="color:#7C7BAD"/> Configurazione &#187; Funzioni tecniche &#187; Dorsale di sincronizzazione
+</p><p align="justify">
+<ol>
+<li> Impostare protocollo "By Odoo JSON-RPC (odoorpc)"</li>
+<li> Impostare nome host dove l'istanza remota di Odoo &#232; in esecuzione</li>
+<li> Impostare porta di comunicazione (di solito Odoo usa 8069)</li>
+<li> Dichiarare nome database remoto</li>
+<li> Dichiarare nome utente remoto e password (la password non &#232; visibile)</li>
+<li> Dichiarare identit&#224; Odoo</li>
+<li> Dichiarare la versione remota di Odoo</li>
+<li> Scegliere il prefisso per questa dorsale</li>
+<li> Dichiarare la lingua usata da utente remoto</li>
+<li> Fare click su bottone <span style="color:white;background-color:#7C7BAD">Verificare&#160;Connessione</span></li>
+</ol>
+</p><p align="justify">
+Se Odoo riesce a connettersi con controparte, lo stato della dorsale diventa "Pronto".
 </p></p>
         </div>
     </div>
@@ -121,12 +114,26 @@ modificato in checked.
     <div class="oe_row oe_spaced">
         <h3 align="center" style="color:#162832;font-size: 26px;font-weight: 300;">ChangeLog History | Cronologia modifiche</h3>
         <div class="oe_span12">
-<h4>12.0.0.3.11 (2024-12-29)</h4>
+<h4>12.0.0.3.13 (2025-01-04)</h4>
 <p align="justify">
 <ul>
-<li>[IMP] New API get_record_list</li>
+<li>[QUA] Test coverage 91% (64: 6+58) [134 TestPoints] - quality rating 390 (target 100)</li>
+</ul>
+</p><p align="justify">
+<h4>12.0.0.3.12 (2025-01-03)</h4>
+</p><p align="justify">
+<ul>
+<li>[IMP] Dependign on version check / Controllo versione dipendenze</li>
+<li>[QUA] Test coverage 91% (64: 6+58) [134 TestPoints] - quality rating 390 (target 100)</li>
+</ul>
+</p><p align="justify">
+<h4>12.0.0.3.11 (2024-12-29)</h4>
+</p><p align="justify">
+<ul>
+<li>[IMP] New API get_record_list and get_id_from_ext_ref</li>
 <li>[IMP] Minor aesthetic update</li>
-<li>[QUA] Test coverage 90% (63: 6+57) [194 TestPoints] - quality rating 547 (target 100)</li>
+<li>[IMP] More tests</li>
+<li>[QUA] Test coverage 90% (63: 6+57) [134 TestPoints] - quality rating 395 (target 100)</li>
 </ul>
 </p><p align="justify">
 <h4>12.0.0.3.10 (2024-12-16)</h4>
@@ -164,6 +171,6 @@ modificato in checked.
     </div>
     <div class="oe_row oe_spaced">
         <p>This module is part of <a href="https://github.com/zeroincombenze/connector">connector</a> project.</p>
-        <p>Published information on | Informazioni pubblicate: 2024-12-29</p>
+        <p>Published information on | Informazioni pubblicate: 2025-01-05</p>
     </div>
 </section>

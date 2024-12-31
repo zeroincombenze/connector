@@ -1,21 +1,13 @@
-Questo modulo rende disponibile alcune funzioni per sincronizzare con l'esterno.
+Questo modulo abilita l'importazione dati da file csv. I file csv devono essere
+presenti in una cartella dichiarata nella configurazione della dorsale.
 
-Caratteristiche
-~~~~~~~~~~~~~~~
+La prima riga del file csv deve contenere le etichette di campo. L'utente può associare
+l'etichetta del campo ad un campo interno di Odoo; l'utente può anche dichiarare una
+funzione di conversione da eseguire.
 
-* Scambio multi-canale
-* Protocolli JSON, XMLRPC e file CSV
-* Logica Push o Pull
-* Many2one, One2Many e Many2Many gestiti con referenze esterne
-* Traduzione automatica dei campi
-* Traduzione automatica dei campi e dei valori di Odoo dalla 6.1 alla 12.0
-* Controllo anti-ricorsione
-* Creazione a due fasi
-* Traduttore dinamico
+Se l'utente dichiara una versione di Odoo di controparte, l'associazione tra i campi
+della version corrente e quella dichiarata verrò caricata.
 
-Questo modulo può essere usato per:
+Se il file csv contiene la colonna "id", il valore di questa colonna sarà usato per
+evitare duplicazioni di dati. Senza questa colonna sarà usato il numero di riga.
 
-* Aggiornare database di Odoo tra versioni (anche all'indietro)
-* Importare dati da file senza duplicazioni
-* Connettere Odoo con altri software (sino a 4 contemporaneamente)
-* Popolare il DB di Odoo nella prima installazione quando migrazione da altro software

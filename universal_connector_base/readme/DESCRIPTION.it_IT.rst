@@ -1,23 +1,19 @@
 Questo modulo è base della suite Universal Connector e rende disponibile alcune
 funzioni per sincronizzare con l'esterno.
 
-Caratteristiche della suite
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Il protocollo utilizzato è "xmlrpc su http/https", chiamato XML-RPC, che è implementato
+da `python client xmlrpc <https://docs.python.org/3/library/xmlrpc.client.html>`__,
+quindi non è necessario installare alcun pacchetto. Questo protocollo è più semplice di
+REST e SOAP per progettazione.
 
-* Scambio multi-dorsale
-* Multi-protocollo come JSON, XMLRPC e CSV
-* Logica Push o Pull
-* Many2one, One2Many e Many2Many acquisiti con riferimenti remoti
-* Riconosicmento con referenze esterne (solo istanze remote Odoo)
-* Configurazione modificabile da GUI
-* Controllo anti-ricorsione
-* Creazione a due fasi per gestire le gerarchie
-* Migratore dinamico database da Odoo 6.1
+Il tipico endpoint per accedere all'istanza remota di Odoo dovrebbe essere "https://admin@localhost:8069"
+e l'autenticazione è basata su nome utente/password.
 
-Questo modulo può essere usato per:
+I modelli sincronizzabili sono:
 
-* Migrare database di Odoo tra versioni come openupgrade (anche all'indietro)
-* Importare dati da file in locazioni specifiche usando configurazione utente
-* Creare ambienti di demo e test partendo da file csv
-* Connettere in tempo reale Odoo con altri software o altre istanze Odoo
-* Popolare il database quando Odoo necessita di migrare da altro software
+* Azienda (res.company)
+* Nazione (res.country and res.country.state)
+* Divisa (res.currency and res.currency.rate)
+* Lingua (res.lang)
+* Nominativo (res.partner and res.partner.category)
+* Utente (res.users and res.groups)

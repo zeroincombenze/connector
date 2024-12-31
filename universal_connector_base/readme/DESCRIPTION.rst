@@ -1,23 +1,19 @@
 This module is base for Universal Connector suite and makes available some functions
 to synchronize external data with Odoo data.
 
-Site Characteristics
-~~~~~~~~~~~~~~~~~~~~
+The used protocol is "xmlrpc over http/https", called XML-RPC, that is  implemented
+by `python client xmlrpc <https://docs.python.org/3/library/xmlrpc.client.html>`__,
+so no package is required to be installed. This protocol is more simple than REST and
+SOAP by design.
 
-* Multi-backend interchange
-* Multi-protocols, like JSON, XMLRPC and CSV
-* Push and/or Pull logic
-* Many2one, One2Many and Many2Many acquired with remote references
-* Recognition by external reference (only remote Odoo)
-* Updatable configuration by GUI
-* Anti-recurse checks
-* Two phases create in order to create hierarchical record structure
-* Dynamic database migration for Odoo since 6.1
+The typical endpoint to login remote Odoo instance should be "https://admin@localhost:8069"
+and authentication is based on username/password.
 
-This module can be used for:
+Synchronizable models are:
 
-* Migrate Odoo DB from a version to another version, like openupgrade, (even back upgrade)
-* Import data from files in specific location using user configuration
-* Create demo and test environment based on csv files
-* Connect just in time Odoo with other software or other Odoo instnces
-* Populate database when Oddo requires to migrate from another software
+* Company (res.company)
+* Country (res.country and res.country.state)
+* Currency (res.currency and res.currency.rate)
+* Language (res.lang)
+* Partner (res.partner and res.partner.category)
+* User (res.users and res.groups)

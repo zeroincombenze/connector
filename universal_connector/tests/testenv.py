@@ -2065,7 +2065,7 @@ class MainTest(test_common.TransactionCase):
             if "ir.values" in self.env:
                 records = self.env["ir.values"].search([("value", "=", value)])
                 if len(records) == 1:
-                    model_name = records[0].model
+                    model_name = records[0].res_model
         return model_name
 
     @api.model

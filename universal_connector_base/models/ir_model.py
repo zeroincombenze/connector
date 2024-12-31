@@ -23,7 +23,6 @@ class BaseModel(models.BaseModel):
         ttl=None,
         running_in_queue=None,
         jacket=None,
-        logrec=None,
         ctx=None,
     ):
         return self.env["ir.model.synchro"].synchro(
@@ -34,7 +33,6 @@ class BaseModel(models.BaseModel):
             ttl=ttl,
             running_in_queue=running_in_queue,
             jacket=jacket,
-            logrec=logrec,
             ctx=ctx,
         )
 
@@ -44,7 +42,7 @@ class BaseModel(models.BaseModel):
             [], order="sequence desc,name desc"
         ):
             dir_mapper = backend.get_dir_mapper(model=self._name)
-            if not dir_mapper:
+            if not dir_mapper:  # pragma: no cover
                 continue
             loc_ext_id = dir_mapper.get_loc_ext_id()
             if hasattr(self, loc_ext_id) and getattr(self, loc_ext_id):

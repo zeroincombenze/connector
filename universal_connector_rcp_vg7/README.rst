@@ -1,6 +1,6 @@
-======================================================================
-|icon| Universal Connector VG7/universal_connector_rcp_vg7 10.0.0.3.11
-======================================================================
+=============================================================
+|icon| Universal Connector VG7/Connettore per VG7 10.0.0.3.13
+=============================================================
 
 **Add Remote Counterparty VG7 to Universal Connector**
 
@@ -14,15 +14,48 @@
 Overview | Panoramica
 =====================
 
-|en| Missed description
+|en| Connector to "VG7 print" software.
+
+This module, based on Universal Connector, allow the download of data from remote
+"VG7 print" software. Connector can import:
+
+* Customers
+* Customer addresses
+* Products
 
 
-|it| Descrizione non disponibile
+|it| Connettore verso software "VG7 print".
+
+Questo modulo, basato su Connettore Universlae, permette di scaricare i dati da
+"VG7 print". Il connettore può importare:
+
+* Clienti
+* Indirizzi clienti
+* Prodotti
 
 
 |thumbnail|
 
 .. |thumbnail| image:: https://raw.githubusercontent.com/zeroincombenze/connector/10.0/universal_connector_rcp_vg7/static/description/
+
+
+Configuration | Configurazione
+------------------------------
+
+☰ Settings > Activate the developer mode
+
+☰ Settings > Technical > Synchronization Backend
+
+#. Set protocol to "VG7 Print"
+#. Add Client Key
+#. Declare identity "VG7"
+#. Choose "vg7_id" prefix for this backend
+#. Declare remote user language
+#. Set Endpoint
+#. Click on button [Check Connection]
+
+If Odoo can connect with remote counterparty, backend state is set to "Ready".
+
 
 
 Getting started | Primi passi
@@ -120,10 +153,30 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 ChangeLog History | Cronologia modifiche
 ----------------------------------------
 
-10.0.0.1.0 (2016-10-06)
-~~~~~~~~~~~~~~~~~~~~~~~
+10.0.0.3.13 (2025-01-04)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [FIX] Instance without company splitmode
+* [FIX] set_globak
+* [QUA] Test coverage 67% (223: 73+150) [11 TestPoints] - quality rating 49 (target 100)
+
+10.0.0.3.12 (2024-12-30)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] Dependign on version check / Controllo versione dipendenze
+* [QUA] Test coverage 66% (223: 76+147) [9 TestPoints] - quality rating 47 (target 100)
+
+10.0.0.3.11 (2024-12-29)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] Upgrade to universal_connector_base
+* [QUA] Test coverage 66% (223: 76+147) [9 TestPoints] - quality rating 47 (target 100)
+
+10.0.0.3.10 (2024-12-19)
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 * Initial implementation / Implementazione iniziale
+* [QUA] Test coverage 66% (223: 76+147) [9 TestPoints] - quality rating 47 (target 100)
 
 
 
@@ -174,7 +227,7 @@ La distribuzione `Zeroincombenze® <https://www.zeroincombenze.it/>`__ è proget
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2024-12-20
+Last Update / Ultimo aggiornamento: 2025-01-04
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status

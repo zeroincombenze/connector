@@ -2,7 +2,7 @@
 <odoo>
 
     <record id="view_synchro_model_tree" model="ir.ui.view">
-        <field name="name">view.synchro.channel.model.tree</field>
+        <field name="name">view.synchro.backend.model.tree</field>
         <field name="model">synchro.channel.model</field>
         <field name="arch" type="xml">
             <tree string="Synchonization model">
@@ -185,12 +185,12 @@
         <field name="view_id" ref="view_synchro_tnl_tree"/>
     </record>
 
-    <menuitem id="menu_synchro_channel" name="Synchonization Channel" action="action_synchro_channel" parent="menu_universal_connector" groups="base.group_no_one"/>
+    <menuitem id="menu_synchro_backend" name="Synchonization Backend" action="action_synchro_backend" parent="menu_universal_connector" groups="base.group_no_one" sequence="16"/>
 
-    <menuitem id="menu_synchro_model" name="Synchonization Model" action="action_synchro_model" parent="menu_universal_connector" groups="base.group_no_one"/>
+    <menuitem id="menu_synchro_model" name="Synchonization Model" action="action_synchro_model" parent="menu_universal_connector" groups="base.group_no_one" sequence="24"/>
 
-    <menuitem id="menu_synchro_field" name="Synchonization Field" action="action_synchro_field" parent="menu_universal_connector" groups="base.group_no_one"/>
+    <menuitem id="menu_synchro_field" name="Synchonization Field" action="action_synchro_field" parent="menu_universal_connector" groups="base.group_no_one" sequence="32"/>
 
-    <menuitem id="menu_synchro_translation" name="Translation Domains" action="action_synchro_tnl" parent="menu_universal_connector" groups="base.group_no_one"/>
+    <menuitem id="menu_synchro_translation" name="Translation Domains" action="action_synchro_tnl" parent="menu_universal_connector" groups="base.group_no_one" sequence="64"/>
 
 </odoo>

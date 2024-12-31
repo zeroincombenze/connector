@@ -1,5 +1,5 @@
 #
-# Copyright 2018-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
+# Copyright 2018-25 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
 #
 # Contributions to development, thanks to:
 # * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
@@ -12,6 +12,7 @@ import json
 import logging
 
 from odoo import _, api, fields, models
+from odoo.exceptions import UserError
 from python_plus import _u
 
 _logger = logging.getLogger(__name__)
@@ -32,7 +33,7 @@ class IrModelSynchroLog(models.Model):
     }
 
     timestamp = fields.Datetime("Timestamp", copy=False)
-    model = fields.Char("Model")
+    res_model = fields.Char("Model")
     res_id = fields.Integer("Model ID")
     errmsg = fields.Char("Error message", copy=False)
     errcode = fields.Integer("Error code", copy=False)
@@ -41,16 +42,12 @@ class IrModelSynchroLog(models.Model):
     reference = fields.Char(
         string="Reference", compute="_compute_reference", readonly=True, store=False
     )
-    backend_id = fields.Many2one(
-        "synchro.channel",
-        "Backend",
-        copy=False,
-    )
+    backend_id = fields.Many2one("synchro.channel", "Backend", copy=False)
 
-    @api.depends("model", "res_id")
+    @api.depends("res_model", "res_id")
     def _compute_reference(self):  # pragma: no cover
         for res in self:
-            res.reference = "%s,%s" % (res.model, res.res_id)
+            res.reference = "%s,%s" % (res.res_model, res.res_id)
 
     def pretty_print(self, values):  # pragma: no cover
         def to_str(obj):
@@ -76,59 +73,82 @@ class IrModelSynchroLog(models.Model):
             )
         return json.dumps(values, indent=2)
 
+    # def get_logrec(self, binding_model, ctx):
+    #     binding_model = binding_model or False
+    #     if "logrec" not in ctx:
+    #         ctx["logrec"] = {}
+    #     if binding_model not in ctx["logrec"]:
+    #         ctx["logrec"][binding_model] = self.env[self._name].with_context(
+    #             {"logrec": ctx["logrec"]})
+    #     return ctx["logrec"][binding_model]
+
     def logger(
         self,
-        res_model,
-        res_rec,
-        errmsg,
+        hdr_msg,
+        body_msg,
         errcode,
+        res_model,
         loglevel,
         recloglevel,
-        logrec=None,
+        upd_log=None,
+        res_rec=None,
         res_id=None,
         backend=None,
-        values=None,
     ):
         now = datetime.now()
         if not PY3:
             now = now.strftime("%Y-%m-%d %H:%M:%S.%f")
-        vals = {
-            "timestamp": now,
-            "model": (
-                res_model
-                if res_model in self.env
-                else res_rec._namme if res_rec else False
-            ),
-            "errcode": errcode,
-        }
-        if res_id:
-            vals["res_id"] = res_id
-        for name, lev in self.loglevel2num.items():
-            if int(lev) == (recloglevel or loglevel):
-                vals["loglevel"] = name
-                break
-        if backend:
-            vals["backend_id"] = backend.id
-        elif vals["model"] == "synchro.channel" and vals["res_id"]:
-            vals["backend_id"] = vals["res_id"]
-        vals["values"] = self.pretty_print(values) if values else False
-        if logrec:
-            # logrec should be deleted if prior rollback
+        vals = {}
+        if upd_log:
+            if not self.res_model:
+                vals["res_model"] = res_model
+            if not self.errcode and errcode:
+                vals["errcode"] = errcode
+            if not self.res_id and res_id:
+                vals["res_id"] = res_id
+            if not self.backend_id and backend:
+                vals["backend_id"] = backend.id
+            if hdr_msg:
+                vals["errmsg"] = hdr_msg
+            if not self.values:
+                vals["values"] = body_msg
+            elif body_msg:
+                vals["values"] = self.values + "\n\n--------\n" + body_msg
             try:
-                getattr(logrec, "errmsg")
+                self.write(vals)
+                logrec = self
             except BaseException:
-                self.env.cr.rollback()  # pylint: disable=invalid-commit
-                logrec = None
-        if logrec:
-            if errmsg and loglevel >= recloglevel:
-                vals["errmsg"] = logrec.errmsg + " | " + errmsg
-            logrec.write(vals)
+                return self.logger(
+                    hdr_msg,
+                    body_msg,
+                    errcode,
+                    res_model,
+                    loglevel,
+                    recloglevel,
+                    upd_log=False,
+                    res_rec=res_rec,
+                    res_id=res_id,
+                    backend=backend,
+                )
         else:
-            vals["errmsg"] = errmsg or _("No Error")
+            vals["timestamp"] = now
+            vals["res_model"] = res_model
+            vals["errcode"] = errcode
+            vals["res_id"] = res_id
+            for name, lev in self.loglevel2num.items():
+                if int(lev) == (recloglevel or loglevel):
+                    vals["loglevel"] = name
+                    break
+            if backend:
+                vals["backend_id"] = backend.id
+            vals["errmsg"] = hdr_msg or _("No Error")
+            if res_rec and len(res_rec) > 1:
+                vals["errmsg"] += " # (%s)" % ",".join([str(x.id) for x in res_rec])
+            vals["values"] = body_msg
             logrec = self.create(vals)
         if res_rec and hasattr(res_rec, "timestamp") and hasattr(res_rec, "errmsg"):
-            res_rec.write({"timestamp": now, "errmsg": errmsg})
-        return logrec
+            res_rec.write({"timestamp": now, "errmsg": hdr_msg})
+        return logrec or self.env["ir.model.synchro.log"]
 
     def purge_log(self):
         for day in (15, 8, 7, 5, 3, 2, 1):
@@ -151,9 +171,8 @@ class IrModelSynchroLog(models.Model):
         msg_text,
         res_rec=None,
         res_model=None,
-        id=None,
+        res_id=None,
         values=None,
-        logrec=None,
         backend=None,
         errcode=None,
         errmsg=None,
@@ -171,48 +190,59 @@ class IrModelSynchroLog(models.Model):
         # prot: backend.method
         # db: backend.database
         #
+        def get_backend_value(backend, field, key=None):
+            key = key or field
+            return (getattr(backend, field) if backend else ctx.get(key)) or False
+
         Cache = self.env["ir.model.synchro.cache"]
         ctx = ctx or {}
-        ctx["model"] = (
-            ctx.get("model") or res_model or (res_rec._name if res_rec else "")
-        )
-        ctx["id"] = (
-            id
-            or ctx.get("id")
-            or (
-                res_rec
-                and (
-                    (len(res_rec) == 1 and res_rec.id)
-                    or (len(res_rec) > 1 and res_rec.ids[0])
-                )
-            )
-            or False
-        )
+        loglevel = loglevel or 2
+        # Current self could be in delete cache if prior ORM error happened
+        # so in this case we have to create rather tha update record
+        try:
+            upd_log = True
+            getattr(self, "id")
+            getattr(self, "loglevel")
+            getattr(self, "errmsg")
+            upd_log = upd_log and self.id and self.loglevel
+        except BaseException:
+            self.env.cr.rollback()  # pylint: disable=invalid-commit
+            upd_log = False
         if res_rec and len(res_rec) > 1:
-            msg_text += " # " + str(res_rec.ids)
+            res_rec0 = res_rec[0]
+        else:
+            res_rec0 = res_rec
+        res_model = (
+            self.res_model
+            if upd_log
+            else ""
+            or (
+                res_model
+                or ctx.get("res_model")
+                or (res_rec0._name if res_rec0 else "")
+            )
+        )
+        res_id = (
+            self.res_id
+            if (upd_log and self.res_id)
+            else False
+            or (
+                res_id
+                or ctx.get("res_id")
+                or (res_rec0.id if res_rec0 else "")
+                or False
+            )
+        )
         ctx["e"] = errmsg
         ctx["E"] = errcode
-        ctx["backend"] = backend.name if backend else ctx.get("backend") or ""
-        ctx["lgi_ep"] = backend.counterpart_url if backend else ctx.get("lgi_ep") or ""
-        ctx["data_ep"] = (
-            backend.counterpart_data_url if backend else ctx.get("data_ep") or ""
-        )
-        ctx["host"] = backend.hostname if backend else ctx.get("host") or ""
-        ctx["prot"] = backend.method if backend else ctx.get("prot") or ""
-        ctx["db"] = backend.database if backend else ctx.get("db") or ""
-        ctx["pfx"] = backend.prefix if backend else ctx.get("pfx") or ""
-        ctx["vals"] = (
-            {
-                k: v[0:28] + "[...]" if isinstance(v, str) and len(v) > 32 else v
-                for k, v in values.items()
-            }
-            if isinstance(values, dict)
-            else values if values else ""
-        )
-        if not isinstance(values, str):
-            ctx["vals"] = str(ctx["vals"])
-        elif len(ctx["vals"]) > 40:
-            ctx["vals"] = ctx["vals"][:36] + " ..."
+        backend = backend or self.backend_id or False
+        if not backend and res_model == "synchro.channel" and res_id:
+            backend = (
+                res_rec0 if res_rec0 else self.env["synchro.channel"].browse(res_id)
+            )
+        ctx["model"] = res_model
+        ctx["id"] = res_id
+        ctx["backend"] = backend.name if backend else ""
         if backend:
             curloglevel = int(backend.tracelevel or "0")
             Cache.set_loglevel(curloglevel)
@@ -225,31 +255,72 @@ class IrModelSynchroLog(models.Model):
             if not loglevel.isdigit():
                 reqloglevel = int(self.loglevel2num.get(loglevel, "2"))
             else:
-                reqloglevel = int(loglevel)
+                reqloglevel = loglevel
         recloglevel = 0
-        if logrec and isinstance(logrec.loglevel, str):
-            if not logrec.loglevel.isdigit():
-                recloglevel = int(logrec.loglevel2num.get(logrec.loglevel, "0"))
+        if upd_log:
+            if isinstance(self.loglevel, str) and not self.loglevel.isdigit():
+                recloglevel = int(self.loglevel2num.get(self.loglevel, "0"))
             else:
-                recloglevel = int(logrec.loglevel)
+                recloglevel = int(self.loglevel)
         if reqloglevel >= 4:
             Cache.clean_cache()
         if max(reqloglevel, recloglevel) >= 4 - curloglevel:
+            ctx["lgi_ep"] = get_backend_value(backend, "counterpart_url", key="lgi_ep")
+            ctx["data_ep"] = get_backend_value(
+                backend, "counterpart_data_url", key="data_ep"
+            )
+            ctx["host"] = get_backend_value(backend, "hostname", key="host")
+            ctx["prot"] = get_backend_value(backend, "method", key="prot")
+            ctx["db"] = get_backend_value(backend, "database", key="db")
+            ctx["pfx"] = get_backend_value(backend, "prefix", key="pfx")
+            ctx["vals"] = (
+                {
+                    k: v[0:28] + "[...]" if isinstance(v, str) and len(v) > 32 else v
+                    for k, v in values.items()
+                }
+                if isinstance(values, dict)
+                else values if values else ""
+            )
             try:
-                full_msg = _u(msg_text % ctx)
-            except BaseException:  # pragma: no cover
-                full_msg = _u(msg_text)
+                if ctx["E"] and ctx["e"] and not msg_text.startswith("!"):
+                    hdr_msg = (
+                        "!%(e)s %(E)s!: " + _u(_(msg_text).replace("%(vals)s", "\n%%s"))
+                    ) % ctx
+                else:
+                    hdr_msg = _u(_(msg_text).replace("%(vals)s", "%(vals)32.32s")) % ctx
+            except BaseException as e:  # pragma: no cover
+                raise UserError(e)
+            body_msg = _u(msg_text.replace("%(vals)s", "\n%%s")) % ctx
+            if "%s" in body_msg:
+                values = (
+                    self.pretty_print(values)
+                    if isinstance(values, dict)
+                    else str(values) if values is not None else None
+                )
+                body_msg = body_msg % values
             if reqloglevel >= 4 - curloglevel:
-                _logger.info(full_msg)
-            return self.logger(
-                ctx["model"],
-                res_rec,
-                full_msg,
+                _logger.info(hdr_msg)
+            logrec = self.logger(
+                hdr_msg,
+                body_msg,
                 errcode,
+                res_model,
                 reqloglevel,
                 recloglevel,
-                logrec=logrec,
-                res_id=ctx["id"],
+                upd_log=upd_log,
+                res_rec=res_rec,
+                res_id=res_id,
                 backend=backend,
-                values=values,
             )
+            # if logrec and logrec != self:
+            #     res_model = logrec.res_model or res_model
+            #     ctx = self._compute_reference["logrec"]
+            #     if "logrec" not in ctx:
+            #         ctx["logrec"] = {}
+            #         ctx["logrec"][res_model] = logrec
+            #     elif res_model in ctx["logrec"]:
+            #         ctx["logrec"][res_model] = logrec
+            #     elif False in ctx["logrec"]:
+            #         ctx["logrec"][res_model] = logrec
+            #         del ctx[logrec][False]
+            return logrec

@@ -1,5 +1,5 @@
 #
-# Copyright 2018-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
+# Copyright 2018-25 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
 #
 # Contributions to development, thanks to:
 # * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
@@ -156,6 +156,7 @@ Return code are:
    -13: Invalid remote response
    -14: No enough data to create record
    -15: Invalid company
+   -16: Backend not ready
   -100: if return code < -100 means error on child records
 """
 from future.utils import PY3
@@ -259,7 +260,8 @@ class IrModelSynchro(models.Model):
 
     @api.model
     def create_new(self, Binder, vals, only_minimal=False, ctx=None):
-        SynchroLog = self.env["ir.model.synchro.log"]
+        ctx = ctx or {}
+        ctx["logrec"] = ctx.get("logrec") or self.env["ir.model.synchro.log"]
         if not only_minimal and hasattr(Binder, "assure_values"):
             vals = Binder.assure_values(vals, False)
         if Binder._name.startswith("account.move") and not ctx:
@@ -269,15 +271,13 @@ class IrModelSynchro(models.Model):
                 rec = Binder.create(vals)
             else:
                 rec = Binder.create(vals)
-            SynchroLog.logmsg(
-                "warning", "", res_rec=rec, logrec=self.logrec, values=vals
-            )
+            ctx["logrec"].logmsg("warning", "", res_rec=rec, values=vals)
         except BaseException as e:  # pragma: no cover
             self.env.cr.rollback()  # pylint: disable=invalid-commit
             rec = -1
-            SynchroLog.logmsg(
+            self.env["ir.model.synchro.log"].logmsg(
                 "error",
-                "!%(E)s! ERROR %(e)s: %(model)s.create(%(vals)s)",
+                "%(model)s.create(%(vals)s)",
                 res_model=Binder._name,
                 values=vals,
                 errmsg=e,
@@ -286,38 +286,36 @@ class IrModelSynchro(models.Model):
         return rec
 
     def rewrite(self, rec, vals, dir_mapper, only_minimal=False, ctx=None):
-        SynchroLog = self.env["ir.model.synchro.log"]
-        if (
-            not only_minimal
-            and hasattr(rec, "assure_values")
-            and dir_mapper.auth_action != "sync"
-        ):
-            vals = rec.assure_values(vals, rec)
-        vals = dir_mapper.drop_protected_equal_fields(vals, rec)
+        ctx = ctx or {}
+        ctx["logrec"] = ctx.get("logrec") or self.env["ir.model.synchro.log"]
+        if vals:
+            if (
+                not only_minimal
+                and hasattr(rec, "assure_values")
+                and dir_mapper.auth_action != "sync"
+            ):
+                vals = rec.assure_values(vals, rec)
+            vals = dir_mapper.drop_protected_equal_fields(vals, rec)
         if vals:
             try:
                 if rec._name.startswith("account.move"):
                     rec.with_context(check_move_validity=False).write(vals)
                 else:
                     rec.write(vals)
-                SynchroLog.logmsg(
-                    "warning", "", res_rec=rec, logrec=self.logrec, values=vals
-                )
+                ctx["logrec"].logmsg("warning", "", res_rec=rec, values=vals)
             except BaseException as e:  # pragma: no cover
                 self.env.cr.rollback()  # pylint: disable=invalid-commit
-                SynchroLog.logmsg(
+                self.env["ir.model.synchro.log"].logmsg(
                     "error",
-                    "!%(E)s! ERROR %(e)s: %(model)s.write(%(vals)s)",
+                    "%(model)s.write(%(vals)s)",
                     res_rec=rec,
                     values=vals,
                     errmsg=e,
                     errcode=-2,
                 )
                 return -2
-            else:
-                SynchroLog.logmsg(
-                    "warning", "", res_rec=rec, logrec=self.logrec, errcode=-9
-                )
+        else:
+            ctx["logrec"] = ctx["logrec"].logmsg("warning", "", res_rec=rec, errcode=-9)
         return rec
 
     @api.model
@@ -330,11 +328,11 @@ class IrModelSynchro(models.Model):
         ttl=None,
         running_in_queue=None,
         jacket=None,
-        logrec=None,
         ctx=None,
     ):
         Cache = self.env["ir.model.synchro.cache"]
-        SynchroLog = self.env["ir.model.synchro.log"]
+        ctx = ctx or {}
+        ctx["logrec"] = ctx.get("logrec") or self.env["ir.model.synchro.log"]
         DirMapper = self.env["synchro.channel.model"]
 
         if isinstance(jacket, str):
@@ -342,25 +340,23 @@ class IrModelSynchro(models.Model):
         elif jacket and backend:
             vals = backend.vals_with_jacket(vals)
         elif jacket and not backend:  # pragma: no cover
-            SynchroLog.logmsg(
+            ctx["logrec"].logmsg(
                 "error",
-                "!%(E)s! %(model)s.synchro() w/o remote identification",
+                "%(model)s.synchro() w/o remote identification",
                 res_model=vcls._name,
                 values=vals,
                 errcode=-7,
-                logrec=logrec,
             )
 
         vmodel = vcls._name
-        binding_model = DirMapper.get_binding_model_name(vmodel)
+        binding_model = DirMapper.split_binding_model_n_spec(vmodel)[0]
         if not binding_model:  # pragma: no cover
-            SynchroLog.logmsg(
+            ctx["logrec"].logmsg(
                 "error",
-                "!%(E)s! Invalid or unknown model %(model)s!",
+                "Invalid or unknown model %(model)s!",
                 res_model=vmodel,
                 values=vals,
                 errcode=-11,
-                logrec=logrec,
             )
             return -11
         Binder = self.env[binding_model].with_context(
@@ -369,32 +365,33 @@ class IrModelSynchro(models.Model):
         backend = backend or self.env["synchro.channel"].assign_backend(vals)
         if not backend:  # pragma: no cover
             Cache.clean_cache()
-            SynchroLog.logmsg(
+            ctx["logrec"].logmsg(
                 "error",
-                "!%(E)s! No backend found!",
+                "No backend found on synchro(%(model)s,%(vals)s,ttl=%(t)s))",
+                res_model=vmodel,
                 values=vals,
                 errcode=-6,
-                logrec=logrec,
+                ctx={"t": ttl},
             )
             return -6
-        if backend.state == "ready":
+        if backend.state == "draft":  # pragma: no cover
+            return -16
+        if backend.state in ("ready", "failed"):
             backend.write({"state": "run"})
-
-        ttl = ttl or (4 if only_minimal else 2)
-        self.logrec = SynchroLog.logmsg(
-            "warning",
-            "%(model)s.synchro(%(vals)s,backend=%(backend)s,min=%(m)s),ttl=%(t)s",
-            res_model=vmodel,
-            values=vals,
-            backend=backend,
-            logrec=logrec,
-            ctx={"m": only_minimal, "t": ttl},
-        )
-
         dir_mapper = backend.get_dir_mapper(model=vmodel)
         spec = False
         saved_vals = vals.copy()
         ctx = dir_mapper.load_ctx(ctx if running_in_queue else {})
+        ttl = ttl or (4 if only_minimal else 2)
+        ctx["logrec"] = ctx["logrec"].logmsg(
+            "warning" if ctx["logrec"] else "info",
+            "%(model)s.synchro(%(vals)s,backend=%(backend)s,min=%(m)s),ttl=%(t)s",
+            res_model=vmodel,
+            values=vals,
+            backend=backend,
+            ctx={"m": only_minimal, "t": ttl},
+        )
+
         vals, incomplete_record = dir_mapper.map_to_internal(
             vals,
             ttl,
@@ -452,22 +449,23 @@ class IrModelSynchro(models.Model):
                             prio=3 if valid else 2,
                         )
                     if valid:
-                        rec = self.create_new(Binder, min_vals, only_minimal=True)
+                        rec = self.create_new(
+                            Binder, min_vals, only_minimal=True, ctx=ctx
+                        )
                     else:
-                        SynchroLog.logmsg(
+                        ctx["logrec"].logmsg(
                             "warning",
                             "No enough data to create record",
-                            logrec=self.logrec,
                         )
                         if not running_in_queue and backend.load_mode == "direct":
                             postponed = vals
                 elif vals:
-                    rec = self.create_new(Binder, vals, only_minimal=False)
+                    rec = self.create_new(Binder, vals, only_minimal=False, ctx=ctx)
         else:
-            if dir_mapper.auth_action in ("ins", "lock"):
+            if dir_mapper.auth_action in ("ins", "lock"):  # pragma: no cover
                 rec = -4
-            elif vals:
-                rec = self.rewrite(rec, vals, dir_mapper, only_minimal=False)
+            else:
+                rec = self.rewrite(rec, vals, dir_mapper, only_minimal=False, ctx=ctx)
         if not running_in_queue and backend.load_mode == "direct":
             if Cache.que_waiting_len(backend):
                 commit_rate = 16 if backend.deferred_payload > "0" else 1024
@@ -480,11 +478,11 @@ class IrModelSynchro(models.Model):
                 # can be created so we should test for this case
                 if postponed and rec == -14:
                     rec = dir_mapper.bind_record(Binder, postponed, ctx=ctx)
-            if self.state == "run":
-                self.state = "ready"
+        if not running_in_queue and self.state == "run":
+            self.state = "ready"
         return rec.id if hasattr(rec, "id") else rec
 
-    def pull_one_record(
+    def pull_1_record(
         self,
         ext_model,
         prefix,
@@ -493,9 +491,9 @@ class IrModelSynchro(models.Model):
         ctx=None,
         dir_mapper=None,
         running_in_queue=None,
-        logrec=None,
     ):
-        SynchroLog = self.env["ir.model.synchro.log"]
+        ctx = ctx or {}
+        logrec = ctx.get("logrec") or self.env["ir.model.synchro.log"]
         Cache = self.env["ir.model.synchro.cache"]
 
         if dir_mapper:
@@ -507,24 +505,23 @@ class IrModelSynchro(models.Model):
             if backend:
                 dir_mapper = backend.get_dir_mapper(ext_model=ext_model)
         if not backend:  # pragma: no cover
-            SynchroLog.logmsg(
+            logrec.logmsg(
                 "error",
-                "!%(E)s! No backend found on push_one_record(%(model)s,%(vals)s)",
+                "No backend found on pull_1_record(%(model)s,%(vals)s,%(t)s))",
                 res_model=ext_model,
                 values=vals,
                 errcode=-6,
-                logrec=logrec,
+                ctx={"t": ttl},
             )
             return -6
         if not dir_mapper:  # pragma: no cover
             Cache.clean_cache()
-            SynchroLog.logmsg(
+            logrec.logmsg(
                 "error",
-                "!%(E)s! Unmanaged model push_one_record(%(model)s,%(vals)s,%(t)s)",
+                "Unmanaged model on pull_1_record(%(model)s,%(vals)s,%(t)s)",
                 res_model=ext_model,
                 values=vals,
                 errcode=-8,
-                logrec=logrec,
                 ctx={"t": ttl},
             )
             return -8
@@ -532,12 +529,12 @@ class IrModelSynchro(models.Model):
         if (isinstance(vals, dict) and dir_mapper.counterpart_pk not in vals) or (
             not isinstance(vals, dict) and not hasattr(vals, dir_mapper.counterpart_pk)
         ):  # pragma: no cover
-            SynchroLog.logmsg(
+            logrec.logmsg(
                 "error",
-                "!%(E)s! Data of model %(model)s received w/o %(pk)s",
+                "Received data of model %(model)s w/o %(pk)s",
                 backend=backend,
                 res_model=dir_mapper._name,
-                logrec=logrec,
+                errcode=-13,
                 ctx={"pk": dir_mapper.counterpart_pk},
             )
             return -13
@@ -548,7 +545,6 @@ class IrModelSynchro(models.Model):
             running_in_queue=running_in_queue,
             jacket=True,
             ttl=ttl,
-            logrec=logrec,
             ctx=ctx,
         )
 
@@ -556,44 +552,41 @@ class IrModelSynchro(models.Model):
     def trigger_one_record(
         self, ext_model, prefix, ext_id, ttl=None, running_in_queue=None, ctx=None
     ):
-        SynchroLog = self.env["ir.model.synchro.log"]
+        ctx = ctx or {}
+        logrec = ctx.get("logrec") or self.env["ir.model.synchro.log"]
         Cache = self.env["ir.model.synchro.cache"]
 
         if not prefix:  # pragma: no cover
-            SynchroLog.logmsg(
+            logrec.logmsg(
                 "error",
-                "!%(E)s! Unrecognized prefix on trigger_one_record(%(model)s,%(id)s)",
-                res_model=ext_model,
-                id=ext_id,
+                "Unrecognized prefix on trigger_one_record(%(xmodel)s,%(xid)s,%(t)s)",
                 errcode=-7,
+                ctx={"xmodel": ext_model, "xid": ext_id, "t": ttl},
             )
             return -7
         backend = self.env["synchro.channel"].assign_backend({"%s:" % prefix: prefix})
         if not backend:  # pragma: no cover
-            SynchroLog.logmsg(
+            logrec.logmsg(
                 "error",
-                "!%(E)s! No backend found on trigger_one_record(%(model)s,%(id)s)",
-                res_model=ext_model,
-                id=ext_id,
+                "No backend found on trigger_one_record(%(xmodel)s,%(xid)s,ttl=%(t)s)",
                 errcode=-6,
+                ctx={"xmodel": ext_model, "xid": ext_id, "t": ttl},
             )
             return -6
 
         dir_mapper = backend.get_dir_mapper(ext_model=ext_model)
         if not dir_mapper:  # pragma: no cover
             Cache.clean_cache()
-            SynchroLog.logmsg(
+            logrec.logmsg(
                 "error",
-                "!%(E)s! Unmanaged model trigger_one_record(%(model)s,%(id)s,%(t)s)",
-                res_model=ext_model,
-                id=ext_id,
+                "Unmanaged model on trigger_one_record(%(xmodel)s,%(xid)s,ttl=%(t)s)",
                 errcode=-8,
-                ctx={"t": ttl},
+                ctx={"xmodel": ext_model, "xid": ext_id, "t": ttl},
             )
             return -8
-        logrec = SynchroLog.logmsg(
+        ctx["logrec"] = logrec.logmsg(
             "info",
-            "trigger_one_record(%(xmodel)s,%(pfx)s,remote_id=%(xid)s, ttl=%(t)s)",
+            "trigger_one_record(%(xmodel)s,%(pfx)s,remote_id=%(xid)s,ttl=%(t)s)",
             res_model=dir_mapper.name,
             backend=backend,
             ctx={"xmodel": ext_model, "xid": ext_id, "t": ttl},
@@ -603,7 +596,7 @@ class IrModelSynchro(models.Model):
             return -13  # pragma: no cover
         if isinstance(vals, (tuple, list)):
             vals = vals[0]
-        return self.pull_one_record(
+        return self.pull_1_record(
             ext_model,
             prefix,
             vals,
@@ -611,7 +604,6 @@ class IrModelSynchro(models.Model):
             ctx=ctx,
             dir_mapper=dir_mapper,
             running_in_queue=running_in_queue,
-            logrec=logrec,
         )
 
     @api.model

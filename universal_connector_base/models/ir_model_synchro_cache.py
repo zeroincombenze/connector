@@ -1,5 +1,5 @@
 #
-# Copyright 2018-24 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
+# Copyright 2018-25 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
 #
 # Contributions to development, thanks to:
 # * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
@@ -20,35 +20,6 @@ except ImportError as err:  # pragma: no cover
 
 
 DEF_SKEYS = {
-    # "res.partner": [
-    #     # ["rea_office", "rea_code"],
-    #     ["?vat", "name", "is_company", "type"],
-    #     ["vat", "%name", "is_company", "type"],
-    #     ["+vat", "is_company", "type"],
-    #     ["!vat", "name", "type"],
-    # ],
-    # "res.company": [["vat"], ["name"], ["partner_id"]],
-    # "account.account": [
-    #     ["code", "company_id"],
-    #     ["name", "company_id"],
-    # ],
-    # "account.account.type": [["type"], ["name"]],
-    # "account.invoice": [["number", "company_id"], ["move_name", "company_id"]],
-    # "account.invoice.line": [["invoice_id", "sequence"], ["invoice_id", "name"]],
-    # "product.template": [
-    #     ["name", "default_code"],
-    #     ["name", "barcode"],
-    #     ["name"],
-    #     ["default_code"],
-    #     ["barcode"],
-    # ],
-    # "product.product": [
-    #     ["name", "default_code"],
-    #     ["name", "barcode"],
-    #     ["name"],
-    #     ["default_code"],
-    #     ["barcode"],
-    # ],
     "product.supplierinfo": [["name", "product_tmpl_id", "qty"], "!"],
     "project.project": [["account_analytic_id"]],
     "sale.order": [["name"]],
@@ -61,13 +32,6 @@ MODEL_LAZY_COMPANY = [
     "product.template",
     "product.product",
 ]
-# MAGIC_FIELDS = {
-#     "res.partner": {
-#         "company_id": False,
-#         "is_company": True,
-#         "supplier": True,
-#     },
-# }
 # Warning: order is very important!
 CANDIDATE_KEYS = [
     "acc_number",
@@ -80,7 +44,7 @@ CANDIDATE_KEYS = [
     "serial_number",
     "vat",
     "move_name",
-    # "email",
+    "email",
     "name",
 ]
 ANCILLARY_KEYS = [
@@ -133,11 +97,6 @@ class IrModelSynchroCache(models.Model):
         "base.config.settings",
         "base_import",
         "change.password.wizard",
-        # "ir.actions.actions",
-        # "ir.actions.act_window",
-        # "ir.actions.act_window.view",
-        # "ir.actions.report.xml",
-        # "ir.actions.server",
         "ir.autovacuum",
         "ir.config_parameter",
         "ir.exports",
@@ -150,8 +109,6 @@ class IrModelSynchroCache(models.Model):
         "ir.qweb",
         "ir.rule",
         "ir.translation",
-        # "ir.ui.menu",
-        # "ir.ui.view",
         "ir.values",
         "mail.alias",
         "mail.followers",
@@ -160,7 +117,6 @@ class IrModelSynchroCache(models.Model):
         "report",
         "res.config",
         "res.font",
-        # "res.groups",
         "res.request.link",
         "res.users.log",
         "web_tour",
@@ -209,11 +165,7 @@ class IrModelSynchroCache(models.Model):
     BLACKLIST_COLUMNS = SUPERMAGIC_COLUMNS + ["parent_left", "parent_right", "state"]
     DEF_INCL_FLDS = [
         "action",
-        # "category_id",
         "code",
-        # "company_id",
-        # "company_ids",
-        # "country_id",
         "description",
         "default_code",
         "journal_id",
@@ -322,7 +274,7 @@ class IrModelSynchroCache(models.Model):
             "name": {"protect_update": 2},
         },
         "res.currency": {
-            "rate_ids": {"protect_update": 2},
+            "rate_ids": {"protect_update": 3},
             "rounding": {"protect_update": 2},
         },
         "res.partner": {
@@ -335,6 +287,8 @@ class IrModelSynchroCache(models.Model):
             "property_stock_supplier": {"readonly": True},
             "title": {"readonly": True},
             "type": {"required": True},
+            "picking_warn": {"apply": "no-message"},
+            "invoice_warn": {"apply": "no-message"},
         },
         "res.partner.bank": {
             "bank_name": {"readonly": False},
@@ -369,7 +323,7 @@ class IrModelSynchroCache(models.Model):
         que_name = "IN_QUEUE%d" % prio
         ttl -= 1 if isinstance(ttl, int) else 0
         if ttl > 0:
-            if action in ("synchro", "trigger", "push"):
+            if action in ("synchro", "trigger", "pull"):
                 in_queue = self.get_attr(backend.id, que_name) or []
                 found_in_que = False
                 for que_action, que_model, que_values, que_ttl, que_ctx in in_queue:
