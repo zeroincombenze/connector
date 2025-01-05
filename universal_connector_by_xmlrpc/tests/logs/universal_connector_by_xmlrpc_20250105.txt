@@ -1,56 +1,56 @@
-2025-01-05 11:45:43,000 154982 DAEMON test_universal_connector_by_xmlrpc_12 run_odoo_debug.sh: cd /home/odoo/12.0/venv_odoo && source ./bin/activate
-2025-01-05 10:46:34,103 156787 INFO ? odoo: Odoo version 12.0 
-2025-01-05 10:46:34,104 156787 INFO ? odoo: Using configuration file at /home/odoo/12.0/connector/universal_connector_by_xmlrpc/tests/logs/zero12.connector.universal_connector_by_xmlrpc.conf 
-2025-01-05 10:46:34,104 156787 INFO ? odoo: addons paths: ['/home/odoo/.local/share/Odoo12/addons/12.0', '/home/odoo/12.0/odoo/addons', '/home/odoo/12.0/addons', '/home/odoo/.local/share/Odoo12/addons', '/home/odoo/12.0/account-analytic', '/home/odoo/12.0/account-budgeting', '/home/odoo/12.0/account-closing', '/home/odoo/12.0/account-consolidation', '/home/odoo/12.0/account-financial-reporting', '/home/odoo/12.0/account-financial-tools', '/home/odoo/12.0/account-fiscal-rule', '/home/odoo/12.0/account-invoice-reporting', '/home/odoo/12.0/account-invoicing', '/home/odoo/12.0/account-payment', '/home/odoo/12.0/account-reconcile', '/home/odoo/12.0/bank-payment', '/home/odoo/12.0/bank-statement-import', '/home/odoo/12.0/brand', '/home/odoo/12.0/calendar', '/home/odoo/12.0/commission', '/home/odoo/12.0/community-data-files', '/home/odoo/12.0/connector', '/home/odoo/12.0/contract', '/home/odoo/12.0/credit-control', '/home/odoo/12.0/crm', '/home/odoo/12.0/currency', '/home/odoo/12.0/data-protection', '/home/odoo/12.0/ddmrp', '/home/odoo/12.0/delivery-carrier', '/home/odoo/12.0/dms', '/home/odoo/12.0/e-commerce', '/home/odoo/12.0/edi', '/home/odoo/12.0/helpdesk', '/home/odoo/12.0/hr', '/home/odoo/12.0/intrastat-extrastat', '/home/odoo/12.0/knowledge', '/home/odoo/12.0/l10n-italy', '/home/odoo/12.0/l10n-italy-supplemental', '/home/odoo/12.0/maintenance', '/home/odoo/12.0/management-system', '/home/odoo/12.0/manufacture', '/home/odoo/12.0/margin-analysis', '/home/odoo/12.0/marketplace', '/home/odoo/12.0/mis-builder', '/home/odoo/12.0/multi-company', '/home/odoo/12.0/partner-contact', '/home/odoo/12.0/product-attribute', '/home/odoo/12.0/product-kitting', '/home/odoo/12.0/product-pack', '/home/odoo/12.0/product-variant', '/home/odoo/12.0/profiles', '/home/odoo/12.0/project', '/home/odoo/12.0/purchase-reporting', '/home/odoo/12.0/purchase-workflow', '/home/odoo/12.0/queue', '/home/odoo/12.0/report-print-send', '/home/odoo/12.0/reporting-engine', '/home/odoo/12.0/rma', '/home/odoo/12.0/sale-financial', '/home/odoo/12.0/sale-reporting', '/home/odoo/12.0/sale-workflow', '/home/odoo/12.0/search-engine', '/home/odoo/12.0/server-auth', '/home/odoo/12.0/server-backend', '/home/odoo/12.0/server-brand', '/home/odoo/12.0/server-env', '/home/odoo/12.0/server-tools', '/home/odoo/12.0/server-ux', '/home/odoo/12.0/social', '/home/odoo/12.0/stock-logistics-barcode', '/home/odoo/12.0/stock-logistics-reporting', '/home/odoo/12.0/stock-logistics-tracking', '/home/odoo/12.0/stock-logistics-transport', '/home/odoo/12.0/stock-logistics-warehouse', '/home/odoo/12.0/stock-logistics-workflow', '/home/odoo/12.0/storage', '/home/odoo/12.0/timesheet', '/home/odoo/12.0/uncovered', '/home/odoo/12.0/web', '/home/odoo/12.0/webhook', '/home/odoo/12.0/website', '/home/odoo/12.0/wms', '/home/odoo/12.0/zerobug-test', '/home/odoo/12.0/venv_odoo/lib/python3.7/site-packages/odoo/addons'] 
-2025-01-05 10:46:34,104 156787 INFO ? odoo: database: odoo12@localhost:5432 
-2025-01-05 10:46:34,257 156787 INFO ? odoo.addons.base.models.ir_actions_report: Will use the Wkhtmltopdf binary at /home/odoo/12.0/venv_odoo/bin/wkhtmltopdf 
-2025-01-05 10:46:34,380 156787 INFO ? odoo.service.server: HTTP service (werkzeug) running on NB200Z0.:52940 
-2025-01-05 10:46:34,396 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.modules.loading: loading 1 modules... 
-2025-01-05 10:46:34,407 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.modules.loading: 1 modules loaded in 0.01s, 0 queries 
-2025-01-05 10:46:34,537 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.modules.loading: updating modules list 
-2025-01-05 10:46:34,540 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_module: ALLOW access to module.update_list on [] to user __system__ #1 via n/a 
-2025-01-05 10:46:45,624 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_module: ALLOW access to module.button_install on ['universal_connector_by_xmlrpc'] to user __system__ #1 via n/a 
-2025-01-05 10:46:45,909 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.modules.loading: loading 11 modules... 
-2025-01-05 10:46:46,214 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.modules.loading: 11 modules loaded in 0.31s, 0 queries 
-2025-01-05 10:46:46,219 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.modules.loading: loading 12 modules... 
-2025-01-05 10:46:46,463 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.modules.registry: module universal_connector_by_xmlrpc: creating or updating database tables 
-2025-01-05 10:46:46,548 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.modules.loading: loading universal_connector_by_xmlrpc/data/synchro_channel.xml 
-2025-01-05 10:46:46,600 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.modules.loading: Module universal_connector_by_xmlrpc: loading demo 
-2025-01-05 10:46:47,048 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.modules.module: odoo.addons.universal_connector_by_xmlrpc.tests.test_backend running tests. 
-2025-01-05 10:46:47,049 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_by_xmlrpc.tests.test_backend: test_connection (odoo.addons.universal_connector_by_xmlrpc.tests.test_backend.MyTest) 
-2025-01-05 10:46:47,198 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_by_xmlrpc.tests.testenv: 🎺🎺🎺 Starting test v2.0.21 (debug_level=0, commit=True) 
-2025-01-05 10:46:47,201 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_by_xmlrpc.tests.testenv: 🎺🎺 Testing module: universal_connector_by_xmlrpc (12.0.0.3.13) 
-2025-01-05 10:46:47,201 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_by_xmlrpc.tests.testenv: 🎺🎺 Loading data from: synchro.channel  
-2025-01-05 10:46:47,244 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_by_xmlrpc.tests.test_backend: 🎺 Starting connection test on ports 8270 (db=oca10) and 8272 (db=oca12) and on ports 8167 (db=demo7) and 8168 (db=demo8) 
-2025-01-05 10:46:47,355 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.channel.button_check_connection(ep=admin@localhost:8167,h=localhost) 
-2025-01-05 10:46:52,577 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.company,oe7,remote_id=1,ttl=1) 
-2025-01-05 10:46:52,971 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.company,oe7,remote_id=4,ttl=1) 
-2025-01-05 10:46:53,366 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.company,oe7,remote_id=3,ttl=1) 
-2025-01-05 10:46:53,784 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.channel.button_reset_to_draft(ep=admin@localhost:8167,h=localhost): 
-2025-01-05 10:46:53,897 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.channel.button_check_connection(ep=admin@localhost:8167,h=localhost) 
-2025-01-05 10:46:54,200 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.company,oe7,remote_id=1,ttl=1) 
-2025-01-05 10:46:54,341 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.company,oe7,remote_id=4,ttl=1) 
-2025-01-05 10:46:54,630 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.company,oe7,remote_id=3,ttl=1) 
-2025-01-05 10:46:58,061 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.currency,oe7,remote_id=1,ttl=None) 
-2025-01-05 10:46:58,171 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.currency.synchro({'oe7:rate_ids': [1], 'oe7:name',backend=Test Odoo 7.0,min=True),ttl=4 
-2025-01-05 10:46:58,211 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.currency,oe7,remote_id=3,ttl=None) 
-2025-01-05 10:46:58,301 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.currency.synchro({'oe7:rate_ids': [177, 2], 'oe7:,backend=Test Odoo 7.0,min=True),ttl=4 
-2025-01-05 10:46:58,901 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.channel.button_check_connection(ep=admin@localhost:8168,h=localhost) 
-2025-01-05 10:47:08,552 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.company,oe8,remote_id=3,ttl=1) 
-2025-01-05 10:47:10,140 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.company,oe8,remote_id=1,ttl=1) 
-2025-01-05 10:47:12,004 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.channel.button_reset_to_draft(ep=admin@localhost:8168,h=localhost): 
-2025-01-05 10:47:12,439 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.channel.button_check_connection(ep=admin@localhost:8168,h=localhost) 
-2025-01-05 10:47:13,080 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.company,oe8,remote_id=3,ttl=1) 
-2025-01-05 10:47:14,576 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.company,oe8,remote_id=1,ttl=1) 
-2025-01-05 10:47:23,454 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.currency,oe8,remote_id=1,ttl=None) 
-2025-01-05 10:47:23,950 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.currency.synchro({'oe8:create_uid': False, 'oe8:c,backend=Test Odoo 8.0,min=True),ttl=4 
-2025-01-05 10:47:24,001 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.currency,oe8,remote_id=3,ttl=None) 
-2025-01-05 10:47:24,488 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.currency.synchro({'oe8:create_uid': [1, 'Administ,backend=Test Odoo 8.0,min=True),ttl=4 
-2025-01-05 10:47:24,531 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.country,oe8,remote_id=235,ttl=None) 
-2025-01-05 10:47:24,848 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.country.synchro({'oe8:create_uid': [1, 'Administ,backend=Test Odoo 8.0,min=True),ttl=4 
-2025-01-05 10:47:24,920 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=3,ttl=None) 
-2025-01-05 10:47:25,020 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.partner.synchro({'oe7:comment': False, 'oe7:webs,backend=Test Odoo 7.0,min=True),ttl=4 
-2025-01-05 10:47:25,124 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/e7/e7aa49e28912f86a83133bd5730a9f410d778dff 
+2025-01-05 14:24:22,000 282344 DAEMON test_universal_connector_by_xmlrpc_12 run_odoo_debug.sh: cd /home/odoo/12.0/venv_odoo && source ./bin/activate
+2025-01-05 13:24:53,917 283913 INFO ? odoo: Odoo version 12.0 
+2025-01-05 13:24:53,918 283913 INFO ? odoo: Using configuration file at /home/odoo/12.0/connector/universal_connector_by_xmlrpc/tests/logs/zero12.connector.universal_connector_by_xmlrpc.conf 
+2025-01-05 13:24:53,918 283913 INFO ? odoo: addons paths: ['/home/odoo/.local/share/Odoo12/addons/12.0', '/home/odoo/12.0/odoo/addons', '/home/odoo/12.0/addons', '/home/odoo/.local/share/Odoo12/addons', '/home/odoo/12.0/account-analytic', '/home/odoo/12.0/account-budgeting', '/home/odoo/12.0/account-closing', '/home/odoo/12.0/account-consolidation', '/home/odoo/12.0/account-financial-reporting', '/home/odoo/12.0/account-financial-tools', '/home/odoo/12.0/account-fiscal-rule', '/home/odoo/12.0/account-invoice-reporting', '/home/odoo/12.0/account-invoicing', '/home/odoo/12.0/account-payment', '/home/odoo/12.0/account-reconcile', '/home/odoo/12.0/bank-payment', '/home/odoo/12.0/bank-statement-import', '/home/odoo/12.0/brand', '/home/odoo/12.0/calendar', '/home/odoo/12.0/commission', '/home/odoo/12.0/community-data-files', '/home/odoo/12.0/connector', '/home/odoo/12.0/contract', '/home/odoo/12.0/credit-control', '/home/odoo/12.0/crm', '/home/odoo/12.0/currency', '/home/odoo/12.0/data-protection', '/home/odoo/12.0/ddmrp', '/home/odoo/12.0/delivery-carrier', '/home/odoo/12.0/dms', '/home/odoo/12.0/e-commerce', '/home/odoo/12.0/edi', '/home/odoo/12.0/helpdesk', '/home/odoo/12.0/hr', '/home/odoo/12.0/intrastat-extrastat', '/home/odoo/12.0/knowledge', '/home/odoo/12.0/l10n-italy', '/home/odoo/12.0/l10n-italy-supplemental', '/home/odoo/12.0/maintenance', '/home/odoo/12.0/management-system', '/home/odoo/12.0/manufacture', '/home/odoo/12.0/margin-analysis', '/home/odoo/12.0/marketplace', '/home/odoo/12.0/mis-builder', '/home/odoo/12.0/multi-company', '/home/odoo/12.0/partner-contact', '/home/odoo/12.0/product-attribute', '/home/odoo/12.0/product-kitting', '/home/odoo/12.0/product-pack', '/home/odoo/12.0/product-variant', '/home/odoo/12.0/profiles', '/home/odoo/12.0/project', '/home/odoo/12.0/purchase-reporting', '/home/odoo/12.0/purchase-workflow', '/home/odoo/12.0/queue', '/home/odoo/12.0/report-print-send', '/home/odoo/12.0/reporting-engine', '/home/odoo/12.0/rma', '/home/odoo/12.0/sale-financial', '/home/odoo/12.0/sale-reporting', '/home/odoo/12.0/sale-workflow', '/home/odoo/12.0/search-engine', '/home/odoo/12.0/server-auth', '/home/odoo/12.0/server-backend', '/home/odoo/12.0/server-brand', '/home/odoo/12.0/server-env', '/home/odoo/12.0/server-tools', '/home/odoo/12.0/server-ux', '/home/odoo/12.0/social', '/home/odoo/12.0/stock-logistics-barcode', '/home/odoo/12.0/stock-logistics-reporting', '/home/odoo/12.0/stock-logistics-tracking', '/home/odoo/12.0/stock-logistics-transport', '/home/odoo/12.0/stock-logistics-warehouse', '/home/odoo/12.0/stock-logistics-workflow', '/home/odoo/12.0/storage', '/home/odoo/12.0/timesheet', '/home/odoo/12.0/uncovered', '/home/odoo/12.0/web', '/home/odoo/12.0/webhook', '/home/odoo/12.0/website', '/home/odoo/12.0/wms', '/home/odoo/12.0/zerobug-test', '/home/odoo/12.0/venv_odoo/lib/python3.7/site-packages/odoo/addons'] 
+2025-01-05 13:24:53,918 283913 INFO ? odoo: database: odoo12@localhost:5432 
+2025-01-05 13:24:54,053 283913 INFO ? odoo.addons.base.models.ir_actions_report: Will use the Wkhtmltopdf binary at /home/odoo/12.0/venv_odoo/bin/wkhtmltopdf 
+2025-01-05 13:24:54,153 283913 INFO ? odoo.service.server: HTTP service (werkzeug) running on NB200Z0.:62460 
+2025-01-05 13:24:54,153 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.modules.loading: loading 1 modules... 
+2025-01-05 13:24:54,160 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.modules.loading: 1 modules loaded in 0.01s, 0 queries 
+2025-01-05 13:24:54,249 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.modules.loading: updating modules list 
+2025-01-05 13:24:54,253 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_module: ALLOW access to module.update_list on [] to user __system__ #1 via n/a 
+2025-01-05 13:25:01,881 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_module: ALLOW access to module.button_install on ['universal_connector_by_xmlrpc'] to user __system__ #1 via n/a 
+2025-01-05 13:25:02,057 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.modules.loading: loading 11 modules... 
+2025-01-05 13:25:02,240 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.modules.loading: 11 modules loaded in 0.18s, 0 queries 
+2025-01-05 13:25:02,243 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.modules.loading: loading 12 modules... 
+2025-01-05 13:25:02,391 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.modules.registry: module universal_connector_by_xmlrpc: creating or updating database tables 
+2025-01-05 13:25:02,434 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.modules.loading: loading universal_connector_by_xmlrpc/data/synchro_channel.xml 
+2025-01-05 13:25:02,456 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.modules.loading: Module universal_connector_by_xmlrpc: loading demo 
+2025-01-05 13:25:02,752 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.modules.module: odoo.addons.universal_connector_by_xmlrpc.tests.test_backend running tests. 
+2025-01-05 13:25:02,752 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_by_xmlrpc.tests.test_backend: test_connection (odoo.addons.universal_connector_by_xmlrpc.tests.test_backend.MyTest) 
+2025-01-05 13:25:02,849 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_by_xmlrpc.tests.testenv: 🎺🎺🎺 Starting test v2.0.21 (debug_level=0, commit=True) 
+2025-01-05 13:25:02,851 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_by_xmlrpc.tests.testenv: 🎺🎺 Testing module: universal_connector_by_xmlrpc (12.0.0.3.13) 
+2025-01-05 13:25:02,851 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_by_xmlrpc.tests.testenv: 🎺🎺 Loading data from: synchro.channel  
+2025-01-05 13:25:02,888 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_by_xmlrpc.tests.test_backend: 🎺 Starting connection test on ports 8270 (db=oca10) and 8272 (db=oca12) and on ports 8167 (db=demo7) and 8168 (db=demo8) 
+2025-01-05 13:25:03,020 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.channel.button_check_connection(ep=admin@localhost:8167,h=localhost) 
+2025-01-05 13:25:06,494 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.company,oe7,remote_id=1,ttl=1) 
+2025-01-05 13:25:06,663 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.company,oe7,remote_id=4,ttl=1) 
+2025-01-05 13:25:06,822 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.company,oe7,remote_id=3,ttl=1) 
+2025-01-05 13:25:06,993 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.channel.button_reset_to_draft(ep=admin@localhost:8167,h=localhost): 
+2025-01-05 13:25:07,048 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.channel.button_check_connection(ep=admin@localhost:8167,h=localhost) 
+2025-01-05 13:25:07,213 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.company,oe7,remote_id=1,ttl=1) 
+2025-01-05 13:25:07,291 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.company,oe7,remote_id=4,ttl=1) 
+2025-01-05 13:25:07,460 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.company,oe7,remote_id=3,ttl=1) 
+2025-01-05 13:25:09,657 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.currency,oe7,remote_id=1,ttl=None) 
+2025-01-05 13:25:09,713 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.currency.synchro({'oe7:rate_ids': [1], 'oe7:name',backend=Test Odoo 7.0,min=True),ttl=4 
+2025-01-05 13:25:09,737 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.currency,oe7,remote_id=3,ttl=None) 
+2025-01-05 13:25:09,791 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.currency.synchro({'oe7:rate_ids': [177, 2], 'oe7:,backend=Test Odoo 7.0,min=True),ttl=4 
+2025-01-05 13:25:09,956 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.channel.button_check_connection(ep=admin@localhost:8168,h=localhost) 
+2025-01-05 13:25:13,675 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.company,oe8,remote_id=3,ttl=1) 
+2025-01-05 13:25:14,024 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.company,oe8,remote_id=1,ttl=1) 
+2025-01-05 13:25:14,382 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.channel.button_reset_to_draft(ep=admin@localhost:8168,h=localhost): 
+2025-01-05 13:25:14,495 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.channel.button_check_connection(ep=admin@localhost:8168,h=localhost) 
+2025-01-05 13:25:14,724 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.company,oe8,remote_id=3,ttl=1) 
+2025-01-05 13:25:15,078 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.company,oe8,remote_id=1,ttl=1) 
+2025-01-05 13:25:17,779 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.currency,oe8,remote_id=1,ttl=None) 
+2025-01-05 13:25:17,893 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.currency.synchro({'oe8:create_uid': False, 'oe8:c,backend=Test Odoo 8.0,min=True),ttl=4 
+2025-01-05 13:25:17,918 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.currency,oe8,remote_id=3,ttl=None) 
+2025-01-05 13:25:18,022 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.currency.synchro({'oe8:create_uid': [1, 'Administ,backend=Test Odoo 8.0,min=True),ttl=4 
+2025-01-05 13:25:18,041 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.country,oe8,remote_id=235,ttl=None) 
+2025-01-05 13:25:18,151 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.country.synchro({'oe8:create_uid': [1, 'Administ,backend=Test Odoo 8.0,min=True),ttl=4 
+2025-01-05 13:25:18,189 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=3,ttl=None) 
+2025-01-05 13:25:18,243 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.partner.synchro({'oe7:comment': False, 'oe7:webs,backend=Test Odoo 7.0,min=True),ttl=4 
+2025-01-05 13:25:18,295 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/e7/e7aa49e28912f86a83133bd5730a9f410d778dff 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -87,7 +87,7 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/e7/e7aa49e28912f86a83133bd5730a9f410d778dff'
-2025-01-05 10:47:25,134 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/ce/ce9e7f90952a124be08d13907563c451acc1c099 
+2025-01-05 13:25:18,300 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/ce/ce9e7f90952a124be08d13907563c451acc1c099 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -124,7 +124,7 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/ce/ce9e7f90952a124be08d13907563c451acc1c099'
-2025-01-05 10:47:25,143 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/c9/c947cb81093ee89c7b1fe232191108af0ab4ff15 
+2025-01-05 13:25:18,304 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/c9/c947cb81093ee89c7b1fe232191108af0ab4ff15 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -161,23 +161,23 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/c9/c947cb81093ee89c7b1fe232191108af0ab4ff15'
-2025-01-05 10:47:25,191 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.users,oe7,remote_id=1,ttl=3) 
-2025-01-05 10:47:25,653 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.groups,oe7,remote_id=1,ttl=2) 
-2025-01-05 10:47:26,034 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.groups,oe7,remote_id=2,ttl=2) 
-2025-01-05 10:47:26,429 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.groups,oe7,remote_id=3,ttl=2) 
-2025-01-05 10:47:26,846 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.groups,oe7,remote_id=6,ttl=2) 
-2025-01-05 10:47:27,250 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.groups,oe7,remote_id=7,ttl=2) 
-2025-01-05 10:47:27,644 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.groups,oe7,remote_id=8,ttl=2) 
-2025-01-05 10:47:28,000 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.groups,oe7,remote_id=10,ttl=2) 
-2025-01-05 10:47:28,350 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.groups,oe7,remote_id=22,ttl=2) 
-2025-01-05 10:47:28,693 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.groups,oe7,remote_id=23,ttl=2) 
-2025-01-05 10:47:29,050 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.groups,oe7,remote_id=27,ttl=2) 
-2025-01-05 10:47:29,386 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.groups,oe7,remote_id=28,ttl=2) 
-2025-01-05 10:47:29,774 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=3,ttl=None) 
-2025-01-05 10:47:29,894 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.partner.synchro({'oe7:comment': False, 'oe7:webs,backend=Test Odoo 7.0,min=True),ttl=4 
-2025-01-05 10:47:30,002 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=8,ttl=None) 
-2025-01-05 10:47:30,098 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.partner.synchro({'oe7:comment': False, 'oe7:webs,backend=Test Odoo 7.0,min=True),ttl=4 
-2025-01-05 10:47:30,333 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/be/be510c4f13c4219e5c1ac51121520190bf98fef4 
+2025-01-05 13:25:18,327 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.users,oe7,remote_id=1,ttl=3) 
+2025-01-05 13:25:18,562 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.groups,oe7,remote_id=1,ttl=2) 
+2025-01-05 13:25:18,766 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.groups,oe7,remote_id=2,ttl=2) 
+2025-01-05 13:25:18,967 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.groups,oe7,remote_id=3,ttl=2) 
+2025-01-05 13:25:19,187 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.groups,oe7,remote_id=6,ttl=2) 
+2025-01-05 13:25:19,385 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.groups,oe7,remote_id=7,ttl=2) 
+2025-01-05 13:25:19,578 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.groups,oe7,remote_id=8,ttl=2) 
+2025-01-05 13:25:19,762 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.groups,oe7,remote_id=10,ttl=2) 
+2025-01-05 13:25:19,946 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.groups,oe7,remote_id=22,ttl=2) 
+2025-01-05 13:25:20,136 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.groups,oe7,remote_id=23,ttl=2) 
+2025-01-05 13:25:20,332 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.groups,oe7,remote_id=27,ttl=2) 
+2025-01-05 13:25:20,525 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.groups,oe7,remote_id=28,ttl=2) 
+2025-01-05 13:25:20,723 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=3,ttl=None) 
+2025-01-05 13:25:20,788 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.partner.synchro({'oe7:comment': False, 'oe7:webs,backend=Test Odoo 7.0,min=True),ttl=4 
+2025-01-05 13:25:20,842 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=8,ttl=None) 
+2025-01-05 13:25:20,895 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.partner.synchro({'oe7:comment': False, 'oe7:webs,backend=Test Odoo 7.0,min=True),ttl=4 
+2025-01-05 13:25:21,018 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/be/be510c4f13c4219e5c1ac51121520190bf98fef4 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -214,7 +214,7 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/be/be510c4f13c4219e5c1ac51121520190bf98fef4'
-2025-01-05 10:47:30,344 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/bb/bb61da124a13052f5e22901040fb3313aacc70e2 
+2025-01-05 13:25:21,025 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/bb/bb61da124a13052f5e22901040fb3313aacc70e2 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -251,7 +251,7 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/bb/bb61da124a13052f5e22901040fb3313aacc70e2'
-2025-01-05 10:47:30,351 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/19/195880cb461b0a68741876cc353c29349109f3bf 
+2025-01-05 13:25:21,028 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/19/195880cb461b0a68741876cc353c29349109f3bf 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -288,13 +288,13 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/19/195880cb461b0a68741876cc353c29349109f3bf'
-2025-01-05 10:47:30,410 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.country,oe7,remote_id=235,ttl=3) 
-2025-01-05 10:47:30,529 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.country.state,oe7,remote_id=5,ttl=3) 
-2025-01-05 10:47:30,808 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=8,ttl=3) 
-2025-01-05 10:47:31,032 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=36,ttl=3) 
-2025-01-05 10:47:31,511 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=35,ttl=3) 
-2025-01-05 10:47:31,881 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=34,ttl=3) 
-2025-01-05 10:47:32,224 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/1f/1f3b37adc61b802fb704cbd1202bafeb55b9e91d 
+2025-01-05 13:25:21,060 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.country,oe7,remote_id=235,ttl=3) 
+2025-01-05 13:25:21,127 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.country.state,oe7,remote_id=5,ttl=3) 
+2025-01-05 13:25:21,268 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=8,ttl=3) 
+2025-01-05 13:25:21,380 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=36,ttl=3) 
+2025-01-05 13:25:21,592 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=35,ttl=3) 
+2025-01-05 13:25:21,836 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=34,ttl=3) 
+2025-01-05 13:25:22,073 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/1f/1f3b37adc61b802fb704cbd1202bafeb55b9e91d 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -331,7 +331,7 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/1f/1f3b37adc61b802fb704cbd1202bafeb55b9e91d'
-2025-01-05 10:47:32,239 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/f8/f81f74df2ee639b76d6313b883fb6c0199bfaf1d 
+2025-01-05 13:25:22,078 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/f8/f81f74df2ee639b76d6313b883fb6c0199bfaf1d 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -368,7 +368,7 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/f8/f81f74df2ee639b76d6313b883fb6c0199bfaf1d'
-2025-01-05 10:47:32,247 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/e5/e5fa50c62b1218452c91519802e6e75d01b51f63 
+2025-01-05 13:25:22,085 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/e5/e5fa50c62b1218452c91519802e6e75d01b51f63 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -405,10 +405,10 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/e5/e5fa50c62b1218452c91519802e6e75d01b51f63'
-2025-01-05 10:47:32,302 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner.category,oe7,remote_id=13,ttl=3) 
-2025-01-05 10:47:32,581 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner.category,oe7,remote_id=12,ttl=3) 
-2025-01-05 10:47:33,011 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=5,ttl=2) 
-2025-01-05 10:47:33,357 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/5f/5f59e0caa6d536fe4a6415d87f4afb2ef0608fc1 
+2025-01-05 13:25:22,122 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner.category,oe7,remote_id=13,ttl=3) 
+2025-01-05 13:25:22,279 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner.category,oe7,remote_id=12,ttl=3) 
+2025-01-05 13:25:22,527 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=5,ttl=2) 
+2025-01-05 13:25:22,710 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/5f/5f59e0caa6d536fe4a6415d87f4afb2ef0608fc1 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -445,7 +445,7 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/5f/5f59e0caa6d536fe4a6415d87f4afb2ef0608fc1'
-2025-01-05 10:47:33,370 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/7b/7b4ba651f427d11b8a6d0a61d909b7cee569fe47 
+2025-01-05 13:25:22,717 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/7b/7b4ba651f427d11b8a6d0a61d909b7cee569fe47 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -482,7 +482,7 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/7b/7b4ba651f427d11b8a6d0a61d909b7cee569fe47'
-2025-01-05 10:47:33,379 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/86/86e794b27f958c8a4530ac64786ccf72280cbffd 
+2025-01-05 13:25:22,721 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/86/86e794b27f958c8a4530ac64786ccf72280cbffd 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -519,16 +519,16 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/86/86e794b27f958c8a4530ac64786ccf72280cbffd'
-2025-01-05 10:47:33,437 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.country,oe7,remote_id=229,ttl=1) 
-2025-01-05 10:47:33,544 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=5,ttl=1) 
-2025-01-05 10:47:33,786 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=10,ttl=2) 
-2025-01-05 10:47:34,194 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.country.state,oe7,remote_id=14,ttl=1) 
-2025-01-05 10:47:34,477 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=10,ttl=1) 
-2025-01-05 10:47:34,700 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=26,ttl=2) 
-2025-01-05 10:47:35,088 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.country,oe7,remote_id=233,ttl=1) 
-2025-01-05 10:47:35,191 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=26,ttl=1) 
-2025-01-05 10:47:35,442 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=29,ttl=1) 
-2025-01-05 10:47:35,779 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/24/2470aa607bdf1f128394703173f150fcc671f746 
+2025-01-05 13:25:22,752 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.country,oe7,remote_id=229,ttl=1) 
+2025-01-05 13:25:22,814 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=5,ttl=1) 
+2025-01-05 13:25:22,943 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=10,ttl=2) 
+2025-01-05 13:25:23,165 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.country.state,oe7,remote_id=14,ttl=1) 
+2025-01-05 13:25:23,310 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=10,ttl=1) 
+2025-01-05 13:25:23,433 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=26,ttl=2) 
+2025-01-05 13:25:23,765 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.country,oe7,remote_id=233,ttl=1) 
+2025-01-05 13:25:23,827 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=26,ttl=1) 
+2025-01-05 13:25:23,955 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=29,ttl=1) 
+2025-01-05 13:25:24,224 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/24/2470aa607bdf1f128394703173f150fcc671f746 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -565,7 +565,7 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/24/2470aa607bdf1f128394703173f150fcc671f746'
-2025-01-05 10:47:35,793 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/44/44cb76baaa2e336eb8e3fee70741d93da6100192 
+2025-01-05 13:25:24,234 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/44/44cb76baaa2e336eb8e3fee70741d93da6100192 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -602,7 +602,7 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/44/44cb76baaa2e336eb8e3fee70741d93da6100192'
-2025-01-05 10:47:35,801 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/5e/5ef8004c45951f37f0152cc1b20bc3fd300b8aa3 
+2025-01-05 13:25:24,239 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/5e/5ef8004c45951f37f0152cc1b20bc3fd300b8aa3 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -639,8 +639,8 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/5e/5ef8004c45951f37f0152cc1b20bc3fd300b8aa3'
-2025-01-05 10:47:35,854 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=28,ttl=1) 
-2025-01-05 10:47:36,174 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/2b/2bbfba99b1749239c49d753f9b8fca48490d370a 
+2025-01-05 13:25:24,273 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=28,ttl=1) 
+2025-01-05 13:25:24,508 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/2b/2bbfba99b1749239c49d753f9b8fca48490d370a 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -677,7 +677,7 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/2b/2bbfba99b1749239c49d753f9b8fca48490d370a'
-2025-01-05 10:47:36,192 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/d9/d93bc8dd77405cd6c302a9f03958b1622083c7f0 
+2025-01-05 13:25:24,523 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/d9/d93bc8dd77405cd6c302a9f03958b1622083c7f0 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -714,7 +714,7 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/d9/d93bc8dd77405cd6c302a9f03958b1622083c7f0'
-2025-01-05 10:47:36,201 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/d4/d44d9b4d5fe3b2ea81fa004c00395604a1df1b11 
+2025-01-05 13:25:24,528 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/d4/d44d9b4d5fe3b2ea81fa004c00395604a1df1b11 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -751,11 +751,11 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/d4/d44d9b4d5fe3b2ea81fa004c00395604a1df1b11'
-2025-01-05 10:47:36,249 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=39,ttl=1) 
-2025-01-05 10:47:36,786 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=62,ttl=1) 
-2025-01-05 10:47:37,284 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=7,ttl=None) 
-2025-01-05 10:47:37,384 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.partner.synchro({'oe7:comment': False, 'oe7:webs,backend=Test Odoo 7.0,min=True),ttl=4 
-2025-01-05 10:47:37,627 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/6e/6e6ca6a8bb84551c06e29990df6326edfac61c30 
+2025-01-05 13:25:24,564 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=39,ttl=1) 
+2025-01-05 13:25:24,895 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=62,ttl=1) 
+2025-01-05 13:25:25,224 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=7,ttl=None) 
+2025-01-05 13:25:25,297 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.partner.synchro({'oe7:comment': False, 'oe7:webs,backend=Test Odoo 7.0,min=True),ttl=4 
+2025-01-05 13:25:25,505 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/6e/6e6ca6a8bb84551c06e29990df6326edfac61c30 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -792,7 +792,7 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/6e/6e6ca6a8bb84551c06e29990df6326edfac61c30'
-2025-01-05 10:47:37,640 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/18/18ead9b7f905c756f17b72380593eaeec9a780f8 
+2025-01-05 13:25:25,512 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/18/18ead9b7f905c756f17b72380593eaeec9a780f8 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -829,7 +829,7 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/18/18ead9b7f905c756f17b72380593eaeec9a780f8'
-2025-01-05 10:47:37,650 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/e0/e02e22d0dd1da6214b5d5f4203ca7e8e1932404d 
+2025-01-05 13:25:25,517 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/e0/e02e22d0dd1da6214b5d5f4203ca7e8e1932404d 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -866,11 +866,11 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/e0/e02e22d0dd1da6214b5d5f4203ca7e8e1932404d'
-2025-01-05 10:47:37,711 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.country,oe7,remote_id=49,ttl=3) 
-2025-01-05 10:47:37,824 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=7,ttl=3) 
-2025-01-05 10:47:38,076 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.currency,oe7,remote_id=8,ttl=2) 
-2025-01-05 10:47:38,229 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=32,ttl=3) 
-2025-01-05 10:47:38,582 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/e1/e1e1059a01d6e0b0eb2c934cf023d70bfa5ebfcd 
+2025-01-05 13:25:25,551 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.country,oe7,remote_id=49,ttl=3) 
+2025-01-05 13:25:25,628 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=7,ttl=3) 
+2025-01-05 13:25:25,778 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.currency,oe7,remote_id=8,ttl=2) 
+2025-01-05 13:25:25,853 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=32,ttl=3) 
+2025-01-05 13:25:26,055 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/e1/e1e1059a01d6e0b0eb2c934cf023d70bfa5ebfcd 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -907,7 +907,7 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/e1/e1e1059a01d6e0b0eb2c934cf023d70bfa5ebfcd'
-2025-01-05 10:47:38,597 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/f6/f6936a6de2e5588d9bdf28efd74f4db5eec94b28 
+2025-01-05 13:25:26,062 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/f6/f6936a6de2e5588d9bdf28efd74f4db5eec94b28 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -944,7 +944,7 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/f6/f6936a6de2e5588d9bdf28efd74f4db5eec94b28'
-2025-01-05 10:47:38,605 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/6c/6c69c591559bbb23d94937cbe28f3a34301126e1 
+2025-01-05 13:25:26,067 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/6c/6c69c591559bbb23d94937cbe28f3a34301126e1 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -981,18 +981,18 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/6c/6c69c591559bbb23d94937cbe28f3a34301126e1'
-2025-01-05 10:47:38,657 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=33,ttl=3) 
-2025-01-05 10:47:39,013 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner.category,oe7,remote_id=9,ttl=3) 
-2025-01-05 10:47:39,292 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner.category,oe7,remote_id=14,ttl=3) 
-2025-01-05 10:47:39,663 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=11,ttl=2) 
-2025-01-05 10:47:40,082 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=11,ttl=1) 
-2025-01-05 10:47:40,324 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=12,ttl=2) 
-2025-01-05 10:47:40,747 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.country,oe7,remote_id=58,ttl=1) 
-2025-01-05 10:47:40,867 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=12,ttl=1) 
-2025-01-05 10:47:41,118 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=23,ttl=2) 
-2025-01-05 10:47:41,511 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=23,ttl=1) 
-2025-01-05 10:47:41,738 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=40,ttl=1) 
-2025-01-05 10:47:42,080 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/0c/0c78f98ea899bf4e50afdbc01263fcc9fd0a3206 
+2025-01-05 13:25:26,100 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=33,ttl=3) 
+2025-01-05 13:25:26,335 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner.category,oe7,remote_id=9,ttl=3) 
+2025-01-05 13:25:26,519 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner.category,oe7,remote_id=14,ttl=3) 
+2025-01-05 13:25:26,758 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=11,ttl=2) 
+2025-01-05 13:25:26,988 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=11,ttl=1) 
+2025-01-05 13:25:27,124 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=12,ttl=2) 
+2025-01-05 13:25:27,349 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.country,oe7,remote_id=58,ttl=1) 
+2025-01-05 13:25:27,409 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=12,ttl=1) 
+2025-01-05 13:25:27,542 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=23,ttl=2) 
+2025-01-05 13:25:27,776 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=23,ttl=1) 
+2025-01-05 13:25:27,903 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=40,ttl=1) 
+2025-01-05 13:25:28,086 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/0c/0c78f98ea899bf4e50afdbc01263fcc9fd0a3206 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -1029,7 +1029,7 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/0c/0c78f98ea899bf4e50afdbc01263fcc9fd0a3206'
-2025-01-05 10:47:42,091 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/25/256a8dda58ac15f417b3a20d7bff488689113b3a 
+2025-01-05 13:25:28,092 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/25/256a8dda58ac15f417b3a20d7bff488689113b3a 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -1066,7 +1066,7 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/25/256a8dda58ac15f417b3a20d7bff488689113b3a'
-2025-01-05 10:47:42,098 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/92/92c5c312d78caddc860c3ae5947f580f9844dba2 
+2025-01-05 13:25:28,096 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/92/92c5c312d78caddc860c3ae5947f580f9844dba2 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -1103,8 +1103,8 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/92/92c5c312d78caddc860c3ae5947f580f9844dba2'
-2025-01-05 10:47:42,164 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=41,ttl=1) 
-2025-01-05 10:47:42,538 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/6c/6c9541e39119d72b2a5707076f90f7f3eab3ea32 
+2025-01-05 13:25:28,127 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=41,ttl=1) 
+2025-01-05 13:25:28,303 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/6c/6c9541e39119d72b2a5707076f90f7f3eab3ea32 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -1141,7 +1141,7 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/6c/6c9541e39119d72b2a5707076f90f7f3eab3ea32'
-2025-01-05 10:47:42,550 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/4f/4f30dd4eee722d2974ba564d4c4939fbe5035c6c 
+2025-01-05 13:25:28,310 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/4f/4f30dd4eee722d2974ba564d4c4939fbe5035c6c 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -1178,7 +1178,7 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/4f/4f30dd4eee722d2974ba564d4c4939fbe5035c6c'
-2025-01-05 10:47:42,558 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/ef/ef3d7f47ded70c0dd826f17be67971acf375b0d7 
+2025-01-05 13:25:28,314 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/ef/ef3d7f47ded70c0dd826f17be67971acf375b0d7 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -1215,9 +1215,9 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/ef/ef3d7f47ded70c0dd826f17be67971acf375b0d7'
-2025-01-05 10:47:42,624 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner.category,oe7,remote_id=5,ttl=1) 
-2025-01-05 10:47:43,037 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=42,ttl=1) 
-2025-01-05 10:47:43,371 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/8b/8bcd1ed212fb444a25a01a0316c702e121384935 
+2025-01-05 13:25:28,344 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner.category,oe7,remote_id=5,ttl=1) 
+2025-01-05 13:25:28,570 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=42,ttl=1) 
+2025-01-05 13:25:28,747 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/8b/8bcd1ed212fb444a25a01a0316c702e121384935 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -1254,7 +1254,7 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/8b/8bcd1ed212fb444a25a01a0316c702e121384935'
-2025-01-05 10:47:43,372 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/0c/0cffbaa48243465315e779fb34e9b11f3b24aec2 
+2025-01-05 13:25:28,747 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/0c/0cffbaa48243465315e779fb34e9b11f3b24aec2 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -1291,7 +1291,7 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/0c/0cffbaa48243465315e779fb34e9b11f3b24aec2'
-2025-01-05 10:47:43,383 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/e0/e0d67066bea1efba5ceedf86f53e6ed53104866a 
+2025-01-05 13:25:28,755 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/e0/e0d67066bea1efba5ceedf86f53e6ed53104866a 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -1328,7 +1328,7 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/e0/e0d67066bea1efba5ceedf86f53e6ed53104866a'
-2025-01-05 10:47:43,384 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/87/87b0649b877b60331e140b3ce218717e2b2191c3 
+2025-01-05 13:25:28,755 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/87/87b0649b877b60331e140b3ce218717e2b2191c3 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -1365,7 +1365,7 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/87/87b0649b877b60331e140b3ce218717e2b2191c3'
-2025-01-05 10:47:43,391 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/9e/9e7be815b34e0194dad655d0bd774721be7fc432 
+2025-01-05 13:25:28,759 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/9e/9e7be815b34e0194dad655d0bd774721be7fc432 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -1402,7 +1402,7 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/9e/9e7be815b34e0194dad655d0bd774721be7fc432'
-2025-01-05 10:47:43,391 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/ce/ce5e65681fca0f84effa136884518738a4ed269a 
+2025-01-05 13:25:28,759 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/ce/ce5e65681fca0f84effa136884518738a4ed269a 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -1439,38 +1439,38 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/ce/ce5e65681fca0f84effa136884518738a4ed269a'
-2025-01-05 10:47:43,451 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner.category,oe7,remote_id=16,ttl=1) 
-2025-01-05 10:47:43,859 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=58,ttl=1) 
-2025-01-05 10:47:44,224 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner.category,oe7,remote_id=15,ttl=1) 
-2025-01-05 10:47:44,656 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.currency,oe7,remote_id=1,ttl=None) 
-2025-01-05 10:47:44,777 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.currency.synchro({'oe7:rate_ids': [1], 'oe7:name',backend=Test Odoo 7.0,min=True),ttl=4 
-2025-01-05 10:47:44,801 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.currency,oe7,remote_id=3,ttl=None) 
-2025-01-05 10:47:44,914 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.currency.synchro({'oe7:rate_ids': [177, 2], 'oe7:,backend=Test Odoo 7.0,min=True),ttl=4 
-2025-01-05 10:47:44,945 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=3,ttl=None) 
-2025-01-05 10:47:45,049 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.partner.synchro({'oe7:comment': False, 'oe7:webs,backend=Test Odoo 7.0,min=True),ttl=4 
-2025-01-05 10:47:45,150 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=8,ttl=None) 
-2025-01-05 10:47:45,265 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.partner.synchro({'oe7:comment': False, 'oe7:webs,backend=Test Odoo 7.0,min=True),ttl=4 
-2025-01-05 10:47:45,383 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=7,ttl=None) 
-2025-01-05 10:47:45,514 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.partner.synchro({'oe7:comment': False, 'oe7:webs,backend=Test Odoo 7.0,min=True),ttl=4 
-2025-01-05 10:47:45,640 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=3,ttl=None) 
-2025-01-05 10:47:45,855 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.partner.synchro({'oe8:comment': False, 'oe8:webs,backend=Test Odoo 8.0,min=True),ttl=4 
-2025-01-05 10:47:45,967 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.users,oe8,remote_id=1,ttl=3) 
-2025-01-05 10:47:46,812 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.groups,oe8,remote_id=3,ttl=2) 
-2025-01-05 10:47:47,642 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.groups,oe8,remote_id=18,ttl=2) 
-2025-01-05 10:47:48,402 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.groups,oe8,remote_id=5,ttl=2) 
-2025-01-05 10:47:49,082 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.groups,oe8,remote_id=22,ttl=2) 
-2025-01-05 10:47:49,804 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.groups,oe8,remote_id=10,ttl=2) 
-2025-01-05 10:47:50,524 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.groups,oe8,remote_id=24,ttl=2) 
-2025-01-05 10:47:51,253 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.groups,oe8,remote_id=4,ttl=2) 
-2025-01-05 10:47:52,014 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.groups,oe8,remote_id=8,ttl=2) 
-2025-01-05 10:47:52,722 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.groups,oe8,remote_id=23,ttl=2) 
-2025-01-05 10:47:53,452 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.groups,oe8,remote_id=9,ttl=2) 
-2025-01-05 10:47:54,156 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.groups,oe8,remote_id=20,ttl=2) 
-2025-01-05 10:47:54,866 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=15,ttl=None) 
-2025-01-05 10:47:55,084 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.partner.synchro({'oe8:comment': False, 'oe8:webs,backend=Test Odoo 8.0,min=True),ttl=4 
-2025-01-05 10:47:55,215 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.country.state,oe8,remote_id=18,ttl=3) 
-2025-01-05 10:47:55,784 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=52,ttl=3) 
-2025-01-05 10:47:56,443 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/d6/d694aedb3fd293b0ad70a7ee7cbc4c0918d51d21 
+2025-01-05 13:25:28,788 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner.category,oe7,remote_id=16,ttl=1) 
+2025-01-05 13:25:29,006 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=58,ttl=1) 
+2025-01-05 13:25:29,208 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner.category,oe7,remote_id=15,ttl=1) 
+2025-01-05 13:25:29,460 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.currency,oe7,remote_id=1,ttl=None) 
+2025-01-05 13:25:29,521 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.currency.synchro({'oe7:rate_ids': [1], 'oe7:name',backend=Test Odoo 7.0,min=True),ttl=4 
+2025-01-05 13:25:29,536 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.currency,oe7,remote_id=3,ttl=None) 
+2025-01-05 13:25:29,590 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.currency.synchro({'oe7:rate_ids': [177, 2], 'oe7:,backend=Test Odoo 7.0,min=True),ttl=4 
+2025-01-05 13:25:29,606 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=3,ttl=None) 
+2025-01-05 13:25:29,659 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.partner.synchro({'oe7:comment': False, 'oe7:webs,backend=Test Odoo 7.0,min=True),ttl=4 
+2025-01-05 13:25:29,720 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=8,ttl=None) 
+2025-01-05 13:25:29,777 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.partner.synchro({'oe7:comment': False, 'oe7:webs,backend=Test Odoo 7.0,min=True),ttl=4 
+2025-01-05 13:25:29,841 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=7,ttl=None) 
+2025-01-05 13:25:29,895 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.partner.synchro({'oe7:comment': False, 'oe7:webs,backend=Test Odoo 7.0,min=True),ttl=4 
+2025-01-05 13:25:29,967 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=3,ttl=None) 
+2025-01-05 13:25:30,084 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.partner.synchro({'oe8:comment': False, 'oe8:webs,backend=Test Odoo 8.0,min=True),ttl=4 
+2025-01-05 13:25:30,159 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.users,oe8,remote_id=1,ttl=3) 
+2025-01-05 13:25:30,564 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.groups,oe8,remote_id=3,ttl=2) 
+2025-01-05 13:25:30,960 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.groups,oe8,remote_id=18,ttl=2) 
+2025-01-05 13:25:31,351 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.groups,oe8,remote_id=5,ttl=2) 
+2025-01-05 13:25:31,791 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.groups,oe8,remote_id=22,ttl=2) 
+2025-01-05 13:25:32,185 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.groups,oe8,remote_id=10,ttl=2) 
+2025-01-05 13:25:32,631 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.groups,oe8,remote_id=24,ttl=2) 
+2025-01-05 13:25:33,067 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.groups,oe8,remote_id=4,ttl=2) 
+2025-01-05 13:25:33,494 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.groups,oe8,remote_id=8,ttl=2) 
+2025-01-05 13:25:33,901 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.groups,oe8,remote_id=23,ttl=2) 
+2025-01-05 13:25:34,303 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.groups,oe8,remote_id=9,ttl=2) 
+2025-01-05 13:25:34,711 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.groups,oe8,remote_id=20,ttl=2) 
+2025-01-05 13:25:35,138 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=15,ttl=None) 
+2025-01-05 13:25:35,263 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.partner.synchro({'oe8:comment': False, 'oe8:webs,backend=Test Odoo 8.0,min=True),ttl=4 
+2025-01-05 13:25:35,337 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.country.state,oe8,remote_id=18,ttl=3) 
+2025-01-05 13:25:35,668 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=52,ttl=3) 
+2025-01-05 13:25:36,037 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/d6/d694aedb3fd293b0ad70a7ee7cbc4c0918d51d21 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -1507,7 +1507,7 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/d6/d694aedb3fd293b0ad70a7ee7cbc4c0918d51d21'
-2025-01-05 10:47:56,459 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/25/25668fabdb766827cb0d7b27736d60b093e4ebf7 
+2025-01-05 13:25:36,045 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/25/25668fabdb766827cb0d7b27736d60b093e4ebf7 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -1544,7 +1544,7 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/25/25668fabdb766827cb0d7b27736d60b093e4ebf7'
-2025-01-05 10:47:56,469 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/1c/1c0493f280e96b469f86725a32c39cae72bb9b5f 
+2025-01-05 13:25:36,049 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/1c/1c0493f280e96b469f86725a32c39cae72bb9b5f 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -1581,8 +1581,8 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/1c/1c0493f280e96b469f86725a32c39cae72bb9b5f'
-2025-01-05 10:47:56,530 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=53,ttl=3) 
-2025-01-05 10:47:57,149 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/c8/c8fd583925c09ec326a3b997cd044a0ad7636db7 
+2025-01-05 13:25:36,076 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=53,ttl=3) 
+2025-01-05 13:25:36,430 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/c8/c8fd583925c09ec326a3b997cd044a0ad7636db7 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -1619,7 +1619,7 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/c8/c8fd583925c09ec326a3b997cd044a0ad7636db7'
-2025-01-05 10:47:57,164 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/d1/d11256bbbee226b9d70934d607d8c2623ac43bee 
+2025-01-05 13:25:36,439 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/d1/d11256bbbee226b9d70934d607d8c2623ac43bee 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -1656,7 +1656,7 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/d1/d11256bbbee226b9d70934d607d8c2623ac43bee'
-2025-01-05 10:47:57,171 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/5c/5c8ecc838115f07c84f25dd094d612b8a89fec21 
+2025-01-05 13:25:36,443 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/5c/5c8ecc838115f07c84f25dd094d612b8a89fec21 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -1693,17 +1693,17 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/5c/5c8ecc838115f07c84f25dd094d612b8a89fec21'
-2025-01-05 10:47:57,217 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner.category,oe8,remote_id=5,ttl=3) 
-2025-01-05 10:47:57,800 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner.category,oe8,remote_id=1,ttl=2) 
-2025-01-05 10:47:58,357 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner.category,oe8,remote_id=8,ttl=3) 
-2025-01-05 10:47:58,939 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=18,ttl=2) 
-2025-01-05 10:47:59,617 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.country,oe8,remote_id=76,ttl=1) 
-2025-01-05 10:47:59,856 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=18,ttl=1) 
-2025-01-05 10:48:00,185 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=12,ttl=2) 
-2025-01-05 10:48:00,842 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.country,oe8,remote_id=233,ttl=1) 
-2025-01-05 10:48:01,176 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=12,ttl=1) 
-2025-01-05 10:48:01,490 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=17,ttl=2) 
-2025-01-05 10:48:02,153 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/0c/0cffbaa48243465315e779fb34e9b11f3b24aec2 
+2025-01-05 13:25:36,470 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner.category,oe8,remote_id=5,ttl=3) 
+2025-01-05 13:25:36,841 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner.category,oe8,remote_id=1,ttl=2) 
+2025-01-05 13:25:37,208 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner.category,oe8,remote_id=8,ttl=3) 
+2025-01-05 13:25:37,581 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=18,ttl=2) 
+2025-01-05 13:25:38,022 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.country,oe8,remote_id=76,ttl=1) 
+2025-01-05 13:25:38,153 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=18,ttl=1) 
+2025-01-05 13:25:38,334 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=12,ttl=2) 
+2025-01-05 13:25:38,739 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.country,oe8,remote_id=233,ttl=1) 
+2025-01-05 13:25:38,871 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=12,ttl=1) 
+2025-01-05 13:25:39,055 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=17,ttl=2) 
+2025-01-05 13:25:39,575 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/0c/0cffbaa48243465315e779fb34e9b11f3b24aec2 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -1740,7 +1740,7 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/0c/0cffbaa48243465315e779fb34e9b11f3b24aec2'
-2025-01-05 10:48:02,168 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/87/87b0649b877b60331e140b3ce218717e2b2191c3 
+2025-01-05 13:25:39,584 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/87/87b0649b877b60331e140b3ce218717e2b2191c3 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -1777,7 +1777,7 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/87/87b0649b877b60331e140b3ce218717e2b2191c3'
-2025-01-05 10:48:02,177 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/ce/ce5e65681fca0f84effa136884518738a4ed269a 
+2025-01-05 13:25:39,588 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/ce/ce5e65681fca0f84effa136884518738a4ed269a 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -1814,15 +1814,15 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/ce/ce5e65681fca0f84effa136884518738a4ed269a'
-2025-01-05 10:48:02,236 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=17,ttl=1) 
-2025-01-05 10:48:02,817 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=22,ttl=2) 
-2025-01-05 10:48:04,534 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.country,oe8,remote_id=11,ttl=1) 
-2025-01-05 10:48:05,249 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=22,ttl=1) 
-2025-01-05 10:48:06,425 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner.category,oe8,remote_id=7,ttl=1) 
-2025-01-05 10:48:08,397 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner.category,oe8,remote_id=6,ttl=1) 
-2025-01-05 10:48:09,969 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=16,ttl=1) 
-2025-01-05 10:48:11,598 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=7,ttl=2) 
-2025-01-05 10:48:13,277 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/9b/9b995a832118f933c8689d27b57c0d8d3fe044e7 
+2025-01-05 13:25:39,618 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=17,ttl=1) 
+2025-01-05 13:25:39,793 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=22,ttl=2) 
+2025-01-05 13:25:40,331 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.country,oe8,remote_id=11,ttl=1) 
+2025-01-05 13:25:40,471 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=22,ttl=1) 
+2025-01-05 13:25:40,664 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner.category,oe8,remote_id=7,ttl=1) 
+2025-01-05 13:25:41,035 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner.category,oe8,remote_id=6,ttl=1) 
+2025-01-05 13:25:41,360 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=16,ttl=1) 
+2025-01-05 13:25:41,818 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=7,ttl=2) 
+2025-01-05 13:25:42,177 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/9b/9b995a832118f933c8689d27b57c0d8d3fe044e7 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -1859,7 +1859,7 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/9b/9b995a832118f933c8689d27b57c0d8d3fe044e7'
-2025-01-05 10:48:13,292 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/31/3112ba542d36c49e05aba2de97e3cc07413d8d22 
+2025-01-05 13:25:42,184 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/31/3112ba542d36c49e05aba2de97e3cc07413d8d22 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -1896,7 +1896,7 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/31/3112ba542d36c49e05aba2de97e3cc07413d8d22'
-2025-01-05 10:48:13,301 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/75/75cad89eeb26116b1155b742de74efd7e079a8c3 
+2025-01-05 13:25:42,188 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/75/75cad89eeb26116b1155b742de74efd7e079a8c3 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -1933,24 +1933,24 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/75/75cad89eeb26116b1155b742de74efd7e079a8c3'
-2025-01-05 10:48:13,354 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.country,oe8,remote_id=21,ttl=1) 
-2025-01-05 10:48:13,966 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=7,ttl=1) 
-2025-01-05 10:48:14,594 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=14,ttl=2) 
-2025-01-05 10:48:16,226 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.country,oe8,remote_id=105,ttl=1) 
-2025-01-05 10:48:16,953 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=14,ttl=1) 
-2025-01-05 10:48:17,673 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=19,ttl=2) 
-2025-01-05 10:48:19,436 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.country.state,oe8,remote_id=43,ttl=1) 
-2025-01-05 10:48:20,734 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=19,ttl=1) 
-2025-01-05 10:48:21,373 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=29,ttl=2) 
-2025-01-05 10:48:23,095 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=29,ttl=1) 
-2025-01-05 10:48:23,763 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=57,ttl=1) 
-2025-01-05 10:48:25,512 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner.category,oe8,remote_id=11,ttl=1) 
-2025-01-05 10:48:27,069 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=48,ttl=1) 
-2025-01-05 10:48:28,638 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=49,ttl=1) 
-2025-01-05 10:48:29,957 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner.category,oe8,remote_id=9,ttl=1) 
-2025-01-05 10:48:31,339 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=56,ttl=1) 
-2025-01-05 10:48:32,747 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=61,ttl=1) 
-2025-01-05 10:48:34,199 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/63/63d4ba80def55da294e5ecc6a94b9d450860cb65 
+2025-01-05 13:25:42,215 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.country,oe8,remote_id=21,ttl=1) 
+2025-01-05 13:25:42,353 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=7,ttl=1) 
+2025-01-05 13:25:42,535 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=14,ttl=2) 
+2025-01-05 13:25:43,128 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.country,oe8,remote_id=105,ttl=1) 
+2025-01-05 13:25:43,347 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=14,ttl=1) 
+2025-01-05 13:25:43,559 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=19,ttl=2) 
+2025-01-05 13:25:44,010 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.country.state,oe8,remote_id=43,ttl=1) 
+2025-01-05 13:25:44,365 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=19,ttl=1) 
+2025-01-05 13:25:44,577 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=29,ttl=2) 
+2025-01-05 13:25:45,028 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=29,ttl=1) 
+2025-01-05 13:25:45,232 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=57,ttl=1) 
+2025-01-05 13:25:45,691 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner.category,oe8,remote_id=11,ttl=1) 
+2025-01-05 13:25:46,145 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=48,ttl=1) 
+2025-01-05 13:25:46,595 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=49,ttl=1) 
+2025-01-05 13:25:47,024 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner.category,oe8,remote_id=9,ttl=1) 
+2025-01-05 13:25:47,376 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=56,ttl=1) 
+2025-01-05 13:25:47,783 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=61,ttl=1) 
+2025-01-05 13:25:48,183 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/63/63d4ba80def55da294e5ecc6a94b9d450860cb65 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -1987,7 +1987,7 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/63/63d4ba80def55da294e5ecc6a94b9d450860cb65'
-2025-01-05 10:48:34,211 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/c2/c2c6e45caa93ee80957d8e122b06360e723a1d13 
+2025-01-05 13:25:48,196 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/c2/c2c6e45caa93ee80957d8e122b06360e723a1d13 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -2024,7 +2024,7 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/c2/c2c6e45caa93ee80957d8e122b06360e723a1d13'
-2025-01-05 10:48:34,220 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/86/865e9cfe659d9f88ea3c61725873bd0499a84890 
+2025-01-05 13:25:48,207 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/86/865e9cfe659d9f88ea3c61725873bd0499a84890 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -2061,8 +2061,8 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/86/865e9cfe659d9f88ea3c61725873bd0499a84890'
-2025-01-05 10:48:34,416 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=43,ttl=1) 
-2025-01-05 10:48:35,938 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/b8/b8e80fa6386f7e827ed68466f0dcdede5e6aaa2e 
+2025-01-05 13:25:48,307 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=43,ttl=1) 
+2025-01-05 13:25:48,673 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/b8/b8e80fa6386f7e827ed68466f0dcdede5e6aaa2e 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -2099,7 +2099,7 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/b8/b8e80fa6386f7e827ed68466f0dcdede5e6aaa2e'
-2025-01-05 10:48:35,952 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/1e/1e66f25038821205dca768999b2daa3064acd4db 
+2025-01-05 13:25:48,681 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/1e/1e66f25038821205dca768999b2daa3064acd4db 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -2136,7 +2136,7 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/1e/1e66f25038821205dca768999b2daa3064acd4db'
-2025-01-05 10:48:35,959 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/42/42088edd81a592d8ee5171d01b8afcbb4d530504 
+2025-01-05 13:25:48,685 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/42/42088edd81a592d8ee5171d01b8afcbb4d530504 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -2173,10 +2173,10 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/42/42088edd81a592d8ee5171d01b8afcbb4d530504'
-2025-01-05 10:48:36,014 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=42,ttl=1) 
-2025-01-05 10:48:37,029 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner.category,oe8,remote_id=10,ttl=1) 
-2025-01-05 10:48:38,035 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=51,ttl=1) 
-2025-01-05 10:48:38,989 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/b2/b29e8936556376421844858012fc6c634f96752d 
+2025-01-05 13:25:48,714 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=42,ttl=1) 
+2025-01-05 13:25:49,115 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner.category,oe8,remote_id=10,ttl=1) 
+2025-01-05 13:25:49,489 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=51,ttl=1) 
+2025-01-05 13:25:49,934 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/b2/b29e8936556376421844858012fc6c634f96752d 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -2213,7 +2213,7 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/b2/b29e8936556376421844858012fc6c634f96752d'
-2025-01-05 10:48:39,003 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/df/dfbe9ee58cd37af11fcd0ae18826a12f71ad8cb6 
+2025-01-05 13:25:49,940 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/df/dfbe9ee58cd37af11fcd0ae18826a12f71ad8cb6 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -2250,7 +2250,7 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/df/dfbe9ee58cd37af11fcd0ae18826a12f71ad8cb6'
-2025-01-05 10:48:39,009 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/60/609620c3aecd9ff93b07db5fd9f03c1b6e54f491 
+2025-01-05 13:25:49,943 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/60/609620c3aecd9ff93b07db5fd9f03c1b6e54f491 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -2287,9 +2287,9 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/60/609620c3aecd9ff93b07db5fd9f03c1b6e54f491'
-2025-01-05 10:48:39,185 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=58,ttl=1) 
-2025-01-05 10:48:39,912 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=59,ttl=1) 
-2025-01-05 10:48:40,648 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/f0/f0068698d805597da85a9b9a5e24888373dc2168 
+2025-01-05 13:25:50,079 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=58,ttl=1) 
+2025-01-05 13:25:51,138 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=59,ttl=1) 
+2025-01-05 13:25:51,573 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/f0/f0068698d805597da85a9b9a5e24888373dc2168 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -2326,7 +2326,7 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/f0/f0068698d805597da85a9b9a5e24888373dc2168'
-2025-01-05 10:48:40,663 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/18/180703411d6ad50eaff82af40f723aed88ba842c 
+2025-01-05 13:25:51,579 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/18/180703411d6ad50eaff82af40f723aed88ba842c 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -2363,7 +2363,7 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/18/180703411d6ad50eaff82af40f723aed88ba842c'
-2025-01-05 10:48:40,675 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/b3/b3423c5d814482b978212e297398c765027c97eb 
+2025-01-05 13:25:51,586 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/b3/b3423c5d814482b978212e297398c765027c97eb 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -2400,66 +2400,66 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/b3/b3423c5d814482b978212e297398c765027c97eb'
-2025-01-05 10:48:40,964 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=3,ttl=None) 
-2025-01-05 10:48:41,173 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.partner.synchro({'oe8:comment': False, 'oe8:webs,backend=Test Odoo 8.0,min=True),ttl=4 
-2025-01-05 10:48:41,291 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=15,ttl=None) 
-2025-01-05 10:48:41,479 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.partner.synchro({'oe8:comment': False, 'oe8:webs,backend=Test Odoo 8.0,min=True),ttl=4 
-2025-01-05 10:48:41,642 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=9,ttl=None) 
-2025-01-05 10:48:41,869 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.partner.synchro({'oe8:comment': False, 'oe8:webs,backend=Test Odoo 8.0,min=True),ttl=4 
-2025-01-05 10:48:42,424 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.country.state,oe8,remote_id=13,ttl=3) 
-2025-01-05 10:48:43,048 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=9,ttl=3) 
-2025-01-05 10:48:43,393 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=36,ttl=3) 
-2025-01-05 10:48:44,150 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=35,ttl=3) 
-2025-01-05 10:48:44,810 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=34,ttl=3) 
-2025-01-05 10:48:45,576 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner.category,oe8,remote_id=13,ttl=3) 
-2025-01-05 10:48:46,192 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner.category,oe8,remote_id=12,ttl=3) 
-2025-01-05 10:48:46,792 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=6,ttl=2) 
-2025-01-05 10:48:47,539 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.country,oe8,remote_id=229,ttl=1) 
-2025-01-05 10:48:47,822 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=6,ttl=1) 
-2025-01-05 10:48:48,152 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=11,ttl=2) 
-2025-01-05 10:48:48,867 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=11,ttl=1) 
-2025-01-05 10:48:49,210 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=27,ttl=2) 
-2025-01-05 10:48:49,914 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=27,ttl=1) 
-2025-01-05 10:48:50,252 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=33,ttl=1) 
-2025-01-05 10:48:51,008 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=32,ttl=1) 
-2025-01-05 10:48:51,737 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=37,ttl=1) 
-2025-01-05 10:48:52,602 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=41,ttl=1) 
-2025-01-05 10:48:53,354 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=7,ttl=None) 
-2025-01-05 10:48:53,579 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.partner.synchro({'oe8:comment': False, 'oe8:webs,backend=Test Odoo 8.0,min=True),ttl=4 
-2025-01-05 10:48:53,706 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.currency,oe8,remote_id=1,ttl=None) 
-2025-01-05 10:48:53,894 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.currency.synchro({'oe8:create_uid': False, 'oe8:c,backend=Test Odoo 8.0,min=True),ttl=4 
-2025-01-05 10:48:53,929 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.currency,oe8,remote_id=3,ttl=None) 
-2025-01-05 10:48:54,109 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.currency.synchro({'oe8:create_uid': [1, 'Administ,backend=Test Odoo 8.0,min=True),ttl=4 
-2025-01-05 10:48:54,140 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.country,oe8,remote_id=235,ttl=None) 
-2025-01-05 10:48:54,338 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.country.synchro({'oe8:create_uid': [1, 'Administ,backend=Test Odoo 8.0,min=True),ttl=4 
-2025-01-05 10:48:54,382 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=3,ttl=None) 
-2025-01-05 10:48:54,586 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.partner.synchro({'oe8:comment': False, 'oe8:webs,backend=Test Odoo 8.0,min=True),ttl=4 
-2025-01-05 10:48:54,716 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=15,ttl=None) 
-2025-01-05 10:48:54,909 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.partner.synchro({'oe8:comment': False, 'oe8:webs,backend=Test Odoo 8.0,min=True),ttl=4 
-2025-01-05 10:48:55,042 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=9,ttl=None) 
-2025-01-05 10:48:55,257 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.partner.synchro({'oe8:comment': False, 'oe8:webs,backend=Test Odoo 8.0,min=True),ttl=4 
-2025-01-05 10:48:55,376 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=7,ttl=None) 
-2025-01-05 10:48:55,599 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.partner.synchro({'oe8:comment': False, 'oe8:webs,backend=Test Odoo 8.0,min=True),ttl=4 
-2025-01-05 10:48:55,778 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=3,ttl=None) 
-2025-01-05 10:48:55,977 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.partner.synchro({'oe8:comment': False, 'oe8:webs,backend=Test Odoo 8.0,min=True),ttl=4 
-2025-01-05 10:48:56,087 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=3,ttl=None) 
-2025-01-05 10:48:56,211 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.partner.synchro({'oe7:comment': False, 'oe7:webs,backend=Test Odoo 7.0,min=True),ttl=4 
-2025-01-05 10:48:56,348 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=3,ttl=None) 
-2025-01-05 10:48:56,531 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.partner.synchro({'oe8:comment': False, 'oe8:webs,backend=Test Odoo 8.0,min=True),ttl=4 
-2025-01-05 10:48:56,644 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=3,ttl=None) 
-2025-01-05 10:48:56,766 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.partner.synchro({'oe7:comment': False, 'oe7:webs,backend=Test Odoo 7.0,min=True),ttl=4 
-2025-01-05 10:48:56,914 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=15,ttl=None) 
-2025-01-05 10:48:57,128 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.partner.synchro({'oe8:comment': False, 'oe8:webs,backend=Test Odoo 8.0,min=True),ttl=4 
-2025-01-05 10:48:57,251 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_by_xmlrpc.tests.testenv: 🏆🥇 [1;32m146 tests SUCCESSFULLY completed[0m 
-2025-01-05 10:48:57,303 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_by_xmlrpc.tests.test_backend: Ran 1 test in 130.254s 
-2025-01-05 10:48:57,303 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_by_xmlrpc.tests.test_backend: OK 
-2025-01-05 10:48:57,303 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.modules.module: odoo.addons.universal_connector_by_xmlrpc.tests.test_backend tested in 130.25s, 28548 queries 
-2025-01-05 10:48:57,325 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.modules.loading: 12 modules loaded in 131.10s, 28548 queries 
-2025-01-05 10:48:57,628 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.modules.loading: Modules loaded. 
-2025-01-05 10:48:57,632 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.service.server: Starting post tests 
-2025-01-05 10:48:57,633 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.service.server: All post-tested in 0.00s, 0 queries 
-2025-01-05 10:48:57,633 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.service.server: Initiating shutdown 
-2025-01-05 10:48:57,633 156787 INFO test_universal_connector_by_xmlrpc_12 odoo.service.server: Hit CTRL-C again or send a second signal to force the shutdown. 
+2025-01-05 13:25:51,766 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=3,ttl=None) 
+2025-01-05 13:25:51,889 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.partner.synchro({'oe8:comment': False, 'oe8:webs,backend=Test Odoo 8.0,min=True),ttl=4 
+2025-01-05 13:25:51,955 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=15,ttl=None) 
+2025-01-05 13:25:52,098 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.partner.synchro({'oe8:comment': False, 'oe8:webs,backend=Test Odoo 8.0,min=True),ttl=4 
+2025-01-05 13:25:52,179 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=9,ttl=None) 
+2025-01-05 13:25:52,307 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.partner.synchro({'oe8:comment': False, 'oe8:webs,backend=Test Odoo 8.0,min=True),ttl=4 
+2025-01-05 13:25:52,624 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.country.state,oe8,remote_id=13,ttl=3) 
+2025-01-05 13:25:52,986 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=9,ttl=3) 
+2025-01-05 13:25:53,166 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=36,ttl=3) 
+2025-01-05 13:25:53,544 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=35,ttl=3) 
+2025-01-05 13:25:53,923 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=34,ttl=3) 
+2025-01-05 13:25:54,404 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner.category,oe8,remote_id=13,ttl=3) 
+2025-01-05 13:25:54,904 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner.category,oe8,remote_id=12,ttl=3) 
+2025-01-05 13:25:55,267 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=6,ttl=2) 
+2025-01-05 13:25:55,692 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.country,oe8,remote_id=229,ttl=1) 
+2025-01-05 13:25:55,820 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=6,ttl=1) 
+2025-01-05 13:25:56,030 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=11,ttl=2) 
+2025-01-05 13:25:56,516 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=11,ttl=1) 
+2025-01-05 13:25:56,707 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=27,ttl=2) 
+2025-01-05 13:25:57,140 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=27,ttl=1) 
+2025-01-05 13:25:57,387 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=33,ttl=1) 
+2025-01-05 13:25:57,814 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=32,ttl=1) 
+2025-01-05 13:25:58,247 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=37,ttl=1) 
+2025-01-05 13:25:58,812 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=41,ttl=1) 
+2025-01-05 13:25:59,294 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=7,ttl=None) 
+2025-01-05 13:25:59,449 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.partner.synchro({'oe8:comment': False, 'oe8:webs,backend=Test Odoo 8.0,min=True),ttl=4 
+2025-01-05 13:25:59,528 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.currency,oe8,remote_id=1,ttl=None) 
+2025-01-05 13:25:59,651 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.currency.synchro({'oe8:create_uid': False, 'oe8:c,backend=Test Odoo 8.0,min=True),ttl=4 
+2025-01-05 13:25:59,672 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.currency,oe8,remote_id=3,ttl=None) 
+2025-01-05 13:25:59,810 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.currency.synchro({'oe8:create_uid': [1, 'Administ,backend=Test Odoo 8.0,min=True),ttl=4 
+2025-01-05 13:25:59,833 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.country,oe8,remote_id=235,ttl=None) 
+2025-01-05 13:25:59,940 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.country.synchro({'oe8:create_uid': [1, 'Administ,backend=Test Odoo 8.0,min=True),ttl=4 
+2025-01-05 13:25:59,969 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=3,ttl=None) 
+2025-01-05 13:26:00,085 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.partner.synchro({'oe8:comment': False, 'oe8:webs,backend=Test Odoo 8.0,min=True),ttl=4 
+2025-01-05 13:26:00,154 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=15,ttl=None) 
+2025-01-05 13:26:00,278 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.partner.synchro({'oe8:comment': False, 'oe8:webs,backend=Test Odoo 8.0,min=True),ttl=4 
+2025-01-05 13:26:00,350 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=9,ttl=None) 
+2025-01-05 13:26:00,478 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.partner.synchro({'oe8:comment': False, 'oe8:webs,backend=Test Odoo 8.0,min=True),ttl=4 
+2025-01-05 13:26:00,556 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=7,ttl=None) 
+2025-01-05 13:26:00,675 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.partner.synchro({'oe8:comment': False, 'oe8:webs,backend=Test Odoo 8.0,min=True),ttl=4 
+2025-01-05 13:26:00,791 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=3,ttl=None) 
+2025-01-05 13:26:00,905 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.partner.synchro({'oe8:comment': False, 'oe8:webs,backend=Test Odoo 8.0,min=True),ttl=4 
+2025-01-05 13:26:00,967 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=3,ttl=None) 
+2025-01-05 13:26:01,037 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.partner.synchro({'oe7:comment': False, 'oe7:webs,backend=Test Odoo 7.0,min=True),ttl=4 
+2025-01-05 13:26:01,121 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=3,ttl=None) 
+2025-01-05 13:26:01,262 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.partner.synchro({'oe8:comment': False, 'oe8:webs,backend=Test Odoo 8.0,min=True),ttl=4 
+2025-01-05 13:26:01,335 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe7,remote_id=3,ttl=None) 
+2025-01-05 13:26:01,396 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.partner.synchro({'oe7:comment': False, 'oe7:webs,backend=Test Odoo 7.0,min=True),ttl=4 
+2025-01-05 13:26:01,488 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: trigger_one_record(res.partner,oe8,remote_id=15,ttl=None) 
+2025-01-05 13:26:01,614 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.ir_model_synchro_log: res.partner.synchro({'oe8:comment': False, 'oe8:webs,backend=Test Odoo 8.0,min=True),ttl=4 
+2025-01-05 13:26:01,682 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_by_xmlrpc.tests.testenv: 🏆🥇 [1;32m146 tests SUCCESSFULLY completed[0m 
+2025-01-05 13:26:01,723 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_by_xmlrpc.tests.test_backend: Ran 1 test in 58.971s 
+2025-01-05 13:26:01,723 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_by_xmlrpc.tests.test_backend: OK 
+2025-01-05 13:26:01,723 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.modules.module: odoo.addons.universal_connector_by_xmlrpc.tests.test_backend tested in 58.97s, 28554 queries 
+2025-01-05 13:26:01,738 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.modules.loading: 12 modules loaded in 59.50s, 28554 queries 
+2025-01-05 13:26:01,956 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.modules.loading: Modules loaded. 
+2025-01-05 13:26:01,960 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.service.server: Starting post tests 
+2025-01-05 13:26:01,961 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.service.server: All post-tested in 0.00s, 0 queries 
+2025-01-05 13:26:01,961 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.service.server: Initiating shutdown 
+2025-01-05 13:26:01,961 283913 INFO test_universal_connector_by_xmlrpc_12 odoo.service.server: Hit CTRL-C again or send a second signal to force the shutdown. 
 
 +===================================================================
 | please test [36muniversal_connector_by_xmlrpc[0m (12.0): [32mSUCCESS![0m

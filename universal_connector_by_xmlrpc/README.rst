@@ -157,10 +157,10 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 ChangeLog History | Cronologia modifiche
 ----------------------------------------
 
-12.0.0.3.13 (2025-01-04)
+12.0.0.3.13 (2025-01-05)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-* [QUA] Test coverage 95% (57: 3+54) [106 TestPoints] - quality rating 355 (target 100)
+* [QUA] Test coverage 89% (57: 6+51) [106 TestPoints] - quality rating 352 (target 100)
 
 12.0.0.3.12 (2025-01-03)
 ~~~~~~~~~~~~~~~~~~~~~~~~

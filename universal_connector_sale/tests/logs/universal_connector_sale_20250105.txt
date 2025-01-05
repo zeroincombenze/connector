@@ -1,492 +1,491 @@
-2025-01-05 13:53:49,000 211678 DAEMON test_universal_connector_sale_12 run_odoo_debug.sh: cd /home/odoo/12.0/venv_odoo && source ./bin/activate
-2025-01-05 12:53:52,159 212719 INFO ? odoo: Odoo version 12.0 
-2025-01-05 12:53:52,160 212719 INFO ? odoo: Using configuration file at /home/odoo/12.0/connector/universal_connector_sale/tests/logs/zero12.connector.universal_connector_sale.conf 
-2025-01-05 12:53:52,161 212719 INFO ? odoo: addons paths: ['/home/odoo/.local/share/Odoo12/addons/12.0', '/home/odoo/12.0/odoo/addons', '/home/odoo/12.0/addons', '/home/odoo/.local/share/Odoo12/addons', '/home/odoo/12.0/account-analytic', '/home/odoo/12.0/account-budgeting', '/home/odoo/12.0/account-closing', '/home/odoo/12.0/account-consolidation', '/home/odoo/12.0/account-financial-reporting', '/home/odoo/12.0/account-financial-tools', '/home/odoo/12.0/account-fiscal-rule', '/home/odoo/12.0/account-invoice-reporting', '/home/odoo/12.0/account-invoicing', '/home/odoo/12.0/account-payment', '/home/odoo/12.0/account-reconcile', '/home/odoo/12.0/bank-payment', '/home/odoo/12.0/bank-statement-import', '/home/odoo/12.0/brand', '/home/odoo/12.0/calendar', '/home/odoo/12.0/commission', '/home/odoo/12.0/community-data-files', '/home/odoo/12.0/connector', '/home/odoo/12.0/contract', '/home/odoo/12.0/credit-control', '/home/odoo/12.0/crm', '/home/odoo/12.0/currency', '/home/odoo/12.0/data-protection', '/home/odoo/12.0/ddmrp', '/home/odoo/12.0/delivery-carrier', '/home/odoo/12.0/dms', '/home/odoo/12.0/e-commerce', '/home/odoo/12.0/edi', '/home/odoo/12.0/helpdesk', '/home/odoo/12.0/hr', '/home/odoo/12.0/intrastat-extrastat', '/home/odoo/12.0/knowledge', '/home/odoo/12.0/l10n-italy', '/home/odoo/12.0/l10n-italy-supplemental', '/home/odoo/12.0/maintenance', '/home/odoo/12.0/management-system', '/home/odoo/12.0/manufacture', '/home/odoo/12.0/margin-analysis', '/home/odoo/12.0/marketplace', '/home/odoo/12.0/mis-builder', '/home/odoo/12.0/multi-company', '/home/odoo/12.0/partner-contact', '/home/odoo/12.0/product-attribute', '/home/odoo/12.0/product-kitting', '/home/odoo/12.0/product-pack', '/home/odoo/12.0/product-variant', '/home/odoo/12.0/profiles', '/home/odoo/12.0/project', '/home/odoo/12.0/purchase-reporting', '/home/odoo/12.0/purchase-workflow', '/home/odoo/12.0/queue', '/home/odoo/12.0/report-print-send', '/home/odoo/12.0/reporting-engine', '/home/odoo/12.0/rma', '/home/odoo/12.0/sale-financial', '/home/odoo/12.0/sale-reporting', '/home/odoo/12.0/sale-workflow', '/home/odoo/12.0/search-engine', '/home/odoo/12.0/server-auth', '/home/odoo/12.0/server-backend', '/home/odoo/12.0/server-brand', '/home/odoo/12.0/server-env', '/home/odoo/12.0/server-tools', '/home/odoo/12.0/server-ux', '/home/odoo/12.0/social', '/home/odoo/12.0/stock-logistics-barcode', '/home/odoo/12.0/stock-logistics-reporting', '/home/odoo/12.0/stock-logistics-tracking', '/home/odoo/12.0/stock-logistics-transport', '/home/odoo/12.0/stock-logistics-warehouse', '/home/odoo/12.0/stock-logistics-workflow', '/home/odoo/12.0/storage', '/home/odoo/12.0/timesheet', '/home/odoo/12.0/uncovered', '/home/odoo/12.0/web', '/home/odoo/12.0/webhook', '/home/odoo/12.0/website', '/home/odoo/12.0/wms', '/home/odoo/12.0/zerobug-test', '/home/odoo/12.0/venv_odoo/lib/python3.7/site-packages/odoo/addons'] 
-2025-01-05 12:53:52,162 212719 INFO ? odoo: database: odoo12@localhost:5432 
-2025-01-05 12:53:52,319 212719 INFO ? odoo.addons.base.models.ir_actions_report: Will use the Wkhtmltopdf binary at /home/odoo/12.0/venv_odoo/bin/wkhtmltopdf 
-2025-01-05 12:53:52,461 212719 INFO ? odoo.service.server: HTTP service (werkzeug) running on NB200Z0.:60625 
-2025-01-05 12:53:52,484 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading 1 modules... 
-2025-01-05 12:53:52,499 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: 1 modules loaded in 0.01s, 0 queries 
-2025-01-05 12:53:52,628 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: updating modules list 
-2025-01-05 12:53:52,632 212719 INFO test_universal_connector_sale_12 odoo.addons.base.models.ir_module: ALLOW access to module.update_list on [] to user __system__ #1 via n/a 
-2025-01-05 12:54:04,110 212719 INFO test_universal_connector_sale_12 odoo.addons.base.models.ir_module: ALLOW access to module.button_install on ['universal_connector_sale'] to user __system__ #1 via n/a 
-2025-01-05 12:54:04,420 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading 31 modules... 
-2025-01-05 12:54:05,053 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: 31 modules loaded in 0.63s, 0 queries 
-2025-01-05 12:54:05,073 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading 39 modules... 
-2025-01-05 12:54:05,774 212719 INFO test_universal_connector_sale_12 odoo.modules.registry: module account_facturx: creating or updating database tables 
-2025-01-05 12:54:05,981 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading account_facturx/data/facturx_templates.xml 
-2025-01-05 12:54:06,077 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: Module account_facturx: loading demo 
-2025-01-05 12:54:06,435 212719 INFO test_universal_connector_sale_12 odoo.modules.registry: module l10n_generic_coa: creating or updating database tables 
-2025-01-05 12:54:06,452 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading l10n_generic_coa/data/account_data.xml 
-2025-01-05 12:54:06,474 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading l10n_generic_coa/data/l10n_generic_coa_chart_data.xml 
-2025-01-05 12:54:06,498 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading l10n_generic_coa/data/account.account.template.csv 
-2025-01-05 12:54:06,596 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading l10n_generic_coa/data/l10n_generic_coa_chart_post_data.xml 
-2025-01-05 12:54:06,616 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading l10n_generic_coa/data/account_tax_template_data.xml 
-2025-01-05 12:54:06,630 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading l10n_generic_coa/data/account_chart_template_data.xml 
-2025-01-05 12:54:06,994 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: Module l10n_generic_coa: loading demo 
-2025-01-05 12:54:06,995 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading l10n_generic_coa/data/account_bank_statement_demo.xml 
-2025-01-05 12:54:07,140 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading l10n_generic_coa/data/account_invoice_demo.xml 
-2025-01-05 12:54:09,478 212719 INFO test_universal_connector_sale_12 odoo.modules.module: odoo.addons.l10n_generic_coa.tests.test_base_objects running tests. 
-2025-01-05 12:54:09,478 212719 INFO test_universal_connector_sale_12 odoo.addons.l10n_generic_coa.tests.test_base_objects: test_basic (odoo.addons.l10n_generic_coa.tests.test_base_objects.TestAccountBankStatement) 
-2025-01-05 12:54:10,266 212719 INFO test_universal_connector_sale_12 odoo.addons.l10n_generic_coa.tests.test_base_objects: test_state (odoo.addons.l10n_generic_coa.tests.test_base_objects.TestAccountInvoice) 
-2025-01-05 12:54:11,188 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted account.move.line records with IDs: [24, 23, 22] 
-2025-01-05 12:54:11,206 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted account.move records with IDs: [9] 
-2025-01-05 12:54:11,210 212719 INFO test_universal_connector_sale_12 odoo.addons.l10n_generic_coa.tests.test_base_objects: Ran 2 tests in 1.732s 
-2025-01-05 12:54:11,210 212719 INFO test_universal_connector_sale_12 odoo.addons.l10n_generic_coa.tests.test_base_objects: OK 
-2025-01-05 12:54:11,598 212719 INFO test_universal_connector_sale_12 odoo.modules.registry: module payment: creating or updating database tables 
-2025-01-05 12:54:12,493 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading payment/data/account_data.xml 
-2025-01-05 12:54:12,500 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading payment/data/payment_icon_data.xml 
-2025-01-05 12:54:12,712 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading payment/data/payment_acquirer_data.xml 
-2025-01-05 12:54:13,090 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading payment/data/payment_cron.xml 
-2025-01-05 12:54:13,116 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading payment/views/payment_views.xml 
-2025-01-05 12:54:13,426 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading payment/views/account_payment_views.xml 
-2025-01-05 12:54:13,524 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading payment/views/account_invoice_views.xml 
-2025-01-05 12:54:13,626 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading payment/views/payment_acquirer_onboarding_templates.xml 
-2025-01-05 12:54:13,706 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading payment/views/payment_templates.xml 
-2025-01-05 12:54:13,817 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading payment/views/payment_portal_templates.xml 
-2025-01-05 12:54:13,924 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading payment/views/assets.xml 
-2025-01-05 12:54:14,030 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading payment/views/res_partner_views.xml 
-2025-01-05 12:54:14,140 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading payment/security/ir.model.access.csv 
-2025-01-05 12:54:14,212 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading payment/security/payment_security.xml 
-2025-01-05 12:54:14,256 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: Module payment: loading demo 
-2025-01-05 12:54:14,718 212719 INFO test_universal_connector_sale_12 odoo.modules.registry: module snailmail_account: creating or updating database tables 
-2025-01-05 12:54:14,988 212719 INFO test_universal_connector_sale_12 odoo.models: Storing computed values of account.invoice.send.snailmail_cost 
-2025-01-05 12:54:15,037 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading snailmail_account/views/res_config_settings_views.xml 
-2025-01-05 12:54:15,198 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading snailmail_account/wizard/account_invoice_send_views.xml 
-2025-01-05 12:54:15,259 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: Module snailmail_account: loading demo 
-2025-01-05 12:54:15,639 212719 INFO test_universal_connector_sale_12 odoo.modules.registry: module l10n_us: creating or updating database tables 
-2025-01-05 12:54:15,754 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading l10n_us/data/res_company_data.xml 
-2025-01-05 12:54:15,770 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading l10n_us/views/res_partner_bank_views.xml 
-2025-01-05 12:54:15,818 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: Module l10n_us: loading demo 
-2025-01-05 12:54:16,212 212719 INFO test_universal_connector_sale_12 odoo.modules.registry: module payment_transfer: creating or updating database tables 
-2025-01-05 12:54:16,352 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading payment_transfer/views/payment_views.xml 
-2025-01-05 12:54:16,429 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading payment_transfer/views/payment_transfer_templates.xml 
-2025-01-05 12:54:16,452 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading payment_transfer/data/payment_acquirer_data.xml 
-2025-01-05 12:54:16,528 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: Module payment_transfer: loading demo 
-2025-01-05 12:54:17,003 212719 INFO test_universal_connector_sale_12 odoo.modules.registry: module sale: creating or updating database tables 
-2025-01-05 12:54:18,362 212719 INFO test_universal_connector_sale_12 odoo.models: Storing computed values of sale.order.invoice_status 
-2025-01-05 12:54:18,363 212719 INFO test_universal_connector_sale_12 odoo.models: Storing computed values of sale.order.amount_untaxed 
-2025-01-05 12:54:18,365 212719 INFO test_universal_connector_sale_12 odoo.models: Storing computed values of sale.order.amount_tax 
-2025-01-05 12:54:18,366 212719 INFO test_universal_connector_sale_12 odoo.models: Storing computed values of sale.order.amount_total 
-2025-01-05 12:54:18,367 212719 INFO test_universal_connector_sale_12 odoo.models: Storing computed values of sale.order.currency_rate 
-2025-01-05 12:54:18,402 212719 INFO test_universal_connector_sale_12 odoo.models: Storing computed values of sale.order.line.invoice_status 
-2025-01-05 12:54:18,403 212719 INFO test_universal_connector_sale_12 odoo.models: Storing computed values of sale.order.line.price_subtotal 
-2025-01-05 12:54:18,404 212719 INFO test_universal_connector_sale_12 odoo.models: Storing computed values of sale.order.line.price_tax 
-2025-01-05 12:54:18,405 212719 INFO test_universal_connector_sale_12 odoo.models: Storing computed values of sale.order.line.price_total 
-2025-01-05 12:54:18,406 212719 INFO test_universal_connector_sale_12 odoo.models: Storing computed values of sale.order.line.price_reduce 
-2025-01-05 12:54:18,411 212719 INFO test_universal_connector_sale_12 odoo.models: Storing computed values of sale.order.line.price_reduce_taxinc 
-2025-01-05 12:54:18,412 212719 INFO test_universal_connector_sale_12 odoo.models: Storing computed values of sale.order.line.price_reduce_taxexcl 
-2025-01-05 12:54:18,423 212719 INFO test_universal_connector_sale_12 odoo.models: Storing computed values of sale.order.line.qty_delivered_method 
-2025-01-05 12:54:18,424 212719 INFO test_universal_connector_sale_12 odoo.models: Storing computed values of sale.order.line.qty_delivered 
-2025-01-05 12:54:18,424 212719 INFO test_universal_connector_sale_12 odoo.models: Storing computed values of sale.order.line.qty_to_invoice 
-2025-01-05 12:54:18,425 212719 INFO test_universal_connector_sale_12 odoo.models: Storing computed values of sale.order.line.qty_invoiced 
-2025-01-05 12:54:18,426 212719 INFO test_universal_connector_sale_12 odoo.models: Storing computed values of sale.order.line.untaxed_amount_invoiced 
-2025-01-05 12:54:18,426 212719 INFO test_universal_connector_sale_12 odoo.models: Storing computed values of sale.order.line.untaxed_amount_to_invoice 
-2025-01-05 12:54:18,433 212719 INFO test_universal_connector_sale_12 odoo.models: Storing computed values of sale.order.line.currency_id 
-2025-01-05 12:54:18,796 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/security/sale_security.xml 
-2025-01-05 12:54:19,668 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/security/ir.model.access.csv 
-2025-01-05 12:54:19,914 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/report/sale_report.xml 
-2025-01-05 12:54:19,939 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/report/sale_report_views.xml 
-2025-01-05 12:54:20,021 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/report/sale_report_templates.xml 
-2025-01-05 12:54:20,078 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/report/invoice_report_templates.xml 
-2025-01-05 12:54:20,108 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/report/report_all_channels_sales_views.xml 
-2025-01-05 12:54:20,151 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/data/ir_sequence_data.xml 
-2025-01-05 12:54:20,160 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/data/sale_data.xml 
-2025-01-05 12:54:20,189 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/data/mail_data.xml 
-2025-01-05 12:54:20,254 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/wizard/sale_make_invoice_advance_views.xml 
-2025-01-05 12:54:20,292 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/views/sale_views.xml 
-2025-01-05 12:54:21,866 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/views/sales_team_views.xml 
-2025-01-05 12:54:22,097 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/views/res_partner_views.xml 
-2025-01-05 12:54:22,582 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/views/mail_activity_views.xml 
-2025-01-05 12:54:22,609 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/views/assets.xml 
-2025-01-05 12:54:22,853 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/views/sale_portal_templates.xml 
-2025-01-05 12:54:23,025 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/views/sale_product_configurator_templates.xml 
-2025-01-05 12:54:23,123 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/views/sale_onboarding_views.xml 
-2025-01-05 12:54:23,298 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/views/res_config_settings_views.xml 
-2025-01-05 12:54:23,501 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/views/payment_views.xml 
-2025-01-05 12:54:23,607 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/views/product_attribute_views.xml 
-2025-01-05 12:54:23,789 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/wizard/sale_product_configurator_views.xml 
-2025-01-05 12:54:23,824 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: Module sale: loading demo 
-2025-01-05 12:54:23,825 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/data/sale_demo.xml 
-2025-01-05 12:54:28,878 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/data/product_product_demo.xml 
-2025-01-05 12:54:29,355 212719 INFO test_universal_connector_sale_12 odoo.modules.module: odoo.addons.sale.tests.test_onchange running tests. 
-2025-01-05 12:54:29,356 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_onchange: test_onchange_product_id (odoo.addons.sale.tests.test_onchange.TestOnchangeProductId) 
-2025-01-05 12:54:30,289 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_onchange: test_pricelist_application (odoo.addons.sale.tests.test_onchange.TestOnchangeProductId) 
-2025-01-05 12:54:30,289 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_onchange: ` Test different prices are correctly applied based on dates 
-2025-01-05 12:54:31,161 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_onchange: test_pricelist_based_on_other (odoo.addons.sale.tests.test_onchange.TestOnchangeProductId) 
-2025-01-05 12:54:31,161 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_onchange: ` Test price and discount are correctly applied with a pricelist based on an other one 
-2025-01-05 12:54:31,461 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_onchange: test_pricelist_uom_discount (odoo.addons.sale.tests.test_onchange.TestOnchangeProductId) 
-2025-01-05 12:54:31,461 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_onchange: ` Test prices and discounts are correctly applied based on date and uom 
-2025-01-05 12:54:31,744 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_onchange: test_pricelist_with_other_currency (odoo.addons.sale.tests.test_onchange.TestOnchangeProductId) 
-2025-01-05 12:54:31,744 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_onchange: ` Test prices are correctly applied with a pricelist with an other currency 
-2025-01-05 12:54:31,844 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted ir.model.data records with IDs: [5439, 5440] 
-2025-01-05 12:54:31,852 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted res.currency.rate records with IDs: [2, 1] 
-2025-01-05 12:54:32,000 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_onchange: Ran 5 tests in 2.645s 
-2025-01-05 12:54:32,000 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_onchange: OK 
-2025-01-05 12:54:32,001 212719 INFO test_universal_connector_sale_12 odoo.modules.module: odoo.addons.sale.tests.test_reinvoice running tests. 
-2025-01-05 12:54:32,659 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_reinvoice: test_at_cost (odoo.addons.sale.tests.test_reinvoice.TestReInvoice) 
-2025-01-05 12:54:32,660 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_reinvoice: ` Test vendor bill at cost for product based on ordered and delivered quantities. 
-2025-01-05 12:54:33,891 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_reinvoice: test_no_expense (odoo.addons.sale.tests.test_reinvoice.TestReInvoice) 
-2025-01-05 12:54:33,892 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_reinvoice: ` Test invoicing vendor bill with no policy. Check nothing happen. 
-2025-01-05 12:54:34,317 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_reinvoice: test_sales_price (odoo.addons.sale.tests.test_reinvoice.TestReInvoice) 
-2025-01-05 12:54:34,318 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_reinvoice: ` Test invoicing vendor bill at sales price for products based on delivered and ordered quantities. Check no existing SO line is incremented, but when invoicing a second time, increment only the delivered so line. 
-2025-01-05 12:54:35,449 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_reinvoice: Ran 3 tests in 3.448s 
-2025-01-05 12:54:35,449 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_reinvoice: OK 
-2025-01-05 12:54:35,450 212719 INFO test_universal_connector_sale_12 odoo.modules.module: odoo.addons.sale.tests.test_sale_order running tests. 
-2025-01-05 12:54:36,368 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_order: test_cost_invoicing (odoo.addons.sale.tests.test_sale_order.TestSaleOrder) 
-2025-01-05 12:54:36,368 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_order: ` Test confirming a vendor invoice to reinvoice cost on the so 
-2025-01-05 12:54:37,099 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_order: test_discount_and_untaxed_subtotal (odoo.addons.sale.tests.test_sale_order.TestSaleOrder) 
-2025-01-05 12:54:37,100 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_order: ` When adding a discount on a SO line, this test ensures that the untaxed amount to invoice is equal to the untaxed subtotal 
-2025-01-05 12:54:37,508 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_order: test_multi_currency_discount (odoo.addons.sale.tests.test_sale_order.TestSaleOrder) 
-2025-01-05 12:54:37,508 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_order: ` Verify the currency used for pricelist price & discount computation. 
-2025-01-05 12:54:37,975 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted ir.model.data records with IDs: [5570, 5486, 5560, 5489, 5510, 5487, 5458, 5460, 5490, 5491, 5502, 5495, 5494, 5465, 5493, 5504, 5499, 5551, 5501, 5444, 5492, 5500, 5503, 5497, 5496, 5498, 5442, 5508, 5443, 5484, 5445, 5446, 5478, 5509, 5607, 5511, 5447, 5512, 5448, 5513, 5552, 5514, 5518, 5515, 5517, 5567, 5520, 5519, 5587, 5521, 5553, 5522, 5554, 5524, 5610, 5525, 5463, 5483, 5468, 5526, 5449, 5451, 5450, 5530, 5459, 5529, 5528, 5527, 5595, 5531, 5532, 5464, 5534, 5536, 5505, 5507, 5563, 5471, 5535, 5506, 5533, 5537, 5538, 5585, 5540, 5539, 5466, 5452, 5541, 5550, 5548, 5544, 5543, 5557, 5549, 5542, 5547, 5479, 5546, 5545, 5472, 5473, 5556, 5558, 5562, 5561, 5453, 5559, 5474, 5606, 5455, 5602, 5604, 5475, 5605, 5456, 5601, 5603, 5600, 5523, 5467, 5592, 5469, 5599, 5598, 5593, 5589, 5591, 5583, 5584, 5457, 5476, 5597, 5608, 5590, 5588, 5582, 5586, 5594, 5516, 5580, 5581, 5576, 5578, 5572, 5573, 5575, 5470, 5574, 5579, 5577, 5571, 5461, 5482, 5439, 5440, 5485, 5569, 5441, 5462, 5568, 5596, 5481, 5488, 5480, 5454, 5566, 5609, 5477, 5565, 5555, 5564] 
-2025-01-05 12:54:37,984 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted res.currency.rate records with IDs: [2, 59, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 172, 3, 1, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 12] 
-2025-01-05 12:54:38,671 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_order: test_sale_order (odoo.addons.sale.tests.test_sale_order.TestSaleOrder) 
-2025-01-05 12:54:38,672 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_order: ` Test the sales order flow (invoicing and quantity updates) - Invoice repeatedly while varrying delivered quantities and check that invoice are always what we expect 
-2025-01-05 12:54:40,703 212719 INFO test_universal_connector_sale_12 odoo.tests: skip sending email in test mode 
-2025-01-05 12:54:40,709 212719 INFO test_universal_connector_sale_12 odoo.addons.mail.models.mail_mail: Mail with ID 1 and Message-Id '<351258753328918.1736081680.598528146743774-openerp-27-sale.order@nb200z0>' successfully sent 
-2025-01-05 12:54:40,724 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.mail records with IDs: [1] 
-2025-01-05 12:54:40,725 212719 INFO test_universal_connector_sale_12 odoo.addons.mail.models.mail_mail: Sent batch 1 emails via mail server ID #False 
-2025-01-05 12:54:41,729 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_order: test_sale_with_taxes (odoo.addons.sale.tests.test_sale_order.TestSaleOrder) 
-2025-01-05 12:54:41,729 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_order: ` Test SO with taxes applied on its lines and check subtotal applied on its lines and total applied on the SO 
-2025-01-05 12:54:41,986 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_order: test_so_create_multicompany (odoo.addons.sale.tests.test_sale_order.TestSaleOrder) 
-2025-01-05 12:54:41,987 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_order: ` In case we use new() outside of an onchange, it might cause the value of related fields to be incorrect. If so, then the company being a related might not be set, which would mean that taxes from all child companies would end up on the order lines. 
-2025-01-05 12:54:42,633 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_order: test_unlink_cancel (odoo.addons.sale.tests.test_sale_order.TestSaleOrder) 
-2025-01-05 12:54:42,633 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_order: ` Test deleting and cancelling sales orders depending on their state and on the user's rights 
-2025-01-05 12:54:42,780 212719 INFO test_universal_connector_sale_12 odoo.models: The requested operation cannot be completed due to record rules: Document type: sale.order, Operation: read, Records: 34, User: 8 
-2025-01-05 12:54:42,788 212719 INFO test_universal_connector_sale_12 odoo.models: The requested operation cannot be completed due to record rules: Document type: sale.order, Operation: read, Records: 34, User: 8 
-2025-01-05 12:54:42,844 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #9 deleted sale.order records with IDs: [34] 
-2025-01-05 12:54:43,054 212719 INFO test_universal_connector_sale_12 odoo.models: The requested operation cannot be completed due to record rules: Document type: sale.order, Operation: read, Records: 35, User: 8 
-2025-01-05 12:54:43,058 212719 INFO test_universal_connector_sale_12 odoo.models: The requested operation cannot be completed due to record rules: Document type: sale.order, Operation: read, Records: 35, User: 8 
-2025-01-05 12:54:43,090 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #9 deleted sale.order records with IDs: [35] 
-2025-01-05 12:54:43,103 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [231] 
-2025-01-05 12:54:43,229 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_order: Ran 7 tests in 7.778s 
-2025-01-05 12:54:43,229 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_order: OK 
-2025-01-05 12:54:43,229 212719 INFO test_universal_connector_sale_12 odoo.modules.module: odoo.addons.sale.tests.test_sale_order tested in 7.78s, 6461 queries 
-2025-01-05 12:54:43,230 212719 INFO test_universal_connector_sale_12 odoo.modules.module: odoo.addons.sale.tests.test_sale_pricelist running tests. 
-2025-01-05 12:54:43,948 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_pricelist: test_sale_with_pricelist_discount_excluded (odoo.addons.sale.tests.test_sale_pricelist.TestSaleOrder) 
-2025-01-05 12:54:43,948 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_pricelist: ` Test SO with the pricelist 'discount displayed' and check discount and unit price appeared on its lines 
-2025-01-05 12:54:44,375 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_pricelist: test_sale_with_pricelist_discount_included (odoo.addons.sale.tests.test_sale_pricelist.TestSaleOrder) 
-2025-01-05 12:54:44,375 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_pricelist: ` Test SO with the pricelist and check unit price appeared on its lines 
-2025-01-05 12:54:44,601 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_pricelist: test_sale_with_pricelist_empty (odoo.addons.sale.tests.test_sale_pricelist.TestSaleOrder) 
-2025-01-05 12:54:44,830 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_pricelist: Ran 3 tests in 1.599s 
-2025-01-05 12:54:44,831 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_pricelist: OK 
-2025-01-05 12:54:44,831 212719 INFO test_universal_connector_sale_12 odoo.modules.module: odoo.addons.sale.tests.test_sale_to_invoice running tests. 
-2025-01-05 12:54:45,463 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_to_invoice: test_downpayment (odoo.addons.sale.tests.test_sale_to_invoice.TestSaleToInvoice) 
-2025-01-05 12:54:45,463 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_to_invoice: ` Test invoice with a way of downpayment and check downpayment's SO line is created and also check a total amount of invoice is equal to a respective sale order's total amount 
-2025-01-05 12:54:46,367 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_to_invoice: test_invoice_refund (odoo.addons.sale.tests.test_sale_to_invoice.TestSaleToInvoice) 
-2025-01-05 12:54:46,367 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_to_invoice: ` Test invoice with a refund and check customer invoices credit note is created from respective invoice 
-2025-01-05 12:54:48,137 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_to_invoice: test_invoice_with_discount (odoo.addons.sale.tests.test_sale_to_invoice.TestSaleToInvoice) 
-2025-01-05 12:54:48,137 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_to_invoice: ` Test invoice with a discount and check discount applied on both SO lines and an invoice lines 
-2025-01-05 12:54:49,031 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_to_invoice: test_search_invoice_ids (odoo.addons.sale.tests.test_sale_to_invoice.TestSaleToInvoice) 
-2025-01-05 12:54:49,031 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_to_invoice: ` Test searching on computed fields invoice_ids 
-2025-01-05 12:54:49,444 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_to_invoice: Ran 4 tests in 4.612s 
-2025-01-05 12:54:49,444 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_to_invoice: OK 
-2025-01-05 12:54:49,908 212719 INFO test_universal_connector_sale_12 odoo.modules.registry: module universal_connector_sale: creating or updating database tables 
-2025-01-05 12:54:50,137 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: loading universal_connector_sale/views/sale_order_view.xml 
-2025-01-05 12:54:50,148 212719 WARNING test_universal_connector_sale_12 odoo.models: ir.ui.view.create() with unknown fields: sequence 
-2025-01-05 12:54:50,259 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: Module universal_connector_sale: loading demo 
-2025-01-05 12:54:50,296 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: 39 modules loaded in 45.22s, 19021 queries 
-2025-01-05 12:54:51,070 212719 INFO test_universal_connector_sale_12 odoo.modules.loading: Modules loaded. 
-2025-01-05 12:54:51,091 212719 INFO test_universal_connector_sale_12 odoo.service.server: Starting post tests 
-2025-01-05 12:54:51,095 212719 INFO test_universal_connector_sale_12 odoo.modules.module: odoo.addons.sale.tests.test_access_rights running tests. 
-2025-01-05 12:54:51,277 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_access_rights: test_access_employee (odoo.addons.sale.tests.test_access_rights.TestAccessRights) 
-2025-01-05 12:54:51,278 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_access_rights: ` Test classic employee's access rights 
-2025-01-05 12:54:51,761 212719 INFO test_universal_connector_sale_12 odoo.addons.base.models.ir_model: Access Denied by ACLs for operation: read, uid: 15, model: sale.order 
-2025-01-05 12:54:51,766 212719 INFO test_universal_connector_sale_12 odoo.addons.base.models.ir_model: Access Denied by ACLs for operation: write, uid: 15, model: sale.order 
-2025-01-05 12:54:51,802 212719 INFO test_universal_connector_sale_12 odoo.addons.base.models.ir_model: Access Denied by ACLs for operation: create, uid: 15, model: sale.order 
-2025-01-05 12:54:51,805 212719 INFO test_universal_connector_sale_12 odoo.addons.base.models.ir_model: Access Denied by ACLs for operation: read, uid: 15, model: sale.order 
-2025-01-05 12:54:51,808 212719 INFO test_universal_connector_sale_12 odoo.addons.base.models.ir_model: Access Denied by ACLs for operation: read, uid: 15, model: sale.order 
-2025-01-05 12:54:51,810 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_access_rights: test_access_portal_user (odoo.addons.sale.tests.test_access_rights.TestAccessRights) 
-2025-01-05 12:54:51,810 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_access_rights: ` Test portal user's access rights 
-2025-01-05 12:54:52,274 212719 INFO test_universal_connector_sale_12 odoo.models: The requested operation cannot be completed due to record rules: Document type: sale.order, Operation: read, Records: 39, User: 19 
-2025-01-05 12:54:52,307 212719 INFO test_universal_connector_sale_12 odoo.addons.base.models.ir_model: Access Denied by ACLs for operation: write, uid: 19, model: sale.order 
-2025-01-05 12:54:52,311 212719 INFO test_universal_connector_sale_12 odoo.addons.base.models.ir_model: Access Denied by ACLs for operation: read, uid: 19, model: ir.sequence 
-2025-01-05 12:54:52,338 212719 INFO test_universal_connector_sale_12 odoo.addons.base.models.ir_model: Access Denied by ACLs for operation: unlink, uid: 19, model: sale.order 
-2025-01-05 12:54:52,340 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_access_rights: test_access_sales_manager (odoo.addons.sale.tests.test_access_rights.TestAccessRights) 
-2025-01-05 12:54:52,340 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_access_rights: ` Test sales manager's access rights 
-2025-01-05 12:54:53,011 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #21 deleted sale.order records with IDs: [40] 
-2025-01-05 12:54:53,050 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #21 deleted crm.team records with IDs: [7] 
-2025-01-05 12:54:53,053 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_access_rights: test_access_sales_person (odoo.addons.sale.tests.test_access_rights.TestAccessRights) 
-2025-01-05 12:54:53,053 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_access_rights: ` Test Salesperson's access rights 
-2025-01-05 12:54:53,495 212719 INFO test_universal_connector_sale_12 odoo.models: The requested operation cannot be completed due to record rules: Document type: sale.order, Operation: read, Records: 42, User: 28 
-2025-01-05 12:54:53,611 212719 INFO test_universal_connector_sale_12 odoo.models: Access Denied by record rules for operation: read on record ids: [43], uid: 28, model: sale.order 
-2025-01-05 12:54:53,627 212719 INFO test_universal_connector_sale_12 odoo.addons.base.models.ir_model: Access Denied by ACLs for operation: unlink, uid: 28, model: sale.order 
-2025-01-05 12:54:53,670 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_access_rights: Ran 4 tests in 2.575s 
-2025-01-05 12:54:53,671 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_access_rights: OK 
-2025-01-05 12:54:53,675 212719 INFO test_universal_connector_sale_12 odoo.modules.module: odoo.addons.sale.tests.test_sale_product_attribute_value_config running tests. 
-2025-01-05 12:54:53,676 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_product_attribute_value_config: test_01_is_combination_possible_archived (odoo.addons.sale.tests.test_sale_product_attribute_value_config.TestSaleProductAttributeValueConfig) 
-2025-01-05 12:54:53,676 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_product_attribute_value_config: ` The goal is to test the possibility of archived combinations.  This test could not be put into product module because there was no model which had product_id as required and without cascade on delete. Here we have the sales order line in this situation.  This is a necessary condition for `create_variant_ids` to archive instead of delete the variants. 
-2025-01-05 12:54:54,030 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [338] 
-2025-01-05 12:54:54,055 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [59] 
-2025-01-05 12:54:54,067 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [290] 
-2025-01-05 12:54:54,238 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [358] 
-2025-01-05 12:54:54,259 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [78] 
-2025-01-05 12:54:54,271 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [310] 
-2025-01-05 12:54:54,768 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.template.attribute.value records with IDs: [13, 14, 15] 
-2025-01-05 12:54:54,777 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.template.attribute.line records with IDs: [6] 
-2025-01-05 12:54:54,940 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [356, 355, 354, 353, 352, 351, 350, 349, 348, 347, 346, 345, 344, 343, 342, 341, 340, 339] 
-2025-01-05 12:54:54,974 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [339] 
-2025-01-05 12:54:55,011 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [340] 
-2025-01-05 12:54:55,050 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [341] 
-2025-01-05 12:54:55,069 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [62] 
-2025-01-05 12:54:55,081 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [293] 
-2025-01-05 12:54:55,102 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [342] 
-2025-01-05 12:54:55,124 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [63] 
-2025-01-05 12:54:55,137 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [294] 
-2025-01-05 12:54:55,161 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [343] 
-2025-01-05 12:54:55,180 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [64] 
-2025-01-05 12:54:55,191 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [295] 
-2025-01-05 12:54:55,216 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [344] 
-2025-01-05 12:54:55,234 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [65] 
-2025-01-05 12:54:55,244 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [296] 
-2025-01-05 12:54:55,269 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [345] 
-2025-01-05 12:54:55,287 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [66] 
-2025-01-05 12:54:55,298 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [297] 
-2025-01-05 12:54:55,323 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [346] 
-2025-01-05 12:54:55,340 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [67] 
-2025-01-05 12:54:55,352 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [298] 
-2025-01-05 12:54:55,376 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [347] 
-2025-01-05 12:54:55,393 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [68] 
-2025-01-05 12:54:55,405 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [299] 
-2025-01-05 12:54:55,432 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [348] 
-2025-01-05 12:54:55,451 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [69] 
-2025-01-05 12:54:55,462 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [300] 
-2025-01-05 12:54:55,491 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [349] 
-2025-01-05 12:54:55,509 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [70] 
-2025-01-05 12:54:55,524 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [301] 
-2025-01-05 12:54:55,550 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [350] 
-2025-01-05 12:54:55,569 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [71] 
-2025-01-05 12:54:55,580 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [302] 
-2025-01-05 12:54:55,610 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [351] 
-2025-01-05 12:54:55,628 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [72] 
-2025-01-05 12:54:55,640 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [303] 
-2025-01-05 12:54:55,667 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [352] 
-2025-01-05 12:54:55,689 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [73] 
-2025-01-05 12:54:55,700 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [304] 
-2025-01-05 12:54:55,731 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [353] 
-2025-01-05 12:54:55,750 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [74] 
-2025-01-05 12:54:55,761 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [305] 
-2025-01-05 12:54:55,791 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [354] 
-2025-01-05 12:54:55,809 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [75] 
-2025-01-05 12:54:55,820 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [306] 
-2025-01-05 12:54:55,850 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [355] 
-2025-01-05 12:54:55,868 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [76] 
-2025-01-05 12:54:55,880 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [307] 
-2025-01-05 12:54:55,908 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [356] 
-2025-01-05 12:54:55,926 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [77] 
-2025-01-05 12:54:55,938 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [308] 
-2025-01-05 12:54:56,003 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.template.attribute.value records with IDs: [8, 9] 
-2025-01-05 12:54:56,013 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.template.attribute.line records with IDs: [4] 
-2025-01-05 12:54:56,124 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [369, 368, 367, 366, 365, 364, 340, 339] 
-2025-01-05 12:54:56,150 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [339] 
-2025-01-05 12:54:56,185 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [340] 
-2025-01-05 12:54:56,224 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [364] 
-2025-01-05 12:54:56,242 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [82] 
-2025-01-05 12:54:56,254 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [315] 
-2025-01-05 12:54:56,276 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [365] 
-2025-01-05 12:54:56,292 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [83] 
-2025-01-05 12:54:56,303 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [316] 
-2025-01-05 12:54:56,325 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [366] 
-2025-01-05 12:54:56,345 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [84] 
-2025-01-05 12:54:56,362 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [317] 
-2025-01-05 12:54:56,386 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [367] 
-2025-01-05 12:54:56,404 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [85] 
-2025-01-05 12:54:56,415 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [318] 
-2025-01-05 12:54:56,439 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [368] 
-2025-01-05 12:54:56,456 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [86] 
-2025-01-05 12:54:56,468 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [319] 
-2025-01-05 12:54:56,492 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [369] 
-2025-01-05 12:54:56,513 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [87] 
-2025-01-05 12:54:56,525 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [320] 
-2025-01-05 12:54:56,659 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.template.attribute.value records with IDs: [19, 20, 21] 
-2025-01-05 12:54:56,671 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.template.attribute.line records with IDs: [8] 
-2025-01-05 12:54:56,825 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [372, 371, 370, 340, 339] 
-2025-01-05 12:54:56,854 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [339] 
-2025-01-05 12:54:56,892 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [340] 
-2025-01-05 12:54:56,931 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [370] 
-2025-01-05 12:54:56,970 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [371] 
-2025-01-05 12:54:56,989 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [89] 
-2025-01-05 12:54:57,002 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [322] 
-2025-01-05 12:54:57,023 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [372] 
-2025-01-05 12:54:57,044 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [90] 
-2025-01-05 12:54:57,056 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [323] 
-2025-01-05 12:54:57,419 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [381, 380, 379, 378, 377, 376, 375, 374, 373, 370] 
-2025-01-05 12:54:57,454 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [370] 
-2025-01-05 12:54:57,492 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [373] 
-2025-01-05 12:54:57,540 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [374] 
-2025-01-05 12:54:57,562 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [92] 
-2025-01-05 12:54:57,575 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [325] 
-2025-01-05 12:54:57,597 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [375] 
-2025-01-05 12:54:57,617 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [93] 
-2025-01-05 12:54:57,627 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [326] 
-2025-01-05 12:54:57,650 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [376] 
-2025-01-05 12:54:57,669 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [94] 
-2025-01-05 12:54:57,682 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [327] 
-2025-01-05 12:54:57,707 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [377] 
-2025-01-05 12:54:57,726 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [95] 
-2025-01-05 12:54:57,738 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [328] 
-2025-01-05 12:54:57,766 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [378] 
-2025-01-05 12:54:57,787 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [96] 
-2025-01-05 12:54:57,802 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [329] 
-2025-01-05 12:54:57,827 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [379] 
-2025-01-05 12:54:57,846 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [97] 
-2025-01-05 12:54:57,857 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [330] 
-2025-01-05 12:54:57,880 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [380] 
-2025-01-05 12:54:57,899 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [98] 
-2025-01-05 12:54:57,910 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [331] 
-2025-01-05 12:54:57,946 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [381] 
-2025-01-05 12:54:57,967 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [99] 
-2025-01-05 12:54:57,983 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [332] 
-2025-01-05 12:54:58,333 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.template.attribute.value records with IDs: [22, 23, 24] 
-2025-01-05 12:54:58,344 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.template.attribute.line records with IDs: [9] 
-2025-01-05 12:54:58,532 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [397, 396, 395, 394, 393, 392, 391, 390, 389, 388, 387, 386, 385, 384, 383, 382, 373, 370, 340, 339] 
-2025-01-05 12:54:58,563 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [339] 
-2025-01-05 12:54:58,600 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [340] 
-2025-01-05 12:54:58,648 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [370] 
-2025-01-05 12:54:58,687 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [373] 
-2025-01-05 12:54:58,730 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [382] 
-2025-01-05 12:54:58,750 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [100] 
-2025-01-05 12:54:58,762 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [333] 
-2025-01-05 12:54:58,787 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [383] 
-2025-01-05 12:54:58,806 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [101] 
-2025-01-05 12:54:58,818 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [334] 
-2025-01-05 12:54:58,842 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [384] 
-2025-01-05 12:54:58,861 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [102] 
-2025-01-05 12:54:58,872 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [335] 
-2025-01-05 12:54:58,900 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [385] 
-2025-01-05 12:54:58,926 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [103] 
-2025-01-05 12:54:58,943 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [336] 
-2025-01-05 12:54:58,979 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [386] 
-2025-01-05 12:54:59,005 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [104] 
-2025-01-05 12:54:59,023 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [337] 
-2025-01-05 12:54:59,055 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [387] 
-2025-01-05 12:54:59,077 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [105] 
-2025-01-05 12:54:59,091 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [338] 
-2025-01-05 12:54:59,123 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [388] 
-2025-01-05 12:54:59,145 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [106] 
-2025-01-05 12:54:59,159 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [339] 
-2025-01-05 12:54:59,188 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [389] 
-2025-01-05 12:54:59,208 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [107] 
-2025-01-05 12:54:59,222 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [340] 
-2025-01-05 12:54:59,251 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [390] 
-2025-01-05 12:54:59,272 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [108] 
-2025-01-05 12:54:59,290 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [341] 
-2025-01-05 12:54:59,321 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [391] 
-2025-01-05 12:54:59,343 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [109] 
-2025-01-05 12:54:59,357 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [342] 
-2025-01-05 12:54:59,388 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [392] 
-2025-01-05 12:54:59,409 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [110] 
-2025-01-05 12:54:59,421 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [343] 
-2025-01-05 12:54:59,453 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [393] 
-2025-01-05 12:54:59,474 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [111] 
-2025-01-05 12:54:59,487 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [344] 
-2025-01-05 12:54:59,514 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [394] 
-2025-01-05 12:54:59,538 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [112] 
-2025-01-05 12:54:59,551 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [345] 
-2025-01-05 12:54:59,582 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [395] 
-2025-01-05 12:54:59,603 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [113] 
-2025-01-05 12:54:59,615 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [346] 
-2025-01-05 12:54:59,643 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [396] 
-2025-01-05 12:54:59,661 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [114] 
-2025-01-05 12:54:59,674 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [347] 
-2025-01-05 12:54:59,710 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [397] 
-2025-01-05 12:54:59,731 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [115] 
-2025-01-05 12:54:59,743 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [348] 
-2025-01-05 12:54:59,807 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.template.attribute.value records with IDs: [25, 26] 
-2025-01-05 12:54:59,818 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.template.attribute.line records with IDs: [10] 
-2025-01-05 12:54:59,958 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [405, 404, 403, 402, 401, 400, 373, 340, 339] 
-2025-01-05 12:54:59,988 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [339] 
-2025-01-05 12:55:00,045 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [340] 
-2025-01-05 12:55:00,086 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [373] 
-2025-01-05 12:55:00,128 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [400] 
-2025-01-05 12:55:00,148 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [116] 
-2025-01-05 12:55:00,160 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [350] 
-2025-01-05 12:55:00,185 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [401] 
-2025-01-05 12:55:00,204 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [117] 
-2025-01-05 12:55:00,217 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [351] 
-2025-01-05 12:55:00,240 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [402] 
-2025-01-05 12:55:00,259 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [118] 
-2025-01-05 12:55:00,271 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [352] 
-2025-01-05 12:55:00,295 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [403] 
-2025-01-05 12:55:00,314 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [119] 
-2025-01-05 12:55:00,326 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [353] 
-2025-01-05 12:55:00,349 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [404] 
-2025-01-05 12:55:00,368 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [120] 
-2025-01-05 12:55:00,379 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [354] 
-2025-01-05 12:55:00,403 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [405] 
-2025-01-05 12:55:00,422 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [121] 
-2025-01-05 12:55:00,435 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [355] 
-2025-01-05 12:55:00,573 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.template.attribute.value records with IDs: [27, 28, 29] 
-2025-01-05 12:55:00,582 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.template.attribute.line records with IDs: [11] 
-2025-01-05 12:55:00,781 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [407, 406, 370, 340, 339] 
-2025-01-05 12:55:00,815 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [339] 
-2025-01-05 12:55:00,852 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [340] 
-2025-01-05 12:55:00,891 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [370] 
-2025-01-05 12:55:00,930 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [406] 
-2025-01-05 12:55:00,948 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [122] 
-2025-01-05 12:55:00,960 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [356] 
-2025-01-05 12:55:00,983 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [407] 
-2025-01-05 12:55:01,002 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [123] 
-2025-01-05 12:55:01,012 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [357] 
-2025-01-05 12:55:01,345 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_product_attribute_value_config: test_02_get_combination_info (odoo.addons.sale.tests.test_sale_product_attribute_value_config.TestSaleProductAttributeValueConfig) 
-2025-01-05 12:55:01,719 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [417] 
-2025-01-05 12:55:01,739 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [132] 
-2025-01-05 12:55:01,751 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [367] 
-2025-01-05 12:55:01,927 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [437] 
-2025-01-05 12:55:01,948 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [151] 
-2025-01-05 12:55:01,960 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [387] 
-2025-01-05 12:55:02,078 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.template.attribute.value records with IDs: [33, 34] 
-2025-01-05 12:55:02,088 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.template.attribute.line records with IDs: [13] 
-2025-01-05 12:55:02,276 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [435, 434, 433, 432, 431, 430, 429, 428, 427, 426, 425, 424, 423, 422, 421, 420, 419, 418] 
-2025-01-05 12:55:02,301 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150] 
-2025-01-05 12:55:02,320 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [368, 369, 370, 371, 372, 373, 374, 375, 376, 377, 378, 379, 380, 381, 382, 383, 384, 385] 
-2025-01-05 12:55:02,387 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.template.attribute.value records with IDs: [38, 39, 40] 
-2025-01-05 12:55:02,396 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.template.attribute.line records with IDs: [15] 
-2025-01-05 12:55:02,576 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [449, 448, 447, 446, 445, 444, 443, 442, 441] 
-2025-01-05 12:55:02,599 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [155, 156, 157, 158, 159, 160, 161, 162, 163] 
-2025-01-05 12:55:02,614 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [391, 392, 393, 394, 395, 396, 397, 398, 399] 
-2025-01-05 12:55:02,681 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_product_attribute_value_config: test_03_get_combination_info_discount_policy (odoo.addons.sale.tests.test_sale_product_attribute_value_config.TestSaleProductAttributeValueConfig) 
-2025-01-05 12:55:03,001 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [451] 
-2025-01-05 12:55:03,022 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [164] 
-2025-01-05 12:55:03,034 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [401] 
-2025-01-05 12:55:03,203 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [471] 
-2025-01-05 12:55:03,221 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [183] 
-2025-01-05 12:55:03,234 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [421] 
-2025-01-05 12:55:03,331 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_product_attribute_value_config: test_04_create_product_variant_non_dynamic (odoo.addons.sale.tests.test_sale_product_attribute_value_config.TestSaleProductAttributeValueConfig) 
-2025-01-05 12:55:03,331 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_product_attribute_value_config: ` The goal of this test is to make sure the create_product_variant does not create variant if the type is not dynamic. It can however return a variant if it already exists. 
-2025-01-05 12:55:03,638 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [476] 
-2025-01-05 12:55:03,660 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [187] 
-2025-01-05 12:55:03,672 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [426] 
-2025-01-05 12:55:03,840 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [496] 
-2025-01-05 12:55:03,858 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [206] 
-2025-01-05 12:55:03,870 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [446] 
-2025-01-05 12:55:03,918 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [477] 
-2025-01-05 12:55:03,936 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [188] 
-2025-01-05 12:55:03,947 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [427] 
-2025-01-05 12:55:03,966 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_product_attribute_value_config: test_05_create_product_variant_dynamic (odoo.addons.sale.tests.test_sale_product_attribute_value_config.TestSaleProductAttributeValueConfig) 
-2025-01-05 12:55:03,966 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_product_attribute_value_config: ` The goal of this test is to make sure the create_product_variant does work with dynamic. If the combination is possible, it should create it. If it's not possible, it should not create it. 
-2025-01-05 12:55:04,287 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [501] 
-2025-01-05 12:55:04,308 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [210] 
-2025-01-05 12:55:04,321 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [451] 
-2025-01-05 12:55:04,491 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [521] 
-2025-01-05 12:55:04,509 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [229] 
-2025-01-05 12:55:04,521 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [471] 
-2025-01-05 12:55:04,537 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.template.attribute.value records with IDs: [78, 79, 80] 
-2025-01-05 12:55:04,546 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.template.attribute.line records with IDs: [30] 
-2025-01-05 12:55:04,688 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [519, 518, 517, 516, 515, 514, 513, 512, 511, 510, 509, 508, 507, 506, 505, 504, 503, 502] 
-2025-01-05 12:55:04,710 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228] 
-2025-01-05 12:55:04,728 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469] 
-2025-01-05 12:55:04,795 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [530, 529, 528, 527, 526, 525] 
-2025-01-05 12:55:04,810 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [233, 234, 235, 236, 237, 238] 
-2025-01-05 12:55:04,823 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [475, 476, 477, 478, 479, 480] 
-2025-01-05 12:55:04,904 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_product_attribute_value_config: Ran 5 tests in 11.229s 
-2025-01-05 12:55:04,905 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_product_attribute_value_config: OK 
-2025-01-05 12:55:04,905 212719 INFO test_universal_connector_sale_12 odoo.modules.module: odoo.addons.sale.tests.test_sale_product_attribute_value_config tested in 11.23s, 9906 queries 
-2025-01-05 12:55:04,907 212719 INFO test_universal_connector_sale_12 odoo.modules.module: odoo.addons.sale.tests.test_sale_transaction running tests. 
-2025-01-05 12:55:04,907 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_transaction: test_sale_invoicing_from_transaction (odoo.addons.sale.tests.test_sale_transaction.TestSaleTransaction) 
-2025-01-05 12:55:04,907 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_transaction: ` Test the following scenario: - Create a sale order - Create a transaction for the sale order. - Confirm the transaction but no invoice generated automatically. - Create manually an invoice for this sale order. => The invoice must be paid. 
-2025-01-05 12:55:05,581 212719 INFO test_universal_connector_sale_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_sale_12/5f/5f59e0caa6d536fe4a6415d87f4afb2ef0608fc1 
+2025-01-05 15:18:55,000 318134 DAEMON test_universal_connector_sale_12 run_odoo_debug.sh: cd /home/odoo/12.0/venv_odoo && source ./bin/activate
+2025-01-05 14:19:00,390 319615 INFO ? odoo: Odoo version 12.0 
+2025-01-05 14:19:00,390 319615 INFO ? odoo: Using configuration file at /home/odoo/12.0/connector/universal_connector_sale/tests/logs/zero12.connector.universal_connector_sale.conf 
+2025-01-05 14:19:00,390 319615 INFO ? odoo: addons paths: ['/home/odoo/.local/share/Odoo12/addons/12.0', '/home/odoo/12.0/odoo/addons', '/home/odoo/12.0/addons', '/home/odoo/.local/share/Odoo12/addons', '/home/odoo/12.0/account-analytic', '/home/odoo/12.0/account-budgeting', '/home/odoo/12.0/account-closing', '/home/odoo/12.0/account-consolidation', '/home/odoo/12.0/account-financial-reporting', '/home/odoo/12.0/account-financial-tools', '/home/odoo/12.0/account-fiscal-rule', '/home/odoo/12.0/account-invoice-reporting', '/home/odoo/12.0/account-invoicing', '/home/odoo/12.0/account-payment', '/home/odoo/12.0/account-reconcile', '/home/odoo/12.0/bank-payment', '/home/odoo/12.0/bank-statement-import', '/home/odoo/12.0/brand', '/home/odoo/12.0/calendar', '/home/odoo/12.0/commission', '/home/odoo/12.0/community-data-files', '/home/odoo/12.0/connector', '/home/odoo/12.0/contract', '/home/odoo/12.0/credit-control', '/home/odoo/12.0/crm', '/home/odoo/12.0/currency', '/home/odoo/12.0/data-protection', '/home/odoo/12.0/ddmrp', '/home/odoo/12.0/delivery-carrier', '/home/odoo/12.0/dms', '/home/odoo/12.0/e-commerce', '/home/odoo/12.0/edi', '/home/odoo/12.0/helpdesk', '/home/odoo/12.0/hr', '/home/odoo/12.0/intrastat-extrastat', '/home/odoo/12.0/knowledge', '/home/odoo/12.0/l10n-italy', '/home/odoo/12.0/l10n-italy-supplemental', '/home/odoo/12.0/maintenance', '/home/odoo/12.0/management-system', '/home/odoo/12.0/manufacture', '/home/odoo/12.0/margin-analysis', '/home/odoo/12.0/marketplace', '/home/odoo/12.0/mis-builder', '/home/odoo/12.0/multi-company', '/home/odoo/12.0/partner-contact', '/home/odoo/12.0/product-attribute', '/home/odoo/12.0/product-kitting', '/home/odoo/12.0/product-pack', '/home/odoo/12.0/product-variant', '/home/odoo/12.0/profiles', '/home/odoo/12.0/project', '/home/odoo/12.0/purchase-reporting', '/home/odoo/12.0/purchase-workflow', '/home/odoo/12.0/queue', '/home/odoo/12.0/report-print-send', '/home/odoo/12.0/reporting-engine', '/home/odoo/12.0/rma', '/home/odoo/12.0/sale-financial', '/home/odoo/12.0/sale-reporting', '/home/odoo/12.0/sale-workflow', '/home/odoo/12.0/search-engine', '/home/odoo/12.0/server-auth', '/home/odoo/12.0/server-backend', '/home/odoo/12.0/server-brand', '/home/odoo/12.0/server-env', '/home/odoo/12.0/server-tools', '/home/odoo/12.0/server-ux', '/home/odoo/12.0/social', '/home/odoo/12.0/stock-logistics-barcode', '/home/odoo/12.0/stock-logistics-reporting', '/home/odoo/12.0/stock-logistics-tracking', '/home/odoo/12.0/stock-logistics-transport', '/home/odoo/12.0/stock-logistics-warehouse', '/home/odoo/12.0/stock-logistics-workflow', '/home/odoo/12.0/storage', '/home/odoo/12.0/timesheet', '/home/odoo/12.0/uncovered', '/home/odoo/12.0/web', '/home/odoo/12.0/webhook', '/home/odoo/12.0/website', '/home/odoo/12.0/wms', '/home/odoo/12.0/zerobug-test', '/home/odoo/12.0/venv_odoo/lib/python3.7/site-packages/odoo/addons'] 
+2025-01-05 14:19:00,390 319615 INFO ? odoo: database: odoo12@localhost:5432 
+2025-01-05 14:19:00,504 319615 INFO ? odoo.addons.base.models.ir_actions_report: Will use the Wkhtmltopdf binary at /home/odoo/12.0/venv_odoo/bin/wkhtmltopdf 
+2025-01-05 14:19:00,583 319615 INFO ? odoo.service.server: HTTP service (werkzeug) running on NB200Z0.:19732 
+2025-01-05 14:19:00,599 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading 1 modules... 
+2025-01-05 14:19:00,606 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: 1 modules loaded in 0.01s, 0 queries 
+2025-01-05 14:19:00,686 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: updating modules list 
+2025-01-05 14:19:00,690 319615 INFO test_universal_connector_sale_12 odoo.addons.base.models.ir_module: ALLOW access to module.update_list on [] to user __system__ #1 via n/a 
+2025-01-05 14:19:08,734 319615 INFO test_universal_connector_sale_12 odoo.addons.base.models.ir_module: ALLOW access to module.button_install on ['universal_connector_sale'] to user __system__ #1 via n/a 
+2025-01-05 14:19:08,907 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading 31 modules... 
+2025-01-05 14:19:09,500 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: 31 modules loaded in 0.59s, 0 queries 
+2025-01-05 14:19:09,509 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading 39 modules... 
+2025-01-05 14:19:09,921 319615 INFO test_universal_connector_sale_12 odoo.modules.registry: module account_facturx: creating or updating database tables 
+2025-01-05 14:19:10,045 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading account_facturx/data/facturx_templates.xml 
+2025-01-05 14:19:10,109 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: Module account_facturx: loading demo 
+2025-01-05 14:19:10,375 319615 INFO test_universal_connector_sale_12 odoo.modules.registry: module l10n_generic_coa: creating or updating database tables 
+2025-01-05 14:19:10,384 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading l10n_generic_coa/data/account_data.xml 
+2025-01-05 14:19:10,392 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading l10n_generic_coa/data/l10n_generic_coa_chart_data.xml 
+2025-01-05 14:19:10,421 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading l10n_generic_coa/data/account.account.template.csv 
+2025-01-05 14:19:10,488 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading l10n_generic_coa/data/l10n_generic_coa_chart_post_data.xml 
+2025-01-05 14:19:10,498 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading l10n_generic_coa/data/account_tax_template_data.xml 
+2025-01-05 14:19:10,505 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading l10n_generic_coa/data/account_chart_template_data.xml 
+2025-01-05 14:19:10,726 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: Module l10n_generic_coa: loading demo 
+2025-01-05 14:19:10,726 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading l10n_generic_coa/data/account_bank_statement_demo.xml 
+2025-01-05 14:19:10,812 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading l10n_generic_coa/data/account_invoice_demo.xml 
+2025-01-05 14:19:12,228 319615 INFO test_universal_connector_sale_12 odoo.modules.module: odoo.addons.l10n_generic_coa.tests.test_base_objects running tests. 
+2025-01-05 14:19:12,228 319615 INFO test_universal_connector_sale_12 odoo.addons.l10n_generic_coa.tests.test_base_objects: test_basic (odoo.addons.l10n_generic_coa.tests.test_base_objects.TestAccountBankStatement) 
+2025-01-05 14:19:12,727 319615 INFO test_universal_connector_sale_12 odoo.addons.l10n_generic_coa.tests.test_base_objects: test_state (odoo.addons.l10n_generic_coa.tests.test_base_objects.TestAccountInvoice) 
+2025-01-05 14:19:13,268 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted account.move.line records with IDs: [24, 23, 22] 
+2025-01-05 14:19:13,278 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted account.move records with IDs: [9] 
+2025-01-05 14:19:13,280 319615 INFO test_universal_connector_sale_12 odoo.addons.l10n_generic_coa.tests.test_base_objects: Ran 2 tests in 1.051s 
+2025-01-05 14:19:13,280 319615 INFO test_universal_connector_sale_12 odoo.addons.l10n_generic_coa.tests.test_base_objects: OK 
+2025-01-05 14:19:13,499 319615 INFO test_universal_connector_sale_12 odoo.modules.registry: module payment: creating or updating database tables 
+2025-01-05 14:19:13,964 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading payment/data/account_data.xml 
+2025-01-05 14:19:13,969 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading payment/data/payment_icon_data.xml 
+2025-01-05 14:19:14,086 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading payment/data/payment_acquirer_data.xml 
+2025-01-05 14:19:14,291 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading payment/data/payment_cron.xml 
+2025-01-05 14:19:14,305 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading payment/views/payment_views.xml 
+2025-01-05 14:19:14,479 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading payment/views/account_payment_views.xml 
+2025-01-05 14:19:14,523 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading payment/views/account_invoice_views.xml 
+2025-01-05 14:19:14,576 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading payment/views/payment_acquirer_onboarding_templates.xml 
+2025-01-05 14:19:14,617 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading payment/views/payment_templates.xml 
+2025-01-05 14:19:14,674 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading payment/views/payment_portal_templates.xml 
+2025-01-05 14:19:14,729 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading payment/views/assets.xml 
+2025-01-05 14:19:14,786 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading payment/views/res_partner_views.xml 
+2025-01-05 14:19:14,846 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading payment/security/ir.model.access.csv 
+2025-01-05 14:19:14,887 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading payment/security/payment_security.xml 
+2025-01-05 14:19:14,906 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: Module payment: loading demo 
+2025-01-05 14:19:15,180 319615 INFO test_universal_connector_sale_12 odoo.modules.registry: module snailmail_account: creating or updating database tables 
+2025-01-05 14:19:15,303 319615 INFO test_universal_connector_sale_12 odoo.models: Storing computed values of account.invoice.send.snailmail_cost 
+2025-01-05 14:19:15,328 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading snailmail_account/views/res_config_settings_views.xml 
+2025-01-05 14:19:15,417 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading snailmail_account/wizard/account_invoice_send_views.xml 
+2025-01-05 14:19:15,445 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: Module snailmail_account: loading demo 
+2025-01-05 14:19:15,640 319615 INFO test_universal_connector_sale_12 odoo.modules.registry: module l10n_us: creating or updating database tables 
+2025-01-05 14:19:15,699 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading l10n_us/data/res_company_data.xml 
+2025-01-05 14:19:15,706 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading l10n_us/views/res_partner_bank_views.xml 
+2025-01-05 14:19:15,727 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: Module l10n_us: loading demo 
+2025-01-05 14:19:15,932 319615 INFO test_universal_connector_sale_12 odoo.modules.registry: module payment_transfer: creating or updating database tables 
+2025-01-05 14:19:15,998 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading payment_transfer/views/payment_views.xml 
+2025-01-05 14:19:16,037 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading payment_transfer/views/payment_transfer_templates.xml 
+2025-01-05 14:19:16,048 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading payment_transfer/data/payment_acquirer_data.xml 
+2025-01-05 14:19:16,087 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: Module payment_transfer: loading demo 
+2025-01-05 14:19:16,377 319615 INFO test_universal_connector_sale_12 odoo.modules.registry: module sale: creating or updating database tables 
+2025-01-05 14:19:17,050 319615 INFO test_universal_connector_sale_12 odoo.models: Storing computed values of sale.order.invoice_status 
+2025-01-05 14:19:17,051 319615 INFO test_universal_connector_sale_12 odoo.models: Storing computed values of sale.order.amount_untaxed 
+2025-01-05 14:19:17,051 319615 INFO test_universal_connector_sale_12 odoo.models: Storing computed values of sale.order.amount_tax 
+2025-01-05 14:19:17,052 319615 INFO test_universal_connector_sale_12 odoo.models: Storing computed values of sale.order.amount_total 
+2025-01-05 14:19:17,053 319615 INFO test_universal_connector_sale_12 odoo.models: Storing computed values of sale.order.currency_rate 
+2025-01-05 14:19:17,070 319615 INFO test_universal_connector_sale_12 odoo.models: Storing computed values of sale.order.line.invoice_status 
+2025-01-05 14:19:17,070 319615 INFO test_universal_connector_sale_12 odoo.models: Storing computed values of sale.order.line.price_subtotal 
+2025-01-05 14:19:17,071 319615 INFO test_universal_connector_sale_12 odoo.models: Storing computed values of sale.order.line.price_tax 
+2025-01-05 14:19:17,071 319615 INFO test_universal_connector_sale_12 odoo.models: Storing computed values of sale.order.line.price_total 
+2025-01-05 14:19:17,072 319615 INFO test_universal_connector_sale_12 odoo.models: Storing computed values of sale.order.line.price_reduce 
+2025-01-05 14:19:17,075 319615 INFO test_universal_connector_sale_12 odoo.models: Storing computed values of sale.order.line.price_reduce_taxinc 
+2025-01-05 14:19:17,075 319615 INFO test_universal_connector_sale_12 odoo.models: Storing computed values of sale.order.line.price_reduce_taxexcl 
+2025-01-05 14:19:17,080 319615 INFO test_universal_connector_sale_12 odoo.models: Storing computed values of sale.order.line.qty_delivered_method 
+2025-01-05 14:19:17,080 319615 INFO test_universal_connector_sale_12 odoo.models: Storing computed values of sale.order.line.qty_delivered 
+2025-01-05 14:19:17,081 319615 INFO test_universal_connector_sale_12 odoo.models: Storing computed values of sale.order.line.qty_to_invoice 
+2025-01-05 14:19:17,081 319615 INFO test_universal_connector_sale_12 odoo.models: Storing computed values of sale.order.line.qty_invoiced 
+2025-01-05 14:19:17,082 319615 INFO test_universal_connector_sale_12 odoo.models: Storing computed values of sale.order.line.untaxed_amount_invoiced 
+2025-01-05 14:19:17,083 319615 INFO test_universal_connector_sale_12 odoo.models: Storing computed values of sale.order.line.untaxed_amount_to_invoice 
+2025-01-05 14:19:17,087 319615 INFO test_universal_connector_sale_12 odoo.models: Storing computed values of sale.order.line.currency_id 
+2025-01-05 14:19:17,304 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/security/sale_security.xml 
+2025-01-05 14:19:17,798 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/security/ir.model.access.csv 
+2025-01-05 14:19:17,937 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/report/sale_report.xml 
+2025-01-05 14:19:17,947 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/report/sale_report_views.xml 
+2025-01-05 14:19:17,991 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/report/sale_report_templates.xml 
+2025-01-05 14:19:18,021 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/report/invoice_report_templates.xml 
+2025-01-05 14:19:18,039 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/report/report_all_channels_sales_views.xml 
+2025-01-05 14:19:18,064 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/data/ir_sequence_data.xml 
+2025-01-05 14:19:18,069 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/data/sale_data.xml 
+2025-01-05 14:19:18,085 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/data/mail_data.xml 
+2025-01-05 14:19:18,121 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/wizard/sale_make_invoice_advance_views.xml 
+2025-01-05 14:19:18,141 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/views/sale_views.xml 
+2025-01-05 14:19:19,002 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/views/sales_team_views.xml 
+2025-01-05 14:19:19,096 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/views/res_partner_views.xml 
+2025-01-05 14:19:19,342 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/views/mail_activity_views.xml 
+2025-01-05 14:19:19,354 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/views/assets.xml 
+2025-01-05 14:19:19,490 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/views/sale_portal_templates.xml 
+2025-01-05 14:19:19,589 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/views/sale_product_configurator_templates.xml 
+2025-01-05 14:19:19,642 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/views/sale_onboarding_views.xml 
+2025-01-05 14:19:19,743 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/views/res_config_settings_views.xml 
+2025-01-05 14:19:19,850 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/views/payment_views.xml 
+2025-01-05 14:19:19,896 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/views/product_attribute_views.xml 
+2025-01-05 14:19:19,996 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/wizard/sale_product_configurator_views.xml 
+2025-01-05 14:19:20,011 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: Module sale: loading demo 
+2025-01-05 14:19:20,012 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/data/sale_demo.xml 
+2025-01-05 14:19:22,944 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading sale/data/product_product_demo.xml 
+2025-01-05 14:19:23,260 319615 INFO test_universal_connector_sale_12 odoo.modules.module: odoo.addons.sale.tests.test_onchange running tests. 
+2025-01-05 14:19:23,260 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_onchange: test_onchange_product_id (odoo.addons.sale.tests.test_onchange.TestOnchangeProductId) 
+2025-01-05 14:19:23,784 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_onchange: test_pricelist_application (odoo.addons.sale.tests.test_onchange.TestOnchangeProductId) 
+2025-01-05 14:19:23,785 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_onchange: ` Test different prices are correctly applied based on dates 
+2025-01-05 14:19:24,278 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_onchange: test_pricelist_based_on_other (odoo.addons.sale.tests.test_onchange.TestOnchangeProductId) 
+2025-01-05 14:19:24,279 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_onchange: ` Test price and discount are correctly applied with a pricelist based on an other one 
+2025-01-05 14:19:24,444 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_onchange: test_pricelist_uom_discount (odoo.addons.sale.tests.test_onchange.TestOnchangeProductId) 
+2025-01-05 14:19:24,445 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_onchange: ` Test prices and discounts are correctly applied based on date and uom 
+2025-01-05 14:19:24,604 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_onchange: test_pricelist_with_other_currency (odoo.addons.sale.tests.test_onchange.TestOnchangeProductId) 
+2025-01-05 14:19:24,604 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_onchange: ` Test prices are correctly applied with a pricelist with an other currency 
+2025-01-05 14:19:24,679 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted ir.model.data records with IDs: [5439, 5440] 
+2025-01-05 14:19:24,686 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted res.currency.rate records with IDs: [2, 1] 
+2025-01-05 14:19:24,771 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_onchange: Ran 5 tests in 1.511s 
+2025-01-05 14:19:24,771 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_onchange: OK 
+2025-01-05 14:19:24,771 319615 INFO test_universal_connector_sale_12 odoo.modules.module: odoo.addons.sale.tests.test_reinvoice running tests. 
+2025-01-05 14:19:25,139 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_reinvoice: test_at_cost (odoo.addons.sale.tests.test_reinvoice.TestReInvoice) 
+2025-01-05 14:19:25,140 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_reinvoice: ` Test vendor bill at cost for product based on ordered and delivered quantities. 
+2025-01-05 14:19:25,818 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_reinvoice: test_no_expense (odoo.addons.sale.tests.test_reinvoice.TestReInvoice) 
+2025-01-05 14:19:25,818 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_reinvoice: ` Test invoicing vendor bill with no policy. Check nothing happen. 
+2025-01-05 14:19:26,047 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_reinvoice: test_sales_price (odoo.addons.sale.tests.test_reinvoice.TestReInvoice) 
+2025-01-05 14:19:26,047 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_reinvoice: ` Test invoicing vendor bill at sales price for products based on delivered and ordered quantities. Check no existing SO line is incremented, but when invoicing a second time, increment only the delivered so line. 
+2025-01-05 14:19:26,676 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_reinvoice: Ran 3 tests in 1.905s 
+2025-01-05 14:19:26,677 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_reinvoice: OK 
+2025-01-05 14:19:26,677 319615 INFO test_universal_connector_sale_12 odoo.modules.module: odoo.addons.sale.tests.test_sale_order running tests. 
+2025-01-05 14:19:27,206 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_order: test_cost_invoicing (odoo.addons.sale.tests.test_sale_order.TestSaleOrder) 
+2025-01-05 14:19:27,206 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_order: ` Test confirming a vendor invoice to reinvoice cost on the so 
+2025-01-05 14:19:27,604 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_order: test_discount_and_untaxed_subtotal (odoo.addons.sale.tests.test_sale_order.TestSaleOrder) 
+2025-01-05 14:19:27,604 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_order: ` When adding a discount on a SO line, this test ensures that the untaxed amount to invoice is equal to the untaxed subtotal 
+2025-01-05 14:19:27,917 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_order: test_multi_currency_discount (odoo.addons.sale.tests.test_sale_order.TestSaleOrder) 
+2025-01-05 14:19:27,917 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_order: ` Verify the currency used for pricelist price & discount computation. 
+2025-01-05 14:19:28,196 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted ir.model.data records with IDs: [5570, 5486, 5560, 5489, 5510, 5487, 5458, 5460, 5490, 5491, 5502, 5495, 5494, 5465, 5493, 5504, 5499, 5551, 5501, 5444, 5492, 5500, 5503, 5497, 5496, 5498, 5442, 5508, 5443, 5484, 5445, 5446, 5478, 5509, 5607, 5511, 5447, 5512, 5448, 5513, 5552, 5514, 5518, 5515, 5517, 5567, 5520, 5519, 5587, 5521, 5553, 5522, 5554, 5524, 5610, 5525, 5463, 5483, 5468, 5526, 5449, 5451, 5450, 5530, 5459, 5529, 5528, 5527, 5595, 5531, 5532, 5464, 5534, 5536, 5505, 5507, 5563, 5471, 5535, 5506, 5533, 5537, 5538, 5585, 5540, 5539, 5466, 5452, 5541, 5550, 5548, 5544, 5543, 5557, 5549, 5542, 5547, 5479, 5546, 5545, 5472, 5473, 5556, 5558, 5562, 5561, 5453, 5559, 5474, 5606, 5455, 5602, 5604, 5475, 5605, 5456, 5601, 5603, 5600, 5523, 5467, 5592, 5469, 5599, 5598, 5593, 5589, 5591, 5583, 5584, 5457, 5476, 5597, 5608, 5590, 5588, 5582, 5586, 5594, 5516, 5580, 5581, 5576, 5578, 5572, 5573, 5575, 5470, 5574, 5579, 5577, 5571, 5461, 5482, 5439, 5440, 5485, 5569, 5441, 5462, 5568, 5596, 5481, 5488, 5480, 5454, 5566, 5609, 5477, 5565, 5555, 5564] 
+2025-01-05 14:19:28,201 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted res.currency.rate records with IDs: [2, 59, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 172, 3, 1, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 12] 
+2025-01-05 14:19:28,585 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_order: test_sale_order (odoo.addons.sale.tests.test_sale_order.TestSaleOrder) 
+2025-01-05 14:19:28,585 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_order: ` Test the sales order flow (invoicing and quantity updates) - Invoice repeatedly while varrying delivered quantities and check that invoice are always what we expect 
+2025-01-05 14:19:29,738 319615 INFO test_universal_connector_sale_12 odoo.tests: skip sending email in test mode 
+2025-01-05 14:19:29,741 319615 INFO test_universal_connector_sale_12 odoo.addons.mail.models.mail_mail: Mail with ID 1 and Message-Id '<237996432570938.1736086769.685124874114990-openerp-27-sale.order@nb200z0>' successfully sent 
+2025-01-05 14:19:29,752 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.mail records with IDs: [1] 
+2025-01-05 14:19:29,752 319615 INFO test_universal_connector_sale_12 odoo.addons.mail.models.mail_mail: Sent batch 1 emails via mail server ID #False 
+2025-01-05 14:19:30,343 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_order: test_sale_with_taxes (odoo.addons.sale.tests.test_sale_order.TestSaleOrder) 
+2025-01-05 14:19:30,344 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_order: ` Test SO with taxes applied on its lines and check subtotal applied on its lines and total applied on the SO 
+2025-01-05 14:19:30,499 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_order: test_so_create_multicompany (odoo.addons.sale.tests.test_sale_order.TestSaleOrder) 
+2025-01-05 14:19:30,499 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_order: ` In case we use new() outside of an onchange, it might cause the value of related fields to be incorrect. If so, then the company being a related might not be set, which would mean that taxes from all child companies would end up on the order lines. 
+2025-01-05 14:19:30,853 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_order: test_unlink_cancel (odoo.addons.sale.tests.test_sale_order.TestSaleOrder) 
+2025-01-05 14:19:30,853 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_order: ` Test deleting and cancelling sales orders depending on their state and on the user's rights 
+2025-01-05 14:19:30,935 319615 INFO test_universal_connector_sale_12 odoo.models: The requested operation cannot be completed due to record rules: Document type: sale.order, Operation: read, Records: 34, User: 8 
+2025-01-05 14:19:30,938 319615 INFO test_universal_connector_sale_12 odoo.models: The requested operation cannot be completed due to record rules: Document type: sale.order, Operation: read, Records: 34, User: 8 
+2025-01-05 14:19:30,969 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #9 deleted sale.order records with IDs: [34] 
+2025-01-05 14:19:31,089 319615 INFO test_universal_connector_sale_12 odoo.models: The requested operation cannot be completed due to record rules: Document type: sale.order, Operation: read, Records: 35, User: 8 
+2025-01-05 14:19:31,091 319615 INFO test_universal_connector_sale_12 odoo.models: The requested operation cannot be completed due to record rules: Document type: sale.order, Operation: read, Records: 35, User: 8 
+2025-01-05 14:19:31,108 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #9 deleted sale.order records with IDs: [35] 
+2025-01-05 14:19:31,117 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [231] 
+2025-01-05 14:19:31,197 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_order: Ran 7 tests in 4.520s 
+2025-01-05 14:19:31,198 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_order: OK 
+2025-01-05 14:19:31,198 319615 INFO test_universal_connector_sale_12 odoo.modules.module: odoo.addons.sale.tests.test_sale_pricelist running tests. 
+2025-01-05 14:19:31,614 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_pricelist: test_sale_with_pricelist_discount_excluded (odoo.addons.sale.tests.test_sale_pricelist.TestSaleOrder) 
+2025-01-05 14:19:31,615 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_pricelist: ` Test SO with the pricelist 'discount displayed' and check discount and unit price appeared on its lines 
+2025-01-05 14:19:31,872 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_pricelist: test_sale_with_pricelist_discount_included (odoo.addons.sale.tests.test_sale_pricelist.TestSaleOrder) 
+2025-01-05 14:19:31,872 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_pricelist: ` Test SO with the pricelist and check unit price appeared on its lines 
+2025-01-05 14:19:31,988 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_pricelist: test_sale_with_pricelist_empty (odoo.addons.sale.tests.test_sale_pricelist.TestSaleOrder) 
+2025-01-05 14:19:32,115 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_pricelist: Ran 3 tests in 0.917s 
+2025-01-05 14:19:32,115 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_pricelist: OK 
+2025-01-05 14:19:32,116 319615 INFO test_universal_connector_sale_12 odoo.modules.module: odoo.addons.sale.tests.test_sale_to_invoice running tests. 
+2025-01-05 14:19:32,473 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_to_invoice: test_downpayment (odoo.addons.sale.tests.test_sale_to_invoice.TestSaleToInvoice) 
+2025-01-05 14:19:32,473 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_to_invoice: ` Test invoice with a way of downpayment and check downpayment's SO line is created and also check a total amount of invoice is equal to a respective sale order's total amount 
+2025-01-05 14:19:32,991 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_to_invoice: test_invoice_refund (odoo.addons.sale.tests.test_sale_to_invoice.TestSaleToInvoice) 
+2025-01-05 14:19:32,991 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_to_invoice: ` Test invoice with a refund and check customer invoices credit note is created from respective invoice 
+2025-01-05 14:19:34,048 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_to_invoice: test_invoice_with_discount (odoo.addons.sale.tests.test_sale_to_invoice.TestSaleToInvoice) 
+2025-01-05 14:19:34,048 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_to_invoice: ` Test invoice with a discount and check discount applied on both SO lines and an invoice lines 
+2025-01-05 14:19:34,553 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_to_invoice: test_search_invoice_ids (odoo.addons.sale.tests.test_sale_to_invoice.TestSaleToInvoice) 
+2025-01-05 14:19:34,553 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_to_invoice: ` Test searching on computed fields invoice_ids 
+2025-01-05 14:19:34,763 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_to_invoice: Ran 4 tests in 2.647s 
+2025-01-05 14:19:34,763 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_to_invoice: OK 
+2025-01-05 14:19:35,025 319615 INFO test_universal_connector_sale_12 odoo.modules.registry: module universal_connector_sale: creating or updating database tables 
+2025-01-05 14:19:35,147 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: loading universal_connector_sale/views/sale_order_view.xml 
+2025-01-05 14:19:35,155 319615 WARNING test_universal_connector_sale_12 odoo.models: ir.ui.view.create() with unknown fields: sequence 
+2025-01-05 14:19:35,220 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: Module universal_connector_sale: loading demo 
+2025-01-05 14:19:35,236 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: 39 modules loaded in 25.73s, 19021 queries 
+2025-01-05 14:19:35,605 319615 INFO test_universal_connector_sale_12 odoo.modules.loading: Modules loaded. 
+2025-01-05 14:19:35,610 319615 INFO test_universal_connector_sale_12 odoo.service.server: Starting post tests 
+2025-01-05 14:19:35,612 319615 INFO test_universal_connector_sale_12 odoo.modules.module: odoo.addons.sale.tests.test_access_rights running tests. 
+2025-01-05 14:19:35,702 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_access_rights: test_access_employee (odoo.addons.sale.tests.test_access_rights.TestAccessRights) 
+2025-01-05 14:19:35,702 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_access_rights: ` Test classic employee's access rights 
+2025-01-05 14:19:35,953 319615 INFO test_universal_connector_sale_12 odoo.addons.base.models.ir_model: Access Denied by ACLs for operation: read, uid: 15, model: sale.order 
+2025-01-05 14:19:35,955 319615 INFO test_universal_connector_sale_12 odoo.addons.base.models.ir_model: Access Denied by ACLs for operation: write, uid: 15, model: sale.order 
+2025-01-05 14:19:35,977 319615 INFO test_universal_connector_sale_12 odoo.addons.base.models.ir_model: Access Denied by ACLs for operation: create, uid: 15, model: sale.order 
+2025-01-05 14:19:35,979 319615 INFO test_universal_connector_sale_12 odoo.addons.base.models.ir_model: Access Denied by ACLs for operation: read, uid: 15, model: sale.order 
+2025-01-05 14:19:35,980 319615 INFO test_universal_connector_sale_12 odoo.addons.base.models.ir_model: Access Denied by ACLs for operation: read, uid: 15, model: sale.order 
+2025-01-05 14:19:35,981 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_access_rights: test_access_portal_user (odoo.addons.sale.tests.test_access_rights.TestAccessRights) 
+2025-01-05 14:19:35,981 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_access_rights: ` Test portal user's access rights 
+2025-01-05 14:19:36,232 319615 INFO test_universal_connector_sale_12 odoo.models: The requested operation cannot be completed due to record rules: Document type: sale.order, Operation: read, Records: 39, User: 19 
+2025-01-05 14:19:36,249 319615 INFO test_universal_connector_sale_12 odoo.addons.base.models.ir_model: Access Denied by ACLs for operation: write, uid: 19, model: sale.order 
+2025-01-05 14:19:36,251 319615 INFO test_universal_connector_sale_12 odoo.addons.base.models.ir_model: Access Denied by ACLs for operation: read, uid: 19, model: ir.sequence 
+2025-01-05 14:19:36,264 319615 INFO test_universal_connector_sale_12 odoo.addons.base.models.ir_model: Access Denied by ACLs for operation: unlink, uid: 19, model: sale.order 
+2025-01-05 14:19:36,266 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_access_rights: test_access_sales_manager (odoo.addons.sale.tests.test_access_rights.TestAccessRights) 
+2025-01-05 14:19:36,266 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_access_rights: ` Test sales manager's access rights 
+2025-01-05 14:19:36,613 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #21 deleted sale.order records with IDs: [40] 
+2025-01-05 14:19:36,632 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #21 deleted crm.team records with IDs: [7] 
+2025-01-05 14:19:36,634 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_access_rights: test_access_sales_person (odoo.addons.sale.tests.test_access_rights.TestAccessRights) 
+2025-01-05 14:19:36,634 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_access_rights: ` Test Salesperson's access rights 
+2025-01-05 14:19:36,877 319615 INFO test_universal_connector_sale_12 odoo.models: The requested operation cannot be completed due to record rules: Document type: sale.order, Operation: read, Records: 42, User: 28 
+2025-01-05 14:19:36,943 319615 INFO test_universal_connector_sale_12 odoo.models: Access Denied by record rules for operation: read on record ids: [43], uid: 28, model: sale.order 
+2025-01-05 14:19:36,949 319615 INFO test_universal_connector_sale_12 odoo.addons.base.models.ir_model: Access Denied by ACLs for operation: unlink, uid: 28, model: sale.order 
+2025-01-05 14:19:36,967 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_access_rights: Ran 4 tests in 1.355s 
+2025-01-05 14:19:36,967 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_access_rights: OK 
+2025-01-05 14:19:36,968 319615 INFO test_universal_connector_sale_12 odoo.modules.module: odoo.addons.sale.tests.test_sale_product_attribute_value_config running tests. 
+2025-01-05 14:19:36,968 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_product_attribute_value_config: test_01_is_combination_possible_archived (odoo.addons.sale.tests.test_sale_product_attribute_value_config.TestSaleProductAttributeValueConfig) 
+2025-01-05 14:19:36,969 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_product_attribute_value_config: ` The goal is to test the possibility of archived combinations.  This test could not be put into product module because there was no model which had product_id as required and without cascade on delete. Here we have the sales order line in this situation.  This is a necessary condition for `create_variant_ids` to archive instead of delete the variants. 
+2025-01-05 14:19:37,219 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [338] 
+2025-01-05 14:19:37,232 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [59] 
+2025-01-05 14:19:37,239 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [290] 
+2025-01-05 14:19:37,328 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [358] 
+2025-01-05 14:19:37,339 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [78] 
+2025-01-05 14:19:37,345 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [310] 
+2025-01-05 14:19:37,532 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.template.attribute.value records with IDs: [13, 14, 15] 
+2025-01-05 14:19:37,538 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.template.attribute.line records with IDs: [6] 
+2025-01-05 14:19:37,624 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [356, 355, 354, 353, 352, 351, 350, 349, 348, 347, 346, 345, 344, 343, 342, 341, 340, 339] 
+2025-01-05 14:19:37,645 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [339] 
+2025-01-05 14:19:37,665 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [340] 
+2025-01-05 14:19:37,688 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [341] 
+2025-01-05 14:19:37,699 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [62] 
+2025-01-05 14:19:37,706 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [293] 
+2025-01-05 14:19:37,719 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [342] 
+2025-01-05 14:19:37,729 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [63] 
+2025-01-05 14:19:37,735 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [294] 
+2025-01-05 14:19:37,748 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [343] 
+2025-01-05 14:19:37,758 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [64] 
+2025-01-05 14:19:37,764 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [295] 
+2025-01-05 14:19:37,780 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [344] 
+2025-01-05 14:19:37,795 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [65] 
+2025-01-05 14:19:37,804 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [296] 
+2025-01-05 14:19:37,823 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [345] 
+2025-01-05 14:19:37,835 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [66] 
+2025-01-05 14:19:37,842 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [297] 
+2025-01-05 14:19:37,857 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [346] 
+2025-01-05 14:19:37,868 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [67] 
+2025-01-05 14:19:37,874 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [298] 
+2025-01-05 14:19:37,888 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [347] 
+2025-01-05 14:19:37,898 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [68] 
+2025-01-05 14:19:37,905 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [299] 
+2025-01-05 14:19:37,919 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [348] 
+2025-01-05 14:19:37,930 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [69] 
+2025-01-05 14:19:37,937 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [300] 
+2025-01-05 14:19:37,952 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [349] 
+2025-01-05 14:19:37,963 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [70] 
+2025-01-05 14:19:37,970 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [301] 
+2025-01-05 14:19:37,986 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [350] 
+2025-01-05 14:19:37,999 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [71] 
+2025-01-05 14:19:38,008 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [302] 
+2025-01-05 14:19:38,023 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [351] 
+2025-01-05 14:19:38,034 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [72] 
+2025-01-05 14:19:38,040 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [303] 
+2025-01-05 14:19:38,056 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [352] 
+2025-01-05 14:19:38,066 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [73] 
+2025-01-05 14:19:38,073 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [304] 
+2025-01-05 14:19:38,089 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [353] 
+2025-01-05 14:19:38,099 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [74] 
+2025-01-05 14:19:38,106 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [305] 
+2025-01-05 14:19:38,122 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [354] 
+2025-01-05 14:19:38,131 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [75] 
+2025-01-05 14:19:38,138 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [306] 
+2025-01-05 14:19:38,154 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [355] 
+2025-01-05 14:19:38,164 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [76] 
+2025-01-05 14:19:38,173 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [307] 
+2025-01-05 14:19:38,189 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [356] 
+2025-01-05 14:19:38,198 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [77] 
+2025-01-05 14:19:38,205 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [308] 
+2025-01-05 14:19:38,242 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.template.attribute.value records with IDs: [8, 9] 
+2025-01-05 14:19:38,248 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.template.attribute.line records with IDs: [4] 
+2025-01-05 14:19:38,310 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [369, 368, 367, 366, 365, 364, 340, 339] 
+2025-01-05 14:19:38,326 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [339] 
+2025-01-05 14:19:38,345 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [340] 
+2025-01-05 14:19:38,366 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [364] 
+2025-01-05 14:19:38,375 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [82] 
+2025-01-05 14:19:38,381 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [315] 
+2025-01-05 14:19:38,393 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [365] 
+2025-01-05 14:19:38,404 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [83] 
+2025-01-05 14:19:38,411 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [316] 
+2025-01-05 14:19:38,425 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [366] 
+2025-01-05 14:19:38,435 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [84] 
+2025-01-05 14:19:38,441 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [317] 
+2025-01-05 14:19:38,454 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [367] 
+2025-01-05 14:19:38,464 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [85] 
+2025-01-05 14:19:38,471 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [318] 
+2025-01-05 14:19:38,483 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [368] 
+2025-01-05 14:19:38,493 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [86] 
+2025-01-05 14:19:38,500 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [319] 
+2025-01-05 14:19:38,512 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [369] 
+2025-01-05 14:19:38,522 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [87] 
+2025-01-05 14:19:38,529 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [320] 
+2025-01-05 14:19:38,610 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.template.attribute.value records with IDs: [19, 20, 21] 
+2025-01-05 14:19:38,616 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.template.attribute.line records with IDs: [8] 
+2025-01-05 14:19:38,700 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [372, 371, 370, 340, 339] 
+2025-01-05 14:19:38,715 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [339] 
+2025-01-05 14:19:38,734 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [340] 
+2025-01-05 14:19:38,755 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [370] 
+2025-01-05 14:19:38,775 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [371] 
+2025-01-05 14:19:38,786 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [89] 
+2025-01-05 14:19:38,792 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [322] 
+2025-01-05 14:19:38,804 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [372] 
+2025-01-05 14:19:38,814 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [90] 
+2025-01-05 14:19:38,822 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [323] 
+2025-01-05 14:19:39,018 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [381, 380, 379, 378, 377, 376, 375, 374, 373, 370] 
+2025-01-05 14:19:39,037 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [370] 
+2025-01-05 14:19:39,057 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [373] 
+2025-01-05 14:19:39,078 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [374] 
+2025-01-05 14:19:39,089 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [92] 
+2025-01-05 14:19:39,096 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [325] 
+2025-01-05 14:19:39,108 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [375] 
+2025-01-05 14:19:39,121 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [93] 
+2025-01-05 14:19:39,129 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [326] 
+2025-01-05 14:19:39,146 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [376] 
+2025-01-05 14:19:39,158 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [94] 
+2025-01-05 14:19:39,164 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [327] 
+2025-01-05 14:19:39,180 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [377] 
+2025-01-05 14:19:39,194 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [95] 
+2025-01-05 14:19:39,202 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [328] 
+2025-01-05 14:19:39,216 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [378] 
+2025-01-05 14:19:39,228 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [96] 
+2025-01-05 14:19:39,234 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [329] 
+2025-01-05 14:19:39,252 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [379] 
+2025-01-05 14:19:39,263 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [97] 
+2025-01-05 14:19:39,269 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [330] 
+2025-01-05 14:19:39,282 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [380] 
+2025-01-05 14:19:39,293 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [98] 
+2025-01-05 14:19:39,299 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [331] 
+2025-01-05 14:19:39,313 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [381] 
+2025-01-05 14:19:39,323 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [99] 
+2025-01-05 14:19:39,329 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [332] 
+2025-01-05 14:19:39,526 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.template.attribute.value records with IDs: [22, 23, 24] 
+2025-01-05 14:19:39,532 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.template.attribute.line records with IDs: [9] 
+2025-01-05 14:19:39,641 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [397, 396, 395, 394, 393, 392, 391, 390, 389, 388, 387, 386, 385, 384, 383, 382, 373, 370, 340, 339] 
+2025-01-05 14:19:39,660 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [339] 
+2025-01-05 14:19:39,681 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [340] 
+2025-01-05 14:19:39,704 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [370] 
+2025-01-05 14:19:39,727 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [373] 
+2025-01-05 14:19:39,750 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [382] 
+2025-01-05 14:19:39,760 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [100] 
+2025-01-05 14:19:39,767 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [333] 
+2025-01-05 14:19:39,779 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [383] 
+2025-01-05 14:19:39,789 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [101] 
+2025-01-05 14:19:39,796 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [334] 
+2025-01-05 14:19:39,809 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [384] 
+2025-01-05 14:19:39,820 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [102] 
+2025-01-05 14:19:39,827 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [335] 
+2025-01-05 14:19:39,840 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [385] 
+2025-01-05 14:19:39,851 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [103] 
+2025-01-05 14:19:39,858 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [336] 
+2025-01-05 14:19:39,873 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [386] 
+2025-01-05 14:19:39,885 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [104] 
+2025-01-05 14:19:39,892 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [337] 
+2025-01-05 14:19:39,908 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [387] 
+2025-01-05 14:19:39,920 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [105] 
+2025-01-05 14:19:39,927 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [338] 
+2025-01-05 14:19:39,943 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [388] 
+2025-01-05 14:19:39,955 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [106] 
+2025-01-05 14:19:39,961 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [339] 
+2025-01-05 14:19:39,978 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [389] 
+2025-01-05 14:19:39,989 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [107] 
+2025-01-05 14:19:39,995 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [340] 
+2025-01-05 14:19:40,011 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [390] 
+2025-01-05 14:19:40,026 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [108] 
+2025-01-05 14:19:40,034 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [341] 
+2025-01-05 14:19:40,051 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [391] 
+2025-01-05 14:19:40,062 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [109] 
+2025-01-05 14:19:40,069 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [342] 
+2025-01-05 14:19:40,086 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [392] 
+2025-01-05 14:19:40,098 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [110] 
+2025-01-05 14:19:40,106 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [343] 
+2025-01-05 14:19:40,123 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [393] 
+2025-01-05 14:19:40,135 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [111] 
+2025-01-05 14:19:40,142 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [344] 
+2025-01-05 14:19:40,159 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [394] 
+2025-01-05 14:19:40,171 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [112] 
+2025-01-05 14:19:40,177 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [345] 
+2025-01-05 14:19:40,194 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [395] 
+2025-01-05 14:19:40,206 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [113] 
+2025-01-05 14:19:40,213 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [346] 
+2025-01-05 14:19:40,230 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [396] 
+2025-01-05 14:19:40,242 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [114] 
+2025-01-05 14:19:40,248 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [347] 
+2025-01-05 14:19:40,268 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [397] 
+2025-01-05 14:19:40,278 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [115] 
+2025-01-05 14:19:40,286 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [348] 
+2025-01-05 14:19:40,321 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.template.attribute.value records with IDs: [25, 26] 
+2025-01-05 14:19:40,327 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.template.attribute.line records with IDs: [10] 
+2025-01-05 14:19:40,410 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [405, 404, 403, 402, 401, 400, 373, 340, 339] 
+2025-01-05 14:19:40,428 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [339] 
+2025-01-05 14:19:40,449 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [340] 
+2025-01-05 14:19:40,473 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [373] 
+2025-01-05 14:19:40,498 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [400] 
+2025-01-05 14:19:40,510 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [116] 
+2025-01-05 14:19:40,517 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [350] 
+2025-01-05 14:19:40,530 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [401] 
+2025-01-05 14:19:40,543 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [117] 
+2025-01-05 14:19:40,550 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [351] 
+2025-01-05 14:19:40,562 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [402] 
+2025-01-05 14:19:40,573 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [118] 
+2025-01-05 14:19:40,579 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [352] 
+2025-01-05 14:19:40,592 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [403] 
+2025-01-05 14:19:40,602 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [119] 
+2025-01-05 14:19:40,608 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [353] 
+2025-01-05 14:19:40,621 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [404] 
+2025-01-05 14:19:40,632 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [120] 
+2025-01-05 14:19:40,639 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [354] 
+2025-01-05 14:19:40,652 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [405] 
+2025-01-05 14:19:40,662 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [121] 
+2025-01-05 14:19:40,669 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [355] 
+2025-01-05 14:19:40,748 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.template.attribute.value records with IDs: [27, 28, 29] 
+2025-01-05 14:19:40,753 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.template.attribute.line records with IDs: [11] 
+2025-01-05 14:19:40,861 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [407, 406, 370, 340, 339] 
+2025-01-05 14:19:40,877 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [339] 
+2025-01-05 14:19:40,897 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [340] 
+2025-01-05 14:19:40,920 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [370] 
+2025-01-05 14:19:40,941 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [406] 
+2025-01-05 14:19:40,953 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [122] 
+2025-01-05 14:19:40,959 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [356] 
+2025-01-05 14:19:40,971 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [407] 
+2025-01-05 14:19:40,982 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [123] 
+2025-01-05 14:19:40,989 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [357] 
+2025-01-05 14:19:41,173 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_product_attribute_value_config: test_02_get_combination_info (odoo.addons.sale.tests.test_sale_product_attribute_value_config.TestSaleProductAttributeValueConfig) 
+2025-01-05 14:19:41,392 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [417] 
+2025-01-05 14:19:41,407 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [132] 
+2025-01-05 14:19:41,414 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [367] 
+2025-01-05 14:19:41,512 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [437] 
+2025-01-05 14:19:41,523 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [151] 
+2025-01-05 14:19:41,529 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [387] 
+2025-01-05 14:19:41,613 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.template.attribute.value records with IDs: [33, 34] 
+2025-01-05 14:19:41,618 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.template.attribute.line records with IDs: [13] 
+2025-01-05 14:19:41,717 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [435, 434, 433, 432, 431, 430, 429, 428, 427, 426, 425, 424, 423, 422, 421, 420, 419, 418] 
+2025-01-05 14:19:41,730 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150] 
+2025-01-05 14:19:41,739 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [368, 369, 370, 371, 372, 373, 374, 375, 376, 377, 378, 379, 380, 381, 382, 383, 384, 385] 
+2025-01-05 14:19:41,772 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.template.attribute.value records with IDs: [38, 39, 40] 
+2025-01-05 14:19:41,777 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.template.attribute.line records with IDs: [15] 
+2025-01-05 14:19:41,923 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [449, 448, 447, 446, 445, 444, 443, 442, 441] 
+2025-01-05 14:19:41,933 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [155, 156, 157, 158, 159, 160, 161, 162, 163] 
+2025-01-05 14:19:41,959 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [391, 392, 393, 394, 395, 396, 397, 398, 399] 
+2025-01-05 14:19:41,998 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_product_attribute_value_config: test_03_get_combination_info_discount_policy (odoo.addons.sale.tests.test_sale_product_attribute_value_config.TestSaleProductAttributeValueConfig) 
+2025-01-05 14:19:42,226 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [451] 
+2025-01-05 14:19:42,239 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [164] 
+2025-01-05 14:19:42,246 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [401] 
+2025-01-05 14:19:42,341 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [471] 
+2025-01-05 14:19:42,353 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [183] 
+2025-01-05 14:19:42,360 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [421] 
+2025-01-05 14:19:42,419 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_product_attribute_value_config: test_04_create_product_variant_non_dynamic (odoo.addons.sale.tests.test_sale_product_attribute_value_config.TestSaleProductAttributeValueConfig) 
+2025-01-05 14:19:42,419 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_product_attribute_value_config: ` The goal of this test is to make sure the create_product_variant does not create variant if the type is not dynamic. It can however return a variant if it already exists. 
+2025-01-05 14:19:42,588 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [476] 
+2025-01-05 14:19:42,600 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [187] 
+2025-01-05 14:19:42,606 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [426] 
+2025-01-05 14:19:42,698 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [496] 
+2025-01-05 14:19:42,708 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [206] 
+2025-01-05 14:19:42,714 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [446] 
+2025-01-05 14:19:42,738 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [477] 
+2025-01-05 14:19:42,747 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [188] 
+2025-01-05 14:19:42,754 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [427] 
+2025-01-05 14:19:42,761 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_product_attribute_value_config: test_05_create_product_variant_dynamic (odoo.addons.sale.tests.test_sale_product_attribute_value_config.TestSaleProductAttributeValueConfig) 
+2025-01-05 14:19:42,761 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_product_attribute_value_config: ` The goal of this test is to make sure the create_product_variant does work with dynamic. If the combination is possible, it should create it. If it's not possible, it should not create it. 
+2025-01-05 14:19:43,014 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [501] 
+2025-01-05 14:19:43,024 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [210] 
+2025-01-05 14:19:43,031 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [451] 
+2025-01-05 14:19:43,125 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [521] 
+2025-01-05 14:19:43,138 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [229] 
+2025-01-05 14:19:43,144 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [471] 
+2025-01-05 14:19:43,153 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.template.attribute.value records with IDs: [78, 79, 80] 
+2025-01-05 14:19:43,157 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.template.attribute.line records with IDs: [30] 
+2025-01-05 14:19:43,258 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [519, 518, 517, 516, 515, 514, 513, 512, 511, 510, 509, 508, 507, 506, 505, 504, 503, 502] 
+2025-01-05 14:19:43,273 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228] 
+2025-01-05 14:19:43,283 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469] 
+2025-01-05 14:19:43,326 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.message records with IDs: [530, 529, 528, 527, 526, 525] 
+2025-01-05 14:19:43,338 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted product.product records with IDs: [233, 234, 235, 236, 237, 238] 
+2025-01-05 14:19:43,345 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.followers records with IDs: [475, 476, 477, 478, 479, 480] 
+2025-01-05 14:19:43,389 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_product_attribute_value_config: Ran 5 tests in 6.421s 
+2025-01-05 14:19:43,389 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_product_attribute_value_config: OK 
+2025-01-05 14:19:43,390 319615 INFO test_universal_connector_sale_12 odoo.modules.module: odoo.addons.sale.tests.test_sale_product_attribute_value_config tested in 6.42s, 9906 queries 
+2025-01-05 14:19:43,390 319615 INFO test_universal_connector_sale_12 odoo.modules.module: odoo.addons.sale.tests.test_sale_transaction running tests. 
+2025-01-05 14:19:43,390 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_transaction: test_sale_invoicing_from_transaction (odoo.addons.sale.tests.test_sale_transaction.TestSaleTransaction) 
+2025-01-05 14:19:43,391 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_transaction: ` Test the following scenario: - Create a sale order - Create a transaction for the sale order. - Confirm the transaction but no invoice generated automatically. - Create manually an invoice for this sale order. => The invoice must be paid. 
+2025-01-05 14:19:43,723 319615 INFO test_universal_connector_sale_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_sale_12/5f/5f59e0caa6d536fe4a6415d87f4afb2ef0608fc1 
 Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/api.py", line 1050, in get
     value = self._data[key][field][record._ids[0]]
@@ -539,17 +538,17 @@ Traceback (most recent call last):
   File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
     r = base64.b64encode(open(full_path,'rb').read())
 FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_sale_12/5f/5f59e0caa6d536fe4a6415d87f4afb2ef0608fc1'
-2025-01-05 12:55:07,094 212719 INFO test_universal_connector_sale_12 odoo.tests: skip sending email in test mode 
-2025-01-05 12:55:07,099 212719 INFO test_universal_connector_sale_12 odoo.addons.mail.models.mail_mail: Mail with ID 2 and Message-Id '<339282130068605.1736081706.950602531433105-openerp-46-sale.order@nb200z0>' successfully sent 
-2025-01-05 12:55:07,115 212719 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.mail records with IDs: [2] 
-2025-01-05 12:55:07,116 212719 INFO test_universal_connector_sale_12 odoo.addons.mail.models.mail_mail: Sent batch 1 emails via mail server ID #False 
-2025-01-05 12:55:08,192 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_transaction: test_sale_transaction_mismatch (odoo.addons.sale.tests.test_sale_transaction.TestSaleTransaction) 
-2025-01-05 12:55:08,192 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_transaction: ` Test that a transaction for the incorrect amount does not validate the SO. 
-2025-01-05 12:55:08,710 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_transaction: Ran 2 tests in 3.803s 
-2025-01-05 12:55:08,710 212719 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_transaction: OK 
-2025-01-05 12:55:08,711 212719 INFO test_universal_connector_sale_12 odoo.service.server: All post-tested in 17.62s, 15115 queries 
-2025-01-05 12:55:08,711 212719 INFO test_universal_connector_sale_12 odoo.service.server: Initiating shutdown 
-2025-01-05 12:55:08,711 212719 INFO test_universal_connector_sale_12 odoo.service.server: Hit CTRL-C again or send a second signal to force the shutdown. 
+2025-01-05 14:19:44,592 319615 INFO test_universal_connector_sale_12 odoo.tests: skip sending email in test mode 
+2025-01-05 14:19:44,595 319615 INFO test_universal_connector_sale_12 odoo.addons.mail.models.mail_mail: Mail with ID 2 and Message-Id '<788265780461662.1736086784.518995285034180-openerp-46-sale.order@nb200z0>' successfully sent 
+2025-01-05 14:19:44,605 319615 INFO test_universal_connector_sale_12 odoo.models.unlink: User #1 deleted mail.mail records with IDs: [2] 
+2025-01-05 14:19:44,605 319615 INFO test_universal_connector_sale_12 odoo.addons.mail.models.mail_mail: Sent batch 1 emails via mail server ID #False 
+2025-01-05 14:19:45,187 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_transaction: test_sale_transaction_mismatch (odoo.addons.sale.tests.test_sale_transaction.TestSaleTransaction) 
+2025-01-05 14:19:45,187 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_transaction: ` Test that a transaction for the incorrect amount does not validate the SO. 
+2025-01-05 14:19:45,469 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_transaction: Ran 2 tests in 2.079s 
+2025-01-05 14:19:45,469 319615 INFO test_universal_connector_sale_12 odoo.addons.sale.tests.test_sale_transaction: OK 
+2025-01-05 14:19:45,469 319615 INFO test_universal_connector_sale_12 odoo.service.server: All post-tested in 9.86s, 15115 queries 
+2025-01-05 14:19:45,469 319615 INFO test_universal_connector_sale_12 odoo.service.server: Initiating shutdown 
+2025-01-05 14:19:45,470 319615 INFO test_universal_connector_sale_12 odoo.service.server: Hit CTRL-C again or send a second signal to force the shutdown. 
 
 +===================================================================
 | please test [36muniversal_connector_sale[0m (12.0): [32mSUCCESS![0m
