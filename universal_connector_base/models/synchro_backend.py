@@ -7,15 +7,10 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 #
 import os
-
-import logging
-import re
-
 from datetime import datetime, timedelta
+
 from odoo import api, fields, models
 from python_plus import _u
-
-_logger = logging.getLogger(__name__)
 
 try:
     from urllib.parse import urlparse
@@ -26,27 +21,9 @@ except ImportError:
 class SynchroChannel(models.Model):
     """Odoo Backends"""
 
-    _name = "synchro.channel"
+    _name = "synchro.backend"
     _description = "Odoo Backend"
     _order = "sequence,name"
-
-    def _default_hostname(self):
-        return self.parse_endpoint(with_default=True)[1]
-
-    def _default_login(self):
-        return self.parse_endpoint(with_default=True)[4]
-
-    def _default_port(self):
-        return self.parse_endpoint(with_default=True)[2]
-
-    def _default_database(self):
-        return self.parse_endpoint(with_default=True)[3]
-
-    def _default_path(self):
-        return self.parse_endpoint(with_default=True, with_path="login")[6]
-
-    def _default_exchange_path(self):
-        return self.parse_endpoint(with_default=True, with_path="data")[6]
 
     def _default_language(self):  # pragma: no cover
         if self.env.user.lang and self.env.user.lang != "en_US":
@@ -61,29 +38,22 @@ class SynchroChannel(models.Model):
             return lang_ids[0]
         return self.env["res.lang"].search([("code", "=", "en_US")])[0]
 
-    def selection_for_version(self):
-        return [
-            ("6.1", "Odoo 6.1 - Python2"),
-            ("7.0", "Odoo 7.0 - Python2"),
-            ("8.0", "Odoo 8.0 - Python2"),
-            ("9.0", "Odoo 9.0 - Python2"),
-            ("10.0", "Odoo 10.0 - Python2"),
-            ("11.0", "Odoo 11.0 - Python3"),
-            ("12.0", "Odoo 12.0 - Python3"),
-            ("13.0", "Odoo 13.0 - Python3"),
-            ("14.0", "Odoo 14.0 - Python3"),
-            ("15.0", "Odoo 15.0 - Python3"),
-            ("16.0", "Odoo 16.0 - Python3"),
-            ("17.0", "Odoo 17.0 - Python3"),
-            ("18.0", "Odoo 18.0 - Python3"),
-        ]
+    def selection_for_version(self, identity=None):
+        res = []
+        for identity in self.env["synchro.identity"].search(
+            [("id", "=", identity.id)] if identity else []
+        ):
+            if identity.remote_sw_version:
+                version = eval(identity.remote_sw_version)
+                res += [(x, "%s %s" % (identity.code, x)) for x in version]
+        return res
 
     def selection_for_prefix(self):
         # WARNING! Before correct follow list, update prefix field
         return [
-            ("oe16", "oe16"),
-            ("oe12", "oe12"),
-            ("oe10", "oe10"),
+            ("odoo16", "odoo16"),
+            ("odoo12", "odoo12"),
+            ("odoo10", "odoo10"),
             ("oe8", "oe8"),
             ("oe7", "oe7"),
         ]
@@ -108,9 +78,9 @@ class SynchroChannel(models.Model):
     )
     prefix = fields.Selection(
         [
-            ("oe16", "oe16"),
-            ("oe12", "oe12"),
-            ("oe10", "oe10"),
+            ("odoo16", "odoo16"),
+            ("odoo12", "odoo12"),
+            ("odoo10", "odoo10"),
             ("oe8", "oe8"),
             ("oe7", "oe7"),
         ],
@@ -128,29 +98,27 @@ class SynchroChannel(models.Model):
         readonly=True,
         states={"draft": [("readonly", False)]},
     )
-    identity = fields.Selection(
-        [
-            ("generic", "Generic counterparty"),
-            ("odoo", "Odoo instance"),
-        ],
-        "Counterpart identity",
+    identity_id = fields.Many2one(
+        comodel_name="synchro.identity",
+        string="Counterpart identity",
         required=True,
-        default="odoo",
         help="Counterpart identity for specific behavior; i.e. 'Odoo', 'Magento'",
         readonly=True,
         states={"draft": [("readonly", False)]},
     )
-    method = fields.Selection(
-        [
-            ("xmlrpc/https", "By xmlrpc over https"),
-            ("xmlrpc/http", "By xmlrpc over http"),
-        ],
-        "Send/Receive protocol",
+    protocol_id = fields.Many2one(
+        comodel_name="synchro.protocol",
+        string="Send/Receive protocol",
         required=True,
-        default="xmlrpc/https",
         help="Communication Protocol to load data from/to remote counterparty",
         readonly=True,
         states={"draft": [("readonly", False)]},
+    )
+    method = fields.Char(
+        related="protocol_id.code",
+        string="Send/Receive method",
+        store=True,
+        readonly=True,
     )
     load_mode = fields.Selection(
         [
@@ -189,24 +157,21 @@ class SynchroChannel(models.Model):
         readonly=True,
         states={"draft": [("readonly", False)]},
     )
-    odoo_version = fields.Selection(
+    remote_sw_version = fields.Selection(
         lambda self: self.selection_for_version(),
         "Counterpart software version",
-        default="8.0",
         readonly=True,
         states={"draft": [("readonly", False)]},
     )
     hostname = fields.Char(
         string="Hostname",
         help="Counterpart host name without protocol; may be an IP address",
-        default=_default_hostname,
         readonly=True,
         states={"draft": [("readonly", False)]},
     )
     lgi_path = fields.Char(
         "RPC login path",
         help="Counterpart login path when load by rpc over https",
-        default=_default_path,
         readonly=True,
         states={"draft": [("readonly", False)]},
     )
@@ -214,20 +179,17 @@ class SynchroChannel(models.Model):
         "Exchange directory data path",
         help="Counterpart data path when load by rpc over https"
         " or where file will be read and written when load by csv",
-        default=_default_exchange_path,
         readonly=True,
         states={"draft": [("readonly", False)]},
     )
     login = fields.Char(
         string="Username / Client id",
         help="Username to login remote counterparty.",
-        default=_default_login,
         readonly=True,
         states={"draft": [("readonly", False)]},
     )
     port = fields.Integer(
         string="Communication Port",
-        default=_default_port,
         help="Port to communicate with remote counterparty; Odoo uses 8069",
         readonly=True,
         states={"draft": [("readonly", False)]},
@@ -271,7 +233,7 @@ class SynchroChannel(models.Model):
         readonly=True,
         states={"draft": [("readonly", False)]},
     )
-    pypi_sign = fields.Char(
+    pylib = fields.Char(
         string="PYPI library",
         readonly=True,
         help="Python library used to communicate with remote counterparty",
@@ -312,8 +274,8 @@ class SynchroChannel(models.Model):
         "This feature can slow data interchange.",
     )
     model_ids = fields.One2many(
-        "synchro.channel.model",
-        "synchro_channel_id",
+        "synchro.model",
+        "backend_id",
         string="Model mapping",
         readonly=True,
         states={"draft": [("readonly", False)]},
@@ -329,19 +291,20 @@ class SynchroChannel(models.Model):
     )
     workflow_model = fields.Char("Current Workflow Model", readonly=True)
     log_ids = fields.One2many(
-        "ir.model.synchro.log",
+        "synchro.log",
         "backend_id",
         string="Logs",
     )
 
     @api.depends("model", "res_id")
     def _compute_queue_jobs(self):  # pragma: no cover
-        que_list = self.env["ir.model.synchro.cache"].get_que_list(self)
+        que_list = self.env["synchro.cache"].get_que_list(self)
         html = "<table>"
-        for que_action, que_model, que_values, que_ttl, que_ctx in que_list:
+        for que_action, que_model, que_spec, que_values, que_ttl, que_ctx in que_list:
             html += "<tr>"
             html += "<td>" + que_action + "</td>"
             html += "<td>" + que_model + "</td>"
+            html += "<td>" + (que_spec if que_spec else "") + "</td>"
             html += "<td>" + str(que_values) + "</td>"
             html += "<td>" + str(que_ttl) + "</td>"
             html += "<td>" + str(que_ctx) + "</td>"
@@ -350,32 +313,63 @@ class SynchroChannel(models.Model):
 
     @api.model
     def _compute_counterpart_url(self):
-        countepart_url = self.get_login_endpoint(with_port=True, rebuild=True)
-        if countepart_url != self.counterpart_url:
-            self.counterpart_url = countepart_url
+        if self.protocol_id:
+            protocol, hostname, port, db, login, passwd, path = self.parse_endpoint(
+                with_path="login", with_default=True
+            )
+            counterpart_url = protocol
+            if hostname and counterpart_url:
+                counterpart_url += "://" + hostname
+            elif hostname:
+                counterpart_url = hostname
+            if port and counterpart_url:
+                counterpart_url += ":%d" % port
+            if path:
+                counterpart_url = os.path.join(counterpart_url, path)
+            if counterpart_url != self.counterpart_url:
+                self.counterpart_url = counterpart_url
 
-    @api.onchange("method")
-    def _onchange_method(self):  # pragma: no cover
-        prot = self.get_protocol_from_method(self.method)
-        if prot == "http" and self.counterpart_url:
-            if self.counterpart_url.startswith("https:"):
-                self.counterpart_url = self.counterpart_url.replace("https", "http", 1)
-            if self.counterpart_data_url.startswith("https:"):
-                self.counterpart_data_url = self.counterpart_data_url.replace(
-                    "https", "http", 1
-                )
-        elif prot == "https" and self.counterpart_url:
+    @api.onchange("protocol_id")
+    def _onchange_protocol_id(self):  # pragma: no cover
+        for param in ("lgi_path", "exchange_path", "port"):
+            setattr(self, param, self.get_default_from_protocol(param))
+        self.pylib = self.protocol_id.pylib
+        if self.protocol_id.secure_protocol:
             if self.counterpart_url.startswith("http:"):
                 self.counterpart_url = self.counterpart_url.replace("http", "https", 1)
             if self.counterpart_data_url.startswith("http:"):
                 self.counterpart_data_url = self.counterpart_data_url.replace(
                     "http", "https", 1
                 )
-        self.init_backend()
+        else:
+            if self.counterpart_url.startswith("https:"):
+                self.counterpart_url = self.counterpart_url.replace("https", "http", 1)
+            if self.counterpart_data_url.startswith("https:"):
+                self.counterpart_data_url = self.counterpart_data_url.replace(
+                    "https", "http", 1
+                )
+
+    @api.onchange("identity_id")
+    def _onchange_identity_id(self):  # pragma: no cover
+        for param in (
+            "login",
+            "password",
+            "lgi_path",
+            "exchange_path",
+            "port",
+            "prefix",
+        ):
+            setattr(self, param, self.get_default_from_identity(param))
+        return {
+            "domain": {
+                "remote_sw_version": self.selection_for_version(
+                    identity=self.identity_id
+                )
+            }
+        }
 
     @api.onchange("counterpart_url")
     def _onchange_login_endpoint(self):
-        self.init_backend()
         if not self.counterpart_url:  # pragma: no cover
             return
         prot, hostname, port, database, login, passwd, path = self.parse_endpoint(
@@ -392,6 +386,16 @@ class SynchroChannel(models.Model):
         if database and database != self.database:
             self.database = database
 
+    @api.onchange("counterpart_data_url")
+    def _onchange_data_endpoint(self):
+        if not self.counterpart_data_url:  # pragma: no cover
+            return
+        prot, hostname, port, database, login, passwd, path = self.parse_endpoint(
+            with_path="data",
+        )
+        if path != self.exchange_path:
+            self.exchange_path = path
+
     @api.onchange("hostname")
     def _onchange_hostname(self):
         if self.hostname:
@@ -407,32 +411,6 @@ class SynchroChannel(models.Model):
         if self.port:
             self._compute_counterpart_url()
 
-    @api.onchange("odoo_version")
-    def _onchange_odoo_version(self):
-        if self.odoo_version:
-            Api = self.env["synchro.api"]
-            login_path, exchange_path = Api.get_default_paths(self)
-            if login_path:
-                self.lgi_path = login_path
-            if exchange_path:
-                self.exchange_path = exchange_path
-            self._compute_counterpart_url()
-            major_version = int(self.odoo_version.split(".")[0])
-            candidate = ""
-            prefetch = "oe%d" % major_version
-            for v, n in self.selection_for_prefix():
-                if prefetch == v:
-                    candidate = v
-                    break
-                elif (
-                    not candidate and v.startswith("oe") and int(v[2:]) < major_version
-                ):
-                    candidate = v
-            if candidate:
-                self.prefix = candidate
-            else:
-                self.prefix = v
-
     def _build_all_indexes(self, cls):
         """Build unique index on table to <gamma>_id for performance"""
         for prefix, _x in self.selection_for_prefix():
@@ -441,16 +419,25 @@ class SynchroChannel(models.Model):
             table = cls._name.replace(".", "_")
             index_name = "%s_unique_%s" % (table, prefix)
             self._cr.execute(
-                "SELECT indexname FROM pg_indexes WHERE indexname = '%s'" % index_name
+                "SELECT indexname FROM pg_indexes WHERE indexname = '%s'", index_name
             )  # pylint: disable=E8103
             if not self._cr.fetchone():
-                self._cr.execute(
-                    "CREATE UNIQUE INDEX %s on %s (%s_id) "
-                    "where %s_id<>0 and %s_id is not null"
-                    % (index_name, table, prefix, prefix, prefix)
-                )  # pylint: disable=E8103
+                if hasattr(self, "company_id"):
+                    self._cr.execute(
+                        "CREATE UNIQUE INDEX %(index)s on %(table)s"
+                        " (company_id, %(prefix)s_id)"
+                        " where %(prefix)s_id<>0 and %(prefix)s_id is not null",
+                        {"index": index_name, "table": table, "prefix": prefix},
+                    )  # pylint: disable=E8103
+                else:
+                    self._cr.execute(
+                        "CREATE UNIQUE INDEX %(index)s on %(table)s %(prefix)s_id)"
+                        " where %(prefix)s_id<>0 and %(prefix)s_id is not null",
+                        {"index": index_name, "table": table, "prefix": prefix},
+                    )  # pylint: disable=E8103
             self._cr.execute(
-                "UPDATE %s set %s_id=NULL where %s_id=0" % (table, prefix, prefix)
+                "UPDATE %(table)s set %(prefix)s_id=NULL where %(prefix)s_id=0",
+                {"table": table, "prefix": prefix},
             )  # pylint: disable=E8103
 
     def _synchronize_company(self):
@@ -461,10 +448,11 @@ class SynchroChannel(models.Model):
             company_ids = self.env["synchro.api"].get_record_list(session, dir_mapper)
             synchronized = False if len(company_ids) else True
             for company_id in company_ids:
-                self.env["ir.model.synchro.cache"].que_push(
+                self.env["synchro.cache"].que_push(
                     self,
                     "trigger",
                     dir_mapper.counterpart_name,
+                    dir_mapper.model_spec,
                     company_id,
                     2,
                     {},
@@ -477,7 +465,7 @@ class SynchroChannel(models.Model):
                     synchronized = True
                     break
             if not synchronized:  # pragma: no cover
-                self.env["ir.model.synchro.log"].logmsg(
+                self.env["synchro.log"].logmsg(
                     "error",
                     "No company synchronized!",
                     res_rec=self,
@@ -485,7 +473,7 @@ class SynchroChannel(models.Model):
                 )
                 self.state = "failed"
         elif not self.company_id:
-            self.env["ir.model.synchro.log"].logmsg(
+            self.env["synchro.log"].logmsg(
                 "error",
                 "No company assigned to backend!",
                 res_rec=self,
@@ -499,12 +487,12 @@ class SynchroChannel(models.Model):
             if dir_mapper not in dir_mappers:
                 dir_mappers[dir_mapper] = {"depends": set()}
             for mapper in dir_mapper.field_ids:
-                if not mapper.name or struct[mapper.name]["type"] in (
+                if not mapper.name or struct.get(mapper.name, {}).get("type") in (
                     "one2many",
                     "many2many",
                 ):
                     continue
-                comodel = struct[mapper.name].get("relation")
+                comodel = struct.get(mapper.name, {}).get("relation")
                 if comodel and comodel != dir_mapper.name:
                     dir_mappers[dir_mapper]["depends"].add(comodel)
             for model in dir_mappers[dir_mapper]["depends"]:
@@ -545,20 +533,22 @@ class SynchroChannel(models.Model):
         self.ensure_one()
         session = self.connect()
         if self.env["synchro.api"].session_is_active(session) and self.state == "ready":
-            self.env["ir.model.synchro.log"].logmsg(
+            self.env["synchro.log"].logmsg(
                 "info",
                 "%(model)s.button_check_connection(ep=%(lgi_ep)s,h=%(host)s)",
                 res_rec=self,
                 backend=self,
             )
-            if self.identity == "odoo" and not self.model_ids:
-                self.button_build_model_map()
+            if not self.model_ids:
+                self.button_build_model_map(force=True)
             managed_models = set([x.name for x in self.model_ids])
             for dir_mapper in self.model_ids:
-                if self.identity != "odoo":  # pragma: no cover
-                    dir_mapper.complete_dir_mapper(
-                        self, dir_mapper.counterpart_name, model=dir_mapper.name
-                    )
+                dir_mapper.build_dir_mapper(
+                    self,
+                    ext_model=dir_mapper.counterpart_name,
+                    model=dir_mapper.name,
+                    model_spec=dir_mapper.model_spec,
+                )
                 dir_mapper.analyze_dir_mapper(managed_models)
             self._set_model_priority(managed_models)
             self._synchronize_company()
@@ -567,7 +557,7 @@ class SynchroChannel(models.Model):
     def button_reset_to_draft(self):
         self.ensure_one()
         if self.state != "draft":
-            self.env["ir.model.synchro.log"].logmsg(
+            self.env["synchro.log"].logmsg(
                 "info",
                 "%(model)s.button_reset_to_draft(ep=%(lgi_ep)s,h=%(host)s):",
                 res_rec=self,
@@ -576,81 +566,77 @@ class SynchroChannel(models.Model):
             self.write({"state": "draft"})
 
     @api.multi
-    def button_build_model_map(self):
+    def button_build_model_map(self, force=False):
         """Get remote tables of counterparty"""
         self.ensure_one()
         session = self.get_session()
         if self.env["synchro.api"].session_is_active(session) and self.state == "ready":
             model_list = self.env["synchro.api"].get_model_list(session, self)
-            for binding_model, remote_model in model_list:
+            for binding_model, remote_model, model_spec in model_list:
                 if binding_model and binding_model not in self.env:
                     continue
-                if self.identity == "odoo":
-                    self.env["synchro.channel.model"].build_odoo_dir_mapper(
-                        self, remote_model, model=binding_model
-                    )
-                else:
-                    self.env["synchro.channel.model"].complete_dir_mapper(
-                        self, remote_model, model=binding_model
-                    )
+                if self.identity_id.code not in ("odoo", "openerp"):
+                    remote_model = False
+                self.env["synchro.model"].build_dir_mapper(
+                    self,
+                    ext_model=remote_model,
+                    model=binding_model,
+                    model_spec=model_spec,
+                    force=force,
+                )
+
+    @api.multi
+    def button_rebuild_model_map(self):
+        return self.button_rebuild_model_map(force=True)
 
     def get_loc_ext_id(self):
         return "%s_id" % self.prefix
 
-    def get_method_from_protocol(self, prot):
-        return {
-            "https": "xmlrpc/https",
-            "http": "xmlrpc/http",
-        }.get(prot) or False
-
-    def get_protocol_from_method(self, method):
-        if method:
-            return {
-                "xmlrpc/https": method.split("/")[1],
-                "xmlrpc/http": method.split("/")[1],
-            }.get(method) or False
-        return method
-
-    @api.model
-    def get_login_endpoint(self, with_port=None, rebuild=False):
-        return self.env["synchro.api"].get_login_endpoint(
-            self, with_port=with_port, rebuild=rebuild
+    def get_default_from_identity(self, param):
+        return (
+            getattr(self, param)
+            or (self.identity_id and getattr(self.identity_id, "default_%s" % param))
+            or ""
         )
 
-    @api.model
-    def get_data_endpoint(self, exchange_path=None):
-        return self.env["synchro.api"].get_data_endpoint(
-            self, exchange_path=exchange_path
+    def get_default_from_protocol(self, param):
+        return (
+            self.get_default_from_identity(param)
+            or (self.protocol_id and getattr(self.protocol_id, "default_%s" % param))
+            or ""
         )
-
-    def extract_protocol(self, parts):
-        return parts.scheme if parts.scheme in ("http", "https") else False
 
     def parse_endpoint(self, endpoint=None, with_default=True, with_path=None):
-        Api = self.env["synchro.api"]
-        _x = port = def_port = database = def_db = login = def_login = False
-        password = def_pwd = path = hostname = False
         endpoint = endpoint or self.counterpart_url
-        # method = self.method or "xmlrpc/https"
-        protocol = "https"
-        if endpoint:
-            if not re.match(r"(\w+:)?//", endpoint):
-                endpoint = "https://" + endpoint
-            parts = urlparse(endpoint, scheme=_u("https"))
-            protocol = self.extract_protocol(parts) or "https"
-            if with_default:
-                _x, def_port, def_db, def_login, def_pwd, login_path, exchange_path = (
-                    Api.get_default(self)
+        protocol = hostname = database = login = password = path = ""
+        port = 0
+        if self.protocol_id:
+            if self.protocol_id.http_protocol:
+                protocol = (
+                    self.protocol_id.code if self.protocol_id.http_protocol else ""
                 )
-                hostname = self.hostname or "localhost"
-                database = self.database or def_db
-                login = self.login or def_login
-                password = self.password or def_pwd
-                if with_path == "data":
-                    path = self.exchange_path or exchange_path
+                if self.protocol_id.secure_protocol:
+                    if endpoint.startswith("http:"):
+                        endpoint = endpoint.replace("http", "https", 1)
+                    if protocol.startswith("http"):
+                        protocol = protocol.replace("http", "https", 1)
                 else:
-                    path = self.lgi_path or login_path
-                port = self.port or def_port
+                    if endpoint.startswith("https:"):
+                        endpoint = endpoint.replace("https", "http", 1)
+                    if protocol.startswith("https"):
+                        protocol = protocol.replace("https", "http", 1)
+            parts = urlparse(endpoint, scheme=_u(protocol or "https"))
+            if with_default:
+                hostname = self.hostname or "localhost"
+                database = self.database or "demo"
+                login = self.get_default_from_identity("login")
+                password = self.get_default_from_identity("password")
+                if with_path == "data":
+                    path = self.get_default_from_protocol("exchange_path")
+                else:
+                    path = self.get_default_from_protocol("lgi_path")
+                port = self.get_default_from_protocol("port")
+                port = int(port) if port else 0
             if parts.hostname:
                 hostname = parts.hostname
             if parts.username:
@@ -663,24 +649,9 @@ class SynchroChannel(models.Model):
                 port = parts.port
             if parts.fragment.startswith("db="):
                 database = parts.fragment.split("=", 1)[1]
-        elif with_default:
-            if not hostname:
-                hostname = "localhost"
-            _x, port, database, login, password, path, exchange_path = Api.get_default(
-                self
-            )
-            if with_path == "data":
-                path = exchange_path
         if with_path:
             return protocol, hostname, port, database, login, password, path
         return protocol, hostname, port, database, login, password
-
-    @api.multi
-    def init_backend(self):
-        Api = self.env["synchro.api"]
-        for backend in self:
-            if not backend.pypi_sign:
-                backend.pypi_sign = Api.get_pypi_name(backend)
 
     def get_session(self):
         if self.state not in ("ready", "run"):  # pragma: no cover
@@ -692,7 +663,7 @@ class SynchroChannel(models.Model):
         if self.env["synchro.api"].session_is_active(session):
             self.state = "ready"
         else:  # pragma: no cover
-            self.env["ir.model.synchro.log"].logmsg(
+            self.env["synchro.log"].logmsg(
                 "error",
                 "!%(E)s! Connection to %(model)s failed!",
                 res_rec=self,
@@ -705,36 +676,12 @@ class SynchroChannel(models.Model):
         self.ensure_one()
         upd_vals = {}
         if "state" not in vals:
-            if (
-                "hostname" in vals
-                or "login" in vals
-                or "port" in vals
-                or "lgi_path" in vals
-                or "exchange_path" in vals
-            ):
-                if "counterpart_url" not in vals:
-                    counterpart_url = self.get_login_endpoint(with_port=True)
-                    if counterpart_url != self.counterpart_url:
-                        upd_vals["counterpart_url"] = counterpart_url
-                if "counterpart_data_url" not in vals:
-                    counterpart_data_url = self.get_data_endpoint()
-                    if counterpart_data_url != self.counterpart_data_url:
-                        upd_vals["counterpart_data_url"] = counterpart_data_url
-            pypi_sign = self.env["synchro.api"].get_pypi_name(
-                self, method=vals["method"] if "method" in vals else self.method
-            )
-            if pypi_sign != self.pypi_sign:
-                upd_vals["pypi_sign"] = pypi_sign
-            if upd_vals:
-                if "counterpart_url" not in upd_vals and "counterpart_url" in vals:
-                    upd_vals["counterpart_url"] = vals["counterpart_url"]
-                if (
-                    "counterpart_data_url" not in upd_vals
-                    and "counterpart_data_url" in vals
-                ):
-                    upd_vals["counterpart_data_url"] = vals["counterpart_data_url"]
-                if "pypi_sign" in vals:
-                    upd_vals["pypi_sign"] = vals["pypi_sign"]
+            if "protocol_id" in vals:
+                pylib = self.env["synchro.protocol"].browse(vals["protocol_id"]).pylib
+            else:
+                pylib = self.protocol_id.pylib
+            if pylib != self.pylib:
+                upd_vals["pylib"] = pylib
         return upd_vals
 
     @api.model
@@ -781,8 +728,8 @@ class SynchroChannel(models.Model):
         return magic_fields
 
     def get_dir_mapper(self, model=None, ext_model=None, spec=None):
-        DirMapper = self.env["synchro.channel.model"]
-        domain = [("synchro_channel_id", "=", self.id)]
+        DirMapper = self.env["synchro.model"]
+        domain = [("backend_id", "=", self.id)]
         if model:
             if ext_model:
                 domain.append("|")
@@ -803,7 +750,7 @@ class SynchroChannel(models.Model):
         local_ids = []
         if mode and mode != self.load_mode:
             return local_ids
-        Cache = self.env["ir.model.synchro.cache"]
+        Cache = self.env["synchro.cache"]
 
         if self.load_mode == "direct":
             max_ctr = 2048
@@ -830,20 +777,20 @@ class SynchroChannel(models.Model):
             if datetime.now() > time_limit:
                 break
             max_ctr -= 1
-            action, model, values, ttl, ctx = Cache.que_pop(self)
+            action, model, spec, values, ttl, ctx = Cache.que_pop(self)
             if not action or not model or not values:
                 if Cache.que_waiting_len(self):
                     continue
                 break
             if action == "synchro":
-                id = self.env["ir.model.synchro"].synchro(
-                    self.env[model],
+                id = self.env[model].synchro(
                     values,
-                    backend=self,
                     only_minimal=False,
                     ttl=ttl,
                     running_in_queue=True,
                     jacket=True,
+                    model_spec=spec,
+                    backend=self,
                     ctx=ctx,
                 )
             elif action == "trigger":
@@ -863,11 +810,12 @@ class SynchroChannel(models.Model):
             self.state = "ready"
         if commit or loaded_ctr > commit_rate:
             self.env.cr.commit()  # pylint: disable=invalid-commit
-        return local_ids
+        # return local_ids
+        return []
 
     @api.model
     def create(self, vals):
-        self.env["ir.model.synchro.cache"].clean_cache()
+        self.env["synchro.cache"].clean_cache()
         backend = super().create(vals)
         upd_vals = backend.counterpart_vals(vals)
         if upd_vals:
@@ -876,7 +824,7 @@ class SynchroChannel(models.Model):
 
     @api.multi
     def write(self, vals):
-        self.env["ir.model.synchro.cache"].clean_cache()
+        self.env["synchro.cache"].clean_cache()
         res = super().write(vals)
         for backend in self:
             upd_vals = backend.counterpart_vals(vals)

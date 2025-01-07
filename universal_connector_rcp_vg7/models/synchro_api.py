@@ -7,11 +7,8 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 #
 import os
-import logging
 
 from odoo import models
-
-_logger = logging.getLogger(__name__)
 
 
 class SynchroApi(models.Model):
@@ -32,10 +29,9 @@ class SynchroApi(models.Model):
         return vals
 
     def adapt_response_vg7(self, values, dir_mapper, ext_id):
-        Cache = self.env["ir.model.synchro.cache"]
+        Cache = self.env["synchro.cache"]
         vmodel = dir_mapper.name
-        ext_model = dir_mapper.counterpart_name
-        backend = dir_mapper.synchro_channel_id
+        backend = dir_mapper.backend_id
         ext_key_id = dir_mapper.counterpart_pk
         row_billing = {}
         row_shipping = {}
@@ -74,9 +70,16 @@ class SynchroApi(models.Model):
                     invoice_vals = self.manage_alias(invoice_vals)
                     if ext_key_id not in invoice_vals:
                         invoice_vals[ext_key_id] = values[ext_key_id]
-                    invoice_vals[":type"] = "invoice"
+                    # invoice_vals[":type"] = "invoice"
                     Cache.que_push(
-                        backend, "pull", ext_model, invoice_vals, 2, {}, prio=3
+                        backend,
+                        "synchro",
+                        "res.partner",
+                        "invoice",
+                        invoice_vals,
+                        2,
+                        {},
+                        prio=3,
                     )
             if row_shipping:
                 shipping_vals = {}
@@ -88,18 +91,17 @@ class SynchroApi(models.Model):
                     shipping_vals[key] = value
                 if shipping_vals:
                     shipping_vals = self.manage_alias(shipping_vals)
-                    shipping_vals[":type"] = "delivery"
+                    # shipping_vals[":type"] = "delivery"
                     Cache.que_push(
                         backend,
                         "pull",
                         "customers_shipping_addresses",
+                        "",
                         shipping_vals,
                         2,
                         {},
                         prio=3,
                     )
-            # if row_contact:
-            #     values["contact"] = row_contact
         return values
 
     def adapt_responses_vg7(self, res, dir_mapper, ext_id):

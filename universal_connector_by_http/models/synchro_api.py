@@ -19,22 +19,11 @@ class SynchroApi(models.Model):
 
     _inherit = "synchro.api"
 
-    def https_default(self, backend):
-        return ["https", 0, "demo", "admin", "admin", "", ""]
-
-    def http_default(self, backend):
-        return ["http", 0, "demo", "admin", "admin", "", ""]
-
-    def get_pypi_name_https(self):
-        return "requests"
-
-    def get_pypi_name_http(self):
-        return "requests"
-
     def https_x_connect(self, endpoint, data_endpoint, headers=None, verify=None):
-        session = self.init_sesssion(
+        session = self.init_session(
             login_endpoint=endpoint, data_endpoint=data_endpoint
         )
+        cnx = False
         try:
             if headers:
                 cnx = requests.get(endpoint, headers=headers, verify=verify)
@@ -42,7 +31,7 @@ class SynchroApi(models.Model):
                 cnx = requests.get(endpoint, verify=verify)
         except BaseException as e:  # pragma: no cover
             self.env.cr.rollback()  # pylint: disable=invalid-commit
-            self.env["ir.model.synchro.log"].logmsg(
+            self.env["synchro.log"].logmsg(
                 "error",
                 "Error %(e)s opening session on %(ep)s http=%(h)s",
                 ctx={
@@ -55,7 +44,7 @@ class SynchroApi(models.Model):
         if cnx is not False and hasattr(cnx, "status_code"):
             http_status = getattr(cnx, "status_code", "N/A")
             if http_status != 200:
-                self.env["ir.model.synchro.log"].logmsg(
+                self.env["synchro.log"].logmsg(
                     "error",
                     "Error http=%(h)s opening session on %(ep)s",
                     ctx={"h": str(http_status), "ep": endpoint},
@@ -104,7 +93,7 @@ class SynchroApi(models.Model):
     def get_response_https(
         self, session, dir_mapper, ext_id=False, endpoint=None, fields=None
     ):
-        backend = dir_mapper.synchro_channel_id
+        backend = dir_mapper.backend_id
         values = []
         if backend.client_key:
             headers = {"Authorization": "access_token %s" % backend.client_key}

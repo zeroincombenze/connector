@@ -10,11 +10,9 @@
                 <page name="synchro" string="Synchronization">
                     <button name="pull_record" string="Synchronize" type="object"/>
                     <group>
-                        <field name="oe16_id"/>
-                        <field name="oe12_id"/>
-                        <field name="oe10_id"/>
-                        <field name="oe8_id"/>
-                        <field name="oe7_id"/>
+                        <field name="odoo16_id"/>
+                        <field name="odoo12_id"/>
+                        <field name="odoo10_id"/>
                     </group>
                 </page>
             </xpath>

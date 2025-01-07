@@ -8,7 +8,7 @@
 #
 {
     "name": "Universal Connector",
-    "version": "12.0.0.3.13",
+    "version": "12.0.0.3.14",
     "category": "Generic Modules",
     "summary": "Universal Connector complete suite",
     "author": "SHS-AV s.r.l.",
@@ -22,7 +22,6 @@
         "universal_connector_by_http",
         "universal_connector_by_csv",
         "universal_connector_product",
-        "universal_connector_rcp_vg7",
     ],
     "maintainer": "Antonio M. Vigliotti <antoniomaria.vigliotti@gmail.com>",
     "installable": True,

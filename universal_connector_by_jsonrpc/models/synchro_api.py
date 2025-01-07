@@ -23,25 +23,19 @@ class SynchroApi(models.Model):
 
     _inherit = "synchro.api"
 
-    def odoo_jsonrpc_default(self, backend):
-        return ["jsonrpc", 8069, "demo", "admin", "admin", "", ""]
-
-    def get_pypi_name_odoo_jsonrpc(self):
-        return "odorpc"
-
     def odoo_jsonrpc_connect(self, hostname, port):
-        session = self.init_sesssion()
+        session = self.init_session()
         try:
             cnx = odoorpc.ODOO(hostname, "jsonrpc", port=port)
             if eval(cnx.version.split(".")[0]) < 10:
-                self.env["ir.model.synchro.log"].logmsg(
+                self.env["synchro.log"].logmsg(
                     "error",
                     "Unmanageable remote Odoo: please use xmlrpc protocol",
                 )
                 cnx = False
         except BaseException as e:  # pragma: no cover
             self.env.cr.rollback()  # pylint: disable=invalid-commit
-            self.env["ir.model.synchro.log"].logmsg(
+            self.env["synchro.log"].logmsg(
                 "error",
                 "Error %(e)s opening session on %(s)s://%(h)s:%(p)d",
                 ctx={"e": e, "h": hostname, "s": "jsonrpc", "p": port},
@@ -58,7 +52,7 @@ class SynchroApi(models.Model):
             session = cnx["cnx_lgi"].env.user
         except BaseException as e:  # pragma: no cover
             self.env.cr.rollback()  # pylint: disable=invalid-commit
-            self.env["ir.model.synchro.log"].logmsg(
+            self.env["synchro.log"].logmsg(
                 "error",
                 "Error %(e)s during login(db=%(db)s, user=%(u)s)",
                 ctx={"e": e, "db": database, "u": login},
@@ -92,10 +86,10 @@ class SynchroApi(models.Model):
             values = session["cnx_lgi"].env[ext_model].search([])
         except BaseException as e:  # pragma: no cover
             self.env.cr.rollback()  # pylint: disable=invalid-commit
-            self.env["ir.model.synchro.log"].logmsg(
+            self.env["synchro.log"].logmsg(
                 "error",
                 "!%(E)s! ERROR %(e)s reading(db=%(db)s, model=%(model)s, id=%(id)s)",
-                backend=dir_mapper.synchro_channel_id,
+                backend=dir_mapper.backend_id,
                 res_model=ext_model,
                 errcode=-13,
                 errmsg=e,
@@ -103,7 +97,7 @@ class SynchroApi(models.Model):
             return []
         return values
 
-    def get_id_from_ext_ref_odoo_jsonrpc(self, session, dir_mapper, ext_id):
+    def get_ext_id_of_ext_ref_odoo_jsonrpc(self, session, dir_mapper, ext_id):
         ext_model = dir_mapper.counterpart_name
         try:
             values = (
@@ -113,10 +107,10 @@ class SynchroApi(models.Model):
             )
         except BaseException as e:  # pragma: no cover
             self.env.cr.rollback()  # pylint: disable=invalid-commit
-            self.env["ir.model.synchro.log"].logmsg(
+            self.env["synchro.log"].logmsg(
                 "error",
                 "!%(E)s! ERROR %(e)s reading(db=%(db)s, model=%(model)s, id=%(id)s)",
-                backend=dir_mapper.synchro_channel_id,
+                backend=dir_mapper.backend_id,
                 res_model=ext_model,
                 errcode=-13,
                 errmsg=e,

@@ -1,0 +1,5 @@
+id,name,module,model,res_id
+50,user_root,base,res.users,1
+51,main_partner,base,res.partner,1
+52,main_company,base,res.company,1
+53,partner_root,base,res.partner,3

@@ -12,11 +12,9 @@ from odoo import fields, models
 class SaleOrder(models.Model):
     _inherit = "sale.order"
 
-    oe7_id = fields.Integer("Odoo7 ID", copy=False)
-    oe8_id = fields.Integer("Odoo8 ID", copy=False)
-    oe10_id = fields.Integer("Odoo10 ID", copy=False)
-    oe12_id = fields.Integer("Odoo12 ID", copy=False)
-    oe16_id = fields.Integer("Odoo16 ID", copy=False)
+    odoo10_id = fields.Integer("Odoo10 ID", copy=False)
+    odoo12_id = fields.Integer("Odoo12 ID", copy=False)
+    odoo16_id = fields.Integer("Odoo16 ID", copy=False)
     timestamp = fields.Datetime("Timestamp", copy=False, readonly=True)
     errmsg = fields.Char("Error message", copy=False, readonly=True)
     original_state = fields.Char("Original Status", copy=False)
@@ -25,9 +23,7 @@ class SaleOrder(models.Model):
 class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
-    oe7_id = fields.Integer("Odoo7 ID", copy=False)
-    oe8_id = fields.Integer("Odoo8 ID", copy=False)
-    oe10_id = fields.Integer("Odoo10 ID", copy=False)
-    oe12_id = fields.Integer("Odoo12 ID", copy=False)
-    oe16_id = fields.Integer("Odoo16 ID", copy=False)
+    odoo10_id = fields.Integer("Odoo10 ID", copy=False)
+    odoo12_id = fields.Integer("Odoo12 ID", copy=False)
+    odoo16_id = fields.Integer("Odoo16 ID", copy=False)
     to_delete = fields.Boolean("Record to delete")

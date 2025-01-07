@@ -20,9 +20,9 @@ class WizardSynchroPullRecord(models.TransientModel):
     _name = "wizard.synchro.pull.record"
     _description = "Pull Records from counterparty"
 
-    backend_id = fields.Many2one("synchro.channel", required=True, string="Backend")
+    backend_id = fields.Many2one("synchro.backend", required=True, string="Backend")
     dir_mapper_id = fields.Many2one(
-        comodel_name="synchro.channel.model",
+        comodel_name="synchro.model",
         string="Model",
         # domain=lambda self: self._get_backend_domain(),
         help="Select model to import",
@@ -48,15 +48,11 @@ class WizardSynchroPullRecord(models.TransientModel):
 
     @api.onchange("backend_id")
     def onchange_backend_id(self):
-        return {
-            "domain": {
-                "dir_mapper_id": [("synchro_channel_id", "=", self.backend_id.id)]
-            }
-        }
+        return {"domain": {"dir_mapper_id": [("backend_id", "=", self.backend_id.id)]}}
 
     # @api.onchange("ir_model_id")
     # def onchange_model_id(self):
-    #     recs = self.env["synchro.channel.model"].search(
+    #     recs = self.env["synchro.model"].search(
     #         [("name", "=", self.ir_model_id.res_model), ("model_spec", "=", False)]
     #     )
     #     rec_counter = 0
@@ -96,13 +92,14 @@ class WizardSynchroPullRecord(models.TransientModel):
         return remote_ids
 
     def pull_full_records(self):
-        Cache = self.env["ir.model.synchro.cache"]
+        Cache = self.env["synchro.cache"]
         remote_ids = self.evaluate_remote_ids()
         for res_id in remote_ids:
             Cache.que_push(
                 self.backend_id,
                 "trigger",
                 self.dir_mapper_id.counterpart_name,
+                self.dir_mapper_id.model_spec,
                 res_id,
                 4,
                 {},

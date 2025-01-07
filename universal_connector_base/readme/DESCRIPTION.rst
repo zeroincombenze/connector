@@ -17,3 +17,6 @@ Synchronizable models are:
 * Language (res.lang)
 * Partner (res.partner and res.partner.category)
 * User (res.users and res.groups)
+
+This module can synchroniza Odoo from version 8.0 to 18.0.
+For prior versions you should install the module *universal_connector_openerp*

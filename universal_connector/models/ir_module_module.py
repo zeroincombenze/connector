@@ -35,12 +35,12 @@ class IrModuleCategory(models.Model):
     vg7_id = fields.Integer("VG7 ID", copy=False)
     oe7_id = fields.Integer("Odoo7 ID", copy=False)
     oe8_id = fields.Integer("Odoo8 ID", copy=False)
-    oe10_id = fields.Integer("Odoo10 ID", copy=False)
+    odoo10_id = fields.Integer("Odoo10 ID", copy=False)
 
     @api.model_cr_context
     def _auto_init(self):
         res = super()._auto_init()
-        for prefix in ("vg7", "oe7", "oe8", "oe10"):
+        for prefix in ("vg7", "oe7", "oe8", "odoo10"):
             self.env["ir.model.synchro"]._build_unique_index(self._inherit, prefix)
         return res
 

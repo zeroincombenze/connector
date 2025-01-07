@@ -23,12 +23,12 @@ msgid "API for Odoo Backend"
 msgstr "Dorsale odoo non valida in codice IVA api"
 
 #. module: universal_connector_by_csv
-#: selection:synchro.channel,method:0
+#: selection:synchro.backend,method:0
 msgid "By xmlrpc over http"
 msgstr "Per xmlrpc su http"
 
 #. module: universal_connector_by_csv
-#: selection:synchro.channel,method:0
+#: selection:synchro.backend,method:0
 msgid "By xmlrpc over https"
 msgstr "Per xmlrpc su https"
 
@@ -38,7 +38,7 @@ msgid "Communication Protocol to load data from remote counterparty"
 msgstr "Protocollo per ottenere dati da controparte remota"
 
 #. module: universal_connector_by_csv
-#: selection:synchro.channel,method:0
+#: selection:synchro.backend,method:0
 msgid "Import by csv"
 msgstr "Importare csv"
 

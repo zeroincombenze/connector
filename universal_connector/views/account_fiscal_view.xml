@@ -13,7 +13,7 @@
                         <field name="vg7_id"/>
                         <field name="oe7_id"/>
                         <field name="oe8_id"/>
-                        <field name="oe10_id"/>
+                        <field name="odoo10_id"/>
                         <field name="dim_name"/>
                         <field name="errmsg"/>
                     </group>

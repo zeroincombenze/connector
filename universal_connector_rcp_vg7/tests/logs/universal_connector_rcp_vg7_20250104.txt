@@ -27,9 +27,9 @@
 2025-01-04 20:40:05,856 90238 INFO test_universal_connector_rcp_vg7_10 odoo.addons.universal_connector_rcp_vg7.tests.test_backend: test_connection (odoo.addons.universal_connector_rcp_vg7.tests.test_backend.MyTest)
 2025-01-04 20:40:05,939 90238 INFO test_universal_connector_rcp_vg7_10 odoo.addons.universal_connector_rcp_vg7.tests.testenv: 🎺🎺🎺 Starting test v2.0.21 (debug_level=0, commit=True)
 2025-01-04 20:40:05,941 90238 INFO test_universal_connector_rcp_vg7_10 odoo.addons.universal_connector_rcp_vg7.tests.testenv: 🎺🎺 Testing module: universal_connector_rcp_vg7 (10.0.0.3.13)
-2025-01-04 20:40:05,941 90238 INFO test_universal_connector_rcp_vg7_10 odoo.addons.universal_connector_rcp_vg7.tests.testenv: 🎺🎺 Loading data from: synchro.channel 
+2025-01-04 20:40:05,941 90238 INFO test_universal_connector_rcp_vg7_10 odoo.addons.universal_connector_rcp_vg7.tests.testenv: 🎺🎺 Loading data from: synchro.backend
 2025-01-04 20:40:05,956 90238 INFO test_universal_connector_rcp_vg7_10 odoo.addons.universal_connector_rcp_vg7.tests.test_backend: 🎺 Starting connection test on ports 8270 (db=oca10) and 8272 (db=oca12) and on ports 8167 (db=demo7) and 8168 (db=demo8)
-2025-01-04 20:40:06,440 90238 INFO test_universal_connector_rcp_vg7_10 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.channel.button_check_connection(ep=https://gestionale.paperservice.vg7progress.it/index.php,h=gestionale.paperservice.vg7progress.it)
+2025-01-04 20:40:06,440 90238 INFO test_universal_connector_rcp_vg7_10 odoo.addons.universal_connector_base.models.ir_model_synchro_log: synchro.backend.button_check_connection(ep=https://gestionale.paperservice.vg7progress.it/index.php,h=gestionale.paperservice.vg7progress.it)
 2025-01-04 20:40:07,091 90238 ERROR test_universal_connector_rcp_vg7_10 odoo.addons.universal_connector_rcp_vg7.tests.test_backend: FAIL
 2025-01-04 20:40:07,091 90238 INFO test_universal_connector_rcp_vg7_10 odoo.addons.universal_connector_rcp_vg7.tests.testenv: 🏆🥇 [1;32m2 tests SUCCESSFULLY completed[0m
 2025-01-04 20:40:07,093 90238 INFO test_universal_connector_rcp_vg7_10 odoo.addons.universal_connector_rcp_vg7.tests.test_backend: ======================================================================

@@ -13,7 +13,7 @@ _logger = logging.getLogger(__name__)
 
 
 class SynchroChannel(models.Model):
-    _inherit = "synchro.channel"
+    _inherit = "synchro.backend"
 
     @api.model
     def find_model_channel(self, model_name=None, ext_model=None):
@@ -24,8 +24,8 @@ class SynchroChannel(models.Model):
         else:
             return None
         if self.id:
-            domain.append(("synchro_channel_id", "=", self.id))
-        rec = self.env["synchro.channel.model"].search(domain, order="sequence")
+            domain.append(("backend_id", "=", self.id))
+        rec = self.env["synchro.model"].search(domain, order="sequence")
         if rec:
             rec = rec[0]
         return rec

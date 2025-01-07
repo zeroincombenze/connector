@@ -38,14 +38,8 @@ class SynchroApi(models.Model):
                 pass
         return _u(value)
 
-    def csv_default(self, backend):
-        return ["csv", 0, "demo", "admin", "admin", "", ""]
-
-    def get_pypi_name_csv(self):
-        return "csv"
-
     def csv_connect(self, exchange_path):
-        session = self.init_sesssion()
+        session = self.init_session()
         session["cnx_lgi"] = True
         session["exchange_path"] = (
             exchange_path if os.path.isdir(exchange_path) else False
@@ -65,7 +59,7 @@ class SynchroApi(models.Model):
     def get_response_csv(
         self, session, dir_mapper, ext_id=False, endpoint=None, fields=None
     ):
-        backend = dir_mapper.synchro_channel_id
+        backend = dir_mapper.backend_id
         exchange_path = backend.exchange_path
         ext_key_id = dir_mapper.counterpart_pk
         file_csv = os.path.join(exchange_path, dir_mapper.counterpart_name + ".csv")
@@ -96,7 +90,7 @@ class SynchroApi(models.Model):
         return res
 
     def get_record_list_csv(self, session, dir_mapper):
-        backend = dir_mapper.synchro_channel_id
+        backend = dir_mapper.backend_id
         exchange_path = backend.exchange_path
         ext_key_id = dir_mapper.counterpart_pk
         file_csv = os.path.join(exchange_path, dir_mapper.counterpart_name + ".csv")
@@ -119,4 +113,33 @@ class SynchroApi(models.Model):
                 else:
                     row_id = row_res[ext_key_id]
                 res.append(row_id)
+        return res
+
+    def get_ext_id_of_ext_ref_odoo_csv(self, session, dir_mapper, ext_id):
+        backend = dir_mapper.backend_id
+        exchange_path = backend.exchange_path
+        ext_key_id = "id"
+        file_csv = os.path.join(exchange_path, "ir.model.data.csv")
+        res = []
+        if not os.path.isfile(file_csv):
+            return res
+        ext_model = dir_mapper.counterpart_name
+        with open(file_csv, "r") as fd:
+            hdr = False
+            reader = csv.DictReader(fd, fieldnames=[], restkey="undef_name")
+            for line in reader:
+                row = line["undef_name"]
+                if not hdr:
+                    row_id = 0
+                    hdr = row
+                    continue
+                row_id += 1
+                row_res = dict(zip(hdr, [self.simple_cast(x) for x in row]))
+                if ext_key_id not in row_res:
+                    row_res[ext_key_id] = row_id
+                else:
+                    row_id = row_res[ext_key_id]
+                if row_res["model"] == ext_model and ext_id == row_res["res_id"]:
+                    res.append(row_id)
+                    break
         return res

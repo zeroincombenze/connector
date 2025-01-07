@@ -6,9 +6,16 @@
 #
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 #
-import oerplib3 as oerplib
+import logging
 
 from odoo import models
+
+_logger = logging.getLogger(__name__)
+
+try:
+    import oerplib3 as oerplib
+except ImportError as err:  # pragma: no cover
+    _logger.error(err)
 
 
 class SynchroApi(models.Model):
@@ -16,19 +23,13 @@ class SynchroApi(models.Model):
 
     _inherit = "synchro.api"
 
-    def odoo_xmlrpc_default(self, backend):
-        return ["xmlrpc", 8069, "demo", "admin", "admin", "", ""]
-
-    def get_pypi_name_odoo_xmlrpc(self):
-        return "oerplib3"
-
     def odoo_xmlrpc_connect(self, hostname, port):
-        session = self.init_sesssion()
+        session = self.init_session()
         try:
             cnx = oerplib.OERP(server=hostname, protocol="xmlrpc", port=port)
         except BaseException as e:  # pragma: no cover
             self.env.cr.rollback()  # pylint: disable=invalid-commit
-            self.env["ir.model.synchro.log"].logmsg(
+            self.env["synchro.log"].logmsg(
                 "error",
                 "Error %(e)s opening session on %(s)s://%(h)s:%(p)d",
                 ctx={"e": e, "h": hostname, "s": "xmlrpc", "p": port},
@@ -46,7 +47,7 @@ class SynchroApi(models.Model):
             )
         except BaseException as e:  # pragma: no cover
             self.env.cr.rollback()  # pylint: disable=invalid-commit
-            self.env["ir.model.synchro.log"].logmsg(
+            self.env["synchro.log"].logmsg(
                 "error",
                 "Error %(e)s during login(db=%(db)s, user=%(u)s)",
                 ctx={"e": e, "db": database, "u": login},
@@ -80,10 +81,10 @@ class SynchroApi(models.Model):
             values = session["cnx_lgi"].search(ext_model, [])
         except BaseException as e:  # pragma: no cover
             self.env.cr.rollback()  # pylint: disable=invalid-commit
-            self.env["ir.model.synchro.log"].logmsg(
+            self.env["synchro.log"].logmsg(
                 "error",
                 "!%(E)s! ERROR %(e)s reading(db=%(db)s, model=%(model)s, id=%(id)s)",
-                backend=dir_mapper.synchro_channel_id,
+                backend=dir_mapper.backend_id,
                 res_model=ext_model,
                 errcode=-13,
                 errmsg=e,
@@ -91,7 +92,7 @@ class SynchroApi(models.Model):
             return []
         return values
 
-    def get_id_from_ext_ref_odoo_xmlrpc(self, session, dir_mapper, ext_id):
+    def get_ext_id_of_ext_ref_odoo_xmlrpc(self, session, dir_mapper, ext_id):
         ext_model = dir_mapper.counterpart_name
         try:
             values = session["cnx_lgi"].search(
@@ -99,10 +100,10 @@ class SynchroApi(models.Model):
             )
         except BaseException as e:  # pragma: no cover
             self.env.cr.rollback()  # pylint: disable=invalid-commit
-            self.env["ir.model.synchro.log"].logmsg(
+            self.env["synchro.log"].logmsg(
                 "error",
                 "!%(E)s! ERROR %(e)s reading(db=%(db)s, model=%(model)s, id=%(id)s)",
-                backend=dir_mapper.synchro_channel_id,
+                backend=dir_mapper.backend_id,
                 res_model=ext_model,
                 errcode=-13,
                 errmsg=e,

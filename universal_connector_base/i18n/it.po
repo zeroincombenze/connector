@@ -46,12 +46,12 @@ msgid "Active"
 msgstr "Attivo"
 
 #. module: universal_connector_base
-#: selection:synchro.channel,tracelevel:0
+#: selection:synchro.backend,tracelevel:0
 msgid "All"
 msgstr "Tutto/i"
 
 #. module: universal_connector_base
-#: selection:synchro.channel.model.fields,protect_update:0
+#: selection:synchro.mappers,protect_update:0
 msgid "Always Update"
 msgstr "Sempre sempre"
 
@@ -71,22 +71,22 @@ msgid "Backend Name"
 msgstr "Nome dorsale"
 
 #. module: universal_connector_base
-#: selection:synchro.channel.model.fields,protect_update:0
+#: selection:synchro.mappers,protect_update:0
 msgid "But current value is empty"
 msgstr "Solo se valore corrente è vuoto"
 
 #. module: universal_connector_base
-#: selection:synchro.channel.model.fields,protect_update:0
+#: selection:synchro.mappers,protect_update:0
 msgid "But new value not empty"
 msgstr "Solo se nuovo valore non è vuoto"
 
 #. module: universal_connector_base
-#: selection:synchro.channel,method:0
+#: selection:synchro.backend,method:0
 msgid "By xmlrpc over http"
 msgstr "Non tutti richiedono lo stesso accesso al tuo sito Web più di xmlrpc da"
 
 #. module: universal_connector_base
-#: selection:synchro.channel,method:0
+#: selection:synchro.backend,method:0
 msgid "By xmlrpc over https"
 msgstr "Xmlrpc su https"
 
@@ -96,7 +96,7 @@ msgid "Check Connection"
 msgstr "Verificare connessione"
 
 #. module: universal_connector_base
-#: selection:synchro.channel,state:0
+#: selection:synchro.backend,state:0
 msgid "Checked"
 msgstr "Verificato/a"
 
@@ -121,12 +121,12 @@ msgid "Communication Protocol to load data from remote counterparty"
 msgstr "Protocollo per ottenere dati da controparte remota"
 
 #. module: universal_connector_base
-#: model:ir.model.fields,field_description:universal_connector_base.field_synchro_channel__company_id selection:synchro.channel.model,model_spec:0 selection:synchro.channel.model.fields,spec:0
+#: model:ir.model.fields,field_description:universal_connector_base.field_synchro_channel__company_id selection:synchro.model,model_spec:0 selection:synchro.mappers,spec:0
 msgid "Company"
 msgstr "Azienda"
 
 #. module: universal_connector_base
-#: selection:synchro.channel,state:0
+#: selection:synchro.backend,state:0
 msgid "Connection failed"
 msgstr "Connessione fallita"
 
@@ -156,7 +156,7 @@ msgid "Counterpart model name"
 msgstr "Nome modello controparte"
 
 #. module: universal_connector_base
-#: model:ir.model.fields,field_description:universal_connector_base.field_synchro_channel__odoo_version
+#: model:ir.model.fields,field_description:universal_connector_base.field_synchro_channel__remote_sw_version
 msgid "Counterpart software version"
 msgstr "Versione software controparte"
 
@@ -188,7 +188,7 @@ msgid "Current Workflow Model"
 msgstr "Attuale Flusso di lavoro Modello"
 
 #. module: universal_connector_base
-#: selection:synchro.channel.model,model_spec:0 selection:synchro.channel.model.fields,spec:0
+#: selection:synchro.model,model_spec:0 selection:synchro.mappers,spec:0
 msgid "Customer"
 msgstr "Cliente"
 
@@ -208,7 +208,7 @@ msgid "Database name"
 msgstr "Nome database"
 
 #. module: universal_connector_base
-#: selection:synchro.channel.model,model_spec:0 selection:synchro.channel.model.fields,spec:0
+#: selection:synchro.model,model_spec:0 selection:synchro.mappers,spec:0
 msgid "Delivery Address"
 msgstr "Indirizzo di consegna"
 
@@ -224,7 +224,7 @@ msgid "Display Name"
 msgstr "Mostrare nome"
 
 #. module: universal_connector_base
-#: selection:synchro.channel,state:0
+#: selection:synchro.backend,state:0
 msgid "Draft"
 msgstr "Bozza"
 
@@ -287,12 +287,12 @@ msgid "Function to apply for supply value or default value."
 msgstr "Funzione a applicare non valida in codice IVA supply valore o calendario\" ecc valore."
 
 #. module: universal_connector_base
-#: selection:synchro.channel.model,model_spec:0
+#: selection:synchro.model,model_spec:0
 msgid "Generic Address"
 msgstr "Indirizzo generico"
 
 #. module: universal_connector_base
-#: selection:synchro.channel,identity:0
+#: selection:synchro.backend,identity:0
 msgid "Generic counterparty"
 msgstr "Controparte generica"
 
@@ -343,12 +343,12 @@ msgid "Import status"
 msgstr "Status importare"
 
 #. module: universal_connector_base
-#: selection:synchro.channel,state:0
+#: selection:synchro.backend,state:0
 msgid "In Production"
 msgstr "Produzione applicazioni"
 
 #. module: universal_connector_base
-#: selection:synchro.channel.model,model_spec:0 selection:synchro.channel.model.fields,spec:0
+#: selection:synchro.model,model_spec:0 selection:synchro.mappers,spec:0
 msgid "Invoice Address"
 msgstr "Indirizzo fattura"
 
@@ -404,17 +404,17 @@ msgid "Logs"
 msgstr "Elencazioni"
 
 #. module: universal_connector_base
-#: selection:synchro.channel,tracelevel:0
+#: selection:synchro.backend,tracelevel:0
 msgid "Main + Inner functions"
 msgstr "Main + Funzioni inner"
 
 #. module: universal_connector_base
-#: selection:synchro.channel,tracelevel:0
+#: selection:synchro.backend,tracelevel:0
 msgid "Main functions"
 msgstr "Funzioni funzioni"
 
 #. module: universal_connector_base
-#: selection:synchro.channel.model.fields,protect_update:0
+#: selection:synchro.mappers,protect_update:0
 msgid "Max counter"
 msgstr "Counter massimo"
 
@@ -457,7 +457,7 @@ msgid "No Error"
 msgstr "Errore mai"
 
 #. module: universal_connector_base
-#: selection:synchro.channel,tracelevel:0
+#: selection:synchro.backend,tracelevel:0
 msgid "No Trace"
 msgstr "Traccia mai"
 
@@ -478,7 +478,7 @@ msgid "Odoo field value"
 msgstr "Valore campo Odoo"
 
 #. module: universal_connector_base
-#: selection:synchro.channel,identity:0
+#: selection:synchro.backend,identity:0
 msgid "Odoo instance"
 msgstr "Istanza istanza"
 
@@ -489,7 +489,7 @@ msgid "Odoo model name"
 msgstr "Nome modello Odoo"
 
 #. module: universal_connector_base
-#: model:ir.model.fields,field_description:universal_connector_base.field_synchro_channel__pypi_sign
+#: model:ir.model.fields,field_description:universal_connector_base.field_synchro_channel__pylib
 msgid "PYPI library"
 msgstr "library pypi"
 
@@ -512,9 +512,9 @@ msgstr "Prefisso nomi campo"
 #: model:ir.model.fields,help:universal_connector_base.field_synchro_channel__prefix
 msgid ""
 "Prefix to add to model field name to recognize counterpart ID.Format must be [a-zA-Z]{2}[a-zA-Z0-9]+\n"
-"i.e. with prefix='oe10'\n"
+"i.e. with prefix='odoo10'\n"
 "<partner_id> means ID in Odoo\n"
-"<oe10:partner_id> means counterpart field name and value\n"
+"<odoo10:partner_id> means counterpart field name and value\n"
 msgstr ""
 
 #. module: universal_connector_base
@@ -534,12 +534,12 @@ msgid "Protect field against update"
 msgstr "Protezione anti-modifiche"
 
 #. module: universal_connector_base
-#: selection:synchro.channel.model.fields,protect_update:0
+#: selection:synchro.mappers,protect_update:0
 msgid "Protected field"
 msgstr "Campo protetto"
 
 #. module: universal_connector_base
-#: model:ir.model.fields,help:universal_connector_base.field_synchro_channel__pypi_sign
+#: model:ir.model.fields,help:universal_connector_base.field_synchro_channel__pylib
 msgid "Python library used to communicate with remote counterparty"
 msgstr "Libreria python usata per comunicare con controparte remota"
 
@@ -610,17 +610,17 @@ msgid "State"
 msgstr "Stato"
 
 #. module: universal_connector_base
-#: selection:synchro.channel,tracelevel:0
+#: selection:synchro.backend,tracelevel:0
 msgid "Statements"
 msgstr "Estratti conto"
 
 #. module: universal_connector_base
-#: selection:synchro.channel.model.fields,spec:0
+#: selection:synchro.mappers,spec:0
 msgid "Suplier"
 msgstr ""
 
 #. module: universal_connector_base
-#: selection:synchro.channel.model,model_spec:0
+#: selection:synchro.model,model_spec:0
 msgid "Supplier"
 msgstr "Fornitore"
 
@@ -653,7 +653,7 @@ msgid "Synchonization model"
 msgstr "Modello di sincronizzazione"
 
 #. module: universal_connector_base
-#: model:ir.model.fields,field_description:universal_connector_base.field_synchro_channel_model__synchro_channel_id
+#: model:ir.model.fields,field_description:universal_connector_base.field_synchro_channel_model__backend_id
 msgid "Synchro Channel"
 msgstr "Per menzionare un canale synchro"
 
@@ -696,36 +696,36 @@ msgstr "Utente per accedere a controparte remote o identificativo."
 
 #. module: universal_connector_base
 #: model:ir.model,name:universal_connector_base.model_ir_model_synchro_cache
-msgid "ir.model.synchro.cache"
+msgid "synchro.cache"
 msgstr ""
 
 #. module: universal_connector_base
 #: model:ir.model,name:universal_connector_base.model_ir_model_synchro_log
-msgid "ir.model.synchro.log"
+msgid "synchro.log"
 msgstr ""
 
 #. module: universal_connector_base
-#: selection:synchro.channel,prefix:0
-msgid "oe10"
+#: selection:synchro.backend,prefix:0
+msgid "odoo10"
 msgstr ""
 
 #. module: universal_connector_base
-#: selection:synchro.channel,prefix:0
-msgid "oe12"
+#: selection:synchro.backend,prefix:0
+msgid "odoo12"
 msgstr ""
 
 #. module: universal_connector_base
-#: selection:synchro.channel,prefix:0
-msgid "oe16"
+#: selection:synchro.backend,prefix:0
+msgid "odoo16"
 msgstr ""
 
 #. module: universal_connector_base
-#: selection:synchro.channel,prefix:0
+#: selection:synchro.backend,prefix:0
 msgid "oe7"
 msgstr ""
 
 #. module: universal_connector_base
-#: selection:synchro.channel,prefix:0
+#: selection:synchro.backend,prefix:0
 msgid "oe8"
 msgstr ""
 

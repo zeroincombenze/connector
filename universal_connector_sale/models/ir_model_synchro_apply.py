@@ -10,4 +10,4 @@ from odoo import models
 
 
 class IrModelSynchroApply(models.Model):
-    _inherit = "ir.model.synchro.apply"
+    _inherit = "synchro.apply"

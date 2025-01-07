@@ -6,8 +6,13 @@
 #
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 #
-from . import synchro_backend
 from . import synchro_api
-from . import res_country
-from . import res_partner
 from . import ir_model_synchro_apply
+from . import synchro_backend
+from . import ir_model_to_map
+from . import res_currency
+from . import res_country
+from . import res_lang
+from . import res_partner
+from . import product
+from . import res_users

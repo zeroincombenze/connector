@@ -11,7 +11,7 @@
                     <field name="vg7_id"/>
                     <field name="oe7_id"/>
                     <field name="oe8_id"/>
-                    <field name="oe10_id"/>
+                    <field name="odoo10_id"/>
                 </group>
             </xpath>
         </field>
@@ -28,7 +28,7 @@
                         <field name="vg7_id"/>
                         <field name="oe7_id"/>
                         <field name="oe8_id"/>
-                        <field name="oe10_id"/>
+                        <field name="odoo10_id"/>
                     </group>
                 </page>
             </xpath>
@@ -46,7 +46,7 @@
                     <field name="vg7_id"/>
                     <field name="oe7_id"/>
                     <field name="oe8_id"/>
-                    <field name="oe10_id"/>
+                    <field name="odoo10_id"/>
                     <field name="errmsg"/>
                 </group>
             </xpath>
@@ -65,7 +65,7 @@
                         <field name="vg7_id"/>
                         <field name="oe7_id"/>
                         <field name="oe8_id"/>
-                        <field name="oe10_id"/>
+                        <field name="odoo10_id"/>
                         <field name="errmsg"/>
                     </group>
                 </page>

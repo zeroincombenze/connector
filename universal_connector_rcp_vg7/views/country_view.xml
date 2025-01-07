@@ -6,7 +6,7 @@
         <field name="model">res.country</field>
         <field name="inherit_id" ref="universal_connector_base.view_country_synchro_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='oe16_id']" position="after">
+            <xpath expr="//field[@name='odoo16_id']" position="after">
                 <field name="vg7_id"/>
             </xpath>
         </field>
@@ -17,7 +17,7 @@
         <field name="model">res.country.state</field>
         <field name="inherit_id" ref="universal_connector_base.view_country_state_synchro_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='oe16_id']" position="after">
+            <xpath expr="//field[@name='odoo16_id']" position="after">
                 <field name="vg7_id"/>
             </xpath>
         </field>

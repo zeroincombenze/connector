@@ -9,32 +9,32 @@
 #       no_local means record was not in local db before tests
 #
 "?","*","res.country","res.country","code","code",,"","",
-"?","z0bug.localhost-odoo12","res.country","res.country","code","code",233,"US","US",
-"?","z0bug.localhost-odoo10","res.country","res.country","code","code",235,"US","US",
-"?","z0bug.localhost-odoo8","res.country","res.country","code","code",235,"US","US",
+"?","universal_connector_base.backend_odoo12","res.country","res.country","code","code",233,"US","US",
+"?","universal_connector_base.backend_odoo10","res.country","res.country","code","code",235,"US","US",
+"?","universal_connector_openerp.backend_openerp8","res.country","res.country","code","code",235,"US","US",
 "?","*","res.currency","res.currency","name","name",1,"","EUR",
-"?","z0bug.localhost-odoo12","res.currency","res.currency","name","name",2,"","USD",
-"?","z0bug.localhost-odoo10","res.currency","res.currency","name","name",3,"","USD",
-"?","z0bug.localhost-odoo8","res.currency","res.currency","name","name",3,"","USD",
-"?","z0bug.localhost-odoo7","res.currency","res.currency","name","name",3,"","USD",
+"?","universal_connector_base.backend_odoo12","res.currency","res.currency","name","name",2,"","USD",
+"?","universal_connector_base.backend_odoo10","res.currency","res.currency","name","name",3,"","USD",
+"?","universal_connector_openerp.backend_openerp8","res.currency","res.currency","name","name",3,"","USD",
+"?","universal_connector_openerp.backend_openerp7","res.currency","res.currency","name","name",3,"","USD",
 "?","*","res.company","res.company","name","name",,"","",
 "?","*","res.partner","res.partner","city","city",,"","",
-"?","z0bug.localhost-odoo12","res.partner","res.partner","city","city",3,"","Scranton",
-"?","z0bug.localhost-odoo10","res.partner","res.partner","city","city",3,"","Scranton",
-"?","z0bug.localhost-odoo12","res.partner","res.partner","name","name",3,"%","Admin",  # Mitchell Admin
-"?","z0bug.localhost-odoo10","res.partner","res.partner","name","name",3,"%","Admin",
-"?","z0bug.localhost-odoo8","res.partner","res.partner","name","name",3,"%","Admin",
-"?","z0bug.localhost-odoo7","res.partner","res.partner","name","name",3,"%","Admin",
+"?","universal_connector_base.backend_odoo12","res.partner","res.partner","city","city",3,"","Scranton",
+"?","universal_connector_base.backend_odoo10","res.partner","res.partner","city","city",3,"","Scranton",
+"?","universal_connector_base.backend_odoo12","res.partner","res.partner","name","name",3,"%","Admin",  # Mitchell Admin
+"?","universal_connector_base.backend_odoo10","res.partner","res.partner","name","name",3,"%","Admin",
+"?","universal_connector_openerp.backend_openerp8","res.partner","res.partner","name","name",3,"%","Admin",
+"?","universal_connector_openerp.backend_openerp7","res.partner","res.partner","name","name",3,"%","Admin",
 "?","*","res.partner","res.partner","is_company","is_company",,"","",
-"?","z0bug.localhost-odoo12","res.partner","res.partner","name","name",13,"%","The Jackson Group",
-"?","z0bug.localhost-odoo10","res.partner","res.partner","name","name",11,"%","The Jackson Group",
-"?","z0bug.localhost-odoo8","res.partner","res.partner","name","name",15,"%","The Jackson Group",
-"?","z0bug.localhost-odoo12","res.partner","res.partner","name","name",12,"%","Ready Mat",1
-"?","z0bug.localhost-odoo10","res.partner","res.partner","name","name",10,"%","Delta PC",1
-"?","z0bug.localhost-odoo8","res.partner","res.partner","name","name",9,"%","Delta PC",1
-"?","z0bug.localhost-odoo7","res.partner","res.partner","name","name",8,"%","Delta PC",1
-"?","z0bug.localhost-odoo12","res.partner","res.partner","name","name",9,"%","Wood Corner",1
-"?","z0bug.localhost-odoo10","res.partner","res.partner","name","name",7,"%","ASUSTeK",1
-"?","z0bug.localhost-odoo8","res.partner","res.partner","name","name",7,"%","Agrolait",1
-"?","z0bug.localhost-odoo7","res.partner","res.partner","name","name",7,"%","China Export",1
+"?","universal_connector_base.backend_odoo12","res.partner","res.partner","name","name",13,"%","The Jackson Group",
+"?","universal_connector_base.backend_odoo10","res.partner","res.partner","name","name",11,"%","The Jackson Group",
+"?","universal_connector_openerp.backend_openerp8","res.partner","res.partner","name","name",15,"%","The Jackson Group",
+"?","universal_connector_base.backend_odoo12","res.partner","res.partner","name","name",12,"%","Ready Mat",1
+"?","universal_connector_base.backend_odoo10","res.partner","res.partner","name","name",10,"%","Delta PC",1
+"?","universal_connector_openerp.backend_openerp8","res.partner","res.partner","name","name",9,"%","Delta PC",1
+"?","universal_connector_openerp.backend_openerp7","res.partner","res.partner","name","name",8,"%","Delta PC",1
+"?","universal_connector_base.backend_odoo12","res.partner","res.partner","name","name",9,"%","Wood Corner",1
+"?","universal_connector_base.backend_odoo10","res.partner","res.partner","name","name",7,"%","ASUSTeK",1
+"?","universal_connector_openerp.backend_openerp8","res.partner","res.partner","name","name",7,"%","Agrolait",1
+"?","universal_connector_openerp.backend_openerp7","res.partner","res.partner","name","name",7,"%","China Export",1
 "?","*","res.users","res.users","login","login",,"","",

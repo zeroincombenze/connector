@@ -214,7 +214,7 @@ msgid "Barcode"
 msgstr "Codice a barre"
 
 #. module: universal_connector
-#: selection:ir.model.synchro,state:0 selection:ir.model.synchro.apply,state:0
+#: selection:ir.model.synchro,state:0 selection:synchro.apply,state:0
 msgid "Base Object"
 msgstr "Base imponibile"
 
@@ -441,7 +441,7 @@ msgid "Currency"
 msgstr "Divisa"
 
 #. module: universal_connector
-#: selection:ir.model.synchro,state:0 selection:ir.model.synchro.apply,state:0
+#: selection:ir.model.synchro,state:0 selection:synchro.apply,state:0
 msgid "Custom Object"
 msgstr "Personalizzato personalizzato"
 
@@ -1037,31 +1037,31 @@ msgid "Odoo Backend"
 msgstr "Dorsale dorsale"
 
 #. module: universal_connector
-#: model:ir.model.fields,field_description:universal_connector.field_account_account__oe10_id model:ir.model.fields,field_description:universal_connector.field_account_account_type__oe10_id
-#: model:ir.model.fields,field_description:universal_connector.field_account_analytic_account__oe10_id model:ir.model.fields,field_description:universal_connector.field_account_analytic_line__oe10_id
-#: model:ir.model.fields,field_description:universal_connector.field_account_analytic_tag__oe10_id model:ir.model.fields,field_description:universal_connector.field_account_bank_statement_import_journal_creation__oe10_id
-#: model:ir.model.fields,field_description:universal_connector.field_account_fiscal_position__oe10_id model:ir.model.fields,field_description:universal_connector.field_account_invoice__oe10_id
-#: model:ir.model.fields,field_description:universal_connector.field_account_invoice_line__oe10_id model:ir.model.fields,field_description:universal_connector.field_account_journal__oe10_id
-#: model:ir.model.fields,field_description:universal_connector.field_account_move__oe10_id model:ir.model.fields,field_description:universal_connector.field_account_move_line__oe10_id
-#: model:ir.model.fields,field_description:universal_connector.field_account_payment_term__oe10_id model:ir.model.fields,field_description:universal_connector.field_account_payment_term_line__oe10_id
-#: model:ir.model.fields,field_description:universal_connector.field_account_setup_bank_manual_config__oe10_id model:ir.model.fields,field_description:universal_connector.field_account_tax__oe10_id
-#: model:ir.model.fields,field_description:universal_connector.field_ir_module_category__oe10_id model:ir.model.fields,field_description:universal_connector.field_ir_sequence__oe10_id
-#: model:ir.model.fields,field_description:universal_connector.field_product_category__oe10_id model:ir.model.fields,field_description:universal_connector.field_product_pricelist__oe10_id
-#: model:ir.model.fields,field_description:universal_connector.field_product_product__oe10_id model:ir.model.fields,field_description:universal_connector.field_product_template__oe10_id
-#: model:ir.model.fields,field_description:universal_connector.field_purchase_order__oe10_id model:ir.model.fields,field_description:universal_connector.field_purchase_order_line__oe10_id
-#: model:ir.model.fields,field_description:universal_connector.field_res_company__oe10_id model:ir.model.fields,field_description:universal_connector.field_res_country__oe10_id
-#: model:ir.model.fields,field_description:universal_connector.field_res_country_state__oe10_id model:ir.model.fields,field_description:universal_connector.field_res_currency__oe10_id
-#: model:ir.model.fields,field_description:universal_connector.field_res_groups__oe10_id model:ir.model.fields,field_description:universal_connector.field_res_lang__oe10_id
-#: model:ir.model.fields,field_description:universal_connector.field_res_partner__oe10_id model:ir.model.fields,field_description:universal_connector.field_res_partner_bank__oe10_id
-#: model:ir.model.fields,field_description:universal_connector.field_res_partner_bank_company__oe10_id model:ir.model.fields,field_description:universal_connector.field_res_partner_invoice__oe10_id
-#: model:ir.model.fields,field_description:universal_connector.field_res_partner_shipping__oe10_id model:ir.model.fields,field_description:universal_connector.field_res_partner_supplier__oe10_id
-#: model:ir.model.fields,field_description:universal_connector.field_res_users__oe10_id model:ir.model.fields,field_description:universal_connector.field_sale_order__oe10_id
-#: model:ir.model.fields,field_description:universal_connector.field_sale_order_line__oe10_id model:ir.model.fields,field_description:universal_connector.field_stock_location__oe10_id
-#: model:ir.model.fields,field_description:universal_connector.field_stock_move__oe10_id model:ir.model.fields,field_description:universal_connector.field_stock_picking__oe10_id
-#: model:ir.model.fields,field_description:universal_connector.field_stock_picking_carriage_condition__oe10_id model:ir.model.fields,field_description:universal_connector.field_stock_picking_goods_description__oe10_id
-#: model:ir.model.fields,field_description:universal_connector.field_stock_picking_package_preparation__oe10_id model:ir.model.fields,field_description:universal_connector.field_stock_picking_package_preparation_line__oe10_id
-#: model:ir.model.fields,field_description:universal_connector.field_stock_picking_transportation_method__oe10_id model:ir.model.fields,field_description:universal_connector.field_stock_picking_transportation_reason__oe10_id
-#: model:ir.model.fields,field_description:universal_connector.field_stock_warehouse__oe10_id model:ir.model.fields,field_description:universal_connector.field_uom_uom__oe10_id
+#: model:ir.model.fields,field_description:universal_connector.field_account_account__odoo10_id model:ir.model.fields,field_description:universal_connector.field_account_account_type__odoo10_id
+#: model:ir.model.fields,field_description:universal_connector.field_account_analytic_account__odoo10_id model:ir.model.fields,field_description:universal_connector.field_account_analytic_line__odoo10_id
+#: model:ir.model.fields,field_description:universal_connector.field_account_analytic_tag__odoo10_id model:ir.model.fields,field_description:universal_connector.field_account_bank_statement_import_journal_creation__odoo10_id
+#: model:ir.model.fields,field_description:universal_connector.field_account_fiscal_position__odoo10_id model:ir.model.fields,field_description:universal_connector.field_account_invoice__odoo10_id
+#: model:ir.model.fields,field_description:universal_connector.field_account_invoice_line__odoo10_id model:ir.model.fields,field_description:universal_connector.field_account_journal__odoo10_id
+#: model:ir.model.fields,field_description:universal_connector.field_account_move__odoo10_id model:ir.model.fields,field_description:universal_connector.field_account_move_line__odoo10_id
+#: model:ir.model.fields,field_description:universal_connector.field_account_payment_term__odoo10_id model:ir.model.fields,field_description:universal_connector.field_account_payment_term_line__odoo10_id
+#: model:ir.model.fields,field_description:universal_connector.field_account_setup_bank_manual_config__odoo10_id model:ir.model.fields,field_description:universal_connector.field_account_tax__odoo10_id
+#: model:ir.model.fields,field_description:universal_connector.field_ir_module_category__odoo10_id model:ir.model.fields,field_description:universal_connector.field_ir_sequence__odoo10_id
+#: model:ir.model.fields,field_description:universal_connector.field_product_category__odoo10_id model:ir.model.fields,field_description:universal_connector.field_product_pricelist__odoo10_id
+#: model:ir.model.fields,field_description:universal_connector.field_product_product__odoo10_id model:ir.model.fields,field_description:universal_connector.field_product_template__odoo10_id
+#: model:ir.model.fields,field_description:universal_connector.field_purchase_order__odoo10_id model:ir.model.fields,field_description:universal_connector.field_purchase_order_line__odoo10_id
+#: model:ir.model.fields,field_description:universal_connector.field_res_company__odoo10_id model:ir.model.fields,field_description:universal_connector.field_res_country__odoo10_id
+#: model:ir.model.fields,field_description:universal_connector.field_res_country_state__odoo10_id model:ir.model.fields,field_description:universal_connector.field_res_currency__odoo10_id
+#: model:ir.model.fields,field_description:universal_connector.field_res_groups__odoo10_id model:ir.model.fields,field_description:universal_connector.field_res_lang__odoo10_id
+#: model:ir.model.fields,field_description:universal_connector.field_res_partner__odoo10_id model:ir.model.fields,field_description:universal_connector.field_res_partner_bank__odoo10_id
+#: model:ir.model.fields,field_description:universal_connector.field_res_partner_bank_company__odoo10_id model:ir.model.fields,field_description:universal_connector.field_res_partner_invoice__odoo10_id
+#: model:ir.model.fields,field_description:universal_connector.field_res_partner_shipping__odoo10_id model:ir.model.fields,field_description:universal_connector.field_res_partner_supplier__odoo10_id
+#: model:ir.model.fields,field_description:universal_connector.field_res_users__odoo10_id model:ir.model.fields,field_description:universal_connector.field_sale_order__odoo10_id
+#: model:ir.model.fields,field_description:universal_connector.field_sale_order_line__odoo10_id model:ir.model.fields,field_description:universal_connector.field_stock_location__odoo10_id
+#: model:ir.model.fields,field_description:universal_connector.field_stock_move__odoo10_id model:ir.model.fields,field_description:universal_connector.field_stock_picking__odoo10_id
+#: model:ir.model.fields,field_description:universal_connector.field_stock_picking_carriage_condition__odoo10_id model:ir.model.fields,field_description:universal_connector.field_stock_picking_goods_description__odoo10_id
+#: model:ir.model.fields,field_description:universal_connector.field_stock_picking_package_preparation__odoo10_id model:ir.model.fields,field_description:universal_connector.field_stock_picking_package_preparation_line__odoo10_id
+#: model:ir.model.fields,field_description:universal_connector.field_stock_picking_transportation_method__odoo10_id model:ir.model.fields,field_description:universal_connector.field_stock_picking_transportation_reason__odoo10_id
+#: model:ir.model.fields,field_description:universal_connector.field_stock_warehouse__odoo10_id model:ir.model.fields,field_description:universal_connector.field_uom_uom__odoo10_id
 msgid "Odoo10 ID"
 msgstr "ID odoo10"
 
@@ -1941,7 +1941,7 @@ msgstr ""
 
 #. module: universal_connector
 #: model:ir.model,name:universal_connector.model_ir_model_synchro_apply
-msgid "ir.model.synchro.apply"
+msgid "synchro.apply"
 msgstr ""
 
 #. module: universal_connector

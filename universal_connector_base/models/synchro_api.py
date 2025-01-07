@@ -11,7 +11,7 @@ import logging
 
 from odoo import models
 from odoo import release
-from python_plus import unicodes, _u
+from python_plus import unicodes
 
 _logger = logging.getLogger(__name__)
 try:
@@ -27,8 +27,8 @@ class SynchroApi(models.Model):
     rules so it is very difficult to manage all counterparties.
     Trick is merging protocol addons and identity addons in order to make available all
     the needing API.
-    This model declare generic API; inheritance is implemented by naming. A generic API
-    function is overloaded by function name like
+    This model declare generic API; inheritance is implemented with a simple name
+    mangling. So a generic API function is overloaded by function name like
     <identity_name>_<protocol_name>_<function_name>
     or <function_name>_<identity_name>_<protocol_name>; if function does not exit a
     function named <protocol_name>_<function_name> or <function_name>_<protocol_name>
@@ -36,13 +36,9 @@ class SynchroApi(models.Model):
     <identity_name>_<function_name> or <function_name>_<indent_name> is searched.
 
     Model methods:
-    get_default(backend): return default values load on backend
-    get_data_endpoint(backend, exchange_path=None):
-            return exchange endpoint from login endpoint
-    get_login_endpoint(backend,with_port=None,rebuild=None)
-    get_pypi_name(): return python library name
     session(backend): return counterpart session (connect + login)
-    get_model_list(session,backend): return list with couple (local model, remote table)
+    get_model_list(session,backend): return list with couple
+            (local model, remote table, model spec)
     get_field_list(session,backend,model,magic_fields=None):
             return field list of Odoo model that can be synchronized with counterparty
     get_response(session,dir_mapper,ext_id=None,endpoint=None,fields=None):
@@ -60,11 +56,13 @@ class SynchroApi(models.Model):
         self, backend, name, identity=None, method=None, major_version=None
     ):
         """Search for specific function to call"""
-        identity = identity or backend.identity
-        method = (method or backend.method or "").replace("/", "_")
+        identity = identity or (backend.identity_id and backend.identity_id.code) or ""
+        method = (
+            method or (backend.protocol_id and backend.protocol_id.code) or ""
+        ).replace("/", "_")
         major_version = str(
             major_version
-            or (backend.odoo_version and backend.odoo_version.split(".")[0])
+            or (backend.remote_sw_version and backend.remote_sw_version.split(".")[0])
             or "0"
         )
         for fct in (
@@ -80,6 +78,12 @@ class SynchroApi(models.Model):
         ):
             if hasattr(self, fct):
                 return fct
+        self.env["synchro.log"].logmsg(
+            "debug",
+            "No function %(fct)s found!",
+            backend=backend,
+            ctx={"fct": name},
+        )
         return False  # pragma: no cover
 
     # ----------------------------------------------------
@@ -88,8 +92,8 @@ class SynchroApi(models.Model):
     #   cnx_lgi, cnx_data, login_endpoint, data_endpoint,
     #   comm_session
     # ----------------------------------------------------
-    def init_sesssion(self, login_endpoint=False, data_endpoint=False):
-        """Initialize sessione with defautl values"""
+    def init_session(self, login_endpoint=False, data_endpoint=False):
+        """Initialize session with default values"""
         return {
             "login_endpoint": login_endpoint,
             "data_endpoint": data_endpoint,
@@ -116,71 +120,11 @@ class SynchroApi(models.Model):
     # but is based on function name
     # ------------------------------------------------------
 
-    def get_default(self, backend):
-        """
-        Return default protocol, port, database, login pwd, lgi_path, exchange_path
-        """
-        fct = self.get_overridden_fct(backend, "default")
-        if not fct:  # pragma: no cover
-            return False, False, False, False, False, False, False
-        return getattr(self, fct)(backend)
-
-    def get_data_endpoint(self, backend, exchange_path=None):
-        """Return data (exchange) end point"""
-        fct = self.get_overridden_fct(backend, "get_data_endpoint")
-        if fct:
-            return _u(getattr(self, fct)(backend, exchange_path=exchange_path))
-        (protocol, hostname, port, database, login, passwd, path) = (
-            backend.parse_endpoint(with_path="data")
-        )
-        endpoint = protocol + "://" + backend.hostname
-        if backend.port:
-            endpoint += ":%d" % backend.port
-        exchange_path = exchange_path or path
-        if exchange_path:
-            endpoint += exchange_path
-        return endpoint
-
-    def get_login_endpoint(self, backend, with_port=None, rebuild=False):
-        """Return login endpoint"""
-        fct = self.get_overridden_fct(backend, "get_login_endpoint")
-        if fct:  # pragma: no cover
-            return _u(getattr(self, fct)(backend, with_port=with_port, rebuild=rebuild))
-        if not rebuild and backend.counterpart_url and not backend.hostname:
-            endpoint = backend.counterpart_url
-        elif backend.hostname:
-            endpoint = backend.get_protocol_from_method(backend.method) or ""
-            if backend.login:
-                endpoint += "://" + backend.login + "@" + backend.hostname
-            else:
-                endpoint += "://" + backend.hostname
-            if with_port and backend.port:
-                endpoint += ":%d" % backend.port
-            if backend.lgi_path:
-                endpoint += backend.lgi_path
-        else:
-            endpoint = ""
-        return endpoint
-
-    def get_pypi_name(self, backend, method=None):
-        """Return the python library name to communicate with remote"""
-        fct = self.get_overridden_fct(backend, "get_pypi_name", method=method)
-        if not fct:  # pragma: no cover
-            return fct
-        self.env["ir.model.synchro.log"].logmsg(
-            "debug",
-            "%(model)s[%(id)s].%(fct)s():",
-            res_rec=backend,
-            backend=backend,
-            ctx={"fct": fct},
-        )
-        return _u(getattr(self, fct)())
-
     def get_session(self, backend, force_connect=None):
         """Return the current session object, used to communicate with remote
         Based on backend configuration or if requested, can execute a connect()
         """
-        Cache = self.env["ir.model.synchro.cache"]
+        Cache = self.env["synchro.cache"]
         session = Cache.get_attr(self.id, "CNX")
         if not force_connect:
             if not self.session_is_active(session) and backend.auto_reconnect:
@@ -203,9 +147,9 @@ class SynchroApi(models.Model):
         """Return list of (local model, remote model) to manage"""
         fct = self.get_overridden_fct(backend, "get_model_list")
         if not fct:  # pragma: no cover
-            return []
+            return unicodes(getattr(self, "odoo_get_model_list")(session, backend))
         values = unicodes(getattr(self, fct)(session, backend))
-        self.env["ir.model.synchro.log"].logmsg(
+        self.env["synchro.log"].logmsg(
             "debug",
             "%(model)s[%(id)s].%(fct)s():",
             res_rec=backend,
@@ -219,14 +163,17 @@ class SynchroApi(models.Model):
         """Return field list of Odoo model that can be synchronized with counterparty"""
         fct = self.get_overridden_fct(backend, "get_field_list")
         if not fct:  # pragma: no cover
-            return []
+            return unicodes(
+                getattr(self, "odoo_get_field_list")(
+                    session, backend, model, magic_fields=magic_fields)
+            )
         return unicodes(
             getattr(self, fct)(session, backend, model, magic_fields=magic_fields)
         )
 
     def get_record_list(self, session, dir_mapper):
         "Get record list of model from remote counterparty"
-        fct = self.get_overridden_fct(dir_mapper.synchro_channel_id, "get_record_list")
+        fct = self.get_overridden_fct(dir_mapper.backend_id, "get_record_list")
         if not fct:  # pragma: no cover
             return []
         return getattr(self, fct)(session, dir_mapper)
@@ -234,7 +181,7 @@ class SynchroApi(models.Model):
     def get_response(self, session, dir_mapper, ext_id=False, endpoint=None):
         """Get response from remote counterparty, usually is a remote record
         with specific remote id"""
-        fct = self.get_overridden_fct(dir_mapper.synchro_channel_id, "get_response")
+        fct = self.get_overridden_fct(dir_mapper.backend_id, "get_response")
         if not fct:  # pragma: no cover
             return fct
         ext_model = dir_mapper.counterpart_name
@@ -249,23 +196,29 @@ class SynchroApi(models.Model):
                 session, dir_mapper, ext_id=ext_id, endpoint=endpoint, fields=fields
             )
         )
-        self.env["ir.model.synchro.log"].logmsg(
+        self.env["synchro.log"].logmsg(
             "debug",
             "%(model)s.get_response(%(backend)s,%(xmodel)s,%(xid)s,ep=%(ep)s,f=%(f)s)",
-            backend=dir_mapper.synchro_channel_id,
+            backend=dir_mapper.backend_id,
             values=values,
             ctx={"ep": endpoint or "", "xmodel": ext_model, "xid": ext_id, "f": fields},
         )
         return values
 
-    def get_id_from_ext_ref(self, session, dir_mapper, ext_id):
+    def get_ext_xref_from_ext_id(self, session, dir_mapper, ext_id):
         """Return counterpart external reference of counterpart id and model"""
-        fct = self.get_overridden_fct(
-            dir_mapper.synchro_channel_id, "get_id_from_ext_ref"
-        )
+        fct = self.get_overridden_fct(dir_mapper.backend_id, "get_ext_id_of_ext_ref")
         if not fct:  # pragma: no cover
-            return []
-        return getattr(self, fct)(session, dir_mapper, ext_id)
+            return False
+        xrefs = getattr(self, fct)(session, dir_mapper, ext_id)
+        xref = False
+        if xrefs:
+            xref_dir_mapper = dir_mapper.backend_id.get_dir_mapper(
+                model="ir.model.data"
+            )
+            xrefs = self.get_response(session, xref_dir_mapper, ext_id=xrefs[0])
+            xref = xrefs[0]["module"] + "." + xrefs[0]["name"]
+        return xref
 
     # -----------------------------------------------------------
     # Odoo migration translater
@@ -275,7 +228,7 @@ class SynchroApi(models.Model):
     # -----------------------------------------------------------
 
     def get_tnldict(self):
-        Cache = self.env["ir.model.synchro.cache"]
+        Cache = self.env["synchro.cache"]
         tnldict = Cache.get_attr(1, "TNL")
         if not tnldict:
             tnldict = {}
@@ -289,7 +242,7 @@ class SynchroApi(models.Model):
             binding_model,
             source,
             release.major_version,
-            backend.odoo_version,
+            backend.remote_sw_version,
             type="value",
             fld_name=fld_name,
         )
@@ -300,7 +253,7 @@ class SynchroApi(models.Model):
     #         self.get_tnldict(),
     #         binding_model,
     #         source,
-    #         backend.odoo_version,
+    #         backend.remote_sw_version,
     #         release.major_version,
     #         type="value",
     #         fld_name=fld_name,
@@ -310,19 +263,25 @@ class SynchroApi(models.Model):
         def maj_ver(version):
             return int(version.split(".", 1)[0])
 
-        if xref == "base.user_root" and maj_ver(backend.odoo_version) <= 10 < maj_ver(
-            release.major_version
-        ):
-            return "base.user_admin"
-        if xref == "base.user_admin" and maj_ver(backend.odoo_version) > 10 >= maj_ver(
-            release.major_version
-        ):
-            return "base.user_root"
+        if maj_ver(backend.remote_sw_version) <= 10 < maj_ver(release.major_version):
+            xref1 = {
+                "base.user_root": "base.user_admin",
+                "base.partner_admin": "base.partner_root",
+            }.get(xref, xref)
+            if xref1 != xref:
+                return xref1
+        elif maj_ver(backend.remote_sw_version) > 10 >= maj_ver(release.major_version):
+            xref1 = {
+                "base.user_admin": "base.user_root",
+                "base.partner_root": "base.partner_admin",
+            }.get(xref, xref)
+            if xref1 != xref:
+                return xref1
         return transodoo.translate_from_to(
             self.get_tnldict(),
             "",
             xref,
-            backend.odoo_version,
+            backend.remote_sw_version,
             release.major_version,
             type="xref",
         )
@@ -333,7 +292,7 @@ class SynchroApi(models.Model):
             "ir.model",
             binding_model,
             release.major_version,
-            backend.odoo_version,
+            backend.remote_sw_version,
             ttype="model",
         )
         if ext_model == binding_model:
@@ -342,7 +301,7 @@ class SynchroApi(models.Model):
                 "ir.model",
                 binding_model,
                 release.major_version,
-                backend.odoo_version,
+                backend.remote_sw_version,
                 ttype="merge",
             )
         return ext_model
@@ -352,7 +311,7 @@ class SynchroApi(models.Model):
             self.get_tnldict(),
             "ir.model",
             ext_model,
-            backend.odoo_version,
+            backend.remote_sw_version,
             release.major_version,
             ttype="model",
         )
@@ -361,7 +320,7 @@ class SynchroApi(models.Model):
                 self.get_tnldict(),
                 "ir.model",
                 ext_model,
-                backend.odoo_version,
+                backend.remote_sw_version,
                 release.major_version,
                 ttype="merge",
             )
@@ -373,7 +332,7 @@ class SynchroApi(models.Model):
             model,
             fldname,
             release.major_version,
-            backend.odoo_version,
+            backend.remote_sw_version,
             ttype="field",
         )
         return ext_name
@@ -385,80 +344,15 @@ class SynchroApi(models.Model):
     # specific identities or new protocols
     # -----------------------------------------------------------
 
-    def odoo6_xmlrpc_https_default(self, backend):
-        return [
-            "https",
-            0,
-            "demo",
-            "admin",
-            "admin",
-            "/xmlrpc/common",
-            "/xmlrpc/object",
-        ]
-
-    def odoo6_xmlrpc_http_default(self, backend):  # pragma: no cover
-        return ["http"] + self.odoo6_xmlrpc_https_default(backend)[1:]
-
-    def odoo7_xmlrpc_https_default(self, backend):  # pragma: no cover
-        return self.odoo6_xmlrpc_https_default(backend)
-
-    def odoo7_xmlrpc_http_default(self, backend):
-        return self.odoo6_xmlrpc_http_default(backend)
-
-    def odoo8_xmlrpc_https_default(self, backend):  # pragma: no cover
-        return self.odoo6_xmlrpc_https_default(backend)
-
-    def odoo8_xmlrpc_http_default(self, backend):
-        return self.odoo6_xmlrpc_http_default(backend)
-
-    def odoo_xmlrpc_https_default(self, backend):
-        return [
-            "https",
-            0,
-            "demo",
-            "admin",
-            "admin",
-            "/xmlrpc/2/common",
-            "/xmlrpc/2/object",
-        ]
-
-    def odoo_xmlrpc_http_default(self, backend):
-        return ["http"] + self.odoo_xmlrpc_https_default(backend)[1:]
-
-    def odoo_xmlrpc_https_get_data_endpoint(self, backend, exchange_path=None):
-        if backend.counterpart_url:
-            return backend.counterpart_url.replace("/common", "/object")
-        return False  # pragma: no cover
-
-    def odoo_xmlrpc_http_get_data_endpoint(self, backend, exchange_path=None):
-        return self.odoo_xmlrpc_https_get_data_endpoint(
-            backend, exchange_path=exchange_path
-        )
-
-    def get_default_prot_port(self, backend):
-        return self.get_default(backend)[:2]
-
-    def get_default_login(self, backend):
-        return self.get_default(backend)[2:5]
-
-    def get_default_paths(self, backend):
-        return self.get_default(backend)[5:]
-
-    def get_pypi_name_odoo_xmlrpc_https(self):  # pragma: no cover
-        return "xmlrpc"
-
-    def get_pypi_name_odoo_xmlrpc_http(self):
-        return "xmlrpc"
-
     def _odoo_xmlrpc_x_connect(self, login_endpoint, data_endpoint):
-        session = self.init_sesssion(
+        session = self.init_session(
             login_endpoint=login_endpoint, data_endpoint=data_endpoint
         )
         try:
             cnx = client.ServerProxy(login_endpoint)
         except BaseException as e:  # pragma: no cover
             self.env.cr.rollback()  # pylint: disable=invalid-commit
-            self.env["ir.model.synchro.log"].logmsg(
+            self.env["synchro.log"].logmsg(
                 "error",
                 "!%(E)s! ERROR %(e)s opening session on %(ep)s",
                 errcode=-13,
@@ -466,14 +360,13 @@ class SynchroApi(models.Model):
             )
             cnx = False
         session["cnx_lgi"] = cnx
-        session["cnx_data"] = cnx
         if cnx is not False:
             try:
                 cnx_data = client.ServerProxy(data_endpoint)
                 # cnx = (cnx, cnx_data)
             except BaseException as e:  # pragma: no cover
                 self.env.cr.rollback()  # pylint: disable=invalid-commit
-                self.env["ir.model.synchro.log"].logmsg(
+                self.env["synchro.log"].logmsg(
                     "error",
                     "!%(E)s ERROR %(e)s opening session on %(ep)s",
                     errcode=-13,
@@ -498,7 +391,7 @@ class SynchroApi(models.Model):
             session = cnx["cnx_lgi"].authenticate(database, login, passwd, {})
         except BaseException as e:  # pragma: no cover
             self.env.cr.rollback()  # pylint: disable=invalid-commit
-            self.env["ir.model.synchro.log"].logmsg(
+            self.env["synchro.log"].logmsg(
                 "error",
                 "!%(E)s! ERROR %(e)s during login(db=%(db)s, user=%(u)s)",
                 errcode=-7,
@@ -530,89 +423,16 @@ class SynchroApi(models.Model):
             backend,
         )
 
-    def get_response_odoo6_xmlrpc_https(
-        self, session, dir_mapper, ext_id=False, endpoint=None, fields=None
-    ):
-        ext_model = dir_mapper.counterpart_name
-        cnx_data = session["cnx_data"]
-        try:
-            ids = cnx_data.execute_kw(
-                dir_mapper.synchro_channel_id.database,
-                session["session"],
-                dir_mapper.synchro_channel_id.password,
-                ext_model,
-                "search",
-                [[("id", "=", ext_id)]],
-            )
-        except BaseException as e:  # pragma: no cover
-            self.env.cr.rollback()  # pylint: disable=invalid-commit
-            self.env["ir.model.synchro.log"].logmsg(
-                "error",
-                "!%(E)s! ERROR %(e)s reading(db=%(db)s, model=%(model)s, id=%(id)s)",
-                backend=dir_mapper.synchro_channel_id,
-                res_model=ext_model,
-                res_id=ext_id,
-                errcode=-13,
-                errmsg=e,
-            )
-            return False
-        try:
-            values = cnx_data.execute_kw(
-                dir_mapper.synchro_channel_id.database,
-                session["session"],
-                dir_mapper.synchro_channel_id.password,
-                ext_model,
-                "read",
-                ids,
-                {"fields": fields},
-            )
-        except BaseException as e:  # pragma: no cover
-            self.env.cr.rollback()  # pylint: disable=invalid-commit
-            self.env["ir.model.synchro.log"].logmsg(
-                "error",
-                "!%(E)s! ERROR %(e)s reading(db=%(db)s, model=%(model)s, id=%(id)s)",
-                backend=dir_mapper.synchro_channel_id,
-                res_model=ext_model,
-                res_id=ext_id,
-                errcode=-13,
-                errmsg=e,
-            )
-            return False
-        if not isinstance(values, (tuple, list)):
-            values = [values]
-        return values
-
-    def get_response_odoo6_xmlrpc_http(
-        self, session, dir_mapper, ext_id=False, endpoint=None, fields=None
-    ):
-        return self.get_response_odoo6_xmlrpc_https(
-            session, dir_mapper, ext_id=ext_id, endpoint=endpoint, fields=fields
-        )
-
-    def get_response_odoo7_xmlrpc_https(
-        self, session, dir_mapper, ext_id=False, endpoint=None, fields=None
-    ):  # pragma: no cover
-        return self.get_response_odoo6_xmlrpc_https(
-            session, dir_mapper, ext_id=ext_id, endpoint=endpoint, fields=fields
-        )
-
-    def get_response_odoo7_xmlrpc_http(
-        self, session, dir_mapper, ext_id=False, endpoint=None, fields=None
-    ):
-        return self.get_response_odoo6_xmlrpc_http(
-            session, dir_mapper, ext_id=ext_id, endpoint=endpoint, fields=fields
-        )
-
     def get_response_odoo_xmlrpc_https(
         self, session, dir_mapper, ext_id=False, endpoint=None, fields=None
     ):
-        backend = dir_mapper.synchro_channel_id
+        backend = dir_mapper.backend_id
         ext_model = dir_mapper.counterpart_name
         try:
             values = session["cnx_data"].execute_kw(
-                dir_mapper.synchro_channel_id.database,
+                dir_mapper.backend_id.database,
                 session["session"],
-                dir_mapper.synchro_channel_id.password,
+                dir_mapper.backend_id.password,
                 ext_model,
                 "search_read",
                 [[("id", "=", ext_id)]],
@@ -620,7 +440,7 @@ class SynchroApi(models.Model):
             )
         except BaseException as e:  # pragma: no cover
             self.env.cr.rollback()  # pylint: disable=invalid-commit
-            self.env["ir.model.synchro.log"].logmsg(
+            self.env["synchro.log"].logmsg(
                 "error",
                 "!%(E)s! ERROR %(e)s reading(db=%(db)s, model=%(model)s, id=%(id)s)",
                 backend=backend,
@@ -641,8 +461,8 @@ class SynchroApi(models.Model):
 
     def odoo_get_model_list(self, session, backend):
         loc_ext_id = backend.get_loc_ext_id()
-        Cache = self.env["ir.model.synchro.cache"]
-        SynchroModel = self.env["synchro.channel.model"]
+        Cache = self.env["synchro.cache"]
+        SynchroModel = self.env["synchro.model"]
         model_list = []
         for name, model in self.env.items():
             if not Cache.is_manageable(name) or not hasattr(model, loc_ext_id):
@@ -650,27 +470,8 @@ class SynchroApi(models.Model):
             if SynchroModel.split_binding_model_n_spec(model._name)[0] != model._name:
                 continue  # pragma: no cover
             ext_name = self.odoo_tnl_local_model_to_ext(backend, model._name)
-            model_list.append((name, ext_name))
+            model_list.append((name, ext_name, False))
         return model_list
-
-    def get_login_endpoint_odoo_https(self, backend, with_port=None, rebuild=False):
-        if not rebuild and backend.counterpart_url and not backend.hostname:
-            endpoint = backend.counterpart_url
-        elif backend.hostname:
-            endpoint = backend.get_protocol_from_method(backend.method) or ""
-            endpoint += "://" + backend.hostname
-            if with_port and backend.port:
-                endpoint += ":%d" % backend.port
-            if backend.lgi_path:
-                endpoint += backend.lgi_path
-        else:
-            endpoint = ""
-        return endpoint
-
-    def get_login_endpoint_odoo_http(self, backend, with_port=None, rebuild=False):
-        return self.get_login_endpoint_odoo_https(
-            backend, with_port=with_port, rebuild=rebuild
-        )
 
     def odoo_get_field_list(self, session, backend, model, magic_fields=None):
         magic_fields = magic_fields or []
@@ -688,19 +489,19 @@ class SynchroApi(models.Model):
         ext_model = dir_mapper.counterpart_name
         try:
             values = session["cnx_data"].execute_kw(
-                dir_mapper.synchro_channel_id.database,
+                dir_mapper.backend_id.database,
                 session["session"],
-                dir_mapper.synchro_channel_id.password,
+                dir_mapper.backend_id.password,
                 ext_model,
                 "search",
                 [[]],
             )
         except BaseException as e:  # pragma: no cover
             self.env.cr.rollback()  # pylint: disable=invalid-commit
-            self.env["ir.model.synchro.log"].logmsg(
+            self.env["synchro.log"].logmsg(
                 "error",
                 "!%(E)s! ERROR %(e)s reading(db=%(db)s, model=%(model)s, id=%(id)s)",
-                backend=dir_mapper.synchro_channel_id,
+                backend=dir_mapper.backend_id,
                 res_model=ext_model,
                 errcode=-13,
                 errmsg=e,
@@ -711,23 +512,23 @@ class SynchroApi(models.Model):
     def get_record_list_odoo_xmlrpc_http(self, session, dir_mapper):
         return self.get_record_list_odoo_xmlrpc_https(session, dir_mapper)
 
-    def get_id_from_ext_ref_odoo_xmlrpc_https(self, session, dir_mapper, ext_id):
+    def get_ext_id_of_ext_ref_odoo_xmlrpc_https(self, session, dir_mapper, ext_id):
         ext_model = dir_mapper.counterpart_name
         try:
             values = session["cnx_data"].execute_kw(
-                dir_mapper.synchro_channel_id.database,
+                dir_mapper.backend_id.database,
                 session["session"],
-                dir_mapper.synchro_channel_id.password,
+                dir_mapper.backend_id.password,
                 "ir.model.data",
                 "search",
                 [[("model", "=", ext_model), ("res_id", "=", ext_id)]],
             )
         except BaseException as e:  # pragma: no cover
             self.env.cr.rollback()  # pylint: disable=invalid-commit
-            self.env["ir.model.synchro.log"].logmsg(
+            self.env["synchro.log"].logmsg(
                 "error",
                 "!%(E)s! ERROR %(e)s reading(db=%(db)s, model=%(model)s, id=%(id)s)",
-                backend=dir_mapper.synchro_channel_id,
+                backend=dir_mapper.backend_id,
                 res_model=ext_model,
                 errcode=-13,
                 errmsg=e,
@@ -735,5 +536,5 @@ class SynchroApi(models.Model):
             return []
         return values
 
-    def get_id_from_ext_ref_odoo_xmlrpc_http(self, session, dir_mapper, ext_id):
-        return self.get_id_from_ext_ref_odoo_xmlrpc_https(session, dir_mapper, ext_id)
+    def get_ext_id_of_ext_ref_odoo_xmlrpc_http(self, session, dir_mapper, ext_id):
+        return self.get_ext_id_of_ext_ref_odoo_xmlrpc_https(session, dir_mapper, ext_id)

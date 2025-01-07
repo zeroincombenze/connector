@@ -41,7 +41,7 @@ TEST_SYNCHRO_CHANNEL = {
         "password": "admin",
         "counterpart_url": "http://admin@localhost:8270/xmlrpc/2/common",
         "counterpart_data_url": "http://admin@localhost:8270/xmlrpc/2/object",
-        "prefix": "oe10",
+        "prefix": "odoo10",
     },
     "z0bug.localhost-odoo12": {
         "name": "Test Odoo 12.0",
@@ -55,7 +55,7 @@ TEST_SYNCHRO_CHANNEL = {
         "password": "admin",
         "counterpart_url": "http://admin@localhost:8272/xmlrpc/2/common",
         "counterpart_data_url": "http://admin@localhost:8272/xmlrpc/2/object",
-        "prefix": "oe12",
+        "prefix": "odoo12",
     },
     "z0bug.localhost-odoo7": {
         "name": "Test Odoo 7.0",
@@ -91,7 +91,7 @@ TEST_SYNCHRO_CHANNEL = {
     },
 }
 TEST_SETUP_LIST = [
-    "synchro.channel",
+    "synchro.backend",
 ]
 
 
@@ -103,8 +103,8 @@ class MyTest(SingleTransactionCase):
         self.odoo_commit_data = False
         self.get_data_test()
         self.setup_env()
-        self.env["ir.model.synchro.cache"].set_loglevel(self.debug_level + 1)
-        self.env["synchro.channel"].search([]).write(
+        self.env["synchro.cache"].set_loglevel(self.debug_level + 1)
+        self.env["synchro.backend"].search([]).write(
             {"tracelevel": str(self.debug_level + 1), "deferred_payload": "0"}
         )
 
@@ -226,7 +226,9 @@ class MyTest(SingleTransactionCase):
     def get_model_list(self, xref):
         models = []
         for loc_model in self.test_data[xref].keys():
-            models.append((loc_model, self.test_data[xref][loc_model]["EXT_NAME"]))
+            models.append(
+                (loc_model, self.test_data[xref][loc_model]["EXT_NAME"], False)
+            )
         return models
 
     def get_field_list(self, xref, loc_model):
@@ -331,12 +333,13 @@ class MyTest(SingleTransactionCase):
             backend,
             actions="button_build_model_map",
         )
-        for model, ext_model in self.get_model_list(xref):
-            backend_model = self.env["synchro.channel.model"].search(
+        for model, ext_model, model_spec in self.get_model_list(xref):
+            backend_model = self.env["synchro.model"].search(
                 [
                     ("name", "=", model),
                     ("counterpart_name", "=", ext_model),
-                    ("synchro_channel_id", "=", backend.id),
+                    ("model_spec", "=", model_spec),
+                    ("backend_id", "=", backend.id),
                 ]
             )
             self.assertEqual(
@@ -344,7 +347,7 @@ class MyTest(SingleTransactionCase):
             )
 
             for loc_name, ext_name in self.get_field_list(xref, model):
-                backend_field = self.env["synchro.channel.model.field"].search(
+                backend_field = self.env["synchro.mapper"].search(
                     [
                         ("name", "=", loc_name),
                         ("counterpart_name", "=", ext_name),
@@ -562,7 +565,7 @@ class MyTest(SingleTransactionCase):
 
     def _test_03_purge(self):
         _logger.info("🎺 Starting purge log test")
-        self.env["ir.model.synchro.log"].purge_log()
+        self.env["synchro.log"].purge_log()
 
     def test_connection(self):
         # This test requires external Odoo instance active. See header
@@ -570,22 +573,22 @@ class MyTest(SingleTransactionCase):
             "🎺 Starting connection test on ports 8270 (db=oca10) and 8272 (db=oca12)"
             " and on ports 8167 (db=demo7) and 8168 (db=demo8)"
         )
-        for xref in sorted(self.get_resource_data_list("synchro.channel")):
+        for xref in sorted(self.get_resource_data_list("synchro.backend")):
             self._test_check_connection(xref)
             self._test_reset_connection(xref)
             self._test_check_connection(xref)
             self._test_check_models(xref)
             self._test_import_model(xref, "res.currency")
-        for xref in sorted(self.get_resource_data_list("synchro.channel")):
+        for xref in sorted(self.get_resource_data_list("synchro.backend")):
             self._test_import_model(xref, "res.country")
             self._test_import_partner(xref)
-        for xref in sorted(self.get_resource_data_list("synchro.channel")):
+        for xref in sorted(self.get_resource_data_list("synchro.backend")):
             self._test_import_partner2(xref)
             # Now repeat some test in order to check for resync records
             self._test_import_model(xref, "res.currency")
             self._test_import_model(xref, "res.country")
             self._test_import_model(xref, "res.partner")
-        for xref in sorted(self.get_resource_data_list("synchro.channel")):
+        for xref in sorted(self.get_resource_data_list("synchro.backend")):
             # self._test_country_state_ca(xref)
             self._test_pull_record(xref, "res.partner")
         self._test_03_purge()

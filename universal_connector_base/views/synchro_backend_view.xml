@@ -3,16 +3,16 @@
 
     <record id="view_synchro_backend_tree" model="ir.ui.view">
         <field name="name">view.synchro.backend.tree</field>
-        <field name="model">synchro.channel</field>
+        <field name="model">synchro.backend</field>
         <field name="arch" type="xml">
             <tree string="Synchonization Backend">
                 <field name="sequence" widget="handle"/>
                 <field name="name"/>
                 <field name="hostname"/>
                 <field name="database"/>
-                <field name="identity"/>
-                <field name="odoo_version"/>
-                <field name="method"/>
+                <field name="identity_id"/>
+                <field name="remote_sw_version"/>
+                <field name="protocol_id"/>
                 <field name="prefix"/>
                 <field name="state"/>
             </tree>
@@ -21,7 +21,7 @@
 
     <record id="view_synchro_backend_form" model="ir.ui.view">
         <field name="name">view.synchro.backend.form</field>
-        <field name="model">synchro.channel</field>
+        <field name="model">synchro.backend</field>
         <field name="arch" type="xml">
             <form string="Synchonization Backend">
                 <header>
@@ -43,7 +43,7 @@
                     </h1>
                     <group>
                         <group>
-                            <field name="method"/>
+                            <field name="protocol_id"/>
                             <field name="hostname"/>
                             <field name="port"/>
                             <field name="database"/>
@@ -52,11 +52,11 @@
                             <field name="client_key" password="True"/>
                             <field name="load_mode"/>
                             <field name="auto_reconnect"/>
-                            <field name="pypi_sign" force_save="1"/>
+                            <field name="pylib" force_save="1"/>
                         </group>
                         <group>
-                            <field name="identity"/>
-                            <field name="odoo_version"/>
+                            <field name="identity_id"/>
+                            <field name="remote_sw_version"/>
                             <field name="prefix"/>
                             <field name="lgi_path"/>
                             <field name="exchange_path"/>
@@ -117,10 +117,9 @@
 
     <record id="action_synchro_backend" model="ir.actions.act_window">
         <field name="name">Synchonization Backend</field>
-        <field name="res_model">synchro.channel</field>
+        <field name="res_model">synchro.backend</field>
         <field name="view_id" ref="view_synchro_backend_tree"/>
     </record>
 
-    <menuitem id="menu_universal_connector" name="Universal connector" parent="base.next_id_9" groups="base.group_no_one"/>
 
 </odoo>

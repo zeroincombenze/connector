@@ -1,77 +1,77 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo noupdate="0">
 
-    <record forcecreate="1" id="res_country" model="synchro.channel.model">
+    <record forcecreate="1" id="res_country" model="synchro.model">
         <field name="name">res.country</field>
         <field name="field_uname">code</field>
         <field name="counterpart_name">countries</field>
         <field name="sequence">6</field>
-        <field name="synchro_channel_id" ref="channel_vg7"/>
+        <field name="backend_id" ref="backend_vg7"/>
     </record>
 
-    <record forcecreate="1" id="res_country_state" model="synchro.channel.model">
+    <record forcecreate="1" id="res_country_state" model="synchro.model">
         <field name="name">res.country.state</field>
         <field name="field_uname">name</field>
         <field name="counterpart_name">regions</field>
         <field name="search_keys">(['name', 'country_id'],['code', 'country_id'])</field>
         <field name="sequence">7</field>
-        <field name="synchro_channel_id" ref="channel_vg7"/>
+        <field name="backend_id" ref="backend_vg7"/>
     </record>
 
 
-    <record forcecreate="1" id="res_country_address_format" model="synchro.channel.model.field">
+    <record forcecreate="1" id="res_country_address_format" model="synchro.mapper">
         <field name="name">address_format</field>
         <field name="protect_update">3</field>
         <field name="model_id" ref="res_country"/>
     </record>
 
-    <record forcecreate="1" id="res_country_code" model="synchro.channel.model.field">
+    <record forcecreate="1" id="res_country_code" model="synchro.mapper">
         <field name="name">code</field>
         <field name="counterpart_name">code</field>
         <field name="apply">upper(),set_tmp_name()</field>
         <field name="model_id" ref="res_country"/>
     </record>
 
-    <record forcecreate="1" id="res_country_country_group_ids" model="synchro.channel.model.field">
+    <record forcecreate="1" id="res_country_country_group_ids" model="synchro.mapper">
         <field name="name">country_group_ids</field>
         <field name="protect_update">3</field>
         <field name="model_id" ref="res_country"/>
     </record>
 
-    <record forcecreate="1" id="res_country_currency_id" model="synchro.channel.model.field">
+    <record forcecreate="1" id="res_country_currency_id" model="synchro.mapper">
         <field name="name">currency_id</field>
         <field name="protect_update">3</field>
         <field name="model_id" ref="res_country"/>
     </record>
 
-    <record forcecreate="1" id="res_country_name" model="synchro.channel.model.field">
+    <record forcecreate="1" id="res_country_name" model="synchro.mapper">
         <field name="name">name</field>
         <field name="counterpart_name">description</field>
         <field name="apply">set_tmp_name()</field>
         <field name="model_id" ref="res_country"/>
     </record>
 
-    <record forcecreate="1" id="res_country_phone_code" model="synchro.channel.model.field">
+    <record forcecreate="1" id="res_country_phone_code" model="synchro.mapper">
         <field name="name">phone_code</field>
         <field name="protect_update">3</field>
         <field name="model_id" ref="res_country"/>
     </record>
 
 
-    <record forcecreate="1" id="res_country_state_code" model="synchro.channel.model.field">
+    <record forcecreate="1" id="res_country_state_code" model="synchro.mapper">
         <field name="name">code</field>
         <field name="counterpart_name">code</field>
         <field name="apply">upper(),set_tmp_name()</field>
         <field name="model_id" ref="res_country_state"/>
     </record>
 
-    <record forcecreate="1" id="res_country_state_country_id" model="synchro.channel.model.field">
+    <record forcecreate="1" id="res_country_state_country_id" model="synchro.mapper">
         <field name="name">country_id</field>
         <field name="protect_update">3</field>
         <field name="model_id" ref="res_country_state"/>
     </record>
 
-    <record forcecreate="1" id="res_country_state_name" model="synchro.channel.model.field">
+    <record forcecreate="1" id="res_country_state_name" model="synchro.mapper">
         <field name="name">name</field>
         <field name="counterpart_name">description</field>
         <field name="apply">set_tmp_name()</field>
@@ -80,14 +80,14 @@
     </record>
 
 
-    <record forcecreate="1" id="country_id_IT" model="synchro.channel.domain.translation">
+    <record forcecreate="1" id="country_id_IT" model="synchro.alias">
         <field name="model">res.country</field>
         <field name="key">name</field>
         <field name="odoo_value">Italy</field>
         <field name="ext_value">Italia</field>
     </record>
 
-    <record forcecreate="1" id="country_id_US" model="synchro.channel.domain.translation">
+    <record forcecreate="1" id="country_id_US" model="synchro.alias">
         <field name="model">res.country</field>
         <field name="key">name</field>
         <field name="odoo_value">United States</field>
@@ -95,56 +95,56 @@
     </record>
 
 
-    <record forcecreate="1" id="country_state_AP" model="synchro.channel.domain.translation">
+    <record forcecreate="1" id="country_state_AP" model="synchro.alias">
         <field name="model">res.country.state</field>
         <field name="key">name</field>
         <field name="odoo_value">Ascoli Piceno</field>
         <field name="ext_value">ascoli</field>
     </record>
 
-    <record forcecreate="1" id="country_state_BZ" model="synchro.channel.domain.translation">
+    <record forcecreate="1" id="country_state_BZ" model="synchro.alias">
         <field name="model">res.country.state</field>
         <field name="key">name</field>
         <field name="odoo_value">Bolzano</field>
         <field name="ext_value">bolzanobozen</field>
     </record>
 
-    <record forcecreate="1" id="country_state_BT" model="synchro.channel.domain.translation">
+    <record forcecreate="1" id="country_state_BT" model="synchro.alias">
         <field name="model">res.country.state</field>
         <field name="key">name</field>
         <field name="odoo_value">Barletta-Andria-Trani</field>
         <field name="ext_value">barlettaandriatrani</field>
     </record>
 
-    <record forcecreate="1" id="country_state_FC" model="synchro.channel.domain.translation">
+    <record forcecreate="1" id="country_state_FC" model="synchro.alias">
         <field name="model">res.country.state</field>
         <field name="key">name</field>
         <field name="odoo_value">Forlì-Cesena</field>
         <field name="ext_value">forlicesena</field>
     </record>
 
-    <record forcecreate="1" id="country_state_MB" model="synchro.channel.domain.translation">
+    <record forcecreate="1" id="country_state_MB" model="synchro.alias">
         <field name="model">res.country.state</field>
         <field name="key">name</field>
         <field name="odoo_value">Monza e Brianza</field>
         <field name="ext_value">monzabrianza</field>
     </record>
 
-    <record forcecreate="1" id="country_state_MS" model="synchro.channel.domain.translation">
+    <record forcecreate="1" id="country_state_MS" model="synchro.alias">
         <field name="model">res.country.state</field>
         <field name="key">name</field>
         <field name="odoo_value">Massa-Carrara</field>
         <field name="ext_value">massacarrara</field>
     </record>
 
-    <record forcecreate="1" id="country_state_PU" model="synchro.channel.domain.translation">
+    <record forcecreate="1" id="country_state_PU" model="synchro.alias">
         <field name="model">res.country.state</field>
         <field name="key">name</field>
         <field name="odoo_value">Pesaro e Urbino</field>
         <field name="ext_value">pesarourbino</field>
     </record>
 
-    <record forcecreate="1" id="country_state_VB" model="synchro.channel.domain.translation">
+    <record forcecreate="1" id="country_state_VB" model="synchro.alias">
         <field name="model">res.country.state</field>
         <field name="key">name</field>
         <field name="odoo_value">Verbano-Cusio-Ossola</field>

@@ -37,7 +37,7 @@
         <field name="interval_type">minutes</field>
         <field name="numbercall">-1</field>
         <field name="doall" eval="False"/>
-        <field name="model" eval="'ir.model.synchro.log'"/>
+        <field name="model" eval="'synchro.log'"/>
         <field name="function" eval="'purge_log'"/>
         <field name="args" eval="'()'"/>
     </record>

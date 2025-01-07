@@ -1,10 +1,10 @@
 ==================================================================================================
-|icon| Universal Connector protocol xmlrpc/Connettore universale con protocollo xmlrpc 12.0.0.3.13
+|icon| Universal Connector protocol xmlrpc/Connettore universale con protocollo xmlrpc 10.0.0.3.13
 ==================================================================================================
 
 **Add protocol xmlrpc (Odoo 6/7/8) to Universal Connector**
 
-.. |icon| image:: https://raw.githubusercontent.com/zeroincombenze/connector/12.0/universal_connector_by_xmlrpc/static/description/icon.png
+.. |icon| image:: https://raw.githubusercontent.com/zeroincombenze/connector/10.0/universal_connector_by_xmlrpc/static/description/icon.png
 
 
 .. contents::
@@ -37,7 +37,7 @@ Usare questo protocollo per connettere vecchie versioni di Odoo (precedenti alla
 
 |thumbnail|
 
-.. |thumbnail| image:: https://raw.githubusercontent.com/zeroincombenze/connector/12.0/universal_connector_by_xmlrpc/static/description/
+.. |thumbnail| image:: https://raw.githubusercontent.com/zeroincombenze/connector/10.0/universal_connector_by_xmlrpc/static/description/
 
 
 Configuration | Configurazione
@@ -71,8 +71,8 @@ Getting started | Primi passi
 Prerequisites | Prerequisiti
 ----------------------------
 
-* python 3.7
-* postgresql 9.6+ (best 10.0+)
+* python 2.7+ (best 2.7.5+)
+* postgresql 9.2+ (best 9.5)
 
 ::
 
@@ -102,15 +102,15 @@ Installation | Installazione
 +---------------------------------+------------------------------------------+
 | Suggested deployment is:        | Posizione suggerita per l'installazione: |
 +---------------------------------+------------------------------------------+
-| $HOME/12.0 |
+| $HOME/10.0 |
 +----------------------------------------------------------------------------+
 
 ::
 
     # Odoo repository installation; OCB repository must be installed
-    deploy_odoo clone -r connector -b 12.0 -G zero -p $HOME/12.0
+    deploy_odoo clone -r connector -b 10.0 -G zero -p $HOME/10.0
     # Upgrade virtual environment
-    vem amend $HOME/12.0/venv_odoo
+    vem amend $HOME/10.0/venv_odoo
 
 
 
@@ -119,8 +119,8 @@ Upgrade | Aggiornamento
 
 ::
 
-    deploy_odoo update -r connector -b 12.0 -G zero -p $HOME/12.0
-    vem amend $HOME/12.0/venv_odoo
+    deploy_odoo update -r connector -b 10.0 -G zero -p $HOME/10.0
+    vem amend $HOME/10.0/venv_odoo
     # Adjust following statements as per your system
     sudo systemctl restart odoo
 
@@ -157,26 +157,26 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 ChangeLog History | Cronologia modifiche
 ----------------------------------------
 
-12.0.0.3.13 (2025-01-05)
+10.0.0.3.13 (2025-01-05)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 * [QUA] Test coverage 89% (57: 6+51) [106 TestPoints] - quality rating 352 (target 100)
 
-12.0.0.3.12 (2025-01-03)
+10.0.0.3.12 (2025-01-03)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 * [IMP] Dependign on version check / Controllo versione dipendenze
 * [QUA] Test coverage 95% (57: 3+54) [106 TestPoints] - quality rating 355 (target 100)
 
-12.0.0.3.11 (2024-12-29)
+10.0.0.3.11 (2024-12-29)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-* [IMP] New API get_record_list and get_id_from_ext_ref
+* [IMP] New API get_record_list and get_ext_id_of_ext_ref
 * [IMP] Minor aesthetic update
 * [IMP] More tests
 * [QUA] Test coverage 92% (64: 5+59) [106 TestPoints] - quality rating 321 (target 100)
 
-12.0.0.3.10 (2024-12-16)
+10.0.0.3.10 (2024-12-16)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 * [IMP] Splited from universal_connector
@@ -243,8 +243,8 @@ Last Update / Ultimo aggiornamento: 2025-01-05
 .. |license opl| image:: https://img.shields.io/badge/licence-OPL-7379c3.svg
     :target: https://www.odoo.com/documentation/user/14.0/legal/licenses/licenses.html
     :alt: License: OPL
-.. |Try Me| image:: https://www.zeroincombenze.it/wp-content/uploads/ci-ct/prd/button-try-it-12.svg
-    :target: https://erp12.zeroincombenze.it
+.. |Try Me| image:: https://www.zeroincombenze.it/wp-content/uploads/ci-ct/prd/button-try-it-10.svg
+    :target: https://erp10.zeroincombenze.it
     :alt: Try Me
 .. |Zeroincombenze| image:: https://avatars0.githubusercontent.com/u/6972555?s=460&v=4
    :target: https://www.zeroincombenze.it/

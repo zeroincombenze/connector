@@ -8,7 +8,7 @@
 #
 {
     "name": "Universal Connector VG7",
-    "version": "12.0.0.3.13",
+    "version": "12.0.0.3.14",
     "category": "Generic Modules",
     "summary": "Add Remote Counterparty VG7 to Universal Connector",
     "author": "SHS-AV s.r.l.",
@@ -19,10 +19,8 @@
         "universal_connector_base",
         "universal_connector_by_http",
         "universal_connector_product",
-        "assigned_bank",
-        "l10n_it_fatturapa_out",
     ],
-    "version_depends": ["universal_connector_base>=12.0.0.3.13"],
+    "version_depends": ["universal_connector_base>=12.0.0.3.14"],
     "external_dependencies": {
         "python": [
             "python_plus",
@@ -30,12 +28,11 @@
     },
     "version_external_dependencies": ["python_plus>=2.0.12"],
     "data": [
-        "security/ir.model.access.csv",
-        "data/synchro_channel.xml",
+        "data/synchro_identity.xml",
+        "data/synchro_backend.xml",
         "data/synchro_partner.xml",
         "data/synchro_country.xml",
         "views/country_view.xml",
-        "views/partner_view.xml",
     ],
     "maintainer": "Antonio M. Vigliotti <antoniomaria.vigliotti@gmail.com>",
     "installable": True,

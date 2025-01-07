@@ -13,6 +13,7 @@ Without external running instance, these test CANNOT be executed
 
 In order to run full test on the same host MUST be active follow instance:
 
+VG7 print test instance
 """
 
 import os.path as pth
@@ -24,24 +25,20 @@ from .testenv import MainTest as SingleTransactionCase
 
 _logger = logging.getLogger(__name__)
 
-TEST_SYNCHRO_CHANNEL = {
-    "z0bug.localhost-vg7": {
+TEST_SYNCHRO_BACKEND = {
+    "universal_connector_rcp_vg7.backend_vg7": {
         "name": "VG7 print",
-        "identity": "vg7",
-        "method": "https",
-        "login": False,
-        "odoo_version": False,
-        "port": 0,
-        "hostname": "localhost",
+        "identity_id": "universal_connector_rcp_vg7.identity_vg7",
+        "protocol_id": "universal_connector_by_http.protocol_http",
         "counterpart_url": "https://example.com/N/A",
         "lgi_path": "/N/A",
         "exchange_path": "/N/A",
-        "client_key": "N/A",
         "prefix": "vg7",
+        "sequence": 10,
     },
 }
 TEST_SETUP_LIST = [
-    "synchro.channel",
+    "synchro.backend",
 ]
 
 
@@ -53,10 +50,11 @@ class MyTest(SingleTransactionCase):
         self.odoo_commit_data = False
         self.get_data_test()
         self.setup_env()
-        self.env["ir.model.synchro.cache"].set_loglevel(self.debug_level + 1)
-        self.env["synchro.channel"].search([]).write(
-            {"tracelevel": str(self.debug_level + 1)}
+        self.env["synchro.cache"].set_loglevel(self.debug_level + 1)
+        self.env["synchro.backend"].search([]).write(
+            {"tracelevel": str(self.debug_level + 1), "deferred_payload": "0"}
         )
+        self.backend_full_checked = False
 
     def tearDown(self):
         super().tearDown()
@@ -96,7 +94,7 @@ class MyTest(SingleTransactionCase):
         # Text file name is "/home/odoo/.local/<CURRENT_MODULE_NAME>.dat")
         #
         # Warning: synchronization backends must be declared on global variables
-        # TEST_SYNCHRO_CHANNEL and TEST_SETUP_LIST (read testenv documentation)
+        # TEST_SYNCHRO_BACKEND and TEST_SETUP_LIST (read testenv documentation)
         # This function must be executed before setup_env()
         #
         self.test_data = {}
@@ -136,14 +134,14 @@ class MyTest(SingleTransactionCase):
                     items["ext_id"] = int(items["ext_id"])
                 items["no_local"] = str2bool(items["no_local"], False)
                 if items["type"] == "=":
-                    if items["backend"] not in TEST_SYNCHRO_CHANNEL:
+                    if items["backend"] not in TEST_SYNCHRO_BACKEND:
                         raise ValueError(items["backend"])
-                    TEST_SYNCHRO_CHANNEL[items["backend"]][items["loc_field"]] = items[
+                    TEST_SYNCHRO_BACKEND[items["backend"]][items["loc_field"]] = items[
                         "value"
                     ]
                 elif items["type"] == "?":
                     for xref in (
-                        TEST_SYNCHRO_CHANNEL.keys()
+                        TEST_SYNCHRO_BACKEND.keys()
                         if items["backend"] == "*"
                         else [items["backend"]]
                     ):
@@ -169,9 +167,9 @@ class MyTest(SingleTransactionCase):
                             ] = (items["op"], items["value"], items["no_local"])
                 else:
                     raise ValueError(items["type"])
-        for xref, backend in TEST_SYNCHRO_CHANNEL.items():
+        for xref, backend in TEST_SYNCHRO_BACKEND.items():
             if "active" in backend and not backend["active"]:
-                del TEST_SYNCHRO_CHANNEL[xref]
+                del TEST_SYNCHRO_BACKEND[xref]
 
     def get_model_list(self, xref):
         models = []
@@ -260,12 +258,18 @@ class MyTest(SingleTransactionCase):
 
     def _test_check_connection(self, xref):
         backend = self.resource_browse(xref)
+        if self.backend_full_checked:
+            for mapper in self.env["synchro.mapper"].search(
+                [("name", "=", "state_id"), ("protect_update", "!=", "3")]
+            ):
+                mapper.write({"protect_update": "3"})
         self.resource_edit(
             backend,
             actions="button_check_connection",
         )
         self.assertEqual(backend.state, "ready")
-        self.assertEqual(backend.pypi_sign, "requests")
+        self.assertEqual(backend.pylib, "requests")
+        self.backend_full_checked = True
 
     def _test_reset_connection(self, xref):
         backend = self.resource_browse(xref)
@@ -282,24 +286,30 @@ class MyTest(SingleTransactionCase):
             actions="button_build_model_map",
         )
         for model, ext_model in self.get_model_list(xref):
-            backend_model = self.env["synchro.channel.model"].search(
+            backend_model = self.env["synchro.model"].search(
                 [
                     ("name", "=", model),
                     ("counterpart_name", "=", ext_model),
-                    ("synchro_channel_id", "=", backend.id),
+                    ("backend_id", "=", backend.id),
                 ]
             )
-            self.assertEqual(len(backend_model), 1)
+            self.assertEqual(
+                len(backend_model), 1, msg="Too many ext model %s" % ext_model
+            )
 
             for loc_name, ext_name in self.get_field_list(xref, model):
-                backend_field = self.env["synchro.channel.model.field"].search(
+                backend_field = self.env["synchro.mapper"].search(
                     [
                         ("name", "=", loc_name),
                         ("counterpart_name", "=", ext_name),
                         ("model_id", "=", backend_model[0].id),
                     ]
                 )
-                self.assertEqual(len(backend_field), 1)
+                self.assertEqual(
+                    len(backend_field),
+                    1,
+                    msg="Too many field for %s.%s" % (ext_model, ext_name),
+                )
 
     def _test_import_model(self, xref, loc_model):
         Synchro = self.env["ir.model.synchro"]
@@ -310,14 +320,64 @@ class MyTest(SingleTransactionCase):
             loc_id = self.get_loc_id(xref, loc_model, ext_id)
             rec_id = Synchro.trigger_one_record(ext_model, backend.prefix, ext_id)
             if loc_id:
-                self.assertEqual(rec_id, loc_id)
-            rec = self.env[loc_model].browse(rec_id)
-            self.assertEqual(getattr(rec, loc_ext_id), ext_id)
+                self.assertEqual(rec_id, loc_id, msg="Unexpected local record ID")
+            record = self.env[loc_model].browse(rec_id)
+            self.assertEqual(
+                getattr(record, loc_ext_id), ext_id, msg="Synchronization failed"
+            )
             for loc_field, op, value in self.get_test_pattern(xref, loc_model, ext_id):
                 if op == "%":
-                    self.assertIn(value, getattr(rec, loc_field))
+                    self.assertIn(
+                        value,
+                        getattr(record, loc_field),
+                        msg="Unexpected value %s for %s.%s"
+                        % (getattr(record, loc_field), loc_model, loc_field),
+                    )
                 else:
-                    self.assertEqual(getattr(rec, loc_field), value)
+                    self.assertEqual(
+                        getattr(record, loc_field),
+                        value,
+                        msg="Unexpected value %s for %s.%s"
+                        % (getattr(record, loc_field), loc_model, loc_field),
+                    )
+
+    def _test_pull_record(self, xref, loc_model):
+        for ext_id in self.get_ext_id_list(xref, loc_model):
+            # This test run pull_record function of existent and synchronized record.
+            # If ext_if has no_local attribute we cannot find record to pull
+            if self.is_no_local(xref, loc_model, ext_id):
+                continue
+            loc_id = self.get_loc_id(xref, loc_model, ext_id)
+            record = self.env[loc_model].browse(loc_id)
+            do_test = False
+            for loc_field, op, value in self.get_test_pattern(xref, loc_model, ext_id):
+                if loc_field == "name":
+                    record.write({"name": "wrong"})
+                    do_test = True
+                    break
+            if do_test:
+                self.resource_edit(
+                    record,
+                    actions="pull_record",
+                )
+                record = self.env[loc_model].browse(loc_id)
+                for loc_field, op, value in self.get_test_pattern(
+                    xref, loc_model, ext_id
+                ):
+                    if op == "%":
+                        self.assertIn(
+                            value,
+                            getattr(record, loc_field),
+                            msg="Unexpected value %s for %s.%s"
+                            % (getattr(record, loc_field), loc_model, loc_field),
+                        )
+                    else:
+                        self.assertEqual(
+                            getattr(record, loc_field),
+                            value,
+                            msg="Unexpected value %s for %s.%s"
+                            % (getattr(record, loc_field), loc_model, loc_field),
+                        )
 
     def test_connection(self):
         # This test requires external Odoo instance active. See header
@@ -325,9 +385,11 @@ class MyTest(SingleTransactionCase):
             "🎺 Starting connection test on ports 8270 (db=oca10) and 8272 (db=oca12)"
             " and on ports 8167 (db=demo7) and 8168 (db=demo8)"
         )
-        for xref in sorted(self.get_resource_data_list("synchro.channel")):
+        for xref in sorted(self.get_resource_data_list("synchro.backend")):
             self._test_check_connection(xref)
             self._test_reset_connection(xref)
             self._test_check_connection(xref)
             self._test_check_models(xref)
             self._test_import_model(xref, "res.partner")
+        for xref in sorted(self.get_resource_data_list("synchro.backend")):
+            self._test_pull_record(xref, "res.partner")

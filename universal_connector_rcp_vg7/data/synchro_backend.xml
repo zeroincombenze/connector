@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <record id="backend_vg7" model="synchro.backend">
+        <field name="name">VG7 print</field>
+        <field name="protocol_id" ref="universal_connector_by_http.protocol_http"/>
+        <field name="identity_id" ref="universal_connector_rcp_vg7.identity_vg7"/>
+        <field name="prefix">vg7</field>
+        <!-- <field name="product_without_variants" eval="True"/> -->
+        <field name="active" eval="True"/>
+        <field name="sequence">10</field>
+    </record>
+
+</odoo>

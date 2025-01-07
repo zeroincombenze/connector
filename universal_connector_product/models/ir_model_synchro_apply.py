@@ -14,16 +14,14 @@ _logger = logging.getLogger(__name__)
 
 
 class IrModelSynchroApply(models.Model):
-    _inherit = "ir.model.synchro.apply"
+    _inherit = "synchro.apply"
 
     def apply_uom(
         self,
-        backend,
+        mapper,
         vals,
         loc_name,
         ext_ref,
-        loc_ext_id,
-        vmodel,
         default=None,
         ctx=None,
         product=None,
@@ -40,35 +38,52 @@ class IrModelSynchroApply(models.Model):
 
     def apply_line_vals_from_prod(
         self,
-        backend,
+        mapper,
         vals,
         loc_name,
         ext_ref,
-        loc_ext_id,
-        vmodel,
         default=None,
         ctx=None,
     ):
         if vals.get("product_id"):
             Product = self.env["product.product"]
             product = Product.browse(vals["product_id"])
+            vmodel = mapper.model_id.name
             if not vals.get("product_uom"):
                 vals = self.apply_uom(
-                    backend, vals, "product_uom", None, None, vmodel, product=product
+                    mapper.backend_id,
+                    vals,
+                    "product_uom",
+                    None,
+                    None,
+                    vmodel,
+                    product=product,
                 )
             if vmodel == "purchase.order.line" and not vals.get("taxes_id"):
                 vals = self.apply_tax(
-                    backend, vals, "taxes_id", None, None, vmodel, product=product
+                    mapper.backend_id,
+                    vals,
+                    "taxes_id",
+                    None,
+                    None,
+                    vmodel,
+                    product=product,
                 )
             elif vmodel == "sale.order.line" and not vals.get("tax_id"):
                 vals = self.apply_tax(
-                    backend, vals, "tax_id", None, None, vmodel, product=product
+                    mapper.backend_id,
+                    vals,
+                    "tax_id",
+                    None,
+                    None,
+                    vmodel,
+                    product=product,
                 )
             elif vmodel == "account.invoice.line" and not vals.get(
                 "invoice_line_tax_ids"
             ):
                 vals = self.apply_tax(
-                    backend,
+                    mapper.backend_id,
                     vals,
                     "invoice_line_tax_ids",
                     None,
@@ -80,16 +95,28 @@ class IrModelSynchroApply(models.Model):
                 "tax_ids"
             ):
                 vals = self.apply_tax(
-                    backend, vals, "tax_ids", None, None, vmodel, product=product
+                    mapper.backend_id,
+                    vals,
+                    "tax_ids",
+                    None,
+                    None,
+                    vmodel,
+                    product=product,
                 )
             if vmodel == "account.invoice.line" and not vals.get("account_id"):
                 vals = self.apply_account(
-                    backend, vals, "account_id", None, None, vmodel, product=product
+                    mapper.backend_id,
+                    vals,
+                    "account_id",
+                    None,
+                    None,
+                    vmodel,
+                    product=product,
                 )
         return vals
 
     def get_default_product(self):
-        Cache = self.env["ir.model.synchro.cache"]
+        Cache = self.env["synchro.cache"]
         product = Cache.get_struct_model_attr("product.product", "DEF_REC")
         if product:
             return product
@@ -102,7 +129,7 @@ class IrModelSynchroApply(models.Model):
         return product
 
     def get_default_location_id(self):
-        Cache = self.env["ir.model.synchro.cache"]
+        Cache = self.env["synchro.cache"]
         location = Cache.get_struct_model_attr("stock.location", "DEF_ID")
         if location:
             return location.id

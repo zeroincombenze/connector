@@ -1,5 +1,5 @@
 =================================================================================
-|icon| Universal Connector protocol csv/Connettore universale con csv 12.0.0.3.13
+|icon| Universal Connector protocol csv/Connettore universale con csv 12.0.0.3.14
 =================================================================================
 
 **Add importing data from csv for Universal Connector**
@@ -161,6 +161,11 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 ChangeLog History | Cronologia modifiche
 ----------------------------------------
 
+12.0.0.3.14 (2025-01-08)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [QUA] Test coverage 88% (111: 13+98) [106 TestPoints] - quality rating 206 (target 100)
+
 12.0.0.3.13 (2025-01-05)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -235,7 +240,7 @@ La distribuzione `Zeroincombenze® <https://www.zeroincombenze.it/>`__ è proget
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2025-01-05
+Last Update / Ultimo aggiornamento: 2025-01-09
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status

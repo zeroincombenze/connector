@@ -1,7 +1,17 @@
+12.0.0.3.14 (2025-01-08)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] synchro parameters
+* [IMP] cache management
+* [IMP] virtual model are deprecated
+* [IMP] Protocol model
+* [IMP] Identity model
+* [QUA] Test coverage 80% (2319: 458+1861) [134 TestPoints] - quality rating 58 (target 100)
+
 12.0.0.3.13 (2025-01-05)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-* [QUA] Test coverage 80% (2317: 452+1865) [244 TestPoints] - quality rating 66 (target 100)
+* [QUA] Test coverage 80% (2325: 455+1870) [244 TestPoints] - quality rating 66 (target 100)
 
 12.0.0.3.12 (2025-01-03)
 ~~~~~~~~~~~~~~~~~~~~~~~~

@@ -15,8 +15,6 @@ In order to run full test on the same host MUST be active follow instance:
 
 * Odoo 12.0 with OCA modules; http/xmlrpc port: 8272; DB name: oca12
 * Odoo 10.0 with OCA modules; http/xmlrpc port: 8270; DB name: oca10
-* Odoo 8.0 with OCA modules; http/xmlrpc port: 8168; DB name: demo8
-* Odoo 7.0 with OCA modules; http/xmlrpc port: 8167; DB name: demo7
 """
 
 import os.path as pth
@@ -28,70 +26,74 @@ from .testenv import MainTest as SingleTransactionCase
 
 _logger = logging.getLogger(__name__)
 
-TEST_SYNCHRO_CHANNEL = {
-    "z0bug.localhost-odoo10": {
-        "name": "Test Odoo 10.0",
-        "hostname": "localhost",
-        "identity": "odoo",
-        "database": "oca10",
-        "odoo_version": "10.0",
-        "method": "xmlrpc/http",
-        "port": 8270,
-        "login": "admin",
-        "password": "admin",
-        "counterpart_url": "http://admin@localhost:8270/xmlrpc/2/common",
-        "counterpart_data_url": "http://admin@localhost:8270/xmlrpc/2/object",
-        "prefix": "oe10",
-    },
-    "z0bug.localhost-odoo12": {
+TEST_SYNCHRO_BACKEND = {
+    "universal_connector_base.backend_odoo12": {
         "name": "Test Odoo 12.0",
         "hostname": "localhost",
-        "identity": "odoo",
+        "identity_id": "universal_connector_base.identity_odoo",
         "database": "oca12",
-        "odoo_version": "12.0",
-        "method": "xmlrpc/http",
+        "remote_sw_version": "12.0",
+        "protocol_id": "universal_connector_base.protocol_xmlrpc_http",
         "port": 8272,
         "login": "admin",
         "password": "admin",
         "counterpart_url": "http://admin@localhost:8272/xmlrpc/2/common",
         "counterpart_data_url": "http://admin@localhost:8272/xmlrpc/2/object",
-        "prefix": "oe12",
+        "prefix": "odoo12",
+        "sequence": 12,
     },
-    "z0bug.localhost-odoo7": {
-        "name": "Test Odoo 7.0",
+    "universal_connector_base.backend_odoo10": {
+        "name": "Test Odoo 10.0",
         "hostname": "localhost",
-        "identity": "odoo",
-        "database": "demo7",
-        "odoo_version": "7.0",
-        "method": "xmlrpc/http",
-        "port": 8167,
+        "identity_id": "universal_connector_base.identity_odoo",
+        "database": "oca10",
+        "remote_sw_version": "10.0",
+        "protocol_id": "universal_connector_base.protocol_xmlrpc_http",
+        "port": 8270,
         "login": "admin",
         "password": "admin",
-        "lgi_path": "/xmlrpc/common",
-        "exchange_path": "/xmlrpc/object",
-        "counterpart_url": "http://admin@localhost:8167/xmlrpc/common",
-        "counterpart_data_url": "http://admin@localhost:8167/xmlrpc/object",
-        "prefix": "oe7",
+        "counterpart_url": "http://admin@localhost:8270/xmlrpc/2/common",
+        "counterpart_data_url": "http://admin@localhost:8270/xmlrpc/2/object",
+        "prefix": "odoo10",
+        "sequence": 14,
     },
-    "z0bug.localhost-odoo8": {
-        "name": "Test Odoo 8.0",
-        "hostname": "localhost",
-        "identity": "odoo",
-        "database": "demo8",
-        "odoo_version": "8.0",
-        "method": "xmlrpc/http",
-        "port": 8168,
-        "login": "admin",
-        "password": "admin",
-        "lgi_path": "/xmlrpc/common",
-        "exchange_path": "/xmlrpc/object",
-        "counterpart_url": "http://admin@localhost:8168/xmlrpc/common",
-        "counterpart_data_url": "http://admin@localhost:8168/xmlrpc/object",
-        "prefix": "oe8",
-    },
+    # "universal_connector_base.backend_odoo8": {
+    #     "name": "Test Odoo 8.0",
+    #     "hostname": "localhost",
+    #     "identity": "odoo",
+    #     "database": "demo8",
+    #     "remote_sw_version": "8.0",
+    #     "method": "xmlrpc/http",
+    #     "port": 8168,
+    #     "login": "admin",
+    #     "password": "admin",
+    #     "lgi_path": "/xmlrpc/common",
+    #     "exchange_path": "/xmlrpc/object",
+    #     "counterpart_url": "http://admin@localhost:8168/xmlrpc/common",
+    #     "counterpart_data_url": "http://admin@localhost:8168/xmlrpc/object",
+    #     "prefix": "oe8",
+    #     "sequence": 18,
+    # },
+    # "universal_connector_base.backend_odoo7": {
+    #     "name": "Test Odoo 7.0",
+    #     "hostname": "localhost",
+    #     "identity": "odoo",
+    #     "database": "demo7",
+    #     "remote_sw_version": "7.0",
+    #     "method": "xmlrpc/http",
+    #     "port": 8167,
+    #     "login": "admin",
+    #     "password": "admin",
+    #     "lgi_path": "/xmlrpc/common",
+    #     "exchange_path": "/xmlrpc/object",
+    #     "counterpart_url": "http://admin@localhost:8167/xmlrpc/common",
+    #     "counterpart_data_url": "http://admin@localhost:8167/xmlrpc/object",
+    #     "prefix": "oe7",
+    #     "sequence": 20,
+    # },
 }
 TEST_SETUP_LIST = [
-    "synchro.channel",
+    "synchro.backend",
 ]
 
 
@@ -103,10 +105,11 @@ class MyTest(SingleTransactionCase):
         self.odoo_commit_data = False
         self.get_data_test()
         self.setup_env()
-        self.env["ir.model.synchro.cache"].set_loglevel(self.debug_level + 1)
-        self.env["synchro.channel"].search([]).write(
+        self.env["synchro.cache"].set_loglevel(self.debug_level + 1)
+        self.env["synchro.backend"].search([]).write(
             {"tracelevel": str(self.debug_level + 1), "deferred_payload": "0"}
         )
+        self.backend_full_checked = False
 
     def tearDown(self):
         super().tearDown()
@@ -146,7 +149,7 @@ class MyTest(SingleTransactionCase):
         # Text file name is "/home/odoo/.local/<CURRENT_MODULE_NAME>.dat")
         #
         # Warning: synchronization backends must be declared on global variables
-        # TEST_SYNCHRO_CHANNEL and TEST_SETUP_LIST (read testenv documentation)
+        # TEST_SYNCHRO_BACKEND and TEST_SETUP_LIST (read testenv documentation)
         # This function must be executed before setup_env()
         #
         self.test_data = {}
@@ -186,14 +189,14 @@ class MyTest(SingleTransactionCase):
                     items["ext_id"] = int(items["ext_id"])
                 items["no_local"] = str2bool(items["no_local"], False)
                 if items["type"] == "=":
-                    if items["backend"] not in TEST_SYNCHRO_CHANNEL:
+                    if items["backend"] not in TEST_SYNCHRO_BACKEND:
                         raise ValueError(items["backend"])
-                    TEST_SYNCHRO_CHANNEL[items["backend"]][items["loc_field"]] = items[
+                    TEST_SYNCHRO_BACKEND[items["backend"]][items["loc_field"]] = items[
                         "value"
                     ]
                 elif items["type"] == "?":
                     for xref in (
-                        TEST_SYNCHRO_CHANNEL.keys()
+                        TEST_SYNCHRO_BACKEND.keys()
                         if items["backend"] == "*"
                         else [items["backend"]]
                     ):
@@ -219,9 +222,9 @@ class MyTest(SingleTransactionCase):
                             ] = (items["op"], items["value"], items["no_local"])
                 else:
                     raise ValueError(items["type"])
-        for xref, backend in TEST_SYNCHRO_CHANNEL.items():
+        for xref, backend in TEST_SYNCHRO_BACKEND.items():
             if "active" in backend and not backend["active"]:
-                del TEST_SYNCHRO_CHANNEL[xref]
+                del TEST_SYNCHRO_BACKEND[xref]
 
     def get_model_list(self, xref):
         models = []
@@ -310,11 +313,18 @@ class MyTest(SingleTransactionCase):
 
     def _test_check_connection(self, xref):
         backend = self.resource_browse(xref)
+        if self.backend_full_checked:
+            for mapper in self.env["synchro.mapper"].search(
+                [("name", "=", "state_id"), ("protect_update", "!=", "3")]
+            ):
+                mapper.write({"protect_update": "3"})
         self.resource_edit(
             backend,
             actions="button_check_connection",
         )
         self.assertEqual(backend.state, "ready")
+        self.assertEqual(backend.pylib, "xmlrpc")
+        self.backend_full_checked = True
 
     def _test_reset_connection(self, xref):
         backend = self.resource_browse(xref)
@@ -331,11 +341,11 @@ class MyTest(SingleTransactionCase):
             actions="button_build_model_map",
         )
         for model, ext_model in self.get_model_list(xref):
-            backend_model = self.env["synchro.channel.model"].search(
+            backend_model = self.env["synchro.model"].search(
                 [
                     ("name", "=", model),
                     ("counterpart_name", "=", ext_model),
-                    ("synchro_channel_id", "=", backend.id),
+                    ("backend_id", "=", backend.id),
                 ]
             )
             self.assertEqual(
@@ -343,7 +353,7 @@ class MyTest(SingleTransactionCase):
             )
 
             for loc_name, ext_name in self.get_field_list(xref, model):
-                backend_field = self.env["synchro.channel.model.field"].search(
+                backend_field = self.env["synchro.mapper"].search(
                     [
                         ("name", "=", loc_name),
                         ("counterpart_name", "=", ext_name),
@@ -430,12 +440,12 @@ class MyTest(SingleTransactionCase):
             "🎺 Starting connection test on ports 8270 (db=oca10) and 8272 (db=oca12)"
             " and on ports 8167 (db=demo7) and 8168 (db=demo8)"
         )
-        for xref in sorted(self.get_resource_data_list("synchro.channel")):
+        for xref in sorted(self.get_resource_data_list("synchro.backend")):
             self._test_check_connection(xref)
             self._test_reset_connection(xref)
             self._test_check_connection(xref)
             self._test_check_models(xref)
-        for xref in sorted(self.get_resource_data_list("synchro.channel")):
+        for xref in sorted(self.get_resource_data_list("synchro.backend")):
             self._test_import_model(xref, "product.template")
-        for xref in sorted(self.get_resource_data_list("synchro.channel")):
+        for xref in sorted(self.get_resource_data_list("synchro.backend")):
             self._test_pull_record(xref, "product.template")

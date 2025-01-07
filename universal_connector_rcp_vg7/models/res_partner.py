@@ -6,12 +6,7 @@
 #
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 #
-from future.utils import PY3
-import logging
-
-from odoo import api, fields, models
-
-_logger = logging.getLogger(__name__)
+from odoo import fields, models
 
 
 class ResPartner(models.Model):
@@ -26,14 +21,16 @@ class ResPartner(models.Model):
         binding_model = "res.partner"
         Binder = self.env[binding_model]
         if rec:
-            for nm in ("type",) if PY3 else ("type", "individual"):
-                if nm not in vals:
+            for nm in ("type", "individual"):
+                if nm not in vals and hasattr(self, nm):
                     vals[nm] = getattr(rec, nm)
             nm = "parent_id"
             if nm not in vals:
                 vals[nm] = getattr(rec, nm).id
         if vals.get("type") not in ("delivery", "invoice"):
             vals["parent_id"] = False
+        if not vals.get("name"):
+            vals["name"] = "Unknown"
 
         if "codice_destinatario" in vals and not vals["codice_destinatario"]:
             del vals["codice_destinatario"]
@@ -55,75 +52,91 @@ class ResPartner(models.Model):
             ids = Binder.search([("rea_code", "=", vals["rea_code"])])
             if ids:
                 if not rec or ids[0].id != rec.id:
-                    _logger.info("Duplicate REA Code %s" % vals["rea_code"])
+                    # _logger.info("Duplicate REA Code %s" % vals["rea_code"])
                     del vals["rea_code"]
         return vals
 
 
-class ResPartnerShipping(models.Model):
-    _name = "res.partner.shipping"
-    _inherit = "res.partner"
+#
+#
+# class ResPartnerShipping(models.Model):
+#     _name = "res.partner.shipping"
+#     _inherit = "res.partner"
+#
+#     CONTRAINTS = ["id", "!=", "parent_id"]
+#
+#     vg7_id = fields.Integer("VG7 ID", copy=False)
+#
+#     @api.model
+#     def synchro(
+#         self,
+#         vals,
+#         only_minimal=True,
+#         ttl=None,
+#         running_in_queue=None,
+#         jacket=None,
+#         model_spec=False,
+#         backend=None,
+#         dir_mapper=None,
+#         ctx=None,
+#     ):
+#         vals[":type"] = "delivery"
+#         return super().synchro(
+#             vals,
+#             only_minimal=only_minimal,
+#             ttl=ttl,
+#             running_in_queue=running_in_queue,
+#             jacket=jacket,
+#             model_spec=model_spec,
+#             backend=backend,
+#             dir_mapper=dir_mapper,
+#             ctx=ctx,
+#         )
+#
+#
+# class ResPartnerInvoice(models.Model):
+#     _name = "res.partner.invoice"
+#     _inherit = "res.partner"
+#
+#     CONTRAINTS = ["id", "!=", "parent_id"]
+#
+#     vg7_id = fields.Integer("VG7 ID", copy=False)
+#
+#     @api.model
+#     def synchro(
+#         self,
+#         vals,
+#         only_minimal=True,
+#         ttl=None,
+#         running_in_queue=None,
+#         jacket=None,
+#         model_spec=False,
+#         backend=None,
+#         dir_mapper=None,
+#         ctx=None,
+#     ):
+#         vals[":type"] = "invoice"
+#         return super().synchro(
+#             vals,
+#             only_minimal=only_minimal,
+#             ttl=ttl,
+#             running_in_queue=running_in_queue,
+#             jacket=jacket,
+#             model_spec=model_spec,
+#             backend=backend,
+#             dir_mapper=dir_mapper,
+#             ctx=ctx,
+#         )
+#
+#
+# class ResPartnerSupplier(models.Model):
+#     _name = "res.partner.supplier"
+#     _inherit = "res.partner"
+#
+#     vg72_id = fields.Integer("VG7 ID", copy=False)
 
-    CONTRAINTS = ["id", "!=", "parent_id"]
+
+class ResCategory(models.Model):
+    _inherit = "res.partner.category"
 
     vg7_id = fields.Integer("VG7 ID", copy=False)
-
-    @api.model
-    def synchro(
-        self,
-        vals,
-        backend=None,
-        only_minimal=True,
-        ttl=None,
-        running_in_queue=None,
-        jacket=None,
-        ctx=None,
-    ):
-        vals[":type"] = "delivery"
-        return super().synchro(
-            vals,
-            backend=backend,
-            only_minimal=only_minimal,
-            ttl=ttl,
-            running_in_queue=running_in_queue,
-            jacket=jacket,
-            ctx=ctx,
-        )
-
-
-class ResPartnerInvoice(models.Model):
-    _name = "res.partner.invoice"
-    _inherit = "res.partner"
-
-    CONTRAINTS = ["id", "!=", "parent_id"]
-
-    vg7_id = fields.Integer("VG7 ID", copy=False)
-
-    @api.model
-    def synchro(
-        self,
-        vals,
-        backend=None,
-        only_minimal=True,
-        ttl=None,
-        running_in_queue=None,
-        jacket=None,
-        ctx=None,
-    ):
-        vals[":type"] = "invoice"
-        return super().synchro(
-            vals,
-            backend=backend,
-            only_minimal=only_minimal,
-            ttl=ttl,
-            running_in_queue=running_in_queue,
-            jacket=jacket,
-            ctx=ctx,
-        )
-
-
-class ResPartnerSupplier(models.Model):
-    _name = "res.partner.supplier"
-    _inherit = "res.partner"
-
-    vg72_id = fields.Integer("VG7 ID", copy=False)

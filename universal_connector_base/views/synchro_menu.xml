@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <menuitem id="menu_universal_connector" name="Universal connector" parent="base.next_id_9" groups="base.group_no_one"/>
+
+</odoo>

@@ -13,9 +13,9 @@
                         <field name="timestamp"/>
                         <field name="oe7_id"/>
                         <field name="oe8_id"/>
-                        <field name="oe10_id"/>
-                        <field name="oe12_id"/>
-                        <field name="oe16_id"/>
+                        <field name="odoo10_id"/>
+                        <field name="odoo12_id"/>
+                        <field name="odoo16_id"/>
                         <field name="errmsg"/>
                     </group>
                 </page>
@@ -32,9 +32,9 @@
                 <group>
                     <field name="oe7_id"/>
                     <field name="oe8_id"/>
-                    <field name="oe10_id"/>
-                    <field name="oe12_id"/>
-                    <field name="oe16_id"/>
+                    <field name="odoo10_id"/>
+                    <field name="odoo12_id"/>
+                    <field name="odoo16_id"/>
                 </group>
             </xpath>
         </field>
@@ -49,9 +49,9 @@
                 <group>
                     <field name="oe7_id"/>
                     <field name="oe8_id"/>
-                    <field name="oe10_id"/>
-                    <field name="oe12_id"/>
-                    <field name="oe16_id"/>
+                    <field name="odoo10_id"/>
+                    <field name="odoo12_id"/>
+                    <field name="odoo16_id"/>
                 </group>
             </xpath>
         </field>
@@ -66,9 +66,9 @@
                 <group>
                     <field name="oe7_id"/>
                     <field name="oe8_id"/>
-                    <field name="oe10_id"/>
-                    <field name="oe12_id"/>
-                    <field name="oe16_id"/>
+                    <field name="odoo10_id"/>
+                    <field name="odoo12_id"/>
+                    <field name="odoo16_id"/>
                 </group>
             </xpath>
         </field>
@@ -83,9 +83,9 @@
                 <group>
                     <field name="oe7_id"/>
                     <field name="oe8_id"/>
-                    <field name="oe10_id"/>
-                    <field name="oe12_id"/>
-                    <field name="oe16_id"/>
+                    <field name="odoo10_id"/>
+                    <field name="odoo12_id"/>
+                    <field name="odoo16_id"/>
                 </group>
             </xpath>
         </field>

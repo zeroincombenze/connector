@@ -23,22 +23,22 @@ msgid "API for Odoo Backend"
 msgstr "Dorsale odoo non valida in codice IVA api"
 
 #. module: universal_connector_by_http
-#: selection:synchro.channel,method:0
+#: selection:synchro.backend,method:0
 msgid "By http/https"
 msgstr "Per http/https"
 
 #. module: universal_connector_by_http
-#: selection:synchro.channel,method:0
+#: selection:synchro.backend,method:0
 msgid "By http/https no certificate verification"
 msgstr "Senza verifica certificato http/https"
 
 #. module: universal_connector_by_http
-#: selection:synchro.channel,method:0
+#: selection:synchro.backend,method:0
 msgid "By xmlrpc over http"
 msgstr "Non tutti richiedono lo stesso accesso al tuo sito Web più di xmlrpc da"
 
 #. module: universal_connector_by_http
-#: selection:synchro.channel,method:0
+#: selection:synchro.backend,method:0
 msgid "By xmlrpc over https"
 msgstr "Xmlrpc su https"
 

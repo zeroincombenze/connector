@@ -8,9 +8,9 @@
         <field name="arch" type="xml">
             <xpath expr="//group[last()]" position="after">
                 <group string="Synchronization">
-                    <field name="oe16_id"/>
-                    <field name="oe12_id"/>
-                    <field name="oe10_id"/>
+                    <field name="odoo16_id"/>
+                    <field name="odoo12_id"/>
+                    <field name="odoo10_id"/>
                     <field name="oe8_id"/>
                     <field name="oe7_id"/>
                 </group>
@@ -25,9 +25,9 @@
         <field name="inherit_id" ref="base.view_currency_rate_form"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='company_id]" position="after">
-                <field name="oe16_id"/>
-                <field name="oe12_id"/>
-                <field name="oe10_id"/>
+                <field name="odoo16_id"/>
+                <field name="odoo12_id"/>
+                <field name="odoo10_id"/>
                 <field name="oe8_id"/>
                 <field name="oe7_id"/>
             </xpath>

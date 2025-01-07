@@ -13,9 +13,9 @@
                         <field name="timestamp"/>
                         <field name="oe7_id"/>
                         <field name="oe8_id"/>
-                        <field name="oe10_id"/>
-                        <field name="oe12_id"/>
-                        <field name="oe16_id"/>
+                        <field name="odoo10_id"/>
+                        <field name="odoo12_id"/>
+                        <field name="odoo16_id"/>
                         <field name="errmsg"/>
                     </group>
                 </page>
@@ -31,9 +31,9 @@
             <xpath expr="//field[@name='parent_id']" position="after">
                 <field name="oe7_id"/>
                 <field name="oe8_id"/>
-                <field name="oe10_id"/>
-                <field name="oe12_id"/>
-                <field name="oe16_id"/>
+                <field name="odoo10_id"/>
+                <field name="odoo12_id"/>
+                <field name="odoo16_id"/>
             </xpath>
         </field>
     </record>

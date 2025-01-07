@@ -8,7 +8,7 @@
 #
 """Universal connector base tests (base)
 *Warning*
-Universal connector (csv) module connect local Odoo instance with external instance.
+Universal connector (http) module connect local Odoo instance with external instance.
 Without external running instance, these test CANNOT be executed
 
 In order to run full test on the same host MUST be active follow instance:
@@ -26,66 +26,73 @@ from .testenv import MainTest as SingleTransactionCase
 
 _logger = logging.getLogger(__name__)
 
-TEST_SYNCHRO_CHANNEL = {
-    "z0bug.localhost-odoo10": {
-        "name": "Test Odoo 10.0",
-        "hostname": "localhost",
-        "identity": "odoo",
-        "database": "oca10",
-        "odoo_version": "10.0",
-        "method": "http",
-        "port": 8270,
-        "login": "admin",
-        "password": "admin",
-        "counterpart_url": "http://admin@localhost:8270",
-        "counterpart_data_url": "http://admin@localhost:8270",
-        "prefix": "oe10",
-    },
-    "z0bug.localhost-odoo12": {
+TEST_SYNCHRO_BACKEND = {
+    "universal_connector_base.backend_odoo12": {
         "name": "Test Odoo 12.0",
         "hostname": "localhost",
-        "identity": "odoo",
+        "identity_id": "universal_connector_base.identity_odoo",
         "database": "oca12",
-        "odoo_version": "12.0",
-        "method": "http",
+        "remote_sw_version": "12.0",
+        "protocol_id": "universal_connector_by_http.protocol_http",
         "port": 8272,
         "login": "admin",
         "password": "admin",
         "counterpart_url": "http://admin@localhost:8272",
         "counterpart_data_url": "http://admin@localhost:8272",
-        "prefix": "oe12",
+        "prefix": "odoo12",
     },
-    "z0bug.localhost-odoo7": {
-        "name": "Test Odoo 7.0",
+    "universal_connector_base.backend_odoo10": {
+        "name": "Test Odoo 10.0",
         "hostname": "localhost",
-        "identity": "odoo",
-        "database": "demo7",
-        "odoo_version": "7.0",
-        "method": "http",
-        "port": 8167,
+        "identity_id": "universal_connector_base.identity_odoo",
+        "database": "oca10",
+        "remote_sw_version": "10.0",
+        "protocol_id": "universal_connector_by_http.protocol_http",
+        "port": 8270,
         "login": "admin",
         "password": "admin",
-        "counterpart_url": "http://admin@localhost:8167",
-        "counterpart_data_url": "http://admin@localhost:8167",
-        "prefix": "oe7",
+        "counterpart_url": "http://admin@localhost:8270",
+        "counterpart_data_url": "http://admin@localhost:8270",
+        "prefix": "odoo10",
+        "sequence": 14,
     },
-    "z0bug.localhost-odoo8": {
-        "name": "Test Odoo 8.0",
-        "hostname": "localhost",
-        "identity": "odoo",
-        "database": "demo8",
-        "odoo_version": "8.0",
-        "method": "http",
-        "port": 8168,
-        "login": "admin",
-        "password": "admin",
-        "counterpart_url": "http://admin@localhost:8168",
-        "counterpart_data_url": "http://admin@localhost:8168",
-        "prefix": "oe8",
-    },
+    # "universal_connector_openerp.backend_openerp8": {
+    #     "name": "Test OpenERP 8.0",
+    #     "hostname": "localhost",
+    #     "identity_id": "universal_connector_openerp.identity_openerp",
+    #     "database": "demo8",
+    #     "remote_sw_version": "8.0",
+    #     "protocol_id": "universal_connector_vy_http.protocol_http",
+    #     "port": 8168,
+    #     "login": "admin",
+    #     "password": "admin",
+    #     "lgi_path": "/xmlrpc/common",
+    #     "exchange_path": "/xmlrpc/object",
+    #     "counterpart_url": "http://admin@localhost:8168",
+    #     "counterpart_data_url": "http://admin@localhost:8168",
+    #     "prefix": "oe8",
+    #     "sequence": 18,
+    # },
+    # "universal_connector_openerp.backend_openerp7": {
+    #     "name": "Test OpenERP 7.0",
+    #     "hostname": "localhost",
+    #     "identity_id": "universal_connector_openerp.identity_openerp",
+    #     "database": "demo7",
+    #     "remote_sw_version": "7.0",
+    #     "protocol_id": "universal_connector_vy_http.protocol_http",
+    #     "port": 8167,
+    #     "login": "admin",
+    #     "password": "admin",
+    #     "lgi_path": "/xmlrpc/common",
+    #     "exchange_path": "/xmlrpc/object",
+    #     "counterpart_url": "http://admin@localhost:8167",
+    #     "counterpart_data_url": "http://admin@localhost:8167",
+    #     "prefix": "oe7",
+    #     "sequence": 20,
+    # },
 }
 TEST_SETUP_LIST = [
-    "synchro.channel",
+    "synchro.backend",
 ]
 
 
@@ -97,10 +104,11 @@ class MyTest(SingleTransactionCase):
         self.odoo_commit_data = False
         self.get_data_test()
         self.setup_env()
-        self.env["ir.model.synchro.cache"].set_loglevel(self.debug_level + 1)
-        self.env["synchro.channel"].search([]).write(
-            {"tracelevel": str(self.debug_level + 1)}
+        self.env["synchro.cache"].set_loglevel(self.debug_level + 1)
+        self.env["synchro.backend"].search([]).write(
+            {"tracelevel": str(self.debug_level + 1), "deferred_payload": "0"}
         )
+        self.backend_full_checked = False
 
     def tearDown(self):
         super().tearDown()
@@ -140,7 +148,7 @@ class MyTest(SingleTransactionCase):
         # Text file name is "/home/odoo/.local/<CURRENT_MODULE_NAME>.dat")
         #
         # Warning: synchronization backends must be declared on global variables
-        # TEST_SYNCHRO_CHANNEL and TEST_SETUP_LIST (read testenv documentation)
+        # TEST_SYNCHRO_BACKEND and TEST_SETUP_LIST (read testenv documentation)
         # This function must be executed before setup_env()
         #
         self.test_data = {}
@@ -180,14 +188,14 @@ class MyTest(SingleTransactionCase):
                     items["ext_id"] = int(items["ext_id"])
                 items["no_local"] = str2bool(items["no_local"], False)
                 if items["type"] == "=":
-                    if items["backend"] not in TEST_SYNCHRO_CHANNEL:
+                    if items["backend"] not in TEST_SYNCHRO_BACKEND:
                         raise ValueError(items["backend"])
-                    TEST_SYNCHRO_CHANNEL[items["backend"]][items["loc_field"]] = items[
+                    TEST_SYNCHRO_BACKEND[items["backend"]][items["loc_field"]] = items[
                         "value"
                     ]
                 elif items["type"] == "?":
                     for xref in (
-                        TEST_SYNCHRO_CHANNEL.keys()
+                        TEST_SYNCHRO_BACKEND.keys()
                         if items["backend"] == "*"
                         else [items["backend"]]
                     ):
@@ -213,9 +221,9 @@ class MyTest(SingleTransactionCase):
                             ] = (items["op"], items["value"], items["no_local"])
                 else:
                     raise ValueError(items["type"])
-        for xref, backend in TEST_SYNCHRO_CHANNEL.items():
+        for xref, backend in TEST_SYNCHRO_BACKEND.items():
             if "active" in backend and not backend["active"]:
-                del TEST_SYNCHRO_CHANNEL[xref]
+                del TEST_SYNCHRO_BACKEND[xref]
 
     def get_model_list(self, xref):
         models = []
@@ -304,11 +312,18 @@ class MyTest(SingleTransactionCase):
 
     def _test_check_connection(self, xref):
         backend = self.resource_browse(xref)
+        if self.backend_full_checked:
+            for mapper in self.env["synchro.mapper"].search(
+                [("name", "=", "state_id"), ("protect_update", "!=", "3")]
+            ):
+                mapper.write({"protect_update": "3"})
         self.resource_edit(
             backend,
             actions="button_check_connection",
         )
         self.assertEqual(backend.state, "ready")
+        self.assertEqual(backend.pylib, "requests")
+        self.backend_full_checked = True
 
     def _test_reset_connection(self, xref):
         backend = self.resource_browse(xref)
@@ -325,24 +340,30 @@ class MyTest(SingleTransactionCase):
             actions="button_build_model_map",
         )
         for model, ext_model in self.get_model_list(xref):
-            backend_model = self.env["synchro.channel.model"].search(
+            backend_model = self.env["synchro.model"].search(
                 [
                     ("name", "=", model),
                     ("counterpart_name", "=", ext_model),
-                    ("synchro_channel_id", "=", backend.id),
+                    ("backend_id", "=", backend.id),
                 ]
             )
-            self.assertEqual(len(backend_model), 1)
+            self.assertEqual(
+                len(backend_model), 1, msg="Too many ext model %s" % ext_model
+            )
 
             for loc_name, ext_name in self.get_field_list(xref, model):
-                backend_field = self.env["synchro.channel.model.field"].search(
+                backend_field = self.env["synchro.mapper"].search(
                     [
                         ("name", "=", loc_name),
                         ("counterpart_name", "=", ext_name),
                         ("model_id", "=", backend_model[0].id),
                     ]
                 )
-                self.assertEqual(len(backend_field), 1)
+                self.assertEqual(
+                    len(backend_field),
+                    1,
+                    msg="Too many field for %s.%s" % (ext_model, ext_name),
+                )
 
     def _test_import_model(self, xref, loc_model):
         Synchro = self.env["ir.model.synchro"]
@@ -353,14 +374,26 @@ class MyTest(SingleTransactionCase):
             loc_id = self.get_loc_id(xref, loc_model, ext_id)
             rec_id = Synchro.trigger_one_record(ext_model, backend.prefix, ext_id)
             if loc_id:
-                self.assertEqual(rec_id, loc_id)
-            rec = self.env[loc_model].browse(rec_id)
-            self.assertEqual(getattr(rec, loc_ext_id), ext_id)
+                self.assertEqual(rec_id, loc_id, msg="Unexpected local record ID")
+            record = self.env[loc_model].browse(rec_id)
+            self.assertEqual(
+                getattr(record, loc_ext_id), ext_id, msg="Synchronization failed"
+            )
             for loc_field, op, value in self.get_test_pattern(xref, loc_model, ext_id):
                 if op == "%":
-                    self.assertIn(value, getattr(rec, loc_field))
+                    self.assertIn(
+                        value,
+                        getattr(record, loc_field),
+                        msg="Unexpected value %s for %s.%s"
+                        % (getattr(record, loc_field), loc_model, loc_field),
+                    )
                 else:
-                    self.assertEqual(getattr(rec, loc_field), value)
+                    self.assertEqual(
+                        getattr(record, loc_field),
+                        value,
+                        msg="Unexpected value %s for %s.%s"
+                        % (getattr(record, loc_field), loc_model, loc_field),
+                    )
 
     def _test_import_partner(self, xref):
         Synchro = self.env["ir.model.synchro"]
@@ -370,13 +403,13 @@ class MyTest(SingleTransactionCase):
 
         if (
             self.odoo_major_version < 12
-            and int(backend.odoo_version.split(".")[0]) < 12
+            and int(backend.remote_sw_version.split(".")[0]) < 12
         ) or (
             self.odoo_major_version >= 12
-            and int(backend.odoo_version.split(".")[0]) >= 12
+            and int(backend.remote_sw_version.split(".")[0]) >= 12
         ):
             for ext_id in self.get_ext_id_list(xref, loc_model):
-                # This test load counterart record with local record which must be
+                # This test load counterpart record with local record which must be
                 # present in DB. If ext_if has no_local attribute means this test
                 # is to skip
                 if self.is_no_local(xref, loc_model, ext_id):
@@ -385,16 +418,28 @@ class MyTest(SingleTransactionCase):
                 loc_id = self.get_loc_id(xref, loc_model, ext_id)
                 rec_id = Synchro.trigger_one_record(ext_model, backend.prefix, ext_id)
                 if loc_id:
-                    self.assertEqual(rec_id, loc_id)
+                    self.assertEqual(rec_id, loc_id, msg="Unexpected local record ID")
                 partner = self.env[loc_model].browse(rec_id)
-                self.assertEqual(getattr(partner, loc_ext_id), ext_id)
+                self.assertEqual(
+                    getattr(partner, loc_ext_id), ext_id, msg="Synchronization failed"
+                )
                 for loc_field, op, value in self.get_test_pattern(
                     xref, loc_model, ext_id
                 ):
                     if op == "%":
-                        self.assertIn(value, getattr(partner, loc_field))
+                        self.assertIn(
+                            value,
+                            getattr(partner, loc_field),
+                            msg="Unexpected value %s for %s.%s"
+                            % (getattr(partner, loc_field), loc_model, loc_field),
+                        )
                     else:
-                        self.assertEqual(getattr(partner, loc_field), value)
+                        self.assertEqual(
+                            getattr(partner, loc_field),
+                            value,
+                            msg="Unexpected value %s for %s.%s"
+                            % (getattr(partner, loc_field), loc_model, loc_field),
+                        )
 
     def _test_import_partner2(self, xref):
         Synchro = self.env["ir.model.synchro"]
@@ -404,13 +449,13 @@ class MyTest(SingleTransactionCase):
 
         if (
             self.odoo_major_version >= 12
-            and int(backend.odoo_version.split(".")[0]) < 12
+            and int(backend.remote_sw_version.split(".")[0]) < 12
         ) or (
             self.odoo_major_version < 12
-            and int(backend.odoo_version.split(".")[0]) >= 12
+            and int(backend.remote_sw_version.split(".")[0]) >= 12
         ):
             for ext_id in self.get_ext_id_list(xref, loc_model):
-                # This test load counterart record with local record which must be
+                # This test load counterpart record with local record which must be
                 # present in DB. If ext_if has no_local attribute means this test
                 # is to skip
                 if self.is_no_local(xref, loc_model, ext_id):
@@ -421,30 +466,111 @@ class MyTest(SingleTransactionCase):
                 partner = self.env[loc_model].browse(loc_id)
                 partner.write({"%s_id" % backend.prefix: ext_id})
                 rec_id = Synchro.trigger_one_record(ext_model, backend.prefix, ext_id)
-                self.assertEqual(rec_id, loc_id)
+                self.assertEqual(rec_id, loc_id, msg="Unexpected local record ID")
                 partner = self.env[loc_model].browse(rec_id)
-                self.assertEqual(getattr(partner, loc_ext_id), ext_id)
+                self.assertEqual(
+                    getattr(partner, loc_ext_id), ext_id, msg="Synchronization failed"
+                )
                 for loc_field, op, value in self.get_test_pattern(
                     xref, loc_model, ext_id
                 ):
                     if op == "%":
-                        self.assertIn(value, getattr(partner, loc_field))
+                        self.assertIn(
+                            value,
+                            getattr(partner, loc_field),
+                            msg="Unexpected value %s for %s.%s"
+                            % (getattr(partner, loc_field), loc_model, loc_field),
+                        )
                     else:
-                        self.assertEqual(getattr(partner, loc_field), value)
+                        self.assertEqual(
+                            getattr(partner, loc_field),
+                            value,
+                            msg="Unexpected value %s for %s.%s"
+                            % (getattr(partner, loc_field), loc_model, loc_field),
+                        )
 
         for ext_id in self.get_ext_id_list(xref, loc_model):
             ext_model = self.get_ext_model(xref, loc_model)
             loc_id = self.get_loc_id(xref, loc_model, ext_id)
             rec_id = Synchro.trigger_one_record(ext_model, backend.prefix, ext_id)
             if loc_id:
-                self.assertEqual(rec_id, loc_id)
+                self.assertEqual(rec_id, loc_id, msg="Unexpected local record ID")
             partner = self.env[loc_model].browse(rec_id)
-            self.assertEqual(getattr(partner, loc_ext_id), ext_id)
+            self.assertEqual(
+                getattr(partner, loc_ext_id), ext_id, msg="Synchronization failed"
+            )
             for loc_field, op, value in self.get_test_pattern(xref, loc_model, ext_id):
                 if op == "%":
-                    self.assertIn(value, getattr(partner, loc_field))
+                    self.assertIn(
+                        value,
+                        getattr(partner, loc_field),
+                        msg="Unexpected value %s for %s.%s"
+                        % (getattr(partner, loc_field), loc_model, loc_field),
+                    )
                 else:
-                    self.assertEqual(getattr(partner, loc_field), value)
+                    self.assertEqual(
+                        getattr(partner, loc_field),
+                        value,
+                        msg="Unexpected value %s for %s.%s"
+                        % (getattr(partner, loc_field), loc_model, loc_field),
+                    )
+
+    def _test_country_state_ca(self, xref):
+        # res.country.state requires country_id; in order to check this configuration
+        # we have to test a record which can exist in 2+ countries. We use 'CA' used in
+        # "Delta PC" partner; "CA" means California in the USA and Cagliari in Italy
+        loc_modeL = "res.country.state"
+        backend = self.resource_browse(xref)
+        loc_ext_id = "%s_id" % backend.prefix
+        recs = self.env[loc_modeL].search([("code", "=", "CA")])
+        for record in recs:
+            ext_id = getattr(record, loc_ext_id)
+            if record.country_id.code == "US":
+                self.assertGreater(ext_id, 0, msg="No US country synchronized")
+            else:
+                self.assertEqual(ext_id, False, msg="Wrong country synchronization")
+
+    def _test_pull_record(self, xref, loc_model):
+        for ext_id in self.get_ext_id_list(xref, loc_model):
+            # This test run pull_record function of existent and synchronized record.
+            # If ext_if has no_local attribute we cannot find record to pull
+            if self.is_no_local(xref, loc_model, ext_id):
+                continue
+            loc_id = self.get_loc_id(xref, loc_model, ext_id)
+            record = self.env[loc_model].browse(loc_id)
+            do_test = False
+            for loc_field, op, value in self.get_test_pattern(xref, loc_model, ext_id):
+                if loc_field == "name":
+                    record.write({"name": "wrong"})
+                    do_test = True
+                    break
+            if do_test:
+                self.resource_edit(
+                    record,
+                    actions="pull_record",
+                )
+                record = self.env[loc_model].browse(loc_id)
+                for loc_field, op, value in self.get_test_pattern(
+                    xref, loc_model, ext_id
+                ):
+                    if op == "%":
+                        self.assertIn(
+                            value,
+                            getattr(record, loc_field),
+                            msg="Unexpected value %s for %s.%s"
+                            % (getattr(record, loc_field), loc_model, loc_field),
+                        )
+                    else:
+                        self.assertEqual(
+                            getattr(record, loc_field),
+                            value,
+                            msg="Unexpected value %s for %s.%s"
+                            % (getattr(record, loc_field), loc_model, loc_field),
+                        )
+
+    def _test_purge(self):
+        _logger.info("🎺 Starting purge log test")
+        self.env["synchro.log"].purge_log()
 
     def test_connection(self):
         # This test requires external Odoo instance active. See header
@@ -452,14 +578,8 @@ class MyTest(SingleTransactionCase):
             "🎺 Starting connection test on ports 8270 (db=oca10) and 8272 (db=oca12)"
             " and on ports 8167 (db=demo7) and 8168 (db=demo8)"
         )
-        for xref in sorted(self.get_resource_data_list("synchro.channel")):
+        for xref in sorted(self.get_resource_data_list("synchro.backend")):
             self._test_check_connection(xref)
             self._test_reset_connection(xref)
             self._test_check_connection(xref)
             self._test_check_models(xref)
-        #     self._test_import_model(xref, "res.currency")
-        # for xref in sorted(self.get_resource_data_list("synchro.channel")):
-        #     self._test_import_model(xref, "res.country")
-        #     self._test_import_partner(xref)
-        # for xref in sorted(self.get_resource_data_list("synchro.channel")):
-        #     self._test_import_partner2(xref)

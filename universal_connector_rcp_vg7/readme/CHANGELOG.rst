@@ -1,3 +1,10 @@
+12.0.0.3.14 (2025-01-04)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [FIX] Instance without company splitmode
+* [FIX] set_globak
+* [QUA] Test coverage 67% (223: 73+150) [11 TestPoints] - quality rating 49 (target 100)
+
 12.0.0.3.13 (2025-01-04)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 

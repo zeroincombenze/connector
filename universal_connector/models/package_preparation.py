@@ -24,7 +24,7 @@ class StockPickingPackagePreparation(models.Model):
     vg7_id = fields.Integer("VG7 ID", copy=False)
     oe7_id = fields.Integer("Odoo7 ID", copy=False)
     oe8_id = fields.Integer("Odoo8 ID", copy=False)
-    oe10_id = fields.Integer("Odoo10 ID", copy=False)
+    odoo10_id = fields.Integer("Odoo10 ID", copy=False)
     original_state = fields.Char("Original Status", copy=False)
     timestamp = fields.Datetime("Timestamp", copy=False, readonly=True)
     errmsg = fields.Char("Error message", copy=False, readonly=True)
@@ -32,7 +32,7 @@ class StockPickingPackagePreparation(models.Model):
     @api.model_cr_context
     def _auto_init(self):
         res = super()._auto_init()
-        for prefix in ("vg7", "oe7", "oe8", "oe10"):
+        for prefix in ("vg7", "oe7", "oe8", "odoo10"):
             self.env["ir.model.synchro"]._build_unique_index(self._inherit, prefix)
         return res
 
@@ -68,13 +68,13 @@ class StockPickingPackagePreparationLine(models.Model):
     vg7_id = fields.Integer("VG7 ID", copy=False)
     oe7_id = fields.Integer("Odoo7 ID", copy=False)
     oe8_id = fields.Integer("Odoo8 ID", copy=False)
-    oe10_id = fields.Integer("Odoo10 ID", copy=False)
+    odoo10_id = fields.Integer("Odoo10 ID", copy=False)
     to_delete = fields.Boolean("Record to delete")
 
     @api.model_cr_context
     def _auto_init(self):
         res = super()._auto_init()
-        for prefix in ("vg7", "oe7", "oe8", "oe10"):
+        for prefix in ("vg7", "oe7", "oe8", "odoo10"):
             self.env["ir.model.synchro"]._build_unique_index(self._inherit, prefix)
         return res
 
@@ -115,7 +115,7 @@ class StockPickingGoods_description(models.Model):
     vg7_id = fields.Integer("VG7 ID", copy=False)
     oe7_id = fields.Integer("Odoo7 ID", copy=False)
     oe8_id = fields.Integer("Odoo8 ID", copy=False)
-    oe10_id = fields.Integer("Odoo10 ID", copy=False)
+    odoo10_id = fields.Integer("Odoo10 ID", copy=False)
     dim_name = fields.Char(
         "Search Key", compute=_set_dim_name, store=True, readonly=True
     )
@@ -123,7 +123,7 @@ class StockPickingGoods_description(models.Model):
     @api.model_cr_context
     def _auto_init(self):
         res = super()._auto_init()
-        for prefix in ("vg7", "oe7", "oe8", "oe10"):
+        for prefix in ("vg7", "oe7", "oe8", "odoo10"):
             self.env["ir.model.synchro"]._build_unique_index(self._inherit, prefix)
         return res
 
@@ -166,7 +166,7 @@ class StockPickingCarriageCondition(models.Model):
     vg7_id = fields.Integer("VG7 ID", copy=False)
     oe7_id = fields.Integer("Odoo7 ID", copy=False)
     oe8_id = fields.Integer("Odoo8 ID", copy=False)
-    oe10_id = fields.Integer("Odoo10 ID", copy=False)
+    odoo10_id = fields.Integer("Odoo10 ID", copy=False)
     dim_name = fields.Char(
         "Search Key", compute=_set_dim_name, store=True, readonly=True
     )
@@ -174,7 +174,7 @@ class StockPickingCarriageCondition(models.Model):
     @api.model_cr_context
     def _auto_init(self):
         res = super()._auto_init()
-        for prefix in ("vg7", "oe7", "oe8", "oe10"):
+        for prefix in ("vg7", "oe7", "oe8", "odoo10"):
             self.env["ir.model.synchro"]._build_unique_index(self._inherit, prefix)
         return res
 
@@ -217,7 +217,7 @@ class StockPickingTransportationReason(models.Model):
     vg7_id = fields.Integer("VG7 ID", copy=False)
     oe7_id = fields.Integer("Odoo7 ID", copy=False)
     oe8_id = fields.Integer("Odoo8 ID", copy=False)
-    oe10_id = fields.Integer("Odoo10 ID", copy=False)
+    odoo10_id = fields.Integer("Odoo10 ID", copy=False)
     dim_name = fields.Char(
         "Search Key", compute=_set_dim_name, store=True, readonly=True
     )
@@ -225,7 +225,7 @@ class StockPickingTransportationReason(models.Model):
     @api.model_cr_context
     def _auto_init(self):
         res = super()._auto_init()
-        for prefix in ("vg7", "oe7", "oe8", "oe10"):
+        for prefix in ("vg7", "oe7", "oe8", "odoo10"):
             self.env["ir.model.synchro"]._build_unique_index(self._inherit, prefix)
         return res
 
@@ -268,7 +268,7 @@ class StockPickingTransportationMethod(models.Model):
     vg7_id = fields.Integer("VG7 ID", copy=False)
     oe7_id = fields.Integer("Odoo7 ID", copy=False)
     oe8_id = fields.Integer("Odoo8 ID", copy=False)
-    oe10_id = fields.Integer("Odoo10 ID", copy=False)
+    odoo10_id = fields.Integer("Odoo10 ID", copy=False)
     dim_name = fields.Char(
         "Search Key", compute=_set_dim_name, store=True, readonly=True
     )
@@ -276,7 +276,7 @@ class StockPickingTransportationMethod(models.Model):
     @api.model_cr_context
     def _auto_init(self):
         res = super()._auto_init()
-        for prefix in ("vg7", "oe7", "oe8", "oe10"):
+        for prefix in ("vg7", "oe7", "oe8", "odoo10"):
             self.env["ir.model.synchro"]._build_unique_index(self._inherit, prefix)
         return res
 

@@ -45,16 +45,14 @@ def split_fragments(text, maxctr=3, minlen=2):
 
 
 class IrModelSynchroApply(models.Model):
-    _inherit = "ir.model.synchro.apply"
+    _inherit = "synchro.apply"
 
     def apply_person(
         self,
-        backend,
+        mapper,
         vals,
         loc_name,
         ext_ref,
-        loc_ext_id_name,
-        vmodel,
         default=None,
         ctx=None,
     ):  # pragma: no cover
@@ -95,12 +93,10 @@ class IrModelSynchroApply(models.Model):
 
     def apply_street_number(
         self,
-        backend,
+        mapper,
         vals,
         loc_name,
         ext_ref,
-        loc_ext_id_name,
-        vmodel,
         default=None,
         ctx=None,
     ):  # pragma: no cover
@@ -117,12 +113,10 @@ class IrModelSynchroApply(models.Model):
 
     def apply_agents(
         self,
-        backend,
+        mapper,
         vals,
         loc_name,
         ext_ref,
-        loc_ext_id_name,
-        vmodel,
         default=None,
         ctx=None,
     ):  # pragma: no cover
@@ -154,12 +148,10 @@ class IrModelSynchroApply(models.Model):
 
     def apply_set_einvoice(
         self,
-        backend,
+        mapper,
         vals,
         loc_name,
         ext_ref,
-        loc_ext_id_name,
-        vmodel,
         default=None,
         ctx=None,
     ):  # pragma: no cover
@@ -177,12 +169,10 @@ class IrModelSynchroApply(models.Model):
 
     def apply_set_is_pa(
         self,
-        backend,
+        mapper,
         vals,
         loc_name,
         ext_ref,
-        loc_ext_id_name,
-        vmodel,
         default=None,
         ctx=None,
     ):  # pragma: no cover
@@ -192,12 +182,10 @@ class IrModelSynchroApply(models.Model):
 
     def apply_iban(
         self,
-        backend,
+        mapper,
         vals,
         loc_name,
         ext_ref,
-        loc_ext_id_name,
-        vmodel,
         default=None,
         ctx=None,
     ):  # pragma: no cover
@@ -209,12 +197,10 @@ class IrModelSynchroApply(models.Model):
 
     def apply_eom(
         self,
-        backend,
+        mapper,
         vals,
         loc_name,
         ext_ref,
-        loc_ext_id_name,
-        vmodel,
         default=None,
         ctx=None,
     ):  # pragma: no cover
@@ -233,7 +219,7 @@ class IrModelSynchroApply(models.Model):
             else:
                 num_days = False
             if num_days:
-                Cache = self.env["ir.model.synchro.cache"]
+                Cache = self.env["synchro.cache"]
                 if Cache.get_struct_model_attr("account.payment.term.line", "months"):
                     vals["months"] = num_days / 30
                     vals["days"] = 0
@@ -243,12 +229,10 @@ class IrModelSynchroApply(models.Model):
 
     def apply_set_inv_warn(
         self,
-        backend,
+        mapper,
         vals,
         loc_name,
         ext_ref,
-        loc_ext_id_name,
-        vmodel,
         default=None,
         ctx=None,
     ):  # pragma: no cover
@@ -259,12 +243,10 @@ class IrModelSynchroApply(models.Model):
 
     def apply_set_order_state(
         self,
-        backend,
+        mapper,
         vals,
         loc_name,
         ext_ref,
-        loc_ext_id_name,
-        vmodel,
         default=None,
         ctx=None,
     ):  # pragma: no cover
@@ -299,12 +281,10 @@ class IrModelSynchroApply(models.Model):
 
     def apply_set_weight_vg7(
         self,
-        backend,
+        mapper,
         vals,
         loc_name,
         ext_ref,
-        loc_ext_id_name,
-        vmodel,
         default=None,
         ctx=None,
     ):  # pragma: no cover
@@ -318,12 +298,10 @@ class IrModelSynchroApply(models.Model):
 
     def apply_unit_price_vg7(
         self,
-        backend,
+        mapper,
         vals,
         loc_name,
         ext_ref,
-        loc_ext_id_name,
-        vmodel,
         default=None,
         ctx=None,
     ):  # pragma: no cover
@@ -333,12 +311,10 @@ class IrModelSynchroApply(models.Model):
 
     def apply_prod_by_name(
         self,
-        backend,
+        mapper,
         vals,
         loc_name,
         ext_ref,
-        loc_ext_id_name,
-        vmodel,
         default=None,
         ctx=None,
     ):
@@ -367,12 +343,10 @@ class IrModelSynchroApply(models.Model):
 
     def apply_product_vg7_naming(
         self,
-        backend,
+        mapper,
         vals,
         loc_name,
         ext_ref,
-        loc_ext_id_name,
-        vmodel,
         default=None,
         ctx=None,
     ):  # pragma: no cover

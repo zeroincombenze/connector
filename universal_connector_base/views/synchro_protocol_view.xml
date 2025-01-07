@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="view_synchro_protocol_form" model="ir.ui.view">
+        <field name="name">view.synchro.protocol.form</field>
+        <field name="model">synchro.protocol</field>
+        <field name="arch" type="xml">
+            <form string="Communication Protocol">
+                <sheet>
+                    <group>
+                        <field name="code"/>
+                        <field name="name"/>
+                        <field name="http_protocol"/>
+                        <field name="secure_protocol"/>
+                        <field name="default_port"/>
+                        <field name="default_lgi_path"/>
+                        <field name="default_exchange_path"/>
+                        <field name="pylib"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_synchro_protocol_tree" model="ir.ui.view">
+        <field name="name">view.synchro.protocol.tree</field>
+        <field name="model">synchro.protocol</field>
+        <field name="arch" type="xml">
+            <tree string="Communication Protocol">
+                        <field name="code"/>
+                        <field name="name"/>
+                        <field name="http_protocol"/>
+                        <field name="secure_protocol"/>
+                        <field name="default_port"/>
+                        <field name="pylib"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_synchro_protocol" model="ir.actions.act_window">
+        <field name="name">Communication Protocol</field>
+        <field name="res_model">synchro.protocol</field>
+        <field name="view_id" ref="view_synchro_protocol_tree"/>
+    </record>
+
+    <menuitem id="menu_synchro_protocol" name="Communication Protocol" action="action_synchro_protocol" parent="menu_universal_connector" groups="base.group_no_one" sequence="48"/>
+
+</odoo>

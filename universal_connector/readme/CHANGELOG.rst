@@ -1,3 +1,14 @@
+12.0.0.3.14 (2025-01-04)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] New improvements of modules / Migliorie dei singoli moduli
+* [IMP] synchro parameters
+* [IMP] cache management
+* [IMP] virtual model are deprecated
+* [IMP] Protocol model
+* [IMP] Identity model
+* [QUA] Test coverage 80% (2330: 455+1875) [244 TestPoints] - quality rating 66 (target 100)
+
 12.0.0.3.13 (2025-01-04)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 

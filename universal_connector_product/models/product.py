@@ -14,16 +14,16 @@ class ProductTemplate(models.Model):
 
     oe7_id = fields.Integer("Odoo7 ID", copy=False)
     oe8_id = fields.Integer("Odoo8 ID", copy=False)
-    oe10_id = fields.Integer("Odoo10 ID", copy=False)
-    oe12_id = fields.Integer("Odoo12 ID", copy=False)
-    oe16_id = fields.Integer("Odoo16 ID", copy=False)
+    odoo10_id = fields.Integer("Odoo10 ID", copy=False)
+    odoo12_id = fields.Integer("Odoo12 ID", copy=False)
+    odoo16_id = fields.Integer("Odoo16 ID", copy=False)
     timestamp = fields.Datetime("Timestamp", copy=False, readonly=True)
     errmsg = fields.Char("Error message", copy=False, readonly=True)
 
     @api.model_cr_context
     def _auto_init(self):
         res = super()._auto_init()
-        self.env["synchro.channel"]._build_all_indexes(self)
+        self.env["synchro.backend"]._build_all_indexes(self)
         return res
 
 
@@ -32,21 +32,21 @@ class ProductProduct(models.Model):
 
     oe7_id = fields.Integer("Odoo7 ID", copy=False)
     oe8_id = fields.Integer("Odoo8 ID", copy=False)
-    oe10_id = fields.Integer("Odoo10 ID", copy=False)
-    oe12_id = fields.Integer("Odoo12 ID", copy=False)
-    oe16_id = fields.Integer("Odoo16 ID", copy=False)
+    odoo10_id = fields.Integer("Odoo10 ID", copy=False)
+    odoo12_id = fields.Integer("Odoo12 ID", copy=False)
+    odoo16_id = fields.Integer("Odoo16 ID", copy=False)
     timestamp = fields.Datetime("Timestamp", copy=False, readonly=True)
     errmsg = fields.Char("Error message", copy=False, readonly=True)
 
     @api.model_cr_context
     def _auto_init(self):
         res = super()._auto_init()
-        self.env["synchro.channel"]._build_all_indexes(self)
+        self.env["synchro.backend"]._build_all_indexes(self)
         return res
 
     @api.model
     def preprocess(self, backend_id, vals):
-        cache = self.env["ir.model.synchro.cache"]
+        cache = self.env["synchro.cache"]
         if ("vg7_id" in vals or "vg7:id" in vals) and cache.get_attr(
             backend_id, "NO_VARIANTS"
         ):
@@ -63,14 +63,14 @@ class UomUom(models.Model):
 
     oe7_id = fields.Integer("Odoo7 ID", copy=False)
     oe8_id = fields.Integer("Odoo8 ID", copy=False)
-    oe10_id = fields.Integer("Odoo10 ID", copy=False)
-    oe12_id = fields.Integer("Odoo12 ID", copy=False)
-    oe16_id = fields.Integer("Odoo16 ID", copy=False)
+    odoo10_id = fields.Integer("Odoo10 ID", copy=False)
+    odoo12_id = fields.Integer("Odoo12 ID", copy=False)
+    odoo16_id = fields.Integer("Odoo16 ID", copy=False)
 
     @api.model_cr_context
     def _auto_init(self):
         res = super()._auto_init()
-        self.env["synchro.channel"]._build_all_indexes(self)
+        self.env["synchro.backend"]._build_all_indexes(self)
         return res
 
 
@@ -79,14 +79,14 @@ class UomCategory(models.Model):
 
     oe7_id = fields.Integer("Odoo7 ID", copy=False)
     oe8_id = fields.Integer("Odoo8 ID", copy=False)
-    oe10_id = fields.Integer("Odoo10 ID", copy=False)
-    oe12_id = fields.Integer("Odoo12 ID", copy=False)
-    oe16_id = fields.Integer("Odoo16 ID", copy=False)
+    odoo10_id = fields.Integer("Odoo10 ID", copy=False)
+    odoo12_id = fields.Integer("Odoo12 ID", copy=False)
+    odoo16_id = fields.Integer("Odoo16 ID", copy=False)
 
     @api.model_cr_context
     def _auto_init(self):
         res = super()._auto_init()
-        self.env["synchro.channel"]._build_all_indexes(self)
+        self.env["synchro.backend"]._build_all_indexes(self)
         return res
 
 
@@ -95,14 +95,14 @@ class ProductCategory(models.Model):
 
     oe7_id = fields.Integer("Odoo7 ID", copy=False)
     oe8_id = fields.Integer("Odoo8 ID", copy=False)
-    oe10_id = fields.Integer("Odoo10 ID", copy=False)
-    oe12_id = fields.Integer("Odoo12 ID", copy=False)
-    oe16_id = fields.Integer("Odoo16 ID", copy=False)
+    odoo10_id = fields.Integer("Odoo10 ID", copy=False)
+    odoo12_id = fields.Integer("Odoo12 ID", copy=False)
+    odoo16_id = fields.Integer("Odoo16 ID", copy=False)
 
     @api.model_cr_context
     def _auto_init(self):
         res = super()._auto_init()
-        self.env["synchro.channel"]._build_all_indexes(self)
+        self.env["synchro.backend"]._build_all_indexes(self)
         return res
 
 
@@ -111,12 +111,12 @@ class ProductPricelist(models.Model):
 
     oe7_id = fields.Integer("Odoo7 ID", copy=False)
     oe8_id = fields.Integer("Odoo8 ID", copy=False)
-    oe10_id = fields.Integer("Odoo10 ID", copy=False)
-    oe12_id = fields.Integer("Odoo12 ID", copy=False)
-    oe16_id = fields.Integer("Odoo16 ID", copy=False)
+    odoo10_id = fields.Integer("Odoo10 ID", copy=False)
+    odoo12_id = fields.Integer("Odoo12 ID", copy=False)
+    odoo16_id = fields.Integer("Odoo16 ID", copy=False)
 
     @api.model_cr_context
     def _auto_init(self):
         res = super()._auto_init()
-        self.env["synchro.channel"]._build_all_indexes(self)
+        self.env["synchro.backend"]._build_all_indexes(self)
         return res

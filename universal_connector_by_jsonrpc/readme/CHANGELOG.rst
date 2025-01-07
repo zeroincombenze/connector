@@ -1,3 +1,8 @@
+12.0.0.3.14 (2025-01-08)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [QUA] Test coverage 91% (44: 4+40) [134 TestPoints] - quality rating 542 (target 100)
+
 12.0.0.3.13 (2025-01-05)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -12,7 +17,7 @@
 12.0.0.3.11 (2024-12-29)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-* [IMP] New API get_record_list and get_id_from_ext_ref
+* [IMP] New API get_record_list and get_ext_id_of_ext_ref
 * [IMP] Minor aesthetic update
 * [IMP] More tests
 * [QUA] Test coverage 90% (63: 6+57) [134 TestPoints] - quality rating 395 (target 100)

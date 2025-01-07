@@ -18,27 +18,31 @@ class BaseModel(models.BaseModel):
     def synchro(
         self,
         vals,
-        backend=None,
         only_minimal=True,
         ttl=None,
         running_in_queue=None,
         jacket=None,
+        model_spec=False,
+        backend=None,
+        dir_mapper=None,
         ctx=None,
     ):
         return self.env["ir.model.synchro"].synchro(
             self,
             vals,
-            backend=backend,
             only_minimal=only_minimal,
             ttl=ttl,
             running_in_queue=running_in_queue,
             jacket=jacket,
+            model_spec=model_spec,
+            backend=backend,
+            dir_mapper=dir_mapper,
             ctx=ctx,
         )
 
     @api.multi
     def pull_record(self):
-        for backend in self.env["synchro.channel"].search(
+        for backend in self.env["synchro.backend"].search(
             [], order="sequence desc,name desc"
         ):
             dir_mapper = backend.get_dir_mapper(model=self._name)

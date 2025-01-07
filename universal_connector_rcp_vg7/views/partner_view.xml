@@ -6,7 +6,7 @@
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="universal_connector_base.view_partner_synchro_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='oe16_id']" position="after">
+            <xpath expr="//field[@name='odoo16_id']" position="after">
                 <field name="vg7_id"/>
                 <field name="vg72_id"/>
             </xpath>

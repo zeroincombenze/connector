@@ -687,7 +687,7 @@ class ExtTestEnv(object):
     def reset_cache(self):
         lifetime = clodoo.executeL8(
             self.ctx,
-            "ir.model.synchro.cache",
+            "synchro.cache",
             "clean_cache",
             0,
             None,  # channel_id
@@ -883,21 +883,21 @@ class ExtTestEnv(object):
 
     def assure_cache(self):
         clodoo.executeL8(self.ctx,
-                         "ir.model.synchro.cache",
+                         "synchro.cache",
                          "set_loglevel",
                          0,
                          "debug")
         self.reset_cache()
 
     def assure_all_backends(self):
-        model = "synchro.channel"
+        model = "synchro.backend"
         for backend in clodoo.browseL8(
                 self.ctx, model, clodoo.searchL8(
                     self.ctx, model, [])):
             if backend.state != "draft":
                 clodoo.executeL8(
                     self.ctx, model, "button_reset_to_draft", backend.id)
-            if backend.prefix == "oe10":
+            if backend.prefix == "odoo10":
                 clodoo.writeL8(
                     self.ctx,
                     model,

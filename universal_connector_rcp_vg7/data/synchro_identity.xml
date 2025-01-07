@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <record id="identity_vg7" model="synchro.identity">
+        <field name="code">vg7</field>
+        <field name="name">VG/ print</field>
+        <field name="default_lgi_path">index.php</field>
+        <field name="default_exchange_path">index.php/api/v1</field>
+    </record>
+
+</odoo>

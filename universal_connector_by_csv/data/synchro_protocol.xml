@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <record id="protocol_csv" model="synchro.protocol">
+        <field name="code">csv</field>
+        <field name="name">CSV files</field>
+        <field name="http_protocol" eval="False"/>
+        <field name="secure_protocol" eval="False"/>
+        <field name="pylib">csv</field>
+    </record>
+
+</odoo>
