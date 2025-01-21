@@ -422,7 +422,7 @@ class ExtTestEnv(object):
         self.lang = self.lang or "it_IT"
         self.logfn = __file__.replace(".py", ".log")
         # TODO
-        self.ask = True
+        self.ask = False
         self.ctr = 0
         if pth.isfile(self.logfn):
             os.unlink(self.logfn)
@@ -757,6 +757,7 @@ class ExtTestEnv(object):
     def init_new_db(self):
         self.write_log("init_new_db(%s, %s)" % (self.db_name, self.confn))
         print("Be patient, the universal connector full test takes a few time ...")
+        import pdb; pdb.set_trace()
         if self.db_name != os.environ.get("TEST_DB", self.db_name):
             if self.ask:
                 print("Please drop DB %s" % self.db_name)

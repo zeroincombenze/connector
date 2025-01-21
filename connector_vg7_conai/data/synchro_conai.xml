@@ -8,7 +8,7 @@
         <field name="search_keys">(['code'],['name'])</field>
         <field name="field_2complete">True</field>
         <field name="sequence">6</field>
-        <field name="synchro_channel_id" ref="connector_vg7.channel_vg7"/>
+        <field name="synchro_channel_id" ref="universal_connector.channel_vg7"/>
     </record>
 
     <record forcecreate="1" id="conai_partner_category" model="synchro.channel.model">
@@ -18,7 +18,7 @@
         <field name="search_keys">(['code'],['name'])</field>
         <field name="field_2complete">True</field>
         <field name="sequence">6</field>
-        <field name="synchro_channel_id" ref="connector_vg7.channel_vg7"/>
+        <field name="synchro_channel_id" ref="universal_connector.channel_vg7"/>
     </record>
 
 

@@ -1853,7 +1853,7 @@ class IrModelSynchro(models.Model):
                 "float",
                 "monetary",
             ) and isinstance(vals[ext_ref], basestring):
-                vals[ext_ref] = eval(vals[ext_ref])
+                vals[ext_ref] = eval(vals[ext_ref].replace(",", "."))
             return vals
 
         cache = self.env["ir.model.synchro.cache"]
@@ -3849,7 +3849,7 @@ class IrModelSynchro(models.Model):
         cache.open(model=only_model)
         cache.setup_channels(all=True)
         local_ids = []
-        for channel in cache.get_channel_list().copy():
+        for channel in cache.get_channel_list():
             channel_id = channel.id
             if datetime.now() > datetime_stop:
                 break
