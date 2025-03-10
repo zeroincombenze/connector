@@ -1,3 +1,9 @@
+10.0.0.3.10 (2025-03-10)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] Minor aesthetic update
+* [QUA] Test coverage 64% (5068: 1832+3236) [1376 TestPoints] - quality rating 82 (target 100)
+
 10.0.0.3.9 (2024-08-10)
 ~~~~~~~~~~~~~~~~~~~~~~~
 

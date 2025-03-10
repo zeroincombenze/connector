@@ -1476,7 +1476,7 @@ class IrModelSynchro(models.Model):
             # Case #2 - (deprecated) field like <vg7_order_id>:
             #           local name is odoo but value id is of counterpart ref
             is_foreign = True
-            loc_name = ext_ref[len(pfx_depr) :]
+            loc_name = ext_ref[len(pfx_depr):]
             if loc_name == "id":
                 loc_name = ext_name = ext_ref
             else:
@@ -1493,7 +1493,7 @@ class IrModelSynchro(models.Model):
             # Case #3 - field like <vg7:order_id>: both name and value are
             #           of counterpart refs
             is_foreign = True
-            ext_name = ext_ref[len(pfx_ext) :]
+            ext_name = ext_ref[len(pfx_ext):]
             if ext_name == ext_id_name and loc_ext_id_name:
                 loc_name = loc_ext_id_name
             else:

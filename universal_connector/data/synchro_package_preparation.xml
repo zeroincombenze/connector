@@ -207,7 +207,7 @@
     <record forcecreate="1" id="stock_picking_package_preparation_line_weight" model="synchro.channel.model.fields">
         <field name="name">weight</field>
         <field name="counterpart_name">peso</field>
-        <!-- <field name="apply">set_weight_vg7()</field> -->
+        <field name="apply">set_weight_vg7()</field>
         <field name="model_id" ref="stock_picking_package_preparation_line"/>
     </record>
 

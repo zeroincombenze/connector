@@ -19,7 +19,7 @@ _logger = logging.getLogger(__name__)
 
 TEST_SYNCHRO_CHANNEL = {
     "z0bug.localhost-oca10": {
-        "name": "odoo10",
+        "name": "Test Odoo 10.0",
         # "hostname": "localhost",
         "identity": "odoo",
         "client_key": "oca10",
@@ -62,10 +62,6 @@ class MyTest(SingleTransactionCase):
 
     def tearDown(self):
         super(MyTest, self).tearDown()
-        if os.environ.get("ODOO_COMMIT_TEST", ""):
-            # Save test environment, so it is available to use
-            self.env.cr.commit()  # pylint: disable=invalid-commit
-            _logger.info("✨ Test data committed")
 
     def test_component_attrs(self):
         _logger.info(
@@ -108,4 +104,3 @@ class MyTest(SingleTransactionCase):
                 actions="button_check_connection",
             )
             self.assertEqual(backend.state, 'checked')
-
