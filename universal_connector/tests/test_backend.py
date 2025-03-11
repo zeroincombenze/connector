@@ -11,7 +11,7 @@ In order to run full test on the same host MUST be active follow instance:
 * Odoo 12.0 with OCA modules; http/xmlrpc port: 8272; DB name: oca12
 
 """
-import os
+# import os
 import logging
 from .testenv import MainTest as SingleTransactionCase
 
