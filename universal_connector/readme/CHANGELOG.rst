@@ -1,3 +1,9 @@
+10.0.0.3.12 (2025-03-14)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [FIX] Import partner w/o vat and fiscalcode / Import nominativo senza CF e PI
+* [QUA] Test coverage 64% (5061: 1827+3234) [1376 TestPoints] - quality rating 82 (target 100)
+
 10.0.0.3.11 (2025-03-10)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 

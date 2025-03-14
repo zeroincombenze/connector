@@ -63,6 +63,7 @@ from __future__ import print_function, unicode_literals
 from __future__ import division
 from __future__ import absolute_import
 from future import standard_library
+from z0lib.z0librun import print_flush
 
 standard_library.install_aliases()  # noqa: E402
 from past.builtins import basestring, long
@@ -432,7 +433,7 @@ class ExtTestEnv(object):
     def parseoptargs(self, args):
         parser = argparse.ArgumentParser(
             # formatter_class=argparse.RawDescriptionHelpFormatter,
-            description="Odoo test environment - © 2020-2024 by SHS-AV s.r.l.",
+            description="Odoo test environment - © 2020-2025 by SHS-AV s.r.l.",
         )
         parser.add_argument(
             "-c",
@@ -461,16 +462,21 @@ class ExtTestEnv(object):
         )
         self.opt_args = parser.parse_args(*args)
 
+    def print_flush(msg, end=None, flush=True):
+        if sys.version_info[0] == 3:  # pragma: no cover
+            print(msg, end=end, flush=flush)
+        else:  # pragma: no cover
+            print(msg, end=end)
+            if flush:
+                sys.stdout.flush()
+
     def write_log(self, mesg, eol=True, echo=True, no_ts=False, bb=0):
         lines = bb * "\n"
         if echo:
             if not eol:
-                if sys.version[0] == 1:
-                    print(lines + mesg + " -> ",)
-                else:
-                    print(lines + mesg + " -> ", end="")
+                print_flush(lines + mesg + " -> ", end="")
             else:
-                print(lines + mesg)
+                print_flush(lines + mesg)
         with open(self.logfn, "a") as fd:
             if no_ts:
                 fd.write(u" -> ")
@@ -756,13 +762,13 @@ class ExtTestEnv(object):
 
     def init_new_db(self):
         self.write_log("init_new_db(%s, %s)" % (self.db_name, self.confn))
-        print("Be patient, the universal connector full test takes a few time ...")
-        import pdb; pdb.set_trace()
+        print_flush(
+            "Be patient, the universal connector full test takes a few time ...")
         if self.db_name != os.environ.get("TEST_DB", self.db_name):
             if self.ask:
-                print("Please drop DB %s" % self.db_name)
+                print_flush("Please drop DB %s" % self.db_name)
                 input("Press RET to continue ...")
-                print("Now recreate DB %s (w/o demo data)" % self.db_name)
+                print_flush("Now recreate DB %s (w/o demo data)" % self.db_name)
                 input("Press RET to continue ...")
             else:
                 raise IOError("DB %s is different from %s"
@@ -819,8 +825,8 @@ class ExtTestEnv(object):
     def wait_4_module_uninstalled(self, modname):
         installed = self.check_if_module_installed(modname)
         while installed:
-            print("Module %s installed!" % modname)
-            print("Please uninstall %s" % modname)
+            print_flush("Module %s installed!" % modname)
+            print_flush("Please uninstall %s" % modname)
             if self.ask:
                 input("Press RET to continue ...")
             installed = self.check_if_module_installed(modname, wait=True)
@@ -828,8 +834,8 @@ class ExtTestEnv(object):
     def wait_4_module_installed(self, modname, ctr, maxctr):
         installed = self.check_if_module_installed(modname)
         while not installed:
-            print("Module %s not installed!" % modname)
-            print("Please install %s" % modname)
+            print_flush("Module %s not installed!" % modname)
+            print_flush("Please install %s" % modname)
             if self.ask:
                 input("Press RET to continue ...")
             installed = self.check_if_module_installed(
@@ -839,7 +845,7 @@ class ExtTestEnv(object):
         self.write_log("assure_company()", bb=1)
         model = "res.company"
         xref = "z0bug.mycompany"
-        self.company_note = "Si prega di controllate i dati entro le 24h."
+        self.company_note = "Si prega di controllare i dati entro le 24h."
         self.company_id = self.env_ref(xref)
         if not self.company_id:
             company = self.resource_browse(model, xref="base.main_company")
@@ -874,10 +880,10 @@ class ExtTestEnv(object):
             {"lang": self.lang},
             xref="z0bug.partner_mycompany")
         if self.db_name != os.environ.get("TEST_DB", self.db_name):
-            print("Activate Developer Mode and create full test environment")
-            print("lang=it_IT, no new company, CoA=Zero,%s CONAI ..."
+            print_flush("Activate Developer Mode and create full test environment")
+            print_flush("lang=it_IT, no new company, CoA=Zero,%s CONAI ..."
                   % " not" if self.conai else " ")
-            print("You need only chart of account, partners and products ...")
+            print_flush("You need only chart of account, partners and products ...")
             input("Press RET to continue ...")
 
     def assure_cache(self):
@@ -931,12 +937,13 @@ class ExtTestEnv(object):
     def assure_lang(self):
         model = "res.lang"
         if not clodoo.searchL8(self.ctx, model, [("code", "=", self.lang)]):
+            self.write_log("Activate language %s ..." % self.lang, echo=True, bb=1)
             id = clodoo.createL8(
                 self.ctx, "base.language.install", {"lang": self.lang})
             clodoo.executeL8(
                 self.ctx, "base.language.install", "lang_install", [id])
             vals = {"oe8:code": self.lang, "id": 59}
-            self.write_log("Installing language %s ..." % self.lang, echo=True, bb=1)
+            self.write_log("Installing language %s ..." % self.lang, echo=True)
             clodoo.executeL8(self.ctx, model, "synchro", vals)
         self.ctx["lang"] = self.lang
 
@@ -997,6 +1004,7 @@ class ExtTestEnv(object):
     def setup(self):
         self.write_log("** self.setup() **")
         self.init_new_db()
+        # input("Press RET to continue")
         self.prior_model = self.prior_fct = ""
         # model = "ir.module.module"
         maxctr = len(MODULE_LIST)

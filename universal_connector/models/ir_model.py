@@ -2306,6 +2306,7 @@ class IrModelSynchro(models.Model):
             found_valid_key = True if parent_id_name else False
             for keys in cache.get_struct_model_attr(actual_model, "SKEYS"):
                 domain = []
+                valid_domain = False
                 if isinstance(keys, basestring):
                     keys = [keys]
                 for key in keys:
@@ -2344,7 +2345,9 @@ class IrModelSynchro(models.Model):
                         break
                     else:
                         domain.append((key, "=", os0.b(vals[key])))
-                if domain:
+                        if key not in ("type", "is_company"):
+                            valid_domain = True
+                if domain and valid_domain:
                     found_valid_key = True
                     domain = add_constraints(domain, constraints)
                     if loc_ext_id_name and loc_ext_id_name in vals and use_sync:

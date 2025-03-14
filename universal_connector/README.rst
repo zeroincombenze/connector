@@ -1,6 +1,6 @@
-===========================================================
-|icon| Universal Connector/Connettore universale 10.0.0.3.9
-===========================================================
+============================================================
+|icon| Universal Connector/Connettore universale 10.0.0.3.12
+============================================================
 
 .. |icon| image:: https://raw.githubusercontent.com/zeroincombenze/connector/10.0/universal_connector/static/description/icon.png
 
@@ -188,6 +188,24 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 ChangeLog History | Cronologia modifiche
 ----------------------------------------
 
+10.0.0.3.12 (2025-03-14)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [FIX] Import partner w/o vat and ficalcode / Import nominativo senza CF e PI
+* [QUA] Test coverage 64% (5061: 1827+3234) [1376 TestPoints] - quality rating 82 (target 100)
+
+10.0.0.3.11 (2025-03-10)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] Minor aesthetic update
+* [QUA] Test coverage 64% (5068: 1832+3236) [1376 TestPoints] - quality rating 82 (target 100)
+ 
+10.0.0.3.10 (2025-03-10)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] Minor aesthetic update
+* [QUA] Test coverage 64% (5068: 1832+3236) [1376 TestPoints] - quality rating 82 (target 100)
+
 10.0.0.3.9 (2024-08-10)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -250,18 +268,6 @@ ChangeLog History | Cronologia modifiche
 * [IMP] Unit price without tax / Scorporo IVA
 * [QUA] Test coverage 45% (4960: 2735+2225) [6 TestPoints] - quality rating 1336 (target 100)
 
-10.0.0.3.2 (2023-03-02)
-~~~~~~~~~~~~~~~~~~~~~~~
-
-* [IMP] Pull records sto last remote pulled record id
-* [FIX] Excel backend with connected test
-
-10.0.0.3.1 (2023-02-26)
-~~~~~~~~~~~~~~~~~~~~~~~
-
-* [FIX] Ignore Odoo counterpart fields do not exist in local
-* [FIX] Wrong error messages
-
 
 
 Credits | Ringraziamenti
@@ -312,7 +318,7 @@ La distribuzione `Zeroincombenze® <https://www.zeroincombenze.it/>`__ è proget
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2025-01-21
+Last Update / Ultimo aggiornamento: 2025-03-14
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status
