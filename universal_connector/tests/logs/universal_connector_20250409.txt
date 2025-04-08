@@ -1,0 +1,147 @@
+2025-04-09 11:51:52,000 221716 DAEMON test_universal_connector_10 run_odoo_debug.sh: cd /home/odoo/10.0/venv_odoo && source ./bin/activate
+2025-04-09 09:51:57,482 223392 INFO ? odoo: Odoo version 10.0
+2025-04-09 09:51:57,483 223392 INFO ? odoo: Using configuration file at /home/odoo/10.0/connector/universal_connector/tests/logs/zero10.connector.universal_connector.conf
+2025-04-09 09:51:57,483 223392 INFO ? odoo: addons paths: ['/home/odoo/.local/share/Odoo10/addons/10.0', u'/home/odoo/10.0/odoo/addons', u'/home/odoo/10.0/addons', u'/home/odoo/.local/share/Odoo10/addons', u'/home/odoo/10.0/account-analytic', u'/home/odoo/10.0/account-budgeting', u'/home/odoo/10.0/account-closing', u'/home/odoo/10.0/account-consolidation', u'/home/odoo/10.0/account-financial-reporting', u'/home/odoo/10.0/account-financial-tools', u'/home/odoo/10.0/account-fiscal-rule', u'/home/odoo/10.0/account-invoice-reporting', u'/home/odoo/10.0/account-invoicing', u'/home/odoo/10.0/account-payment', u'/home/odoo/10.0/account-reconcile', u'/home/odoo/10.0/bank-payment', u'/home/odoo/10.0/bank-statement-import', u'/home/odoo/10.0/calendar', u'/home/odoo/10.0/commission', u'/home/odoo/10.0/community-data-files', u'/home/odoo/10.0/connector', u'/home/odoo/10.0/contract', u'/home/odoo/10.0/credit-control', u'/home/odoo/10.0/crm', u'/home/odoo/10.0/currency', u'/home/odoo/10.0/data-protection', u'/home/odoo/10.0/delivery-carrier', u'/home/odoo/10.0/e-commerce', u'/home/odoo/10.0/edi', u'/home/odoo/10.0/helpdesk', u'/home/odoo/10.0/hr', u'/home/odoo/10.0/intrastat-extrastat', u'/home/odoo/10.0/knowledge', u'/home/odoo/10.0/l10n-italy', u'/home/odoo/10.0/l10n-italy-supplemental', u'/home/odoo/10.0/maintenance', u'/home/odoo/10.0/management-system', u'/home/odoo/10.0/manufacture', u'/home/odoo/10.0/margin-analysis', u'/home/odoo/10.0/marketplace', u'/home/odoo/10.0/mis-builder', u'/home/odoo/10.0/multi-company', u'/home/odoo/10.0/partner-contact', u'/home/odoo/10.0/product-attribute', u'/home/odoo/10.0/product-kitting', u'/home/odoo/10.0/product-variant', u'/home/odoo/10.0/profiles', u'/home/odoo/10.0/project', u'/home/odoo/10.0/purchase-reporting', u'/home/odoo/10.0/purchase-workflow', u'/home/odoo/10.0/queue', u'/home/odoo/10.0/report-print-send', u'/home/odoo/10.0/reporting-engine', u'/home/odoo/10.0/rma', u'/home/odoo/10.0/sale-financial', u'/home/odoo/10.0/sale-reporting', u'/home/odoo/10.0/sale-workflow', u'/home/odoo/10.0/search-engine', u'/home/odoo/10.0/server-auth', u'/home/odoo/10.0/server-tools', u'/home/odoo/10.0/server-ux', u'/home/odoo/10.0/social', u'/home/odoo/10.0/stock-logistics-barcode', u'/home/odoo/10.0/stock-logistics-reporting', u'/home/odoo/10.0/stock-logistics-tracking', u'/home/odoo/10.0/stock-logistics-transport', u'/home/odoo/10.0/stock-logistics-warehouse', u'/home/odoo/10.0/stock-logistics-workflow', u'/home/odoo/10.0/storage', u'/home/odoo/10.0/timesheet', u'/home/odoo/10.0/uncovered', u'/home/odoo/10.0/web', u'/home/odoo/10.0/webhook', u'/home/odoo/10.0/website', u'/home/odoo/10.0/wms', u'/home/odoo/10.0/zerobug-test']
+2025-04-09 09:51:57,484 223392 INFO ? odoo: database: odoo10@localhost:5432
+2025-04-09 09:51:57,510 223392 INFO ? odoo.service.server: HTTP service (werkzeug) running on NB200Z0.:29309
+2025-04-09 09:51:57,529 223392 INFO test_universal_connector_10 odoo.modules.loading: loading 1 modules...
+2025-04-09 09:51:57,658 223392 INFO test_universal_connector_10 odoo.modules.loading: 1 modules loaded in 0.13s, 0 queries
+2025-04-09 09:52:01,333 223392 INFO test_universal_connector_10 odoo.modules.loading: loading 47 modules...
+2025-04-09 09:52:01,499 223392 INFO test_universal_connector_10 odoo.addons.report.models.report: Will use the Wkhtmltopdf binary at /home/odoo/10.0/venv_odoo/bin/wkhtmltopdf
+2025-04-09 09:52:01,797 223392 INFO test_universal_connector_10 odoo.modules.loading: 47 modules loaded in 0.46s, 0 queries
+2025-04-09 09:52:01,804 223392 INFO test_universal_connector_10 odoo.modules.loading: loading 48 modules...
+2025-04-09 09:52:02,827 223392 INFO test_universal_connector_10 odoo.modules.registry: module universal_connector: creating or updating database tables
+2025-04-09 09:52:10,678 223392 INFO test_universal_connector_10 odoo.addons.auth_crypt.models.res_users: Hashing passwords, may be slow for databases with many users...
+2025-04-09 09:52:12,324 223392 INFO test_universal_connector_10 odoo.models: Storing computed values of account.payment.term fields dim_name
+2025-04-09 09:52:12,328 223392 INFO test_universal_connector_10 odoo.models: Storing computed values of account.tax fields dim_name
+2025-04-09 09:52:12,330 223392 INFO test_universal_connector_10 odoo.models: Storing computed values of stock.picking.transportation_reason fields dim_name
+2025-04-09 09:52:12,331 223392 INFO test_universal_connector_10 odoo.models: Storing computed values of stock.picking.transportation_method fields dim_name
+2025-04-09 09:52:12,333 223392 INFO test_universal_connector_10 odoo.models: Storing computed values of product.product fields dim_name
+2025-04-09 09:52:12,335 223392 INFO test_universal_connector_10 odoo.models: Storing computed values of product.template fields dim_name
+2025-04-09 09:52:12,336 223392 INFO test_universal_connector_10 odoo.models: Storing computed values of stock.picking.carriage_condition fields dim_name
+2025-04-09 09:52:12,337 223392 INFO test_universal_connector_10 odoo.models: Storing computed values of res.partner fields dim_name
+2025-04-09 09:52:12,339 223392 INFO test_universal_connector_10 odoo.models: Storing computed values of stock.picking.goods_description fields dim_name
+2025-04-09 09:52:12,340 223392 INFO test_universal_connector_10 odoo.models: Storing computed values of res.partner.bank.company fields sanitized_acc_number
+2025-04-09 09:52:12,341 223392 INFO test_universal_connector_10 odoo.models: Storing computed values of res.partner.shipping fields commercial_company_name, commercial_partner_id, dim_name, display_name, partner_share
+2025-04-09 09:52:12,343 223392 INFO test_universal_connector_10 odoo.models: Storing computed values of res.partner.invoice fields commercial_company_name, commercial_partner_id, dim_name, display_name, partner_share
+2025-04-09 09:52:12,344 223392 INFO test_universal_connector_10 odoo.models: Storing computed values of res.partner.supplier fields commercial_company_name, commercial_partner_id, dim_name, display_name, partner_share
+2025-04-09 09:52:12,345 223392 INFO test_universal_connector_10 odoo.models: Storing computed values of account.journal fields dim_name
+2025-04-09 09:52:12,346 223392 INFO test_universal_connector_10 odoo.models: Storing computed values of account.fiscal.position fields dim_name
+2025-04-09 09:52:12,347 223392 INFO test_universal_connector_10 odoo.models: Storing computed values of account.account.type fields dim_name
+2025-04-09 09:52:12,348 223392 INFO test_universal_connector_10 odoo.models: Storing computed values of account.account fields dim_name
+2025-04-09 09:52:12,889 223392 INFO test_universal_connector_10 odoo.modules.loading: loading universal_connector/security/ir.model.access.csv
+2025-04-09 09:52:13,155 223392 INFO test_universal_connector_10 odoo.modules.loading: loading universal_connector/wizard/wizard_pull_records_view.xml
+2025-04-09 09:52:13,205 223392 INFO test_universal_connector_10 odoo.modules.loading: loading universal_connector/views/country_view.xml
+2025-04-09 09:52:13,281 223392 INFO test_universal_connector_10 odoo.modules.loading: loading universal_connector/views/account_account_view.xml
+2025-04-09 09:52:13,363 223392 INFO test_universal_connector_10 odoo.modules.loading: loading universal_connector/views/account_fiscal_view.xml
+2025-04-09 09:52:13,412 223392 INFO test_universal_connector_10 odoo.modules.loading: loading universal_connector/views/partner_view.xml
+2025-04-09 09:52:13,534 223392 INFO test_universal_connector_10 odoo.modules.loading: loading universal_connector/views/user_view.xml
+2025-04-09 09:52:13,655 223392 INFO test_universal_connector_10 odoo.modules.loading: loading universal_connector/views/company_view.xml
+2025-04-09 09:52:13,705 223392 INFO test_universal_connector_10 odoo.modules.loading: loading universal_connector/views/currency_view.xml
+2025-04-09 09:52:13,755 223392 INFO test_universal_connector_10 odoo.modules.loading: loading universal_connector/views/lang_view.xml
+2025-04-09 09:52:13,793 223392 INFO test_universal_connector_10 odoo.modules.loading: loading universal_connector/views/product_view.xml
+2025-04-09 09:52:14,120 223392 INFO test_universal_connector_10 odoo.modules.loading: loading universal_connector/views/account_invoice_view.xml
+2025-04-09 09:52:14,355 223392 INFO test_universal_connector_10 odoo.modules.loading: loading universal_connector/views/stock_view.xml
+2025-04-09 09:52:14,604 223392 INFO test_universal_connector_10 odoo.modules.loading: loading universal_connector/views/sale_order_view.xml
+2025-04-09 09:52:14,613 223392 WARNING test_universal_connector_10 odoo.models: ir.ui.view.create() includes unknown fields: sequence
+2025-04-09 09:52:14,710 223392 INFO test_universal_connector_10 odoo.modules.loading: loading universal_connector/views/purchase_order_view.xml
+2025-04-09 09:52:14,789 223392 INFO test_universal_connector_10 odoo.modules.loading: loading universal_connector/views/account_tax_view.xml
+2025-04-09 09:52:14,841 223392 INFO test_universal_connector_10 odoo.modules.loading: loading universal_connector/views/payment_term_view.xml
+2025-04-09 09:52:14,887 223392 INFO test_universal_connector_10 odoo.modules.loading: loading universal_connector/views/picking_view.xml
+2025-04-09 09:52:15,008 223392 INFO test_universal_connector_10 odoo.modules.loading: loading universal_connector/views/partner_bank_view.xml
+2025-04-09 09:52:15,054 223392 INFO test_universal_connector_10 odoo.modules.loading: loading universal_connector/views/sequence_view.xml
+2025-04-09 09:52:15,099 223392 INFO test_universal_connector_10 odoo.modules.loading: loading universal_connector/views/journal_view.xml
+2025-04-09 09:52:15,154 223392 INFO test_universal_connector_10 odoo.modules.loading: loading universal_connector/views/synchro_channel_view.xml
+2025-04-09 09:52:15,454 223392 INFO test_universal_connector_10 odoo.modules.loading: loading universal_connector/views/model_view.xml
+2025-04-09 09:52:15,553 223392 INFO test_universal_connector_10 odoo.modules.loading: loading universal_connector/views/account_move_view.xml
+2025-04-09 09:52:15,602 223392 INFO test_universal_connector_10 odoo.modules.loading: loading universal_connector/data/synchro_channel.xml
+2025-04-09 09:52:15,628 223392 INFO test_universal_connector_10 odoo.modules.loading: loading universal_connector/data/synchro_partner.xml
+2025-04-09 09:52:15,955 223392 INFO test_universal_connector_10 odoo.modules.loading: loading universal_connector/data/synchro_partner_bank.xml
+2025-04-09 09:52:15,988 223392 INFO test_universal_connector_10 odoo.modules.loading: loading universal_connector/data/synchro_country.xml
+2025-04-09 09:52:16,065 223392 INFO test_universal_connector_10 odoo.modules.loading: loading universal_connector/data/synchro_account.xml
+2025-04-09 09:52:16,116 223392 INFO test_universal_connector_10 odoo.modules.loading: loading universal_connector/data/synchro_account_invoice.xml
+2025-04-09 09:52:16,259 223392 INFO test_universal_connector_10 odoo.modules.loading: loading universal_connector/data/synchro_account_tax.xml
+2025-04-09 09:52:16,286 223392 INFO test_universal_connector_10 odoo.modules.loading: loading universal_connector/data/synchro_sale_order.xml
+2025-04-09 09:52:16,412 223392 INFO test_universal_connector_10 odoo.modules.loading: loading universal_connector/data/synchro_purchase_order.xml
+2025-04-09 09:52:16,476 223392 INFO test_universal_connector_10 odoo.modules.loading: loading universal_connector/data/synchro_package_preparation.xml
+2025-04-09 09:52:16,613 223392 INFO test_universal_connector_10 odoo.modules.loading: loading universal_connector/data/synchro_product.xml
+2025-04-09 09:52:16,692 223392 INFO test_universal_connector_10 odoo.modules.loading: loading universal_connector/data/ir_cron.xml
+2025-04-09 09:52:18,724 223392 INFO test_universal_connector_10 odoo.modules.module: odoo.addons.universal_connector.tests.test_backend running tests.
+2025-04-09 09:52:18,725 223392 INFO test_universal_connector_10 odoo.addons.universal_connector.tests.test_backend: test_component_attrs (odoo.addons.universal_connector.tests.test_backend.MyTest)
+2025-04-09 09:52:18,886 223392 INFO test_universal_connector_10 odoo.addons.universal_connector.tests.testenv: 🎺🎺🎺 Starting test v2.0.22 (debug_level=0, commit=True)
+2025-04-09 09:52:18,890 223392 INFO test_universal_connector_10 odoo.addons.universal_connector.tests.testenv: 🎺🎺 Testing module: universal_connector (10.0.0.3.13)
+2025-04-09 09:52:18,890 223392 INFO test_universal_connector_10 odoo.addons.universal_connector.tests.testenv: 🎺🎺 Loading data from: synchro.channel 
+2025-04-09 09:52:18,904 223392 INFO test_universal_connector_10 odoo.addons.universal_connector.models.ir_model_synchro_cache: > clean_cache(-1,None,-1)
+2025-04-09 09:52:18,926 223392 INFO test_universal_connector_10 odoo.addons.universal_connector.models.ir_model_synchro_cache: > clean_cache(-1,None,-1)
+2025-04-09 09:52:18,936 223392 INFO test_universal_connector_10 odoo.addons.universal_connector.tests.test_backend: 🎺 Starting test w/o connection
+2025-04-09 09:52:18,954 223392 INFO test_universal_connector_10 odoo.addons.universal_connector.models.ir_model_synchro_cache: > clean_cache(-1,None,-1)
+2025-04-09 09:52:18,958 223392 INFO test_universal_connector_10 odoo.addons.universal_connector.models.ir_model_synchro_cache: > clean_cache(-1,None,-1)
+2025-04-09 09:52:18,962 223392 INFO test_universal_connector_10 odoo.addons.universal_connector.tests.testenv: 🏆🥇 [1;32m4 tests SUCCESSFULLY completed[0m
+2025-04-09 09:52:18,964 223392 INFO test_universal_connector_10 odoo.addons.universal_connector.tests.test_backend: test_connection (odoo.addons.universal_connector.tests.test_backend.MyTest)
+2025-04-09 09:52:18,991 223392 INFO test_universal_connector_10 odoo.addons.universal_connector.tests.testenv: 🎺🎺🎺 Starting test v2.0.22 (debug_level=0, commit=True)
+2025-04-09 09:52:18,994 223392 INFO test_universal_connector_10 odoo.addons.universal_connector.tests.testenv: 🎺🎺 Testing module: universal_connector (10.0.0.3.13)
+2025-04-09 09:52:18,994 223392 INFO test_universal_connector_10 odoo.addons.universal_connector.tests.testenv: 🎺🎺 Loading data from: synchro.channel 
+2025-04-09 09:52:19,003 223392 INFO test_universal_connector_10 odoo.addons.universal_connector.models.ir_model_synchro_cache: > clean_cache(-1,None,-1)
+2025-04-09 09:52:19,016 223392 INFO test_universal_connector_10 odoo.addons.universal_connector.models.ir_model_synchro_cache: > clean_cache(-1,None,-1)
+2025-04-09 09:52:19,020 223392 INFO test_universal_connector_10 odoo.addons.universal_connector.tests.test_backend: 🎺 Starting connection test on ports 8270 (db=oca10) and 8272 (db=oca12)
+2025-04-09 09:52:19,034 223392 INFO test_universal_connector_10 odoo.addons.universal_connector.models.ir_model: >>> odoo12.odoo_rpc_session(admin@localhost:8272):
+2025-04-09 09:52:19,491 223392 INFO test_universal_connector_10 odoo.addons.universal_connector.models.ir_model_synchro_cache: > clean_cache(-1,None,-1)
+2025-04-09 09:52:19,500 223392 INFO test_universal_connector_10 odoo.addons.universal_connector.models.ir_model_synchro_cache: > clean_cache(-1,None,-1)
+2025-04-09 09:52:19,510 223392 INFO test_universal_connector_10 odoo.addons.universal_connector.models.ir_model_synchro_cache: > clean_cache(-1,None,-1)
+2025-04-09 09:52:19,523 223392 INFO test_universal_connector_10 odoo.addons.universal_connector.models.ir_model: >>> Test Odoo 10.0.odoo_rpc_session(admin@localhost:8270):
+2025-04-09 09:52:19,898 223392 INFO test_universal_connector_10 odoo.addons.universal_connector.models.ir_model_synchro_cache: > clean_cache(-1,None,-1)
+2025-04-09 09:52:19,907 223392 INFO test_universal_connector_10 odoo.addons.universal_connector.models.ir_model_synchro_cache: > clean_cache(-1,None,-1)
+2025-04-09 09:52:19,916 223392 INFO test_universal_connector_10 odoo.addons.universal_connector.models.ir_model_synchro_cache: > clean_cache(-1,None,-1)
+2025-04-09 09:52:19,919 223392 INFO test_universal_connector_10 odoo.addons.universal_connector.tests.testenv: 🏆🥇 [1;32m6 tests SUCCESSFULLY completed[0m
+2025-04-09 09:52:19,921 223392 INFO test_universal_connector_10 odoo.addons.universal_connector.tests.test_backend: Ran 2 tests in 1.196s
+2025-04-09 09:52:19,921 223392 INFO test_universal_connector_10 odoo.addons.universal_connector.tests.test_backend: OK
+2025-04-09 09:52:19,973 223392 INFO test_universal_connector_10 odoo.modules.loading: 48 modules loaded in 18.17s, 138 queries
+2025-04-09 09:52:20,716 223392 INFO test_universal_connector_10 odoo.modules.loading: Modules loaded.
+2025-04-09 09:52:20,724 223392 INFO test_universal_connector_10 odoo.modules.loading: All post-tested in 0.00s, 0 queries
+2025-04-09 09:52:20,725 223392 INFO test_universal_connector_10 odoo.models: Computing parent left and right for table ir_ui_menu...
+2025-04-09 09:52:20,846 223392 INFO test_universal_connector_10 odoo.modules.registry: Registry changed, signaling through the database
+2025-04-09 09:52:20,851 223392 INFO test_universal_connector_10 odoo.service.server: Initiating shutdown
+2025-04-09 09:52:20,851 223392 INFO test_universal_connector_10 odoo.service.server: Hit CTRL-C again or send a second signal to force the shutdown.
+ 221716 DAEMON test_universal_connector_10 : [37;43mRestarting Odoo for concurrent test[0m
+2025-04-09 11:52:31,000 221716 DAEMON test_universal_connector_10 test_concurrent.py: [37;43mStarting /home/odoo/10.0/connector/universal_connector/tests/concurrent_test/test_concurrent.py[0m ...
+2025-04-09 11:57:23,000 221716 DAEMON test_universal_connector_10 test_concurrent.py: [32mTest SUCCESSFULLY completed[0m
+
++===================================================================
+| please test [36muniversal_connector[0m (10.0): [32mSUCCESS![0m
++===================================================================
+
+[1;37;44m$ coverage report --rcfile=/home/odoo/10.0/connector/universal_connector/tests/logs/coverage_universal_connector_10rc -m
+[34;107mName                                                                              Stmts   Miss  Cover   Missing
+---------------------------------------------------------------------------------------------------------------
+/home/odoo/10.0/connector/universal_connector/models/account_account.py             146     91    38%   19-20, 99, 114, 121-123, 126-133, 172-204, 208-221, 225, 234-235, 243, 256, 263-265, 268-275, 278-292, 296-318, 322-324
+/home/odoo/10.0/connector/universal_connector/models/account_fiscal_position.py      40     17    58%   18-19, 27-29, 42, 49-51, 54-61
+/home/odoo/10.0/connector/universal_connector/models/account_invoice.py              63     21    67%   33, 40-55, 58-59, 63, 72-73, 89, 96-98, 102
+/home/odoo/10.0/connector/universal_connector/models/account_journal.py              46     18    61%   18-19, 27, 42, 49-51, 54-61, 65, 74-75
+/home/odoo/10.0/connector/universal_connector/models/account_move.py                 51     15    71%   22-24, 35, 42-43, 56, 64-66, 76-78, 81-82
+/home/odoo/10.0/connector/universal_connector/models/account_payment_term.py         85     40    53%   18-19, 27, 42, 49-51, 54-61, 64-89, 94, 98, 120, 128
+/home/odoo/10.0/connector/universal_connector/models/account_tax.py                  54     25    54%   18-19, 27, 42, 49-51, 54-61, 64-70, 73-78, 82
+/home/odoo/10.0/connector/universal_connector/models/analytic.py                     42      5    88%   26, 33-34, 46, 62
+/home/odoo/10.0/connector/universal_connector/models/ir_model.py                   1976    851    57%   444, 448, 461, 469-470, 488, 538, 574-577, 588, 646-667, 684-691, 693-700, 715-717, 729, 735-742, 744-751, 766-768, 782, 795-799, 817, 820-852, 868, 870-877, 881, 895-897, 915-922, 939-940, 967-980, 1005-1008, 1051, 1056, 1058-1061, 1063, 1065, 1115-1116, 1136-1147, 1168, 1175, 1195, 1203, 1208-1218, 1224, 1226, 1229, 1233-1246, 1274-1275, 1283, 1291, 1322, 1336, 1390, 1393, 1398, 1403, 1405, 1422, 1424, 1452, 1478-1488, 1522, 1562-1566, 1569-1575, 1580-1589, 1592-1594, 1602-1605, 1608-1618, 1624-1644, 1804-1805, 1811-1816, 1820-1826, 1838, 1847, 1896, 1946-1955, 1992, 2008, 2019-2023, 2044-2047, 2063-2066, 2069, 2085, 2093-2101, 2133-2134, 2209, 2254-2255, 2298, 2325, 2344-2345, 2361, 2363, 2366-2372, 2388-2547, 2551-2620, 2623-2712, 2716-2727, 2730-2731, 2762-2763, 2772-2773, 2778-2779, 2784, 2788, 2792-2801, 2814-2820, 2857-2859, 2868-2869, 2888-2889, 2891-2893, 2935-2936, 2941-2943, 2980-2982, 2998-2999, 3008, 3021-3023, 3027-3029, 3033-3035, 3040, 3072, 3075, 3077-3078, 3081, 3085, 3095, 3120, 3152, 3156, 3180, 3184-3185, 3201-3202, 3233-3234, 3239-3240, 3242, 3245-3247, 3251, 3256, 3295-3304, 3313, 3322, 3330, 3378, 3391-3394, 3398, 3405, 3411-3414, 3427, 3434, 3439-3441, 3448-3591, 3610-3891, 3914-3918, 3924-3925, 3937-3940, 3948-3991, 3994, 4001, 4006-4008, 4025, 4029-4030, 4039-4040, 4060-4061, 4064-4065, 4071-4079, 4097, 4174-4186
+/home/odoo/10.0/connector/universal_connector/models/ir_model_synchro_apply.py      446    200    55%   22-23, 26-27, 98, 102, 105, 107, 111, 129, 143-148, 161-163, 191-196, 217, 237, 253, 278-280, 317-319, 332-336, 350-371, 391, 430-454, 472-481, 486, 494-495, 531, 534, 543, 563, 584-589, 603-605, 618-622, 635-659, 672-675, 729, 745-751, 764-766, 783, 785, 797, 835-861, 869, 900-901, 904-905, 907, 924-936, 949-968, 981-985, 998-1000, 1013-1015, 1035-1045, 1048-1057
+/home/odoo/10.0/connector/universal_connector/models/ir_model_synchro_cache.py      536     82    85%   20-21, 24-25, 281, 284-285, 287-288, 295-298, 312-313, 337, 345, 349, 365, 372-374, 377, 385, 401, 410, 420, 425, 442, 449, 461, 469, 535, 539, 545-547, 561, 614-616, 618-619, 631, 644, 648, 700, 702, 707, 721, 725, 735-736, 759, 784, 798-808, 833, 854, 861-862, 876, 918-919, 947, 1042-1045, 1057-1062, 1113, 1118, 1122, 1126
+/home/odoo/10.0/connector/universal_connector/models/ir_model_synchro_data.py        10      0   100%
+/home/odoo/10.0/connector/universal_connector/models/ir_module_module.py             24      2    92%   42, 50
+/home/odoo/10.0/connector/universal_connector/models/ir_sequence.py                  18      2    89%   26, 34
+/home/odoo/10.0/connector/universal_connector/models/package_preparation.py         198     63    68%   18-19, 34, 62-63, 66-67, 80, 91-92, 101, 116, 129, 136-138, 141-148, 167, 180, 187-189, 192-199, 218, 231, 238-240, 243-250, 269, 282, 289-291, 294-301
+/home/odoo/10.0/connector/universal_connector/models/product.py                     145     40    72%   18-19, 27, 46, 53-55, 58-65, 78-80, 88, 103, 110-112, 115-122, 125, 132, 158, 175-176, 188, 196, 214, 222
+/home/odoo/10.0/connector/universal_connector/models/purchase_order.py               83     19    77%   29, 36-37, 40, 45, 51-52, 65-66, 79, 88-90, 92, 115, 122-124, 128
+/home/odoo/10.0/connector/universal_connector/models/res_company.py                  54     34    37%   26, 33-65, 68-76, 89-90
+/home/odoo/10.0/connector/universal_connector/models/res_country.py                  36      4    89%   26, 43-44, 56
+/home/odoo/10.0/connector/universal_connector/models/res_currency.py                 18      2    89%   26, 34
+/home/odoo/10.0/connector/universal_connector/models/res_groups.py                   18      2    89%   26, 34
+/home/odoo/10.0/connector/universal_connector/models/res_lang.py                     18      1    94%   26
+/home/odoo/10.0/connector/universal_connector/models/res_partner.py                 238     53    78%   18-19, 27, 50, 57-59, 62-69, 72, 81, 83, 99, 104, 117-127, 129-130, 134, 188, 198, 202, 237, 239, 291-295, 297, 304-307, 311-314, 316-320, 336-337, 367-369
+/home/odoo/10.0/connector/universal_connector/models/res_partner_bank.py             38     13    66%   27, 34-42, 46, 55-56, 65-67, 76-77
+/home/odoo/10.0/connector/universal_connector/models/res_users.py                    25      4    84%   26, 35, 49-50
+/home/odoo/10.0/connector/universal_connector/models/sale_order.py                   97     32    67%   29, 36-56, 61, 64, 82, 86, 91, 98-99, 112-113, 126, 135-137, 139
+/home/odoo/10.0/connector/universal_connector/models/stock.py                        79     21    73%   26, 42, 60, 67-77, 81, 90-91, 105, 113, 122-123
+/home/odoo/10.0/connector/universal_connector/models/synchro_channel.py             447    142    68%   20-21, 24-25, 28-29, 150, 159, 180, 212-223, 237, 251, 287, 297-299, 307-308, 326, 347, 441, 444, 446, 448, 452-455, 457-462, 464, 470, 475-494, 497-556, 560-572, 575-586, 601-607, 611-614, 619, 623-628, 634-650, 670-681, 692, 699, 727, 777-779, 822
+/home/odoo/10.0/connector/universal_connector/wizard/wizard_pull_records.py          35     23    34%   60-69, 72-94
+---------------------------------------------------------------------------------------------------------------
+TOTAL                                                                              5066   1822    64%
+[0m

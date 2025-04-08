@@ -1161,15 +1161,15 @@ class IrModelSynchro(models.Model):
             rec = exec_search(cls, domain, has_sequence, has_active)
         if not rec:
             rec = exec_search(cls, req_domain, has_sequence, has_active)
-        # if not rec:
-        #     if actual_model in ("res.partner", "product.product", "product.template"):
-        #         domain = reduce_domain(req_domain, (["company_id", "", ""]))
-        #         if domain:
-        #             rec = exec_search(cls, domain, has_sequence, has_active)
-        #         if not rec:
-        #             domain = reduce_domain(req_domain, (["type", "", ""]))
-        #             if domain:
-        #                 rec = exec_search(cls, domain, has_sequence, has_active)
+        if not rec:
+            if actual_model in ("res.partner", "product.product", "product.template"):
+                domain = reduce_domain(req_domain, (["company_id", "", ""]))
+                if domain:
+                    rec = exec_search(cls, domain, has_sequence, has_active)
+                # if not rec:
+                #     domain = reduce_domain(req_domain, (["type", "", ""]))
+                #     if domain:
+                #         rec = exec_search(cls, domain, has_sequence, has_active)
         if rec:
             if not has_sequence and len(rec) > 16:
                 rec = False
@@ -1213,7 +1213,7 @@ class IrModelSynchro(models.Model):
             ]
             rec = translation_model.search(domain)
             if not rec:
-                return rec
+                return False
             value = rec[0].odoo_value
             mode = "ilike"
         domain = [(name, mode, value)]

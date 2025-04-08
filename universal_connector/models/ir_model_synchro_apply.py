@@ -900,10 +900,10 @@ class IrModelSynchroApply(models.Model):
             vals[name_field] = vals[des_field]
             del vals[des_field]
 
-        if vals.get(ext_ref):
+        if loc_name != ext_ref and vals.get(ext_ref):
             vals[loc_name] = vals[ext_ref]
             del vals[ext_ref]
-        if ext_ref in vals:
+        if loc_name != ext_ref and ext_ref in vals:
             del vals[ext_ref]
         return vals
 

@@ -1,3 +1,9 @@
+10.0.0.3.12 (2025-04-09)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [FIX] Import new product from VG7 / Import nuovi prodotti da VG7
+* [QUA] Test coverage 64% (5066: 1822+3244) [1376 TestPoints] - quality rating 82 (target 100)
+
 10.0.0.3.12 (2025-03-14)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 

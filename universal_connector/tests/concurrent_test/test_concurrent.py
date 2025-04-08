@@ -63,7 +63,6 @@ from __future__ import print_function, unicode_literals
 from __future__ import division
 from __future__ import absolute_import
 from future import standard_library
-from z0lib.z0librun import print_flush
 
 standard_library.install_aliases()  # noqa: E402
 from past.builtins import basestring, long
@@ -91,6 +90,7 @@ try:
     from z0lib.z0lib import z0lib
 except ImportError:
     from z0lib import z0lib
+from z0lib.z0librun import print_flush
 # import pdb      # pylint: disable=deprecated-module
 
 __version__ = "10.0.0.2.5"
@@ -415,15 +415,13 @@ class ExtTestEnv(object):
 
     def __init__(self, *args):
         self.parseoptargs(args)
-        for item in ("confn", "db_name", "lang", "conai"):
+        for item in ("ask", "config", "database", "lang", "conai"):
             setattr(self, item, getattr(self.opt_args, item))
-        self.confn = os.environ.get("TEST_CONFN", self.confn)
-        self.db_name = os.environ.get("TEST_DB", self.db_name)
-        # self.db_name = "connect10"
+            print_flush("# %s=%s" % (item, getattr(self, item)))
+        self.config = self.config or os.environ.get("TEST_CONFN")
+        self.database = self.database or os.environ.get("TEST_DB")
         self.lang = self.lang or "it_IT"
         self.logfn = __file__.replace(".py", ".log")
-        # TODO
-        self.ask = False
         self.ctr = 0
         if pth.isfile(self.logfn):
             os.unlink(self.logfn)
@@ -436,17 +434,23 @@ class ExtTestEnv(object):
             description="Odoo test environment - © 2020-2025 by SHS-AV s.r.l.",
         )
         parser.add_argument(
+            "-a",
+            "--ask",
+            action="store_true",
+            help="Ask for actions",
+        )
+        parser.add_argument(
             "-c",
             "--config",
             help="Odoo configuration file",
-            dest="confn",
+            dest="config",
             metavar="FILE",
         )
         parser.add_argument(
             "-d",
             "--database",
             help="DB name to test",
-            dest="db_name",
+            dest="database",
             metavar="FILE",
         )
         parser.add_argument(
@@ -462,13 +466,11 @@ class ExtTestEnv(object):
         )
         self.opt_args = parser.parse_args(*args)
 
-    def print_flush(msg, end=None, flush=True):
-        if sys.version_info[0] == 3:  # pragma: no cover
-            print(msg, end=end, flush=flush)
-        else:  # pragma: no cover
-            print(msg, end=end)
-            if flush:
-                sys.stdout.flush()
+    def ask_4_ret(self, force=False):
+        if force or self.ask:
+            print_flush("Press RET to continue ...")
+            input("")
+            print_flush("")
 
     def write_log(self, mesg, eol=True, echo=True, no_ts=False, bb=0):
         lines = bb * "\n"
@@ -752,7 +754,7 @@ class ExtTestEnv(object):
                 except BaseException as e:
                     self.write_log("Error %s removing records ..." % e, echo=True)
                     if self.ask:
-                        input("Press RET to continue ...")
+                        self.ask_4_ret()
                     else:
                         exit(1)
             else:
@@ -761,26 +763,23 @@ class ExtTestEnv(object):
                                echo=False)
 
     def init_new_db(self):
-        self.write_log("init_new_db(%s, %s)" % (self.db_name, self.confn))
+        self.write_log("init_new_db(%s, %s)" % (self.database, self.config))
         print_flush(
-            "Be patient, the universal connector full test takes a few time ...")
-        if self.db_name != os.environ.get("TEST_DB", self.db_name):
+            "# Be patient, the universal connector full test takes a few time ...")
+        if self.database != os.environ.get("TEST_DB", self.database):
             if self.ask:
-                print_flush("Please drop DB %s" % self.db_name)
-                input("Press RET to continue ...")
-                print_flush("Now recreate DB %s (w/o demo data)" % self.db_name)
-                input("Press RET to continue ...")
-            else:
-                raise IOError("DB %s is different from %s"
-                              % (self.db_name, os.environ.get("TEST_DB", self.db_name)))
-        with open(self.confn, "r") as fd:
+                print_flush("# Please drop DB %s" % self.database)
+                self.ask_4_ret()
+                print_flush("# Now recreate DB %s (w/o demo data)" % self.database)
+                self.ask_4_ret()
+        with open(self.config, "r") as fd:
             contents = fd.read()
         if "psycopg2 = 1" not in contents:
-            with open(self.confn, "a") as fd:
+            with open(self.config, "a") as fd:
                 fd.write("psycopg2 = 1\n")
-        uid, self.ctx = clodoo.oerp_set_env(confn=self.confn, db=self.db_name)
+        uid, self.ctx = clodoo.oerp_set_env(confn=self.config, db=self.database)
         if not uid:
-            raise IOError("DB %s not connected via json/xmlrpc!" % self.db_name)
+            raise IOError("DB %s not connected via json/xmlrpc!" % self.database)
         self.user = self.ctx["user"]
 
     def install_module(self, modname, connector_installed=False):
@@ -825,19 +824,17 @@ class ExtTestEnv(object):
     def wait_4_module_uninstalled(self, modname):
         installed = self.check_if_module_installed(modname)
         while installed:
-            print_flush("Module %s installed!" % modname)
-            print_flush("Please uninstall %s" % modname)
-            if self.ask:
-                input("Press RET to continue ...")
+            print_flush("# Module %s installed!" % modname)
+            print_flush("# Please uninstall %s" % modname)
+            self.ask_4_ret(force=True if modname == THIS_MODULE else self.ask)
             installed = self.check_if_module_installed(modname, wait=True)
 
     def wait_4_module_installed(self, modname, ctr, maxctr):
         installed = self.check_if_module_installed(modname)
         while not installed:
-            print_flush("Module %s not installed!" % modname)
-            print_flush("Please install %s" % modname)
-            if self.ask:
-                input("Press RET to continue ...")
+            print_flush("# Module %s not installed!" % modname)
+            print_flush("# Please install %s" % modname)
+            self.ask_4_ret()
             installed = self.check_if_module_installed(
                 modname, ctr=ctr, maxctr=maxctr, wait=True)
 
@@ -879,12 +876,12 @@ class ExtTestEnv(object):
             company.partner_id.id,
             {"lang": self.lang},
             xref="z0bug.partner_mycompany")
-        if self.db_name != os.environ.get("TEST_DB", self.db_name):
-            print_flush("Activate Developer Mode and create full test environment")
-            print_flush("lang=it_IT, no new company, CoA=Zero,%s CONAI ..."
+        if self.database != os.environ.get("TEST_DB", self.database):
+            print_flush("# Activate Developer Mode and create full test environment")
+            print_flush("#     lang=it_IT, no new company, CoA=Zero,%s CONAI ..."
                   % " not" if self.conai else " ")
-            print_flush("You need only chart of account, partners and products ...")
-            input("Press RET to continue ...")
+            print_flush("# You need only chart of account, partners and products ...")
+            self.ask_4_ret(force=True)
 
     def assure_cache(self):
         clodoo.executeL8(self.ctx,
@@ -1004,7 +1001,7 @@ class ExtTestEnv(object):
     def setup(self):
         self.write_log("** self.setup() **")
         self.init_new_db()
-        # input("Press RET to continue")
+        self.ask_4_ret()
         self.prior_model = self.prior_fct = ""
         # model = "ir.module.module"
         maxctr = len(MODULE_LIST)
@@ -1021,8 +1018,7 @@ class ExtTestEnv(object):
             connector_installed = self.action_after_installed(
                 modname, connector_installed)
 
-        if self.ask:
-            input("Press RET to continue ...")
+        self.ask_4_ret()
         self.assure_lang()
         self.assure_company()
         self.assure_user()
@@ -1947,6 +1943,17 @@ def run_full_identity_test(ext_test_env, model, test_prio, identity, lang=None):
 def main(cli_args=[]):
     if not cli_args:
         cli_args = sys.argv[1:]
+    # Comment or activate following lines for specific test
+    # if "--database" not in cli_args:
+    #     cli_args.append("--database")
+    #     cli_args.append("connect10")
+    # if "--database" in cli_args and "--ask" not in cli_args:
+    #     cli_args.append("--ask")
+    if "--conai" not in cli_args:
+        cli_args.append("--conai")
+    if not os.environ.get("TEST_CONFN") and "--config" not in cli_args:
+        cli_args.append("--config")
+        cli_args.append("./tests/logs/zero10.connector.universal_connector.conf")
     ext_test_env = ExtTestEnv(cli_args)
     ext_test_env.setup()
 
@@ -2017,6 +2024,7 @@ def main(cli_args=[]):
             ext_test_env, model, test_prio, identity, lang=lang)
 
     ext_test_env.teardown()
+    return 0
 
 
 if __name__ == "__main__":
