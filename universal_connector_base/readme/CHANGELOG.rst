@@ -1,19 +1,15 @@
-12.0.0.3.14 (2025-01-08)
+12.0.1.3.13 (2025-04-05)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
+* [FIX] company synchronization best algorithm
 * [IMP] synchro parameters
 * [IMP] cache management
 * [IMP] virtual model are deprecated
 * [IMP] Protocol model
 * [IMP] Identity model
-* [QUA] Test coverage 80% (2319: 458+1861) [134 TestPoints] - quality rating 58 (target 100)
+* [QUA] Test coverage 81% (2326: 447+1879) [134 TestPoints] - quality rating 58 (target 100)
 
-12.0.0.3.13 (2025-01-05)
-~~~~~~~~~~~~~~~~~~~~~~~~
-
-* [QUA] Test coverage 80% (2325: 455+1870) [244 TestPoints] - quality rating 66 (target 100)
-
-12.0.0.3.12 (2025-01-03)
+12.0.1.3.12 (2025-01-03)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 * [IMP] Message log improvements / Migliorie elencazione messeggi
@@ -23,7 +19,7 @@
 * [IMP] Button "Pull record" / Bottone "Prelevare dati"
 * [QUA] Test coverage 80% (2330: 455+1875) [244 TestPoints] - quality rating 66 (target 100)
 
-12.0.0.3.11 (2024-12-29)
+12.0.1.3.11 (2024-12-29)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 * [FIX] Context values / Valori in contesto
@@ -36,7 +32,7 @@
 * [IMP] New tests / Nuovi test
 * [QUA] Test coverage 80% (2256: 453+1803) [244 TestPoints] - quality rating 66 (target 100)
 
-12.0.0.3.10 (2024-12-20)
+12.0.1.3.10 (2024-12-20)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 * [IMP] Split from universal_connector

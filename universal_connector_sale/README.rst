@@ -1,10 +1,10 @@
 ==========================================================================================
-|icon| Universal Connector: Sale Management/Prodotti per connettore universale 10.0.0.3.14
+|icon| Universal Connector: Sale Management/Prodotti per connettore universale 12.0.1.3.14
 ==========================================================================================
 
 **Add sale order models to Universal Connector**
 
-.. |icon| image:: https://raw.githubusercontent.com/zeroincombenze/connector/10.0/universal_connector_sale/static/description/icon.png
+.. |icon| image:: https://raw.githubusercontent.com/zeroincombenze/connector/12.0/universal_connector_sale/static/description/icon.png
 
 
 .. contents::
@@ -32,7 +32,7 @@ I modelli sincronizzabili sono:
 
 |thumbnail|
 
-.. |thumbnail| image:: https://raw.githubusercontent.com/zeroincombenze/connector/10.0/universal_connector_sale/static/description/
+.. |thumbnail| image:: https://raw.githubusercontent.com/zeroincombenze/connector/12.0/universal_connector_sale/static/description/
 
 
 Configuration | Configurazione
@@ -68,8 +68,8 @@ Getting started | Primi passi
 Prerequisites | Prerequisiti
 ----------------------------
 
-* python 2.7+ (best 2.7.5+)
-* postgresql 9.2+ (best 9.5)
+* python 3.7
+* postgresql 9.6+ (best 10.0+)
 
 ::
 
@@ -99,15 +99,15 @@ Installation | Installazione
 +---------------------------------+------------------------------------------+
 | Suggested deployment is:        | Posizione suggerita per l'installazione: |
 +---------------------------------+------------------------------------------+
-| $HOME/10.0 |
+| $HOME/12.0 |
 +----------------------------------------------------------------------------+
 
 ::
 
     # Odoo repository installation; OCB repository must be installed
-    deploy_odoo clone -r connector -b 10.0 -G zero -p $HOME/10.0
+    deploy_odoo clone -r connector -b 12.0 -G zero -p $HOME/12.0
     # Upgrade virtual environment
-    vem amend $HOME/10.0/venv_odoo
+    vem amend $HOME/12.0/venv_odoo
 
 
 
@@ -116,8 +116,8 @@ Upgrade | Aggiornamento
 
 ::
 
-    deploy_odoo update -r connector -b 10.0 -G zero -p $HOME/10.0
-    vem amend $HOME/10.0/venv_odoo
+    deploy_odoo update -r connector -b 12.0 -G zero -p $HOME/12.0
+    vem amend $HOME/12.0/venv_odoo
     # Adjust following statements as per your system
     sudo systemctl restart odoo
 
@@ -154,22 +154,22 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 ChangeLog History | Cronologia modifiche
 ----------------------------------------
 
-10.0.0.3.14 (2025-01-08)
+12.0.0.3.14 (2025-04-09)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 * [QUA] Test coverage 100% (18: 0+18) [0 TestPoints] - quality rating 61 (target 100)
 
-10.0.0.3.13 (2025-01-05)
+12.0.0.3.13 (2025-01-05)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 * [QUA] Test coverage 100% (22: 0+22) [0 TestPoints] - quality rating 61 (target 100)
 
-10.0.0.3.12 (2025-01-03)
+12.0.0.3.12 (2025-01-03)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 * [QUA] Test coverage 100% (22: 0+22) [0 TestPoints] - quality rating 61 (target 100)
 
-10.0.0.3.11 (2024-12-29)
+12.0.0.3.11 (2024-12-29)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 * [IMP] Splited from universal_connector
@@ -224,7 +224,7 @@ La distribuzione `Zeroincombenze® <https://www.zeroincombenze.it/>`__ è proget
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2025-01-08
+Last Update / Ultimo aggiornamento: 2025-04-09
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status
@@ -235,8 +235,8 @@ Last Update / Ultimo aggiornamento: 2025-01-08
 .. |license opl| image:: https://img.shields.io/badge/licence-OPL-7379c3.svg
     :target: https://www.odoo.com/documentation/user/14.0/legal/licenses/licenses.html
     :alt: License: OPL
-.. |Try Me| image:: https://www.zeroincombenze.it/wp-content/uploads/ci-ct/prd/button-try-it-10.svg
-    :target: https://erp10.zeroincombenze.it
+.. |Try Me| image:: https://www.zeroincombenze.it/wp-content/uploads/ci-ct/prd/button-try-it-12.svg
+    :target: https://erp12.zeroincombenze.it
     :alt: Try Me
 .. |Zeroincombenze| image:: https://avatars0.githubusercontent.com/u/6972555?s=460&v=4
    :target: https://www.zeroincombenze.it/

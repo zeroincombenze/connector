@@ -1,0 +1,4 @@
+2025-04-09 14:06:52,480 686857 WARNING template_universal_connector_12 odoo.addons.base.models.ir_model: Two fields (name, model_id) of synchro.model() have the same label: Odoo model name. 
+2025-04-09 14:06:52,488 686857 WARNING template_universal_connector_12 odoo.addons.base.models.ir_model: Two fields (name, fields_id) of synchro.mapper() have the same label: Odoo field name. 
+2025-04-09 14:06:54,540 686857 WARNING template_universal_connector_12 odoo.addons.base.models.ir_model: Two fields (name, model_id) of synchro.model() have the same label: Odoo model name. 
+2025-04-09 14:06:54,550 686857 WARNING template_universal_connector_12 odoo.addons.base.models.ir_model: Two fields (name, fields_id) of synchro.mapper() have the same label: Odoo field name. 

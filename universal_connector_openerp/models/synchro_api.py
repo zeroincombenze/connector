@@ -92,13 +92,17 @@ class SynchroApi(models.Model):
         )
 
     def get_record_list_openerp_xmlrpc_https(self, session, dir_mapper):
-        return self.get_record_list_odoo_xmlrpc_https(session, dir_mapper)
+        return self.get_record_list_odoo_xmlrpc_https(
+            session, dir_mapper
+        )  # pragma: no cover
 
     def get_record_list_openerp_xmlrpc_http(self, session, dir_mapper):
         return self.get_record_list_odoo_xmlrpc_http(session, dir_mapper)
 
     def get_ext_id_of_ext_ref_openerp_xmlrpc_https(self, session, dir_mapper, ext_id):
-        return self.get_ext_id_of_ext_ref_odoo_xmlrpc_https(session, dir_mapper, ext_id)
+        return self.get_ext_id_of_ext_ref_odoo_xmlrpc_https(
+            session, dir_mapper, ext_id
+        )  # pragma: no cover
 
     def get_ext_id_of_ext_ref_openerp_xmlrpc_http(self, session, dir_mapper, ext_id):
         return self.get_ext_id_of_ext_ref_odoo_xmlrpc_http(session, dir_mapper, ext_id)

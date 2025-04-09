@@ -8,7 +8,7 @@
 #
 {
     "name": "Universal Connector protocol XML-RPC (requests)",
-    "version": "12.0.0.3.14",
+    "version": "12.0.1.3.14",
     "category": "Generic Modules",
     "summary": "Add protocol XML-RPC (by requests) to Universal Connector",
     "author": "SHS-AV s.r.l.",
@@ -16,7 +16,7 @@
     "development_status": "Beta",
     "license": "LGPL-3",
     "depends": ["universal_connector_base"],
-    "version_depends": ["universal_connector_base>=12.0.0.3.14"],
+    "version_depends": ["universal_connector_base>=12.0.1.3.14"],
     "external_dependencies": {
         "python": [
             "python_plus",

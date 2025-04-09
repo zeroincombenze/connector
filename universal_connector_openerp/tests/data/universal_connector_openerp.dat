@@ -35,6 +35,8 @@
 "?","universal_connector_openerp.backend_openerp7","res.partner","res.partner","name","name",8,"%","Delta PC",1
 "?","universal_connector_base.backend_odoo12","res.partner","res.partner","name","name",9,"%","Wood Corner",1
 "?","universal_connector_base.backend_odoo10","res.partner","res.partner","name","name",7,"%","ASUSTeK",1
+"?","universal_connector_openerp.backend_openerp8","res.partner","res.partner","name","name",6,"%","ASUSTeK",1
+"?","universal_connector_openerp.backend_openerp7","res.partner","res.partner","name","name",5,"%","ASUSTeK",1
 "?","universal_connector_openerp.backend_openerp8","res.partner","res.partner","name","name",7,"%","Agrolait",1
-"?","universal_connector_openerp.backend_openerp7","res.partner","res.partner","name","name",7,"%","China Export",1
+"?","universal_connector_openerp.backend_openerp7","res.partner","res.partner","name","name",6,"%","Agrolait",1
 "?","*","res.users","res.users","login","login",,"","",

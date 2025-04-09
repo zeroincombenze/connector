@@ -6,17 +6,15 @@
 #
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 #
-"""Universal connector base tests (base)
+"""Universal connector base tests (openerp)
 *Warning*
 Universal connector (base) module connect local Odoo instance with external instance.
 Without external running instance, these test CANNOT be executed
 
 In order to run full test on the same host MUST be active follow instance:
 
-* Odoo 12.0 with OCA modules; http/xmlrpc port: 8272; DB name: oca12
-* Odoo 10.0 with OCA modules; http/xmlrpc port: 8270; DB name: oca10
-* Odoo 8.0 with OCA modules; http/xmlrpc port: 8168; DB name: demo8
-* Odoo 7.0 with OCA modules; http/xmlrpc port: 8167; DB name: demo7
+* Odoo 7.0 with OCA modules; http/xmlrpc port: 8167; DB name: oca10
+* Odoo 8.0 with OCA modules; http/xmlrpc port: 8168; DB name: oca12
 """
 
 import os.path as pth
@@ -29,53 +27,6 @@ from .testenv import MainTest as SingleTransactionCase
 _logger = logging.getLogger(__name__)
 
 TEST_SYNCHRO_BACKEND = {
-    # "universal_connector_base.backend_odoo12": {
-    #     "name": "Test Odoo 12.0",
-    #     "hostname": "localhost",
-    #     "identity_id": "universal_connector_base.identity_odoo",
-    #     "database": "oca12",
-    #     "remote_sw_version": "12.0",
-    #     "protocol_id": "universal_connector_base.protocol_xmlrpc_http",
-    #     "port": 8272,
-    #     "login": "admin",
-    #     "password": "admin",
-    #     "counterpart_url": "http://admin@localhost:8272/xmlrpc/2/common",
-    #     "counterpart_data_url": "http://admin@localhost:8272/xmlrpc/2/object",
-    #     "prefix": "odoo12",
-    #     "sequence": 12,
-    # },
-    # "universal_connector_base.backend_odoo10": {
-    #     "name": "Test Odoo 10.0",
-    #     "hostname": "localhost",
-    #     "identity_id": "universal_connector_base.identity_odoo",
-    #     "database": "oca10",
-    #     "remote_sw_version": "10.0",
-    #     "protocol_id": "universal_connector_base.protocol_xmlrpc_http",
-    #     "port": 8270,
-    #     "login": "admin",
-    #     "password": "admin",
-    #     "counterpart_url": "http://admin@localhost:8270/xmlrpc/2/common",
-    #     "counterpart_data_url": "http://admin@localhost:8270/xmlrpc/2/object",
-    #     "prefix": "odoo10",
-    #     "sequence": 14,
-    # },
-    "universal_connector_openerp.backend_openerp8": {
-        "name": "Test OpenERP 8.0",
-        "hostname": "localhost",
-        "identity_id": "universal_connector_openerp.identity_openerp",
-        "database": "demo8",
-        "remote_sw_version": "8.0",
-        "protocol_id": "universal_connector_base.protocol_xmlrpc_http",
-        "port": 8168,
-        "login": "admin",
-        "password": "admin",
-        "lgi_path": "/xmlrpc/common",
-        "exchange_path": "/xmlrpc/object",
-        "counterpart_url": "http://admin@localhost:8168/xmlrpc/common",
-        "counterpart_data_url": "http://admin@localhost:8168/xmlrpc/object",
-        "prefix": "oe8",
-        "sequence": 18,
-    },
     "universal_connector_openerp.backend_openerp7": {
         "name": "Test OpenERP 7.0",
         "hostname": "localhost",
@@ -86,12 +37,25 @@ TEST_SYNCHRO_BACKEND = {
         "port": 8167,
         "login": "admin",
         "password": "admin",
-        "lgi_path": "/xmlrpc/common",
-        "exchange_path": "/xmlrpc/object",
         "counterpart_url": "http://admin@localhost:8167/xmlrpc/common",
         "counterpart_data_url": "http://admin@localhost:8167/xmlrpc/object",
         "prefix": "oe7",
         "sequence": 20,
+    },
+    "universal_connector_openerp.backend_openerp8": {
+        "name": "Test Odoo 8.0",
+        "hostname": "localhost",
+        "identity_id": "universal_connector_openerp.identity_openerp",
+        "database": "demo8",
+        "remote_sw_version": "8.0",
+        "protocol_id": "universal_connector_base.protocol_xmlrpc_http",
+        "port": 8168,
+        "login": "admin",
+        "password": "admin",
+        "counterpart_url": "http://admin@localhost:8168/xmlrpc/2/common",
+        "counterpart_data_url": "http://admin@localhost:8168/xmlrpc/2/object",
+        "prefix": "oe8",
+        "sequence": 18,
     },
 }
 TEST_SETUP_LIST = [
@@ -231,7 +195,9 @@ class MyTest(SingleTransactionCase):
     def get_model_list(self, xref):
         models = []
         for loc_model in self.test_data[xref].keys():
-            models.append((loc_model, self.test_data[xref][loc_model]["EXT_NAME"]))
+            models.append(
+                (loc_model, self.test_data[xref][loc_model]["EXT_NAME"], False)
+            )
         return models
 
     def get_field_list(self, xref, loc_model):
@@ -342,11 +308,12 @@ class MyTest(SingleTransactionCase):
             backend,
             actions="button_build_model_map",
         )
-        for model, ext_model in self.get_model_list(xref):
+        for model, ext_model, model_spec in self.get_model_list(xref):
             backend_model = self.env["synchro.model"].search(
                 [
                     ("name", "=", model),
                     ("counterpart_name", "=", ext_model),
+                    ("model_spec", "=", model_spec),
                     ("backend_id", "=", backend.id),
                 ]
             )
@@ -433,15 +400,27 @@ class MyTest(SingleTransactionCase):
                         self.assertIn(
                             value,
                             getattr(partner, loc_field),
-                            msg="Unexpected value %s for %s.%s"
-                            % (getattr(partner, loc_field), loc_model, loc_field),
+                            msg="Unexpected value %s for %s.%s (ext_id %s of %s)"
+                            % (
+                                getattr(partner, loc_field),
+                                loc_model,
+                                loc_field,
+                                ext_id,
+                                xref,
+                            ),
                         )
                     else:
                         self.assertEqual(
                             getattr(partner, loc_field),
                             value,
-                            msg="Unexpected value %s for %s.%s"
-                            % (getattr(partner, loc_field), loc_model, loc_field),
+                            msg="Unexpected value %s for %s.%s (ext_id %s of %s)"
+                            % (
+                                getattr(partner, loc_field),
+                                loc_model,
+                                loc_field,
+                                ext_id,
+                                xref,
+                            ),
                         )
 
     def _test_import_partner2(self, xref):
@@ -481,15 +460,27 @@ class MyTest(SingleTransactionCase):
                         self.assertIn(
                             value,
                             getattr(partner, loc_field),
-                            msg="Unexpected value %s for %s.%s"
-                            % (getattr(partner, loc_field), loc_model, loc_field),
+                            msg="Unexpected value %s for %s.%s (ext_id %s of %s)"
+                            % (
+                                getattr(partner, loc_field),
+                                loc_model,
+                                loc_field,
+                                ext_id,
+                                xref,
+                            ),
                         )
                     else:
                         self.assertEqual(
                             getattr(partner, loc_field),
                             value,
-                            msg="Unexpected value %s for %s.%s"
-                            % (getattr(partner, loc_field), loc_model, loc_field),
+                            msg="Unexpected value %s for %s.%s (ext_id %s of %s)"
+                            % (
+                                getattr(partner, loc_field),
+                                loc_model,
+                                loc_field,
+                                ext_id,
+                                xref,
+                            ),
                         )
 
         for ext_id in self.get_ext_id_list(xref, loc_model):
@@ -507,15 +498,27 @@ class MyTest(SingleTransactionCase):
                     self.assertIn(
                         value,
                         getattr(partner, loc_field),
-                        msg="Unexpected value %s for %s.%s"
-                        % (getattr(partner, loc_field), loc_model, loc_field),
+                        msg="Unexpected value %s for %s.%s (ext_id %s of %s)"
+                        % (
+                            getattr(partner, loc_field),
+                            loc_model,
+                            loc_field,
+                            ext_id,
+                            xref,
+                        ),
                     )
                 else:
                     self.assertEqual(
                         getattr(partner, loc_field),
                         value,
-                        msg="Unexpected value %s for %s.%s"
-                        % (getattr(partner, loc_field), loc_model, loc_field),
+                        msg="Unexpected value %s for %s.%s (ext_id %s of %s)"
+                        % (
+                            getattr(partner, loc_field),
+                            loc_model,
+                            loc_field,
+                            ext_id,
+                            xref,
+                        ),
                     )
 
     def _test_country_state_ca(self, xref):
@@ -560,20 +563,28 @@ class MyTest(SingleTransactionCase):
                         self.assertIn(
                             value,
                             getattr(record, loc_field),
-                            msg="Unexpected value %s for %s.%s"
-                            % (getattr(record, loc_field), loc_model, loc_field),
+                            msg="Unexpected value %s for %s.%s (ext_id %s of %s)"
+                            % (
+                                getattr(record, loc_field),
+                                loc_model,
+                                loc_field,
+                                ext_id,
+                                xref,
+                            ),
                         )
                     else:
                         self.assertEqual(
                             getattr(record, loc_field),
                             value,
-                            msg="Unexpected value %s for %s.%s"
-                            % (getattr(record, loc_field), loc_model, loc_field),
+                            msg="Unexpected value %s for %s.%s (ext_id %s of %s)"
+                            % (
+                                getattr(record, loc_field),
+                                loc_model,
+                                loc_field,
+                                ext_id,
+                                xref,
+                            ),
                         )
-
-    def _test_03_purge(self):
-        _logger.info("🎺 Starting purge log test")
-        self.env["synchro.log"].purge_log()
 
     def test_connection(self):
         # This test requires external Odoo instance active. See header
@@ -597,6 +608,4 @@ class MyTest(SingleTransactionCase):
             self._test_import_model(xref, "res.country")
             self._test_import_model(xref, "res.partner")
         for xref in sorted(self.get_resource_data_list("synchro.backend")):
-            # self._test_country_state_ca(xref)
             self._test_pull_record(xref, "res.partner")
-        self._test_03_purge()

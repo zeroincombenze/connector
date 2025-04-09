@@ -1,7 +1,7 @@
-12.0.0.3.14 (2025-01-05)
+12.0.0.3.14 (2025-04-09)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-* [QUA] Test coverage 89% (57: 6+51) [106 TestPoints] - quality rating 352 (target 100)
+* [QUA] Test coverage 95% (40: 2+38) [114 TestPoints] - quality rating 514 (target 100)
 
 12.0.0.3.13 (2025-01-05)
 ~~~~~~~~~~~~~~~~~~~~~~~~

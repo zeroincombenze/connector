@@ -226,9 +226,7 @@ class MyTest(SingleTransactionCase):
     def get_model_list(self, xref):
         models = []
         for loc_model in self.test_data[xref].keys():
-            models.append(
-                (loc_model, self.test_data[xref][loc_model]["EXT_NAME"], False)
-            )
+            models.append((loc_model, self.test_data[xref][loc_model]["EXT_NAME"]))
         return models
 
     def get_field_list(self, xref, loc_model):
@@ -333,12 +331,11 @@ class MyTest(SingleTransactionCase):
             backend,
             actions="button_build_model_map",
         )
-        for model, ext_model, model_spec in self.get_model_list(xref):
+        for model, ext_model in self.get_model_list(xref):
             backend_model = self.env["synchro.model"].search(
                 [
                     ("name", "=", model),
                     ("counterpart_name", "=", ext_model),
-                    ("model_spec", "=", model_spec),
                     ("backend_id", "=", backend.id),
                 ]
             )

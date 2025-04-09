@@ -1,1 +1,0 @@
-2025-01-09 08:18:11,000 593637 DAEMON test_universal_connector_sale_12 run_odoo_debug.sh: cd /home/odoo/12.0/venv_odoo && source ./bin/activate

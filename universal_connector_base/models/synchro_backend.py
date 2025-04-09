@@ -10,6 +10,7 @@ import os
 from datetime import datetime, timedelta
 
 from odoo import api, fields, models
+from odoo.exceptions import UserError
 from python_plus import _u
 
 try:
@@ -44,19 +45,30 @@ class SynchroChannel(models.Model):
             [("id", "=", identity.id)] if identity else []
         ):
             if identity.remote_sw_version:
-                version = eval(identity.remote_sw_version)
-                res += [(x, "%s %s" % (identity.code, x)) for x in version]
+                res += [
+                    (x, "%s %s" % (identity.code, x))
+                    for x in eval(identity.remote_sw_version)
+                ]
         return res
 
     def selection_for_prefix(self):
         # WARNING! Before correct follow list, update prefix field
-        return [
-            ("odoo16", "odoo16"),
-            ("odoo12", "odoo12"),
-            ("odoo10", "odoo10"),
-            ("oe8", "oe8"),
-            ("oe7", "oe7"),
-        ]
+        Partner = self.env["res.partner"]
+        res = []
+        for identity in self.env["synchro.identity"].search([]):
+            prefix = identity.default_prefix
+            if not prefix:
+                continue
+            for name in sorted(
+                [
+                    x[:-3]
+                    for x in Partner._fields.keys()
+                    if x.startswith(prefix) and x.endswith("_id")
+                ],
+                reverse=True,
+            ):
+                res.append((name, name))
+        return res
 
     name = fields.Char(
         "Backend Name",
@@ -77,13 +89,7 @@ class SynchroChannel(models.Model):
         copy=False,
     )
     prefix = fields.Selection(
-        [
-            ("odoo16", "odoo16"),
-            ("odoo12", "odoo12"),
-            ("odoo10", "odoo10"),
-            ("oe8", "oe8"),
-            ("oe7", "oe7"),
-        ],
+        lambda self: self.selection_for_prefix(),
         "Download Prefix",
         required=True,
         help="Download prefix which counterparty must use to identify itself.\n"
@@ -411,60 +417,41 @@ class SynchroChannel(models.Model):
         if self.port:
             self._compute_counterpart_url()
 
-    def _build_all_indexes(self, cls):
-        """Build unique index on table to <gamma>_id for performance"""
-        for prefix, _x in self.selection_for_prefix():
-            if not hasattr(cls, prefix):
-                continue
-            table = cls._name.replace(".", "_")
-            index_name = "%s_unique_%s" % (table, prefix)
-            self._cr.execute(
-                "SELECT indexname FROM pg_indexes WHERE indexname = '%s'", index_name
-            )  # pylint: disable=E8103
-            if not self._cr.fetchone():
-                if hasattr(self, "company_id"):
-                    self._cr.execute(
-                        "CREATE UNIQUE INDEX %(index)s on %(table)s"
-                        " (company_id, %(prefix)s_id)"
-                        " where %(prefix)s_id<>0 and %(prefix)s_id is not null",
-                        {"index": index_name, "table": table, "prefix": prefix},
-                    )  # pylint: disable=E8103
-                else:
-                    self._cr.execute(
-                        "CREATE UNIQUE INDEX %(index)s on %(table)s %(prefix)s_id)"
-                        " where %(prefix)s_id<>0 and %(prefix)s_id is not null",
-                        {"index": index_name, "table": table, "prefix": prefix},
-                    )  # pylint: disable=E8103
-            self._cr.execute(
-                "UPDATE %(table)s set %(prefix)s_id=NULL where %(prefix)s_id=0",
-                {"table": table, "prefix": prefix},
-            )  # pylint: disable=E8103
-
     def _synchronize_company(self):
         self.ensure_one()
         dir_mapper = self.get_dir_mapper(model="res.company")
         if dir_mapper.counterpart_name:
             session = self.get_session()
-            company_ids = self.env["synchro.api"].get_record_list(session, dir_mapper)
-            synchronized = False if len(company_ids) else True
-            for company_id in company_ids:
+            ext_company_ids = self.env["synchro.api"].get_record_list(
+                session, dir_mapper
+            )
+            if not ext_company_ids:
+                # No company to synchronize
+                return
+            loc_ext_id = dir_mapper.get_loc_ext_id()
+            loc_ext_ids = [
+                getattr(company, loc_ext_id)
+                for company in self.env["res.company"].search([])
+            ]
+            while set(loc_ext_ids) - set(ext_company_ids):
+                for ext_company_id in sorted(ext_company_ids):
+                    if ext_company_id not in loc_ext_ids:
+                        break
                 self.env["synchro.cache"].que_push(
                     self,
                     "trigger",
                     dir_mapper.counterpart_name,
                     dir_mapper.model_spec,
-                    company_id,
+                    ext_company_id,
                     2,
                     {},
                     prio=2,
                 )
-            self.synchro_queue()
-            loc_ext_id = dir_mapper.get_loc_ext_id()
-            for company in self.env["res.company"].search([]):
-                if getattr(company, loc_ext_id) in company_ids:
-                    synchronized = True
-                    break
-            if not synchronized:  # pragma: no cover
+                ids = self.synchro_queue()
+                if ids:
+                    ext_company_ids = list(set(ext_company_ids) - set([ext_company_id]))
+                    loc_ext_ids = [x for x in loc_ext_ids if x and x not in ids]
+            if set(loc_ext_ids) - set(ext_company_ids):  # pragma: no cover
                 self.env["synchro.log"].logmsg(
                     "error",
                     "No company synchronized!",
@@ -472,14 +459,14 @@ class SynchroChannel(models.Model):
                     errcode=-13,
                 )
                 self.state = "failed"
-        elif not self.company_id:
-            self.env["synchro.log"].logmsg(
-                "error",
-                "No company assigned to backend!",
-                res_rec=self,
-                errcode=-13,
-            )
-            self.state = "failed"
+            elif not self.company_id:
+                self.env["synchro.log"].logmsg(
+                    "error",
+                    "No company assigned to backend!",
+                    res_rec=self,
+                    errcode=-13,
+                )
+                self.state = "failed"
 
     def _build_models_info(self, dir_mappers, dir_mapper, depth=1):
         if depth > 0 and dir_mapper.name:
@@ -541,6 +528,7 @@ class SynchroChannel(models.Model):
             )
             if not self.model_ids:
                 self.button_build_model_map(force=True)
+            self.assure_technical_models()
             managed_models = set([x.name for x in self.model_ids])
             for dir_mapper in self.model_ids:
                 dir_mapper.build_dir_mapper(
@@ -552,6 +540,37 @@ class SynchroChannel(models.Model):
                 dir_mapper.analyze_dir_mapper(managed_models)
             self._set_model_priority(managed_models)
             self._synchronize_company()
+
+    @api.multi
+    def assure_technical_models(self):
+        self.ensure_one()
+        # Technical model "ir.model.data" and "ir.module.module" must be present
+        found_models = {
+            "ir.model.data": False,
+            "ir.module.module": False,
+            "res.country": False,
+            "res.country.state": False,
+            "res.currency": False,
+            "res.currency.rate": False,
+            "res.lang": False,
+            "res.groups": False,
+            "res.company": False,
+            "res.users": False,
+        }
+        for dir_mapper in self.model_ids:
+            if dir_mapper.name in found_models:
+                found_models[dir_mapper.name] = True
+        for binding_model, found in found_models.items():
+            if not found:
+                if self.identity_id.code in ("odoo", "openerp"):
+                    raise UserError(_("Missed mapping for %s" % binding_model))
+                self.env["synchro.model"].build_dir_mapper(
+                    self,
+                    ext_model=False,
+                    model=binding_model,
+                    model_spec=False,
+                    force=True,
+                )
 
     @api.multi
     def button_reset_to_draft(self):
@@ -722,9 +741,21 @@ class SynchroChannel(models.Model):
 
     @api.model
     def get_magic_fields(self):
+        Partner = self.env["res.partner"]
         magic_fields = []
-        for backend in self.search([]):
-            magic_fields.append(backend.get_loc_ext_id())
+        for identity in self.env["synchro.identity"].search([]):
+            prefix = identity.default_prefix
+            if not prefix:
+                continue
+            for name in sorted(
+                [
+                    x
+                    for x in Partner._fields.keys()
+                    if x.startswith(prefix) and x.endswith("_id")
+                ],
+                reverse=True,
+            ):
+                magic_fields.append(name)
         return magic_fields
 
     def get_dir_mapper(self, model=None, ext_model=None, spec=None):
@@ -773,6 +804,7 @@ class SynchroChannel(models.Model):
             max_secs = 270
         time_limit = datetime.now() + timedelta(seconds=max_secs)
         loaded_ctr = 0
+        cached_model = False
         while max_ctr > 0:
             if datetime.now() > time_limit:
                 break
@@ -782,6 +814,8 @@ class SynchroChannel(models.Model):
                 if Cache.que_waiting_len(self):
                     continue
                 break
+            if not cached_model:
+                cached_model = model
             if action == "synchro":
                 id = self.env[model].synchro(
                     values,
@@ -805,13 +839,13 @@ class SynchroChannel(models.Model):
                 id = -1
             if id > 0:
                 loaded_ctr += 1
-                local_ids.append(id)
+                if model == cached_model:
+                    local_ids.append(id)
         if self.state == "run":
             self.state = "ready"
         if commit or loaded_ctr > commit_rate:
             self.env.cr.commit()  # pylint: disable=invalid-commit
-        # return local_ids
-        return []
+        return local_ids
 
     @api.model
     def create(self, vals):

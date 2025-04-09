@@ -194,7 +194,9 @@ class MyTest(SingleTransactionCase):
     def get_model_list(self, xref):
         models = []
         for loc_model in self.test_data[xref].keys():
-            models.append((loc_model, self.test_data[xref][loc_model]["EXT_NAME"]))
+            models.append(
+                (loc_model, self.test_data[xref][loc_model]["EXT_NAME"], False)
+            )
         return models
 
     def get_field_list(self, xref, loc_model):
@@ -312,11 +314,12 @@ class MyTest(SingleTransactionCase):
             backend,
             actions="button_build_model_map",
         )
-        for model, ext_model in self.get_model_list(xref):
+        for model, ext_model, model_spec in self.get_model_list(xref):
             backend_model = self.env["synchro.model"].search(
                 [
                     ("name", "=", model),
                     ("counterpart_name", "=", ext_model),
+                    ("model_spec", "=", model_spec),
                     ("backend_id", "=", backend.id),
                 ]
             )
@@ -403,15 +406,27 @@ class MyTest(SingleTransactionCase):
                         self.assertIn(
                             value,
                             getattr(partner, loc_field),
-                            msg="Unexpected value %s for %s.%s"
-                            % (getattr(partner, loc_field), loc_model, loc_field),
+                            msg="Unexpected value %s for %s.%s (ext_id %s of %s)"
+                            % (
+                                getattr(partner, loc_field),
+                                loc_model,
+                                loc_field,
+                                ext_id,
+                                xref,
+                            ),
                         )
                     else:
                         self.assertEqual(
                             getattr(partner, loc_field),
                             value,
-                            msg="Unexpected value %s for %s.%s"
-                            % (getattr(partner, loc_field), loc_model, loc_field),
+                            msg="Unexpected value %s for %s.%s (ext_id %s of %s)"
+                            % (
+                                getattr(partner, loc_field),
+                                loc_model,
+                                loc_field,
+                                ext_id,
+                                xref,
+                            ),
                         )
 
     def _test_import_partner2(self, xref):
@@ -451,15 +466,27 @@ class MyTest(SingleTransactionCase):
                         self.assertIn(
                             value,
                             getattr(partner, loc_field),
-                            msg="Unexpected value %s for %s.%s"
-                            % (getattr(partner, loc_field), loc_model, loc_field),
+                            msg="Unexpected value %s for %s.%s (ext_id %s of %s)"
+                            % (
+                                getattr(partner, loc_field),
+                                loc_model,
+                                loc_field,
+                                ext_id,
+                                xref,
+                            ),
                         )
                     else:
                         self.assertEqual(
                             getattr(partner, loc_field),
                             value,
-                            msg="Unexpected value %s for %s.%s"
-                            % (getattr(partner, loc_field), loc_model, loc_field),
+                            msg="Unexpected value %s for %s.%s (ext_id %s of %s)"
+                            % (
+                                getattr(partner, loc_field),
+                                loc_model,
+                                loc_field,
+                                ext_id,
+                                xref,
+                            ),
                         )
 
         for ext_id in self.get_ext_id_list(xref, loc_model):
@@ -477,15 +504,27 @@ class MyTest(SingleTransactionCase):
                     self.assertIn(
                         value,
                         getattr(partner, loc_field),
-                        msg="Unexpected value %s for %s.%s"
-                        % (getattr(partner, loc_field), loc_model, loc_field),
+                        msg="Unexpected value %s for %s.%s (ext_id %s of %s)"
+                        % (
+                            getattr(partner, loc_field),
+                            loc_model,
+                            loc_field,
+                            ext_id,
+                            xref,
+                        ),
                     )
                 else:
                     self.assertEqual(
                         getattr(partner, loc_field),
                         value,
-                        msg="Unexpected value %s for %s.%s"
-                        % (getattr(partner, loc_field), loc_model, loc_field),
+                        msg="Unexpected value %s for %s.%s (ext_id %s of %s)"
+                        % (
+                            getattr(partner, loc_field),
+                            loc_model,
+                            loc_field,
+                            ext_id,
+                            xref,
+                        ),
                     )
 
     def _test_country_state_ca(self, xref):
@@ -530,15 +569,27 @@ class MyTest(SingleTransactionCase):
                         self.assertIn(
                             value,
                             getattr(record, loc_field),
-                            msg="Unexpected value %s for %s.%s"
-                            % (getattr(record, loc_field), loc_model, loc_field),
+                            msg="Unexpected value %s for %s.%s (ext_id %s of %s)"
+                            % (
+                                getattr(record, loc_field),
+                                loc_model,
+                                loc_field,
+                                ext_id,
+                                xref,
+                            ),
                         )
                     else:
                         self.assertEqual(
                             getattr(record, loc_field),
                             value,
-                            msg="Unexpected value %s for %s.%s"
-                            % (getattr(record, loc_field), loc_model, loc_field),
+                            msg="Unexpected value %s for %s.%s (ext_id %s of %s)"
+                            % (
+                                getattr(record, loc_field),
+                                loc_model,
+                                loc_field,
+                                ext_id,
+                                xref,
+                            ),
                         )
 
     def test_connection(self):
@@ -562,3 +613,5 @@ class MyTest(SingleTransactionCase):
             self._test_import_model(xref, "res.currency")
             self._test_import_model(xref, "res.country")
             self._test_import_model(xref, "res.partner")
+        for xref in sorted(self.get_resource_data_list("synchro.backend")):
+            self._test_pull_record(xref, "res.partner")

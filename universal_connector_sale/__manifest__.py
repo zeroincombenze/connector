@@ -8,7 +8,7 @@
 #
 {
     "name": "Universal Connector: Sale Management",
-    "version": "12.0.0.3.14",
+    "version": "12.0.1.3.14",
     "category": "Generic Modules",
     "summary": "Add sale order models to Universal Connector",
     "author": "SHS-AV s.r.l.",
@@ -20,7 +20,7 @@
         "sale",
         "universal_connector_base",
     ],
-    "version_depends": ["universal_connector_base>=12.0.0.3.14"],
+    "version_depends": ["universal_connector_base>=12.0.1.3.14"],
     "external_dependencies": {
         "python": [
             "python_plus",

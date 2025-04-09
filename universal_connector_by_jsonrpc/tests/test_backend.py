@@ -53,40 +53,6 @@ TEST_SYNCHRO_BACKEND = {
         "prefix": "odoo10",
         "sequence": 14,
     },
-    # "universal_connector_base.backend_odoo8": {
-    #     "name": "Test Odoo 8.0",
-    #     "hostname": "localhost",
-    #     "identity": "odoo",
-    #     "database": "demo8",
-    #     "remote_sw_version": "8.0",
-    #     "method": "xmlrpc/http",
-    #     "port": 8168,
-    #     "login": "admin",
-    #     "password": "admin",
-    #     "lgi_path": "/xmlrpc/common",
-    #     "exchange_path": "/xmlrpc/object",
-    #     "counterpart_url": "http://admin@localhost:8168/xmlrpc/common",
-    #     "counterpart_data_url": "http://admin@localhost:8168/xmlrpc/object",
-    #     "prefix": "oe8",
-    #     "sequence": 18,
-    # },
-    # "universal_connector_base.backend_odoo7": {
-    #     "name": "Test Odoo 7.0",
-    #     "hostname": "localhost",
-    #     "identity": "odoo",
-    #     "database": "demo7",
-    #     "remote_sw_version": "7.0",
-    #     "method": "xmlrpc/http",
-    #     "port": 8167,
-    #     "login": "admin",
-    #     "password": "admin",
-    #     "lgi_path": "/xmlrpc/common",
-    #     "exchange_path": "/xmlrpc/object",
-    #     "counterpart_url": "http://admin@localhost:8167/xmlrpc/common",
-    #     "counterpart_data_url": "http://admin@localhost:8167/xmlrpc/object",
-    #     "prefix": "oe7",
-    #     "sequence": 20,
-    # },
 }
 TEST_SETUP_LIST = [
     "synchro.backend",
@@ -225,7 +191,9 @@ class MyTest(SingleTransactionCase):
     def get_model_list(self, xref):
         models = []
         for loc_model in self.test_data[xref].keys():
-            models.append((loc_model, self.test_data[xref][loc_model]["EXT_NAME"]))
+            models.append(
+                (loc_model, self.test_data[xref][loc_model]["EXT_NAME"], False)
+            )
         return models
 
     def get_field_list(self, xref, loc_model):
@@ -336,11 +304,12 @@ class MyTest(SingleTransactionCase):
             backend,
             actions="button_build_model_map",
         )
-        for model, ext_model in self.get_model_list(xref):
+        for model, ext_model, model_spec in self.get_model_list(xref):
             backend_model = self.env["synchro.model"].search(
                 [
                     ("name", "=", model),
                     ("counterpart_name", "=", ext_model),
+                    ("model_spec", "=", model_spec),
                     ("backend_id", "=", backend.id),
                 ]
             )
@@ -427,15 +396,27 @@ class MyTest(SingleTransactionCase):
                         self.assertIn(
                             value,
                             getattr(partner, loc_field),
-                            msg="Unexpected value %s for %s.%s"
-                            % (getattr(partner, loc_field), loc_model, loc_field),
+                            msg="Unexpected value %s for %s.%s (ext_id %s of %s)"
+                            % (
+                                getattr(partner, loc_field),
+                                loc_model,
+                                loc_field,
+                                ext_id,
+                                xref,
+                            ),
                         )
                     else:
                         self.assertEqual(
                             getattr(partner, loc_field),
                             value,
-                            msg="Unexpected value %s for %s.%s"
-                            % (getattr(partner, loc_field), loc_model, loc_field),
+                            msg="Unexpected value %s for %s.%s (ext_id %s of %s)"
+                            % (
+                                getattr(partner, loc_field),
+                                loc_model,
+                                loc_field,
+                                ext_id,
+                                xref,
+                            ),
                         )
 
     def _test_import_partner2(self, xref):
@@ -475,15 +456,27 @@ class MyTest(SingleTransactionCase):
                         self.assertIn(
                             value,
                             getattr(partner, loc_field),
-                            msg="Unexpected value %s for %s.%s"
-                            % (getattr(partner, loc_field), loc_model, loc_field),
+                            msg="Unexpected value %s for %s.%s (ext_id %s of %s)"
+                            % (
+                                getattr(partner, loc_field),
+                                loc_model,
+                                loc_field,
+                                ext_id,
+                                xref,
+                            ),
                         )
                     else:
                         self.assertEqual(
                             getattr(partner, loc_field),
                             value,
-                            msg="Unexpected value %s for %s.%s"
-                            % (getattr(partner, loc_field), loc_model, loc_field),
+                            msg="Unexpected value %s for %s.%s (ext_id %s of %s)"
+                            % (
+                                getattr(partner, loc_field),
+                                loc_model,
+                                loc_field,
+                                ext_id,
+                                xref,
+                            ),
                         )
 
         for ext_id in self.get_ext_id_list(xref, loc_model):
@@ -501,15 +494,27 @@ class MyTest(SingleTransactionCase):
                     self.assertIn(
                         value,
                         getattr(partner, loc_field),
-                        msg="Unexpected value %s for %s.%s"
-                        % (getattr(partner, loc_field), loc_model, loc_field),
+                        msg="Unexpected value %s for %s.%s (ext_id %s of %s)"
+                        % (
+                            getattr(partner, loc_field),
+                            loc_model,
+                            loc_field,
+                            ext_id,
+                            xref,
+                        ),
                     )
                 else:
                     self.assertEqual(
                         getattr(partner, loc_field),
                         value,
-                        msg="Unexpected value %s for %s.%s"
-                        % (getattr(partner, loc_field), loc_model, loc_field),
+                        msg="Unexpected value %s for %s.%s (ext_id %s of %s)"
+                        % (
+                            getattr(partner, loc_field),
+                            loc_model,
+                            loc_field,
+                            ext_id,
+                            xref,
+                        ),
                     )
 
     def _test_pull_record(self, xref, loc_model):
@@ -539,15 +544,27 @@ class MyTest(SingleTransactionCase):
                         self.assertIn(
                             value,
                             getattr(record, loc_field),
-                            msg="Unexpected value %s for %s.%s"
-                            % (getattr(record, loc_field), loc_model, loc_field),
+                            msg="Unexpected value %s for %s.%s (ext_id %s of %s)"
+                            % (
+                                getattr(record, loc_field),
+                                loc_model,
+                                loc_field,
+                                ext_id,
+                                xref,
+                            ),
                         )
                     else:
                         self.assertEqual(
                             getattr(record, loc_field),
                             value,
-                            msg="Unexpected value %s for %s.%s"
-                            % (getattr(record, loc_field), loc_model, loc_field),
+                            msg="Unexpected value %s for %s.%s (ext_id %s of %s)"
+                            % (
+                                getattr(record, loc_field),
+                                loc_model,
+                                loc_field,
+                                ext_id,
+                                xref,
+                            ),
                         )
 
     def test_connection(self):

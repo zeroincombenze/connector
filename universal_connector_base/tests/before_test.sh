@@ -1,6 +1,6 @@
 #!/bin/bash
 
-for port in 8272 8270; do
+for port in 8272 8270 8172 8170 8174; do
   for ctr in {11..0}; do
       ss -lt|grep 0.0.0.0:$port
       [[ $? -eq 0 ]] && break
@@ -16,5 +16,9 @@ done
 msg=""
 psql -Atl|grep -E "^oca12\|" || msg="$msg DB oca12 not found!"
 psql -Atl|grep -E "^oca10\|" || msg="$msg DB oca10 not found!"
+psql -Atl|grep -E "^demo10\|" || msg="$msg DB demo10 not found!"
+psql -Atl|grep -E "^demo12\|" || msg="$msg DB demo12 not found!"
+psql -Atl|grep -E "^demo14\|" || msg="$msg DB demo14 not found!"
+
 [[ -n $msg ]] && echo $msg && exit 1
 exit 0

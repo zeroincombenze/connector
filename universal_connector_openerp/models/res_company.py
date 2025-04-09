@@ -6,17 +6,16 @@
 #
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 #
-from odoo import api, fields, models
+from odoo import fields, models
 
 
 class ResCompany(models.Model):
     _inherit = "res.company"
 
+    _sql_constraints = [
+        ("ref_unique_oe8_id", "unique(oe8_id)", "Remote ref must be unique!"),
+        ("ref_unique_oe7_id", "unique(oe7_id)", "Remote ref must be unique!"),
+    ]
+
     oe7_id = fields.Integer("Odoo7 ID", copy=False)
     oe8_id = fields.Integer("Odoo8 ID", copy=False)
-
-    @api.model_cr_context
-    def _auto_init(self):
-        res = super()._auto_init()
-        self.env["synchro.backend"]._build_all_indexes(self)
-        return res

@@ -23,7 +23,7 @@ class SynchroApi(models.Model):
 
     _inherit = "synchro.api"
 
-    def odoo_xmlrpc_connect(self, hostname, port):
+    def openerp_xmlrpc_connect(self, hostname, port):
         session = self.init_session()
         try:
             cnx = oerplib.OERP(server=hostname, protocol="xmlrpc", port=port)
@@ -40,7 +40,7 @@ class SynchroApi(models.Model):
         session["server_version"] = cnx.db.server_version() if cnx else False
         return session
 
-    def odoo_xmlrpc_login(self, cnx, database, login, password):
+    def openerp_xmlrpc_login(self, cnx, database, login, password):
         try:
             session = cnx["cnx_lgi"].login(
                 database=database, user=login, passwd=password
@@ -56,15 +56,15 @@ class SynchroApi(models.Model):
         cnx["session"] = session
         return cnx
 
-    def odoo_xmlrpc_session(self, backend):
-        return self.odoo_xmlrpc_login(
-            self.odoo_xmlrpc_connect(backend.hostname, backend.port),
+    def openerp_xmlrpc_session(self, backend):
+        return self.openerp_xmlrpc_login(
+            self.openerp_xmlrpc_connect(backend.hostname, backend.port),
             backend.database,
             backend.login,
             backend.password,
         )
 
-    def get_response_odoo_xmlrpc(
+    def get_response_openerp_xmlrpc(
         self, session, dir_mapper, ext_id=False, endpoint=None, fields=None
     ):
         ext_model = dir_mapper.counterpart_name
@@ -75,7 +75,7 @@ class SynchroApi(models.Model):
             return [vals]
         return session["cnx_lgi"].env[dir_mapper.name].search([])
 
-    def get_record_list_odoo_xmlrpc(self, session, dir_mapper):
+    def get_record_list_openerp_xmlrpc(self, session, dir_mapper):
         ext_model = dir_mapper.counterpart_name
         try:
             values = session["cnx_lgi"].search(ext_model, [])
@@ -92,7 +92,7 @@ class SynchroApi(models.Model):
             return []
         return values
 
-    def get_ext_id_of_ext_ref_odoo_xmlrpc(self, session, dir_mapper, ext_id):
+    def get_ext_id_of_ext_ref_openerp_xmlrpc(self, session, dir_mapper, ext_id):
         ext_model = dir_mapper.counterpart_name
         try:
             values = session["cnx_lgi"].search(

@@ -8,7 +8,7 @@
 #
 {
     "name": "Universal Connector Base",
-    "version": "12.0.0.3.13",
+    "version": "12.0.1.3.14",
     "category": "Generic Modules",
     "summary": "Basic features for Universal Connector",
     "author": "SHS-AV s.r.l.",

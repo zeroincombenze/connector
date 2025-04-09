@@ -345,11 +345,15 @@ class SynchroChannelModel(models.Model):
 
     @api.model
     def drop_protected_equal_fields(self, vals, rec):
+        magic_fields = self.backend_id.get_magic_fields()
         loc_ext_id = self.get_loc_ext_id()
         struct = self.env[rec._name].fields_get()
         for loc_name, value in vals.copy().items():
-            if loc_name not in struct or (
-                self.auth_action == "sync" and loc_name != loc_ext_id
+            if (
+                loc_name not in struct
+                or (self.auth_action == "sync" and loc_name != loc_ext_id)
+                or loc_name in magic_fields
+                and not vals[loc_name]
             ):
                 del vals[loc_name]
                 continue
@@ -621,11 +625,11 @@ class SynchroChannelModel(models.Model):
             comodel = "res.lang"
             rec = self.env[comodel].search([("code", "=", vals[loc_name])])
             if not rec:
-                synchro_comodel = backend.get_dir_mapper(model=comodel)
+                # synchro_comodel = backend.get_dir_mapper(model=comodel)
                 Cache.que_push(
                     backend,
                     "synchro",
-                    synchro_comodel,
+                    comodel,
                     False,
                     {"code": vals[ext_ref]},
                     ttl,
@@ -690,7 +694,11 @@ class SynchroChannelModel(models.Model):
                 )
                 del vals[ext_ref]
                 continue
-            elif not loc_name or loc_name in Cache.SUPERMAGIC_COLUMNS or loc_name in magic_fields:
+            elif (
+                not loc_name
+                or loc_name in Cache.SUPERMAGIC_COLUMNS
+                or loc_name in magic_fields
+            ):
                 del vals[ext_ref]
                 continue
             if ftype:
@@ -711,7 +719,17 @@ class SynchroChannelModel(models.Model):
                 )
             if ext_ref in vals and loc_name != ext_ref:
                 del vals[ext_ref]
-        required_fields = [x for x in self.field_ids if x.required]
+        for loc_name, value in vals.copy().items():
+            if value is None:
+                del vals[loc_name]
+        return vals, incomplete_record
+
+    @api.model
+    def compile_required_fields(self, vals, ctx=None):
+        self.ensure_one()
+        required_fields = [
+            x for x in self.field_ids if x.required and not x.fields_id[0].related
+        ]
         IrApply = self.env["synchro.apply"]
         for mapper in required_fields:
             if mapper.name not in vals:
@@ -728,10 +746,11 @@ class SynchroChannelModel(models.Model):
                                 mapper.name,
                                 ctx=ctx,
                             )
+        magic_fields = self.backend_id.get_magic_fields()
         for loc_name, value in vals.copy().items():
-            if value is None:
+            if value is None or loc_name in magic_fields and not vals[loc_name]:
                 del vals[loc_name]
-        return vals, incomplete_record
+        return vals
 
     def build_dir_mapper(
         self, backend, ext_model=None, model=None, model_spec=None, force=False
@@ -763,7 +782,10 @@ class SynchroChannelModel(models.Model):
                 if model:
                     binding_model, spec = self.split_binding_model_n_spec(model)
                     model_spec = model_spec or spec
-                    if not ext_model and backend.identity in ("odoo", "openerp"):
+                    if not ext_model and backend.identity_id.code in (
+                        "odoo",
+                        "openerp",
+                    ):
                         ext_model = SynchroApi.odoo_tnl_local_model_to_ext(
                             backend, binding_model
                         )
@@ -796,7 +818,11 @@ class SynchroChannelModel(models.Model):
                         "res.lang": "no",
                     }.get(
                         binding_model,
-                        "auto" if binding_model.startswith(("ir.", "res.")) else "no",
+                        (
+                            "auto"
+                            if binding_model.startswith(("ir.", "res.", "product"))
+                            else "no"
+                        ),
                     ),
                 }
                 try:
@@ -859,7 +885,13 @@ class SynchroChannelModel(models.Model):
 
         if self.auth_action not in ("lock", "sync", "upd"):
             missed_fields = list(
-                set([k for k, v in struct.items() if v.get("required")])
+                set(
+                    [
+                        k
+                        for k, v in struct.items()
+                        if v.get("required") and not v.get("related")
+                    ]
+                )
                 - {x.name for x in self.field_ids if x.apply}
             )
             if missed_fields:

@@ -1,0 +1,161 @@
+2025-04-10 11:29:47,356 138038 INFO ? odoo: Odoo version 12.0 
+2025-04-10 11:29:47,357 138038 INFO ? odoo: Using configuration file at /home/odoo/12.0/connector/universal_connector/tests/logs/zero12.connector.universal_connector.conf 
+2025-04-10 11:29:47,357 138038 INFO ? odoo: addons paths: ['/home/odoo/.local/share/Odoo12/addons/12.0', '/home/odoo/12.0/odoo/addons', '/home/odoo/12.0/addons', '/home/odoo/.local/share/Odoo12/addons', '/home/odoo/12.0/account-analytic', '/home/odoo/12.0/account-budgeting', '/home/odoo/12.0/account-closing', '/home/odoo/12.0/account-consolidation', '/home/odoo/12.0/account-financial-reporting', '/home/odoo/12.0/account-financial-tools', '/home/odoo/12.0/account-fiscal-rule', '/home/odoo/12.0/account-invoice-reporting', '/home/odoo/12.0/account-invoicing', '/home/odoo/12.0/account-payment', '/home/odoo/12.0/account-reconcile', '/home/odoo/12.0/bank-payment', '/home/odoo/12.0/bank-statement-import', '/home/odoo/12.0/brand', '/home/odoo/12.0/calendar', '/home/odoo/12.0/commission', '/home/odoo/12.0/community-data-files', '/home/odoo/12.0/connector', '/home/odoo/12.0/contract', '/home/odoo/12.0/credit-control', '/home/odoo/12.0/crm', '/home/odoo/12.0/currency', '/home/odoo/12.0/data-protection', '/home/odoo/12.0/ddmrp', '/home/odoo/12.0/delivery-carrier', '/home/odoo/12.0/dms', '/home/odoo/12.0/e-commerce', '/home/odoo/12.0/edi', '/home/odoo/12.0/field-service', '/home/odoo/12.0/helpdesk', '/home/odoo/12.0/hr', '/home/odoo/12.0/intrastat-extrastat', '/home/odoo/12.0/knowledge', '/home/odoo/12.0/l10n-italy', '/home/odoo/12.0/l10n-italy-supplemental', '/home/odoo/12.0/maintenance', '/home/odoo/12.0/management-system', '/home/odoo/12.0/manufacture', '/home/odoo/12.0/margin-analysis', '/home/odoo/12.0/marketplace', '/home/odoo/12.0/mis-builder', '/home/odoo/12.0/multi-company', '/home/odoo/12.0/partner-contact', '/home/odoo/12.0/product-attribute', '/home/odoo/12.0/product-kitting', '/home/odoo/12.0/product-pack', '/home/odoo/12.0/product-variant', '/home/odoo/12.0/profiles', '/home/odoo/12.0/project', '/home/odoo/12.0/purchase-reporting', '/home/odoo/12.0/purchase-workflow', '/home/odoo/12.0/queue', '/home/odoo/12.0/report-print-send', '/home/odoo/12.0/reporting-engine', '/home/odoo/12.0/rma', '/home/odoo/12.0/sale-financial', '/home/odoo/12.0/sale-reporting', '/home/odoo/12.0/sale-workflow', '/home/odoo/12.0/search-engine', '/home/odoo/12.0/server-auth', '/home/odoo/12.0/server-backend', '/home/odoo/12.0/server-brand', '/home/odoo/12.0/server-env', '/home/odoo/12.0/server-tools', '/home/odoo/12.0/server-ux', '/home/odoo/12.0/social', '/home/odoo/12.0/stock-logistics-barcode', '/home/odoo/12.0/stock-logistics-reporting', '/home/odoo/12.0/stock-logistics-tracking', '/home/odoo/12.0/stock-logistics-transport', '/home/odoo/12.0/stock-logistics-warehouse', '/home/odoo/12.0/stock-logistics-workflow', '/home/odoo/12.0/storage', '/home/odoo/12.0/timesheet', '/home/odoo/12.0/uncovered', '/home/odoo/12.0/web', '/home/odoo/12.0/webhook', '/home/odoo/12.0/website', '/home/odoo/12.0/wms', '/home/odoo/12.0/zerobug-test', '/home/odoo/12.0/venv_odoo/lib/python3.7/site-packages/odoo/addons'] 
+2025-04-10 11:29:47,357 138038 INFO ? odoo: database: odoo12@localhost:5432 
+2025-04-10 11:29:47,490 138038 INFO ? odoo.addons.base.models.ir_actions_report: Will use the Wkhtmltopdf binary at /home/odoo/12.0/venv_odoo/bin/wkhtmltopdf 
+2025-04-10 11:29:47,588 138038 INFO ? odoo.service.server: HTTP service (werkzeug) running on NB200Z0.:29001 
+2025-04-10 11:29:47,600 138038 INFO test_universal_connector_12 odoo.modules.loading: loading 1 modules... 
+2025-04-10 11:29:47,609 138038 INFO test_universal_connector_12 odoo.modules.loading: 1 modules loaded in 0.01s, 0 queries 
+2025-04-10 11:29:47,649 138038 INFO test_universal_connector_12 odoo.modules.loading: loading 23 modules... 
+2025-04-10 11:29:48,026 138038 INFO test_universal_connector_12 odoo.modules.loading: 23 modules loaded in 0.38s, 0 queries 
+2025-04-10 11:29:48,380 138038 INFO test_universal_connector_12 odoo.modules.loading: Modules loaded. 
+2025-04-10 11:29:54,358 138038 INFO ? odoo.http: HTTP Configuring static files 
+2025-04-10 11:29:54,373 138038 INFO ? odoo.http: Generating nondb routing 
+2025-04-10 11:29:54,383 138038 INFO ? werkzeug: 127.0.0.1 - - [10/Apr/2025 11:29:54] "POST /web/webclient/version_info HTTP/1.1" 200 - 1 0.001 0.014
+2025-04-10 11:29:54,482 138038 INFO test_universal_connector_12 odoo.addons.base.models.res_users: Login successful for db:test_universal_connector_12 login:admin from 127.0.0.1 
+2025-04-10 11:29:54,515 138038 INFO test_universal_connector_12 odoo.modules.registry: At least one model cache has been invalidated, signaling through the database. 
+2025-04-10 11:29:54,515 138038 INFO test_universal_connector_12 werkzeug: 127.0.0.1 - - [10/Apr/2025 11:29:54] "POST /web/session/authenticate HTTP/1.1" 200 - 58 0.032 0.098
+2025-04-10 11:29:54,519 138038 INFO test_universal_connector_12 odoo.addons.base.models.ir_http: Generating routing map 
+2025-04-10 11:29:54,652 138038 INFO test_universal_connector_12 werkzeug: 127.0.0.1 - - [10/Apr/2025 11:29:54] "POST /jsonrpc HTTP/1.1" 200 - 26 0.009 0.125
+2025-04-10 11:29:54,740 138038 INFO test_universal_connector_12 werkzeug: 127.0.0.1 - - [10/Apr/2025 11:29:54] "POST /jsonrpc HTTP/1.1" 200 - 105 0.040 0.044
+2025-04-10 11:29:54,752 138038 INFO test_universal_connector_12 werkzeug: 127.0.0.1 - - [10/Apr/2025 11:29:54] "POST /jsonrpc HTTP/1.1" 200 - 3 0.001 0.005
+2025-04-10 11:29:54,760 138038 INFO test_universal_connector_12 werkzeug: 127.0.0.1 - - [10/Apr/2025 11:29:54] "POST /jsonrpc HTTP/1.1" 200 - 5 0.002 0.003
+2025-04-10 11:29:54,889 138038 INFO test_universal_connector_12 werkzeug: 127.0.0.1 - - [10/Apr/2025 11:29:54] "POST /jsonrpc HTTP/1.1" 200 - 6 0.011 0.116
+2025-04-10 11:29:55,908 138038 INFO test_universal_connector_12 werkzeug: 127.0.0.1 - - [10/Apr/2025 11:29:55] "POST /jsonrpc HTTP/1.1" 200 - 3 0.004 0.011
+2025-04-10 11:29:55,914 138038 INFO test_universal_connector_12 werkzeug: 127.0.0.1 - - [10/Apr/2025 11:29:55] "POST /jsonrpc HTTP/1.1" 200 - 2 0.001 0.002
+2025-04-10 11:29:55,922 138038 INFO test_universal_connector_12 werkzeug: 127.0.0.1 - - [10/Apr/2025 11:29:55] "POST /jsonrpc HTTP/1.1" 200 - 5 0.002 0.003
+2025-04-10 11:29:55,937 138038 INFO test_universal_connector_12 werkzeug: 127.0.0.1 - - [10/Apr/2025 11:29:55] "POST /jsonrpc HTTP/1.1" 200 - 8 0.003 0.010
+2025-04-10 11:29:55,944 138038 INFO test_universal_connector_12 werkzeug: 127.0.0.1 - - [10/Apr/2025 11:29:55] "POST /jsonrpc HTTP/1.1" 200 - 4 0.001 0.003
+2025-04-10 11:29:55,951 138038 ERROR test_universal_connector_12 odoo.http: Expected singleton: synchro.backend(2, 1, 35, 34) 
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 2
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('synchro.backend(2,).queue_jobs', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/http.py", line 127, in dispatch_rpc
+    result = dispatch(method, params)
+  File "/home/odoo/12.0/odoo/service/model.py", line 40, in dispatch
+    res = fn(db, uid, *params)
+  File "/home/odoo/12.0/odoo/service/model.py", line 178, in execute_kw
+    return execute(db, uid, obj, method, *args, **kw or {})
+  File "/home/odoo/12.0/odoo/service/model.py", line 98, in wrapper
+    return f(dbname, *args, **kwargs)
+  File "/home/odoo/12.0/odoo/service/model.py", line 185, in execute
+    res = execute_cr(cr, uid, obj, method, *args, **kw)
+  File "/home/odoo/12.0/odoo/service/model.py", line 169, in execute_cr
+    result = odoo.api.call_kw(recs, method, args, kw)
+  File "/home/odoo/12.0/odoo/api.py", line 760, in call_kw
+    return _call_kw_multi(method, model, args, kwargs)
+  File "/home/odoo/12.0/odoo/api.py", line 747, in _call_kw_multi
+    result = method(recs, *args, **kwargs)
+  File "/home/odoo/12.0/odoo/models.py", line 2838, in read
+    vals[name] = convert(record[name], record, use_name_get)
+  File "/home/odoo/12.0/odoo/models.py", line 5172, in __getitem__
+    return self._fields[key].__get__(self, type(self))
+  File "/home/odoo/12.0/odoo/fields.py", line 1068, in __get__
+    self.determine_value(record)
+  File "/home/odoo/12.0/odoo/fields.py", line 1181, in determine_value
+    self.compute_value(recs)
+  File "/home/odoo/12.0/odoo/fields.py", line 1135, in compute_value
+    self._compute_value(records)
+  File "/home/odoo/12.0/odoo/fields.py", line 1128, in _compute_value
+    self.compute(records)
+  File "/home/odoo/12.0/connector/universal_connector_base/models/synchro_backend.py", line 291, in <lambda>
+    compute=lambda self: self._compute_queue_jobs(),
+  File "/home/odoo/12.0/connector/universal_connector_base/models/synchro_backend.py", line 307, in _compute_queue_jobs
+    que_list = self.env["synchro.cache"].get_que_list(self)
+  File "/home/odoo/12.0/connector/universal_connector_base/models/synchro_cache.py", line 368, in get_que_list
+    que_list += self.get_attr(backend.id, que_name) or []
+  File "/home/odoo/12.0/odoo/fields.py", line 2952, in __get__
+    raise ValueError("Expected singleton: %s" % record)
+ValueError: Expected singleton: synchro.backend(2, 1, 35, 34)
+2025-04-10 11:29:55,955 138038 ERROR test_universal_connector_12 odoo.http: Exception during JSON request handling. 
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 2
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('synchro.backend(2,).queue_jobs', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/http.py", line 663, in _handle_exception
+    return super(JsonRequest, self)._handle_exception(exception)
+  File "/home/odoo/12.0/odoo/http.py", line 321, in _handle_exception
+    raise pycompat.reraise(type(exception), exception, sys.exc_info()[2])
+  File "/home/odoo/12.0/odoo/tools/pycompat.py", line 87, in reraise
+    raise value
+  File "/home/odoo/12.0/odoo/http.py", line 705, in dispatch
+    result = self._call_function(**self.params)
+  File "/home/odoo/12.0/odoo/http.py", line 353, in _call_function
+    return checked_call(self.db, *args, **kwargs)
+  File "/home/odoo/12.0/odoo/service/model.py", line 98, in wrapper
+    return f(dbname, *args, **kwargs)
+  File "/home/odoo/12.0/odoo/http.py", line 346, in checked_call
+    result = self.endpoint(*a, **kw)
+  File "/home/odoo/12.0/odoo/http.py", line 948, in __call__
+    return self.method(*args, **kw)
+  File "/home/odoo/12.0/odoo/http.py", line 526, in response_wrap
+    response = f(*args, **kw)
+  File "/home/odoo/12.0/odoo/addons/base/controllers/rpc.py", line 77, in jsonrpc
+    return dispatch_rpc(service, method, args)
+  File "/home/odoo/12.0/odoo/http.py", line 127, in dispatch_rpc
+    result = dispatch(method, params)
+  File "/home/odoo/12.0/odoo/service/model.py", line 40, in dispatch
+    res = fn(db, uid, *params)
+  File "/home/odoo/12.0/odoo/service/model.py", line 178, in execute_kw
+    return execute(db, uid, obj, method, *args, **kw or {})
+  File "/home/odoo/12.0/odoo/service/model.py", line 98, in wrapper
+    return f(dbname, *args, **kwargs)
+  File "/home/odoo/12.0/odoo/service/model.py", line 185, in execute
+    res = execute_cr(cr, uid, obj, method, *args, **kw)
+  File "/home/odoo/12.0/odoo/service/model.py", line 169, in execute_cr
+    result = odoo.api.call_kw(recs, method, args, kw)
+  File "/home/odoo/12.0/odoo/api.py", line 760, in call_kw
+    return _call_kw_multi(method, model, args, kwargs)
+  File "/home/odoo/12.0/odoo/api.py", line 747, in _call_kw_multi
+    result = method(recs, *args, **kwargs)
+  File "/home/odoo/12.0/odoo/models.py", line 2838, in read
+    vals[name] = convert(record[name], record, use_name_get)
+  File "/home/odoo/12.0/odoo/models.py", line 5172, in __getitem__
+    return self._fields[key].__get__(self, type(self))
+  File "/home/odoo/12.0/odoo/fields.py", line 1068, in __get__
+    self.determine_value(record)
+  File "/home/odoo/12.0/odoo/fields.py", line 1181, in determine_value
+    self.compute_value(recs)
+  File "/home/odoo/12.0/odoo/fields.py", line 1135, in compute_value
+    self._compute_value(records)
+  File "/home/odoo/12.0/odoo/fields.py", line 1128, in _compute_value
+    self.compute(records)
+  File "/home/odoo/12.0/connector/universal_connector_base/models/synchro_backend.py", line 291, in <lambda>
+    compute=lambda self: self._compute_queue_jobs(),
+  File "/home/odoo/12.0/connector/universal_connector_base/models/synchro_backend.py", line 307, in _compute_queue_jobs
+    que_list = self.env["synchro.cache"].get_que_list(self)
+  File "/home/odoo/12.0/connector/universal_connector_base/models/synchro_cache.py", line 368, in get_que_list
+    que_list += self.get_attr(backend.id, que_name) or []
+  File "/home/odoo/12.0/odoo/fields.py", line 2952, in __get__
+    raise ValueError("Expected singleton: %s" % record)
+ValueError: Expected singleton: synchro.backend(2, 1, 35, 34)
+2025-04-10 11:29:55,957 138038 INFO test_universal_connector_12 werkzeug: 127.0.0.1 - - [10/Apr/2025 11:29:55] "POST /jsonrpc HTTP/1.1" 200 - 3 0.001 0.011
+2025-04-10 11:30:03,109 138038 INFO test_universal_connector_12 odoo.service.server: Initiating shutdown 
+2025-04-10 11:30:03,110 138038 INFO test_universal_connector_12 odoo.service.server: Hit CTRL-C again or send a second signal to force the shutdown. 

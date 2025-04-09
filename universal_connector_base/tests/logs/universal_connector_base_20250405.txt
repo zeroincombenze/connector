@@ -1,0 +1,590 @@
+2025-04-05 18:26:36,872 2359725 INFO ? odoo: Odoo version 10.0
+2025-04-05 18:26:36,872 2359725 INFO ? odoo: Using configuration file at /home/odoo/10.0/connector/universal_connector_base/tests/logs/zero10.connector.universal_connector_base.conf
+2025-04-05 18:26:36,872 2359725 INFO ? odoo: addons paths: ['/home/odoo/.local/share/Odoo10/addons/10.0', u'/home/odoo/10.0/odoo/addons', u'/home/odoo/10.0/addons', u'/home/odoo/.local/share/Odoo10/addons', u'/home/odoo/10.0/account-analytic', u'/home/odoo/10.0/account-budgeting', u'/home/odoo/10.0/account-closing', u'/home/odoo/10.0/account-consolidation', u'/home/odoo/10.0/account-financial-reporting', u'/home/odoo/10.0/account-financial-tools', u'/home/odoo/10.0/account-fiscal-rule', u'/home/odoo/10.0/account-invoice-reporting', u'/home/odoo/10.0/account-invoicing', u'/home/odoo/10.0/account-payment', u'/home/odoo/10.0/account-reconcile', u'/home/odoo/10.0/bank-payment', u'/home/odoo/10.0/bank-statement-import', u'/home/odoo/10.0/calendar', u'/home/odoo/10.0/commission', u'/home/odoo/10.0/community-data-files', u'/home/odoo/10.0/connector', u'/home/odoo/10.0/contract', u'/home/odoo/10.0/credit-control', u'/home/odoo/10.0/crm', u'/home/odoo/10.0/currency', u'/home/odoo/10.0/data-protection', u'/home/odoo/10.0/delivery-carrier', u'/home/odoo/10.0/e-commerce', u'/home/odoo/10.0/edi', u'/home/odoo/10.0/helpdesk', u'/home/odoo/10.0/hr', u'/home/odoo/10.0/intrastat-extrastat', u'/home/odoo/10.0/knowledge', u'/home/odoo/10.0/l10n-italy', u'/home/odoo/10.0/l10n-italy-supplemental', u'/home/odoo/10.0/maintenance', u'/home/odoo/10.0/management-system', u'/home/odoo/10.0/manufacture', u'/home/odoo/10.0/margin-analysis', u'/home/odoo/10.0/marketplace', u'/home/odoo/10.0/mis-builder', u'/home/odoo/10.0/multi-company', u'/home/odoo/10.0/partner-contact', u'/home/odoo/10.0/product-attribute', u'/home/odoo/10.0/product-kitting', u'/home/odoo/10.0/product-variant', u'/home/odoo/10.0/profiles', u'/home/odoo/10.0/project', u'/home/odoo/10.0/purchase-reporting', u'/home/odoo/10.0/purchase-workflow', u'/home/odoo/10.0/queue', u'/home/odoo/10.0/report-print-send', u'/home/odoo/10.0/reporting-engine', u'/home/odoo/10.0/rma', u'/home/odoo/10.0/sale-financial', u'/home/odoo/10.0/sale-reporting', u'/home/odoo/10.0/sale-workflow', u'/home/odoo/10.0/search-engine', u'/home/odoo/10.0/server-auth', u'/home/odoo/10.0/server-tools', u'/home/odoo/10.0/server-ux', u'/home/odoo/10.0/social', u'/home/odoo/10.0/stock-logistics-barcode', u'/home/odoo/10.0/stock-logistics-reporting', u'/home/odoo/10.0/stock-logistics-tracking', u'/home/odoo/10.0/stock-logistics-transport', u'/home/odoo/10.0/stock-logistics-warehouse', u'/home/odoo/10.0/stock-logistics-workflow', u'/home/odoo/10.0/storage', u'/home/odoo/10.0/timesheet', u'/home/odoo/10.0/uncovered', u'/home/odoo/10.0/web', u'/home/odoo/10.0/webhook', u'/home/odoo/10.0/website', u'/home/odoo/10.0/wms', u'/home/odoo/10.0/zerobug-test']
+2025-04-05 18:26:36,873 2359725 INFO ? odoo: database: odoo10@localhost:5432
+2025-04-05 18:26:36,896 2359725 INFO ? odoo.service.server: HTTP service (werkzeug) running on NB200Z0.:36557
+2025-04-05 18:26:36,914 2359725 INFO test_universal_connector_base_10 odoo.modules.loading: loading 1 modules...
+2025-04-05 18:26:37,025 2359725 INFO test_universal_connector_base_10 odoo.modules.loading: 1 modules loaded in 0.11s, 0 queries
+2025-04-05 18:26:37,779 2359725 INFO test_universal_connector_base_10 odoo.modules.loading: loading 12 modules...
+2025-04-05 18:26:37,832 2359725 INFO test_universal_connector_base_10 odoo.modules.loading: 12 modules loaded in 0.05s, 0 queries
+2025-04-05 18:26:37,836 2359725 INFO test_universal_connector_base_10 odoo.modules.loading: loading 13 modules...
+2025-04-05 18:26:38,036 2359725 INFO test_universal_connector_base_10 odoo.modules.registry: module universal_connector_base: creating or updating database tables
+2025-04-05 18:26:39,381 2359725 INFO test_universal_connector_base_10 odoo.addons.auth_crypt.models.res_users: Hashing passwords, may be slow for databases with many users...
+2025-04-05 18:26:40,785 2359725 INFO test_universal_connector_base_10 odoo.models: Storing computed values of synchro.mapper fields backend_id, model_counterpart_name
+2025-04-05 18:26:40,787 2359725 INFO test_universal_connector_base_10 odoo.models: Storing computed values of synchro.model fields state
+2025-04-05 18:26:40,788 2359725 INFO test_universal_connector_base_10 odoo.models: Storing computed values of synchro.backend fields method
+2025-04-05 18:26:40,817 2359725 INFO test_universal_connector_base_10 odoo.modules.loading: loading universal_connector_base/security/ir.model.access.csv
+2025-04-05 18:26:41,149 2359725 INFO test_universal_connector_base_10 odoo.modules.loading: loading universal_connector_base/data/synchro_protocol.xml
+2025-04-05 18:26:41,162 2359725 INFO test_universal_connector_base_10 odoo.modules.loading: loading universal_connector_base/data/synchro_identity.xml
+2025-04-05 18:26:41,185 2359725 INFO test_universal_connector_base_10 odoo.modules.loading: loading universal_connector_base/data/synchro_backend.xml
+2025-04-05 18:26:41,245 2359725 INFO test_universal_connector_base_10 odoo.modules.loading: loading universal_connector_base/wizard/wizard_pull_record_view.xml
+2025-04-05 18:26:41,288 2359725 INFO test_universal_connector_base_10 odoo.modules.loading: loading universal_connector_base/views/synchro_menu.xml
+2025-04-05 18:26:41,308 2359725 INFO test_universal_connector_base_10 odoo.modules.loading: loading universal_connector_base/views/synchro_identity_view.xml
+2025-04-05 18:26:41,421 2359725 INFO test_universal_connector_base_10 odoo.modules.loading: loading universal_connector_base/views/synchro_protocol_view.xml
+2025-04-05 18:26:41,492 2359725 INFO test_universal_connector_base_10 odoo.modules.loading: loading universal_connector_base/views/synchro_backend_view.xml
+2025-04-05 18:26:41,566 2359725 INFO test_universal_connector_base_10 odoo.modules.loading: loading universal_connector_base/views/synchro_model_view.xml
+2025-04-05 18:26:41,830 2359725 INFO test_universal_connector_base_10 odoo.modules.loading: loading universal_connector_base/views/synchro_log_view.xml
+2025-04-05 18:26:41,897 2359725 INFO test_universal_connector_base_10 odoo.modules.loading: loading universal_connector_base/views/country_view.xml
+2025-04-05 18:26:41,960 2359725 INFO test_universal_connector_base_10 odoo.modules.loading: loading universal_connector_base/views/currency_view.xml
+2025-04-05 18:26:41,994 2359725 INFO test_universal_connector_base_10 odoo.modules.loading: loading universal_connector_base/views/partner_view.xml
+2025-04-05 18:26:42,076 2359725 INFO test_universal_connector_base_10 odoo.modules.loading: loading universal_connector_base/views/company_view.xml
+2025-04-05 18:26:42,124 2359725 INFO test_universal_connector_base_10 odoo.modules.loading: loading universal_connector_base/views/user_view.xml
+2025-04-05 18:26:42,550 2359725 INFO test_universal_connector_base_10 odoo.modules.module: odoo.addons.universal_connector_base.tests.test_backend running tests.
+2025-04-05 18:26:42,551 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.tests.test_backend: test_connection (odoo.addons.universal_connector_base.tests.test_backend.MyTest)
+2025-04-05 18:26:42,653 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.tests.testenv: 🎺🎺🎺 Starting test v2.0.22 (debug_level=0, commit=True)
+2025-04-05 18:26:42,656 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.tests.testenv: 🎺🎺 Testing module: universal_connector_base (10.0.1.3.14)
+2025-04-05 18:26:42,656 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.tests.testenv: 🎺🎺 Loading data from: synchro.backend 
+2025-04-05 18:26:42,689 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.tests.test_backend: 🎺 Starting connection test on ports 8270 (db=oca10) and 8272 (db=oca12) and on ports 8167 (db=demo7) and 8168 (db=demo8)
+2025-04-05 18:26:42,822 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: synchro.backend.button_check_connection(ep=http://admin@localhost:8270/xmlrpc/2/common,h=localhost)
+2025-04-05 18:26:51,825 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.company,odoo10,remote_id=1,ttl=1)
+2025-04-05 18:26:52,209 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: synchro.backend.button_reset_to_draft(ep=http://admin@localhost:8270/xmlrpc/2/common,h=localhost):
+2025-04-05 18:26:52,348 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: synchro.backend.button_check_connection(ep=http://admin@localhost:8270/xmlrpc/2/common,h=localhost)
+2025-04-05 18:26:55,878 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo10,remote_id=1,ttl=None)
+2025-04-05 18:26:56,013 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: res.currency.synchro({u'odoo10:id': 1, u'odoo10:creat,backend=Test Odoo 10.0,min=True),ttl=4
+2025-04-05 18:26:56,043 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo10,remote_id=3,ttl=None)
+2025-04-05 18:26:56,139 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: res.currency.synchro({u'odoo10:id': 3, u'odoo10:creat,backend=Test Odoo 10.0,min=True),ttl=4
+2025-04-05 18:26:56,338 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: synchro.backend.button_check_connection(ep=http://admin@localhost:8272/xmlrpc/2/common,h=localhost)
+2025-04-05 18:27:05,042 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.company,odoo12,remote_id=1,ttl=1)
+2025-04-05 18:27:05,448 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: synchro.backend.button_reset_to_draft(ep=http://admin@localhost:8272/xmlrpc/2/common,h=localhost):
+2025-04-05 18:27:05,580 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: synchro.backend.button_check_connection(ep=http://admin@localhost:8272/xmlrpc/2/common,h=localhost)
+2025-04-05 18:27:09,426 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo12,remote_id=1,ttl=None)
+2025-04-05 18:27:09,596 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: res.currency.synchro({u'odoo12:decimal_places': 2, u',backend=Test Odoo 12.0,min=True),ttl=4
+2025-04-05 18:27:09,634 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo12,remote_id=2,ttl=None)
+2025-04-05 18:27:09,757 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: res.currency.synchro({u'odoo12:decimal_places': 2, u',backend=Test Odoo 12.0,min=True),ttl=4
+2025-04-05 18:27:09,792 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country,odoo10,remote_id=235,ttl=None)
+2025-04-05 18:27:09,917 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: res.country.synchro({u'odoo10:id': 235, u'odoo10:cod,backend=Test Odoo 10.0,min=True),ttl=4
+2025-04-05 18:27:09,991 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=68,ttl=3)
+2025-04-05 18:27:10,224 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=69,ttl=3)
+2025-04-05 18:27:10,450 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=10,ttl=3)
+2025-04-05 18:27:10,675 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=9,ttl=3)
+2025-04-05 18:27:10,898 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=70,ttl=3)
+2025-04-05 18:27:11,136 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=12,ttl=3)
+2025-04-05 18:27:11,372 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=60,ttl=3)
+2025-04-05 18:27:11,611 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=11,ttl=3)
+2025-04-05 18:27:11,841 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=13,ttl=3)
+2025-04-05 18:27:12,066 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=14,ttl=3)
+2025-04-05 18:27:12,288 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=15,ttl=3)
+2025-04-05 18:27:12,522 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=17,ttl=3)
+2025-04-05 18:27:12,771 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=16,ttl=3)
+2025-04-05 18:27:12,999 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=18,ttl=3)
+2025-04-05 18:27:13,226 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=61,ttl=3)
+2025-04-05 18:27:13,469 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=19,ttl=3)
+2025-04-05 18:27:13,715 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=62,ttl=3)
+2025-04-05 18:27:13,955 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=20,ttl=3)
+2025-04-05 18:27:14,196 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=24,ttl=3)
+2025-04-05 18:27:14,439 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=21,ttl=3)
+2025-04-05 18:27:14,688 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=22,ttl=3)
+2025-04-05 18:27:14,933 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=23,ttl=3)
+2025-04-05 18:27:15,170 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=25,ttl=3)
+2025-04-05 18:27:15,400 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=26,ttl=3)
+2025-04-05 18:27:15,625 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=27,ttl=3)
+2025-04-05 18:27:15,896 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=42,ttl=3)
+2025-04-05 18:27:16,142 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=41,ttl=3)
+2025-04-05 18:27:16,376 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=28,ttl=3)
+2025-04-05 18:27:16,625 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=63,ttl=3)
+2025-04-05 18:27:16,870 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=43,ttl=3)
+2025-04-05 18:27:17,116 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=44,ttl=3)
+2025-04-05 18:27:17,363 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=46,ttl=3)
+2025-04-05 18:27:17,602 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=64,ttl=3)
+2025-04-05 18:27:17,831 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=45,ttl=3)
+2025-04-05 18:27:18,061 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=29,ttl=3)
+2025-04-05 18:27:18,270 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=36,ttl=3)
+2025-04-05 18:27:18,487 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=37,ttl=3)
+2025-04-05 18:27:18,702 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=30,ttl=3)
+2025-04-05 18:27:18,938 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=32,ttl=3)
+2025-04-05 18:27:19,152 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=33,ttl=3)
+2025-04-05 18:27:19,377 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=34,ttl=3)
+2025-04-05 18:27:19,605 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=31,ttl=3)
+2025-04-05 18:27:19,835 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=35,ttl=3)
+2025-04-05 18:27:20,055 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=38,ttl=3)
+2025-04-05 18:27:20,267 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=39,ttl=3)
+2025-04-05 18:27:20,488 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=40,ttl=3)
+2025-04-05 18:27:20,714 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=47,ttl=3)
+2025-04-05 18:27:20,970 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=66,ttl=3)
+2025-04-05 18:27:21,194 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=65,ttl=3)
+2025-04-05 18:27:21,450 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=48,ttl=3)
+2025-04-05 18:27:21,899 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=49,ttl=3)
+2025-04-05 18:27:22,148 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=50,ttl=3)
+2025-04-05 18:27:22,395 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=51,ttl=3)
+2025-04-05 18:27:22,627 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=52,ttl=3)
+2025-04-05 18:27:22,855 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=53,ttl=3)
+2025-04-05 18:27:23,071 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=55,ttl=3)
+2025-04-05 18:27:23,287 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=67,ttl=3)
+2025-04-05 18:27:23,514 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=54,ttl=3)
+2025-04-05 18:27:23,749 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=56,ttl=3)
+2025-04-05 18:27:23,984 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=58,ttl=3)
+2025-04-05 18:27:24,215 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=57,ttl=3)
+2025-04-05 18:27:24,441 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,remote_id=59,ttl=3)
+2025-04-05 18:27:24,685 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,remote_id=3,ttl=None)
+2025-04-05 18:27:24,851 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({u'odoo10:city': 'Scranton', u'o,backend=Test Odoo 10.0,min=True),ttl=4
+2025-04-05 18:27:25,049 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,remote_id=3,ttl=3)
+2025-04-05 18:27:25,300 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.users,odoo10,remote_id=1,ttl=3)
+2025-04-05 18:27:25,827 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.groups,odoo10,remote_id=3,ttl=2)
+2025-04-05 18:27:26,170 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.groups,odoo10,remote_id=23,ttl=2)
+2025-04-05 18:27:26,527 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.groups,odoo10,remote_id=8,ttl=2)
+2025-04-05 18:27:26,866 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.groups,odoo10,remote_id=1,ttl=2)
+2025-04-05 18:27:27,251 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.groups,odoo10,remote_id=48,ttl=2)
+2025-04-05 18:27:27,611 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.groups,odoo10,remote_id=40,ttl=2)
+2025-04-05 18:27:27,943 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.groups,odoo10,remote_id=22,ttl=2)
+2025-04-05 18:27:28,250 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.groups,odoo10,remote_id=4,ttl=2)
+2025-04-05 18:27:28,575 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.groups,odoo10,remote_id=30,ttl=2)
+2025-04-05 18:27:28,941 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.groups,odoo10,remote_id=7,ttl=2)
+2025-04-05 18:27:29,273 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.groups,odoo10,remote_id=39,ttl=2)
+2025-04-05 18:27:29,636 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.groups,odoo10,remote_id=47,ttl=2)
+2025-04-05 18:27:29,955 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.groups,odoo10,remote_id=21,ttl=2)
+2025-04-05 18:27:30,257 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.groups,odoo10,remote_id=20,ttl=2)
+2025-04-05 18:27:30,690 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,remote_id=11,ttl=None)
+2025-04-05 18:27:30,850 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({u'odoo10:city': 'Miami', u'odoo,backend=Test Odoo 10.0,min=True),ttl=4
+2025-04-05 18:27:31,070 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,remote_id=11,ttl=3)
+2025-04-05 18:27:31,284 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,remote_id=31,ttl=3)
+2025-04-05 18:27:31,605 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,remote_id=32,ttl=3)
+2025-04-05 18:27:31,931 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner.category,odoo10,remote_id=5,ttl=3)
+2025-04-05 18:27:32,212 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner.category,odoo10,remote_id=1,ttl=2)
+2025-04-05 18:27:32,453 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner.category,odoo10,remote_id=8,ttl=3)
+2025-04-05 18:27:32,683 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,remote_id=12,ttl=2)
+2025-04-05 18:27:33,011 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country,odoo10,remote_id=76,ttl=1)
+2025-04-05 18:27:33,161 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,remote_id=12,ttl=1)
+2025-04-05 18:27:33,371 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner.category,odoo10,remote_id=7,ttl=1)
+2025-04-05 18:27:33,604 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner.category,odoo10,remote_id=6,ttl=1)
+2025-04-05 18:27:33,848 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,remote_id=8,ttl=2)
+2025-04-05 18:27:34,167 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country,odoo10,remote_id=21,ttl=1)
+2025-04-05 18:27:34,303 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,remote_id=8,ttl=1)
+2025-04-05 18:27:34,515 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,remote_id=30,ttl=1)
+2025-04-05 18:27:34,827 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,remote_id=36,ttl=1)
+2025-04-05 18:27:35,160 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,remote_id=29,ttl=1)
+2025-04-05 18:27:35,466 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner.category,odoo10,remote_id=11,ttl=1)
+2025-04-05 18:27:35,732 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,remote_id=18,ttl=1)
+2025-04-05 18:27:36,019 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,remote_id=33,ttl=1)
+2025-04-05 18:27:36,352 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,remote_id=23,ttl=1)
+2025-04-05 18:27:36,887 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,remote_id=22,ttl=1)
+2025-04-05 18:27:37,342 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner.category,odoo10,remote_id=10,ttl=1)
+2025-04-05 18:27:37,633 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country,odoo12,remote_id=233,ttl=None)
+2025-04-05 18:27:37,790 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: res.country.synchro({u'odoo12:id': 233, u'odoo12:nam,backend=Test Odoo 12.0,min=True),ttl=4
+2025-04-05 18:27:37,869 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=68,ttl=3)
+2025-04-05 18:27:38,141 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=69,ttl=3)
+2025-04-05 18:27:38,373 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=10,ttl=3)
+2025-04-05 18:27:38,602 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=9,ttl=3)
+2025-04-05 18:27:38,829 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=70,ttl=3)
+2025-04-05 18:27:39,076 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=12,ttl=3)
+2025-04-05 18:27:39,318 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=60,ttl=3)
+2025-04-05 18:27:39,549 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=11,ttl=3)
+2025-04-05 18:27:39,781 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=13,ttl=3)
+2025-04-05 18:27:40,017 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=14,ttl=3)
+2025-04-05 18:27:40,266 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=15,ttl=3)
+2025-04-05 18:27:40,498 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=17,ttl=3)
+2025-04-05 18:27:40,722 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=16,ttl=3)
+2025-04-05 18:27:40,954 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=18,ttl=3)
+2025-04-05 18:27:41,202 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=61,ttl=3)
+2025-04-05 18:27:41,432 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=19,ttl=3)
+2025-04-05 18:27:41,659 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=62,ttl=3)
+2025-04-05 18:27:41,898 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=20,ttl=3)
+2025-04-05 18:27:42,180 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=24,ttl=3)
+2025-04-05 18:27:42,431 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=21,ttl=3)
+2025-04-05 18:27:42,693 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=22,ttl=3)
+2025-04-05 18:27:42,936 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=23,ttl=3)
+2025-04-05 18:27:43,169 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=25,ttl=3)
+2025-04-05 18:27:43,458 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=26,ttl=3)
+2025-04-05 18:27:43,748 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=27,ttl=3)
+2025-04-05 18:27:43,985 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=42,ttl=3)
+2025-04-05 18:27:44,222 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=41,ttl=3)
+2025-04-05 18:27:44,456 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=28,ttl=3)
+2025-04-05 18:27:44,682 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=63,ttl=3)
+2025-04-05 18:27:44,913 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=43,ttl=3)
+2025-04-05 18:27:45,146 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=44,ttl=3)
+2025-04-05 18:27:45,379 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=46,ttl=3)
+2025-04-05 18:27:45,609 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=64,ttl=3)
+2025-04-05 18:27:45,839 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=45,ttl=3)
+2025-04-05 18:27:46,071 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=29,ttl=3)
+2025-04-05 18:27:46,301 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=36,ttl=3)
+2025-04-05 18:27:46,532 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=37,ttl=3)
+2025-04-05 18:27:46,761 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=30,ttl=3)
+2025-04-05 18:27:46,988 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=32,ttl=3)
+2025-04-05 18:27:47,228 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=33,ttl=3)
+2025-04-05 18:27:47,472 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=34,ttl=3)
+2025-04-05 18:27:47,710 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=31,ttl=3)
+2025-04-05 18:27:47,961 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=35,ttl=3)
+2025-04-05 18:27:48,200 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=38,ttl=3)
+2025-04-05 18:27:48,436 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=39,ttl=3)
+2025-04-05 18:27:48,659 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=40,ttl=3)
+2025-04-05 18:27:48,890 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=47,ttl=3)
+2025-04-05 18:27:49,125 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=66,ttl=3)
+2025-04-05 18:27:49,378 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=65,ttl=3)
+2025-04-05 18:27:49,622 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=48,ttl=3)
+2025-04-05 18:27:49,861 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=49,ttl=3)
+2025-04-05 18:27:50,114 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=50,ttl=3)
+2025-04-05 18:27:50,355 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=51,ttl=3)
+2025-04-05 18:27:50,588 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=52,ttl=3)
+2025-04-05 18:27:50,824 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=53,ttl=3)
+2025-04-05 18:27:51,055 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=55,ttl=3)
+2025-04-05 18:27:51,292 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=67,ttl=3)
+2025-04-05 18:27:51,546 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=54,ttl=3)
+2025-04-05 18:27:51,982 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=56,ttl=3)
+2025-04-05 18:27:52,229 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=58,ttl=3)
+2025-04-05 18:27:52,472 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=57,ttl=3)
+2025-04-05 18:27:52,716 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=59,ttl=3)
+2025-04-05 18:27:52,970 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,remote_id=3,ttl=None)
+2025-04-05 18:27:53,094 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({u'odoo10:city': 'Scranton', u'o,backend=Test Odoo 10.0,min=True),ttl=4
+2025-04-05 18:27:53,179 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,remote_id=11,ttl=None)
+2025-04-05 18:27:53,294 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({u'odoo10:city': 'Miami', u'odoo,backend=Test Odoo 10.0,min=True),ttl=4
+2025-04-05 18:27:53,379 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,remote_id=10,ttl=None)
+2025-04-05 18:27:53,498 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({u'odoo10:city': 'Fremont', u'od,backend=Test Odoo 10.0,min=True),ttl=4
+2025-04-05 18:27:53,703 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,remote_id=10,ttl=3)
+2025-04-05 18:27:53,922 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,remote_id=27,ttl=3)
+2025-04-05 18:27:54,232 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,remote_id=28,ttl=3)
+2025-04-05 18:27:54,548 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,remote_id=40,ttl=3)
+2025-04-05 18:27:54,851 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,remote_id=39,ttl=3)
+2025-04-05 18:27:55,153 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,remote_id=16,ttl=3)
+2025-04-05 18:27:55,477 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,remote_id=34,ttl=3)
+2025-04-05 18:27:55,789 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,remote_id=38,ttl=3)
+2025-04-05 18:27:56,094 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner.category,odoo10,remote_id=13,ttl=3)
+2025-04-05 18:27:56,326 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner.category,odoo10,remote_id=12,ttl=3)
+2025-04-05 18:27:56,550 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,remote_id=7,ttl=2)
+2025-04-05 18:27:56,857 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country,odoo10,remote_id=229,ttl=1)
+2025-04-05 18:27:56,981 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,remote_id=7,ttl=1)
+2025-04-05 18:27:57,191 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,remote_id=19,ttl=1)
+2025-04-05 18:27:57,551 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,remote_id=17,ttl=1)
+2025-04-05 18:27:57,830 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,remote_id=15,ttl=1)
+2025-04-05 18:27:58,128 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,remote_id=20,ttl=1)
+2025-04-05 18:27:58,401 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,remote_id=21,ttl=1)
+2025-04-05 18:27:58,670 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,remote_id=14,ttl=1)
+2025-04-05 18:27:58,981 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,remote_id=7,ttl=None)
+2025-04-05 18:27:59,109 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({u'odoo10:city': 'Taipei', u'odo,backend=Test Odoo 10.0,min=True),ttl=4
+2025-04-05 18:27:59,204 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo10,remote_id=1,ttl=None)
+2025-04-05 18:27:59,314 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: res.currency.synchro({u'odoo10:id': 1, u'odoo10:creat,backend=Test Odoo 10.0,min=True),ttl=4
+2025-04-05 18:27:59,339 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo10,remote_id=3,ttl=None)
+2025-04-05 18:27:59,446 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: res.currency.synchro({u'odoo10:id': 3, u'odoo10:creat,backend=Test Odoo 10.0,min=True),ttl=4
+2025-04-05 18:27:59,479 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country,odoo10,remote_id=235,ttl=None)
+2025-04-05 18:27:59,584 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: res.country.synchro({u'odoo10:id': 235, u'odoo10:cod,backend=Test Odoo 10.0,min=True),ttl=4
+2025-04-05 18:27:59,648 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,remote_id=3,ttl=None)
+2025-04-05 18:27:59,754 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({u'odoo10:city': 'Scranton', u'o,backend=Test Odoo 10.0,min=True),ttl=4
+2025-04-05 18:27:59,839 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,remote_id=11,ttl=None)
+2025-04-05 18:27:59,948 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({u'odoo10:city': 'Miami', u'odoo,backend=Test Odoo 10.0,min=True),ttl=4
+2025-04-05 18:28:00,056 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,remote_id=10,ttl=None)
+2025-04-05 18:28:00,177 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({u'odoo10:city': 'Fremont', u'od,backend=Test Odoo 10.0,min=True),ttl=4
+2025-04-05 18:28:00,276 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,remote_id=7,ttl=None)
+2025-04-05 18:28:00,398 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({u'odoo10:city': 'Taipei', u'odo,backend=Test Odoo 10.0,min=True),ttl=4
+2025-04-05 18:28:00,484 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,remote_id=3,ttl=None)
+2025-04-05 18:28:00,651 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({u'odoo12:self': [3, 'YourCompan,backend=Test Odoo 12.0,min=True),ttl=4
+2025-04-05 18:28:00,701 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: !-7! Invalid value                            it_IT for lang
+2025-04-05 18:28:00,778 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country,odoo12,remote_id=109,ttl=3)
+2025-04-05 18:28:00,988 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=306,ttl=2)
+2025-04-05 18:28:01,111 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=307,ttl=2)
+2025-04-05 18:28:01,232 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=308,ttl=2)
+2025-04-05 18:28:01,354 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=309,ttl=2)
+2025-04-05 18:28:01,479 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=311,ttl=2)
+2025-04-05 18:28:01,608 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=350,ttl=2)
+2025-04-05 18:28:01,736 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=310,ttl=2)
+2025-04-05 18:28:01,860 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=312,ttl=2)
+2025-04-05 18:28:01,982 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=313,ttl=2)
+2025-04-05 18:28:02,108 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=314,ttl=2)
+2025-04-05 18:28:02,231 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=318,ttl=2)
+2025-04-05 18:28:02,356 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=319,ttl=2)
+2025-04-05 18:28:02,486 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=316,ttl=2)
+2025-04-05 18:28:02,616 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=317,ttl=2)
+2025-04-05 18:28:02,748 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=320,ttl=2)
+2025-04-05 18:28:02,872 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=323,ttl=2)
+2025-04-05 18:28:02,993 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=322,ttl=2)
+2025-04-05 18:28:03,119 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=315,ttl=2)
+2025-04-05 18:28:03,243 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=321,ttl=2)
+2025-04-05 18:28:03,371 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=324,ttl=2)
+2025-04-05 18:28:03,516 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=326,ttl=2)
+2025-04-05 18:28:03,644 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=328,ttl=2)
+2025-04-05 18:28:03,778 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=331,ttl=2)
+2025-04-05 18:28:03,900 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=327,ttl=2)
+2025-04-05 18:28:04,024 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=325,ttl=2)
+2025-04-05 18:28:04,149 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=336,ttl=2)
+2025-04-05 18:28:04,270 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=332,ttl=2)
+2025-04-05 18:28:04,393 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=334,ttl=2)
+2025-04-05 18:28:04,520 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=333,ttl=2)
+2025-04-05 18:28:04,643 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=329,ttl=2)
+2025-04-05 18:28:04,771 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=330,ttl=2)
+2025-04-05 18:28:04,895 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=337,ttl=2)
+2025-04-05 18:28:05,022 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=342,ttl=2)
+2025-04-05 18:28:05,145 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=339,ttl=2)
+2025-04-05 18:28:05,272 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=341,ttl=2)
+2025-04-05 18:28:05,399 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=340,ttl=2)
+2025-04-05 18:28:05,528 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=338,ttl=2)
+2025-04-05 18:28:05,655 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=343,ttl=2)
+2025-04-05 18:28:05,777 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=344,ttl=2)
+2025-04-05 18:28:05,901 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=345,ttl=2)
+2025-04-05 18:28:06,027 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=346,ttl=2)
+2025-04-05 18:28:06,153 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=347,ttl=2)
+2025-04-05 18:28:06,280 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=348,ttl=2)
+2025-04-05 18:28:06,424 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=335,ttl=2)
+2025-04-05 18:28:06,550 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=353,ttl=2)
+2025-04-05 18:28:06,998 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=352,ttl=2)
+2025-04-05 18:28:07,248 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=354,ttl=2)
+2025-04-05 18:28:07,382 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=355,ttl=2)
+2025-04-05 18:28:07,523 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=351,ttl=2)
+2025-04-05 18:28:07,673 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=356,ttl=2)
+2025-04-05 18:28:07,803 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=365,ttl=2)
+2025-04-05 18:28:07,941 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=357,ttl=2)
+2025-04-05 18:28:08,073 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=362,ttl=2)
+2025-04-05 18:28:08,196 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=363,ttl=2)
+2025-04-05 18:28:08,317 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=358,ttl=2)
+2025-04-05 18:28:08,439 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=364,ttl=2)
+2025-04-05 18:28:08,564 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=359,ttl=2)
+2025-04-05 18:28:08,688 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=360,ttl=2)
+2025-04-05 18:28:08,812 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=366,ttl=2)
+2025-04-05 18:28:08,939 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=367,ttl=2)
+2025-04-05 18:28:09,059 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=368,ttl=2)
+2025-04-05 18:28:09,184 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=369,ttl=2)
+2025-04-05 18:28:09,304 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=371,ttl=2)
+2025-04-05 18:28:09,430 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=370,ttl=2)
+2025-04-05 18:28:09,551 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=373,ttl=2)
+2025-04-05 18:28:09,689 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=379,ttl=2)
+2025-04-05 18:28:09,810 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=372,ttl=2)
+2025-04-05 18:28:09,937 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=378,ttl=2)
+2025-04-05 18:28:10,061 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=376,ttl=2)
+2025-04-05 18:28:10,185 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=380,ttl=2)
+2025-04-05 18:28:10,311 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=382,ttl=2)
+2025-04-05 18:28:10,436 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=384,ttl=2)
+2025-04-05 18:28:10,566 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=374,ttl=2)
+2025-04-05 18:28:10,714 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=381,ttl=2)
+2025-04-05 18:28:10,853 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=377,ttl=2)
+2025-04-05 18:28:10,993 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=375,ttl=2)
+2025-04-05 18:28:11,127 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=383,ttl=2)
+2025-04-05 18:28:11,272 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=386,ttl=2)
+2025-04-05 18:28:11,403 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=387,ttl=2)
+2025-04-05 18:28:11,530 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=388,ttl=2)
+2025-04-05 18:28:11,671 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=385,ttl=2)
+2025-04-05 18:28:11,797 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=389,ttl=2)
+2025-04-05 18:28:11,922 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=391,ttl=2)
+2025-04-05 18:28:12,056 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=390,ttl=2)
+2025-04-05 18:28:12,181 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=392,ttl=2)
+2025-04-05 18:28:12,309 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=393,ttl=2)
+2025-04-05 18:28:12,442 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=396,ttl=2)
+2025-04-05 18:28:12,564 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=398,ttl=2)
+2025-04-05 18:28:12,696 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=349,ttl=2)
+2025-04-05 18:28:12,825 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=397,ttl=2)
+2025-04-05 18:28:12,950 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=394,ttl=2)
+2025-04-05 18:28:13,079 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=399,ttl=2)
+2025-04-05 18:28:13,215 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=395,ttl=2)
+2025-04-05 18:28:13,351 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=400,ttl=2)
+2025-04-05 18:28:13,476 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=401,ttl=2)
+2025-04-05 18:28:13,605 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=405,ttl=2)
+2025-04-05 18:28:13,755 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=403,ttl=2)
+2025-04-05 18:28:13,882 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=404,ttl=2)
+2025-04-05 18:28:14,005 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=402,ttl=2)
+2025-04-05 18:28:14,135 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=407,ttl=2)
+2025-04-05 18:28:14,260 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=406,ttl=2)
+2025-04-05 18:28:14,389 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=408,ttl=2)
+2025-04-05 18:28:14,513 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=409,ttl=2)
+2025-04-05 18:28:14,640 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=411,ttl=2)
+2025-04-05 18:28:14,766 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=412,ttl=2)
+2025-04-05 18:28:14,890 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=410,ttl=2)
+2025-04-05 18:28:15,016 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=415,ttl=2)
+2025-04-05 18:28:15,144 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=413,ttl=2)
+2025-04-05 18:28:15,266 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=361,ttl=2)
+2025-04-05 18:28:15,400 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=416,ttl=2)
+2025-04-05 18:28:15,523 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=414,ttl=2)
+2025-04-05 18:28:15,651 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.users,odoo12,remote_id=2,ttl=3)
+2025-04-05 18:28:16,166 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.groups,odoo12,remote_id=2,ttl=2)
+2025-04-05 18:28:16,516 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.groups,odoo12,remote_id=32,ttl=2)
+2025-04-05 18:28:16,880 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.groups,odoo12,remote_id=36,ttl=2)
+2025-04-05 18:28:17,212 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.groups,odoo12,remote_id=7,ttl=2)
+2025-04-05 18:28:17,541 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.groups,odoo12,remote_id=1,ttl=2)
+2025-04-05 18:28:17,935 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.groups,odoo12,remote_id=26,ttl=2)
+2025-04-05 18:28:18,279 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.groups,odoo12,remote_id=18,ttl=2)
+2025-04-05 18:28:18,583 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.groups,odoo12,remote_id=21,ttl=2)
+2025-04-05 18:28:18,931 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.groups,odoo12,remote_id=25,ttl=2)
+2025-04-05 18:28:19,292 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.groups,odoo12,remote_id=42,ttl=2)
+2025-04-05 18:28:19,670 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.groups,odoo12,remote_id=50,ttl=2)
+2025-04-05 18:28:20,015 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.groups,odoo12,remote_id=3,ttl=2)
+2025-04-05 18:28:20,358 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.groups,odoo12,remote_id=33,ttl=2)
+2025-04-05 18:28:20,740 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.groups,odoo12,remote_id=6,ttl=2)
+2025-04-05 18:28:21,089 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.groups,odoo12,remote_id=40,ttl=2)
+2025-04-05 18:28:21,452 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.groups,odoo12,remote_id=41,ttl=2)
+2025-04-05 18:28:22,019 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.groups,odoo12,remote_id=24,ttl=2)
+2025-04-05 18:28:22,423 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.groups,odoo12,remote_id=20,ttl=2)
+2025-04-05 18:28:22,798 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.groups,odoo12,remote_id=19,ttl=2)
+2025-04-05 18:28:23,190 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,remote_id=13,ttl=None)
+2025-04-05 18:28:23,368 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({u'odoo12:self': [13, 'The Jacks,backend=Test Odoo 12.0,min=True),ttl=4
+2025-04-05 18:28:23,493 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,remote_id=29,ttl=3)
+2025-04-05 18:28:23,869 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,remote_id=28,ttl=3)
+2025-04-05 18:28:24,236 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,remote_id=3,ttl=None)
+2025-04-05 18:28:24,374 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({u'odoo12:self': [3, 'YourCompan,backend=Test Odoo 12.0,min=True),ttl=4
+2025-04-05 18:28:24,480 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,remote_id=9,ttl=None)
+2025-04-05 18:28:24,619 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({u'odoo12:self': [9, 'Wood Corne,backend=Test Odoo 12.0,min=True),ttl=4
+2025-04-05 18:28:24,879 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,remote_id=9,ttl=3)
+2025-04-05 18:28:25,123 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,remote_id=17,ttl=3)
+2025-04-05 18:28:25,469 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,remote_id=32,ttl=3)
+2025-04-05 18:28:25,829 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,remote_id=16,ttl=3)
+2025-04-05 18:28:26,197 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner.category,odoo12,remote_id=7,ttl=3)
+2025-04-05 18:28:26,454 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner.category,odoo12,remote_id=1,ttl=2)
+2025-04-05 18:28:26,690 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner.category,odoo12,remote_id=6,ttl=3)
+2025-04-05 18:28:26,932 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,remote_id=10,ttl=2)
+2025-04-05 18:28:27,318 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,remote_id=10,ttl=1)
+2025-04-05 18:28:27,555 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,remote_id=11,ttl=2)
+2025-04-05 18:28:27,857 2359725 INFO test_universal_connector_base_10 odoo.addons.base.ir.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo10/filestore/test_universal_connector_base_10/18/18c97b93f481f599dcb96b913f0e52a714d9e5df
+Traceback (most recent call last):
+  File "/home/odoo/10.0/odoo/addons/base/ir/ir_attachment.py", line 100, in _file_read
+    r = open(full_path,'rb').read().encode('base64')
+IOError: [Errno 2] No such file or directory: u'/home/odoo/.local/share/Odoo10/filestore/test_universal_connector_base_10/18/18c97b93f481f599dcb96b913f0e52a714d9e5df'
+2025-04-05 18:28:27,863 2359725 INFO test_universal_connector_base_10 odoo.addons.base.ir.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo10/filestore/test_universal_connector_base_10/ca/ca47d6ff6ef86a9ffdf443dacd347535dab4c42a
+Traceback (most recent call last):
+  File "/home/odoo/10.0/odoo/addons/base/ir/ir_attachment.py", line 100, in _file_read
+    r = open(full_path,'rb').read().encode('base64')
+IOError: [Errno 2] No such file or directory: u'/home/odoo/.local/share/Odoo10/filestore/test_universal_connector_base_10/ca/ca47d6ff6ef86a9ffdf443dacd347535dab4c42a'
+2025-04-05 18:28:27,871 2359725 INFO test_universal_connector_base_10 odoo.addons.base.ir.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo10/filestore/test_universal_connector_base_10/93/93c770bac9c314c3c5d50d500072651a7edf5b50
+Traceback (most recent call last):
+  File "/home/odoo/10.0/odoo/addons/base/ir/ir_attachment.py", line 100, in _file_read
+    r = open(full_path,'rb').read().encode('base64')
+IOError: [Errno 2] No such file or directory: u'/home/odoo/.local/share/Odoo10/filestore/test_universal_connector_base_10/93/93c770bac9c314c3c5d50d500072651a7edf5b50'
+2025-04-05 18:28:27,943 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,remote_id=11,ttl=1)
+2025-04-05 18:28:28,188 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,remote_id=12,ttl=2)
+2025-04-05 18:28:28,586 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,remote_id=12,ttl=1)
+2025-04-05 18:28:28,830 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,remote_id=184,ttl=1)
+2025-04-05 18:28:28,973 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,remote_id=35,ttl=1)
+2025-04-05 18:28:29,327 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,remote_id=18,ttl=1)
+2025-04-05 18:28:29,691 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,remote_id=19,ttl=1)
+2025-04-05 18:28:30,054 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,remote_id=20,ttl=1)
+2025-04-05 18:28:30,355 2359725 INFO test_universal_connector_base_10 odoo.addons.base.ir.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo10/filestore/test_universal_connector_base_10/f1/f1932a9854dd5d5d11ae91ee7845ced350813af0
+Traceback (most recent call last):
+  File "/home/odoo/10.0/odoo/addons/base/ir/ir_attachment.py", line 100, in _file_read
+    r = open(full_path,'rb').read().encode('base64')
+IOError: [Errno 2] No such file or directory: u'/home/odoo/.local/share/Odoo10/filestore/test_universal_connector_base_10/f1/f1932a9854dd5d5d11ae91ee7845ced350813af0'
+2025-04-05 18:28:30,364 2359725 INFO test_universal_connector_base_10 odoo.addons.base.ir.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo10/filestore/test_universal_connector_base_10/ba/ba716e7795b1d60835945f8fddfad9a697037dce
+Traceback (most recent call last):
+  File "/home/odoo/10.0/odoo/addons/base/ir/ir_attachment.py", line 100, in _file_read
+    r = open(full_path,'rb').read().encode('base64')
+IOError: [Errno 2] No such file or directory: u'/home/odoo/.local/share/Odoo10/filestore/test_universal_connector_base_10/ba/ba716e7795b1d60835945f8fddfad9a697037dce'
+2025-04-05 18:28:30,378 2359725 INFO test_universal_connector_base_10 odoo.addons.base.ir.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo10/filestore/test_universal_connector_base_10/7f/7fa7888e6ef64e7cebd6e8b255c928f7493d3b08
+Traceback (most recent call last):
+  File "/home/odoo/10.0/odoo/addons/base/ir/ir_attachment.py", line 100, in _file_read
+    r = open(full_path,'rb').read().encode('base64')
+IOError: [Errno 2] No such file or directory: u'/home/odoo/.local/share/Odoo10/filestore/test_universal_connector_base_10/7f/7fa7888e6ef64e7cebd6e8b255c928f7493d3b08'
+2025-04-05 18:28:30,426 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,remote_id=22,ttl=1)
+2025-04-05 18:28:30,719 2359725 INFO test_universal_connector_base_10 odoo.addons.base.ir.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo10/filestore/test_universal_connector_base_10/92/924219b70d8654b046def632748becc58bd54e12
+Traceback (most recent call last):
+  File "/home/odoo/10.0/odoo/addons/base/ir/ir_attachment.py", line 100, in _file_read
+    r = open(full_path,'rb').read().encode('base64')
+IOError: [Errno 2] No such file or directory: u'/home/odoo/.local/share/Odoo10/filestore/test_universal_connector_base_10/92/924219b70d8654b046def632748becc58bd54e12'
+2025-04-05 18:28:30,724 2359725 INFO test_universal_connector_base_10 odoo.addons.base.ir.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo10/filestore/test_universal_connector_base_10/d1/d14c47365e8727928238f36d61c9c1468bf715a8
+Traceback (most recent call last):
+  File "/home/odoo/10.0/odoo/addons/base/ir/ir_attachment.py", line 100, in _file_read
+    r = open(full_path,'rb').read().encode('base64')
+IOError: [Errno 2] No such file or directory: u'/home/odoo/.local/share/Odoo10/filestore/test_universal_connector_base_10/d1/d14c47365e8727928238f36d61c9c1468bf715a8'
+2025-04-05 18:28:30,735 2359725 INFO test_universal_connector_base_10 odoo.addons.base.ir.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo10/filestore/test_universal_connector_base_10/c4/c4358f0b56703ba5d0113edc66eaf2279f077555
+Traceback (most recent call last):
+  File "/home/odoo/10.0/odoo/addons/base/ir/ir_attachment.py", line 100, in _file_read
+    r = open(full_path,'rb').read().encode('base64')
+IOError: [Errno 2] No such file or directory: u'/home/odoo/.local/share/Odoo10/filestore/test_universal_connector_base_10/c4/c4358f0b56703ba5d0113edc66eaf2279f077555'
+2025-04-05 18:28:30,780 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,remote_id=31,ttl=1)
+2025-04-05 18:28:31,076 2359725 INFO test_universal_connector_base_10 odoo.addons.base.ir.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo10/filestore/test_universal_connector_base_10/1c/1cb6c6537c1d136bdb607af647823ce7ee866ee0
+Traceback (most recent call last):
+  File "/home/odoo/10.0/odoo/addons/base/ir/ir_attachment.py", line 100, in _file_read
+    r = open(full_path,'rb').read().encode('base64')
+IOError: [Errno 2] No such file or directory: u'/home/odoo/.local/share/Odoo10/filestore/test_universal_connector_base_10/1c/1cb6c6537c1d136bdb607af647823ce7ee866ee0'
+2025-04-05 18:28:31,081 2359725 INFO test_universal_connector_base_10 odoo.addons.base.ir.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo10/filestore/test_universal_connector_base_10/34/346178a68d73c21d4f49a9b7b1e887fdfda99f55
+Traceback (most recent call last):
+  File "/home/odoo/10.0/odoo/addons/base/ir/ir_attachment.py", line 100, in _file_read
+    r = open(full_path,'rb').read().encode('base64')
+IOError: [Errno 2] No such file or directory: u'/home/odoo/.local/share/Odoo10/filestore/test_universal_connector_base_10/34/346178a68d73c21d4f49a9b7b1e887fdfda99f55'
+2025-04-05 18:28:31,090 2359725 INFO test_universal_connector_base_10 odoo.addons.base.ir.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo10/filestore/test_universal_connector_base_10/55/55c7aa087fe968986663cd7bdea271c88ec61dd7
+Traceback (most recent call last):
+  File "/home/odoo/10.0/odoo/addons/base/ir/ir_attachment.py", line 100, in _file_read
+    r = open(full_path,'rb').read().encode('base64')
+IOError: [Errno 2] No such file or directory: u'/home/odoo/.local/share/Odoo10/filestore/test_universal_connector_base_10/55/55c7aa087fe968986663cd7bdea271c88ec61dd7'
+2025-04-05 18:28:31,136 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,remote_id=23,ttl=1)
+2025-04-05 18:28:31,428 2359725 INFO test_universal_connector_base_10 odoo.addons.base.ir.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo10/filestore/test_universal_connector_base_10/f0/f0eddf695d122a6ea07d9deb7000b268d8f8d0b7
+Traceback (most recent call last):
+  File "/home/odoo/10.0/odoo/addons/base/ir/ir_attachment.py", line 100, in _file_read
+    r = open(full_path,'rb').read().encode('base64')
+IOError: [Errno 2] No such file or directory: u'/home/odoo/.local/share/Odoo10/filestore/test_universal_connector_base_10/f0/f0eddf695d122a6ea07d9deb7000b268d8f8d0b7'
+2025-04-05 18:28:31,435 2359725 INFO test_universal_connector_base_10 odoo.addons.base.ir.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo10/filestore/test_universal_connector_base_10/09/0919117aa5fbea2cd5e9a11a81640c6d9045ad89
+Traceback (most recent call last):
+  File "/home/odoo/10.0/odoo/addons/base/ir/ir_attachment.py", line 100, in _file_read
+    r = open(full_path,'rb').read().encode('base64')
+IOError: [Errno 2] No such file or directory: u'/home/odoo/.local/share/Odoo10/filestore/test_universal_connector_base_10/09/0919117aa5fbea2cd5e9a11a81640c6d9045ad89'
+2025-04-05 18:28:31,443 2359725 INFO test_universal_connector_base_10 odoo.addons.base.ir.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo10/filestore/test_universal_connector_base_10/c1/c1c6bb774e22df79813ed72c43d05c014e969174
+Traceback (most recent call last):
+  File "/home/odoo/10.0/odoo/addons/base/ir/ir_attachment.py", line 100, in _file_read
+    r = open(full_path,'rb').read().encode('base64')
+IOError: [Errno 2] No such file or directory: u'/home/odoo/.local/share/Odoo10/filestore/test_universal_connector_base_10/c1/c1c6bb774e22df79813ed72c43d05c014e969174'
+2025-04-05 18:28:31,490 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner.category,odoo12,remote_id=4,ttl=1)
+2025-04-05 18:28:31,720 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,remote_id=21,ttl=1)
+2025-04-05 18:28:32,084 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,remote_id=25,ttl=1)
+2025-04-05 18:28:32,444 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,remote_id=37,ttl=1)
+2025-04-05 18:28:32,829 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,remote_id=24,ttl=1)
+2025-04-05 18:28:33,209 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,remote_id=36,ttl=1)
+2025-04-05 18:28:33,573 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,remote_id=30,ttl=1)
+2025-04-05 18:28:33,938 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,remote_id=38,ttl=1)
+2025-04-05 18:28:34,337 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,remote_id=12,ttl=None)
+2025-04-05 18:28:34,497 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({u'odoo12:self': [12, 'Ready Mat,backend=Test Odoo 12.0,min=True),ttl=4
+2025-04-05 18:28:34,619 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,remote_id=13,ttl=None)
+2025-04-05 18:28:34,757 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({u'odoo12:self': [13, 'The Jacks,backend=Test Odoo 12.0,min=True),ttl=4
+2025-04-05 18:28:34,865 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo12,remote_id=1,ttl=None)
+2025-04-05 18:28:34,977 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: res.currency.synchro({u'odoo12:decimal_places': 2, u',backend=Test Odoo 12.0,min=True),ttl=4
+2025-04-05 18:28:35,005 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo12,remote_id=2,ttl=None)
+2025-04-05 18:28:35,116 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: res.currency.synchro({u'odoo12:decimal_places': 2, u',backend=Test Odoo 12.0,min=True),ttl=4
+2025-04-05 18:28:35,143 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country,odoo12,remote_id=233,ttl=None)
+2025-04-05 18:28:35,253 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: res.country.synchro({u'odoo12:id': 233, u'odoo12:nam,backend=Test Odoo 12.0,min=True),ttl=4
+2025-04-05 18:28:35,323 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,remote_id=3,ttl=None)
+2025-04-05 18:28:35,452 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({u'odoo12:self': [3, 'YourCompan,backend=Test Odoo 12.0,min=True),ttl=4
+2025-04-05 18:28:35,563 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,remote_id=9,ttl=None)
+2025-04-05 18:28:35,705 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({u'odoo12:self': [9, 'Wood Corne,backend=Test Odoo 12.0,min=True),ttl=4
+2025-04-05 18:28:35,854 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,remote_id=12,ttl=None)
+2025-04-05 18:28:35,986 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({u'odoo12:self': [12, 'Ready Mat,backend=Test Odoo 12.0,min=True),ttl=4
+2025-04-05 18:28:36,104 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,remote_id=13,ttl=None)
+2025-04-05 18:28:36,229 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({u'odoo12:self': [13, 'The Jacks,backend=Test Odoo 12.0,min=True),ttl=4
+2025-04-05 18:28:36,403 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,remote_id=3,ttl=None)
+2025-04-05 18:28:36,544 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({u'odoo10:city': 'Scranton', u'o,backend=Test Odoo 10.0,min=True),ttl=4
+2025-04-05 18:28:36,885 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,remote_id=3,ttl=None)
+2025-04-05 18:28:37,138 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({u'odoo12:self': [3, 'YourCompan,backend=Test Odoo 12.0,min=True),ttl=4
+2025-04-05 18:28:37,386 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,remote_id=11,ttl=None)
+2025-04-05 18:28:37,536 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({u'odoo10:city': 'Miami', u'odoo,backend=Test Odoo 10.0,min=True),ttl=4
+2025-04-05 18:28:37,659 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,remote_id=13,ttl=None)
+2025-04-05 18:28:37,827 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({u'odoo12:self': [13, 'The Jacks,backend=Test Odoo 12.0,min=True),ttl=4
+2025-04-05 18:28:37,958 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,remote_id=3,ttl=None)
+2025-04-05 18:28:38,094 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({u'odoo10:city': 'Scranton', u'o,backend=Test Odoo 10.0,min=True),ttl=4
+2025-04-05 18:28:38,238 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,remote_id=3,ttl=None)
+2025-04-05 18:28:38,373 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({u'odoo12:self': [3, 'YourCompan,backend=Test Odoo 12.0,min=True),ttl=4
+2025-04-05 18:28:38,522 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,remote_id=11,ttl=None)
+2025-04-05 18:28:38,635 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({u'odoo10:city': 'Miami', u'odoo,backend=Test Odoo 10.0,min=True),ttl=4
+2025-04-05 18:28:38,744 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,remote_id=13,ttl=None)
+2025-04-05 18:28:38,872 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({u'odoo12:self': [13, 'The Jacks,backend=Test Odoo 12.0,min=True),ttl=4
+2025-04-05 18:28:38,972 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.tests.test_backend: 🎺 Starting purge log test
+2025-04-05 18:28:38,974 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.tests.testenv: 🏆🥇 [1;32m134 tests SUCCESSFULLY completed[0m
+2025-04-05 18:28:38,977 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.tests.test_backend: Ran 1 test in 116.426s
+2025-04-05 18:28:38,977 2359725 INFO test_universal_connector_base_10 odoo.addons.universal_connector_base.tests.test_backend: OK
+2025-04-05 18:28:38,977 2359725 INFO test_universal_connector_base_10 odoo.modules.module: odoo.addons.universal_connector_base.tests.test_backend tested in 116.43s, 45994 queries
+2025-04-05 18:28:39,073 2359725 INFO test_universal_connector_base_10 odoo.modules.loading: 13 modules loaded in 121.24s, 45994 queries
+2025-04-05 18:28:39,300 2359725 INFO test_universal_connector_base_10 odoo.modules.loading: Modules loaded.
+2025-04-05 18:28:39,302 2359725 INFO test_universal_connector_base_10 odoo.modules.loading: All post-tested in 0.00s, 0 queries
+2025-04-05 18:28:39,303 2359725 INFO test_universal_connector_base_10 odoo.models: Computing parent left and right for table ir_ui_menu...
+2025-04-05 18:28:39,350 2359725 INFO test_universal_connector_base_10 odoo.models: Computing parent left and right for table res_partner_category...
+2025-04-05 18:28:39,367 2359725 INFO test_universal_connector_base_10 odoo.modules.registry: Registry changed, signaling through the database
+2025-04-05 18:28:39,368 2359725 INFO test_universal_connector_base_10 odoo.service.server: Initiating shutdown
+2025-04-05 18:28:39,368 2359725 INFO test_universal_connector_base_10 odoo.service.server: Hit CTRL-C again or send a second signal to force the shutdown.
+
++===================================================================
+| please test [36muniversal_connector_base[0m (10.0): [32mSUCCESS![0m
++===================================================================
+
+[1;37;44m$ coverage report --rcfile=/home/odoo/10.0/connector/universal_connector_base/tests/logs/coverage_universal_connector_base_10rc -m
+[34;107mName                                                               Stmts   Miss  Cover   Missing
+------------------------------------------------------------------------------------------------
+connector/universal_connector_base/models/ir_model.py                 17      2    88%   11, 45
+connector/universal_connector_base/models/ir_model_synchro.py        191     36    81%   181, 184, 206, 210, 218, 221, 223, 227, 230, 234, 236, 240-241, 244, 250, 254, 258, 271, 273, 278, 307, 346, 348-349, 415, 475, 481-482, 499-506, 517, 523, 525
+connector/universal_connector_base/models/ir_model_to_map.py          19      0   100%
+connector/universal_connector_base/models/res_company.py               9      0   100%
+connector/universal_connector_base/models/res_country.py              19      0   100%
+connector/universal_connector_base/models/res_currency.py             19      0   100%
+connector/universal_connector_base/models/res_lang.py                 11      0   100%
+connector/universal_connector_base/models/res_partner.py              29      1    97%   61
+connector/universal_connector_base/models/res_users.py                23      1    96%   37
+connector/universal_connector_base/models/synchro_alias.py            10      0   100%
+connector/universal_connector_base/models/synchro_api.py             174     11    94%   82, 145, 225, 245, 272-277, 315-332
+connector/universal_connector_base/models/synchro_apply.py           157    110    30%   27, 41, 52-58, 70, 79-87, 125-127, 168-170, 183-185, 211-215, 233, 236, 249-269, 281-291, 361-380, 410-413, 424-432, 443-451, 462-464, 478-483, 494-506, 517-521, 562-570
+connector/universal_connector_base/models/synchro_backend.py         358     42    88%   314, 322-323, 371, 378, 382, 384, 386, 389, 396, 399, 404, 422, 455-461, 510, 536, 556, 558, 568-569, 598-601, 604, 606, 624, 630, 633, 680, 703, 739, 766, 771, 790-795, 803, 807, 816, 822
+connector/universal_connector_base/models/synchro_cache.py           185     61    67%   339, 342, 355, 364-370, 376, 384, 392, 399, 401, 420, 425-426, 429-432, 447, 451, 456, 461-463, 466, 477-478, 483-485, 490-491, 497, 502-505, 510-511, 514-522, 529, 533, 535, 539-541, 545, 555-557, 561
+connector/universal_connector_base/models/synchro_identity.py         26      6    77%   63-68
+connector/universal_connector_base/models/synchro_log.py             142     14    90%   105, 111, 115, 121-122, 147, 209-211, 241, 253, 259, 265, 291
+connector/universal_connector_base/models/synchro_mapper.py          187     21    89%   101, 103, 128, 155, 157, 165, 169, 201, 206, 221, 223, 233, 235, 258, 262, 302, 321, 334, 343, 352, 360
+connector/universal_connector_base/models/synchro_model.py           693    111    84%   166-179, 209, 227, 258-259, 271, 295, 348, 381, 404, 406, 410, 468-470, 473, 499-507, 543-545, 565-576, 680, 682, 726, 738, 752, 779, 786-790, 855, 885, 904, 918, 972-973, 977, 986-987, 1000, 1020, 1022, 1026, 1035, 1041, 1073, 1080, 1181, 1197, 1199-1204, 1209, 1212-1217, 1224, 1240, 1268-1275, 1281, 1343, 1354-1357, 1362, 1366-1368, 1376-1377, 1383-1385, 1387-1388, 1390, 1401, 1408-1413, 1436, 1439, 1443, 1451, 1457
+connector/universal_connector_base/models/synchro_protocol.py         20      6    70%   41-46
+connector/universal_connector_base/wizard/wizard_pull_records.py      37     25    32%   51-52, 67-93, 96-110
+------------------------------------------------------------------------------------------------
+TOTAL                                                               2326    447    81%
+[0m

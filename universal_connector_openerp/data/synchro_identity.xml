@@ -3,13 +3,14 @@
 
     <record id="identity_openerp" model="synchro.identity">
         <field name="code">openerp</field>
-        <field name="name">Odoo (6.1 - 7.0)</field>
+        <field name="name">Odoo (6.1 - 8.0)</field>
         <field name="default_login">admin</field>
         <field name="default_password">admin</field>
         <field name="default_port">8069</field>
         <field name="default_lgi_path">xmlrpc/common</field>
         <field name="default_exchange_path">xmlrpc/object</field>
         <field name="remote_sw_version">'8.0','7.0','6.1'</field>
+        <field name="default_prefix">oe</field>
         <field name="sequence">14</field>
     </record>
 

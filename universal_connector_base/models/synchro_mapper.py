@@ -198,6 +198,11 @@ class SynchroMapper(models.Model):
                         append_fct(fct)
                 if loc_name == "type" and binding_model == "account.account.type":
                     append_fct("oe_account_account_type_nam()")
+                elif (
+                    loc_name == "product_variant_ids"
+                    and binding_model == "product.template"
+                ):
+                    append_fct("none()")
                 if loc_name == "vat":
                     append_fct("vat()")
                 for fct in apply4:

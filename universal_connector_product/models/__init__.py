@@ -7,4 +7,4 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 #
 from . import product
-from . import ir_model_synchro_apply
+from . import synchro_apply

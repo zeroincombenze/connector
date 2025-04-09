@@ -15,7 +15,6 @@ class ProductTemplate(models.Model):
     vg7_id = fields.Integer("VG7 ID", copy=False)
 
 
-
 class ProductProduct(models.Model):
     _inherit = "product.product"
 
@@ -28,19 +27,16 @@ class UomUom(models.Model):
     vg7_id = fields.Integer("VG7 ID", copy=False)
 
 
-
 class UomCategory(models.Model):
     _inherit = "uom.category"
 
     vg7_id = fields.Integer("VG7 ID", copy=False)
 
 
-
 class ProductCategory(models.Model):
     _inherit = "product.category"
 
     vg7_id = fields.Integer("VG7 ID", copy=False)
-
 
 
 class ProductPricelist(models.Model):

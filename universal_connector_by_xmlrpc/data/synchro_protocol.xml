@@ -6,7 +6,7 @@
         <field name="name">Odoo XML-RPC</field>
         <field name="http_protocol" eval="False"/>
         <field name="secure_protocol" eval="False"/>
-        <field name="pylib">oerplin</field>
+        <field name="pylib">oerplib3</field>
     </record>
 
 </odoo>

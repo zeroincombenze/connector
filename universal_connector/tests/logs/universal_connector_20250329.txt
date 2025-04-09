@@ -1,0 +1,299 @@
+2025-03-29 20:26:27,258 2239819 INFO ? odoo: Odoo version 10.0
+2025-03-29 20:26:27,258 2239819 INFO ? odoo: Using configuration file at /home/odoo/10.0/connector/universal_connector/tests/logs/zero10.connector.universal_connector.conf
+2025-03-29 20:26:27,258 2239819 INFO ? odoo: addons paths: ['/home/odoo/.local/share/Odoo10/addons/10.0', u'/home/odoo/10.0/odoo/addons', u'/home/odoo/10.0/addons', u'/home/odoo/.local/share/Odoo10/addons', u'/home/odoo/10.0/account-analytic', u'/home/odoo/10.0/account-budgeting', u'/home/odoo/10.0/account-closing', u'/home/odoo/10.0/account-consolidation', u'/home/odoo/10.0/account-financial-reporting', u'/home/odoo/10.0/account-financial-tools', u'/home/odoo/10.0/account-fiscal-rule', u'/home/odoo/10.0/account-invoice-reporting', u'/home/odoo/10.0/account-invoicing', u'/home/odoo/10.0/account-payment', u'/home/odoo/10.0/account-reconcile', u'/home/odoo/10.0/bank-payment', u'/home/odoo/10.0/bank-statement-import', u'/home/odoo/10.0/calendar', u'/home/odoo/10.0/commission', u'/home/odoo/10.0/community-data-files', u'/home/odoo/10.0/connector', u'/home/odoo/10.0/contract', u'/home/odoo/10.0/credit-control', u'/home/odoo/10.0/crm', u'/home/odoo/10.0/currency', u'/home/odoo/10.0/data-protection', u'/home/odoo/10.0/delivery-carrier', u'/home/odoo/10.0/e-commerce', u'/home/odoo/10.0/edi', u'/home/odoo/10.0/helpdesk', u'/home/odoo/10.0/hr', u'/home/odoo/10.0/intrastat-extrastat', u'/home/odoo/10.0/knowledge', u'/home/odoo/10.0/l10n-italy', u'/home/odoo/10.0/l10n-italy-supplemental', u'/home/odoo/10.0/maintenance', u'/home/odoo/10.0/management-system', u'/home/odoo/10.0/manufacture', u'/home/odoo/10.0/margin-analysis', u'/home/odoo/10.0/marketplace', u'/home/odoo/10.0/mis-builder', u'/home/odoo/10.0/multi-company', u'/home/odoo/10.0/partner-contact', u'/home/odoo/10.0/product-attribute', u'/home/odoo/10.0/product-kitting', u'/home/odoo/10.0/product-variant', u'/home/odoo/10.0/profiles', u'/home/odoo/10.0/project', u'/home/odoo/10.0/purchase-reporting', u'/home/odoo/10.0/purchase-workflow', u'/home/odoo/10.0/queue', u'/home/odoo/10.0/report-print-send', u'/home/odoo/10.0/reporting-engine', u'/home/odoo/10.0/rma', u'/home/odoo/10.0/sale-financial', u'/home/odoo/10.0/sale-reporting', u'/home/odoo/10.0/sale-workflow', u'/home/odoo/10.0/search-engine', u'/home/odoo/10.0/server-auth', u'/home/odoo/10.0/server-tools', u'/home/odoo/10.0/server-ux', u'/home/odoo/10.0/social', u'/home/odoo/10.0/stock-logistics-barcode', u'/home/odoo/10.0/stock-logistics-reporting', u'/home/odoo/10.0/stock-logistics-tracking', u'/home/odoo/10.0/stock-logistics-transport', u'/home/odoo/10.0/stock-logistics-warehouse', u'/home/odoo/10.0/stock-logistics-workflow', u'/home/odoo/10.0/storage', u'/home/odoo/10.0/timesheet', u'/home/odoo/10.0/uncovered', u'/home/odoo/10.0/web', u'/home/odoo/10.0/webhook', u'/home/odoo/10.0/website', u'/home/odoo/10.0/wms', u'/home/odoo/10.0/zerobug-test']
+2025-03-29 20:26:27,258 2239819 INFO ? odoo: database: odoo10@localhost:5432
+2025-03-29 20:26:27,272 2239819 INFO ? odoo.service.server: HTTP service (werkzeug) running on NB200Z0.:36927
+2025-03-29 20:26:27,287 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading 1 modules...
+2025-03-29 20:26:27,360 2239819 INFO test_universal_connector_10 odoo.modules.loading: 1 modules loaded in 0.07s, 0 queries
+2025-03-29 20:26:28,101 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading 26 modules...
+2025-03-29 20:26:28,202 2239819 INFO test_universal_connector_10 odoo.addons.report.models.report: Will use the Wkhtmltopdf binary at /home/odoo/10.0/venv_odoo/bin/wkhtmltopdf
+2025-03-29 20:26:28,230 2239819 INFO test_universal_connector_10 odoo.modules.loading: 26 modules loaded in 0.13s, 0 queries
+2025-03-29 20:26:28,237 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading 30 modules...
+2025-03-29 20:26:28,438 2239819 INFO test_universal_connector_10 odoo.modules.registry: module procurement: creating or updating database tables
+2025-03-29 20:26:28,701 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading procurement/security/ir.model.access.csv
+2025-03-29 20:26:28,741 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading procurement/security/procurement_security.xml
+2025-03-29 20:26:28,764 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading procurement/data/procurement_data.xml
+2025-03-29 20:26:28,774 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading procurement/wizard/procurement_order_compute_all_views.xml
+2025-03-29 20:26:28,795 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading procurement/views/procurement_views.xml
+2025-03-29 20:26:28,949 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading procurement/views/product_views.xml
+2025-03-29 20:26:29,108 2239819 INFO test_universal_connector_10 odoo.modules.module: odoo.addons.procurement.tests.test_procurement running tests.
+2025-03-29 20:26:30,476 2239819 INFO test_universal_connector_10 odoo.addons.procurement.tests.test_procurement: test_base (odoo.addons.procurement.tests.test_procurement.TestBase)
+2025-03-29 20:26:30,742 2239819 INFO test_universal_connector_10 odoo.addons.procurement.tests.test_procurement: Ran 1 test in 1.633s
+2025-03-29 20:26:30,742 2239819 INFO test_universal_connector_10 odoo.addons.procurement.tests.test_procurement: OK
+2025-03-29 20:26:30,910 2239819 INFO test_universal_connector_10 odoo.modules.registry: module stock: creating or updating database tables
+2025-03-29 20:26:31,642 2239819 INFO test_universal_connector_10 odoo.models: Computing parent left and right for table stock_location...
+2025-03-29 20:26:32,571 2239819 INFO test_universal_connector_10 odoo.models: Computing parent left and right for table stock_quant_package...
+2025-03-29 20:26:33,646 2239819 INFO test_universal_connector_10 odoo.addons.auth_crypt.models.res_users: Hashing passwords, may be slow for databases with many users...
+2025-03-29 20:26:33,955 2239819 INFO test_universal_connector_10 odoo.models: Storing computed values of procurement.rule fields route_sequence
+2025-03-29 20:26:33,956 2239819 INFO test_universal_connector_10 odoo.models: Storing computed values of stock.quant fields packaging_type_id
+2025-03-29 20:26:33,956 2239819 INFO test_universal_connector_10 odoo.models: Storing computed values of stock.location fields complete_name
+2025-03-29 20:26:33,957 2239819 INFO test_universal_connector_10 odoo.models: Storing computed values of stock.move fields product_qty, scrapped
+2025-03-29 20:26:33,958 2239819 INFO test_universal_connector_10 odoo.models: Storing computed values of stock.picking fields group_id, max_date, min_date, priority, state
+2025-03-29 20:26:33,958 2239819 INFO test_universal_connector_10 odoo.models: Storing computed values of stock.production.lot fields product_uom_id
+2025-03-29 20:26:33,959 2239819 INFO test_universal_connector_10 odoo.models: Storing computed values of stock.inventory.line fields company_id, location_name, prodlot_name, product_code, product_name, theoretical_qty
+2025-03-29 20:26:33,959 2239819 INFO test_universal_connector_10 odoo.models: Storing computed values of stock.location.path fields route_sequence
+2025-03-29 20:26:33,979 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/security/stock_security.xml
+2025-03-29 20:26:34,908 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/security/ir.model.access.csv
+2025-03-29 20:26:35,761 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/views/stock_menu_views.xml
+2025-03-29 20:26:35,875 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/report/report_stock_forecast.xml
+2025-03-29 20:26:35,922 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/report/stock_report_views.xml
+2025-03-29 20:26:35,975 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/report/report_stock_view.xml
+2025-03-29 20:26:36,037 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/report/report_package_barcode.xml
+2025-03-29 20:26:36,066 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/report/report_lot_barcode.xml
+2025-03-29 20:26:36,082 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/report/report_location_barcode.xml
+2025-03-29 20:26:36,111 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/report/report_stockpicking_operations.xml
+2025-03-29 20:26:36,159 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/report/report_deliveryslip.xml
+2025-03-29 20:26:36,185 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/report/report_stockinventory.xml
+2025-03-29 20:26:36,201 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/wizard/stock_change_product_qty_views.xml
+2025-03-29 20:26:36,222 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/wizard/stock_picking_return_views.xml
+2025-03-29 20:26:36,243 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/wizard/make_procurement_views.xml
+2025-03-29 20:26:36,264 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/wizard/procurement_orderpoint_compute_views.xml
+2025-03-29 20:26:36,285 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/wizard/stock_immediate_transfer_views.xml
+2025-03-29 20:26:36,307 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/wizard/stock_backorder_confirmation_views.xml
+2025-03-29 20:26:36,322 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/views/stock_scrap_views.xml
+2025-03-29 20:26:36,397 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/views/res_partner_views.xml
+2025-03-29 20:26:36,467 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/views/product_strategy_views.xml
+2025-03-29 20:26:36,500 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/views/stock_inventory_views.xml
+2025-03-29 20:26:36,641 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/views/stock_incoterms_views.xml
+2025-03-29 20:26:36,697 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/views/stock_production_lot_views.xml
+2025-03-29 20:26:36,760 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/views/stock_picking_views.xml
+2025-03-29 20:26:37,043 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/views/stock_quant_views.xml
+2025-03-29 20:26:37,254 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/views/stock_location_views.xml
+2025-03-29 20:26:37,481 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/views/procurement_views.xml
+2025-03-29 20:26:37,656 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/views/stock_warehouse_views.xml
+2025-03-29 20:26:37,801 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/views/stock_move_views.xml
+2025-03-29 20:26:38,033 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/views/stock_pack_operation_views.xml
+2025-03-29 20:26:38,114 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/views/product_views.xml
+2025-03-29 20:26:38,522 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/views/stock_config_settings_views.xml
+2025-03-29 20:26:38,561 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/data/default_barcode_patterns.xml
+2025-03-29 20:26:38,575 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/data/stock_data.xml
+2025-03-29 20:26:38,864 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/data/stock_data.yml
+2025-03-29 20:26:38,905 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/data/stock_incoterms_data.xml
+2025-03-29 20:26:38,937 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/data/stock_sequence_data.xml
+2025-03-29 20:26:38,951 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/data/web_planner_data.xml
+2025-03-29 20:26:38,982 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/data/stock_demo_pre.yml
+2025-03-29 20:26:39,024 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/data/stock_demo.xml
+2025-03-29 20:26:40,063 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/data/procurement_demo.xml
+2025-03-29 20:26:40,244 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/data/stock_orderpoint_demo.xml
+2025-03-29 20:26:40,281 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/data/stock_orderpoint_demo.yml
+2025-03-29 20:26:40,285 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/data/stock_demo.yml
+2025-03-29 20:26:45,569 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.pack.operation records with IDs: [2]
+2025-03-29 20:26:46,037 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [4]
+2025-03-29 20:26:46,057 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [10]
+2025-03-29 20:26:46,303 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/data/stock_location_demo_cpu1.xml
+2025-03-29 20:26:46,315 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/data/stock_location_demo_cpu3.yml
+2025-03-29 20:26:47,279 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/test/procrule.yml
+2025-03-29 20:26:48,565 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/test/stock_users.yml
+2025-03-29 20:26:49,073 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/test/packing.yml
+2025-03-29 20:26:49,598 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.pack.operation records with IDs: [13]
+2025-03-29 20:26:49,693 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [13]
+2025-03-29 20:26:49,711 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [14, 15, 16]
+2025-03-29 20:26:50,214 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.pack.operation records with IDs: [17, 18, 19]
+2025-03-29 20:26:50,271 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [23, 24, 25]
+2025-03-29 20:26:50,873 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.pack.operation records with IDs: [23, 24]
+2025-03-29 20:26:50,911 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.pack.operation records with IDs: [25, 26]
+2025-03-29 20:26:50,954 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [33, 34]
+2025-03-29 20:26:51,124 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/test/packingneg.yml
+2025-03-29 20:26:51,677 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [37]
+2025-03-29 20:26:51,693 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [38, 39, 40]
+2025-03-29 20:26:52,222 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [44, 45, 46]
+2025-03-29 20:26:52,247 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [47, 48, 49, 50]
+2025-03-29 20:26:53,166 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [56]
+2025-03-29 20:26:53,180 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [57]
+2025-03-29 20:26:53,210 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.quant records with IDs: [23]
+2025-03-29 20:26:53,216 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.quant records with IDs: [27]
+2025-03-29 20:26:53,274 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading stock/test/wiseoperator.yml
+2025-03-29 20:26:53,929 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.pack.operation records with IDs: [37]
+2025-03-29 20:26:53,972 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [60]
+2025-03-29 20:26:54,005 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [61, 62]
+2025-03-29 20:26:54,924 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [65, 66, 67]
+2025-03-29 20:26:54,948 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [68, 69]
+2025-03-29 20:26:55,121 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [72, 73]
+2025-03-29 20:26:55,253 2239819 INFO test_universal_connector_10 odoo.modules.module: odoo.addons.stock.tests.test_product running tests.
+2025-03-29 20:26:57,128 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_product: test_with_owner (odoo.addons.stock.tests.test_product.TestVirtualAvailable)
+2025-03-29 20:26:57,545 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_product: test_without_owner (odoo.addons.stock.tests.test_product.TestVirtualAvailable)
+2025-03-29 20:26:57,995 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_product: Ran 2 tests in 2.742s
+2025-03-29 20:26:57,995 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_product: OK
+2025-03-29 20:26:57,996 2239819 INFO test_universal_connector_10 odoo.modules.module: odoo.addons.stock.tests.test_shipment running tests.
+2025-03-29 20:26:59,578 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_shipment: test_shipment (odoo.addons.stock.tests.test_shipment.TestInventory)
+2025-03-29 20:26:59,922 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #13 deleted stock.move.operation.link records with IDs: [80]
+2025-03-29 20:27:00,583 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #13 deleted stock.pack.operation records with IDs: [48]
+2025-03-29 20:27:00,645 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [83]
+2025-03-29 20:27:00,741 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [84]
+2025-03-29 20:27:00,815 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_shipment: Ran 1 test in 2.819s
+2025-03-29 20:27:00,815 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_shipment: OK
+2025-03-29 20:27:00,816 2239819 INFO test_universal_connector_10 odoo.modules.module: odoo.addons.stock.tests.test_stock_flow running tests.
+2025-03-29 20:27:00,816 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_stock_flow: test_00_picking_create_and_transfer_quantity (odoo.addons.stock.tests.test_stock_flow.TestStockFlow)
+2025-03-29 20:27:00,816 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_stock_flow: ` Basic stock operation on incoming and outgoing shipment.
+2025-03-29 20:27:04,419 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.pack.operation records with IDs: [51, 52, 53, 54]
+2025-03-29 20:27:04,614 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [92, 93, 94, 95, 96]
+2025-03-29 20:27:04,880 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [97, 98, 99, 100, 101, 102]
+2025-03-29 20:27:06,092 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.pack.operation records with IDs: [61, 62]
+2025-03-29 20:27:14,620 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.pack.operation records with IDs: [65, 66, 67, 68]
+2025-03-29 20:27:14,815 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [125, 126, 127, 128, 129, 130, 131, 132]
+2025-03-29 20:27:15,080 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [133, 134, 135, 136, 137, 138, 139]
+2025-03-29 20:27:17,151 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.pack.operation records with IDs: [63, 64]
+2025-03-29 20:27:17,300 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [151, 152, 153]
+2025-03-29 20:27:17,679 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [154, 155, 156, 157, 158, 159]
+2025-03-29 22:41:01,761 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.pack.operation records with IDs: [75, 76]
+2025-03-29 22:41:01,857 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [169, 170, 171]
+2025-03-29 22:41:04,028 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_stock_flow: test_10_pickings_transfer_with_different_uom (odoo.addons.stock.tests.test_stock_flow.TestStockFlow)
+2025-03-29 22:41:04,028 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_stock_flow: ` Picking transfer with diffrent unit of meassure.
+2025-03-29 22:41:06,698 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.pack.operation records with IDs: [88, 89, 90, 91, 92]
+2025-03-29 22:41:06,803 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [182, 183, 184, 185, 186]
+2025-03-29 22:41:06,851 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [187, 188, 189, 190, 191]
+2025-03-29 22:41:07,816 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.pack.operation records with IDs: [98, 99, 100, 101, 102]
+2025-03-29 22:41:07,908 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [202, 203, 204, 205, 206]
+2025-03-29 22:41:08,134 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [207, 208, 209, 210, 211, 212]
+2025-03-29 22:41:08,985 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.pack.operation records with IDs: [109]
+2025-03-29 22:41:09,603 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.pack.operation records with IDs: [111]
+2025-03-29 22:41:09,661 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [224, 225]
+2025-03-29 22:41:09,692 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [226, 227]
+2025-03-29 22:41:10,581 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.pack.operation records with IDs: [113, 114, 115, 116, 117]
+2025-03-29 22:41:10,656 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [236, 237, 238, 239, 240, 241]
+2025-03-29 22:41:10,960 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.pack.operation records with IDs: [110]
+2025-03-29 22:41:11,099 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [248]
+2025-03-30 08:12:04,732 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [249]
+2025-03-30 08:12:07,459 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.pack.operation records with IDs: [124]
+2025-03-30 08:12:07,747 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [252]
+2025-03-30 08:12:07,856 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [253]
+2025-03-30 08:12:09,629 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.pack.operation records with IDs: [126]
+2025-03-30 08:12:09,789 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [256]
+2025-03-30 08:12:09,866 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [257]
+2025-03-30 08:12:12,226 2239819 ERROR test_universal_connector_10 odoo.addons.stock.tests.test_stock_flow: FAIL
+2025-03-30 08:12:12,229 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_stock_flow: test_20_create_inventory_with_different_uom (odoo.addons.stock.tests.test_stock_flow.TestStockFlow)
+2025-03-30 08:12:12,229 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_stock_flow: ` Create inventory with different unit of measure.
+2025-03-30 08:12:20,189 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_stock_flow: test_30_check_with_no_incoming_lot (odoo.addons.stock.tests.test_stock_flow.TestStockFlow)
+2025-03-30 08:12:20,190 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_stock_flow: ` Picking in without lots and picking out with
+2025-03-30 08:12:24,853 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [260]
+2025-03-30 08:12:24,932 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [261]
+2025-03-30 08:12:26,198 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [263]
+2025-03-30 08:12:26,244 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [264]
+2025-03-30 08:12:26,466 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [265]
+2025-03-30 08:12:26,644 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_stock_flow: test_40_pack_in_pack (odoo.addons.stock.tests.test_stock_flow.TestStockFlow)
+2025-03-30 08:12:26,644 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_stock_flow: ` Put a pack in pack
+2025-03-30 08:12:29,808 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [268]
+2025-03-30 08:12:29,850 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [269]
+2025-03-30 08:12:29,879 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [270]
+2025-03-30 08:12:30,202 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [272]
+2025-03-30 08:12:30,244 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [273]
+2025-03-30 08:12:30,571 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [275]
+2025-03-30 08:12:30,615 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [276]
+2025-03-30 08:12:30,771 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_stock_flow: test_50_create_in_out_with_product_pack_lines (odoo.addons.stock.tests.test_stock_flow.TestStockFlow)
+2025-03-30 08:12:34,196 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.pack.operation records with IDs: [134]
+2025-03-30 08:12:34,287 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [279]
+2025-03-30 08:12:34,315 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [280, 281]
+2025-03-30 08:12:34,961 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [284]
+2025-03-30 08:12:34,994 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [285, 286]
+2025-03-30 08:12:35,172 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_stock_flow: test_60_create_in_out_with_product_pack_lines (odoo.addons.stock.tests.test_stock_flow.TestStockFlow)
+2025-03-30 08:12:37,687 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.pack.operation records with IDs: [139]
+2025-03-30 08:12:37,769 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [290]
+2025-03-30 08:12:37,801 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [291, 292]
+2025-03-30 08:12:38,381 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [295, 296]
+2025-03-30 08:12:38,515 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_stock_flow: test_70_picking_state_all_at_once_reserve (odoo.addons.stock.tests.test_stock_flow.TestStockFlow)
+2025-03-30 08:12:38,515 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_stock_flow: ` This test will check that the state of the picking is correctly computed according to the state of its move lines and its move type.
+2025-03-30 08:12:41,916 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_stock_flow: test_71_picking_state_all_at_once_force_assign (odoo.addons.stock.tests.test_stock_flow.TestStockFlow)
+2025-03-30 08:12:41,916 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_stock_flow: ` This test will check that the state of the picking is correctly computed according to the state of its move lines and its move type.
+2025-03-30 08:12:44,809 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_stock_flow: test_72_picking_state_partial_reserve (odoo.addons.stock.tests.test_stock_flow.TestStockFlow)
+2025-03-30 08:12:44,809 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_stock_flow: ` This test will check that the state of the picking is correctly computed according to the state of its move lines and its move type.
+2025-03-30 08:12:47,772 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.pack.operation records with IDs: [146]
+2025-03-30 08:12:47,832 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_stock_flow: test_73_picking_state_partial_force_assign (odoo.addons.stock.tests.test_stock_flow.TestStockFlow)
+2025-03-30 08:12:47,833 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_stock_flow: ` This test will check that the state of the picking is correctly computed according to the state of its move lines and its move type.
+2025-03-30 08:12:50,384 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_stock_flow: test_74_move_state_waiting_mto (odoo.addons.stock.tests.test_stock_flow.TestStockFlow)
+2025-03-30 08:12:50,384 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_stock_flow: ` This test will check that when a move is unreserved, its state changes to 'waiting' if it has ancestors or if it has a 'procure_method' equal to 'make_to_order' else the state changes to 'confirmed'.
+2025-03-30 08:12:53,060 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_stock_flow: ======================================================================
+2025-03-30 08:12:53,060 2239819 ERROR test_universal_connector_10 odoo.addons.stock.tests.test_stock_flow: FAIL: test_10_pickings_transfer_with_different_uom (odoo.addons.stock.tests.test_stock_flow.TestStockFlow)
+2025-03-30 08:12:53,060 2239819 ERROR test_universal_connector_10 odoo.addons.stock.tests.test_stock_flow: ` Picking transfer with diffrent unit of meassure.
+2025-03-30 08:12:53,060 2239819 ERROR test_universal_connector_10 odoo.addons.stock.tests.test_stock_flow: Traceback (most recent call last):
+2025-03-30 08:12:53,060 2239819 ERROR test_universal_connector_10 odoo.addons.stock.tests.test_stock_flow: `   File "/home/odoo/10.0/addons/stock/tests/test_stock_flow.py", line 953, in test_10_pickings_transfer_with_different_uom
+2025-03-30 08:12:53,060 2239819 ERROR test_universal_connector_10 odoo.addons.stock.tests.test_stock_flow: `     self.assertEqual(sum(total_qty), 999.9995, 'Expecting 999.9995 kg , got %.4f kg on location stock!' % (sum(total_qty)))
+2025-03-30 08:12:53,061 2239819 ERROR test_universal_connector_10 odoo.addons.stock.tests.test_stock_flow: ` AssertionError: 999.9994999999999 != 999.9995 : Expecting 999.9995 kg , got 999.9995 kg on location stock!
+2025-03-30 08:12:53,061 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_stock_flow: Ran 12 tests in 42352.244s
+2025-03-30 08:12:53,061 2239819 ERROR test_universal_connector_10 odoo.addons.stock.tests.test_stock_flow: FAILED
+2025-03-30 08:12:53,061 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_stock_flow:  (failures=1)
+2025-03-30 08:12:53,061 2239819 INFO test_universal_connector_10 odoo.modules.module: odoo.addons.stock.tests.test_stock_flow tested in 42352.25s, 54427 queries
+2025-03-30 08:12:53,061 2239819 ERROR test_universal_connector_10 odoo.modules.module: Module stock: 1 failures, 0 errors
+2025-03-30 08:12:53,061 2239819 INFO test_universal_connector_10 odoo.modules.module: odoo.addons.stock.tests.test_stock_scrap running tests.
+2025-03-30 08:12:53,062 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_stock_scrap: test_stock_scrap_01 (odoo.addons.stock.tests.test_stock_scrap.TestStockScrap)
+2025-03-30 08:12:53,062 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_stock_scrap: ` Standalone scrap a stockable product
+2025-03-30 08:12:53,752 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_stock_scrap: test_stock_scrap_02 (odoo.addons.stock.tests.test_stock_scrap.TestStockScrap)
+2025-03-30 08:12:53,752 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_stock_scrap: ` Scrap a stockable product from a picking
+2025-03-30 08:12:54,589 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_stock_scrap: test_stock_scrap_03 (odoo.addons.stock.tests.test_stock_scrap.TestStockScrap)
+2025-03-30 08:12:54,589 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_stock_scrap: ` Standalone scrap a consumable product
+2025-03-30 08:12:55,312 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_stock_scrap: test_stock_scrap_04 (odoo.addons.stock.tests.test_stock_scrap.TestStockScrap)
+2025-03-30 08:12:55,312 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_stock_scrap: ` Scrap a consumable product from a picking
+2025-03-30 08:12:56,399 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_stock_scrap: Ran 4 tests in 3.338s
+2025-03-30 08:12:56,399 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_stock_scrap: OK
+2025-03-30 08:12:56,400 2239819 INFO test_universal_connector_10 odoo.modules.module: odoo.addons.stock.tests.test_warehouse running tests.
+2025-03-30 08:13:00,466 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_warehouse: test_basic_move (odoo.addons.stock.tests.test_warehouse.TestInventory)
+2025-03-30 08:13:01,130 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.quant records with IDs: [123]
+2025-03-30 08:13:01,145 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.quant records with IDs: [125]
+2025-03-30 08:13:01,713 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_warehouse: test_inventory_adjustment_and_negative_quants_1 (odoo.addons.stock.tests.test_warehouse.TestInventory)
+2025-03-30 08:13:01,713 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_warehouse: ` Make sure negative quants from returns get wiped out with an inventory adjustment
+2025-03-30 08:13:02,373 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [306]
+2025-03-30 08:13:02,403 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [307]
+2025-03-30 08:13:03,246 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.pack.operation records with IDs: [150]
+2025-03-30 08:13:03,306 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [310]
+2025-03-30 08:13:03,603 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.quant records with IDs: [128]
+2025-03-30 08:13:03,614 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.quant records with IDs: [130]
+2025-03-30 08:13:03,653 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_warehouse: test_inventory_adjustment_and_negative_quants_2 (odoo.addons.stock.tests.test_warehouse.TestInventory)
+2025-03-30 08:13:03,653 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_warehouse: ` Make sure negative quants get wiped out with an inventory adjustment
+2025-03-30 08:13:04,290 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [312]
+2025-03-30 08:13:04,324 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.move.operation.link records with IDs: [313]
+2025-03-30 08:13:04,608 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.quant records with IDs: [131]
+2025-03-30 08:13:04,623 2239819 INFO test_universal_connector_10 odoo.models.unlink: User #1 deleted stock.quant records with IDs: [133]
+2025-03-30 08:13:04,650 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_warehouse: test_inventory_product (odoo.addons.stock.tests.test_warehouse.TestInventory)
+2025-03-30 08:13:05,303 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_warehouse: test_inventory_wizard (odoo.addons.stock.tests.test_warehouse.TestInventory)
+2025-03-30 08:13:10,360 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_warehouse: test_resupply_from_wh (odoo.addons.stock.tests.test_warehouse.TestResupply)
+2025-03-30 08:13:14,772 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_warehouse: Ran 6 tests in 18.372s
+2025-03-30 08:13:14,772 2239819 INFO test_universal_connector_10 odoo.addons.stock.tests.test_warehouse: OK
+2025-03-30 08:13:14,772 2239819 INFO test_universal_connector_10 odoo.modules.module: odoo.addons.stock.tests.test_warehouse tested in 18.37s, 14017 queries
+2025-03-30 08:13:15,226 2239819 INFO test_universal_connector_10 odoo.modules.registry: module universal_connector_product: creating or updating database tables
+2025-03-30 08:13:15,825 2239819 INFO test_universal_connector_10 odoo.modules.loading: loading universal_connector_product/views/product_view.xml
+2025-03-30 08:13:16,496 2239819 INFO test_universal_connector_10 odoo.modules.module: odoo.addons.universal_connector_product.tests.test_backend running tests.
+2025-03-30 08:13:16,497 2239819 INFO test_universal_connector_10 odoo.addons.universal_connector_product.tests.test_backend: test_connection (odoo.addons.universal_connector_product.tests.test_backend.MyTest)
+2025-03-30 08:13:16,729 2239819 INFO test_universal_connector_10 odoo.addons.universal_connector_product.tests.testenv: 🎺🎺🎺 Starting test v2.0.22 (debug_level=0, commit=True)
+2025-03-30 08:13:16,735 2239819 INFO test_universal_connector_10 odoo.addons.universal_connector_product.tests.testenv: 🎺🎺 Testing module: universal_connector_product (10.0.1.3.14)
+2025-03-30 08:13:16,736 2239819 INFO test_universal_connector_10 odoo.addons.universal_connector_product.tests.testenv: 🎺🎺 Loading data from: synchro.backend 
+2025-03-30 08:13:16,799 2239819 INFO test_universal_connector_10 odoo.addons.universal_connector_product.tests.test_backend: 🎺 Starting connection test on ports 8270 (db=oca10) and 8272 (db=oca12) and on ports 8167 (db=demo7) and 8168 (db=demo8)
+2025-03-30 08:13:17,063 2239819 INFO test_universal_connector_10 odoo.addons.universal_connector_base.models.synchro_log: synchro.backend.button_check_connection(ep=http://admin@localhost:8270/xmlrpc/2/common,h=localhost)
+2025-03-30 08:14:01,098 2239819 ERROR test_universal_connector_10 odoo.addons.universal_connector_product.tests.test_backend: ERROR
+2025-03-30 08:14:01,099 2239819 INFO test_universal_connector_10 odoo.addons.universal_connector_product.tests.testenv: 🏆🥇 [1;32m0 tests SUCCESSFULLY completed[0m
+2025-03-30 08:14:01,101 2239819 INFO test_universal_connector_10 odoo.addons.universal_connector_product.tests.test_backend: ======================================================================
+2025-03-30 08:14:01,101 2239819 ERROR test_universal_connector_10 odoo.addons.universal_connector_product.tests.test_backend: ERROR: test_connection (odoo.addons.universal_connector_product.tests.test_backend.MyTest)
+2025-03-30 08:14:01,102 2239819 ERROR test_universal_connector_10 odoo.addons.universal_connector_product.tests.test_backend: Traceback (most recent call last):
+2025-03-30 08:14:01,102 2239819 ERROR test_universal_connector_10 odoo.addons.universal_connector_product.tests.test_backend: `   File "/home/odoo/10.0/connector/universal_connector_product/tests/test_backend.py", line 445, in test_connection
+2025-03-30 08:14:01,102 2239819 ERROR test_universal_connector_10 odoo.addons.universal_connector_product.tests.test_backend: `     self._test_check_connection(xref)
+2025-03-30 08:14:01,102 2239819 ERROR test_universal_connector_10 odoo.addons.universal_connector_product.tests.test_backend: `   File "/home/odoo/10.0/connector/universal_connector_product/tests/test_backend.py", line 324, in _test_check_connection
+2025-03-30 08:14:01,102 2239819 ERROR test_universal_connector_10 odoo.addons.universal_connector_product.tests.test_backend: `     actions="button_check_connection",
+2025-03-30 08:14:01,102 2239819 ERROR test_universal_connector_10 odoo.addons.universal_connector_product.tests.test_backend: `   File "/home/odoo/10.0/connector/universal_connector_product/tests/testenv.py", line 3177, in resource_edit
+2025-03-30 08:14:01,102 2239819 ERROR test_universal_connector_10 odoo.addons.universal_connector_product.tests.test_backend: `     ctx=ctx,
+2025-03-30 08:14:01,102 2239819 ERROR test_universal_connector_10 odoo.addons.universal_connector_product.tests.test_backend: `   File "/home/odoo/10.0/connector/universal_connector_product/tests/testenv.py", line 2034, in _exec_action
+2025-03-30 08:14:01,102 2239819 ERROR test_universal_connector_10 odoo.addons.universal_connector_product.tests.test_backend: `     act_windows = getattr(record, action)()
+2025-03-30 08:14:01,102 2239819 ERROR test_universal_connector_10 odoo.addons.universal_connector_product.tests.test_backend: `   File "/home/odoo/10.0/connector/universal_connector_base/models/synchro_backend.py", line 558, in button_check_connection
+2025-03-30 08:14:01,102 2239819 ERROR test_universal_connector_10 odoo.addons.universal_connector_product.tests.test_backend: `     dir_mapper.analyze_dir_mapper(managed_models)
+2025-03-30 08:14:01,102 2239819 ERROR test_universal_connector_10 odoo.addons.universal_connector_product.tests.test_backend: `   File "/home/odoo/10.0/connector/universal_connector_base/models/synchro_model.py", line 886, in analyze_dir_mapper
+2025-03-30 08:14:01,102 2239819 ERROR test_universal_connector_10 odoo.addons.universal_connector_product.tests.test_backend: `     % (missed_fields, binding_model)
+2025-03-30 08:14:01,102 2239819 ERROR test_universal_connector_10 odoo.addons.universal_connector_product.tests.test_backend: ` UserError: (u"Missed mapping for field ['product_variant_ids'] of product.product", '')
+2025-03-30 08:14:01,102 2239819 INFO test_universal_connector_10 odoo.addons.universal_connector_product.tests.test_backend: Ran 1 test in 44.604s
+2025-03-30 08:14:01,102 2239819 ERROR test_universal_connector_10 odoo.addons.universal_connector_product.tests.test_backend: FAILED
+2025-03-30 08:14:01,103 2239819 INFO test_universal_connector_10 odoo.addons.universal_connector_product.tests.test_backend:  (errors=1)
+2025-03-30 08:14:01,103 2239819 INFO test_universal_connector_10 odoo.modules.module: odoo.addons.universal_connector_product.tests.test_backend tested in 44.61s, 14064 queries
+2025-03-30 08:14:01,103 2239819 ERROR test_universal_connector_10 odoo.modules.module: Module universal_connector_product: 0 failures, 1 errors
+2025-03-30 08:14:01,447 2239819 INFO test_universal_connector_10 odoo.modules.registry: module universal_connector: creating or updating database tables
+2025-03-30 08:14:02,073 2239819 INFO test_universal_connector_10 odoo.modules.loading: 30 modules loaded in 42453.84s, 99831 queries
+2025-03-30 08:14:02,555 2239819 WARNING test_universal_connector_10 odoo.modules.loading: Model portal.wizard is declared but cannot be loaded! (Perhaps a module was partially removed or renamed)
+2025-03-30 08:14:02,555 2239819 WARNING test_universal_connector_10 odoo.modules.loading: Model portal.wizard.user is declared but cannot be loaded! (Perhaps a module was partially removed or renamed)
+2025-03-30 08:14:03,206 2239819 ERROR test_universal_connector_10 odoo.modules.loading: At least one test failed when loading the modules.
+2025-03-30 08:14:03,219 2239819 INFO test_universal_connector_10 odoo.modules.loading: All post-tested in 0.01s, 0 queries
+2025-03-30 08:14:03,220 2239819 INFO test_universal_connector_10 odoo.models: Computing parent left and right for table ir_ui_menu...
+2025-03-30 08:14:03,403 2239819 INFO test_universal_connector_10 odoo.models: Computing parent left and right for table stock_location...
+2025-03-30 08:14:03,455 2239819 INFO test_universal_connector_10 odoo.models: Computing parent left and right for table stock_quant_package...
+2025-03-30 08:14:03,459 2239819 INFO test_universal_connector_10 odoo.modules.registry: Registry changed, signaling through the database
+2025-03-30 08:14:03,462 2239819 INFO test_universal_connector_10 odoo.service.server: Initiating shutdown
+2025-03-30 08:14:03,462 2239819 INFO test_universal_connector_10 odoo.service.server: Hit CTRL-C again or send a second signal to force the shutdown.
+
++===================================================================
+| please test [36muniversal_connector[0m (10.0): [31mFAILED![0m
++===================================================================
+

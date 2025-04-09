@@ -29,6 +29,7 @@ TEST_SYNCHRO_BACKEND = {
     "universal_connector_rcp_vg7.backend_vg7": {
         "name": "VG7 print",
         "identity_id": "universal_connector_rcp_vg7.identity_vg7",
+        "remote_sw_version": "2.0",
         "protocol_id": "universal_connector_by_http.protocol_http",
         "counterpart_url": "https://example.com/N/A",
         "lgi_path": "/N/A",

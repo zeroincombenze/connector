@@ -92,7 +92,7 @@ except ImportError:
     from z0lib import z0lib
 # import pdb      # pylint: disable=deprecated-module
 
-__version__ = "10.0.0.2.5"
+__version__ = "10.0.1.2.5"
 
 # TEST_IBAN = "IT60X0542811101000000123456"
 MODEL_KEYS = {

@@ -436,13 +436,20 @@ class IrModelSynchro(models.Model):
             rec = -15
             return rec
         postponed = False
-        rec = dir_mapper.bind_record(
-            Binder, vals, model_spec=model_spec, ctx=ctx) if vals else None
+        rec = (
+            dir_mapper.bind_record(Binder, vals, model_spec=model_spec, ctx=ctx)
+            if vals
+            else None
+        )
         if not rec:
             rec = -14
             loc_ext_id = dir_mapper.get_loc_ext_id()
             min_vals = {}
             if dir_mapper.auth_action not in ("upd", "lock"):
+                vals = dir_mapper.compile_required_fields(
+                    vals,
+                    ctx=ctx,
+                )
                 if only_minimal or incomplete_record:
                     for loc_name in vals.keys():
                         mapper = dir_mapper.get_mapper(loc_name=loc_name)

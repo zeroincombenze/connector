@@ -8,15 +8,15 @@
 #
 {
     "name": "Universal Connector protocol xmlrpc",
-    "version": "12.0.0.3.14",
+    "version": "12.0.1.3.14",
     "category": "Generic Modules",
     "summary": "Add protocol xmlrpc (Odoo 6/7/8) to Universal Connector",
     "author": "SHS-AV s.r.l.",
     "website": "https://www.zeroincombenze.it/",
     "development_status": "Beta",
     "license": "LGPL-3",
-    "depends": ["universal_connector_base"],
-    "version_depends": ["universal_connector_openerp>=10.0.0.3.14"],
+    "depends": ["universal_connector_openerp"],
+    "version_depends": ["universal_connector_openerp>=10.0.1.3.14"],
     "external_dependencies": {
         "python": [
             "python_plus",

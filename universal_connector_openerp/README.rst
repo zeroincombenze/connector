@@ -1,8 +1,8 @@
 ================================================================================
-|icon| Universal Connector Openerp/Connettore universale per Openerp 12.0.0.3.14
+|icon| Universal Connector Openerp/Connettore universale per Openerp 12.0.1.3.14
 ================================================================================
 
-**Manage remote old openepr version**
+**Manage remote old openerp version**
 
 .. |icon| image:: https://raw.githubusercontent.com/zeroincombenze/connector/12.0/universal_connector_openerp/static/description/icon.png
 
@@ -144,11 +144,11 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 ChangeLog History | Cronologia modifiche
 ----------------------------------------
 
-12.0.0.3.14 (2025-01-09)
+12.0.0.3.14 (2025-04-09)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 * [IMP] Split from universal_connecto_base
-* [QUA] Test coverage 92% (39: 3+36) [146 TestPoints] - quality rating 655 (target 100)
+* [QUA] Test coverage 100% (106: 0+106) [154 TestPoints] - quality rating 293 (target 100)
 
 
 
@@ -199,7 +199,7 @@ La distribuzione `Zeroincombenze® <https://www.zeroincombenze.it/>`__ è proget
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2025-01-09
+Last Update / Ultimo aggiornamento: 2025-04-09
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status

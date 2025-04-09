@@ -12,6 +12,10 @@ from odoo import fields, models
 class ResPartner(models.Model):
     _inherit = "res.partner"
 
+    _sql_constraints = [
+        ("ref_unique_vg7_id", "unique(vg7_id)", "Remote ref must be unique!"),
+    ]
+
     vg7_id = fields.Integer("VG7 ID", copy=False)
     vg72_id = fields.Integer("VG7 ID (2.nd)", copy=False)
 
@@ -29,8 +33,6 @@ class ResPartner(models.Model):
                 vals[nm] = getattr(rec, nm).id
         if vals.get("type") not in ("delivery", "invoice"):
             vals["parent_id"] = False
-        if not vals.get("name"):
-            vals["name"] = "Unknown"
 
         if "codice_destinatario" in vals and not vals["codice_destinatario"]:
             del vals["codice_destinatario"]
@@ -134,9 +136,3 @@ class ResPartner(models.Model):
 #     _inherit = "res.partner"
 #
 #     vg72_id = fields.Integer("VG7 ID", copy=False)
-
-
-class ResCategory(models.Model):
-    _inherit = "res.partner.category"
-
-    vg7_id = fields.Integer("VG7 ID", copy=False)

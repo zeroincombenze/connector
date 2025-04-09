@@ -9,6 +9,7 @@
 from xmlrpc import client
 import logging
 
+from numpy.ma import append
 from odoo import models
 from odoo import release
 from python_plus import unicodes
@@ -165,7 +166,8 @@ class SynchroApi(models.Model):
         if not fct:  # pragma: no cover
             return unicodes(
                 getattr(self, "odoo_get_field_list")(
-                    session, backend, model, magic_fields=magic_fields)
+                    session, backend, model, magic_fields=magic_fields
+                )
             )
         return unicodes(
             getattr(self, fct)(session, backend, model, magic_fields=magic_fields)
@@ -216,8 +218,11 @@ class SynchroApi(models.Model):
             xref_dir_mapper = dir_mapper.backend_id.get_dir_mapper(
                 model="ir.model.data"
             )
-            xrefs = self.get_response(session, xref_dir_mapper, ext_id=xrefs[0])
-            xref = xrefs[0]["module"] + "." + xrefs[0]["name"]
+            if xref_dir_mapper:
+                xrefs = self.get_response(session, xref_dir_mapper, ext_id=xrefs[0])
+                xref = xrefs[0]["module"] + "." + xrefs[0]["name"]
+            else:
+                xref = False
         return xref
 
     # -----------------------------------------------------------
@@ -469,7 +474,10 @@ class SynchroApi(models.Model):
                 continue
             if SynchroModel.split_binding_model_n_spec(model._name)[0] != model._name:
                 continue  # pragma: no cover
-            ext_name = self.odoo_tnl_local_model_to_ext(backend, model._name)
+            if backend.identity_id.code in ("odoo", "openerp"):
+                ext_name = self.odoo_tnl_local_model_to_ext(backend, model._name)
+            else:
+                ext_name = False
             model_list.append((name, ext_name, False))
         return model_list
 
@@ -481,7 +489,12 @@ class SynchroApi(models.Model):
             if loc_name == "id":
                 res.append((loc_ext_id, loc_name))
             elif loc_name not in magic_fields:
-                ext_name = self.odoo_tnl_local_field_to_ext(backend, model, loc_name)
+                if backend.identity_id.code in ("odoo", "openerp"):
+                    ext_name = self.odoo_tnl_local_field_to_ext(
+                        backend, model, loc_name
+                    )
+                else:
+                    ext_name = False
                 res.append((loc_name, ext_name))
         return res
 

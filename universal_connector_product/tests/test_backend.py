@@ -57,40 +57,6 @@ TEST_SYNCHRO_BACKEND = {
         "prefix": "odoo10",
         "sequence": 14,
     },
-    # "universal_connector_base.backend_odoo8": {
-    #     "name": "Test Odoo 8.0",
-    #     "hostname": "localhost",
-    #     "identity": "odoo",
-    #     "database": "demo8",
-    #     "remote_sw_version": "8.0",
-    #     "method": "xmlrpc/http",
-    #     "port": 8168,
-    #     "login": "admin",
-    #     "password": "admin",
-    #     "lgi_path": "/xmlrpc/common",
-    #     "exchange_path": "/xmlrpc/object",
-    #     "counterpart_url": "http://admin@localhost:8168/xmlrpc/common",
-    #     "counterpart_data_url": "http://admin@localhost:8168/xmlrpc/object",
-    #     "prefix": "oe8",
-    #     "sequence": 18,
-    # },
-    # "universal_connector_base.backend_odoo7": {
-    #     "name": "Test Odoo 7.0",
-    #     "hostname": "localhost",
-    #     "identity": "odoo",
-    #     "database": "demo7",
-    #     "remote_sw_version": "7.0",
-    #     "method": "xmlrpc/http",
-    #     "port": 8167,
-    #     "login": "admin",
-    #     "password": "admin",
-    #     "lgi_path": "/xmlrpc/common",
-    #     "exchange_path": "/xmlrpc/object",
-    #     "counterpart_url": "http://admin@localhost:8167/xmlrpc/common",
-    #     "counterpart_data_url": "http://admin@localhost:8167/xmlrpc/object",
-    #     "prefix": "oe7",
-    #     "sequence": 20,
-    # },
 }
 TEST_SETUP_LIST = [
     "synchro.backend",
@@ -117,9 +83,12 @@ class MyTest(SingleTransactionCase):
     def get_data_test(self):
         # In order to validate this connector module, we have to load record from
         # another Odoo instances, that are built outside the current environment.
-        # So the solution is to create these Odoo instances before this test execution
-        # and make available information about counterparties in a text file with data
-        # to compare in order to validate current regression tests.
+        # So the solution is to create these Odoo instances before this test was started
+        # and make available information about counterparties in a text file.
+        # External Odoo instance must be built with demo data so we can run tests like
+        # usual internal tests. Even so, demo data can change across Odoo versions, and
+        # we use the configuration text file in order to compare and validate
+        # current regression tests.
         # If file is not present we suppose the instances with minimal demo data.
         #
         # The condition to validate module are:
@@ -145,8 +114,8 @@ class MyTest(SingleTransactionCase):
         #
         # This test could be executed just on real customer db so we cannot use clear
         # password or token in data set/configure. In these case is mandatory
-        # to read this data from local file, not published.
-        # Text file name is "/home/odoo/.local/<CURRENT_MODULE_NAME>.dat")
+        # to read this data from local file, but not published.
+        # Hidden fext file name is "/home/odoo/.local/<CURRENT_MODULE_NAME>.dat")
         #
         # Warning: synchronization backends must be declared on global variables
         # TEST_SYNCHRO_BACKEND and TEST_SETUP_LIST (read testenv documentation)
@@ -229,7 +198,9 @@ class MyTest(SingleTransactionCase):
     def get_model_list(self, xref):
         models = []
         for loc_model in self.test_data[xref].keys():
-            models.append((loc_model, self.test_data[xref][loc_model]["EXT_NAME"]))
+            models.append(
+                (loc_model, self.test_data[xref][loc_model]["EXT_NAME"], False)
+            )
         return models
 
     def get_field_list(self, xref, loc_model):
@@ -340,11 +311,12 @@ class MyTest(SingleTransactionCase):
             backend,
             actions="button_build_model_map",
         )
-        for model, ext_model in self.get_model_list(xref):
+        for model, ext_model, model_spec in self.get_model_list(xref):
             backend_model = self.env["synchro.model"].search(
                 [
                     ("name", "=", model),
                     ("counterpart_name", "=", ext_model),
+                    ("model_spec", "=", model_spec),
                     ("backend_id", "=", backend.id),
                 ]
             )
@@ -423,15 +395,27 @@ class MyTest(SingleTransactionCase):
                         self.assertIn(
                             value,
                             getattr(record, loc_field),
-                            msg="Unexpected value %s for %s.%s"
-                            % (getattr(record, loc_field), loc_model, loc_field),
+                            msg="Unexpected value %s for %s.%s (ext_id %s of %s)"
+                            % (
+                                getattr(record, loc_field),
+                                loc_model,
+                                loc_field,
+                                ext_id,
+                                xref,
+                            ),
                         )
                     else:
                         self.assertEqual(
                             getattr(record, loc_field),
                             value,
-                            msg="Unexpected value %s for %s.%s"
-                            % (getattr(record, loc_field), loc_model, loc_field),
+                            msg="Unexpected value %s for %s.%s (ext_id %s of %s)"
+                            % (
+                                getattr(record, loc_field),
+                                loc_model,
+                                loc_field,
+                                ext_id,
+                                xref,
+                            ),
                         )
 
     def test_connection(self):

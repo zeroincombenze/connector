@@ -8,7 +8,7 @@
         <field name="prefix">vg7</field>
         <!-- <field name="product_without_variants" eval="True"/> -->
         <field name="active" eval="True"/>
-        <field name="sequence">10</field>
+        <field name="sequence">16</field>
     </record>
 
 </odoo>

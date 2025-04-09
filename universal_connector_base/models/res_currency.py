@@ -8,7 +8,7 @@
 #
 import logging
 
-from odoo import api, fields, models
+from odoo import fields, models
 
 _logger = logging.getLogger(__name__)
 
@@ -16,30 +16,34 @@ _logger = logging.getLogger(__name__)
 class ResCurrency(models.Model):
     _inherit = "res.currency"
 
-    oe7_id = fields.Integer("Odoo7 ID", copy=False)
-    oe8_id = fields.Integer("Odoo8 ID", copy=False)
-    odoo10_id = fields.Integer("Odoo10 ID", copy=False)
-    odoo12_id = fields.Integer("Odoo12 ID", copy=False)
-    odoo16_id = fields.Integer("Odoo16 ID", copy=False)
+    _sql_constraints = [
+        ("ref_unique_odoo_id", "unique(odoo_id)", "Remote ref must be unique!"),
+        ("ref_unique_odoo16_id", "unique(odoo16_id)", "Remote ref must be unique!"),
+        ("ref_unique_odoo14_id", "unique(odoo14_id)", "Remote ref must be unique!"),
+        ("ref_unique_odoo12_id", "unique(odoo12_id)", "Remote ref must be unique!"),
+        ("ref_unique_odoo10_id", "unique(odoo10_id)", "Remote ref must be unique!"),
+    ]
 
-    @api.model_cr_context
-    def _auto_init(self):
-        res = super()._auto_init()
-        self.env["synchro.backend"]._build_all_indexes(self)
-        return res
+    odoo_id = fields.Integer("Odoo ID", copy=False)
+    odoo16_id = fields.Integer("Odoo16 ID", copy=False)
+    odoo14_id = fields.Integer("Odoo14 ID", copy=False)
+    odoo12_id = fields.Integer("Odoo12 ID", copy=False)
+    odoo10_id = fields.Integer("Odoo10 ID", copy=False)
 
 
 class ResCurrencyRate(models.Model):
     _inherit = "res.currency.rate"
 
-    oe7_id = fields.Integer("Odoo7 ID", copy=False)
-    oe8_id = fields.Integer("Odoo8 ID", copy=False)
-    odoo10_id = fields.Integer("Odoo10 ID", copy=False)
-    odoo12_id = fields.Integer("Odoo12 ID", copy=False)
-    odoo16_id = fields.Integer("Odoo16 ID", copy=False)
+    _sql_constraints = [
+        ("ref_unique_odoo_id", "unique(odoo_id)", "Remote ref must be unique!"),
+        ("ref_unique_odoo16_id", "unique(odoo16_id)", "Remote ref must be unique!"),
+        ("ref_unique_odoo14_id", "unique(odoo14_id)", "Remote ref must be unique!"),
+        ("ref_unique_odoo12_id", "unique(odoo12_id)", "Remote ref must be unique!"),
+        ("ref_unique_odoo10_id", "unique(odoo10_id)", "Remote ref must be unique!"),
+    ]
 
-    @api.model_cr_context
-    def _auto_init(self):
-        res = super()._auto_init()
-        self.env["synchro.backend"]._build_all_indexes(self)
-        return res
+    odoo_id = fields.Integer("Odoo ID", copy=False)
+    odoo16_id = fields.Integer("Odoo16 ID", copy=False)
+    odoo14_id = fields.Integer("Odoo14 ID", copy=False)
+    odoo12_id = fields.Integer("Odoo12 ID", copy=False)
+    odoo10_id = fields.Integer("Odoo10 ID", copy=False)

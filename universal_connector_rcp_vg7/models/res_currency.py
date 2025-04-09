@@ -8,7 +8,7 @@
 #
 import logging
 
-from odoo import api, fields, models
+from odoo import fields, models
 
 _logger = logging.getLogger(__name__)
 
@@ -16,11 +16,18 @@ _logger = logging.getLogger(__name__)
 class ResCurrency(models.Model):
     _inherit = "res.currency"
 
+    _sql_constraints = [
+        ("ref_unique_vg7_id", "unique(vg7_id)", "Remote ref must be unique!"),
+    ]
+
     vg7_id = fields.Integer("VG7 ID", copy=False)
 
 
 class ResCurrencyRate(models.Model):
     _inherit = "res.currency.rate"
 
-    vg7_id = fields.Integer("VG7 ID", copy=False)
+    _sql_constraints = [
+        ("ref_unique_vg7_id", "unique(vg7_id)", "Remote ref must be unique!"),
+    ]
 
+    vg7_id = fields.Integer("VG7 ID", copy=False)

@@ -10,6 +10,7 @@
         <field name="default_lgi_path">xmlrpc/2/common</field>
         <field name="default_exchange_path">xmlrpc/2/object</field>
         <field name="remote_sw_version">'18.0','17.0','16.0','15.0','14.0','13.0','12.0','11.0','10.0','9.0'</field>
+        <field name="default_prefix">odoo</field>
         <field name="sequence">10</field>
     </record>
 

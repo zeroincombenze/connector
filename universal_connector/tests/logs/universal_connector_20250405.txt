@@ -1,0 +1,177 @@
+2025-04-05 18:45:54,103 2420857 INFO ? odoo: Odoo version 10.0
+2025-04-05 18:45:54,103 2420857 INFO ? odoo: Using configuration file at /home/odoo/10.0/connector/universal_connector/tests/logs/zero10.connector.universal_connector.conf
+2025-04-05 18:45:54,103 2420857 INFO ? odoo: addons paths: ['/home/odoo/.local/share/Odoo10/addons/10.0', u'/home/odoo/10.0/odoo/addons', u'/home/odoo/10.0/addons', u'/home/odoo/.local/share/Odoo10/addons', u'/home/odoo/10.0/account-analytic', u'/home/odoo/10.0/account-budgeting', u'/home/odoo/10.0/account-closing', u'/home/odoo/10.0/account-consolidation', u'/home/odoo/10.0/account-financial-reporting', u'/home/odoo/10.0/account-financial-tools', u'/home/odoo/10.0/account-fiscal-rule', u'/home/odoo/10.0/account-invoice-reporting', u'/home/odoo/10.0/account-invoicing', u'/home/odoo/10.0/account-payment', u'/home/odoo/10.0/account-reconcile', u'/home/odoo/10.0/bank-payment', u'/home/odoo/10.0/bank-statement-import', u'/home/odoo/10.0/calendar', u'/home/odoo/10.0/commission', u'/home/odoo/10.0/community-data-files', u'/home/odoo/10.0/connector', u'/home/odoo/10.0/contract', u'/home/odoo/10.0/credit-control', u'/home/odoo/10.0/crm', u'/home/odoo/10.0/currency', u'/home/odoo/10.0/data-protection', u'/home/odoo/10.0/delivery-carrier', u'/home/odoo/10.0/e-commerce', u'/home/odoo/10.0/edi', u'/home/odoo/10.0/helpdesk', u'/home/odoo/10.0/hr', u'/home/odoo/10.0/intrastat-extrastat', u'/home/odoo/10.0/knowledge', u'/home/odoo/10.0/l10n-italy', u'/home/odoo/10.0/l10n-italy-supplemental', u'/home/odoo/10.0/maintenance', u'/home/odoo/10.0/management-system', u'/home/odoo/10.0/manufacture', u'/home/odoo/10.0/margin-analysis', u'/home/odoo/10.0/marketplace', u'/home/odoo/10.0/mis-builder', u'/home/odoo/10.0/multi-company', u'/home/odoo/10.0/partner-contact', u'/home/odoo/10.0/product-attribute', u'/home/odoo/10.0/product-kitting', u'/home/odoo/10.0/product-variant', u'/home/odoo/10.0/profiles', u'/home/odoo/10.0/project', u'/home/odoo/10.0/purchase-reporting', u'/home/odoo/10.0/purchase-workflow', u'/home/odoo/10.0/queue', u'/home/odoo/10.0/report-print-send', u'/home/odoo/10.0/reporting-engine', u'/home/odoo/10.0/rma', u'/home/odoo/10.0/sale-financial', u'/home/odoo/10.0/sale-reporting', u'/home/odoo/10.0/sale-workflow', u'/home/odoo/10.0/search-engine', u'/home/odoo/10.0/server-auth', u'/home/odoo/10.0/server-tools', u'/home/odoo/10.0/server-ux', u'/home/odoo/10.0/social', u'/home/odoo/10.0/stock-logistics-barcode', u'/home/odoo/10.0/stock-logistics-reporting', u'/home/odoo/10.0/stock-logistics-tracking', u'/home/odoo/10.0/stock-logistics-transport', u'/home/odoo/10.0/stock-logistics-warehouse', u'/home/odoo/10.0/stock-logistics-workflow', u'/home/odoo/10.0/storage', u'/home/odoo/10.0/timesheet', u'/home/odoo/10.0/uncovered', u'/home/odoo/10.0/web', u'/home/odoo/10.0/webhook', u'/home/odoo/10.0/website', u'/home/odoo/10.0/wms', u'/home/odoo/10.0/zerobug-test']
+2025-04-05 18:45:54,103 2420857 INFO ? odoo: database: odoo10@localhost:5432
+2025-04-05 18:45:54,115 2420857 INFO ? odoo.service.server: HTTP service (werkzeug) running on NB200Z0.:37680
+2025-04-05 18:45:54,131 2420857 INFO test_universal_connector_10 odoo.modules.loading: loading 1 modules...
+2025-04-05 18:45:54,205 2420857 INFO test_universal_connector_10 odoo.modules.loading: 1 modules loaded in 0.07s, 0 queries
+2025-04-05 18:45:54,974 2420857 INFO test_universal_connector_10 odoo.modules.loading: loading 30 modules...
+2025-04-05 18:45:55,102 2420857 INFO test_universal_connector_10 odoo.addons.report.models.report: Will use the Wkhtmltopdf binary at /home/odoo/10.0/venv_odoo/bin/wkhtmltopdf
+2025-04-05 18:45:55,216 2420857 INFO test_universal_connector_10 odoo.modules.loading: 30 modules loaded in 0.24s, 0 queries
+2025-04-05 18:45:55,223 2420857 INFO test_universal_connector_10 odoo.modules.loading: loading 32 modules...
+2025-04-05 18:45:55,455 2420857 INFO test_universal_connector_10 odoo.modules.registry: module universal_connector_product: creating or updating database tables
+2025-04-05 18:45:55,586 2420857 INFO test_universal_connector_10 odoo.modules.loading: loading universal_connector_product/views/product_view.xml
+2025-04-05 18:45:55,625 2420857 INFO test_universal_connector_10 odoo.addons.base.ir.ir_ui_view: Field `oe7_id` does not exist
+
+Error context:
+View `product_template.synchro.form`
+[view_id: 472, xml_id: n/a, model: product.template, parent_id: 319]
+2025-04-05 18:45:55,625 2420857 ERROR test_universal_connector_10 odoo.models: Exception while validating constraint
+Traceback (most recent call last):
+  File "/home/odoo/10.0/odoo/models.py", line 1081, in _validate_fields
+    check(self)
+  File "/home/odoo/10.0/odoo/addons/base/ir/ir_ui_view.py", line 286, in _check_xml
+    self.postprocess_and_fields(view.model, view_doc, view.id)
+  File "/home/odoo/10.0/odoo/addons/base/ir/ir_ui_view.py", line 919, in postprocess_and_fields
+    self.raise_view_error(message, view_id)
+  File "/home/odoo/10.0/odoo/addons/base/ir/ir_ui_view.py", line 477, in raise_view_error
+    raise ValueError(message)
+ValueError: Field `oe7_id` does not exist
+
+Error context:
+View `product_template.synchro.form`
+[view_id: 472, xml_id: n/a, model: product.template, parent_id: 319]
+2025-04-05 18:45:55,628 2420857 WARNING test_universal_connector_10 odoo.modules.loading: Transient module states were reset
+2025-04-05 18:45:55,629 2420857 ERROR test_universal_connector_10 odoo.modules.registry: Failed to load registry
+Traceback (most recent call last):
+  File "/home/odoo/10.0/odoo/modules/registry.py", line 83, in new
+    odoo.modules.load_modules(registry._db, force_demo, status, update_module)
+  File "/home/odoo/10.0/odoo/modules/loading.py", line 377, in load_modules
+    loaded_modules, update_module, models_to_check)
+  File "/home/odoo/10.0/odoo/modules/loading.py", line 270, in load_marked_modules
+    perform_checks=perform_checks, models_to_check=models_to_check
+  File "/home/odoo/10.0/odoo/modules/loading.py", line 182, in load_module_graph
+    _load_data(cr, module_name, idref, mode, kind='data')
+  File "/home/odoo/10.0/odoo/modules/loading.py", line 96, in _load_data
+    tools.convert_file(cr, module_name, filename, idref, mode, noupdate, kind, report)
+  File "/home/odoo/10.0/odoo/tools/convert.py", line 846, in convert_file
+    convert_xml_import(cr, module, fp, idref, mode, noupdate, report)
+  File "/home/odoo/10.0/odoo/tools/convert.py", line 916, in convert_xml_import
+    obj.parse(doc.getroot(), mode=mode)
+  File "/home/odoo/10.0/odoo/tools/convert.py", line 800, in parse
+    self._tags[rec.tag](rec, de, mode=mode)
+  File "/home/odoo/10.0/odoo/tools/convert.py", line 708, in _tag_record
+    id = self.env(context=rec_context)['ir.model.data']._update(rec_model, self.module, res, rec_id or False, not self.isnoupdate(data_node), noupdate=self.isnoupdate(data_node), mode=self.mode)
+  File "/home/odoo/10.0/odoo/addons/base/ir/ir_model.py", line 1252, in _update
+    record = record.create(values)
+  File "/home/odoo/10.0/odoo/addons/base/ir/ir_ui_view.py", line 365, in create
+    return super(View, self).create(self._compute_defaults(values))
+  File "/home/odoo/10.0/odoo/models.py", line 3887, in create
+    self._fields[key].determine_inverse(record)
+  File "/home/odoo/10.0/odoo/fields.py", line 1064, in determine_inverse
+    getattr(records, self.inverse)()
+  File "/home/odoo/10.0/odoo/addons/base/ir/ir_ui_view.py", line 220, in _inverse_arch
+    view.write(data)
+  File "/home/odoo/10.0/odoo/addons/base/ir/ir_ui_view.py", line 383, in write
+    return super(View, self).write(self._compute_defaults(vals))
+  File "/home/odoo/10.0/odoo/models.py", line 3595, in write
+    self._write(old_vals)
+  File "/home/odoo/10.0/odoo/models.py", line 3764, in _write
+    self._validate_fields(vals)
+  File "/home/odoo/10.0/odoo/models.py", line 1086, in _validate_fields
+    raise ValidationError("%s\n\n%s" % (_("Error while validating constraint"), tools.ustr(e)))
+ParseError: "Error while validating constraint
+
+Field `oe7_id` does not exist
+
+Error context:
+View `product_template.synchro.form`
+[view_id: 472, xml_id: n/a, model: product.template, parent_id: 319]
+None" while parsing /home/odoo/10.0/connector/universal_connector_product/views/product_view.xml:4, near
+<record id="view_product_template_synchro_form" model="ir.ui.view">
+        <field name="name">product_template.synchro.form</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[last()]" position="after">
+                <page name="synchro" string="Synchronization">
+                    <button name="pull_record" string="Synchronize" type="object"/>
+                    <group>
+                        <field name="timestamp"/>
+                        <field name="oe7_id"/>
+                        <field name="oe8_id"/>
+                        <field name="odoo10_id"/>
+                        <field name="odoo12_id"/>
+                        <field name="odoo16_id"/>
+                        <field name="errmsg"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+2025-04-05 18:45:55,630 2420857 CRITICAL test_universal_connector_10 odoo.service.server: Failed to initialize database `test_universal_connector_10`.
+Traceback (most recent call last):
+  File "/home/odoo/10.0/odoo/service/server.py", line 974, in preload_registries
+    registry = Registry.new(dbname, update_module=update_module)
+  File "/home/odoo/10.0/odoo/modules/registry.py", line 83, in new
+    odoo.modules.load_modules(registry._db, force_demo, status, update_module)
+  File "/home/odoo/10.0/odoo/modules/loading.py", line 377, in load_modules
+    loaded_modules, update_module, models_to_check)
+  File "/home/odoo/10.0/odoo/modules/loading.py", line 270, in load_marked_modules
+    perform_checks=perform_checks, models_to_check=models_to_check
+  File "/home/odoo/10.0/odoo/modules/loading.py", line 182, in load_module_graph
+    _load_data(cr, module_name, idref, mode, kind='data')
+  File "/home/odoo/10.0/odoo/modules/loading.py", line 96, in _load_data
+    tools.convert_file(cr, module_name, filename, idref, mode, noupdate, kind, report)
+  File "/home/odoo/10.0/odoo/tools/convert.py", line 846, in convert_file
+    convert_xml_import(cr, module, fp, idref, mode, noupdate, report)
+  File "/home/odoo/10.0/odoo/tools/convert.py", line 916, in convert_xml_import
+    obj.parse(doc.getroot(), mode=mode)
+  File "/home/odoo/10.0/odoo/tools/convert.py", line 800, in parse
+    self._tags[rec.tag](rec, de, mode=mode)
+  File "/home/odoo/10.0/odoo/tools/convert.py", line 708, in _tag_record
+    id = self.env(context=rec_context)['ir.model.data']._update(rec_model, self.module, res, rec_id or False, not self.isnoupdate(data_node), noupdate=self.isnoupdate(data_node), mode=self.mode)
+  File "/home/odoo/10.0/odoo/addons/base/ir/ir_model.py", line 1252, in _update
+    record = record.create(values)
+  File "/home/odoo/10.0/odoo/addons/base/ir/ir_ui_view.py", line 365, in create
+    return super(View, self).create(self._compute_defaults(values))
+  File "/home/odoo/10.0/odoo/models.py", line 3887, in create
+    self._fields[key].determine_inverse(record)
+  File "/home/odoo/10.0/odoo/fields.py", line 1064, in determine_inverse
+    getattr(records, self.inverse)()
+  File "/home/odoo/10.0/odoo/addons/base/ir/ir_ui_view.py", line 220, in _inverse_arch
+    view.write(data)
+  File "/home/odoo/10.0/odoo/addons/base/ir/ir_ui_view.py", line 383, in write
+    return super(View, self).write(self._compute_defaults(vals))
+  File "/home/odoo/10.0/odoo/models.py", line 3595, in write
+    self._write(old_vals)
+  File "/home/odoo/10.0/odoo/models.py", line 3764, in _write
+    self._validate_fields(vals)
+  File "/home/odoo/10.0/odoo/models.py", line 1086, in _validate_fields
+    raise ValidationError("%s\n\n%s" % (_("Error while validating constraint"), tools.ustr(e)))
+ParseError: "Error while validating constraint
+
+Field `oe7_id` does not exist
+
+Error context:
+View `product_template.synchro.form`
+[view_id: 472, xml_id: n/a, model: product.template, parent_id: 319]
+None" while parsing /home/odoo/10.0/connector/universal_connector_product/views/product_view.xml:4, near
+<record id="view_product_template_synchro_form" model="ir.ui.view">
+        <field name="name">product_template.synchro.form</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[last()]" position="after">
+                <page name="synchro" string="Synchronization">
+                    <button name="pull_record" string="Synchronize" type="object"/>
+                    <group>
+                        <field name="timestamp"/>
+                        <field name="oe7_id"/>
+                        <field name="oe8_id"/>
+                        <field name="odoo10_id"/>
+                        <field name="odoo12_id"/>
+                        <field name="odoo16_id"/>
+                        <field name="errmsg"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+2025-04-05 18:45:55,630 2420857 INFO test_universal_connector_10 odoo.service.server: Initiating shutdown
+2025-04-05 18:45:55,630 2420857 INFO test_universal_connector_10 odoo.service.server: Hit CTRL-C again or send a second signal to force the shutdown.
+
++===================================================================
+| please test [36muniversal_connector[0m (10.0): [31mFAILED![0m
++===================================================================
+

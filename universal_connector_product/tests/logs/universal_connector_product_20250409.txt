@@ -1,0 +1,80 @@
+2025-04-09 12:30:05,000 422779 DAEMON test_universal_connector_product_10 run_odoo_debug.sh: cd /home/odoo/10.0/venv_odoo && source ./bin/activate
+2025-04-09 10:30:09,753 426253 INFO ? odoo: Odoo version 10.0
+2025-04-09 10:30:09,754 426253 INFO ? odoo: Using configuration file at /home/odoo/10.0/connector/universal_connector_product/tests/logs/zero10.connector.universal_connector_product.conf
+2025-04-09 10:30:09,754 426253 INFO ? odoo: addons paths: ['/home/odoo/.local/share/Odoo10/addons/10.0', u'/home/odoo/10.0/odoo/addons', u'/home/odoo/10.0/addons', u'/home/odoo/.local/share/Odoo10/addons', u'/home/odoo/10.0/account-analytic', u'/home/odoo/10.0/account-budgeting', u'/home/odoo/10.0/account-closing', u'/home/odoo/10.0/account-consolidation', u'/home/odoo/10.0/account-financial-reporting', u'/home/odoo/10.0/account-financial-tools', u'/home/odoo/10.0/account-fiscal-rule', u'/home/odoo/10.0/account-invoice-reporting', u'/home/odoo/10.0/account-invoicing', u'/home/odoo/10.0/account-payment', u'/home/odoo/10.0/account-reconcile', u'/home/odoo/10.0/bank-payment', u'/home/odoo/10.0/bank-statement-import', u'/home/odoo/10.0/calendar', u'/home/odoo/10.0/commission', u'/home/odoo/10.0/community-data-files', u'/home/odoo/10.0/connector', u'/home/odoo/10.0/contract', u'/home/odoo/10.0/credit-control', u'/home/odoo/10.0/crm', u'/home/odoo/10.0/currency', u'/home/odoo/10.0/data-protection', u'/home/odoo/10.0/delivery-carrier', u'/home/odoo/10.0/e-commerce', u'/home/odoo/10.0/edi', u'/home/odoo/10.0/helpdesk', u'/home/odoo/10.0/hr', u'/home/odoo/10.0/intrastat-extrastat', u'/home/odoo/10.0/knowledge', u'/home/odoo/10.0/l10n-italy', u'/home/odoo/10.0/l10n-italy-supplemental', u'/home/odoo/10.0/maintenance', u'/home/odoo/10.0/management-system', u'/home/odoo/10.0/manufacture', u'/home/odoo/10.0/margin-analysis', u'/home/odoo/10.0/marketplace', u'/home/odoo/10.0/mis-builder', u'/home/odoo/10.0/multi-company', u'/home/odoo/10.0/partner-contact', u'/home/odoo/10.0/product-attribute', u'/home/odoo/10.0/product-kitting', u'/home/odoo/10.0/product-variant', u'/home/odoo/10.0/profiles', u'/home/odoo/10.0/project', u'/home/odoo/10.0/purchase-reporting', u'/home/odoo/10.0/purchase-workflow', u'/home/odoo/10.0/queue', u'/home/odoo/10.0/report-print-send', u'/home/odoo/10.0/reporting-engine', u'/home/odoo/10.0/rma', u'/home/odoo/10.0/sale-financial', u'/home/odoo/10.0/sale-reporting', u'/home/odoo/10.0/sale-workflow', u'/home/odoo/10.0/search-engine', u'/home/odoo/10.0/server-auth', u'/home/odoo/10.0/server-tools', u'/home/odoo/10.0/server-ux', u'/home/odoo/10.0/social', u'/home/odoo/10.0/stock-logistics-barcode', u'/home/odoo/10.0/stock-logistics-reporting', u'/home/odoo/10.0/stock-logistics-tracking', u'/home/odoo/10.0/stock-logistics-transport', u'/home/odoo/10.0/stock-logistics-warehouse', u'/home/odoo/10.0/stock-logistics-workflow', u'/home/odoo/10.0/storage', u'/home/odoo/10.0/timesheet', u'/home/odoo/10.0/uncovered', u'/home/odoo/10.0/web', u'/home/odoo/10.0/webhook', u'/home/odoo/10.0/website', u'/home/odoo/10.0/wms', u'/home/odoo/10.0/zerobug-test']
+2025-04-09 10:30:09,754 426253 INFO ? odoo: database: odoo10@localhost:5432
+2025-04-09 10:30:09,767 426253 INFO ? odoo.service.server: HTTP service (werkzeug) running on NB200Z0.:31602
+2025-04-09 10:30:09,776 426253 INFO test_universal_connector_product_10 odoo.modules.loading: loading 1 modules...
+2025-04-09 10:30:09,853 426253 INFO test_universal_connector_product_10 odoo.modules.loading: 1 modules loaded in 0.08s, 0 queries
+2025-04-09 10:30:10,529 426253 INFO test_universal_connector_product_10 odoo.modules.loading: loading 25 modules...
+2025-04-09 10:30:10,627 426253 INFO test_universal_connector_product_10 odoo.addons.report.models.report: Will use the Wkhtmltopdf binary at /home/odoo/10.0/venv_odoo/bin/wkhtmltopdf
+2025-04-09 10:30:10,675 426253 INFO test_universal_connector_product_10 odoo.modules.loading: 25 modules loaded in 0.15s, 0 queries
+2025-04-09 10:30:10,677 426253 INFO test_universal_connector_product_10 odoo.modules.loading: loading 26 modules...
+2025-04-09 10:30:10,933 426253 INFO test_universal_connector_product_10 odoo.modules.registry: module universal_connector_product: creating or updating database tables
+2025-04-09 10:30:11,263 426253 INFO test_universal_connector_product_10 odoo.modules.loading: loading universal_connector_product/views/product_view.xml
+2025-04-09 10:30:11,493 426253 INFO test_universal_connector_product_10 odoo.modules.module: odoo.addons.universal_connector_product.tests.test_backend running tests.
+2025-04-09 10:30:11,494 426253 INFO test_universal_connector_product_10 odoo.addons.universal_connector_product.tests.test_backend: test_connection (odoo.addons.universal_connector_product.tests.test_backend.MyTest)
+2025-04-09 10:30:11,566 426253 INFO test_universal_connector_product_10 odoo.addons.universal_connector_product.tests.testenv: 🎺🎺🎺 Starting test v2.0.22 (debug_level=0, commit=True)
+2025-04-09 10:30:11,568 426253 INFO test_universal_connector_product_10 odoo.addons.universal_connector_product.tests.testenv: 🎺🎺 Testing module: universal_connector_product (10.0.1.3.14)
+2025-04-09 10:30:11,568 426253 INFO test_universal_connector_product_10 odoo.addons.universal_connector_product.tests.testenv: 🎺🎺 Loading data from: synchro.backend 
+2025-04-09 10:30:11,592 426253 INFO test_universal_connector_product_10 odoo.addons.universal_connector_product.tests.test_backend: 🎺 Starting connection test on ports 8270 (db=oca10) and 8272 (db=oca12) and on ports 8167 (db=demo7) and 8168 (db=demo8)
+2025-04-09 10:30:11,684 426253 INFO test_universal_connector_product_10 odoo.addons.universal_connector_base.models.synchro_log: synchro.backend.button_check_connection(ep=http://admin@localhost:8270/xmlrpc/2/common,h=localhost)
+2025-04-09 10:30:25,237 426253 INFO test_universal_connector_product_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.company,odoo10,remote_id=1,ttl=1)
+2025-04-09 10:30:25,691 426253 INFO test_universal_connector_product_10 odoo.addons.universal_connector_base.models.synchro_log: synchro.backend.button_reset_to_draft(ep=http://admin@localhost:8270/xmlrpc/2/common,h=localhost):
+2025-04-09 10:30:25,917 426253 INFO test_universal_connector_product_10 odoo.addons.universal_connector_base.models.synchro_log: synchro.backend.button_check_connection(ep=http://admin@localhost:8270/xmlrpc/2/common,h=localhost)
+2025-04-09 10:30:29,312 426253 INFO test_universal_connector_product_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.company,odoo10,remote_id=3,ttl=1)
+2025-04-09 10:30:32,829 426253 INFO test_universal_connector_product_10 odoo.addons.universal_connector_base.models.synchro_log: synchro.backend.button_check_connection(ep=http://admin@localhost:8272/xmlrpc/2/common,h=localhost)
+2025-04-09 10:30:51,270 426253 INFO test_universal_connector_product_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.company,odoo12,remote_id=1,ttl=1)
+2025-04-09 10:30:51,548 426253 INFO test_universal_connector_product_10 odoo.addons.universal_connector_base.models.synchro_log: synchro.backend.button_reset_to_draft(ep=http://admin@localhost:8272/xmlrpc/2/common,h=localhost):
+2025-04-09 10:30:51,648 426253 INFO test_universal_connector_product_10 odoo.addons.universal_connector_base.models.synchro_log: synchro.backend.button_check_connection(ep=http://admin@localhost:8272/xmlrpc/2/common,h=localhost)
+2025-04-09 10:30:55,433 426253 INFO test_universal_connector_product_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.company,odoo12,remote_id=2,ttl=1)
+2025-04-09 10:30:57,895 426253 INFO test_universal_connector_product_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(product.template,odoo10,remote_id=10,ttl=None)
+2025-04-09 10:30:58,077 426253 INFO test_universal_connector_product_10 odoo.addons.universal_connector_base.models.synchro_log: product.template.synchro({u'odoo10:packaging_ids': [], u',backend=Test Odoo 10.0,min=True),ttl=4
+2025-04-09 10:30:58,240 426253 INFO test_universal_connector_product_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(product.product,odoo10,remote_id=10,ttl=3)
+2025-04-09 10:30:58,536 426253 INFO test_universal_connector_product_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(product.product,odoo10,remote_id=11,ttl=3)
+2025-04-09 10:30:58,815 426253 INFO test_universal_connector_product_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(product.product,odoo10,remote_id=12,ttl=3)
+2025-04-09 10:30:59,126 426253 INFO test_universal_connector_product_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(product.uom,odoo10,remote_id=1,ttl=3)
+2025-04-09 10:30:59,349 426253 INFO test_universal_connector_product_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(product.category,odoo10,remote_id=6,ttl=3)
+2025-04-09 10:30:59,566 426253 INFO test_universal_connector_product_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(product.uom.categ,odoo10,remote_id=1,ttl=2)
+2025-04-09 10:30:59,758 426253 INFO test_universal_connector_product_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(product.category,odoo10,remote_id=2,ttl=2)
+2025-04-09 10:30:59,971 426253 INFO test_universal_connector_product_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(product.category,odoo10,remote_id=1,ttl=1)
+2025-04-09 10:31:00,163 426253 INFO test_universal_connector_product_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(product.category,odoo10,remote_id=4,ttl=1)
+2025-04-09 10:31:00,352 426253 INFO test_universal_connector_product_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(product.category,odoo10,remote_id=5,ttl=1)
+2025-04-09 10:31:00,569 426253 INFO test_universal_connector_product_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(product.template,odoo12,remote_id=9,ttl=None)
+2025-04-09 10:31:00,747 426253 INFO test_universal_connector_product_10 odoo.addons.universal_connector_base.models.synchro_log: product.template.synchro({u'odoo12:id': 9, u'odoo12:selle,backend=Test Odoo 12.0,min=True),ttl=4
+2025-04-09 10:31:00,935 426253 INFO test_universal_connector_product_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(product.product,odoo12,remote_id=13,ttl=3)
+2025-04-09 10:31:01,286 426253 INFO test_universal_connector_product_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(product.product,odoo12,remote_id=36,ttl=3)
+2025-04-09 10:31:01,714 426253 INFO test_universal_connector_product_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(product.product,odoo12,remote_id=37,ttl=3)
+2025-04-09 10:31:02,118 426253 INFO test_universal_connector_product_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(product.product,odoo12,remote_id=10,ttl=3)
+2025-04-09 10:31:02,468 426253 INFO test_universal_connector_product_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(product.product,odoo12,remote_id=11,ttl=3)
+2025-04-09 10:31:02,895 426253 INFO test_universal_connector_product_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(product.product,odoo12,remote_id=12,ttl=3)
+2025-04-09 10:31:03,225 426253 INFO test_universal_connector_product_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(product.category,odoo12,remote_id=8,ttl=3)
+2025-04-09 10:31:03,500 426253 INFO test_universal_connector_product_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(uom.uom,odoo12,remote_id=1,ttl=3)
+2025-04-09 10:31:03,723 426253 INFO test_universal_connector_product_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(product.category,odoo12,remote_id=2,ttl=2)
+2025-04-09 10:31:03,947 426253 INFO test_universal_connector_product_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(uom.category,odoo12,remote_id=1,ttl=2)
+2025-04-09 10:31:04,170 426253 INFO test_universal_connector_product_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(product.category,odoo12,remote_id=1,ttl=1)
+2025-04-09 10:31:04,569 426253 INFO test_universal_connector_product_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(product.category,odoo12,remote_id=5,ttl=1)
+2025-04-09 10:31:04,803 426253 INFO test_universal_connector_product_10 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(product.category,odoo12,remote_id=7,ttl=1)
+2025-04-09 10:31:05,025 426253 INFO test_universal_connector_product_10 odoo.addons.universal_connector_product.tests.testenv: 🏆🥇 [1;32m18 tests SUCCESSFULLY completed[0m
+2025-04-09 10:31:05,027 426253 INFO test_universal_connector_product_10 odoo.addons.universal_connector_product.tests.test_backend: Ran 1 test in 53.533s
+2025-04-09 10:31:05,027 426253 INFO test_universal_connector_product_10 odoo.addons.universal_connector_product.tests.test_backend: OK
+2025-04-09 10:31:05,027 426253 INFO test_universal_connector_product_10 odoo.modules.module: odoo.addons.universal_connector_product.tests.test_backend tested in 53.53s, 36069 queries
+2025-04-09 10:31:05,039 426253 INFO test_universal_connector_product_10 odoo.modules.loading: 26 modules loaded in 54.36s, 36079 queries
+2025-04-09 10:31:05,444 426253 INFO test_universal_connector_product_10 odoo.modules.loading: Modules loaded.
+2025-04-09 10:31:05,449 426253 INFO test_universal_connector_product_10 odoo.modules.loading: All post-tested in 0.00s, 0 queries
+2025-04-09 10:31:05,449 426253 INFO test_universal_connector_product_10 odoo.modules.registry: Registry changed, signaling through the database
+2025-04-09 10:31:05,450 426253 INFO test_universal_connector_product_10 odoo.service.server: Initiating shutdown
+2025-04-09 10:31:05,451 426253 INFO test_universal_connector_product_10 odoo.service.server: Hit CTRL-C again or send a second signal to force the shutdown.
+
++===================================================================
+| please test [36muniversal_connector_product[0m (10.0): [32mSUCCESS![0m
++===================================================================
+
+[1;37;44m$ coverage report --rcfile=/home/odoo/10.0/connector/universal_connector_product/tests/logs/coverage_universal_connector_product_10rc -m
+[34;107mName                                                                            Stmts   Miss  Cover   Missing
+-------------------------------------------------------------------------------------------------------------
+/home/odoo/10.0/connector/universal_connector_product/models/product.py            63      9    86%   53-63
+/home/odoo/10.0/connector/universal_connector_product/models/synchro_apply.py      53     42    21%   31-41, 53-115, 118-128, 131-140
+-------------------------------------------------------------------------------------------------------------
+TOTAL                                                                             116     51    56%
+[0m
