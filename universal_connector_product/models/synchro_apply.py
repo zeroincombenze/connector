@@ -16,7 +16,7 @@ _logger = logging.getLogger(__name__)
 class IrModelSynchroApply(models.Model):
     _inherit = "synchro.apply"
 
-    def apply_uom(
+    def apply_sanitize_uom(
         self,
         mapper,
         vals,

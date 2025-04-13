@@ -144,7 +144,7 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 ChangeLog History | Cronologia modifiche
 ----------------------------------------
 
-12.0.0.3.14 (2025-04-09)
+12.0.0.3.14 (2025-04-13)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 * [IMP] Split from universal_connecto_base
@@ -199,7 +199,7 @@ La distribuzione `Zeroincombenze® <https://www.zeroincombenze.it/>`__ è proget
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2025-04-09
+Last Update / Ultimo aggiornamento: 2025-04-13
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status

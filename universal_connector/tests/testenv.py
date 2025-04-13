@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-# pylint: skip-file
-"""Test Environment v2.0.22
+"""Test Environment v2.0.21
 
 You can locate the recent testenv.py in testenv directory of module
 https://github.com/zeroincombenze/tools/tree/master/z0bug_odoo/testenv
@@ -54,7 +53,7 @@ Model data declaration
 Each model is declared in a csv file or xlsx file in test/data directory of the
 module. The file name is the same of model name with dots replaced by undescore.
 
-i.e. below the contents of res_partner.csv file:
+i.e. below the contents of res_parter.csv file:
 
     id,name,street
     z0bug.partner1,Alpha,"1, First Avenue"
@@ -234,7 +233,7 @@ various situation; the most common are:
     but they do not really simulate the user behavior because they do not engage the
     onchange methods, they do not load any view and so on.
 
-The real best way to test a creating record is like the follow example
+The real best way to test a create record is like the follow example
 based on res.partner model:
 
         partner = self.resource_edit(
@@ -294,7 +293,7 @@ Data values
 
 Data values may be raw data (string, number, dates, etc.) or external reference
 or some macro.
-You can declare data value on your own, but you can discover th full test environment
+You can declare data value on your own but you can discover th full test environment
 in https://github.com/zeroincombenze/zerobug-test/mk_test_env/ and get data
 from this environment.
 
@@ -2066,7 +2065,7 @@ class MainTest(test_common.TransactionCase):
             if "ir.values" in self.env:
                 records = self.env["ir.values"].search([("value", "=", value)])
                 if len(records) == 1:
-                    model_name = records[0].model
+                    model_name = records[0].res_model
         return model_name
 
     @api.model
@@ -3041,7 +3040,7 @@ class MainTest(test_common.TransactionCase):
         setup_list = setup_list or self.get_resource_list(group=group)
         if not self.title_logged:
             self._logger.info(
-                "🎺🎺🎺 Starting test v2.0.22 (debug_level=%s, commit=%s)"
+                "🎺🎺🎺 Starting test v2.0.21 (debug_level=%s, commit=%s)"
                 % (self.debug_level, getattr(self, "odoo_commit_test", False))
             )
             self._logger.info(
@@ -3695,3 +3694,10 @@ class MainTest(test_common.TransactionCase):
             "🐞%d assertion validated for validate_records(%s)"
             % (ctr_assertion, self.tmpl_repr(template, match=True)),
         )
+
+
+
+
+
+
+

@@ -52,7 +52,9 @@
                         <field name="name"/>
                         <field name="spec"/>
                         <field name="counterpart_name"/>
-                        <field name="apply"/>
+                        <field name="apply4"/>
+                        <field name="default"/>
+                        <field name="ttype"/>
                         <field name="protect_update"/>
                         <field name="required"/>
                         <field name="search_role"/>
@@ -77,7 +79,9 @@
                 <field name="name"/>
                 <field name="spec"/>
                 <field name="counterpart_name"/>
-                <field name="apply"/>
+                <field name="apply4"/>
+                <field name="default"/>
+                <field name="ttype"/>
                 <field name="protect_update"/>
                 <field name="required"/>
                 <field name="model_id"/>
@@ -97,7 +101,9 @@
                     <field name="name"/>
                     <field name="spec"/>
                     <field name="counterpart_name"/>
-                    <field name="apply"/>
+                    <field name="apply4"/>
+                    <field name="default"/>
+                    <field name="ttype"/>
                     <field name="protect_update"/>
                     <field name="required"/>
                     <field name="search_role"/>

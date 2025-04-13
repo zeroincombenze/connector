@@ -9,7 +9,6 @@
 from xmlrpc import client
 import logging
 
-from numpy.ma import append
 from odoo import models
 from odoo import release
 from python_plus import unicodes
@@ -349,7 +348,18 @@ class SynchroApi(models.Model):
     # specific identities or new protocols
     # -----------------------------------------------------------
 
-    def _odoo_xmlrpc_x_connect(self, login_endpoint, data_endpoint):
+    def _odoo_xmlrpc_x_connect(
+        self, backend=None, login_endpoint=None, data_endpoint=None
+    ):
+        if not backend and not login_endpoint and not data_endpoint:
+            self.env["synchro.log"].logmsg(
+                "error",
+                "ERROR: No values supplied",
+                errcode=-13,
+            )
+        elif backend and not login_endpoint or not data_endpoint:
+            login_endpoint = backend.counterpart_url
+            data_endpoint = backend.counterpart_data_url
         session = self.init_session(
             login_endpoint=login_endpoint, data_endpoint=data_endpoint
         )
@@ -361,6 +371,7 @@ class SynchroApi(models.Model):
                 "error",
                 "!%(E)s! ERROR %(e)s opening session on %(ep)s",
                 errcode=-13,
+                backend=backend,
                 ctx={"e": e, "ep": login_endpoint},
             )
             cnx = False
@@ -375,6 +386,7 @@ class SynchroApi(models.Model):
                     "error",
                     "!%(E)s ERROR %(e)s opening session on %(ep)s",
                     errcode=-13,
+                    backend=backend,
                     ctx={"e": e, "ep": data_endpoint},
                 )
                 cnx_data = False
@@ -382,14 +394,10 @@ class SynchroApi(models.Model):
         return session
 
     def odoo_xmlrpc_https_connect(self, backend):  # pragma: no cover
-        return self._odoo_xmlrpc_x_connect(
-            backend.counterpart_url, backend.counterpart_data_url
-        )
+        return self._odoo_xmlrpc_x_connect(backend=backend)
 
     def odoo_xmlrpc_http_connect(self, backend):
-        return self._odoo_xmlrpc_x_connect(
-            backend.counterpart_url, backend.counterpart_data_url
-        )
+        return self._odoo_xmlrpc_x_connect(backend=backend)
 
     def _odoo_xmlrpc_x_login(self, cnx, database, login, passwd):
         try:

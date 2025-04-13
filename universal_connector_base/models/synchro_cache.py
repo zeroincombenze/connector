@@ -287,8 +287,8 @@ class IrModelSynchroCache(models.Model):
             "property_stock_supplier": {"readonly": True},
             "title": {"readonly": True},
             "type": {"required": True},
-            "picking_warn": {"apply": "no-message"},
-            "invoice_warn": {"apply": "no-message"},
+            # "picking_warn": {"apply": "no-message"},
+            # "invoice_warn": {"apply": "no-message"},
         },
         "res.partner.bank": {
             "bank_name": {"readonly": False},

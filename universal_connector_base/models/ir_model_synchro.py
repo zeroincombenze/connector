@@ -258,12 +258,41 @@ class IrModelSynchro(models.Model):
         method = method if hasattr(self, method) else "_cast_field_base"
         return getattr(self, method)(binding_model, value)
 
+    def manage_language(self, vals, overwrite=True):
+        if "code" not in vals:
+            self.env["synchro.log"].logmsg(
+                "error",
+                "Invalid language code",
+                res_model="res.lang",
+                errcode=-7,
+            )
+            return -7
+
+        iso = vals["code"]
+        load = False
+        Language = self.env["res.lang"]
+        languages = Language.search([("code", "=", iso)])
+        if not languages:  # pragma: no cover
+            languages = Language.search([("code", "=", iso), ("active", "=", False)])
+            if languages:
+                languages.write({"active": True})
+                load = True
+        if not languages or load:  # pragma: no cover
+            vals = {
+                "lang": iso,
+                "overwrite": overwrite,
+            }
+            self.env["base.language.install"].create(vals).lang_install()
+            languages = self.env["res.lang"].search([("code", "=", iso)])
+        return languages[0].id if languages else -7
+
+    def manage_module(self, vals):
+        return -99
+
     @api.model
     def create_new(self, Binder, vals, only_minimal=False, ctx=None):
         ctx = ctx or {}
         ctx["logrec"] = ctx.get("logrec") or self.env["synchro.log"]
-        if not only_minimal and hasattr(Binder, "assure_values"):
-            vals = Binder.assure_values(vals, False)
         if Binder._name.startswith("account.move") and not ctx:
             ctx = {"check_move_validity": False}
         try:
@@ -289,12 +318,6 @@ class IrModelSynchro(models.Model):
         ctx = ctx or {}
         ctx["logrec"] = ctx.get("logrec") or self.env["synchro.log"]
         if vals:
-            if (
-                not only_minimal
-                and hasattr(rec, "assure_values")
-                and dir_mapper.auth_action != "sync"
-            ):
-                vals = rec.assure_values(vals, rec)
             vals = dir_mapper.drop_protected_equal_fields(vals, rec)
         if vals:
             try:
@@ -318,124 +341,23 @@ class IrModelSynchro(models.Model):
             ctx["logrec"] = ctx["logrec"].logmsg("warning", "", res_rec=rec, errcode=-9)
         return rec
 
-    @api.model
-    def synchro(
+    def _make_record(
         self,
         Binder,
+        dir_mapper,
+        model_spec,
+        only_minimal,
+        incomplete_record,
+        running_in_queue,
+        ttl,
         vals,
-        only_minimal=True,
-        ttl=None,
-        running_in_queue=None,
-        jacket=None,
-        model_spec=False,
-        backend=None,
-        dir_mapper=None,
+        saved_vals,
         ctx=None,
     ):
-        Cache = self.env["synchro.cache"]
-        ctx = ctx or {}
-        ctx["logrec"] = ctx.get("logrec") or self.env["synchro.log"]
-        DirMapper = self.env["synchro.model"]
-
-        if isinstance(jacket, str):
-            vals = self.env["synchro.backend"].vals_with_jacket(vals, prefix=jacket)
-        elif jacket and not backend and dir_mapper:
-            backend = dir_mapper.backend_id
-            vals = backend.vals_with_jacket(vals)
-        elif jacket and backend:
-            vals = backend.vals_with_jacket(vals)
-        elif jacket and not backend:  # pragma: no cover
-            ctx["logrec"].logmsg(
-                "error",
-                "%(model)s.synchro() w/o remote identification",
-                res_model=Binder if isinstance(Binder, str) else Binder._name,
-                errcode=-7,
-            )
-            return -7
-
-        if isinstance(Binder, str):  # pragma: no cover
-            vmodel = Binder
-            binding_model, model_spec = DirMapper.split_binding_model_n_spec(
-                Binder, spec=model_spec
-            )
-            if binding_model in self.env:
-                Binder = self.env[binding_model].with_context(
-                    {"lang": backend.default_lang_id.code}
-                )
-            else:
-                Cache.clean_cache()
-                ctx["logrec"].logmsg(
-                    "error",
-                    "Invalid or unknown model %(model)s on synchro()!",
-                    res_model=binding_model,
-                    errcode=-11,
-                )
-                return -11
-        else:
-            binding_model, model_spec = DirMapper.split_binding_model_n_spec(
-                Binder._name, spec=model_spec
-            )
-            vmodel = DirMapper.get_vmodel(Binder._name, model_spec)
-            if binding_model not in self.env:  # pragma: no cover
-                ctx["logrec"].logmsg(
-                    "error",
-                    "Invalid or unknown model %(model)s on synchro()!",
-                    res_model=vmodel,
-                    errcode=-11,
-                )
-                return -11
-            Binder = self.env[binding_model].with_context(
-                {"lang": backend.default_lang_id.code}
-            )
-
-        backend = backend or self.env["synchro.backend"].assign_backend(vals)
-        if not backend:  # pragma: no cover
-            Cache.clean_cache()
-            ctx["logrec"].logmsg(
-                "error",
-                "No backend found on synchro(%(model)s,%(vals)s,ttl=%(t)s))",
-                res_model=vmodel,
-                values=vals,
-                errcode=-6,
-                ctx={"t": ttl},
-            )
-            return -6
-        if backend.state == "draft":  # pragma: no cover
-            return -16
-        if backend.state in ("ready", "failed"):
-            backend.write({"state": "run"})
-        dir_mapper = backend.get_dir_mapper(model=binding_model, spec=model_spec)
-        if not dir_mapper:
-            # Compatibility with old release of UC
-            dir_mapper = backend.get_dir_mapper(model=vmodel)
-        saved_vals = vals.copy()
-        ctx = dir_mapper.load_ctx(ctx if running_in_queue else {})
-        ttl = ttl or (4 if only_minimal else 2)
-        ctx["logrec"] = ctx["logrec"].logmsg(
-            "warning" if ctx["logrec"] else "info",
-            "%(model)s.synchro(%(vals)s,backend=%(backend)s,min=%(m)s),ttl=%(t)s",
-            res_model=vmodel,
-            values=vals,
-            backend=backend,
-            ctx={"m": only_minimal, "t": ttl},
-        )
-
-        vals, incomplete_record = dir_mapper.map_to_internal(
-            vals,
-            ttl,
-            only_minimal=only_minimal,
-            model_spec=model_spec,
-            ctx=ctx,
-        )
-        if (
-            backend.company_id
-            and "company_id" in vals
-            and vals["company_id"]
-            and vals["company_id"] != backend.company_id.id
-        ):  # pragma: no cover
-            rec = -15
-            return rec
         postponed = False
+        Cache = self.env["synchro.cache"]
+        backend = dir_mapper.backend_id
+        binding_model = dir_mapper.name
         rec = (
             dir_mapper.bind_record(Binder, vals, model_spec=model_spec, ctx=ctx)
             if vals
@@ -504,6 +426,143 @@ class IrModelSynchro(models.Model):
                 rec = -4
             else:
                 rec = self.rewrite(rec, vals, dir_mapper, only_minimal=False, ctx=ctx)
+        return rec, postponed
+
+    @api.model
+    def synchro(
+        self,
+        Binder,
+        vals,
+        only_minimal=True,
+        ttl=None,
+        running_in_queue=None,
+        jacket=None,
+        model_spec=False,
+        backend=None,
+        dir_mapper=None,
+        ctx=None,
+    ):
+        Cache = self.env["synchro.cache"]
+        ctx = ctx or {}
+        ctx["logrec"] = ctx.get("logrec") or self.env["synchro.log"]
+        DirMapper = self.env["synchro.model"]
+
+        if isinstance(jacket, str):
+            vals = self.env["synchro.backend"].vals_with_jacket(vals, prefix=jacket)
+        elif jacket and not backend and dir_mapper:
+            backend = dir_mapper.backend_id
+            vals = backend.vals_with_jacket(vals)
+        elif jacket and backend:
+            vals = backend.vals_with_jacket(vals)
+        elif jacket and not backend:  # pragma: no cover
+            ctx["logrec"].logmsg(
+                "error",
+                "%(model)s.synchro() w/o remote identification",
+                res_model=Binder if isinstance(Binder, str) else Binder._name,
+                errcode=-7,
+            )
+            return -7
+
+        if isinstance(Binder, str):  # pragma: no cover
+            vmodel = Binder
+            binding_model, model_spec = DirMapper.split_binding_model_n_spec(
+                Binder, spec=model_spec
+            )
+            if binding_model in self.env:
+                Binder = self.env[binding_model].with_context(
+                    {"lang": backend.default_lang_id.code}
+                )
+            else:
+                Cache.clean_cache()
+                ctx["logrec"].logmsg(
+                    "error",
+                    "Invalid or unknown model %(model)s on synchro()!",
+                    res_model=binding_model,
+                    errcode=-11,
+                )
+                return -11
+        else:
+            binding_model, model_spec = DirMapper.split_binding_model_n_spec(
+                Binder._name, spec=model_spec
+            )
+            vmodel = DirMapper.get_vmodel(Binder._name, model_spec)
+            if binding_model not in self.env:  # pragma: no cover
+                ctx["logrec"].logmsg(
+                    "error",
+                    "Invalid or unknown model %(model)s on synchro()!",
+                    res_model=binding_model,
+                    errcode=-11,
+                )
+                return -11
+            Binder = self.env[binding_model].with_context(
+                {"lang": backend.default_lang_id.code}
+            )
+
+        backend = backend or self.env["synchro.backend"].assign_backend(vals)
+        if not backend:  # pragma: no cover
+            Cache.clean_cache()
+            ctx["logrec"].logmsg(
+                "error",
+                "No backend found on synchro(%(model)s,%(vals)s,ttl=%(t)s))",
+                res_model=binding_model,
+                values=vals,
+                errcode=-6,
+                ctx={"t": ttl},
+            )
+            return -6
+        if backend.state == "draft":  # pragma: no cover
+            return -16
+        if backend.state in ("ready", "failed"):
+            backend.write({"state": "run"})
+        dir_mapper = backend.get_dir_mapper(model=binding_model, spec=model_spec)
+        if not dir_mapper:
+            # Compatibility with old release of UC
+            dir_mapper = backend.get_dir_mapper(model=vmodel)
+        saved_vals = vals.copy()
+        ctx = dir_mapper.load_ctx(ctx if running_in_queue else {})
+        ttl = ttl or (4 if only_minimal else 2)
+        ctx["logrec"] = ctx["logrec"].logmsg(
+            "warning" if ctx["logrec"] else "info",
+            "%(model)s.synchro(%(vals)s,backend=%(backend)s,min=%(m)s),ttl=%(t)s",
+            res_model=binding_model,
+            values=vals,
+            backend=backend,
+            ctx={"m": only_minimal, "t": ttl},
+        )
+
+        vals, incomplete_record = dir_mapper.map_to_internal(
+            vals,
+            ttl,
+            only_minimal=only_minimal,
+            model_spec=model_spec,
+            ctx=ctx,
+        )
+        if (
+            backend.company_id
+            and "company_id" in vals
+            and vals["company_id"]
+            and vals["company_id"] != backend.company_id.id
+        ):  # pragma: no cover
+            rec = -15
+            return rec
+        postponed = False
+        if binding_model == "res.lang":
+            rec = self.manage_language(vals)
+        elif binding_model == "ir.module.module":
+            rec = self.manage_module(vals)
+        else:
+            rec, postponed = self._make_record(
+                Binder,
+                dir_mapper,
+                model_spec,
+                only_minimal,
+                incomplete_record,
+                running_in_queue,
+                ttl,
+                vals,
+                saved_vals,
+                ctx=ctx,
+            )
         if not running_in_queue and backend.load_mode == "direct":
             if Cache.que_waiting_len(backend):
                 commit_rate = 16 if backend.deferred_payload > "0" else 1024

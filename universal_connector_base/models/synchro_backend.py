@@ -8,8 +8,9 @@
 #
 import os
 from datetime import datetime, timedelta
+import re
 
-from odoo import api, fields, models
+from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 from python_plus import _u
 
@@ -318,22 +319,38 @@ class SynchroChannel(models.Model):
         html += "</table>"
 
     @api.model
-    def _compute_counterpart_url(self):
-        if self.protocol_id:
-            protocol, hostname, port, db, login, passwd, path = self.parse_endpoint(
-                with_path="login", with_default=True
-            )
-            counterpart_url = protocol
-            if hostname and counterpart_url:
+    def _compute_endpoint(
+        self, protocol, hostname, port, db, login, passwd, path, with_path=None
+    ):
+        endpoint_format = (
+            self.protocol_id.endpoint_format
+            or "protocol,login,passwd,hostname,port,path"
+        )
+        counterpart_url = (
+            re.split(r"\W", protocol)[-1] if "protocol" in endpoint_format else ""
+        )
+        if login and "login" in endpoint_format:
+            if counterpart_url:
+                counterpart_url += "://" + login
+            else:
+                counterpart_url = login
+            if "passwd" in endpoint_format:
+                counterpart_url += ":" + passwd
+            counterpart_url += "@"
+        if hostname and "hostname" in endpoint_format:
+            if not counterpart_url.endswith("@"):
                 counterpart_url += "://" + hostname
-            elif hostname:
-                counterpart_url = hostname
-            if port and counterpart_url:
-                counterpart_url += ":%d" % port
-            if path:
-                counterpart_url = os.path.join(counterpart_url, path)
-            if counterpart_url != self.counterpart_url:
-                self.counterpart_url = counterpart_url
+            else:
+                counterpart_url += hostname
+        if port and "port" in endpoint_format:
+            counterpart_url += ":%d" % port
+        if path and "path" in endpoint_format:
+            counterpart_url = os.path.join(counterpart_url, path)
+        if with_path == "data":
+            if counterpart_url != self.counterpart_data_url:
+                self.counterpart_data_url = counterpart_url
+        elif counterpart_url != self.counterpart_url:
+            self.counterpart_url = counterpart_url
 
     @api.onchange("protocol_id")
     def _onchange_protocol_id(self):  # pragma: no cover
@@ -404,18 +421,51 @@ class SynchroChannel(models.Model):
 
     @api.onchange("hostname")
     def _onchange_hostname(self):
-        if self.hostname:
-            self._compute_counterpart_url()
+        if self.protocol_id:
+            protocol, hostname, port, db, login, passwd, path = self.parse_endpoint(
+                with_path="login"
+            )
+            self._compute_endpoint(
+                protocol, self.hostname, port, db, login, passwd, path
+            )
+            prot, hostname, port, database, login, passwd, path = self.parse_endpoint(
+                with_path="data"
+            )
+            self._compute_endpoint(
+                protocol, self.hostname, port, db, login, passwd, path, with_path="data"
+            )
 
     @api.onchange("login")
     def _onchange_login(self):
-        if self.login:
-            self._compute_counterpart_url()
+        if self.protocol_id:
+            protocol, hostname, port, db, login, passwd, path = self.parse_endpoint(
+                with_path="login"
+            )
+            self._compute_endpoint(
+                protocol, hostname, port, db, self.login, passwd, path
+            )
+            protocol, hostname, port, db, login, passwd, path = self.parse_endpoint(
+                with_path="data"
+            )
+            self._compute_endpoint(
+                protocol, hostname, port, db, self.login, passwd, path, with_path="data"
+            )
 
     @api.onchange("port")
     def _onchange_port(self):  # pragma: no cover
-        if self.port:
-            self._compute_counterpart_url()
+        if self.protocol_id:
+            protocol, hostname, port, db, login, passwd, path = self.parse_endpoint(
+                with_path="login"
+            )
+            self._compute_endpoint(
+                protocol, hostname, self.port, db, login, passwd, path
+            )
+            protocol, hostname, port, db, login, passwd, path = self.parse_endpoint(
+                with_path="data"
+            )
+            self._compute_endpoint(
+                protocol, hostname, self.port, db, login, passwd, path, with_path="data"
+            )
 
     def _synchronize_company(self):
         self.ensure_one()
@@ -626,7 +676,7 @@ class SynchroChannel(models.Model):
         )
 
     def parse_endpoint(self, endpoint=None, with_default=True, with_path=None):
-        endpoint = endpoint or self.counterpart_url
+        endpoint = endpoint or self.counterpart_url or ""
         protocol = hostname = database = login = password = path = ""
         port = 0
         if self.protocol_id:
@@ -644,8 +694,7 @@ class SynchroChannel(models.Model):
                         endpoint = endpoint.replace("https", "http", 1)
                     if protocol.startswith("https"):
                         protocol = protocol.replace("https", "http", 1)
-            parts = urlparse(endpoint, scheme=_u(protocol or "https"))
-            if with_default:
+            if not endpoint or with_default:
                 hostname = self.hostname or "localhost"
                 database = self.database or "demo"
                 login = self.get_default_from_identity("login")
@@ -656,18 +705,22 @@ class SynchroChannel(models.Model):
                     path = self.get_default_from_protocol("lgi_path")
                 port = self.get_default_from_protocol("port")
                 port = int(port) if port else 0
-            if parts.hostname:
-                hostname = parts.hostname
-            if parts.username:
-                login = parts.username
-            if parts.password:
-                password = parts.password
-            if parts.path and with_path != "data":
-                path = parts.path
-            if parts.port:
-                port = parts.port
-            if parts.fragment.startswith("db="):
-                database = parts.fragment.split("=", 1)[1]
+            if endpoint:
+                parts = urlparse(endpoint, scheme=_u(protocol or "https"))
+                if parts.hostname:
+                    hostname = parts.hostname
+                if parts.username:
+                    login = parts.username
+                if parts.password:
+                    password = parts.password
+                if parts.path and with_path != "data":
+                    path = parts.path
+                if parts.port:
+                    port = parts.port
+                if parts.fragment.startswith("db="):
+                    database = parts.fragment.split("=", 1)[1]
+        if path and path.startswith("/"):
+            path = path[1:]
         if with_path:
             return protocol, hostname, port, database, login, password, path
         return protocol, hostname, port, database, login, password

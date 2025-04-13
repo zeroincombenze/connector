@@ -27,12 +27,21 @@ class SynchroMapper(models.Model):
     fields_id = fields.Many2one("ir.model.fields", string="Odoo field name")
     name = fields.Char("Odoo field name")
     counterpart_name = fields.Char("Counterpart field name")
-    apply = fields.Char(
-        string="Function to apply for supply value or default value.",
-        help='Function are in format "name()".\n'
-        "Some avaiable functions are:\n"
+    apply4 = fields.Char(
+        string="Apply function from counterpart value",
+        help="Declare 1+ functions, comma separated, to apply on counterpart value\n"
+        "Function names are in format 'name()'.\n"
+        "Some available functions are:\n"
         "vat(), upper(), lower(), street_number(), bool()\n"
         "person(), journal(), account(), uom(), tax()\n",
+        default="",
+    )
+    default = fields.Char(
+        string="Default value",
+        help="Default value or function to apply for default value.\n"
+        "To declare function set name ending with '()'\n"
+        "i.e. 'foo' means value 'foo'\n"
+        "'foo()' means function foo() to set default\n",
         default="",
     )
     spec = fields.Selection(
@@ -66,7 +75,7 @@ class SynchroMapper(models.Model):
         [
             ("unique", "Field with unique index"),
             ("candidate", "Search keys candidate"),
-            ("ancillary", "Ancillary search file"),
+            ("ancillary", "Ancillary search keys"),
         ],
         string="Role in search keys",
     )
@@ -80,6 +89,7 @@ class SynchroMapper(models.Model):
         store=True,
         string="Backend",
     )
+    ttype = fields.Selection(string="Odoo type", store=True, related="fields_id.ttype")
     sequence = fields.Integer("Priority", default=16)
 
     def get_loc_fname(self, fct):
@@ -107,6 +117,12 @@ class SynchroMapper(models.Model):
             protect_update = "0"
         elif self.model_id.auth_action == "sync" or loc_name in magic_fields:
             # Avoid update for only synchronized models
+            protect_update = "3"
+        elif loc_name != self.model_id.childs_name and struct[loc_name]["type"] in (
+            "one2many",
+            "many2many",
+        ):
+            # Avoid propagation for smart links, like orders in res.partner
             protect_update = "3"
         else:
             # Evaluate default protection pattern
@@ -137,84 +153,124 @@ class SynchroMapper(models.Model):
         )
 
     def get_default_apply(self, magic_fields=None):
-        def append_fct(a):
-            if a and a not in apply4:
-                apply4.append(a)
+        def append_fct(fct):
+            if fct and fct not in apply4:
+                apply4.append(fct)
+
+        def append_def(fct):
+            if (not default or "()" in default[0]) and fct and fct not in default:
+                default.append(fct)
 
         Cache = self.env["synchro.cache"]
         magic_fields = magic_fields or []
-        # backend = self.model_id.backend_id
         loc_name = self.name
         binding_model = self.model_id.split_binding_model_n_spec(self.model_id.name)[0]
         struct = self.env[binding_model].fields_get()
         field_def = Cache.TABLE_DEF.get(binding_model, {}).get(loc_name, {})
         global_def = Cache.TABLE_DEF.get("base", {}).get(loc_name, {})
-        apply4 = self.apply or ""
+        apply4 = self.apply4 or ""
+        default = self.default or ""
         if not Cache.is_manageable(binding_model) or not loc_name:
             pass
         elif loc_name not in struct:
             raise UserError(
                 _("Field %s does not exist in %s!" % (loc_name, binding_model))
             )
-        elif loc_name in (self.model_id.parent_name, self.model_id.get_loc_ext_id()):
-            pass
-        elif self.model_id.auth_action == "sync" or loc_name in magic_fields:
-            apply4 = ""
-        elif apply4 and "()" not in apply4:
-            pass
+        elif (
+            loc_name in (self.model_id.parent_name, self.model_id.get_loc_ext_id())
+            or loc_name in magic_fields
+        ):
+            apply4 = default = ""
+        elif self.model_id.auth_action == "sync":
+            default = ""
         else:
-            apply = field_def.get("apply", global_def.get("apply", ""))
-            if apply and "()" not in apply and not apply4:
-                apply4 = apply
-            else:
-                apply4 = [x.strip() for x in apply4.split(",") if x]
-                for fct in apply.split(","):
-                    append_fct(fct)
-                if struct[loc_name].get("required"):
-                    fct = {
-                        "char": "set_tmp_name()",
-                        "bool": "bool()",
-                        "integer": "integer()",
-                        "float": "float()",
-                        "monetary": "float()",
-                        "datetime": "now()",
-                        "date": "today()",
-                        "many2one": "property()",
-                        "selection": "selection()",
-                    }.get(struct[loc_name]["type"])
-                    if fct:
-                        append_fct(fct)
-                if struct[loc_name].get("relation") and (
-                    struct[loc_name]["relation"] != "res.company"
-                    or binding_model != "res.users"
+            def_apply = field_def.get("apply", global_def.get("apply", ""))
+            def_value = field_def.get("default", global_def.get("default", ""))
+            if def_apply and "()" not in def_apply:
+                raise UserError(
+                    _(
+                        "Interal error: apply %s for field %s.%s is not a function!"
+                        % (def_apply, binding_model, loc_name)
+                    )
+                )
+            apply4 = [x.strip() for x in apply4.split(",") if x]
+            default = [x.strip() for x in default.split(",") if x]
+            if (
+                self.backend_id.identity_id.code in ("odoo", "openerp")
+                and loc_name not in magic_fields
+                and struct[loc_name]["type"]
+                not in (
+                    "many2one",
+                    "one2many",
+                    "many2many" "date",
+                    "datetime",
+                    "boolean",
+                    "binary",
+                )
+            ):
+                append_fct("odoo_migrate()")
+            for fct in def_apply.split(","):
+                append_fct(fct)
+            for fct in def_value.split(","):
+                append_def(fct)
+            fct = "sanitize_" + loc_name
+            if hasattr(self.env["synchro.apply"], self.get_loc_fname(fct)):
+                append_fct(fct + "()")
+            fct = "default_" + loc_name
+            if hasattr(self.env["synchro.apply"], self.get_loc_fname(fct)):
+                append_def(fct + "()")
+            if struct[loc_name].get("required"):
+                fct = {
+                    "char": "set_tmp_name()",
+                    "bool": "bool()",
+                    "integer": "integer()",
+                    "float": "float()",
+                    "monetary": "float()",
+                    "datetime": "now()",
+                    "date": "today()",
+                    "many2one": "property()",
+                    "selection": "selection()",
+                }.get(struct[loc_name]["type"])
+                if fct:
+                    append_def(fct)
+            if struct[loc_name].get("relation") and (
+                struct[loc_name]["relation"] != "res.company"
+                or binding_model != "res.users"
+            ):
+                fct = {
+                    "res.company": "get_global()",
+                    "res.country": "get_global()",
+                }.get(struct[loc_name]["relation"])
+                if fct:
+                    append_def(fct)
+            if loc_name == "type" and binding_model == "account.account.type":
+                append_def("oe_account_account_type_nam()")
+            elif (
+                loc_name == "product_variant_ids"
+                and binding_model == "product.template"
+            ):
+                append_def("none()")
+            for fct in apply4:
+                if not hasattr(self.env["synchro.apply"], self.get_loc_fname(fct)):
+                    self.env["synchro.log"].logmsg(
+                        "error",
+                        "Function %(f)s not found for field %(model)s.%(name)s",
+                        res_model=binding_model,
+                        ctx={"f": fct, "name": loc_name},
+                    )
+            apply4 = ",".join(apply4)
+            for fct in default:
+                if "()" in fct and not hasattr(
+                    self.env["synchro.apply"], self.get_loc_fname(fct)
                 ):
-                    fct = {
-                        "res.company": "get_global()",
-                        "res.country": "get_global()",
-                        "uom.uom": "uom()",
-                        "account.tax": "tax(),",
-                    }.get(struct[loc_name]["relation"])
-                    if fct:
-                        append_fct(fct)
-                if loc_name == "type" and binding_model == "account.account.type":
-                    append_fct("oe_account_account_type_nam()")
-                elif (
-                    loc_name == "product_variant_ids"
-                    and binding_model == "product.template"
-                ):
-                    append_fct("none()")
-                if loc_name == "vat":
-                    append_fct("vat()")
-                for fct in apply4:
-                    if not hasattr(self.env["synchro.apply"], self.get_loc_fname(fct)):
-                        self.env["synchro.log"].logmsg(
-                            "error",
-                            "Function %(f)s not found for field %(model)s.%(name)s",
-                            res_model=binding_model,
-                            ctx={"f": fct, "name": loc_name},
-                        )
-                apply4 = ",".join(apply4)
-        return apply4
+                    self.env["synchro.log"].logmsg(
+                        "error",
+                        "Function %(f)s not found for field %(model)s.%(name)s",
+                        res_model=binding_model,
+                        ctx={"f": fct, "name": loc_name},
+                    )
+            default = ",".join(default)
+        return apply4, default
 
     def get_default_priority(self, magic_fields=None, apply=None):
         binding_model = self.model_id.split_binding_model_n_spec(self.model_id.name)[0]
@@ -280,7 +336,7 @@ class SynchroMapper(models.Model):
                 fix_required=fix_required,
                 magic_fields=magic_fields,
             )
-            apply4 = mapper.get_default_apply(magic_fields=magic_fields)
+            apply4, default = mapper.get_default_apply(magic_fields=magic_fields)
             sequence = mapper.get_default_priority(
                 magic_fields=magic_fields, apply=apply4
             )
@@ -288,7 +344,8 @@ class SynchroMapper(models.Model):
                 {
                     "protect_update": protect_update,
                     "required": required,
-                    "apply": apply4,
+                    "apply4": apply4,
+                    "default": default,
                     "sequence": sequence,
                 }
             )
@@ -298,7 +355,7 @@ class SynchroMapper(models.Model):
     def extract_default_n_apply(self, ftype=None):
         if len(self) != 1:
             return True if ftype == "boolean" else "", "", ""
-        default = self.apply or ""
+        default = self.apply4 or ""
         if default.endswith("()"):
             apply4 = [self.get_loc_fname(fct) for fct in default.split(",")]
             default = False
@@ -315,32 +372,27 @@ class SynchroMapper(models.Model):
     def do_apply(self, vals, field, ext_ref, ctx=None):
         self.ensure_one()
         IrApply = self.env["synchro.apply"]
-        Api = self.env["synchro.api"]
         dir_mapper = self.model_id
-        backend = dir_mapper.backend_id
         vmodel = dir_mapper.name
         loc_name = field["loc_name"]
-        for fct in field["apply4"]:
-            if fct == "apply_odoo_migrate":
-                vals[loc_name] = Api.odoo_tnl_value_from_loc_to_ext(
-                    backend, dir_mapper, vals[ext_ref], loc_name
-                )
-            elif hasattr(IrApply, fct):
-                vals = getattr(IrApply, fct)(
-                    self,
-                    vals,
-                    loc_name,
-                    ext_ref,
-                    default=field["default"],
-                    ctx=ctx,
-                )
-            else:
-                self.env["synchro.log"].logmsg(
-                    "error",
-                    "Function %(f)s not found for field %(model)s.%(name)s",
-                    res_model=vmodel,
-                    ctx={"f": fct[6:] + "()", "name": loc_name},
-                )
+        if loc_name == ext_ref or loc_name not in vals or not vals[loc_name]:
+            for fct in field["apply4"]:
+                if hasattr(IrApply, fct):
+                    vals = getattr(IrApply, fct)(
+                        self,
+                        vals,
+                        loc_name,
+                        ext_ref,
+                        default=field["default"],
+                        ctx=ctx,
+                    )
+                else:
+                    self.env["synchro.log"].logmsg(
+                        "error",
+                        "Function %(f)s not found for field %(model)s.%(name)s",
+                        res_model=vmodel,
+                        ctx={"f": fct[6:] + "()", "name": loc_name},
+                    )
         return vals
 
     @api.model

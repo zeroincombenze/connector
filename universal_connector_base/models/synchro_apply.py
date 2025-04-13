@@ -28,6 +28,22 @@ class IrModelSynchroApply(models.Model):
             "in_refund",
         )
 
+    def apply_odoo_migrate(
+        self,
+        mapper,
+        vals,
+        loc_name,
+        ext_ref,
+        default=None,
+        ctx=None,
+    ):
+        Api = self.env["synchro.api"]
+        dir_mapper = mapper.model_id
+        vals[ext_ref] = Api.odoo_tnl_value_from_loc_to_ext(
+            mapper.backend_id, dir_mapper.name, vals[ext_ref], loc_name
+        )
+        return vals
+
     def apply_none(
         self,
         mapper,
@@ -65,8 +81,6 @@ class IrModelSynchroApply(models.Model):
         default=None,
         ctx=None,
     ):
-        if loc_name in vals and vals[loc_name]:
-            return vals
         if (
             not PY3
             and mapper.model_id.name.startswith("res.partner")
@@ -168,7 +182,7 @@ class IrModelSynchroApply(models.Model):
             vals[ext_ref] = vals[ext_ref].strip()
         return vals
 
-    def apply_vat(
+    def apply_sanitize_vat(
         self,
         mapper,
         vals,
@@ -477,7 +491,7 @@ class IrModelSynchroApply(models.Model):
         Api = self.env["synchro.api"]
         dir_mappper = mapper.model_id
         vals[loc_name] = Api.odoo_tnl_value_from_loc_to_ext(
-            mapper.backend_id, dir_mappper, vals[ext_ref], loc_name
+            mapper.backend_id, dir_mappper.name, vals[ext_ref], loc_name
         )
         return vals
 
@@ -494,7 +508,7 @@ class IrModelSynchroApply(models.Model):
             Api = self.env["synchro.api"]
             dir_mapper = mapper.model_id
             names = Api.odoo_tnl_value_from_loc_to_ext(
-                mapper.backend_id, dir_mapper, vals[ext_ref], loc_name
+                mapper.backend_id, dir_mapper.name, vals[ext_ref], loc_name
             )
             name = vals.get("name", "").lower()
             if isinstance(names, list):

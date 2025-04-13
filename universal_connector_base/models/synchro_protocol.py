@@ -34,6 +34,11 @@ class SynchroProtocol(models.Model):
     pylib = fields.Char(
         string="Python Library used",
     )
+    endpoint_format = fields.Char(
+        string="Endpoint format",
+        help="Items to compose endpoint\n"
+        "default is protocol,login,passwd,hostname,port,path",
+    )
 
     @api.multi
     @api.depends("code", "name")

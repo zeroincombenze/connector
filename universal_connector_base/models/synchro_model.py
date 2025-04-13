@@ -279,7 +279,7 @@ class SynchroChannelModel(models.Model):
                 ctx={"name": ext_ref},
             )
             is_foreign = True
-            loc_name = ext_ref[len(pfx_depr) :]
+            loc_name = ext_ref[len(pfx_depr):]
             if loc_name == "id":
                 loc_name = ext_name = ext_ref
             else:
@@ -416,33 +416,7 @@ class SynchroChannelModel(models.Model):
                 list_8.append(ext_ref)
             else:
                 list_9.append(ext_ref)
-            # loc_name = field["loc_name"]
-            # if not loc_name and not field["id"]:
-            #     continue
-            # ftype = field["type"]
             maps[ext_ref] = field
-            # if loc_name in (loc_ext_id, "id"):
-            #     list_1.append(ext_ref)
-            # elif loc_name == "company_id":
-            #     with_company_id = True
-            #     list_2.append(ext_ref)
-            # elif loc_name == "country_id":
-            #     list_2.append(ext_ref)
-            # elif self.parent_name and loc_name == self.parent_name:
-            #     list_3.insert(0, ext_ref)
-            # elif (
-            #     loc_name
-            #     in (
-            #         "is_company",
-            #         "electronic_invoice_subjected",
-            #     )
-            #     or ftype == "many2one"
-            # ):
-            #     list_8.append(ext_ref)
-            # elif loc_name == childs_name or ftype in ("one2many", "many2many"):
-            #     list_9.append(ext_ref)
-            # else:
-            #     list_6.append(ext_ref)
         return (
             list_1 + list_2 + list_3 + list_6 + list_8 + list_9,
             with_company_id,
@@ -552,12 +526,9 @@ class SynchroChannelModel(models.Model):
                             and loc_name == "company_id"
                             and backend.company_id
                             and field["id"].required
-                            and comodel
-                            not in (
-                                "res.partner",
-                                "res.users",
-                                "product.template",
-                                "product.product",
+                            and (
+                                comodel == "res.currency.rate"
+                                or comodel not in MODEL_LAZY_COMPANY
                             )
                         ):
                             vals[loc_name] = ctx["company_id"]
@@ -572,11 +543,7 @@ class SynchroChannelModel(models.Model):
                                 prio=1,
                             )
                             incomplete_record |= True
-                        elif (
-                            only_minimal
-                            and self.name not in MODEL_LAZY_COMPANY
-                            and field["id"].protect_update != "3"
-                        ):
+                        elif only_minimal and field["id"].protect_update != "3":
                             Cache.que_push(
                                 backend,
                                 "trigger",
@@ -588,18 +555,6 @@ class SynchroChannelModel(models.Model):
                                 prio=2,
                             )
                             incomplete_record |= True
-                        else:
-                            Cache.que_push(
-                                backend,
-                                "trigger",
-                                synchro_comodel.counterpart_name,
-                                False,
-                                vals[ext_ref],
-                                ttl,
-                                ctx,
-                                prio=2,
-                            )
-                            incomplete_record = True
                     else:  # pragma: no cover
                         self.env["synchro.log"].logmsg(
                             "warning",
@@ -680,7 +635,6 @@ class SynchroChannelModel(models.Model):
             vals["type"] = model_spec
         incomplete_record = False
         for ext_ref in field_list:
-            # field = self.get_map_from_ext_ref(ext_ref, struct, spec=spec)
             field = maps[ext_ref]
             mapper = field["id"]
             loc_name = field["loc_name"]
@@ -727,13 +681,28 @@ class SynchroChannelModel(models.Model):
     @api.model
     def compile_required_fields(self, vals, ctx=None):
         self.ensure_one()
+        record = self.new(values=vals)
+        struct = self.env[self._name].fields_get()
+        for loc_name in struct.keys():
+            if (
+                (loc_name in vals and vals[loc_name])
+                or not hasattr(record, loc_name)
+                or not getattr(record, loc_name)
+            ):
+                continue
+            if struct[loc_name]["type"] == "many2many":
+                vals[loc_name] = [x.id for x in getattr(record, loc_name)]
+            elif struct[loc_name]["type"] == "many2one":
+                vals[loc_name] = getattr(record, loc_name).id
+            else:
+                vals[loc_name] = getattr(record, loc_name)
         required_fields = [
             x for x in self.field_ids if x.required and not x.fields_id[0].related
         ]
         IrApply = self.env["synchro.apply"]
         for mapper in required_fields:
             if mapper.name not in vals:
-                for fct in mapper.apply.split(","):
+                for fct in mapper.default.split(","):
                     if "()" not in fct:
                         vals[mapper.name] = fct
                     else:
@@ -892,7 +861,13 @@ class SynchroChannelModel(models.Model):
                         if v.get("required") and not v.get("related")
                     ]
                 )
-                - {x.name for x in self.field_ids if x.apply}
+                - {
+                    x.name
+                    for x in self.field_ids
+                    if x.default
+                    or x.apply4
+                    or x.name in (self.parent_name, self.childs_name)
+                }
             )
             if missed_fields:
                 raise UserError(
