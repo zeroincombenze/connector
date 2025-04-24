@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+<openerp>
+<data>
+
+    <record id="view_account_form_sync" model="ir.ui.view">
+        <field name="name">account.account.form.sync</field>
+        <field name="model">account.account</field>
+        <field name="inherit_id" ref="account.view_account_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="/form/*[1]" position="before">
+                <header>
+                <button name="send_synchro"
+                        type="object"
+                        string="Send to 10.0" class="oe_highlight"/>
+                </header>
+            </xpath>
+        </field>
+    </record>
+
+</data>
+</openerp>
+
