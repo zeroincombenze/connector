@@ -46,10 +46,8 @@ class SynchroChannel(models.Model):
             [("id", "=", identity.id)] if identity else []
         ):
             if identity.remote_sw_version:
-                res += [
-                    (x, "%s %s" % (identity.code, x))
-                    for x in eval(identity.remote_sw_version)
-                ]
+                res += [(x, "%s %s" % (identity.code, x))
+                        for x in eval(identity.remote_sw_version)]
         return res
 
     def selection_for_prefix(self):
@@ -60,14 +58,9 @@ class SynchroChannel(models.Model):
             prefix = identity.default_prefix
             if not prefix:
                 continue
-            for name in sorted(
-                [
-                    x[:-3]
-                    for x in Partner._fields.keys()
-                    if x.startswith(prefix) and x.endswith("_id")
-                ],
-                reverse=True,
-            ):
+            for name in sorted([x[: -3] for x in Partner._fields.keys()
+                                if x.startswith(prefix) and x.endswith("_id")],
+                               reverse=True):
                 res.append((name, name))
         return res
 
@@ -320,15 +313,11 @@ class SynchroChannel(models.Model):
 
     @api.model
     def _compute_endpoint(
-        self, protocol, hostname, port, db, login, passwd, path, with_path=None
-    ):
-        endpoint_format = (
-            self.protocol_id.endpoint_format
-            or "protocol,login,passwd,hostname,port,path"
-        )
-        counterpart_url = (
-            re.split(r"\W", protocol)[-1] if "protocol" in endpoint_format else ""
-        )
+            self, protocol, hostname, port, db, login, passwd, path, with_path=None):
+        endpoint_format = (self.protocol_id.endpoint_format
+                           or "protocol,login,passwd,hostname,port,path")
+        counterpart_url = re.split(
+            r"\W", protocol)[-1] if "protocol" in endpoint_format else ""
         if login and "login" in endpoint_format:
             if counterpart_url:
                 counterpart_url += "://" + login
@@ -426,14 +415,13 @@ class SynchroChannel(models.Model):
                 with_path="login"
             )
             self._compute_endpoint(
-                protocol, self.hostname, port, db, login, passwd, path
-            )
+                protocol, self.hostname, port, db, login, passwd, path)
             prot, hostname, port, database, login, passwd, path = self.parse_endpoint(
                 with_path="data"
             )
             self._compute_endpoint(
-                protocol, self.hostname, port, db, login, passwd, path, with_path="data"
-            )
+                protocol, self.hostname, port, db, login, passwd, path,
+                with_path="data")
 
     @api.onchange("login")
     def _onchange_login(self):
@@ -442,14 +430,13 @@ class SynchroChannel(models.Model):
                 with_path="login"
             )
             self._compute_endpoint(
-                protocol, hostname, port, db, self.login, passwd, path
-            )
+                protocol, hostname, port, db, self.login, passwd, path)
             protocol, hostname, port, db, login, passwd, path = self.parse_endpoint(
                 with_path="data"
             )
             self._compute_endpoint(
-                protocol, hostname, port, db, self.login, passwd, path, with_path="data"
-            )
+                protocol, hostname, port, db, self.login, passwd, path,
+                with_path="data")
 
     @api.onchange("port")
     def _onchange_port(self):  # pragma: no cover
@@ -458,23 +445,21 @@ class SynchroChannel(models.Model):
                 with_path="login"
             )
             self._compute_endpoint(
-                protocol, hostname, self.port, db, login, passwd, path
-            )
+                protocol, hostname, self.port, db, login, passwd, path)
             protocol, hostname, port, db, login, passwd, path = self.parse_endpoint(
                 with_path="data"
             )
             self._compute_endpoint(
-                protocol, hostname, self.port, db, login, passwd, path, with_path="data"
-            )
+                protocol, hostname, self.port, db, login, passwd, path,
+                with_path="data")
 
     def _synchronize_company(self):
         self.ensure_one()
         dir_mapper = self.get_dir_mapper(model="res.company")
         if dir_mapper.counterpart_name:
             session = self.get_session()
-            ext_company_ids = self.env["synchro.api"].get_record_list(
-                session, dir_mapper
-            )
+            ext_company_ids = self.env["synchro.api"].get_record_list(session,
+                                                                      dir_mapper)
             if not ext_company_ids:
                 # No company to synchronize
                 return
@@ -801,13 +786,9 @@ class SynchroChannel(models.Model):
             if not prefix:
                 continue
             for name in sorted(
-                [
-                    x
-                    for x in Partner._fields.keys()
-                    if x.startswith(prefix) and x.endswith("_id")
-                ],
-                reverse=True,
-            ):
+                    [x for x in Partner._fields.keys()
+                     if x.startswith(prefix) and x.endswith("_id")],
+                    reverse=True):
                 magic_fields.append(name)
         return magic_fields
 

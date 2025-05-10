@@ -29,19 +29,18 @@ class IrModelSynchroApply(models.Model):
         )
 
     def apply_odoo_migrate(
-        self,
-        mapper,
-        vals,
-        loc_name,
-        ext_ref,
-        default=None,
-        ctx=None,
+            self,
+            mapper,
+            vals,
+            loc_name,
+            ext_ref,
+            default=None,
+            ctx=None,
     ):
         Api = self.env["synchro.api"]
         dir_mapper = mapper.model_id
         vals[ext_ref] = Api.odoo_tnl_value_from_loc_to_ext(
-            mapper.backend_id, dir_mapper.name, vals[ext_ref], loc_name
-        )
+            mapper.backend_id, dir_mapper.name, vals[ext_ref], loc_name)
         return vals
 
     def apply_none(
@@ -422,7 +421,8 @@ class IrModelSynchroApply(models.Model):
     ):
         if (loc_name not in vals or not vals.get(loc_name)) and not vals.get(ext_ref):
             struct = self.env[mapper.model_id.name].fields_get()
-            vals[ext_ref] = (struct[loc_name].get("selection", [""])[0],)
+            value = struct[loc_name].get("selection", [""])[0]
+            vals[ext_ref] = value[0] if isinstance(value, (list, tuple)) else value
         return vals
 
     def apply_float(

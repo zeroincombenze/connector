@@ -179,16 +179,18 @@ class IrModelSynchroLog(models.Model):
         ctx=None,
     ):
         # ctx values:
-        # model: res_model
-        # id: res_id
-        # backend: backend.name
-        # lgi_ep: login endpoint
-        # data_ep: data endpoint
-        # host: backend.hostname
-        # vals: values to print
-        # pfx: backend prefix
-        # prot: backend.method
-        # db: backend.database
+        # - model: res_model
+        # - id: res_id
+        # - backend: backend.name
+        # - lgi_ep: login endpoint
+        # - data_ep: data endpoint
+        # - host: backend.hostname
+        # - vals: values to print
+        # - pfx: backend prefix
+        # - prot: backend.method
+        # - db: backend.database
+        # - e: errmsg
+        # - E: errcode
         #
         def get_backend_value(backend, field, key=None):
             key = key or field
@@ -275,7 +277,11 @@ class IrModelSynchroLog(models.Model):
             ctx["pfx"] = get_backend_value(backend, "prefix", key="pfx")
             ctx["vals"] = (
                 {
-                    k: (v[0:28] + "[...]" if isinstance(v, str) and len(v) > 32 else v)
+                    k: (
+                        v[0:28] + "[...]"
+                        if isinstance(v, str) and len(v) > 32
+                        else v
+                    )
                     for k, v in values.items()
                 }
                 if isinstance(values, dict)

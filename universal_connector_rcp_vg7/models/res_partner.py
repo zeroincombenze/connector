@@ -13,7 +13,7 @@ class ResPartner(models.Model):
     _inherit = "res.partner"
 
     _sql_constraints = [
-        ("ref_unique_vg7_id", "unique(vg7_id)", "Remote ref must be unique!"),
+        ('ref_unique_vg7_id', 'unique(vg7_id)', 'Remote ref must be unique!'),
     ]
 
     vg7_id = fields.Integer("VG7 ID", copy=False)
@@ -57,8 +57,6 @@ class ResPartner(models.Model):
                     # _logger.info("Duplicate REA Code %s" % vals["rea_code"])
                     del vals["rea_code"]
         return vals
-
-
 #
 #
 # class ResPartnerShipping(models.Model):

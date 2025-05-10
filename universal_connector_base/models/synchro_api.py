@@ -349,8 +349,7 @@ class SynchroApi(models.Model):
     # -----------------------------------------------------------
 
     def _odoo_xmlrpc_x_connect(
-        self, backend=None, login_endpoint=None, data_endpoint=None
-    ):
+            self, backend=None, login_endpoint=None, data_endpoint=None):
         if not backend and not login_endpoint and not data_endpoint:
             self.env["synchro.log"].logmsg(
                 "error",
@@ -499,8 +498,7 @@ class SynchroApi(models.Model):
             elif loc_name not in magic_fields:
                 if backend.identity_id.code in ("odoo", "openerp"):
                     ext_name = self.odoo_tnl_local_field_to_ext(
-                        backend, model, loc_name
-                    )
+                        backend, model, loc_name)
                 else:
                     ext_name = False
                 res.append((loc_name, ext_name))

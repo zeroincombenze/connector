@@ -13,11 +13,11 @@ class ProductTemplate(models.Model):
     _inherit = "product.template"
 
     _sql_constraints = [
-        ("ref_unique_odoo_id", "unique(odoo_id)", "Remote ref must be unique!"),
-        ("ref_unique_odoo16_id", "unique(odoo16_id)", "Remote ref must be unique!"),
-        ("ref_unique_odoo14_id", "unique(odoo14_id)", "Remote ref must be unique!"),
-        ("ref_unique_odoo12_id", "unique(odoo12_id)", "Remote ref must be unique!"),
-        ("ref_unique_odoo10_id", "unique(odoo10_id)", "Remote ref must be unique!"),
+        ('ref_unique_odoo_id', 'unique(odoo_id)', 'Remote ref must be unique!'),
+        ('ref_unique_odoo16_id', 'unique(odoo16_id)', 'Remote ref must be unique!'),
+        ('ref_unique_odoo14_id', 'unique(odoo14_id)', 'Remote ref must be unique!'),
+        ('ref_unique_odoo12_id', 'unique(odoo12_id)', 'Remote ref must be unique!'),
+        ('ref_unique_odoo10_id', 'unique(odoo10_id)', 'Remote ref must be unique!'),
     ]
 
     odoo_id = fields.Integer("Odoo ID", copy=False)
@@ -33,11 +33,11 @@ class ProductProduct(models.Model):
     _inherit = "product.product"
 
     _sql_constraints = [
-        ("ref_unique_odoo_id", "unique(odoo_id)", "Remote ref must be unique!"),
-        ("ref_unique_odoo16_id", "unique(odoo16_id)", "Remote ref must be unique!"),
-        ("ref_unique_odoo14_id", "unique(odoo14_id)", "Remote ref must be unique!"),
-        ("ref_unique_odoo12_id", "unique(odoo12_id)", "Remote ref must be unique!"),
-        ("ref_unique_odoo10_id", "unique(odoo10_id)", "Remote ref must be unique!"),
+        ('ref_unique_odoo_id', 'unique(odoo_id)', 'Remote ref must be unique!'),
+        ('ref_unique_odoo16_id', 'unique(odoo16_id)', 'Remote ref must be unique!'),
+        ('ref_unique_odoo14_id', 'unique(odoo14_id)', 'Remote ref must be unique!'),
+        ('ref_unique_odoo12_id', 'unique(odoo12_id)', 'Remote ref must be unique!'),
+        ('ref_unique_odoo10_id', 'unique(odoo10_id)', 'Remote ref must be unique!'),
     ]
 
     odoo_id = fields.Integer("Odoo ID", copy=False)
@@ -66,11 +66,11 @@ class UomUom(models.Model):
     _inherit = "uom.uom"
 
     _sql_constraints = [
-        ("ref_unique_odoo_id", "unique(odoo_id)", "Remote ref must be unique!"),
-        ("ref_unique_odoo16_id", "unique(odoo16_id)", "Remote ref must be unique!"),
-        ("ref_unique_odoo14_id", "unique(odoo14_id)", "Remote ref must be unique!"),
-        ("ref_unique_odoo12_id", "unique(odoo12_id)", "Remote ref must be unique!"),
-        ("ref_unique_odoo10_id", "unique(odoo10_id)", "Remote ref must be unique!"),
+        ('ref_unique_odoo_id', 'unique(odoo_id)', 'Remote ref must be unique!'),
+        ('ref_unique_odoo16_id', 'unique(odoo16_id)', 'Remote ref must be unique!'),
+        ('ref_unique_odoo14_id', 'unique(odoo14_id)', 'Remote ref must be unique!'),
+        ('ref_unique_odoo12_id', 'unique(odoo12_id)', 'Remote ref must be unique!'),
+        ('ref_unique_odoo10_id', 'unique(odoo10_id)', 'Remote ref must be unique!'),
     ]
 
     odoo_id = fields.Integer("Odoo ID", copy=False)
@@ -84,11 +84,11 @@ class UomCategory(models.Model):
     _inherit = "uom.category"
 
     _sql_constraints = [
-        ("ref_unique_odoo_id", "unique(odoo_id)", "Remote ref must be unique!"),
-        ("ref_unique_odoo16_id", "unique(odoo16_id)", "Remote ref must be unique!"),
-        ("ref_unique_odoo14_id", "unique(odoo14_id)", "Remote ref must be unique!"),
-        ("ref_unique_odoo12_id", "unique(odoo12_id)", "Remote ref must be unique!"),
-        ("ref_unique_odoo10_id", "unique(odoo10_id)", "Remote ref must be unique!"),
+        ('ref_unique_odoo_id', 'unique(odoo_id)', 'Remote ref must be unique!'),
+        ('ref_unique_odoo16_id', 'unique(odoo16_id)', 'Remote ref must be unique!'),
+        ('ref_unique_odoo14_id', 'unique(odoo14_id)', 'Remote ref must be unique!'),
+        ('ref_unique_odoo12_id', 'unique(odoo12_id)', 'Remote ref must be unique!'),
+        ('ref_unique_odoo10_id', 'unique(odoo10_id)', 'Remote ref must be unique!'),
     ]
 
     odoo_id = fields.Integer("Odoo ID", copy=False)
@@ -102,11 +102,11 @@ class ProductCategory(models.Model):
     _inherit = "product.category"
 
     _sql_constraints = [
-        ("ref_unique_odoo_id", "unique(odoo_id)", "Remote ref must be unique!"),
-        ("ref_unique_odoo16_id", "unique(odoo16_id)", "Remote ref must be unique!"),
-        ("ref_unique_odoo14_id", "unique(odoo14_id)", "Remote ref must be unique!"),
-        ("ref_unique_odoo12_id", "unique(odoo12_id)", "Remote ref must be unique!"),
-        ("ref_unique_odoo10_id", "unique(odoo10_id)", "Remote ref must be unique!"),
+        ('ref_unique_odoo_id', 'unique(odoo_id)', 'Remote ref must be unique!'),
+        ('ref_unique_odoo16_id', 'unique(odoo16_id)', 'Remote ref must be unique!'),
+        ('ref_unique_odoo14_id', 'unique(odoo14_id)', 'Remote ref must be unique!'),
+        ('ref_unique_odoo12_id', 'unique(odoo12_id)', 'Remote ref must be unique!'),
+        ('ref_unique_odoo10_id', 'unique(odoo10_id)', 'Remote ref must be unique!'),
     ]
 
     odoo_id = fields.Integer("Odoo ID", copy=False)
@@ -120,11 +120,11 @@ class ProductPricelist(models.Model):
     _inherit = "product.pricelist"
 
     _sql_constraints = [
-        ("ref_unique_odoo_id", "unique(odoo_id)", "Remote ref must be unique!"),
-        ("ref_unique_odoo16_id", "unique(odoo16_id)", "Remote ref must be unique!"),
-        ("ref_unique_odoo14_id", "unique(odoo14_id)", "Remote ref must be unique!"),
-        ("ref_unique_odoo12_id", "unique(odoo12_id)", "Remote ref must be unique!"),
-        ("ref_unique_odoo10_id", "unique(odoo10_id)", "Remote ref must be unique!"),
+        ('ref_unique_odoo_id', 'unique(odoo_id)', 'Remote ref must be unique!'),
+        ('ref_unique_odoo16_id', 'unique(odoo16_id)', 'Remote ref must be unique!'),
+        ('ref_unique_odoo14_id', 'unique(odoo14_id)', 'Remote ref must be unique!'),
+        ('ref_unique_odoo12_id', 'unique(odoo12_id)', 'Remote ref must be unique!'),
+        ('ref_unique_odoo10_id', 'unique(odoo10_id)', 'Remote ref must be unique!'),
     ]
 
     odoo_id = fields.Integer("Odoo ID", copy=False)

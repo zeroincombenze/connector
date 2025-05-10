@@ -13,7 +13,7 @@ class ResCompany(models.Model):
     _inherit = "res.company"
 
     _sql_constraints = [
-        ("ref_unique_vg7_id", "unique(vg7_id)", "Remote ref must be unique!"),
+        ('ref_unique_vg7_id', 'unique(vg7_id)', 'Remote ref must be unique!'),
     ]
 
     vg7_id = fields.Integer("VG7 ID", copy=False)

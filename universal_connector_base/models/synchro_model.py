@@ -349,12 +349,9 @@ class SynchroChannelModel(models.Model):
         loc_ext_id = self.get_loc_ext_id()
         struct = self.env[rec._name].fields_get()
         for loc_name, value in vals.copy().items():
-            if (
-                loc_name not in struct
-                or (self.auth_action == "sync" and loc_name != loc_ext_id)
-                or loc_name in magic_fields
-                and not vals[loc_name]
-            ):
+            if loc_name not in struct or (
+                self.auth_action == "sync" and loc_name != loc_ext_id
+            ) or loc_name in magic_fields and not vals[loc_name]:
                 del vals[loc_name]
                 continue
             mapper = self.get_mapper(loc_name=loc_name)
@@ -472,7 +469,11 @@ class SynchroChannelModel(models.Model):
                                         ctx,
                                         prio=1 if loc_name == self.childs_name else 3,
                                     )
-                        elif isinstance(item, str) and "." in item and " " not in item:
+                        elif (
+                            isinstance(item, str)
+                            and "." in item
+                            and " " not in item
+                        ):
                             # Item is external reference like 'module.reference'
                             rec = self.xmlid_to_object(item, raise_if_not_found=False)
                             if rec:
@@ -526,10 +527,8 @@ class SynchroChannelModel(models.Model):
                             and loc_name == "company_id"
                             and backend.company_id
                             and field["id"].required
-                            and (
-                                comodel == "res.currency.rate"
-                                or comodel not in MODEL_LAZY_COMPANY
-                            )
+                            and (comodel == "res.currency.rate"
+                                 or comodel not in MODEL_LAZY_COMPANY)
                         ):
                             vals[loc_name] = ctx["company_id"]
                             Cache.que_push(
@@ -685,9 +684,9 @@ class SynchroChannelModel(models.Model):
         struct = self.env[self._name].fields_get()
         for loc_name in struct.keys():
             if (
-                (loc_name in vals and vals[loc_name])
-                or not hasattr(record, loc_name)
-                or not getattr(record, loc_name)
+                    (loc_name in vals and vals[loc_name])
+                    or not hasattr(record, loc_name)
+                    or not getattr(record, loc_name)
             ):
                 continue
             if struct[loc_name]["type"] == "many2many":
@@ -696,9 +695,8 @@ class SynchroChannelModel(models.Model):
                 vals[loc_name] = getattr(record, loc_name).id
             else:
                 vals[loc_name] = getattr(record, loc_name)
-        required_fields = [
-            x for x in self.field_ids if x.required and not x.fields_id[0].related
-        ]
+        required_fields = [x for x in self.field_ids
+                           if x.required and not x.fields_id[0].related]
         IrApply = self.env["synchro.apply"]
         for mapper in required_fields:
             if mapper.name not in vals:
@@ -751,10 +749,8 @@ class SynchroChannelModel(models.Model):
                 if model:
                     binding_model, spec = self.split_binding_model_n_spec(model)
                     model_spec = model_spec or spec
-                    if not ext_model and backend.identity_id.code in (
-                        "odoo",
-                        "openerp",
-                    ):
+                    if not ext_model and backend.identity_id.code in ("odoo",
+                                                                      "openerp"):
                         ext_model = SynchroApi.odoo_tnl_local_model_to_ext(
                             backend, binding_model
                         )
@@ -787,11 +783,8 @@ class SynchroChannelModel(models.Model):
                         "res.lang": "no",
                     }.get(
                         binding_model,
-                        (
-                            "auto"
-                            if binding_model.startswith(("ir.", "res.", "product"))
-                            else "no"
-                        ),
+                        "auto" if binding_model.startswith(("ir.", "res.", "product"))
+                        else "no",
                     ),
                 }
                 try:
@@ -854,20 +847,11 @@ class SynchroChannelModel(models.Model):
 
         if self.auth_action not in ("lock", "sync", "upd"):
             missed_fields = list(
-                set(
-                    [
-                        k
-                        for k, v in struct.items()
-                        if v.get("required") and not v.get("related")
-                    ]
-                )
-                - {
-                    x.name
-                    for x in self.field_ids
-                    if x.default
-                    or x.apply4
-                    or x.name in (self.parent_name, self.childs_name)
-                }
+                set([k for k, v in struct.items()
+                     if v.get("required") and not v.get("related")])
+                - {x.name for x in self.field_ids
+                   if x.default or x.apply4 or x.name in (self.parent_name,
+                                                          self.childs_name)}
             )
             if missed_fields:
                 raise UserError(
@@ -1363,7 +1347,11 @@ class SynchroChannelModel(models.Model):
                     else:
                         domain = []
                         break
-                elif isinstance(vals[key], str) and vals[key] == "" and ilike == "?":
+                elif (
+                    isinstance(vals[key], str)
+                    and vals[key] == ""
+                    and ilike == "?"
+                ):
                     domain.append("|")
                     domain.append((key, "=", False))
                     domain.append((key, "=", ""))

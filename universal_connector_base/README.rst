@@ -189,10 +189,14 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 ChangeLog History | Cronologia modifiche
 ----------------------------------------
 
-12.0.1.3.14 (2025-04-12)
+12.0.1.3.14 (2025-04-13)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-* [IMP] Default funcions
+* [IMP] Separate apply e default functions
+* [IMP] Protocol items to manage in backend
+* [IMP] Importing languages install language
+* [IMP] Dynamic apply functions and default functions for specific fields
+* [IMP] Automatic propagation limitation for \*many fields
 * [QUA] Test coverage 77% (2417: 553+1864) [134 TestPoints] - quality rating 56 (target 100)
 
 12.0.1.3.13 (2025-04-05)
@@ -285,7 +289,7 @@ La distribuzione `Zeroincombenze® <https://www.zeroincombenze.it/>`__ è proget
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2025-04-13
+Last Update / Ultimo aggiornamento: 2025-05-10
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status

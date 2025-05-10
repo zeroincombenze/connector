@@ -148,7 +148,7 @@ ChangeLog History | Cronologia modifiche
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 * [IMP] Split from universal_connecto_base
-* [QUA] Test coverage 100% (106: 0+106) [154 TestPoints] - quality rating 293 (target 100)
+* [QUA] Test coverage 100% (106: 0+106) [114 TestPoints] - quality rating 233 (target 100)
 
 
 
@@ -199,7 +199,7 @@ La distribuzione `Zeroincombenze® <https://www.zeroincombenze.it/>`__ è proget
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2025-04-13
+Last Update / Ultimo aggiornamento: 2025-05-10
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status

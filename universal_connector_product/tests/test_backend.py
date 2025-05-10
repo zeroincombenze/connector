@@ -396,26 +396,16 @@ class MyTest(SingleTransactionCase):
                             value,
                             getattr(record, loc_field),
                             msg="Unexpected value %s for %s.%s (ext_id %s of %s)"
-                            % (
-                                getattr(record, loc_field),
-                                loc_model,
-                                loc_field,
-                                ext_id,
-                                xref,
-                            ),
+                            % (getattr(record, loc_field),
+                               loc_model, loc_field, ext_id, xref),
                         )
                     else:
                         self.assertEqual(
                             getattr(record, loc_field),
                             value,
                             msg="Unexpected value %s for %s.%s (ext_id %s of %s)"
-                            % (
-                                getattr(record, loc_field),
-                                loc_model,
-                                loc_field,
-                                ext_id,
-                                xref,
-                            ),
+                            % (getattr(record, loc_field),
+                               loc_model, loc_field, ext_id, xref),
                         )
 
     def test_connection(self):

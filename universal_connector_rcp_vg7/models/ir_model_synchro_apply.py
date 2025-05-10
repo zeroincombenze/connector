@@ -29,7 +29,7 @@ def split_fragments(text, maxctr=3, minlen=2):
         item = text[: x.start()].lower()
         if len(item) > minlen:
             items.append(item)
-        text = text[x.end() :]
+        text = text[x.end():]
     fragments = []
     while len(fragments) < maxctr:
         min_len = 0
@@ -212,7 +212,10 @@ class IrModelSynchroApply(models.Model):
                 vals["option"] = "fix_day_following_month"
             del vals[ext_ref]
         if vals.get("vg7:scadenza"):
-            if isinstance(vals["vg7:scadenza"], str) and vals["vg7:scadenza"].isdigit():
+            if (
+                isinstance(vals["vg7:scadenza"], str)
+                and vals["vg7:scadenza"].isdigit()
+            ):
                 num_days = int(vals["vg7:scadenza"])
             elif isinstance(vals["vg7:scadenza"], int):
                 num_days = vals["vg7:scadenza"]

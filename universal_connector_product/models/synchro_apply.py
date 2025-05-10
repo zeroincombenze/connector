@@ -28,9 +28,9 @@ class IrModelSynchroApply(models.Model):
     ):
         if (loc_name not in vals or not vals[loc_name]) and not vals.get(ext_ref):
             if (
-                product
-                or "product_id" in vals
-                and not mapper.model_id.name.startswith("product.")
+                    product
+                    or "product_id" in vals
+                    and not mapper.model_id.name.startswith("product.")
             ):
                 product = product or self.env["product.product"].browse(
                     vals["product_id"]

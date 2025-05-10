@@ -17,8 +17,8 @@ class ResCurrency(models.Model):
     _inherit = "res.currency"
 
     _sql_constraints = [
-        ("ref_unique_oe8_id", "unique(oe8_id)", "Remote ref must be unique!"),
-        ("ref_unique_oe7_id", "unique(oe7_id)", "Remote ref must be unique!"),
+        ('ref_unique_oe8_id', 'unique(oe8_id)', 'Remote ref must be unique!'),
+        ('ref_unique_oe7_id', 'unique(oe7_id)', 'Remote ref must be unique!'),
     ]
 
     oe7_id = fields.Integer("Odoo7 ID", copy=False)
@@ -29,8 +29,8 @@ class ResCurrencyRate(models.Model):
     _inherit = "res.currency.rate"
 
     _sql_constraints = [
-        ("ref_unique_oe8_id", "unique(oe8_id)", "Remote ref must be unique!"),
-        ("ref_unique_oe7_id", "unique(oe7_id)", "Remote ref must be unique!"),
+        ('ref_unique_oe8_id', 'unique(oe8_id)', 'Remote ref must be unique!'),
+        ('ref_unique_oe7_id', 'unique(oe7_id)', 'Remote ref must be unique!'),
     ]
 
     oe7_id = fields.Integer("Odoo7 ID", copy=False)

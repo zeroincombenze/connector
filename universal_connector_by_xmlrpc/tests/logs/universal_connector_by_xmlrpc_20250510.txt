@@ -1,0 +1,829 @@
+2025-05-10 18:54:46,674 2029094 INFO ? odoo: Odoo version 12.0 
+2025-05-10 18:54:46,675 2029094 INFO ? odoo: Using configuration file at /home/odoo/12.0/connector/universal_connector_by_xmlrpc/tests/logs/zero12.connector.universal_connector_by_xmlrpc.conf 
+2025-05-10 18:54:46,675 2029094 INFO ? odoo: addons paths: ['/home/odoo/.local/share/Odoo12/addons/12.0', '/home/odoo/12.0/odoo/addons', '/home/odoo/12.0/addons', '/home/odoo/.local/share/Odoo12/addons', '/home/odoo/12.0/account-analytic', '/home/odoo/12.0/account-budgeting', '/home/odoo/12.0/account-closing', '/home/odoo/12.0/account-consolidation', '/home/odoo/12.0/account-financial-reporting', '/home/odoo/12.0/account-financial-tools', '/home/odoo/12.0/account-fiscal-rule', '/home/odoo/12.0/account-invoice-reporting', '/home/odoo/12.0/account-invoicing', '/home/odoo/12.0/account-payment', '/home/odoo/12.0/account-reconcile', '/home/odoo/12.0/bank-payment', '/home/odoo/12.0/bank-statement-import', '/home/odoo/12.0/brand', '/home/odoo/12.0/calendar', '/home/odoo/12.0/commission', '/home/odoo/12.0/community-data-files', '/home/odoo/12.0/connector', '/home/odoo/12.0/contract', '/home/odoo/12.0/credit-control', '/home/odoo/12.0/crm', '/home/odoo/12.0/currency', '/home/odoo/12.0/data-protection', '/home/odoo/12.0/ddmrp', '/home/odoo/12.0/delivery-carrier', '/home/odoo/12.0/dms', '/home/odoo/12.0/e-commerce', '/home/odoo/12.0/edi', '/home/odoo/12.0/field-service', '/home/odoo/12.0/helpdesk', '/home/odoo/12.0/hr', '/home/odoo/12.0/intrastat-extrastat', '/home/odoo/12.0/knowledge', '/home/odoo/12.0/l10n-italy', '/home/odoo/12.0/l10n-italy-supplemental', '/home/odoo/12.0/maintenance', '/home/odoo/12.0/management-system', '/home/odoo/12.0/manufacture', '/home/odoo/12.0/margin-analysis', '/home/odoo/12.0/marketplace', '/home/odoo/12.0/mis-builder', '/home/odoo/12.0/multi-company', '/home/odoo/12.0/partner-contact', '/home/odoo/12.0/product-attribute', '/home/odoo/12.0/product-kitting', '/home/odoo/12.0/product-pack', '/home/odoo/12.0/product-variant', '/home/odoo/12.0/profiles', '/home/odoo/12.0/project', '/home/odoo/12.0/purchase-reporting', '/home/odoo/12.0/purchase-workflow', '/home/odoo/12.0/queue', '/home/odoo/12.0/report-print-send', '/home/odoo/12.0/reporting-engine', '/home/odoo/12.0/rma', '/home/odoo/12.0/sale-financial', '/home/odoo/12.0/sale-reporting', '/home/odoo/12.0/sale-workflow', '/home/odoo/12.0/search-engine', '/home/odoo/12.0/server-auth', '/home/odoo/12.0/server-backend', '/home/odoo/12.0/server-brand', '/home/odoo/12.0/server-env', '/home/odoo/12.0/server-tools', '/home/odoo/12.0/server-ux', '/home/odoo/12.0/social', '/home/odoo/12.0/stock-logistics-barcode', '/home/odoo/12.0/stock-logistics-reporting', '/home/odoo/12.0/stock-logistics-tracking', '/home/odoo/12.0/stock-logistics-transport', '/home/odoo/12.0/stock-logistics-warehouse', '/home/odoo/12.0/stock-logistics-workflow', '/home/odoo/12.0/storage', '/home/odoo/12.0/timesheet', '/home/odoo/12.0/uncovered', '/home/odoo/12.0/web', '/home/odoo/12.0/webhook', '/home/odoo/12.0/website', '/home/odoo/12.0/wms', '/home/odoo/12.0/zerobug-test', '/home/odoo/12.0/venv_odoo/lib/python3.7/site-packages/odoo/addons'] 
+2025-05-10 18:54:46,675 2029094 INFO ? odoo: database: odoo12@localhost:5432 
+2025-05-10 18:54:46,819 2029094 INFO ? odoo.addons.base.models.ir_actions_report: Will use the Wkhtmltopdf binary at /home/odoo/12.0/venv_odoo/bin/wkhtmltopdf 
+2025-05-10 18:54:46,921 2029094 INFO ? odoo.addons.server_environment.serv_config: not using server_environment_files for configuration, no directory found 
+2025-05-10 18:54:46,922 2029094 INFO ? odoo.addons.server_environment.serv_config: `running_env` not found. Using default = `test`. 
+2025-05-10 18:54:46,922 2029094 INFO ? odoo.addons.server_environment.serv_config: We strongly recommend against using the rc file but instead use an explicit config file or env variable. 
+2025-05-10 18:54:46,946 2029094 INFO ? odoo.service.server: HTTP service (werkzeug) running on NB200Z0.:26249 
+2025-05-10 18:54:46,963 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.modules.loading: loading 1 modules... 
+2025-05-10 18:54:46,972 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.modules.loading: 1 modules loaded in 0.01s, 0 queries 
+2025-05-10 18:54:47,058 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.modules.loading: updating modules list 
+2025-05-10 18:54:47,061 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_module: ALLOW access to module.update_list on [] to user __system__ #1 via n/a 
+2025-05-10 18:54:54,541 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_module: ALLOW access to module.button_install on ['universal_connector_by_xmlrpc'] to user __system__ #1 via n/a 
+2025-05-10 18:54:54,728 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.modules.loading: loading 12 modules... 
+2025-05-10 18:54:54,954 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.modules.loading: 12 modules loaded in 0.23s, 0 queries 
+2025-05-10 18:54:54,957 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.modules.loading: loading 13 modules... 
+2025-05-10 18:54:55,167 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.modules.registry: module universal_connector_by_xmlrpc: creating or updating database tables 
+2025-05-10 18:54:55,192 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.modules.loading: loading universal_connector_by_xmlrpc/data/synchro_protocol.xml 
+2025-05-10 18:54:55,199 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.modules.loading: Module universal_connector_by_xmlrpc: loading demo 
+2025-05-10 18:54:55,233 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.modules.module: odoo.addons.universal_connector_by_xmlrpc.tests.test_backend running tests. 
+2025-05-10 18:54:55,233 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_by_xmlrpc.tests.test_backend: test_connection (odoo.addons.universal_connector_by_xmlrpc.tests.test_backend.MyTest) 
+2025-05-10 18:54:55,359 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_by_xmlrpc.tests.testenv: 🎺🎺🎺 Starting test v2.0.22 (debug_level=0, commit=True) 
+2025-05-10 18:54:55,362 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_by_xmlrpc.tests.testenv: 🎺🎺 Testing module: universal_connector_by_xmlrpc (12.0.1.3.14) 
+2025-05-10 18:54:55,363 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_by_xmlrpc.tests.testenv: 🎺🎺 Loading data from: synchro.backend  
+2025-05-10 18:54:55,401 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_by_xmlrpc.tests.test_backend: 🎺 Starting connection test on ports 8270 (db=oca10) and 8272 (db=oca12) and on ports 8167 (db=demo7) and 8168 (db=demo8) 
+2025-05-10 18:54:55,480 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: synchro.backend.button_check_connection(ep=http://admin@localhost:8167/xmlrpc/common,h=localhost) 
+2025-05-10 18:55:01,799 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.company,oe7,remote_id=1,ttl=1) 
+2025-05-10 18:55:01,969 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: synchro.backend.button_reset_to_draft(ep=http://admin@localhost:8167/xmlrpc/common,h=localhost): 
+2025-05-10 18:55:02,044 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: synchro.backend.button_check_connection(ep=http://admin@localhost:8167/xmlrpc/common,h=localhost) 
+2025-05-10 18:55:04,249 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,oe7,remote_id=1,ttl=None) 
+2025-05-10 18:55:04,314 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.currency.synchro({'oe7:rate_ids': [1], 'oe7:name',backend=Test OpenERP 7.0,min=True),ttl=4 
+2025-05-10 18:55:04,339 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,oe7,remote_id=3,ttl=None) 
+2025-05-10 18:55:04,393 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.currency.synchro({'oe7:rate_ids': [177, 2], 'oe7:,backend=Test OpenERP 7.0,min=True),ttl=4 
+2025-05-10 18:55:04,545 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: synchro.backend.button_check_connection(ep=http://admin@localhost:8168/xmlrpc/common,h=localhost) 
+2025-05-10 18:55:12,582 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.company,oe8,remote_id=1,ttl=1) 
+2025-05-10 18:55:12,854 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: synchro.backend.button_reset_to_draft(ep=http://admin@localhost:8168/xmlrpc/common,h=localhost): 
+2025-05-10 18:55:12,978 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: synchro.backend.button_check_connection(ep=http://admin@localhost:8168/xmlrpc/common,h=localhost) 
+2025-05-10 18:55:17,095 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,oe8,remote_id=1,ttl=None) 
+2025-05-10 18:55:17,234 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.currency.synchro({'oe8:create_uid': False, 'oe8:c,backend=Test Odoo 8.0,min=True),ttl=4 
+2025-05-10 18:55:17,255 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,oe8,remote_id=3,ttl=None) 
+2025-05-10 18:55:17,396 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.currency.synchro({'oe8:create_uid': [1, 'Administ,backend=Test Odoo 8.0,min=True),ttl=4 
+2025-05-10 18:55:17,419 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country,oe8,remote_id=235,ttl=None) 
+2025-05-10 18:55:17,548 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.country.synchro({'oe8:create_uid': [1, 'Administ,backend=Test Odoo 8.0,min=True),ttl=4 
+2025-05-10 18:55:17,582 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,oe7,remote_id=3,ttl=None) 
+2025-05-10 18:55:17,646 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'oe7:comment': False, 'oe7:webs,backend=Test OpenERP 7.0,min=True),ttl=4 
+2025-05-10 18:55:17,671 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: !-7! Invalid value                            it_IT for lang 
+2025-05-10 18:55:17,681 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/c9/c947cb81093ee89c7b1fe232191108af0ab4ff15 
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 3
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('res.partner(3,).image_small', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 6
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('ir.attachment(6,).datas', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
+    r = base64.b64encode(open(full_path,'rb').read())
+FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/c9/c947cb81093ee89c7b1fe232191108af0ab4ff15'
+2025-05-10 18:55:17,685 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/e7/e7aa49e28912f86a83133bd5730a9f410d778dff 
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 3
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('res.partner(3,).image', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 4
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('ir.attachment(4,).datas', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
+    r = base64.b64encode(open(full_path,'rb').read())
+FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/e7/e7aa49e28912f86a83133bd5730a9f410d778dff'
+2025-05-10 18:55:17,690 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/ce/ce9e7f90952a124be08d13907563c451acc1c099 
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 3
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('res.partner(3,).image_medium', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 5
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('ir.attachment(5,).datas', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
+    r = base64.b64encode(open(full_path,'rb').read())
+FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/ce/ce9e7f90952a124be08d13907563c451acc1c099'
+2025-05-10 18:55:17,747 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_translation: module base: loading translation file (it) for language it_IT 
+2025-05-10 18:55:17,747 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.tools.translate: loading /home/odoo/12.0/odoo/addons/base/i18n/it.po 
+2025-05-10 18:55:19,226 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_translation: module web: loading translation file (it) for language it_IT 
+2025-05-10 18:55:19,226 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.tools.translate: loading /home/odoo/12.0/addons/web/i18n/it.po 
+2025-05-10 18:55:19,295 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_translation: module base_import: loading translation file (it) for language it_IT 
+2025-05-10 18:55:19,295 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.tools.translate: loading /home/odoo/12.0/addons/base_import/i18n/it.po 
+2025-05-10 18:55:19,315 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_translation: module web_settings_dashboard: loading translation file (it) for language it_IT 
+2025-05-10 18:55:19,316 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.tools.translate: loading /home/odoo/12.0/addons/web_settings_dashboard/i18n/it.po 
+2025-05-10 18:55:19,326 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_translation: module iap: loading translation file (it) for language it_IT 
+2025-05-10 18:55:19,326 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.tools.translate: loading /home/odoo/12.0/addons/iap/i18n/it.po 
+2025-05-10 18:55:19,336 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_translation: module module_version: loading translation file (it) for language it_IT 
+2025-05-10 18:55:19,336 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.tools.translate: loading /home/odoo/12.0/uncovered/module_version/i18n/it.po 
+2025-05-10 18:55:19,338 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.tools.translate: Translation 'To upgrade' (view, ir.module.module, 0) not found in reference pot, skipping 
+2025-05-10 18:55:19,338 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.tools.translate: Translation 'Upgrade' (view, ir.module.module, 0) not found in reference pot, skipping 
+2025-05-10 18:55:19,338 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.tools.translate: Translation 'Not Installed' (view, ir.module.module, 0) not found in reference pot, skipping 
+2025-05-10 18:55:19,338 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.tools.translate: Translation 'Cancel Upgrade' (view, ir.module.module, 0) not found in reference pot, skipping 
+2025-05-10 18:55:19,338 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.tools.translate: Translation 'Need Upgrade' (code, addons/module_version/module.py, 60) not found in reference pot, skipping 
+2025-05-10 18:55:19,338 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.tools.translate: Translation 'Need Upgrade' (field, ir.module.module,check_upgrade, 0) not found in reference pot, skipping 
+2025-05-10 18:55:19,338 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.tools.translate: Translation 'Need Upgrade' (field, ir.module.module,need_upgrade, 0) not found in reference pot, skipping 
+2025-05-10 18:55:19,344 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_translation: module universal_connector_base: loading translation file (it) for language it_IT 
+2025-05-10 18:55:19,344 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.tools.translate: loading /home/odoo/12.0/connector/universal_connector_base/i18n/it.po 
+2025-05-10 18:55:19,358 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_translation: module universal_connector_openerp: loading translation file (it) for language it_IT 
+2025-05-10 18:55:19,358 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.tools.translate: loading /home/odoo/12.0/connector/universal_connector_openerp/i18n/it.po 
+2025-05-10 18:55:19,365 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_translation: module web_diagram: loading translation file (it) for language it_IT 
+2025-05-10 18:55:19,365 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.tools.translate: loading /home/odoo/12.0/addons/web_diagram/i18n/it.po 
+2025-05-10 18:55:19,373 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_translation: module web_editor: loading translation file (it) for language it_IT 
+2025-05-10 18:55:19,373 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.tools.translate: loading /home/odoo/12.0/addons/web_editor/i18n/it.po 
+2025-05-10 18:55:19,404 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_translation: module web_kanban_gauge: loading translation file (it) for language it_IT 
+2025-05-10 18:55:19,404 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.tools.translate: loading /home/odoo/12.0/addons/web_kanban_gauge/i18n/it.po 
+2025-05-10 18:55:19,411 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_translation: module web_tour: loading translation file (it) for language it_IT 
+2025-05-10 18:55:19,412 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.tools.translate: loading /home/odoo/12.0/addons/web_tour/i18n/it.po 
+2025-05-10 18:55:19,442 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,oe7,remote_id=3,ttl=None) 
+2025-05-10 18:55:19,504 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'oe7:comment': False, 'oe7:webs,backend=Test OpenERP 7.0,min=True),ttl=4 
+2025-05-10 18:55:19,565 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,oe7,remote_id=8,ttl=None) 
+2025-05-10 18:55:19,623 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'oe7:comment': False, 'oe7:webs,backend=Test OpenERP 7.0,min=True),ttl=4 
+2025-05-10 18:55:19,715 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/19/195880cb461b0a68741876cc353c29349109f3bf 
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 12
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('res.partner(12,).image_small', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 263
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('ir.attachment(263,).datas', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
+    r = base64.b64encode(open(full_path,'rb').read())
+FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/19/195880cb461b0a68741876cc353c29349109f3bf'
+2025-05-10 18:55:19,717 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/be/be510c4f13c4219e5c1ac51121520190bf98fef4 
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 12
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('res.partner(12,).image', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 261
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('ir.attachment(261,).datas', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
+    r = base64.b64encode(open(full_path,'rb').read())
+FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/be/be510c4f13c4219e5c1ac51121520190bf98fef4'
+2025-05-10 18:55:19,725 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/bb/bb61da124a13052f5e22901040fb3313aacc70e2 
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 12
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('res.partner(12,).image_medium', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 262
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('ir.attachment(262,).datas', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
+    r = base64.b64encode(open(full_path,'rb').read())
+FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/bb/bb61da124a13052f5e22901040fb3313aacc70e2'
+2025-05-10 18:55:19,759 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country,oe7,remote_id=235,ttl=3) 
+2025-05-10 18:55:19,832 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,oe7,remote_id=5,ttl=None) 
+2025-05-10 18:55:19,891 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'oe7:comment': False, 'oe7:webs,backend=Test OpenERP 7.0,min=True),ttl=4 
+2025-05-10 18:55:19,976 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/86/86e794b27f958c8a4530ac64786ccf72280cbffd 
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 9
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('res.partner(9,).image_small', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 254
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('ir.attachment(254,).datas', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
+    r = base64.b64encode(open(full_path,'rb').read())
+FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/86/86e794b27f958c8a4530ac64786ccf72280cbffd'
+2025-05-10 18:55:19,979 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/5f/5f59e0caa6d536fe4a6415d87f4afb2ef0608fc1 
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 9
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('res.partner(9,).image', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 252
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('ir.attachment(252,).datas', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
+    r = base64.b64encode(open(full_path,'rb').read())
+FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/5f/5f59e0caa6d536fe4a6415d87f4afb2ef0608fc1'
+2025-05-10 18:55:19,986 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/7b/7b4ba651f427d11b8a6d0a61d909b7cee569fe47 
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 9
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('res.partner(9,).image_medium', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 253
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('ir.attachment(253,).datas', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
+    r = base64.b64encode(open(full_path,'rb').read())
+FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/7b/7b4ba651f427d11b8a6d0a61d909b7cee569fe47'
+2025-05-10 18:55:20,017 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country,oe7,remote_id=229,ttl=3) 
+2025-05-10 18:55:20,084 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,oe7,remote_id=145,ttl=2) 
+2025-05-10 18:55:20,163 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,oe7,remote_id=6,ttl=None) 
+2025-05-10 18:55:20,230 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'oe7:comment': False, 'oe7:webs,backend=Test OpenERP 7.0,min=True),ttl=4 
+2025-05-10 18:55:20,321 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/75/75cad89eeb26116b1155b742de74efd7e079a8c3 
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 10
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('res.partner(10,).image_small', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 257
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('ir.attachment(257,).datas', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
+    r = base64.b64encode(open(full_path,'rb').read())
+FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/75/75cad89eeb26116b1155b742de74efd7e079a8c3'
+2025-05-10 18:55:20,325 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/9b/9b995a832118f933c8689d27b57c0d8d3fe044e7 
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 10
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('res.partner(10,).image', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 255
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('ir.attachment(255,).datas', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
+    r = base64.b64encode(open(full_path,'rb').read())
+FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/9b/9b995a832118f933c8689d27b57c0d8d3fe044e7'
+2025-05-10 18:55:20,331 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/31/3112ba542d36c49e05aba2de97e3cc07413d8d22 
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 10
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('res.partner(10,).image_medium', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 256
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('ir.attachment(256,).datas', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
+    r = base64.b64encode(open(full_path,'rb').read())
+FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/31/3112ba542d36c49e05aba2de97e3cc07413d8d22'
+2025-05-10 18:55:20,362 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country,oe7,remote_id=21,ttl=3) 
+2025-05-10 18:55:20,433 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,oe7,remote_id=1,ttl=None) 
+2025-05-10 18:55:20,491 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.currency.synchro({'oe7:rate_ids': [1], 'oe7:name',backend=Test OpenERP 7.0,min=True),ttl=4 
+2025-05-10 18:55:20,504 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,oe7,remote_id=3,ttl=None) 
+2025-05-10 18:55:20,553 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.currency.synchro({'oe7:rate_ids': [177, 2], 'oe7:,backend=Test OpenERP 7.0,min=True),ttl=4 
+2025-05-10 18:55:20,572 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,oe7,remote_id=3,ttl=None) 
+2025-05-10 18:55:20,627 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'oe7:comment': False, 'oe7:webs,backend=Test OpenERP 7.0,min=True),ttl=4 
+2025-05-10 18:55:20,736 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,oe7,remote_id=8,ttl=None) 
+2025-05-10 18:55:20,798 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'oe7:comment': False, 'oe7:webs,backend=Test OpenERP 7.0,min=True),ttl=4 
+2025-05-10 18:55:20,918 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,oe7,remote_id=5,ttl=None) 
+2025-05-10 18:55:20,989 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'oe7:comment': False, 'oe7:webs,backend=Test OpenERP 7.0,min=True),ttl=4 
+2025-05-10 18:55:21,086 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,oe7,remote_id=6,ttl=None) 
+2025-05-10 18:55:21,161 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'oe7:comment': False, 'oe7:webs,backend=Test OpenERP 7.0,min=True),ttl=4 
+2025-05-10 18:55:21,257 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,oe8,remote_id=3,ttl=None) 
+2025-05-10 18:55:21,416 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'oe8:comment': False, 'oe8:webs,backend=Test Odoo 8.0,min=True),ttl=4 
+2025-05-10 18:55:21,502 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,oe8,remote_id=15,ttl=None) 
+2025-05-10 18:55:21,650 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'oe8:comment': False, 'oe8:webs,backend=Test Odoo 8.0,min=True),ttl=4 
+2025-05-10 18:55:21,729 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,oe8,remote_id=3,ttl=None) 
+2025-05-10 18:55:21,871 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'oe8:comment': False, 'oe8:webs,backend=Test Odoo 8.0,min=True),ttl=4 
+2025-05-10 18:55:21,937 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,oe8,remote_id=15,ttl=None) 
+2025-05-10 18:55:22,076 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'oe8:comment': False, 'oe8:webs,backend=Test Odoo 8.0,min=True),ttl=4 
+2025-05-10 18:55:22,150 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,oe8,remote_id=9,ttl=None) 
+2025-05-10 18:55:22,289 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'oe8:comment': False, 'oe8:webs,backend=Test Odoo 8.0,min=True),ttl=4 
+2025-05-10 18:55:22,487 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,oe8,remote_id=6,ttl=None) 
+2025-05-10 18:55:22,623 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'oe8:comment': False, 'oe8:webs,backend=Test Odoo 8.0,min=True),ttl=4 
+2025-05-10 18:55:22,815 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country,oe8,remote_id=229,ttl=3) 
+2025-05-10 18:55:22,963 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,oe8,remote_id=143,ttl=2) 
+2025-05-10 18:55:23,119 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,oe8,remote_id=7,ttl=None) 
+2025-05-10 18:55:23,256 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'oe8:comment': False, 'oe8:webs,backend=Test Odoo 8.0,min=True),ttl=4 
+2025-05-10 18:55:23,471 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country,oe8,remote_id=21,ttl=3) 
+2025-05-10 18:55:23,677 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,oe8,remote_id=1,ttl=None) 
+2025-05-10 18:55:23,861 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.currency.synchro({'oe8:create_uid': False, 'oe8:c,backend=Test Odoo 8.0,min=True),ttl=4 
+2025-05-10 18:55:23,883 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,oe8,remote_id=3,ttl=None) 
+2025-05-10 18:55:24,083 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.currency.synchro({'oe8:create_uid': [1, 'Administ,backend=Test Odoo 8.0,min=True),ttl=4 
+2025-05-10 18:55:24,107 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country,oe8,remote_id=235,ttl=None) 
+2025-05-10 18:55:24,258 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.country.synchro({'oe8:create_uid': [1, 'Administ,backend=Test Odoo 8.0,min=True),ttl=4 
+2025-05-10 18:55:24,285 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,oe8,remote_id=3,ttl=None) 
+2025-05-10 18:55:24,424 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'oe8:comment': False, 'oe8:webs,backend=Test Odoo 8.0,min=True),ttl=4 
+2025-05-10 18:55:24,490 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,oe8,remote_id=15,ttl=None) 
+2025-05-10 18:55:24,630 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'oe8:comment': False, 'oe8:webs,backend=Test Odoo 8.0,min=True),ttl=4 
+2025-05-10 18:55:24,720 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,oe8,remote_id=9,ttl=None) 
+2025-05-10 18:55:24,875 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'oe8:comment': False, 'oe8:webs,backend=Test Odoo 8.0,min=True),ttl=4 
+2025-05-10 18:55:24,953 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,oe8,remote_id=6,ttl=None) 
+2025-05-10 18:55:25,115 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'oe8:comment': False, 'oe8:webs,backend=Test Odoo 8.0,min=True),ttl=4 
+2025-05-10 18:55:25,199 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,oe8,remote_id=7,ttl=None) 
+2025-05-10 18:55:25,349 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'oe8:comment': False, 'oe8:webs,backend=Test Odoo 8.0,min=True),ttl=4 
+2025-05-10 18:55:25,464 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,oe7,remote_id=3,ttl=None) 
+2025-05-10 18:55:25,536 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'oe7:comment': False, 'oe7:webs,backend=Test OpenERP 7.0,min=True),ttl=4 
+2025-05-10 18:55:25,619 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,oe8,remote_id=3,ttl=None) 
+2025-05-10 18:55:25,776 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'oe8:comment': False, 'oe8:webs,backend=Test Odoo 8.0,min=True),ttl=4 
+2025-05-10 18:55:25,877 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,oe7,remote_id=3,ttl=None) 
+2025-05-10 18:55:25,942 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'oe7:comment': False, 'oe7:webs,backend=Test OpenERP 7.0,min=True),ttl=4 
+2025-05-10 18:55:26,010 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,oe8,remote_id=3,ttl=None) 
+2025-05-10 18:55:26,157 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'oe8:comment': False, 'oe8:webs,backend=Test Odoo 8.0,min=True),ttl=4 
+2025-05-10 18:55:26,241 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/c8/c8fd583925c09ec326a3b997cd044a0ad7636db7 
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 13
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('res.partner(13,).image', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 312
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('ir.attachment(312,).datas', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
+    r = base64.b64encode(open(full_path,'rb').read())
+FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/c8/c8fd583925c09ec326a3b997cd044a0ad7636db7'
+2025-05-10 18:55:26,241 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/d6/d694aedb3fd293b0ad70a7ee7cbc4c0918d51d21 
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 13
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('res.partner(13,).image', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 312
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('ir.attachment(312,).datas', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
+    r = base64.b64encode(open(full_path,'rb').read())
+FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/d6/d694aedb3fd293b0ad70a7ee7cbc4c0918d51d21'
+2025-05-10 18:55:26,244 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/d1/d11256bbbee226b9d70934d607d8c2623ac43bee 
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 13
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('res.partner(13,).image_medium', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 313
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('ir.attachment(313,).datas', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
+    r = base64.b64encode(open(full_path,'rb').read())
+FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/d1/d11256bbbee226b9d70934d607d8c2623ac43bee'
+2025-05-10 18:55:26,244 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/25/25668fabdb766827cb0d7b27736d60b093e4ebf7 
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 13
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('res.partner(13,).image_medium', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 313
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('ir.attachment(313,).datas', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
+    r = base64.b64encode(open(full_path,'rb').read())
+FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/25/25668fabdb766827cb0d7b27736d60b093e4ebf7'
+2025-05-10 18:55:26,248 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/5c/5c8ecc838115f07c84f25dd094d612b8a89fec21 
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 13
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('res.partner(13,).image_small', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 314
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('ir.attachment(314,).datas', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
+    r = base64.b64encode(open(full_path,'rb').read())
+FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/5c/5c8ecc838115f07c84f25dd094d612b8a89fec21'
+2025-05-10 18:55:26,248 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/1c/1c0493f280e96b469f86725a32c39cae72bb9b5f 
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 13
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('res.partner(13,).image_small', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 314
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('ir.attachment(314,).datas', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
+    r = base64.b64encode(open(full_path,'rb').read())
+FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_xmlrpc_12/1c/1c0493f280e96b469f86725a32c39cae72bb9b5f'
+2025-05-10 18:55:26,254 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,oe8,remote_id=15,ttl=None) 
+2025-05-10 18:55:26,395 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'oe8:comment': False, 'oe8:webs,backend=Test Odoo 8.0,min=True),ttl=4 
+2025-05-10 18:55:26,469 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_by_xmlrpc.tests.testenv: 🏆🥇 [1;32m154 tests SUCCESSFULLY completed[0m 
+2025-05-10 18:55:26,507 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_by_xmlrpc.tests.test_backend: Ran 1 test in 31.274s 
+2025-05-10 18:55:26,507 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.addons.universal_connector_by_xmlrpc.tests.test_backend: OK 
+2025-05-10 18:55:26,507 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.modules.module: odoo.addons.universal_connector_by_xmlrpc.tests.test_backend tested in 31.27s, 19195 queries 
+2025-05-10 18:55:26,520 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.modules.loading: 13 modules loaded in 31.56s, 19195 queries 
+2025-05-10 18:55:26,700 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.modules.loading: Modules loaded. 
+2025-05-10 18:55:26,702 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.service.server: Starting post tests 
+2025-05-10 18:55:26,703 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.service.server: All post-tested in 0.00s, 0 queries 
+2025-05-10 18:55:26,703 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.service.server: Initiating shutdown 
+2025-05-10 18:55:26,703 2029094 INFO test_universal_connector_by_xmlrpc_12 odoo.service.server: Hit CTRL-C again or send a second signal to force the shutdown. 
+
++===================================================================
+| please test [36muniversal_connector_by_xmlrpc[0m (12.0): [32mSUCCESS![0m
++===================================================================
+
+[1;37;44m$ coverage report --rcfile=/home/odoo/12.0/connector/universal_connector_by_xmlrpc/tests/logs/coverage_universal_connector_by_xmlrpc_12rc -m
+[34;107mNo data to report.
+[0m

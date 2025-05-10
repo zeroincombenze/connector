@@ -89,7 +89,9 @@ class SynchroMapper(models.Model):
         store=True,
         string="Backend",
     )
-    ttype = fields.Selection(string="Odoo type", store=True, related="fields_id.ttype")
+    ttype = fields.Selection(
+        string="Odoo type", store=True, related="fields_id.ttype"
+    )
     sequence = fields.Integer("Priority", default=16)
 
     def get_loc_fname(self, fct):
@@ -119,9 +121,7 @@ class SynchroMapper(models.Model):
             # Avoid update for only synchronized models
             protect_update = "3"
         elif loc_name != self.model_id.childs_name and struct[loc_name]["type"] in (
-            "one2many",
-            "many2many",
-        ):
+                "one2many", "many2many"):
             # Avoid propagation for smart links, like orders in res.partner
             protect_update = "3"
         else:
@@ -176,10 +176,8 @@ class SynchroMapper(models.Model):
             raise UserError(
                 _("Field %s does not exist in %s!" % (loc_name, binding_model))
             )
-        elif (
-            loc_name in (self.model_id.parent_name, self.model_id.get_loc_ext_id())
-            or loc_name in magic_fields
-        ):
+        elif loc_name in (self.model_id.parent_name,
+                          self.model_id.get_loc_ext_id()) or loc_name in magic_fields:
             apply4 = default = ""
         elif self.model_id.auth_action == "sync":
             default = ""
@@ -188,25 +186,21 @@ class SynchroMapper(models.Model):
             def_value = field_def.get("default", global_def.get("default", ""))
             if def_apply and "()" not in def_apply:
                 raise UserError(
-                    _(
-                        "Interal error: apply %s for field %s.%s is not a function!"
-                        % (def_apply, binding_model, loc_name)
-                    )
+                    _("Interal error: apply %s for field %s.%s is not a function!"
+                      % (def_apply, binding_model, loc_name))
                 )
             apply4 = [x.strip() for x in apply4.split(",") if x]
             default = [x.strip() for x in default.split(",") if x]
             if (
-                self.backend_id.identity_id.code in ("odoo", "openerp")
-                and loc_name not in magic_fields
-                and struct[loc_name]["type"]
-                not in (
-                    "many2one",
-                    "one2many",
-                    "many2many" "date",
-                    "datetime",
-                    "boolean",
-                    "binary",
-                )
+                    self.backend_id.identity_id.code in ("odoo", "openerp")
+                    and loc_name not in magic_fields
+                    and struct[loc_name]["type"] not in ("many2one",
+                                                         "one2many",
+                                                         "many2many"
+                                                         "date",
+                                                         "datetime",
+                                                         "boolean",
+                                                         "binary")
             ):
                 append_fct("odoo_migrate()")
             for fct in def_apply.split(","):
@@ -246,8 +240,8 @@ class SynchroMapper(models.Model):
             if loc_name == "type" and binding_model == "account.account.type":
                 append_def("oe_account_account_type_nam()")
             elif (
-                loc_name == "product_variant_ids"
-                and binding_model == "product.template"
+                    loc_name == "product_variant_ids"
+                    and binding_model == "product.template"
             ):
                 append_def("none()")
             for fct in apply4:
@@ -260,9 +254,8 @@ class SynchroMapper(models.Model):
                     )
             apply4 = ",".join(apply4)
             for fct in default:
-                if "()" in fct and not hasattr(
-                    self.env["synchro.apply"], self.get_loc_fname(fct)
-                ):
+                if "()" in fct and not hasattr(self.env["synchro.apply"],
+                                               self.get_loc_fname(fct)):
                     self.env["synchro.log"].logmsg(
                         "error",
                         "Function %(f)s not found for field %(model)s.%(name)s",

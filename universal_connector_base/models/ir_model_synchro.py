@@ -161,6 +161,7 @@ Return code are:
 """
 from future.utils import PY3
 from datetime import datetime
+import time
 import logging
 
 from odoo import api, models
@@ -241,7 +242,11 @@ class IrModelSynchro(models.Model):
 
     @api.model
     def _cast_field_integer(self, binding_model, value):
-        if value and isinstance(value, str) and (value.isdigit() or value == "-1"):
+        if (
+            value
+            and isinstance(value, str)
+            and (value.isdigit() or value == "-1")
+        ):
             value = int(value)
         return value
 
@@ -262,7 +267,7 @@ class IrModelSynchro(models.Model):
         if "code" not in vals:
             self.env["synchro.log"].logmsg(
                 "error",
-                "Invalid language code",
+                "!%(E)s! ERROR Invalid language code",
                 res_model="res.lang",
                 errcode=-7,
             )
@@ -287,7 +292,66 @@ class IrModelSynchro(models.Model):
         return languages[0].id if languages else -7
 
     def manage_module(self, vals):
-        return -99
+        if "name" not in vals:
+            self.env["synchro.log"].logmsg(
+                "error",
+                "!%(E)s! ERROR Invalid module name",
+                res_model="ir.module.module",
+                errcode=-7,
+            )
+            return -7
+
+        Module = self.env["ir.module.module"]
+        modules = Module.search([("name", "=", vals["name"])])
+        if not modules:
+            self.env["synchro.log"].logmsg(
+                "error",
+                "!%(E)s! ERROR Module %(vals)s does not exist",
+                res_model="ir.module.module",
+                values=vals["name"],
+                errcode=-3,
+            )
+            return -3
+
+        module = modules[0]
+        if module.state == "uninstalled":
+            try:
+                modules.button_immediate_install()
+            except BaseException as e:  # pragma: no cover
+                self.env.cr.rollback()  # pylint: disable=invalid-commit
+                self.env["synchro.log"].logmsg(
+                    "error",
+                    "!%(E)s! ERROR %(e)s Module %(vals)s not installable",
+                    res_model="ir.module.module",
+                    values=vals["name"],
+                    errcode=-4,
+                    errmsg=e,
+                )
+                return -4
+
+            max_ctr = len(module.dependencies_id) + 3
+            query = ("SELECT id FROM ir_module_module WHERE"
+                     " name='%s' AND state='installed'" % module.name)
+            # Check for state by sql to avoid cache trouble
+            while max_ctr > 0:
+                self.env.cr.execute(query)
+                res = self.env.cr.fetchall()
+                if res:
+                    module.state = "installed"
+                    break
+                max_ctr -= 1
+                time.sleep(0.5)
+            time.sleep(1)
+        if module.state != "installed":
+            self.env["synchro.log"].logmsg(
+                "error",
+                "!%(E)s! ERROR Module %(vals)s not installed",
+                res_model="ir.module.module",
+                values=vals["name"],
+                errcode=-4,
+            )
+            return -4
+        return module.id
 
     @api.model
     def create_new(self, Binder, vals, only_minimal=False, ctx=None):
@@ -342,17 +406,9 @@ class IrModelSynchro(models.Model):
         return rec
 
     def _make_record(
-        self,
-        Binder,
-        dir_mapper,
-        model_spec,
-        only_minimal,
-        incomplete_record,
-        running_in_queue,
-        ttl,
-        vals,
-        saved_vals,
-        ctx=None,
+            self, Binder, dir_mapper, model_spec,
+            only_minimal, incomplete_record, running_in_queue, ttl, vals, saved_vals,
+            ctx=None
     ):
         postponed = False
         Cache = self.env["synchro.cache"]
@@ -552,16 +608,10 @@ class IrModelSynchro(models.Model):
             rec = self.manage_module(vals)
         else:
             rec, postponed = self._make_record(
-                Binder,
-                dir_mapper,
-                model_spec,
-                only_minimal,
-                incomplete_record,
-                running_in_queue,
-                ttl,
-                vals,
-                saved_vals,
-                ctx=ctx,
+                Binder, dir_mapper, model_spec,
+                only_minimal, incomplete_record, running_in_queue, ttl,
+                vals, saved_vals,
+                ctx=ctx
             )
         if not running_in_queue and backend.load_mode == "direct":
             if Cache.que_waiting_len(backend):

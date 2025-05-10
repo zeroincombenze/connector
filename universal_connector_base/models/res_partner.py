@@ -17,11 +17,11 @@ class ResPartner(models.Model):
     _inherit = "res.partner"
 
     _sql_constraints = [
-        ("ref_unique_odoo_id", "unique(odoo_id)", "Remote ref must be unique!"),
-        ("ref_unique_odoo16_id", "unique(odoo16_id)", "Remote ref must be unique!"),
-        ("ref_unique_odoo14_id", "unique(odoo14_id)", "Remote ref must be unique!"),
-        ("ref_unique_odoo12_id", "unique(odoo12_id)", "Remote ref must be unique!"),
-        ("ref_unique_odoo10_id", "unique(odoo10_id)", "Remote ref must be unique!"),
+        ('ref_unique_odoo_id', 'unique(odoo_id)', 'Remote ref must be unique!'),
+        ('ref_unique_odoo16_id', 'unique(odoo16_id)', 'Remote ref must be unique!'),
+        ('ref_unique_odoo14_id', 'unique(odoo14_id)', 'Remote ref must be unique!'),
+        ('ref_unique_odoo12_id', 'unique(odoo12_id)', 'Remote ref must be unique!'),
+        ('ref_unique_odoo10_id', 'unique(odoo10_id)', 'Remote ref must be unique!'),
     ]
 
     odoo_id = fields.Integer("Odoo ID", copy=False)
@@ -75,11 +75,11 @@ class ResCategory(models.Model):
     _inherit = "res.partner.category"
 
     _sql_constraints = [
-        ("ref_unique_odoo_id", "unique(odoo_id)", "Remote ref must be unique!"),
-        ("ref_unique_odoo16_id", "unique(odoo16_id)", "Remote ref must be unique!"),
-        ("ref_unique_odoo14_id", "unique(odoo14_id)", "Remote ref must be unique!"),
-        ("ref_unique_odoo12_id", "unique(odoo12_id)", "Remote ref must be unique!"),
-        ("ref_unique_odoo10_id", "unique(odoo10_id)", "Remote ref must be unique!"),
+        ('ref_unique_odoo_id', 'unique(odoo_id)', 'Remote ref must be unique!'),
+        ('ref_unique_odoo16_id', 'unique(odoo16_id)', 'Remote ref must be unique!'),
+        ('ref_unique_odoo14_id', 'unique(odoo14_id)', 'Remote ref must be unique!'),
+        ('ref_unique_odoo12_id', 'unique(odoo12_id)', 'Remote ref must be unique!'),
+        ('ref_unique_odoo10_id', 'unique(odoo10_id)', 'Remote ref must be unique!'),
     ]
 
     odoo_id = fields.Integer("Odoo ID", copy=False)

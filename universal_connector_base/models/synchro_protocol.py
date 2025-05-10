@@ -1,5 +1,5 @@
 #
-# Copyright 2019-22 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
+# Copyright 2019-25 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
 #
 # Contributions to development, thanks to:
 # * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
@@ -37,7 +37,7 @@ class SynchroProtocol(models.Model):
     endpoint_format = fields.Char(
         string="Endpoint format",
         help="Items to compose endpoint\n"
-        "default is protocol,login,passwd,hostname,port,path",
+             "default is protocol,login,passwd,hostname,port,path"
     )
 
     @api.multi

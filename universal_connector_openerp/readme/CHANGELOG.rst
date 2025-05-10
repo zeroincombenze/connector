@@ -2,4 +2,4 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 * [IMP] Split from universal_connecto_base
-* [QUA] Test coverage 100% (106: 0+106) [154 TestPoints] - quality rating 293 (target 100)
+* [QUA] Test coverage 100% (106: 0+106) [114 TestPoints] - quality rating 233 (target 100)
