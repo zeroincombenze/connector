@@ -19,9 +19,12 @@ class SynchroApi(models.Model):
 
     _inherit = "synchro.api"
 
-    def https_x_connect(self, endpoint, data_endpoint, headers=None, verify=None):
+    def https_x_connect(self, backend, headers=None, verify=None, endpoint=None):
+        endpoint = endpoint or backend.counterpart_url
         session = self.init_session(
-            login_endpoint=endpoint, data_endpoint=data_endpoint
+            backend=backend,
+            login_endpoint=endpoint,
+            data_endpoint=backend.counterpart_data_url
         )
         cnx = False
         try:
@@ -54,15 +57,13 @@ class SynchroApi(models.Model):
         session["cnx_data"] = cnx
         return session
 
-    def https_connect(self, endpoint, data_endpoint, headers=None):
+    def https_connect(self, backend, headers=None, endpoint=None):
         return self.https_x_connect(
-            endpoint, data_endpoint, headers=headers, verify=True
-        )
+            backend, headers=headers, verify=True, endpoint=endpoint)
 
-    def http_connect(self, endpoint, data_endpoint, headers=None):
+    def http_connect(self, backend, headers=None, endpoint=None):
         return self.https_x_connect(
-            endpoint, data_endpoint, headers=headers, verify=False
-        )
+            backend, headers=headers, verify=False, endpoint=endpoint)
 
     def https_login(self, cnx, backend):
         # TODO
@@ -81,9 +82,7 @@ class SynchroApi(models.Model):
         else:
             headers = None
         return self.https_login(
-            self.https_connect(
-                backend.counterpart_url, backend.counterpart_data_url, headers=headers
-            ),
+            self.https_connect(backend, headers=headers),
             backend,
         )
 
@@ -93,21 +92,32 @@ class SynchroApi(models.Model):
     def get_response_https(
         self, session, dir_mapper, ext_id=False, endpoint=None, fields=None
     ):
-        backend = dir_mapper.backend_id
+        backend = session["backend"]
         values = []
         if backend.client_key:
             headers = {"Authorization": "access_token %s" % backend.client_key}
         else:
             headers = None
-        endpoint = endpoint or backend.counterpart_data_url
-        session = self.https_x_connect(endpoint, endpoint, headers=headers, verify=True)
+        session = self.https_x_connect(
+            backend, headers=headers, verify=True, endpoint=endpoint)
         response = session["cnx_lgi"]
         if (
             response
             and hasattr(response, "status_code")
             and getattr(response, "status_code", "N/A") == 200
         ):
-            values = response.json()
+            try:
+                values = response.json()
+            except BaseException as e:  # pragma: no cover
+                self.env["synchro.log"].logmsg(
+                    "error",
+                    "Error %(e)s reading from remote %(ep)s",
+                    ctx={
+                        "e": e,
+                        "ep": endpoint,
+                    },
+                )
+                values = []
         return values
 
     def get_response_http(

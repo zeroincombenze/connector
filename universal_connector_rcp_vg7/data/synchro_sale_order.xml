@@ -26,7 +26,7 @@
     <record forcecreate="1" id="sale_order_state" model="synchro.mapper">
         <field name="name">state</field>
         <field name="counterpart_name">order_state</field>
-        <field name="apply">set_order_state()</field>
+        <field name="apply4">set_order_state()</field>
         <field name="model_id" ref="sale_order"/>
     </record>
 
@@ -38,13 +38,13 @@
 
     <record forcecreate="1" id="sale_order_company_id" model="synchro.mapper">
         <field name="name">company_id</field>
-        <field name="apply">get_global()</field>
+        <field name="apply4">get_global()</field>
         <field name="model_id" ref="sale_order"/>
     </record>
 
     <record forcecreate="1" id="sale_order_carriage_condition_id" model="synchro.mapper">
         <field name="name">carriage_condition_id</field>
-        <field name="apply">partner_info()</field>
+        <field name="apply4">partner_info()</field>
         <field name="required" eval="True"/>
         <field name="model_id" ref="sale_order"/>
     </record>
@@ -68,14 +68,14 @@
 
     <record forcecreate="1" id="sale_order_goods_description_id" model="synchro.mapper">
         <field name="name">goods_description_id</field>
-        <field name="apply">partner_info()</field>
+        <field name="apply4">partner_info()</field>
         <field name="required" eval="True"/>
         <field name="model_id" ref="sale_order"/>
     </record>
 
     <record forcecreate="1" id="sale_order_gross_weight" model="synchro.mapper">
         <field name="name">gross_weight</field>
-        <field name="apply">partner_info()</field>
+        <field name="apply4">partner_info()</field>
         <field name="model_id" ref="sale_order"/>
     </record>
 
@@ -92,13 +92,13 @@
 
     <record forcecreate="1" id="sale_order_note" model="synchro.mapper">
         <field name="name">note</field>
-        <field name="apply">company_info()</field>
+        <field name="apply4">company_info()</field>
         <field name="model_id" ref="sale_order"/>
     </record>
 
     <record forcecreate="1" id="sale_order_parcels" model="synchro.mapper">
         <field name="name">parcels</field>
-        <field name="apply">partner_info()</field>
+        <field name="apply4">partner_info()</field>
         <field name="model_id" ref="sale_order"/>
     </record>
 
@@ -111,7 +111,7 @@
     <record forcecreate="1" id="sale_order_partner_shipping_id" model="synchro.mapper">
         <field name="name">partner_shipping_id</field>
         <field name="counterpart_name">customer_shipping_id</field>
-        <field name="apply">partner_address()</field>
+        <field name="apply4">partner_address()</field>
         <field name="spec">delivery</field>
         <field name="required" eval="True"/>
         <field name="model_id" ref="sale_order"/>
@@ -120,55 +120,55 @@
     <record forcecreate="1" id="sale_order_payment_term_id" model="synchro.mapper">
         <field name="name">payment_term_id</field>
         <field name="counterpart_name">payment_id</field>
-        <field name="apply">partner_info()</field>
+        <field name="apply4">partner_info()</field>
         <field name="required" eval="True"/>
         <field name="model_id" ref="sale_order"/>
     </record>
 
     <record forcecreate="1" id="sale_order_pricelist_id" model="synchro.mapper">
         <field name="name">pricelist_id</field>
-        <field name="apply">partner_info()</field>
+        <field name="apply4">partner_info()</field>
         <field name="required" eval="True"/>
         <field name="model_id" ref="sale_order"/>
     </record>
 
     <record forcecreate="1" id="sale_order_fiscal_position_id" model="synchro.mapper">
         <field name="name">fiscal_position_id</field>
-        <field name="apply">partner_info()</field>
+        <field name="apply4">partner_info()</field>
         <field name="required" eval="True"/>
         <field name="model_id" ref="sale_order"/>
     </record>
 
     <record forcecreate="1" id="sale_order_transportation_reason_id" model="synchro.mapper">
         <field name="name">transportation_reason_id</field>
-        <field name="apply">partner_info()</field>
+        <field name="apply4">partner_info()</field>
         <field name="required" eval="True"/>
         <field name="model_id" ref="sale_order"/>
     </record>
 
     <record forcecreate="1" id="sale_order_transportation_method_id" model="synchro.mapper">
         <field name="name">transportation_method_id</field>
-        <field name="apply">partner_info()</field>
+        <field name="apply4">partner_info()</field>
         <field name="required" eval="True"/>
         <field name="model_id" ref="sale_order"/>
     </record>
 
     <record forcecreate="1" id="sale_order_volume" model="synchro.mapper">
         <field name="name">volume</field>
-        <field name="apply">partner_info()</field>
+        <field name="apply4">partner_info()</field>
         <field name="model_id" ref="sale_order"/>
     </record>
 
     <record forcecreate="1" id="sale_order_weight" model="synchro.mapper">
         <field name="name">weight</field>
-        <field name="apply">partner_info()</field>
+        <field name="apply4">partner_info()</field>
         <field name="model_id" ref="sale_order"/>
     </record>
 
 
     <record forcecreate="1" id="sale_order_line_agents" model="synchro.mapper">
         <field name="name">agents</field>
-        <field name="apply">agents()</field>
+        <field name="apply4">agents()</field>
         <field name="model_id" ref="sale_order_line"/>
     </record>
 
@@ -198,13 +198,13 @@
     <record forcecreate="1" id="sale_order_line_product_id" model="synchro.mapper">
         <field name="name">product_id</field>
         <field name="counterpart_name">product_name</field>
-        <field name="apply">line_vals_from_prod()</field>
+        <field name="apply4">line_vals_from_prod()</field>
         <field name="model_id" ref="sale_order_line"/>
     </record>
 
     <record forcecreate="1" id="sale_order_line_product_uom" model="synchro.mapper">
         <field name="name">product_uom</field>
-        <field name="apply">uom()</field>
+        <field name="apply4">uom()</field>
         <field name="model_id" ref="sale_order_line"/>
     </record>
 
@@ -221,13 +221,13 @@
 
     <record forcecreate="1" id="sale_order_line_tax_id" model="synchro.mapper">
         <field name="name">tax_id</field>
-        <field name="apply">tax()</field>
+        <field name="apply4">tax()</field>
         <field name="model_id" ref="sale_order_line"/>
     </record>
 
     <record forcecreate="1" id="sale_order_line_to_delete" model="synchro.mapper">
         <field name="name">to_delete</field>
-        <field name="apply">false</field>
+        <field name="apply4">false</field>
         <field name="model_id" ref="sale_order_line"/>
     </record>
 

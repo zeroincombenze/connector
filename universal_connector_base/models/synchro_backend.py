@@ -10,8 +10,8 @@ import os
 from datetime import datetime, timedelta
 import re
 
-from odoo import _, api, fields, models
-from odoo.exceptions import UserError
+from odoo import api, fields, models
+# from odoo.exceptions import UserError
 from python_plus import _u
 
 try:
@@ -347,16 +347,22 @@ class SynchroChannel(models.Model):
             setattr(self, param, self.get_default_from_protocol(param))
         self.pylib = self.protocol_id.pylib
         if self.protocol_id.secure_protocol:
-            if self.counterpart_url.startswith("http:"):
+            if self.counterpart_url and self.counterpart_url.startswith("http:"):
                 self.counterpart_url = self.counterpart_url.replace("http", "https", 1)
-            if self.counterpart_data_url.startswith("http:"):
+            if (
+                    self.counterpart_data_url
+                    and self.counterpart_data_url.startswith("http:")
+            ):
                 self.counterpart_data_url = self.counterpart_data_url.replace(
                     "http", "https", 1
                 )
         else:
-            if self.counterpart_url.startswith("https:"):
+            if self.counterpart_url and self.counterpart_url.startswith("https:"):
                 self.counterpart_url = self.counterpart_url.replace("https", "http", 1)
-            if self.counterpart_data_url.startswith("https:"):
+            if (
+                    self.counterpart_data_url
+                    and self.counterpart_data_url.startswith("https:")
+            ):
                 self.counterpart_data_url = self.counterpart_data_url.replace(
                     "https", "http", 1
                 )
@@ -483,9 +489,10 @@ class SynchroChannel(models.Model):
                     prio=2,
                 )
                 ids = self.synchro_queue()
-                if ids:
-                    ext_company_ids = list(set(ext_company_ids) - set([ext_company_id]))
-                    loc_ext_ids = [x for x in loc_ext_ids if x and x not in ids]
+                if not ids:
+                    break
+                ext_company_ids = list(set(ext_company_ids) - set([ext_company_id]))
+                loc_ext_ids = [x for x in loc_ext_ids if x and x not in ids]
             if set(loc_ext_ids) - set(ext_company_ids):  # pragma: no cover
                 self.env["synchro.log"].logmsg(
                     "error",
@@ -597,8 +604,8 @@ class SynchroChannel(models.Model):
                 found_models[dir_mapper.name] = True
         for binding_model, found in found_models.items():
             if not found:
-                if self.identity_id.code in ("odoo", "openerp"):
-                    raise UserError(_("Missed mapping for %s" % binding_model))
+                # if self.identity_id.code in ("odoo", "openerp"):
+                #     raise UserError(_("Missed mapping for %s" % binding_model))
                 self.env["synchro.model"].build_dir_mapper(
                     self,
                     ext_model=False,
@@ -645,6 +652,10 @@ class SynchroChannel(models.Model):
 
     def get_loc_ext_id(self):
         return "%s_id" % self.prefix
+
+    def ext_model_field_list(self, backend, ext_model=None, model=None, spec=None):
+        dir_mapper = backend.get_dir_mapper(model=model, ext_model=ext_model, spec=spec)
+        return dir_mapper.get_field_list()
 
     def get_default_from_identity(self, param):
         return (
@@ -778,7 +789,8 @@ class SynchroChannel(models.Model):
         return backend
 
     @api.model
-    def get_magic_fields(self):
+    def get_magic_fields(self, system=False):
+        Cache = self.env["synchro.cache"]
         Partner = self.env["res.partner"]
         magic_fields = []
         for identity in self.env["synchro.identity"].search([]):
@@ -790,9 +802,12 @@ class SynchroChannel(models.Model):
                      if x.startswith(prefix) and x.endswith("_id")],
                     reverse=True):
                 magic_fields.append(name)
+        if system:
+            for name in Cache.LOG_ACCESS_COLUMNS + Cache.BITTER_COLUMNS:
+                magic_fields.append(name)
         return magic_fields
 
-    def get_dir_mapper(self, model=None, ext_model=None, spec=None):
+    def get_dir_mapper(self, model=None, ext_model=None, spec=None, multiple=False):
         DirMapper = self.env["synchro.model"]
         domain = [("backend_id", "=", self.id)]
         if model:
@@ -808,7 +823,7 @@ class SynchroChannel(models.Model):
         if spec is not None:
             domain.append(("model_spec", "=", spec))
         dir_mapper = DirMapper.search(domain)
-        return dir_mapper if len(dir_mapper) == 1 else DirMapper
+        return dir_mapper if len(dir_mapper) == 1 or multiple else DirMapper
 
     @api.model
     def synchro_queue(self, prio=None, max_recs=0, mode=None, commit=False):
@@ -865,8 +880,8 @@ class SynchroChannel(models.Model):
                 id = self.env["ir.model.synchro"].trigger_one_record(
                     model, self.prefix, values, ttl=ttl, running_in_queue=True, ctx=ctx
                 )
-            elif action == "pull":
-                id = self.env["ir.model.synchro"].pull_1_record(
+            elif action == "push":
+                id = self.env["ir.model.synchro"].push_record(
                     model, self.prefix, values, ttl=ttl, running_in_queue=True, ctx=ctx
                 )
             else:
@@ -875,6 +890,8 @@ class SynchroChannel(models.Model):
                 loaded_ctr += 1
                 if model == cached_model:
                     local_ids.append(id)
+            elif max_ctr > 3:
+                max_ctr = 3
         if self.state == "run":
             self.state = "ready"
         if commit or loaded_ctr > commit_rate:

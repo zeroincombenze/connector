@@ -69,7 +69,6 @@ In this software we use the follow terms and structures:
 | prefix     (1)| gamma       | gamma                | gamma                |
 | bind       (2)| customer    |                      | supplier             |
 | binding_model | res.partner | res.partner          | res.partner          |
-| vmodel     (3)| res.partner | res.partner.shipping | res,partner.supplier |
 | loc_ext_id (4)| gamma_id    | gamma_id             | gamma_id             |
 | ext_id     (7)| 1234        | 1234                 | 1234                 |
 | ext_key_id (5)| id          | id                   | id                   |
@@ -147,7 +146,7 @@ Return code are:
     -4: Insufficient permission to update record
     -5: Invalid structure header/details
     -6: No backend to manage counterparty
-    -7: Unrecognized counterparty
+    -7: Unrecognized counterparty data
     -8: Unrecognized external table
     -9: No data updated
    -10: Cannot update record state
@@ -237,7 +236,7 @@ class IrModelSynchro(models.Model):
         return value
 
     @api.model
-    def _cast_field_monetary(self, binding_model, value):
+    def _cast_field_monetary(self, binding_model, value):  # pragma: no cover
         return self._cast_field_float(binding_model, value)
 
     @api.model
@@ -264,7 +263,7 @@ class IrModelSynchro(models.Model):
         return getattr(self, method)(binding_model, value)
 
     def manage_language(self, vals, overwrite=True):
-        if "code" not in vals:
+        if "code" not in vals:  # pragma: no cover
             self.env["synchro.log"].logmsg(
                 "error",
                 "!%(E)s! ERROR Invalid language code",
@@ -282,7 +281,7 @@ class IrModelSynchro(models.Model):
             if languages:
                 languages.write({"active": True})
                 load = True
-        if not languages or load:  # pragma: no cover
+        if not languages or load:
             vals = {
                 "lang": iso,
                 "overwrite": overwrite,
@@ -292,7 +291,7 @@ class IrModelSynchro(models.Model):
         return languages[0].id if languages else -7
 
     def manage_module(self, vals):
-        if "name" not in vals:
+        if "name" not in vals:   # pragma: no cover
             self.env["synchro.log"].logmsg(
                 "error",
                 "!%(E)s! ERROR Invalid module name",
@@ -303,7 +302,7 @@ class IrModelSynchro(models.Model):
 
         Module = self.env["ir.module.module"]
         modules = Module.search([("name", "=", vals["name"])])
-        if not modules:
+        if not modules:  # pragma: no cover
             self.env["synchro.log"].logmsg(
                 "error",
                 "!%(E)s! ERROR Module %(vals)s does not exist",
@@ -314,7 +313,11 @@ class IrModelSynchro(models.Model):
             return -3
 
         module = modules[0]
-        if module.state == "uninstalled":
+        ext_state = vals.get("state", "installed")
+        if ext_state != "installed":
+            return module.id
+
+        if module.state == "uninstalled":  # pragma: no cover
             try:
                 modules.button_immediate_install()
             except BaseException as e:  # pragma: no cover
@@ -342,7 +345,7 @@ class IrModelSynchro(models.Model):
                 max_ctr -= 1
                 time.sleep(0.5)
             time.sleep(1)
-        if module.state != "installed":
+        if module.state != "installed":   # pragma: no cover
             self.env["synchro.log"].logmsg(
                 "error",
                 "!%(E)s! ERROR Module %(vals)s not installed",
@@ -468,14 +471,14 @@ class IrModelSynchro(models.Model):
                         rec = self.create_new(
                             Binder, min_vals, only_minimal=True, ctx=ctx
                         )
-                    else:
+                    else:   # pragma: no cover
                         ctx["logrec"].logmsg(
                             "warning",
                             "No enough data to create record",
                         )
                         if not running_in_queue and backend.load_mode == "direct":
                             postponed = vals
-                elif vals:
+                elif vals:  # pragma: no cover
                     rec = self.create_new(Binder, vals, only_minimal=False, ctx=ctx)
         else:
             if dir_mapper.auth_action in ("ins", "lock"):  # pragma: no cover
@@ -505,7 +508,7 @@ class IrModelSynchro(models.Model):
 
         if isinstance(jacket, str):
             vals = self.env["synchro.backend"].vals_with_jacket(vals, prefix=jacket)
-        elif jacket and not backend and dir_mapper:
+        elif jacket and not backend and dir_mapper:   # pragma: no cover
             backend = dir_mapper.backend_id
             vals = backend.vals_with_jacket(vals)
         elif jacket and backend:
@@ -520,7 +523,7 @@ class IrModelSynchro(models.Model):
             return -7
 
         if isinstance(Binder, str):  # pragma: no cover
-            vmodel = Binder
+            # vmodel = Binder
             binding_model, model_spec = DirMapper.split_binding_model_n_spec(
                 Binder, spec=model_spec
             )
@@ -541,7 +544,7 @@ class IrModelSynchro(models.Model):
             binding_model, model_spec = DirMapper.split_binding_model_n_spec(
                 Binder._name, spec=model_spec
             )
-            vmodel = DirMapper.get_vmodel(Binder._name, model_spec)
+            # vmodel = DirMapper.get_vmodel(Binder._name, model_spec)
             if binding_model not in self.env:  # pragma: no cover
                 ctx["logrec"].logmsg(
                     "error",
@@ -571,9 +574,9 @@ class IrModelSynchro(models.Model):
         if backend.state in ("ready", "failed"):
             backend.write({"state": "run"})
         dir_mapper = backend.get_dir_mapper(model=binding_model, spec=model_spec)
-        if not dir_mapper:
-            # Compatibility with old release of UC
-            dir_mapper = backend.get_dir_mapper(model=vmodel)
+        # if not dir_mapper:
+        #     # Compatibility with old release of UC
+        #     dir_mapper = backend.get_dir_mapper(model=vmodel)
         saved_vals = vals.copy()
         ctx = dir_mapper.load_ctx(ctx if running_in_queue else {})
         ttl = ttl or (4 if only_minimal else 2)
@@ -629,7 +632,7 @@ class IrModelSynchro(models.Model):
             self.state = "ready"
         return rec.id if hasattr(rec, "id") else rec
 
-    def pull_1_record(
+    def push_record(
         self,
         ext_model,
         prefix,
@@ -654,7 +657,7 @@ class IrModelSynchro(models.Model):
         if not backend:  # pragma: no cover
             logrec.logmsg(
                 "error",
-                "No backend found on pull_1_record(%(model)s,%(vals)s,%(t)s))",
+                "No backend found on push_record(%(model)s,%(vals)s,%(t)s))",
                 res_model=ext_model,
                 values=vals,
                 errcode=-6,
@@ -665,7 +668,7 @@ class IrModelSynchro(models.Model):
             Cache.clean_cache()
             logrec.logmsg(
                 "error",
-                "Unmanaged model on pull_1_record(%(model)s,%(vals)s,%(t)s)",
+                "Unmanaged model on push_record(%(model)s,%(vals)s,%(t)s)",
                 res_model=ext_model,
                 values=vals,
                 errcode=-8,
@@ -723,8 +726,8 @@ class IrModelSynchro(models.Model):
             )
             return -6
 
-        dir_mapper = backend.get_dir_mapper(ext_model=ext_model)
-        if not dir_mapper:  # pragma: no cover
+        dir_mappers = backend.get_dir_mapper(ext_model=ext_model, multiple=True)
+        if not dir_mappers:  # pragma: no cover
             Cache.clean_cache()
             logrec.logmsg(
                 "error",
@@ -733,27 +736,33 @@ class IrModelSynchro(models.Model):
                 ctx={"xmodel": ext_model, "xid": ext_id, "t": ttl},
             )
             return -8
-        ctx["logrec"] = logrec.logmsg(
-            "info",
-            "trigger_one_record(%(xmodel)s,%(pfx)s,remote_id=%(xid)s,ttl=%(t)s)",
-            res_model=dir_mapper.name,
-            backend=backend,
-            ctx={"xmodel": ext_model, "xid": ext_id, "t": ttl},
-        )
-        vals = dir_mapper.get_counterpart_response(ext_id)
-        if not vals or len(vals) != 1:
-            return -13  # pragma: no cover
-        if isinstance(vals, (tuple, list)):
-            vals = vals[0]
-        return self.pull_1_record(
-            ext_model,
-            prefix,
-            vals,
-            ttl=ttl,
-            ctx=ctx,
-            dir_mapper=dir_mapper,
-            running_in_queue=running_in_queue,
-        )
+        vals = False
+        for dir_mapper in dir_mappers:
+            if not vals:
+                ctx["logrec"] = logrec.logmsg(
+                    "info",
+                    "trigger_one_record(%(xmodel)s,%(pfx)s,ext_id=%(xid)s,ttl=%(t)s)",
+                    res_model=dir_mapper.name,
+                    backend=backend,
+                    ctx={"xmodel": ext_model, "xid": ext_id, "t": ttl},
+                )
+                vals = dir_mapper.get_counterpart_response(ext_id)
+                if not vals:    # pragma: no cover
+                    return -13
+                if isinstance(vals, (tuple, list)):
+                    if len(vals) != 1:  # pragma: no cover
+                        return -13
+                    vals = vals[0]
+            res_id = self.push_record(
+                ext_model,
+                prefix,
+                vals,
+                ttl=ttl,
+                ctx=ctx,
+                dir_mapper=dir_mapper,
+                running_in_queue=running_in_queue,
+            )
+        return res_id
 
     @api.model
     def synchro_all_queues(self):  # pragma: no cover

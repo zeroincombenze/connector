@@ -176,7 +176,6 @@ class IrModelSynchroApply(models.Model):
         default=None,
         ctx=None,
     ):
-        """External vat may not contain ISO code"""
         if ext_ref in vals and isinstance(vals[ext_ref], str):
             vals[ext_ref] = vals[ext_ref].strip()
         return vals

@@ -24,7 +24,7 @@ from .synchro_cache import (
 _logger = logging.getLogger(__name__)
 
 
-class SynchroChannelModel(models.Model):
+class SynchroModel(models.Model):
     _name = "synchro.model"
     _description = "Model mapping for Synchronization"
     _order = "sequence, id"
@@ -344,8 +344,18 @@ class SynchroChannelModel(models.Model):
         return ext_id
 
     @api.model
+    def get_field_list(self):
+        fields = [
+            mapper.counterpart_name
+            for mapper in self.field_ids if mapper.counterpart_name
+        ]
+        if not fields:
+            fields = ["id"]
+        return fields
+
+    @api.model
     def drop_protected_equal_fields(self, vals, rec):
-        magic_fields = self.backend_id.get_magic_fields()
+        magic_fields = self.backend_id.get_magic_fields(system=True)
         loc_ext_id = self.get_loc_ext_id()
         struct = self.env[rec._name].fields_get()
         for loc_name, value in vals.copy().items():
@@ -507,13 +517,21 @@ class SynchroChannelModel(models.Model):
         comodel = field["relation"]
         if comodel in self.env:
             synchro_comodel = backend.get_dir_mapper(model=comodel)
-            if (
-                isinstance(vals[ext_ref], str)
-                and "." in vals[ext_ref]
-                and " " not in vals[ext_ref]
-            ):
-                # Field is external reference like 'module.reference'
-                rec = self.xmlid_to_object(vals[ext_ref], raise_if_not_found=False)
+            if isinstance(vals[ext_ref], str):
+                rec = False
+                if "." in vals[ext_ref] and " " not in vals[ext_ref]:
+                    # Field is external reference like 'module.reference'
+                    rec = self.xmlid_to_object(vals[ext_ref], raise_if_not_found=False)
+                if not rec:
+                    comodel_dir_mapper = backend.get_dir_mapper(model=comodel)
+                    comodel_Binder = self.env[comodel]
+                    comodel_struct = comodel_Binder.fields_get()
+                    if "code" in comodel_struct:
+                        rec = comodel_dir_mapper.bind_search_record(
+                            comodel_Binder, {"code": vals[ext_ref]}, ctx=ctx)
+                    if not rec and "name" in comodel_struct:
+                        rec = comodel_dir_mapper.bind_search_record(
+                            comodel_Binder, {"name": vals[ext_ref]}, ctx=ctx)
                 if rec:
                     vals[loc_name] = rec.id
             elif isinstance(vals[ext_ref], int) and comodel in self.env:
@@ -575,21 +593,6 @@ class SynchroChannelModel(models.Model):
         backend = self.backend_id
         loc_name = field["loc_name"]
         vals[loc_name] = vals[ext_ref]
-        if loc_name in ("lang", "lang_id"):
-            comodel = "res.lang"
-            rec = self.env[comodel].search([("code", "=", vals[loc_name])])
-            if not rec:
-                # synchro_comodel = backend.get_dir_mapper(model=comodel)
-                Cache.que_push(
-                    backend,
-                    "synchro",
-                    comodel,
-                    False,
-                    {"code": vals[ext_ref]},
-                    ttl,
-                    ctx,
-                    prio=1,
-                )
         valid = False
         for item in field["selection"]:
             if (isinstance(item, (list, tuple)) and vals[loc_name] == item[0]) or (
@@ -606,6 +609,19 @@ class SynchroChannelModel(models.Model):
                 errcode=-7,
             )
             del vals[loc_name]
+            if loc_name in ("lang", "lang_id"):
+                comodel = "res.lang"
+                Cache.que_push(
+                    backend,
+                    "synchro",
+                    comodel,
+                    False,
+                    {"code": vals[ext_ref]},
+                    ttl,
+                    ctx,
+                    prio=1,
+                )
+                incomplete_record |= True
         return vals, incomplete_record
 
     def map_base_to_local(
@@ -680,6 +696,7 @@ class SynchroChannelModel(models.Model):
     @api.model
     def compile_required_fields(self, vals, ctx=None):
         self.ensure_one()
+        magic_fields = self.backend_id.get_magic_fields(system=True)
         record = self.new(values=vals)
         struct = self.env[self._name].fields_get()
         for loc_name in struct.keys():
@@ -687,6 +704,7 @@ class SynchroChannelModel(models.Model):
                     (loc_name in vals and vals[loc_name])
                     or not hasattr(record, loc_name)
                     or not getattr(record, loc_name)
+                    or loc_name in magic_fields
             ):
                 continue
             if struct[loc_name]["type"] == "many2many":
@@ -702,7 +720,8 @@ class SynchroChannelModel(models.Model):
             if mapper.name not in vals:
                 for fct in mapper.default.split(","):
                     if "()" not in fct:
-                        vals[mapper.name] = fct
+                        if fct:
+                            vals[mapper.name] = fct
                     else:
                         fct = "apply_" + fct.replace("()", "")
                         if hasattr(IrApply, fct):
@@ -713,9 +732,8 @@ class SynchroChannelModel(models.Model):
                                 mapper.name,
                                 ctx=ctx,
                             )
-        magic_fields = self.backend_id.get_magic_fields()
         for loc_name, value in vals.copy().items():
-            if value is None or loc_name in magic_fields and not vals[loc_name]:
+            if value is None:
                 del vals[loc_name]
         return vals
 
@@ -726,7 +744,6 @@ class SynchroChannelModel(models.Model):
         Mapper = self.env["synchro.mapper"]
         SynchroApi = self.env["synchro.api"]
 
-        magic_fields = backend.get_magic_fields()
         if (
             len(self) == 1
             and model == self.name
@@ -806,7 +823,7 @@ class SynchroChannelModel(models.Model):
         struct = self.env[binding_model].fields_get()
         session = backend.get_session()
         field_list = self.env["synchro.api"].get_field_list(
-            session, backend, binding_model, magic_fields=magic_fields
+            session, backend, binding_model
         )
         for loc_name, ext_name in field_list:
             Mapper.build_mapper(
@@ -835,7 +852,7 @@ class SynchroChannelModel(models.Model):
             return name[1:] if name.startswith(("+", "!", "%", "_", "-")) else name
 
         self.ensure_one()
-        magic_fields = self.backend_id.get_magic_fields()
+        magic_fields = self.backend_id.get_magic_fields(system=True)
         binding_model = self.name
         if binding_model not in self.env:  # pragma: no cover
             if self.auth_action != "lock":
@@ -1091,23 +1108,20 @@ class SynchroChannelModel(models.Model):
     def get_counterpart_response(self, ext_id=False, mode=None):
         """Get data from counterpart"""
         Cache = self.env["synchro.cache"]
-        SynchroLog = self.env["synchro.log"]
         backend = self.backend_id
-        vmodel = self.name
+        binding_model = self.name
+        if not Cache.is_manageable(binding_model):  # pragma: no cover
+            return False
         if backend.state not in ("ready", "run"):  # pragma: no cover
-            SynchroLog.logmsg(
+            self.env["synchro.log"].logmsg(
                 "error",
                 "!%(E)s! Cannot get data from backend %(backend)s due invalid state",
                 backend=backend,
-                model=vmodel,
+                model=binding_model,
                 errcode=-13,
             )
             return False
-        if not Cache.is_manageable(vmodel):  # pragma: no cover
-            return False
-        # Cache.open(backend=backend, model=vmodel)
-        session = backend.get_session()
-        return self.env["synchro.api"].get_response(session, self, ext_id=ext_id)
+        return self.env["synchro.api"].get_response(backend.get_session(), self, ext_id)
 
     @api.model
     def query_index_fields(
@@ -1115,7 +1129,7 @@ class SynchroChannelModel(models.Model):
     ):
         # Inquire postgresql to get unique indexes that can be used to evaluate search
         # keys
-        # @model is Odoo model nale
+        # @model is Odoo model name
         # @index_name select just the psql index name
         # @flat return field name list, no aggregated by index name
         # @unique return just unique index name or unique field (unique='field')
@@ -1319,9 +1333,12 @@ class SynchroChannelModel(models.Model):
         rec = self.browse_from_ext_xmlref(self, Binder, vals)
         if rec:
             return rec
+        return self.bind_search_record(Binder, vals, model_spec=model_spec, ctx=ctx)
+
+    def bind_search_record(self, Binder, vals, model_spec=None, ctx=None):
         ctx = ctx or {}
         loc_ext_id = self.get_loc_ext_id()
-        candidate = None
+        rec = candidate = None
         if self.name == "res.company":
             rec = Binder.search(["|", (loc_ext_id, "=", False), (loc_ext_id, "=", 0)])
             if len(rec) == 1:
@@ -1333,6 +1350,7 @@ class SynchroChannelModel(models.Model):
             if isinstance(keys, str):
                 keys = [keys]
             for key in keys:
+                def_key = "default_%s" % key
                 ilike = False
                 if key.startswith("!"):
                     key = key[1:]
@@ -1342,6 +1360,16 @@ class SynchroChannelModel(models.Model):
                     ilike = key[0]
                     key = key[1:]
                 if key not in vals:
+                    if def_key in ctx:
+                        domain.append((key, "=", ctx[def_key]))
+                        continue
+                    else:
+                        mapper = self.get_mapper(loc_name=key)
+                        def_value = mapper.get_default_apply()[1]
+                        if def_value:
+                            ctx[def_key] = def_value
+                            domain.append((key, "=", ctx[def_key]))
+                            continue
                     if key in ctx:
                         domain.append((key, "=", ctx[key]))
                     else:
@@ -1428,3 +1456,23 @@ class SynchroChannelModel(models.Model):
                 if not model.model_id:
                     model.write({"model_id": model.get_odoo_model_id()})
         return res
+
+
+class SynchroModelForge(models.Model):
+    _name = "synchro.model.forge"
+    _description = "Model variant for synchronization mapping"
+    _order = "sequence, id"
+
+    _sql_constraints = [
+        (
+            "model_forge_uniq",
+            "unique (name)",
+            "Local model variant must be unique!",
+        )
+    ]
+
+    name = fields.Char(
+        string="Model variant name",
+        required=True,
+    )
+    sequence = fields.Integer("Priority", default=16)

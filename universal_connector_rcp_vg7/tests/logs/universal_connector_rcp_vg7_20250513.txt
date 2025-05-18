@@ -1,0 +1,99 @@
+2025-05-13 18:24:11,567 3795351 INFO ? odoo: Odoo version 12.0 
+2025-05-13 18:24:11,568 3795351 INFO ? odoo: Using configuration file at /home/odoo/12.0/connector/universal_connector_rcp_vg7/tests/logs/zero12.connector.universal_connector_rcp_vg7.conf 
+2025-05-13 18:24:11,568 3795351 INFO ? odoo: addons paths: ['/home/odoo/.local/share/Odoo12/addons/12.0', '/home/odoo/12.0/odoo/addons', '/home/odoo/12.0/addons', '/home/odoo/.local/share/Odoo12/addons', '/home/odoo/12.0/account-analytic', '/home/odoo/12.0/account-budgeting', '/home/odoo/12.0/account-closing', '/home/odoo/12.0/account-consolidation', '/home/odoo/12.0/account-financial-reporting', '/home/odoo/12.0/account-financial-tools', '/home/odoo/12.0/account-fiscal-rule', '/home/odoo/12.0/account-invoice-reporting', '/home/odoo/12.0/account-invoicing', '/home/odoo/12.0/account-payment', '/home/odoo/12.0/account-reconcile', '/home/odoo/12.0/bank-payment', '/home/odoo/12.0/bank-statement-import', '/home/odoo/12.0/brand', '/home/odoo/12.0/calendar', '/home/odoo/12.0/commission', '/home/odoo/12.0/community-data-files', '/home/odoo/12.0/connector', '/home/odoo/12.0/contract', '/home/odoo/12.0/credit-control', '/home/odoo/12.0/crm', '/home/odoo/12.0/currency', '/home/odoo/12.0/data-protection', '/home/odoo/12.0/ddmrp', '/home/odoo/12.0/delivery-carrier', '/home/odoo/12.0/dms', '/home/odoo/12.0/e-commerce', '/home/odoo/12.0/edi', '/home/odoo/12.0/field-service', '/home/odoo/12.0/helpdesk', '/home/odoo/12.0/hr', '/home/odoo/12.0/intrastat-extrastat', '/home/odoo/12.0/knowledge', '/home/odoo/12.0/l10n-italy', '/home/odoo/12.0/l10n-italy-supplemental', '/home/odoo/12.0/maintenance', '/home/odoo/12.0/management-system', '/home/odoo/12.0/manufacture', '/home/odoo/12.0/margin-analysis', '/home/odoo/12.0/marketplace', '/home/odoo/12.0/mis-builder', '/home/odoo/12.0/multi-company', '/home/odoo/12.0/partner-contact', '/home/odoo/12.0/product-attribute', '/home/odoo/12.0/product-kitting', '/home/odoo/12.0/product-pack', '/home/odoo/12.0/product-variant', '/home/odoo/12.0/profiles', '/home/odoo/12.0/project', '/home/odoo/12.0/purchase-reporting', '/home/odoo/12.0/purchase-workflow', '/home/odoo/12.0/queue', '/home/odoo/12.0/report-print-send', '/home/odoo/12.0/reporting-engine', '/home/odoo/12.0/rma', '/home/odoo/12.0/sale-financial', '/home/odoo/12.0/sale-reporting', '/home/odoo/12.0/sale-workflow', '/home/odoo/12.0/search-engine', '/home/odoo/12.0/server-auth', '/home/odoo/12.0/server-backend', '/home/odoo/12.0/server-brand', '/home/odoo/12.0/server-env', '/home/odoo/12.0/server-tools', '/home/odoo/12.0/server-ux', '/home/odoo/12.0/social', '/home/odoo/12.0/stock-logistics-barcode', '/home/odoo/12.0/stock-logistics-reporting', '/home/odoo/12.0/stock-logistics-tracking', '/home/odoo/12.0/stock-logistics-transport', '/home/odoo/12.0/stock-logistics-warehouse', '/home/odoo/12.0/stock-logistics-workflow', '/home/odoo/12.0/storage', '/home/odoo/12.0/timesheet', '/home/odoo/12.0/uncovered', '/home/odoo/12.0/web', '/home/odoo/12.0/webhook', '/home/odoo/12.0/website', '/home/odoo/12.0/wms', '/home/odoo/12.0/zerobug-test', '/home/odoo/12.0/venv_odoo/lib/python3.7/site-packages/odoo/addons'] 
+2025-05-13 18:24:11,568 3795351 INFO ? odoo: database: odoo12@localhost:5432 
+2025-05-13 18:24:11,597 3795351 INFO ? odoo.addons.server_environment.serv_config: not using server_environment_files for configuration, no directory found 
+2025-05-13 18:24:11,597 3795351 INFO ? odoo.addons.server_environment.serv_config: `running_env` not found. Using default = `test`. 
+2025-05-13 18:24:11,597 3795351 INFO ? odoo.addons.server_environment.serv_config: We strongly recommend against using the rc file but instead use an explicit config file or env variable. 
+2025-05-13 18:24:11,738 3795351 INFO ? odoo.addons.base.models.ir_actions_report: Will use the Wkhtmltopdf binary at /home/odoo/12.0/venv_odoo/bin/wkhtmltopdf 
+2025-05-13 18:24:11,854 3795351 INFO ? odoo.service.server: HTTP service (werkzeug) running on NB200Z0.:53541 
+2025-05-13 18:24:11,868 3795351 INFO test_universal_connector_rcp_vg7_12 odoo.modules.loading: loading 1 modules... 
+2025-05-13 18:24:11,876 3795351 INFO test_universal_connector_rcp_vg7_12 odoo.modules.loading: 1 modules loaded in 0.01s, 0 queries 
+2025-05-13 18:24:11,989 3795351 INFO test_universal_connector_rcp_vg7_12 odoo.modules.loading: updating modules list 
+2025-05-13 18:24:11,993 3795351 INFO test_universal_connector_rcp_vg7_12 odoo.addons.base.models.ir_module: ALLOW access to module.update_list on [] to user __system__ #1 via n/a 
+2025-05-13 18:24:22,064 3795351 INFO test_universal_connector_rcp_vg7_12 odoo.addons.base.models.ir_module: ALLOW access to module.button_install on ['universal_connector_rcp_vg7'] to user __system__ #1 via n/a 
+2025-05-13 18:24:22,295 3795351 INFO test_universal_connector_rcp_vg7_12 odoo.modules.loading: loading 27 modules... 
+2025-05-13 18:24:22,745 3795351 INFO test_universal_connector_rcp_vg7_12 odoo.modules.loading: 27 modules loaded in 0.45s, 0 queries 
+2025-05-13 18:24:22,748 3795351 INFO test_universal_connector_rcp_vg7_12 odoo.modules.loading: loading 28 modules... 
+2025-05-13 18:24:23,180 3795351 INFO test_universal_connector_rcp_vg7_12 odoo.modules.registry: module universal_connector_rcp_vg7: creating or updating database tables 
+2025-05-13 18:24:23,636 3795351 INFO test_universal_connector_rcp_vg7_12 odoo.modules.loading: loading universal_connector_rcp_vg7/data/synchro_identity.xml 
+2025-05-13 18:24:23,644 3795351 INFO test_universal_connector_rcp_vg7_12 odoo.modules.loading: loading universal_connector_rcp_vg7/data/synchro_backend.xml 
+2025-05-13 18:24:23,668 3795351 INFO test_universal_connector_rcp_vg7_12 odoo.modules.loading: loading universal_connector_rcp_vg7/data/synchro_partner.xml 
+2025-05-13 18:24:23,708 3795351 WARNING test_universal_connector_rcp_vg7_12 odoo.models: synchro.mapper.create() with unknown fields: apply 
+2025-05-13 18:24:23,724 3795351 WARNING test_universal_connector_rcp_vg7_12 odoo.models: synchro.mapper.create() with unknown fields: apply 
+2025-05-13 18:24:23,734 3795351 WARNING test_universal_connector_rcp_vg7_12 odoo.models: synchro.mapper.create() with unknown fields: apply 
+2025-05-13 18:24:23,742 3795351 WARNING test_universal_connector_rcp_vg7_12 odoo.models: synchro.mapper.create() with unknown fields: apply 
+2025-05-13 18:24:23,767 3795351 WARNING test_universal_connector_rcp_vg7_12 odoo.models: synchro.mapper.create() with unknown fields: apply 
+2025-05-13 18:24:23,776 3795351 WARNING test_universal_connector_rcp_vg7_12 odoo.models: synchro.mapper.create() with unknown fields: apply 
+2025-05-13 18:24:23,784 3795351 WARNING test_universal_connector_rcp_vg7_12 odoo.models: synchro.mapper.create() with unknown fields: apply 
+2025-05-13 18:24:23,794 3795351 WARNING test_universal_connector_rcp_vg7_12 odoo.models: synchro.mapper.create() with unknown fields: apply 
+2025-05-13 18:24:23,856 3795351 WARNING test_universal_connector_rcp_vg7_12 odoo.models: synchro.mapper.create() with unknown fields: apply 
+2025-05-13 18:24:23,864 3795351 WARNING test_universal_connector_rcp_vg7_12 odoo.models: synchro.mapper.create() with unknown fields: apply 
+2025-05-13 18:24:23,871 3795351 WARNING test_universal_connector_rcp_vg7_12 odoo.models: synchro.mapper.create() with unknown fields: apply 
+2025-05-13 18:24:23,878 3795351 WARNING test_universal_connector_rcp_vg7_12 odoo.models: synchro.mapper.create() with unknown fields: apply 
+2025-05-13 18:24:23,888 3795351 WARNING test_universal_connector_rcp_vg7_12 odoo.models: synchro.mapper.create() with unknown fields: apply 
+2025-05-13 18:24:23,898 3795351 WARNING test_universal_connector_rcp_vg7_12 odoo.models: synchro.mapper.create() with unknown fields: apply 
+2025-05-13 18:24:23,938 3795351 WARNING test_universal_connector_rcp_vg7_12 odoo.models: synchro.mapper.create() with unknown fields: apply 
+2025-05-13 18:24:24,032 3795351 WARNING test_universal_connector_rcp_vg7_12 odoo.models: synchro.mapper.create() with unknown fields: apply 
+2025-05-13 18:24:24,043 3795351 WARNING test_universal_connector_rcp_vg7_12 odoo.models: synchro.mapper.create() with unknown fields: apply 
+2025-05-13 18:24:24,052 3795351 WARNING test_universal_connector_rcp_vg7_12 odoo.models: synchro.mapper.create() with unknown fields: apply 
+2025-05-13 18:24:24,103 3795351 WARNING test_universal_connector_rcp_vg7_12 odoo.models: synchro.mapper.create() with unknown fields: apply 
+2025-05-13 18:24:24,111 3795351 WARNING test_universal_connector_rcp_vg7_12 odoo.models: synchro.mapper.create() with unknown fields: apply 
+2025-05-13 18:24:24,209 3795351 WARNING test_universal_connector_rcp_vg7_12 odoo.models: synchro.mapper.create() with unknown fields: apply 
+2025-05-13 18:24:24,217 3795351 WARNING test_universal_connector_rcp_vg7_12 odoo.models: synchro.mapper.create() with unknown fields: apply 
+2025-05-13 18:24:24,225 3795351 WARNING test_universal_connector_rcp_vg7_12 odoo.models: synchro.mapper.create() with unknown fields: apply 
+2025-05-13 18:24:24,269 3795351 WARNING test_universal_connector_rcp_vg7_12 odoo.models: synchro.mapper.create() with unknown fields: apply 
+2025-05-13 18:24:24,277 3795351 WARNING test_universal_connector_rcp_vg7_12 odoo.models: synchro.mapper.create() with unknown fields: apply 
+2025-05-13 18:24:24,351 3795351 WARNING test_universal_connector_rcp_vg7_12 odoo.models: synchro.mapper.create() with unknown fields: apply 
+2025-05-13 18:24:24,359 3795351 WARNING test_universal_connector_rcp_vg7_12 odoo.models: synchro.mapper.create() with unknown fields: apply 
+2025-05-13 18:24:24,366 3795351 WARNING test_universal_connector_rcp_vg7_12 odoo.models: synchro.mapper.create() with unknown fields: apply 
+2025-05-13 18:24:24,374 3795351 WARNING test_universal_connector_rcp_vg7_12 odoo.models: synchro.mapper.create() with unknown fields: apply 
+2025-05-13 18:24:24,418 3795351 WARNING test_universal_connector_rcp_vg7_12 odoo.models: synchro.mapper.create() with unknown fields: apply 
+2025-05-13 18:24:24,425 3795351 WARNING test_universal_connector_rcp_vg7_12 odoo.models: synchro.mapper.create() with unknown fields: apply 
+2025-05-13 18:24:24,439 3795351 WARNING test_universal_connector_rcp_vg7_12 odoo.models: synchro.mapper.create() with unknown fields: apply 
+2025-05-13 18:24:24,448 3795351 WARNING test_universal_connector_rcp_vg7_12 odoo.models: synchro.mapper.create() with unknown fields: apply 
+2025-05-13 18:24:24,482 3795351 INFO test_universal_connector_rcp_vg7_12 odoo.modules.loading: loading universal_connector_rcp_vg7/data/synchro_country.xml 
+2025-05-13 18:24:24,503 3795351 WARNING test_universal_connector_rcp_vg7_12 odoo.models: synchro.mapper.create() with unknown fields: apply 
+2025-05-13 18:24:24,529 3795351 WARNING test_universal_connector_rcp_vg7_12 odoo.models: synchro.mapper.create() with unknown fields: apply 
+2025-05-13 18:24:24,547 3795351 WARNING test_universal_connector_rcp_vg7_12 odoo.models: synchro.mapper.create() with unknown fields: apply 
+2025-05-13 18:24:24,563 3795351 WARNING test_universal_connector_rcp_vg7_12 odoo.models: synchro.mapper.create() with unknown fields: apply 
+2025-05-13 18:24:24,585 3795351 INFO test_universal_connector_rcp_vg7_12 odoo.modules.loading: loading universal_connector_rcp_vg7/views/country_view.xml 
+2025-05-13 18:24:24,641 3795351 INFO test_universal_connector_rcp_vg7_12 odoo.modules.loading: Module universal_connector_rcp_vg7: loading demo 
+2025-05-13 18:24:24,676 3795351 INFO test_universal_connector_rcp_vg7_12 odoo.modules.module: odoo.addons.universal_connector_rcp_vg7.tests.test_backend running tests. 
+2025-05-13 18:24:24,676 3795351 INFO test_universal_connector_rcp_vg7_12 odoo.addons.universal_connector_rcp_vg7.tests.test_backend: test_connection (odoo.addons.universal_connector_rcp_vg7.tests.test_backend.MyTest) 
+2025-05-13 18:24:24,784 3795351 INFO test_universal_connector_rcp_vg7_12 odoo.addons.universal_connector_rcp_vg7.tests.testenv: 🎺🎺🎺 Starting test v2.0.22 (debug_level=0, commit=True) 
+2025-05-13 18:24:24,787 3795351 INFO test_universal_connector_rcp_vg7_12 odoo.addons.universal_connector_rcp_vg7.tests.testenv: 🎺🎺 Testing module: universal_connector_rcp_vg7 (12.0.1.3.14) 
+2025-05-13 18:24:24,787 3795351 INFO test_universal_connector_rcp_vg7_12 odoo.addons.universal_connector_rcp_vg7.tests.testenv: 🎺🎺 Loading data from: synchro.backend  
+2025-05-13 18:24:24,807 3795351 INFO test_universal_connector_rcp_vg7_12 odoo.addons.universal_connector_rcp_vg7.tests.test_backend: 🎺 Starting connection test on ports 8270 (db=oca10) and 8272 (db=oca12) and on ports 8167 (db=demo7) and 8168 (db=demo8) 
+2025-05-13 18:24:24,908 3795351 WARNING test_universal_connector_rcp_vg7_12 py.warnings: /home/odoo/12.0/venv_odoo/lib/python3.7/site-packages/cryptography/hazmat/backends/openssl/x509.py:17: CryptographyDeprecationWarning: This version of cryptography contains a temporary pyOpenSSL fallback path. Upgrade pyOpenSSL now.
+  utils.DeprecatedIn35,
+ 
+2025-05-13 18:24:25,339 3795351 INFO test_universal_connector_rcp_vg7_12 odoo.addons.universal_connector_base.models.synchro_log: synchro.backend.button_check_connection(ep=https://gestionale.paperservice.vg7progress.it/index.php,h=gestionale.paperservice.vg7progress.it) 
+2025-05-13 18:24:39,148 3795351 INFO test_universal_connector_rcp_vg7_12 odoo.addons.universal_connector_base.models.synchro_log: synchro.backend.button_reset_to_draft(ep=https://gestionale.paperservice.vg7progress.it/index.php,h=gestionale.paperservice.vg7progress.it): 
+2025-05-13 18:24:39,354 3795351 INFO test_universal_connector_rcp_vg7_12 odoo.addons.universal_connector_base.models.synchro_log: synchro.backend.button_check_connection(ep=https://gestionale.paperservice.vg7progress.it/index.php,h=gestionale.paperservice.vg7progress.it) 
+2025-05-13 18:24:48,115 3795351 INFO test_universal_connector_rcp_vg7_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(customers,vg7,remote_id=101,ttl=None) 
+2025-05-13 18:24:48,450 3795351 INFO test_universal_connector_rcp_vg7_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'vg7:id': 101, 'vg7:type': 1, ',backend=VG7 print,min=True),ttl=4 
+2025-05-13 18:24:48,690 3795351 INFO test_universal_connector_rcp_vg7_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(countries,vg7,remote_id=166,ttl=3) 
+2025-05-13 18:24:49,034 3795351 INFO test_universal_connector_rcp_vg7_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'vg7:customer_id': 101, 'vg7:ty,backend=VG7 print,min=False),ttl=1 
+2025-05-13 18:24:49,155 3795351 INFO test_universal_connector_rcp_vg7_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'vg7:customer_shipping_id': '10,backend=VG7 print,min=True),ttl=1 
+2025-05-13 18:24:49,352 3795351 INFO test_universal_connector_rcp_vg7_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(customers,vg7,remote_id=111,ttl=None) 
+2025-05-13 18:24:49,679 3795351 INFO test_universal_connector_rcp_vg7_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'vg7:id': 111, 'vg7:type': 1, ',backend=VG7 print,min=True),ttl=4 
+2025-05-13 18:24:49,801 3795351 INFO test_universal_connector_rcp_vg7_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'vg7:customer_id': 111, 'vg7:ty,backend=VG7 print,min=False),ttl=1 
+2025-05-13 18:24:49,919 3795351 INFO test_universal_connector_rcp_vg7_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'vg7:customer_shipping_id': '11,backend=VG7 print,min=True),ttl=1 
+2025-05-13 18:24:50,104 3795351 INFO test_universal_connector_rcp_vg7_12 odoo.addons.universal_connector_rcp_vg7.tests.testenv: 🏆🥇 [1;32m25 tests SUCCESSFULLY completed[0m 
+2025-05-13 18:24:50,221 3795351 INFO test_universal_connector_rcp_vg7_12 odoo.addons.universal_connector_rcp_vg7.tests.test_backend: Ran 1 test in 25.545s 
+2025-05-13 18:24:50,222 3795351 INFO test_universal_connector_rcp_vg7_12 odoo.addons.universal_connector_rcp_vg7.tests.test_backend: OK 
+2025-05-13 18:24:50,222 3795351 INFO test_universal_connector_rcp_vg7_12 odoo.modules.module: odoo.addons.universal_connector_rcp_vg7.tests.test_backend tested in 25.55s, 10436 queries 
+2025-05-13 18:24:50,243 3795351 INFO test_universal_connector_rcp_vg7_12 odoo.modules.loading: 28 modules loaded in 27.49s, 10439 queries 
+2025-05-13 18:24:50,772 3795351 INFO test_universal_connector_rcp_vg7_12 odoo.modules.loading: Modules loaded. 
+2025-05-13 18:24:50,780 3795351 INFO test_universal_connector_rcp_vg7_12 odoo.service.server: Starting post tests 
+2025-05-13 18:24:50,781 3795351 INFO test_universal_connector_rcp_vg7_12 odoo.service.server: All post-tested in 0.00s, 0 queries 
+2025-05-13 18:24:50,781 3795351 INFO test_universal_connector_rcp_vg7_12 odoo.service.server: Initiating shutdown 
+2025-05-13 18:24:50,781 3795351 INFO test_universal_connector_rcp_vg7_12 odoo.service.server: Hit CTRL-C again or send a second signal to force the shutdown. 
+
++===================================================================
+| please test [36muniversal_connector_rcp_vg7[0m (12.0): [32mSUCCESS![0m
++===================================================================
+
+[1;37;44m[34;107mNo data to report.
+[0m

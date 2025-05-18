@@ -16,7 +16,7 @@
     "development_status": "Beta",
     "license": "LGPL-3",
     "depends": ["universal_connector_openerp"],
-    "version_depends": ["universal_connector_openerp>=10.0.1.3.14"],
+    "version_depends": ["universal_connector_openerp>=12.0.1.3.14"],
     "external_dependencies": {
         "python": [
             "python_plus",

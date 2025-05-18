@@ -3,6 +3,8 @@ access_synchro_backend_system,access_synchro_backend_system,model_synchro_backen
 access_synchro_backend_user,access_synchro_backend_user,model_synchro_backend,base.group_system,1,0,0,0
 access_synchro_model_system,access_synchro_model_system,model_synchro_model,base.group_system,1,1,1,1
 access_synchro_model_user,access_synchro_model_user,model_synchro_model,base.group_user,1,0,0,0
+access_synchro_model_forge_system,access_synchro_model_forge_system,model_synchro_model_forge,base.group_system,1,1,1,1
+access_synchro_model_forge_user,access_synchro_model_forge_user,model_synchro_model_forge,base.group_user,1,0,0,0
 access_synchro_field_system,access_synchro_field_system,model_synchro_mapper,base.group_system,1,1,1,1
 access_synchro_field_user,access_synchro_field_user,model_synchro_mapper,base.group_user,1,0,0,0
 access_synchro_alias_system,access_synchro_alias_system,model_synchro_alias,base.group_system,1,1,1,1

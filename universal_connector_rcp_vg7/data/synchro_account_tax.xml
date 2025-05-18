@@ -18,7 +18,7 @@
     <record forcecreate="1" id="account_tax_amount" model="synchro.mapper">
         <field name="name">amount</field>
         <field name="counterpart_name">aliquota</field>
-        <field name="apply">0</field>
+        <field name="apply4">0</field>
         <field name="protect_update">0</field>
         <field name="model_id" ref="account_tax"/>
     </record>
@@ -26,7 +26,7 @@
     <record forcecreate="1" id="account_tax_name" model="synchro.mapper">
         <field name="name">name</field>
         <field name="counterpart_name">description</field>
-        <field name="apply">set_tmp_name()</field>
+        <field name="apply4">set_tmp_name()</field>
         <field name="protect_update">2</field>
         <field name="model_id" ref="account_tax"/>
     </record>
@@ -34,14 +34,14 @@
     <record forcecreate="1" id="account_tax_description" model="synchro.mapper">
         <field name="name">description</field>
         <field name="counterpart_name">code</field>
-        <field name="apply">set_tmp_name()</field>
+        <field name="apply4">set_tmp_name()</field>
         <field name="protect_update">2</field>
         <field name="model_id" ref="account_tax"/>
     </record>
 
     <record forcecreate="1" id="account_tax_type_tax_use" model="synchro.mapper">
         <field name="name">type_tax_use</field>
-        <field name="apply">sale</field>
+        <field name="apply4">sale</field>
         <field name="protect_update">3</field>
         <field name="model_id" ref="account_tax"/>
     </record>

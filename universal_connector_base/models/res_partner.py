@@ -8,7 +8,7 @@
 #
 import logging
 
-from odoo import api, fields, models
+from odoo import fields, models
 
 _logger = logging.getLogger(__name__)
 
@@ -33,42 +33,42 @@ class ResPartner(models.Model):
     errmsg = fields.Char("Error message", copy=False, readonly=True)
 
     CONTRAINTS = [["id", "!=", "parent_id"]]
-
-    @api.model
-    def synchro(
-        self,
-        vals,
-        only_minimal=True,
-        ttl=None,
-        running_in_queue=None,
-        jacket=None,
-        model_spec=False,
-        backend=None,
-        dir_mapper=None,
-        ctx=None,
-    ):
-        if only_minimal:
-            vals[":type"] = vals.get(
-                ":type",
-                {
-                    "shipping": "delivery",
-                    "invoice": "invoice",
-                    "supplier": "contact",
-                }.get(model_spec, "contact"),
-            )
-            if model_spec == "supplier":
-                vals[":supplier"] = True
-        return super().synchro(
-            vals,
-            only_minimal=only_minimal,
-            ttl=ttl,
-            running_in_queue=running_in_queue,
-            jacket=jacket,
-            model_spec=model_spec,
-            backend=backend,
-            dir_mapper=dir_mapper,
-            ctx=ctx,
-        )
+    #
+    # @api.model
+    # def synchro(
+    #     self,
+    #     vals,
+    #     only_minimal=True,
+    #     ttl=None,
+    #     running_in_queue=None,
+    #     jacket=None,
+    #     model_spec=False,
+    #     backend=None,
+    #     dir_mapper=None,
+    #     ctx=None,
+    # ):
+    #     if only_minimal:
+    #         vals[":type"] = vals.get(
+    #             ":type",
+    #             {
+    #                 "shipping": "delivery",
+    #                 "invoice": "invoice",
+    #                 "supplier": "contact",
+    #             }.get(model_spec, "contact"),
+    #         )
+    #         if model_spec == "supplier":
+    #             vals[":supplier"] = True
+    #     return super().synchro(
+    #         vals,
+    #         only_minimal=only_minimal,
+    #         ttl=ttl,
+    #         running_in_queue=running_in_queue,
+    #         jacket=jacket,
+    #         model_spec=model_spec,
+    #         backend=backend,
+    #         dir_mapper=dir_mapper,
+    #         ctx=ctx,
+    #     )
 
 
 class ResCategory(models.Model):

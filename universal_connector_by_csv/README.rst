@@ -1,10 +1,10 @@
 =================================================================================
-|icon| Universal Connector protocol csv/Connettore universale con csv 12.0.1.3.14
+|icon| Universal Connector protocol csv/Connettore universale con csv 10.0.1.3.14
 =================================================================================
 
 **Add importing data from csv for Universal Connector**
 
-.. |icon| image:: https://raw.githubusercontent.com/zeroincombenze/connector/12.0/universal_connector_by_csv/static/description/icon.png
+.. |icon| image:: https://raw.githubusercontent.com/zeroincombenze/connector/10.0/universal_connector_by_csv/static/description/icon.png
 
 
 .. contents::
@@ -44,7 +44,7 @@ evitare duplicazioni di dati. Senza questa colonna sarà usato il numero di riga
 
 |thumbnail|
 
-.. |thumbnail| image:: https://raw.githubusercontent.com/zeroincombenze/connector/12.0/universal_connector_by_csv/static/description/description.png
+.. |thumbnail| image:: https://raw.githubusercontent.com/zeroincombenze/connector/10.0/universal_connector_by_csv/static/description/description.png
 
 
 Configuration | Configurazione
@@ -75,8 +75,8 @@ Getting started | Primi passi
 Prerequisites | Prerequisiti
 ----------------------------
 
-* python 3.7
-* postgresql 9.6+ (best 10.0+)
+* python 2.7+ (best 2.7.5+)
+* postgresql 9.2+ (best 9.5)
 
 ::
 
@@ -106,15 +106,15 @@ Installation | Installazione
 +---------------------------------+------------------------------------------+
 | Suggested deployment is:        | Posizione suggerita per l'installazione: |
 +---------------------------------+------------------------------------------+
-| $HOME/12.0 |
+| $HOME/10.0 |
 +----------------------------------------------------------------------------+
 
 ::
 
     # Odoo repository installation; OCB repository must be installed
-    deploy_odoo clone -r connector -b 12.0 -G zero -p $HOME/12.0
+    deploy_odoo clone -r connector -b 10.0 -G zero -p $HOME/10.0
     # Upgrade virtual environment
-    vem amend $HOME/12.0/venv_odoo
+    vem amend $HOME/10.0/venv_odoo
 
 
 
@@ -123,8 +123,8 @@ Upgrade | Aggiornamento
 
 ::
 
-    deploy_odoo update -r connector -b 12.0 -G zero -p $HOME/12.0
-    vem amend $HOME/12.0/venv_odoo
+    deploy_odoo update -r connector -b 10.0 -G zero -p $HOME/10.0
+    vem amend $HOME/10.0/venv_odoo
     # Adjust following statements as per your system
     sudo systemctl restart odoo
 
@@ -161,30 +161,34 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 ChangeLog History | Cronologia modifiche
 ----------------------------------------
 
-12.0.0.3.14 (2025-04-13)
-~~~~~~~~~~~~~~~~~~~~~~~~
+<<<<<<< HEAD
+10.0.0.3.14 (2025-05-18)
+========================
+10.0.0.3.14 (2025-05-18)
+>>>>>>> 10.0-tmp-20250515
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
-* [QUA] Test coverage 88% (111: 13+98) [110 TestPoints] - quality rating 212 (target 100)
+* [QUA] Test coverage 88% (111: 13+98) [281 TestPoints] - quality rating 222 (target 100)
 
-12.0.0.3.13 (2025-01-05)
+10.0.0.3.13 (2025-01-05)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 * [QUA] Test coverage 86% (104: 15+89) [190 TestPoints] - quality rating 344 (target 100)
 
-12.0.0.3.12 (2025-01-03)
+10.0.0.3.12 (2025-01-03)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 * [IMP] Dependign on version check / Controllo versione dipendenze
 * [QUA] Test coverage 88% (104: 12+92) [190 TestPoints] - quality rating 346 (target 100)
 
-12.0.0.3.11 (2024-12-29)
+10.0.0.3.11 (2024-12-29)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 * [IMP] New API get_record_list
 * [IMP] Minor aesthetic update
 * [QUA] Test coverage 93% (90: 6+84) [190 TestPoints] - quality rating 394 (target 100)
 
-12.0.0.3.10 (2024-12-17)
+10.0.0.3.10 (2024-12-17)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 * [IMP] Split from universal_connector
@@ -240,7 +244,7 @@ La distribuzione `Zeroincombenze® <https://www.zeroincombenze.it/>`__ è proget
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2025-05-10
+Last Update / Ultimo aggiornamento: 2025-05-18
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status
@@ -251,8 +255,8 @@ Last Update / Ultimo aggiornamento: 2025-05-10
 .. |license opl| image:: https://img.shields.io/badge/licence-OPL-7379c3.svg
     :target: https://www.odoo.com/documentation/user/14.0/legal/licenses/licenses.html
     :alt: License: OPL
-.. |Try Me| image:: https://www.zeroincombenze.it/wp-content/uploads/ci-ct/prd/button-try-it-12.svg
-    :target: https://erp12.zeroincombenze.it
+.. |Try Me| image:: https://www.zeroincombenze.it/wp-content/uploads/ci-ct/prd/button-try-it-10.svg
+    :target: https://erp10.zeroincombenze.it
     :alt: Try Me
 .. |Zeroincombenze| image:: https://avatars0.githubusercontent.com/u/6972555?s=460&v=4
    :target: https://www.zeroincombenze.it/

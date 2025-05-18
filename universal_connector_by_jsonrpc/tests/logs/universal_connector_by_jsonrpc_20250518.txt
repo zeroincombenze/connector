@@ -1,0 +1,472 @@
+2025-05-18 16:43:11,354 2570472 INFO ? odoo: Odoo version 12.0 
+2025-05-18 16:43:11,354 2570472 INFO ? odoo: Using configuration file at /home/odoo/12.0/connector/universal_connector_by_jsonrpc/tests/logs/zero12.connector.universal_connector_by_jsonrpc.conf 
+2025-05-18 16:43:11,354 2570472 INFO ? odoo: addons paths: ['/home/odoo/.local/share/Odoo12/addons/12.0', '/home/odoo/12.0/odoo/addons', '/home/odoo/12.0/addons', '/home/odoo/.local/share/Odoo12/addons', '/home/odoo/12.0/account-analytic', '/home/odoo/12.0/account-budgeting', '/home/odoo/12.0/account-closing', '/home/odoo/12.0/account-consolidation', '/home/odoo/12.0/account-financial-reporting', '/home/odoo/12.0/account-financial-tools', '/home/odoo/12.0/account-fiscal-rule', '/home/odoo/12.0/account-invoice-reporting', '/home/odoo/12.0/account-invoicing', '/home/odoo/12.0/account-payment', '/home/odoo/12.0/account-reconcile', '/home/odoo/12.0/bank-payment', '/home/odoo/12.0/bank-statement-import', '/home/odoo/12.0/brand', '/home/odoo/12.0/calendar', '/home/odoo/12.0/commission', '/home/odoo/12.0/community-data-files', '/home/odoo/12.0/connector', '/home/odoo/12.0/contract', '/home/odoo/12.0/credit-control', '/home/odoo/12.0/crm', '/home/odoo/12.0/currency', '/home/odoo/12.0/data-protection', '/home/odoo/12.0/ddmrp', '/home/odoo/12.0/delivery-carrier', '/home/odoo/12.0/dms', '/home/odoo/12.0/e-commerce', '/home/odoo/12.0/edi', '/home/odoo/12.0/field-service', '/home/odoo/12.0/helpdesk', '/home/odoo/12.0/hr', '/home/odoo/12.0/intrastat-extrastat', '/home/odoo/12.0/knowledge', '/home/odoo/12.0/l10n-italy', '/home/odoo/12.0/l10n-italy-supplemental', '/home/odoo/12.0/maintenance', '/home/odoo/12.0/management-system', '/home/odoo/12.0/manufacture', '/home/odoo/12.0/margin-analysis', '/home/odoo/12.0/marketplace', '/home/odoo/12.0/mis-builder', '/home/odoo/12.0/multi-company', '/home/odoo/12.0/partner-contact', '/home/odoo/12.0/product-attribute', '/home/odoo/12.0/product-kitting', '/home/odoo/12.0/product-pack', '/home/odoo/12.0/product-variant', '/home/odoo/12.0/profiles', '/home/odoo/12.0/project', '/home/odoo/12.0/purchase-reporting', '/home/odoo/12.0/purchase-workflow', '/home/odoo/12.0/queue', '/home/odoo/12.0/report-print-send', '/home/odoo/12.0/reporting-engine', '/home/odoo/12.0/rma', '/home/odoo/12.0/sale-financial', '/home/odoo/12.0/sale-reporting', '/home/odoo/12.0/sale-workflow', '/home/odoo/12.0/search-engine', '/home/odoo/12.0/server-auth', '/home/odoo/12.0/server-backend', '/home/odoo/12.0/server-brand', '/home/odoo/12.0/server-env', '/home/odoo/12.0/server-tools', '/home/odoo/12.0/server-ux', '/home/odoo/12.0/social', '/home/odoo/12.0/stock-logistics-barcode', '/home/odoo/12.0/stock-logistics-reporting', '/home/odoo/12.0/stock-logistics-tracking', '/home/odoo/12.0/stock-logistics-transport', '/home/odoo/12.0/stock-logistics-warehouse', '/home/odoo/12.0/stock-logistics-workflow', '/home/odoo/12.0/storage', '/home/odoo/12.0/timesheet', '/home/odoo/12.0/uncovered', '/home/odoo/12.0/web', '/home/odoo/12.0/webhook', '/home/odoo/12.0/website', '/home/odoo/12.0/wms', '/home/odoo/12.0/zerobug-test', '/home/odoo/12.0/venv_odoo/lib/python3.7/site-packages/odoo/addons'] 
+2025-05-18 16:43:11,354 2570472 INFO ? odoo: database: odoo12@localhost:5432 
+2025-05-18 16:43:11,377 2570472 INFO ? odoo.addons.server_environment.serv_config: not using server_environment_files for configuration, no directory found 
+2025-05-18 16:43:11,377 2570472 INFO ? odoo.addons.server_environment.serv_config: `running_env` not found. Using default = `test`. 
+2025-05-18 16:43:11,377 2570472 INFO ? odoo.addons.server_environment.serv_config: We strongly recommend against using the rc file but instead use an explicit config file or env variable. 
+2025-05-18 16:43:11,508 2570472 INFO ? odoo.addons.base.models.ir_actions_report: Will use the Wkhtmltopdf binary at /home/odoo/12.0/venv_odoo/bin/wkhtmltopdf 
+2025-05-18 16:43:11,623 2570472 INFO ? odoo.service.server: HTTP service (werkzeug) running on NB200Z0.:19547 
+2025-05-18 16:43:11,640 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.modules.loading: loading 1 modules... 
+2025-05-18 16:43:11,658 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.modules.loading: 1 modules loaded in 0.02s, 0 queries 
+2025-05-18 16:43:11,760 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.modules.loading: updating modules list 
+2025-05-18 16:43:11,762 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.base.models.ir_module: ALLOW access to module.update_list on [] to user __system__ #1 via n/a 
+2025-05-18 16:43:21,959 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.base.models.ir_module: ALLOW access to module.button_install on ['universal_connector_by_jsonrpc'] to user __system__ #1 via n/a 
+2025-05-18 16:43:22,212 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.modules.loading: loading 10 modules... 
+2025-05-18 16:43:22,448 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.modules.loading: 10 modules loaded in 0.24s, 0 queries 
+2025-05-18 16:43:22,456 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.modules.loading: loading 11 modules... 
+2025-05-18 16:43:22,811 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.modules.registry: module universal_connector_by_jsonrpc: creating or updating database tables 
+2025-05-18 16:43:22,848 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.modules.loading: loading universal_connector_by_jsonrpc/data/synchro_protocol.xml 
+2025-05-18 16:43:22,857 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.modules.loading: Module universal_connector_by_jsonrpc: loading demo 
+2025-05-18 16:43:22,904 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.modules.module: odoo.addons.universal_connector_by_jsonrpc.tests.test_backend running tests. 
+2025-05-18 16:43:22,905 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_by_jsonrpc.tests.test_backend: test_connection (odoo.addons.universal_connector_by_jsonrpc.tests.test_backend.MyTest) 
+2025-05-18 16:43:23,040 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_by_jsonrpc.tests.testenv: 🎺🎺🎺 Starting test v2.0.22 (debug_level=0, commit=True) 
+2025-05-18 16:43:23,042 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_by_jsonrpc.tests.testenv: 🎺🎺 Testing module: universal_connector_by_jsonrpc (12.0.1.3.14) 
+2025-05-18 16:43:23,042 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_by_jsonrpc.tests.testenv: 🎺🎺 Loading data from: synchro.backend  
+2025-05-18 16:43:23,099 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_by_jsonrpc.tests.test_backend: 🎺 Starting connection test on ports 8170 (db=demo10) and 8272 (db=demo12) and 8174 (db=demo14) ... 
+2025-05-18 16:43:24,026 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: synchro.backend.button_check_connection(ep=http://admin@localhost:8270/xmlrpc/2/common,h=localhost) 
+2025-05-18 16:43:52,079 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.company,odoo10,ext_id=1,ttl=1) 
+2025-05-18 16:43:53,882 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: synchro.backend.button_reset_to_draft(ep=http://admin@localhost:8270/xmlrpc/2/common,h=localhost): 
+2025-05-18 16:43:54,600 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: synchro.backend.button_check_connection(ep=http://admin@localhost:8270/xmlrpc/2/common,h=localhost) 
+2025-05-18 16:44:16,822 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo10,ext_id=1,ttl=None) 
+2025-05-18 16:44:17,818 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.currency.synchro({'odoo10:rate_ids': [130], 'odoo,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-18 16:44:17,844 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo10,ext_id=3,ttl=None) 
+2025-05-18 16:44:18,573 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.currency.synchro({'odoo10:rate_ids': [2, 1], 'odo,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-18 16:44:19,139 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: synchro.backend.button_check_connection(ep=http://admin@localhost:8272/xmlrpc/2/common,h=localhost) 
+2025-05-18 16:44:36,862 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.company,odoo12,ext_id=1,ttl=1) 
+2025-05-18 16:44:37,978 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: synchro.backend.button_reset_to_draft(ep=http://admin@localhost:8272/xmlrpc/2/common,h=localhost): 
+2025-05-18 16:44:38,461 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: synchro.backend.button_check_connection(ep=http://admin@localhost:8272/xmlrpc/2/common,h=localhost) 
+2025-05-18 16:44:52,265 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo12,ext_id=1,ttl=None) 
+2025-05-18 16:44:53,058 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.currency.synchro({'odoo12:id': 1, 'odoo12:active',backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-18 16:44:53,107 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo12,ext_id=2,ttl=None) 
+2025-05-18 16:44:53,751 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.currency.synchro({'odoo12:id': 2, 'odoo12:active',backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-18 16:44:54,032 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: synchro.backend.button_check_connection(ep=False,h=localhost) 
+2025-05-18 16:45:04,838 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.company,odoo14,ext_id=1,ttl=1) 
+2025-05-18 16:45:05,335 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: synchro.backend.button_reset_to_draft(ep=False,h=localhost): 
+2025-05-18 16:45:05,557 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: synchro.backend.button_check_connection(ep=False,h=localhost) 
+2025-05-18 16:45:12,920 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo14,ext_id=1,ttl=None) 
+2025-05-18 16:45:13,143 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.currency.synchro({'odoo14:id': 1, 'odoo14:date': ,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-18 16:45:13,170 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo14,ext_id=2,ttl=None) 
+2025-05-18 16:45:13,393 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.currency.synchro({'odoo14:id': 2, 'odoo14:date': ,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-18 16:45:13,420 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country,odoo10,ext_id=235,ttl=None) 
+2025-05-18 16:45:14,385 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.country.synchro({'odoo10:currency_id': [3, 'USD',backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-18 16:45:14,450 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=3,ttl=None) 
+2025-05-18 16:45:15,191 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo10:comment': False, 'odoo1,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-18 16:45:16,012 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=47,ttl=3) 
+2025-05-18 16:45:17,726 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=11,ttl=None) 
+2025-05-18 16:45:18,459 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo10:comment': False, 'odoo1,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-18 16:45:19,434 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=18,ttl=3) 
+2025-05-18 16:45:21,115 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=10,ttl=None) 
+2025-05-18 16:45:21,852 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo10:comment': False, 'odoo1,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-18 16:45:22,705 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=13,ttl=3) 
+2025-05-18 16:45:24,307 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=7,ttl=None) 
+2025-05-18 16:45:25,212 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo10:comment': False, 'odoo1,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-18 16:45:26,166 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country,odoo10,ext_id=229,ttl=3) 
+2025-05-18 16:45:27,055 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo10,ext_id=141,ttl=2) 
+2025-05-18 16:45:27,868 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country,odoo12,ext_id=233,ttl=None) 
+2025-05-18 16:45:28,290 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.country.synchro({'odoo12:id': 233, 'odoo12:addre,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-18 16:45:28,347 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=3,ttl=None) 
+2025-05-18 16:45:28,866 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo12:id': 3, 'odoo12:company,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-18 16:45:29,385 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=47,ttl=3) 
+2025-05-18 16:45:30,343 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=13,ttl=None) 
+2025-05-18 16:45:30,837 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo12:id': 13, 'odoo12:compan,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-18 16:45:31,350 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=307,ttl=3) 
+2025-05-18 16:45:31,934 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country,odoo12,ext_id=109,ttl=2) 
+2025-05-18 16:45:32,465 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=12,ttl=None) 
+2025-05-18 16:45:32,911 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo12:id': 12, 'odoo12:compan,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-18 16:45:33,437 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=184,ttl=3) 
+2025-05-18 16:45:33,960 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country,odoo12,ext_id=90,ttl=2) 
+2025-05-18 16:45:34,508 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo12,ext_id=171,ttl=1) 
+2025-05-18 16:45:35,034 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=9,ttl=None) 
+2025-05-18 16:45:35,505 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo12:id': 9, 'odoo12:company,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-18 16:45:36,044 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=11,ttl=3) 
+2025-05-18 16:45:36,987 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country,odoo14,ext_id=233,ttl=None) 
+2025-05-18 16:45:37,209 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.country.synchro({'odoo14:id': 233, 'odoo14:addre,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-18 16:45:37,257 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=3,ttl=None) 
+2025-05-18 16:45:37,525 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo14:id': 3, 'odoo14:company,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-18 16:45:37,903 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=47,ttl=3) 
+2025-05-18 16:45:38,376 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=13,ttl=None) 
+2025-05-18 16:45:38,603 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo14:id': 13, 'odoo14:compan,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-18 16:45:38,917 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=13,ttl=3) 
+2025-05-18 16:45:39,419 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=12,ttl=None) 
+2025-05-18 16:45:39,674 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo14:id': 12, 'odoo14:compan,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-18 16:45:40,088 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=9,ttl=None) 
+2025-05-18 16:45:40,347 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo14:id': 9, 'odoo14:company,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-18 16:45:40,675 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=3,ttl=None) 
+2025-05-18 16:45:41,565 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo10:comment': False, 'odoo1,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-18 16:45:41,657 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=11,ttl=None) 
+2025-05-18 16:45:42,581 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo10:comment': False, 'odoo1,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-18 16:45:42,686 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=3,ttl=None) 
+2025-05-18 16:45:43,610 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo10:comment': False, 'odoo1,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-18 16:45:43,702 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=11,ttl=None) 
+2025-05-18 16:45:44,521 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo10:comment': False, 'odoo1,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-18 16:45:44,607 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=10,ttl=None) 
+2025-05-18 16:45:45,475 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo10:comment': False, 'odoo1,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-18 16:45:45,598 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=7,ttl=None) 
+2025-05-18 16:45:46,373 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo10:comment': False, 'odoo1,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-18 16:45:46,475 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo10,ext_id=1,ttl=None) 
+2025-05-18 16:45:47,237 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.currency.synchro({'odoo10:rate_ids': [130], 'odoo,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-18 16:45:47,260 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo10,ext_id=3,ttl=None) 
+2025-05-18 16:45:48,197 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.currency.synchro({'odoo10:rate_ids': [2, 1], 'odo,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-18 16:45:48,222 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country,odoo10,ext_id=235,ttl=None) 
+2025-05-18 16:45:49,008 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.country.synchro({'odoo10:currency_id': [3, 'USD',backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-18 16:45:49,066 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=3,ttl=None) 
+2025-05-18 16:45:49,845 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo10:comment': False, 'odoo1,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-18 16:45:49,937 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=11,ttl=None) 
+2025-05-18 16:45:50,897 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo10:comment': False, 'odoo1,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-18 16:45:50,979 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=10,ttl=None) 
+2025-05-18 16:45:51,650 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo10:comment': False, 'odoo1,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-18 16:45:51,725 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=7,ttl=None) 
+2025-05-18 16:45:52,424 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo10:comment': False, 'odoo1,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-18 16:45:52,541 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=3,ttl=None) 
+2025-05-18 16:45:53,184 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo12:id': 3, 'odoo12:company,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-18 16:45:53,265 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=13,ttl=None) 
+2025-05-18 16:45:53,791 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo12:id': 13, 'odoo12:compan,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-18 16:45:53,879 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=12,ttl=None) 
+2025-05-18 16:45:54,421 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo12:id': 12, 'odoo12:compan,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-18 16:45:54,517 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=9,ttl=None) 
+2025-05-18 16:45:54,971 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo12:id': 9, 'odoo12:company,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-18 16:45:55,064 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo12,ext_id=1,ttl=None) 
+2025-05-18 16:45:55,582 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.currency.synchro({'odoo12:id': 1, 'odoo12:active',backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-18 16:45:55,604 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo12,ext_id=2,ttl=None) 
+2025-05-18 16:45:56,054 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.currency.synchro({'odoo12:id': 2, 'odoo12:active',backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-18 16:45:56,076 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country,odoo12,ext_id=233,ttl=None) 
+2025-05-18 16:45:56,638 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.country.synchro({'odoo12:id': 233, 'odoo12:addre,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-18 16:45:56,691 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=3,ttl=None) 
+2025-05-18 16:45:57,218 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo12:id': 3, 'odoo12:company,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-18 16:45:57,302 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=13,ttl=None) 
+2025-05-18 16:45:57,779 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo12:id': 13, 'odoo12:compan,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-18 16:45:57,863 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=12,ttl=None) 
+2025-05-18 16:45:58,320 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo12:id': 12, 'odoo12:compan,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-18 16:45:58,422 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=9,ttl=None) 
+2025-05-18 16:45:59,015 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo12:id': 9, 'odoo12:company,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-18 16:45:59,107 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=3,ttl=None) 
+2025-05-18 16:45:59,356 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo14:id': 3, 'odoo14:company,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-18 16:45:59,433 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=13,ttl=None) 
+2025-05-18 16:45:59,711 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo14:id': 13, 'odoo14:compan,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-18 16:45:59,801 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=12,ttl=None) 
+2025-05-18 16:46:00,049 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo14:id': 12, 'odoo14:compan,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-18 16:46:00,143 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=9,ttl=None) 
+2025-05-18 16:46:00,413 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo14:id': 9, 'odoo14:company,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-18 16:46:00,504 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo14,ext_id=1,ttl=None) 
+2025-05-18 16:46:00,727 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.currency.synchro({'odoo14:id': 1, 'odoo14:date': ,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-18 16:46:00,746 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo14,ext_id=2,ttl=None) 
+2025-05-18 16:46:00,959 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.currency.synchro({'odoo14:id': 2, 'odoo14:date': ,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-18 16:46:00,981 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country,odoo14,ext_id=233,ttl=None) 
+2025-05-18 16:46:01,201 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.country.synchro({'odoo14:id': 233, 'odoo14:addre,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-18 16:46:01,251 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=3,ttl=None) 
+2025-05-18 16:46:01,484 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo14:id': 3, 'odoo14:company,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-18 16:46:01,565 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=13,ttl=None) 
+2025-05-18 16:46:01,810 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo14:id': 13, 'odoo14:compan,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-18 16:46:01,891 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=12,ttl=None) 
+2025-05-18 16:46:02,127 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo14:id': 12, 'odoo14:compan,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-18 16:46:02,223 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=9,ttl=None) 
+2025-05-18 16:46:02,458 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo14:id': 9, 'odoo14:company,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-18 16:46:02,661 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=3,ttl=None) 
+2025-05-18 16:46:03,494 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo10:comment': False, 'odoo1,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-18 16:46:03,577 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=3,ttl=None) 
+2025-05-18 16:46:04,065 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo12:id': 3, 'odoo12:company,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-18 16:46:04,156 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=3,ttl=None) 
+2025-05-18 16:46:04,397 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo14:id': 3, 'odoo14:company,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-18 16:46:04,498 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_jsonrpc_12/c8/c8fd583925c09ec326a3b997cd044a0ad7636db7 
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 13
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('res.partner(13,).image', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 312
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('ir.attachment(312,).datas', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
+    r = base64.b64encode(open(full_path,'rb').read())
+FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_jsonrpc_12/c8/c8fd583925c09ec326a3b997cd044a0ad7636db7'
+2025-05-18 16:46:04,501 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_jsonrpc_12/d6/d694aedb3fd293b0ad70a7ee7cbc4c0918d51d21 
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 13
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('res.partner(13,).image', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 312
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('ir.attachment(312,).datas', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
+    r = base64.b64encode(open(full_path,'rb').read())
+FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_jsonrpc_12/d6/d694aedb3fd293b0ad70a7ee7cbc4c0918d51d21'
+2025-05-18 16:46:04,505 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_jsonrpc_12/d1/d11256bbbee226b9d70934d607d8c2623ac43bee 
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 13
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('res.partner(13,).image_medium', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 313
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('ir.attachment(313,).datas', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
+    r = base64.b64encode(open(full_path,'rb').read())
+FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_jsonrpc_12/d1/d11256bbbee226b9d70934d607d8c2623ac43bee'
+2025-05-18 16:46:04,505 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_jsonrpc_12/25/25668fabdb766827cb0d7b27736d60b093e4ebf7 
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 13
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('res.partner(13,).image_medium', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 313
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('ir.attachment(313,).datas', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
+    r = base64.b64encode(open(full_path,'rb').read())
+FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_jsonrpc_12/25/25668fabdb766827cb0d7b27736d60b093e4ebf7'
+2025-05-18 16:46:04,509 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_jsonrpc_12/5c/5c8ecc838115f07c84f25dd094d612b8a89fec21 
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 13
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('res.partner(13,).image_small', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 314
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('ir.attachment(314,).datas', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
+    r = base64.b64encode(open(full_path,'rb').read())
+FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_jsonrpc_12/5c/5c8ecc838115f07c84f25dd094d612b8a89fec21'
+2025-05-18 16:46:04,509 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_jsonrpc_12/1c/1c0493f280e96b469f86725a32c39cae72bb9b5f 
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 13
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('res.partner(13,).image_small', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 314
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('ir.attachment(314,).datas', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
+    r = base64.b64encode(open(full_path,'rb').read())
+FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_jsonrpc_12/1c/1c0493f280e96b469f86725a32c39cae72bb9b5f'
+2025-05-18 16:46:04,514 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=11,ttl=None) 
+2025-05-18 16:46:05,474 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo10:comment': False, 'odoo1,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-18 16:46:05,567 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=13,ttl=None) 
+2025-05-18 16:46:06,144 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo12:id': 13, 'odoo12:compan,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-18 16:46:06,235 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=13,ttl=None) 
+2025-05-18 16:46:06,480 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo14:id': 13, 'odoo14:compan,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-18 16:46:06,590 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=3,ttl=None) 
+2025-05-18 16:46:07,410 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo10:comment': False, 'odoo1,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-18 16:46:07,501 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=3,ttl=None) 
+2025-05-18 16:46:08,276 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo12:id': 3, 'odoo12:company,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-18 16:46:08,410 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=3,ttl=None) 
+2025-05-18 16:46:08,706 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo14:id': 3, 'odoo14:company,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-18 16:46:08,827 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=11,ttl=None) 
+2025-05-18 16:46:09,796 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo10:comment': False, 'odoo1,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-18 16:46:09,892 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=13,ttl=None) 
+2025-05-18 16:46:10,358 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo12:id': 13, 'odoo12:compan,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-18 16:46:10,451 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=13,ttl=None) 
+2025-05-18 16:46:10,700 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo14:id': 13, 'odoo14:compan,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-18 16:46:10,805 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=3,ttl=None) 
+2025-05-18 16:46:11,712 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo10:comment': False, 'odoo1,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-18 16:46:11,793 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=3,ttl=None) 
+2025-05-18 16:46:12,340 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo12:id': 3, 'odoo12:company,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-18 16:46:12,446 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=3,ttl=None) 
+2025-05-18 16:46:12,717 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo14:id': 3, 'odoo14:company,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-18 16:46:12,820 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=11,ttl=None) 
+2025-05-18 16:46:13,620 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo10:comment': False, 'odoo1,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-18 16:46:13,717 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=13,ttl=None) 
+2025-05-18 16:46:14,167 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo12:id': 13, 'odoo12:compan,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-18 16:46:14,264 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=13,ttl=None) 
+2025-05-18 16:46:14,505 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo14:id': 13, 'odoo14:compan,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-18 16:46:14,594 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: ir.module.module.synchro({'odoo10:name': 'base', 'odoo10:,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-18 16:46:14,604 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.lang.synchro({'odoo10:code': 'it_IT', 'odoo10,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-18 16:46:14,642 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.base.models.ir_translation: module base: loading translation file (it) for language it_IT 
+2025-05-18 16:46:14,642 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.tools.translate: loading /home/odoo/12.0/odoo/addons/base/i18n/it.po 
+2025-05-18 16:46:16,171 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.base.models.ir_translation: module web: loading translation file (it) for language it_IT 
+2025-05-18 16:46:16,171 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.tools.translate: loading /home/odoo/12.0/addons/web/i18n/it.po 
+2025-05-18 16:46:16,267 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.base.models.ir_translation: module base_import: loading translation file (it) for language it_IT 
+2025-05-18 16:46:16,267 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.tools.translate: loading /home/odoo/12.0/addons/base_import/i18n/it.po 
+2025-05-18 16:46:16,293 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.base.models.ir_translation: module web_settings_dashboard: loading translation file (it) for language it_IT 
+2025-05-18 16:46:16,293 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.tools.translate: loading /home/odoo/12.0/addons/web_settings_dashboard/i18n/it.po 
+2025-05-18 16:46:16,305 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.base.models.ir_translation: module iap: loading translation file (it) for language it_IT 
+2025-05-18 16:46:16,305 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.tools.translate: loading /home/odoo/12.0/addons/iap/i18n/it.po 
+2025-05-18 16:46:16,316 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.base.models.ir_translation: module universal_connector_base: loading translation file (it) for language it_IT 
+2025-05-18 16:46:16,316 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.tools.translate: loading /home/odoo/12.0/connector/universal_connector_base/i18n/it.po 
+2025-05-18 16:46:16,332 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.base.models.ir_translation: module web_diagram: loading translation file (it) for language it_IT 
+2025-05-18 16:46:16,333 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.tools.translate: loading /home/odoo/12.0/addons/web_diagram/i18n/it.po 
+2025-05-18 16:46:16,341 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.base.models.ir_translation: module web_editor: loading translation file (it) for language it_IT 
+2025-05-18 16:46:16,341 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.tools.translate: loading /home/odoo/12.0/addons/web_editor/i18n/it.po 
+2025-05-18 16:46:16,374 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.base.models.ir_translation: module web_kanban_gauge: loading translation file (it) for language it_IT 
+2025-05-18 16:46:16,374 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.tools.translate: loading /home/odoo/12.0/addons/web_kanban_gauge/i18n/it.po 
+2025-05-18 16:46:16,381 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.base.models.ir_translation: module web_tour: loading translation file (it) for language it_IT 
+2025-05-18 16:46:16,381 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.tools.translate: loading /home/odoo/12.0/addons/web_tour/i18n/it.po 
+2025-05-18 16:46:16,424 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.currency.rate.synchro({'odoo10:currency_id': 1, 'odoo1,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-18 16:46:16,470 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo10:is_company': True, 'odo,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-18 16:46:16,557 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: ir.module.module.synchro({'odoo12:name': 'base', 'odoo12:,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-18 16:46:16,565 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.lang.synchro({'odoo12:code': 'it_IT', 'odoo12,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-18 16:46:16,572 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.currency.rate.synchro({'odoo12:currency_id': 1, 'odoo1,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-18 16:46:16,590 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo12:is_company': True, 'odo,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-18 16:46:16,675 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: ir.module.module.synchro({'odoo14:name': 'base', 'odoo14:,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-18 16:46:16,683 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.lang.synchro({'odoo14:code': 'it_IT', 'odoo14,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-18 16:46:16,690 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.currency.rate.synchro({'odoo14:currency_id': 1, 'odoo1,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-18 16:46:16,707 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_base.models.synchro_log: res.partner.synchro({'odoo14:is_company': True, 'odo,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-18 16:46:16,789 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_by_jsonrpc.tests.testenv: 🏆🥇 [1;32m384 tests SUCCESSFULLY completed[0m 
+2025-05-18 16:46:16,832 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_by_jsonrpc.tests.test_backend: Ran 1 test in 173.927s 
+2025-05-18 16:46:16,832 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.addons.universal_connector_by_jsonrpc.tests.test_backend: OK 
+2025-05-18 16:46:16,832 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.modules.module: odoo.addons.universal_connector_by_jsonrpc.tests.test_backend tested in 173.93s, 32663 queries 
+2025-05-18 16:46:16,842 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.modules.loading: 11 modules loaded in 174.39s, 32663 queries 
+2025-05-18 16:46:17,040 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.modules.loading: Modules loaded. 
+2025-05-18 16:46:17,042 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.service.server: Starting post tests 
+2025-05-18 16:46:17,043 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.service.server: All post-tested in 0.00s, 0 queries 
+2025-05-18 16:46:17,043 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.service.server: Initiating shutdown 
+2025-05-18 16:46:17,044 2570472 INFO test_universal_connector_by_jsonrpc_12 odoo.service.server: Hit CTRL-C again or send a second signal to force the shutdown. 
+
++===================================================================
+| please test [36muniversal_connector_by_jsonrpc[0m (12.0): [32mSUCCESS![0m
++===================================================================
+
+[1;37;44m$ coverage report --rcfile=/home/odoo/12.0/connector/universal_connector_by_jsonrpc/tests/logs/coverage_universal_connector_by_jsonrpc_12rc -m
+[34;107mNo data to report.
+[0m

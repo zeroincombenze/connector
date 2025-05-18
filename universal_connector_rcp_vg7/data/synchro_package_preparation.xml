@@ -63,14 +63,14 @@
     <record forcecreate="1" id="stock_picking_package_preparation_date" model="synchro.mapper">
         <field name="name">date</field>
         <field name="counterpart_name">data_emissione</field>
-        <field name="apply">datetime()</field>
+        <field name="apply4">datetime()</field>
         <field name="model_id" ref="stock_picking_package_preparation"/>
     </record>
 
     <record forcecreate="1" id="stock_picking_package_preparation_date_done" model="synchro.mapper">
         <field name="name">date_done</field>
         <field name="counterpart_name">data_ritiro</field>
-        <field name="apply">datetime()</field>
+        <field name="apply4">datetime()</field>
         <field name="model_id" ref="stock_picking_package_preparation"/>
     </record>
 
@@ -83,7 +83,7 @@
     <record forcecreate="1" id="stock_picking_package_preparation_partner_shipping_id" model="synchro.mapper">
         <field name="name">partner_shipping_id</field>
         <field name="counterpart_name">customer_shipping_id</field>
-        <field name="apply">partner_address()</field>
+        <field name="apply4">partner_address()</field>
         <field name="spec">delivery</field>
         <field name="required" eval="True"/>
         <field name="model_id" ref="stock_picking_package_preparation"/>
@@ -132,14 +132,14 @@
     <record forcecreate="1" id="stock_picking_package_preparation_gross_weight" model="synchro.mapper">
         <field name="name">gross_weight</field>
         <field name="counterpart_name">peso_lordo</field>
-        <!-- <field name="apply">set_weight_vg7()</field> -->
+        <!-- <field name="apply4">set_weight_vg7()</field> -->
         <field name="model_id" ref="stock_picking_package_preparation"/>
     </record>
 
     <record forcecreate="1" id="stock_picking_package_preparation_weight" model="synchro.mapper">
         <field name="name">weight</field>
         <field name="counterpart_name">peso_netto</field>
-        <!-- <field name="apply">set_weight_vg7()</field> -->
+        <!-- <field name="apply4">set_weight_vg7()</field> -->
         <field name="model_id" ref="stock_picking_package_preparation"/>
     </record>
 
@@ -165,7 +165,7 @@
     <record forcecreate="1" id="stock_picking_package_preparation_line_product_id" model="synchro.mapper">
         <field name="name">product_id</field>
         <field name="counterpart_name">product_id</field>
-        <field name="apply">line_vals_from_prod()</field>
+        <field name="apply4">line_vals_from_prod()</field>
         <field name="model_id" ref="stock_picking_package_preparation_line"/>
     </record>
 
@@ -196,27 +196,27 @@
     <record forcecreate="1" id="stock_picking_package_preparation_line_tax_ids" model="synchro.mapper">
         <field name="name">tax_ids</field>
         <field name="counterpart_name">tax_code_id</field>
-        <field name="apply">tax()</field>
+        <field name="apply4">tax()</field>
         <field name="model_id" ref="stock_picking_package_preparation_line"/>
     </record>
 
     <record forcecreate="1" id="stock_picking_package_preparation_line_weight" model="synchro.mapper">
         <field name="name">weight</field>
         <field name="counterpart_name">peso</field>
-        <!-- <field name="apply">set_weight_vg7()</field> -->
+        <!-- <field name="apply4">set_weight_vg7()</field> -->
         <field name="model_id" ref="stock_picking_package_preparation_line"/>
     </record>
 
     <record forcecreate="1" id="stock_picking_package_preparation_line_product_uom_id" model="synchro.mapper">
         <field name="name">product_uom_id</field>
         <field name="counterpart_name">um_id</field>
-        <field name="apply">uom()</field>
+        <field name="apply4">uom()</field>
         <field name="model_id" ref="stock_picking_package_preparation_line"/>
     </record>
 
     <record forcecreate="1" id="stock_picking_package_preparation_line_to_delete" model="synchro.mapper">
         <field name="name">to_delete</field>
-        <field name="apply">false</field>
+        <field name="apply4">false</field>
         <field name="model_id" ref="stock_picking_package_preparation_line"/>
     </record>
 

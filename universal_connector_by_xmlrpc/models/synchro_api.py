@@ -9,6 +9,7 @@
 import logging
 
 from odoo import models
+from python_plus import unicodes
 
 _logger = logging.getLogger(__name__)
 
@@ -22,6 +23,58 @@ class SynchroApi(models.Model):
     """API for Odoo Backends"""
 
     _inherit = "synchro.api"
+
+    def remote_browse_openerp_xmlrpc(
+            self, session, ext_id,
+            ext_model=None, model=None, spec=None, fields=None):
+        backend = session["backend"]
+        fields = fields or backend.ext_model_field_list(
+            backend, ext_model=ext_model, model=model, spec=spec)
+        values = session["cnx_lgi"].read(ext_model, ext_id, fields)
+        return unicodes(values)
+
+    def remote_search_openerp_xmlrpc(
+            self, session,
+            ext_model=None, model=None, spec=None, domain=[], fields=None):
+        backend = session["backend"]
+        fields = fields or backend.ext_model_field_list(
+            backend, ext_model=ext_model, model=model, spec=spec)
+        if [fields] == ["id"]:
+            return session["cnx_lgi"].search(ext_model, domain)
+        values = []
+        for id in session["cnx_lgi"].search(ext_model, domain):
+            values.append(session["cnx_lgi"].read(ext_model, id, fields=fields))
+        return unicodes(values)
+
+    def validate_ext_model_list_openerp_xmlrpc(self, session, model_list):
+        values = [
+            x["model"] for x in self.remote_search_openerp_xmlrpc(
+                session,
+                ext_model="ir.model",
+                domain=[("model", "in", [x[1] for x in model_list])],
+                fields=["model"])
+        ]
+        return [x for x in model_list if x[1] in values]
+
+    def validate_ext_field_list_openerp_xmlrpc(self, session, ext_model, field_list):
+        values = [
+            x["name"] for x in self.remote_search_openerp_xmlrpc(
+                session,
+                ext_model="ir.model.fields",
+                domain=[("model", "=", ext_model)],
+                fields=["name"])
+        ]
+        return [(x[0], x[1] if x[1] in values else False) for x in field_list]
+
+    def get_ext_id_of_ext_ref_openerp_xmlrpc(self, session, dir_mapper, ext_id):
+        ext_model = dir_mapper.counterpart_name
+        return [
+            x["id"] for x in self.remote_search_openerp_xmlrpc(
+                session,
+                ext_model="ir.model.data",
+                domain=[("model", "=", ext_model), ("res_id", "=", ext_id)],
+                fields=["id"])
+        ]
 
     def openerp_xmlrpc_connect(self, hostname, port):
         session = self.init_session()
@@ -40,7 +93,7 @@ class SynchroApi(models.Model):
         session["server_version"] = cnx.db.server_version() if cnx else False
         return session
 
-    def openerp_xmlrpc_login(self, cnx, database, login, password):
+    def openerp_xmlrpc_authenticate(self, cnx, database, login, password):
         try:
             session = cnx["cnx_lgi"].login(
                 database=database, user=login, passwd=password
@@ -57,7 +110,7 @@ class SynchroApi(models.Model):
         return cnx
 
     def openerp_xmlrpc_session(self, backend):
-        return self.openerp_xmlrpc_login(
+        return self.openerp_xmlrpc_authenticate(
             self.openerp_xmlrpc_connect(backend.hostname, backend.port),
             backend.database,
             backend.login,
@@ -67,46 +120,21 @@ class SynchroApi(models.Model):
     def get_response_openerp_xmlrpc(
         self, session, dir_mapper, ext_id=False, endpoint=None, fields=None
     ):
-        ext_model = dir_mapper.counterpart_name
-        if ext_id:
-            vals = session["cnx_lgi"].read(ext_model, ext_id, fields)
-            if vals and dir_mapper.counterpart_pk not in vals:
-                vals[dir_mapper.counterpart_pk] = ext_id
-            return [vals]
-        return session["cnx_lgi"].env[dir_mapper.name].search([])
+        values = self.remote_browse_openerp_xmlrpc(
+            session,
+            ext_id,
+            ext_model=dir_mapper.counterpart_name,
+            fields=fields
+        )
+        if values and dir_mapper.counterpart_pk not in values:
+            values[dir_mapper.counterpart_pk] = ext_id
+        return [values]
 
     def get_record_list_openerp_xmlrpc(self, session, dir_mapper):
-        ext_model = dir_mapper.counterpart_name
-        try:
-            values = session["cnx_lgi"].search(ext_model, [])
-        except BaseException as e:  # pragma: no cover
-            self.env.cr.rollback()  # pylint: disable=invalid-commit
-            self.env["synchro.log"].logmsg(
-                "error",
-                "!%(E)s! ERROR %(e)s reading(db=%(db)s, model=%(model)s, id=%(id)s)",
-                backend=dir_mapper.backend_id,
-                res_model=ext_model,
-                errcode=-13,
-                errmsg=e,
-            )
-            return []
-        return values
-
-    def get_ext_id_of_ext_ref_openerp_xmlrpc(self, session, dir_mapper, ext_id):
-        ext_model = dir_mapper.counterpart_name
-        try:
-            values = session["cnx_lgi"].search(
-                "ir.model.data", [("model", "=", ext_model), ("res_id", "=", ext_id)]
-            )
-        except BaseException as e:  # pragma: no cover
-            self.env.cr.rollback()  # pylint: disable=invalid-commit
-            self.env["synchro.log"].logmsg(
-                "error",
-                "!%(E)s! ERROR %(e)s reading(db=%(db)s, model=%(model)s, id=%(id)s)",
-                backend=dir_mapper.backend_id,
-                res_model=ext_model,
-                errcode=-13,
-                errmsg=e,
-            )
-            return []
-        return values
+        return [
+            x["id"] for x in self.remote_search_openerp_xmlrpc(
+                session,
+                ext_model=dir_mapper.counterpart_name,
+                domain=[],
+                fields=["id"])
+        ]

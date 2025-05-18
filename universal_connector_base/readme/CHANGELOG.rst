@@ -1,4 +1,8 @@
-12.0.1.3.14 (2025-04-13)
+<<<<<<< HEAD
+12.0.1.3.14 (2025-05-18)
+=======
+12.0.1.3.14 (2025-05-18)
+>>>>>>> 10.0-tmp-20250515
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 * [IMP] Separate apply e default functions
@@ -6,7 +10,7 @@
 * [IMP] Importing languages install language
 * [IMP] Dynamic apply functions and default functions for specific fields
 * [IMP] Automatic propagation limitation for \*many fields
-* [QUA] Test coverage 77% (2417: 553+1864) [134 TestPoints] - quality rating 56 (target 100)
+* [QUA] Test coverage 81% (2463: 464+1999) [281 TestPoints] - quality rating 59 (target 100)
 
 12.0.1.3.13 (2025-04-05)
 ~~~~~~~~~~~~~~~~~~~~~~~~

@@ -23,7 +23,7 @@
     <record forcecreate="1" id="res_partner_bank_acc_number" model="synchro.mapper">
         <field name="name">acc_number</field>
         <field name="counterpart_name">IBAN</field>
-        <field name="apply">iban()</field>
+        <field name="apply4">iban()</field>
         <field name="model_id" ref="res_partner_bank"/>
     </record>
 

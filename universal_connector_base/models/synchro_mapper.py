@@ -95,13 +95,13 @@ class SynchroMapper(models.Model):
     sequence = fields.Integer("Priority", default=16)
 
     def get_loc_fname(self, fct):
-        return "apply_%s" % fct[:-2]
+        return "apply_%s" % (fct[:-2] if fct.endswith("()") else fct)
 
     def get_default_protection(
         self, fix_protect_update=None, fix_required=None, magic_fields=None
     ):
         Cache = self.env["synchro.cache"]
-        magic_fields = magic_fields or []
+        magic_fields = magic_fields or self.backend_id.get_magic_fields()
         loc_name = self.name
         binding_model = self.model_id.split_binding_model_n_spec(self.model_id.name)[0]
         struct = self.env[binding_model].fields_get()
@@ -162,7 +162,7 @@ class SynchroMapper(models.Model):
                 default.append(fct)
 
         Cache = self.env["synchro.cache"]
-        magic_fields = magic_fields or []
+        magic_fields = magic_fields or self.backend_id.get_magic_fields(system=True)
         loc_name = self.name
         binding_model = self.model_id.split_binding_model_n_spec(self.model_id.name)[0]
         struct = self.env[binding_model].fields_get()
@@ -322,7 +322,7 @@ class SynchroMapper(models.Model):
                 }
             )
             force = True
-        magic_fields = magic_fields or []
+        magic_fields = magic_fields or self.backend_id.get_magic_fields(system=True)
         if force:
             protect_update, required = mapper.get_default_protection(
                 fix_protect_update=fix_protect_update,

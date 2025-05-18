@@ -29,7 +29,7 @@
     <record forcecreate="1" id="purchase_order_state" model="synchro.mapper">
         <field name="name">state</field>
         <field name="counterpart_name">order_state_id</field>
-        <field name="apply">set_order_state()</field>
+        <field name="apply4">set_order_state()</field>
         <field name="model_id" ref="purchase_order"/>
     </record>
     -->
@@ -42,14 +42,14 @@
 
     <record forcecreate="1" id="purchase_order_date_planned" model="synchro.mapper">
         <field name="name">date_planned</field>
-        <field name="apply">next_week_day()</field>
+        <field name="apply4">next_week_day()</field>
         <field name="model_id" ref="purchase_order"/>
     </record>
 
     <record forcecreate="1" id="purchase_order_name" model="synchro.mapper">
         <field name="name">name</field>
         <field name="counterpart_name">order_id</field>
-        <field name="apply">str()</field>
+        <field name="apply4">str()</field>
         <field name="model_id" ref="purchase_order"/>
     </record>
 
@@ -61,7 +61,7 @@
 
     <record forcecreate="1" id="purchase_order_company_id" model="synchro.mapper">
         <field name="name">company_id</field>
-        <field name="apply">get_global()</field>
+        <field name="apply4">get_global()</field>
         <field name="model_id" ref="purchase_order"/>
     </record>
 
@@ -73,7 +73,7 @@
 
     <record forcecreate="1" id="purchase_order_fiscal_position_id" model="synchro.mapper">
         <field name="name">fiscal_position_id</field>
-        <field name="apply">partner_info()</field>
+        <field name="apply4">partner_info()</field>
         <field name="required" eval="True"/>
         <field name="model_id" ref="purchase_order"/>
     </record>
@@ -87,7 +87,7 @@
 
     <record forcecreate="1" id="purchase_order_line_date_planned" model="synchro.mapper">
         <field name="name">date_planned</field>
-        <field name="apply">next_week_day()</field>
+        <field name="apply4">next_week_day()</field>
         <field name="model_id" ref="purchase_order_line"/>
     </record>
 
@@ -100,14 +100,14 @@
     <record forcecreate="1" id="purchase_order_line_product_id" model="synchro.mapper">
         <field name="name">product_id</field>
         <field name="counterpart_name">prodotto</field>
-        <field name="apply">prod_by_name(),line_vals_from_prod()</field>
+        <field name="apply4">prod_by_name(),line_vals_from_prod()</field>
         <field name="model_id" ref="purchase_order_line"/>
     </record>
 
     <record forcecreate="1" id="purchase_order_line_product_uom" model="synchro.mapper">
         <field name="name">product_uom</field>
         <field name="counterpart_name">um_id</field>
-        <field name="apply">uom()</field>
+        <field name="apply4">uom()</field>
         <field name="model_id" ref="purchase_order_line"/>
     </record>
 
@@ -120,13 +120,13 @@
     <record forcecreate="1" id="purchase_order_line_tax_id" model="synchro.mapper">
         <field name="name">taxes_id</field>
         <field name="counterpart_name">tax_code_id</field>
-        <field name="apply">tax()</field>
+        <field name="apply4">tax()</field>
         <field name="model_id" ref="purchase_order_line"/>
     </record>
 
     <record forcecreate="1" id="purchase_order_line_to_delete" model="synchro.mapper">
         <field name="name">to_delete</field>
-        <field name="apply">false</field>
+        <field name="apply4">false</field>
         <field name="model_id" ref="purchase_order_line"/>
     </record>
 

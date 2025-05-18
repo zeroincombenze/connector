@@ -199,6 +199,7 @@ class IrModelSynchroCache(models.Model):
             "message_unread_counter": {"readonly": True},
             "password": {"protect_update": 2},
             "password_crypt": {"protect_update": 2},
+            "vat": {"apply": "strip()"},
             "write_date": {"readonly": True},
             "write_uid": {"readonly": True},
         },
@@ -286,9 +287,7 @@ class IrModelSynchroCache(models.Model):
             "property_stock_customer": {"readonly": True},
             "property_stock_supplier": {"readonly": True},
             "title": {"readonly": True},
-            "type": {"required": True},
-            # "picking_warn": {"apply": "no-message"},
-            # "invoice_warn": {"apply": "no-message"},
+            "type": {"required": True, "default": "contact"},
         },
         "res.partner.bank": {
             "bank_name": {"readonly": False},
@@ -324,7 +323,7 @@ class IrModelSynchroCache(models.Model):
         ttl -= 1 if isinstance(ttl, int) else 0
         if ttl == 0:
             return
-        if action in ("synchro", "trigger", "pull"):
+        if action in ("synchro", "trigger", "push"):
             in_queue = self.get_attr(backend.id, que_name) or []
             found_in_que = False
             for qaction, qmodel, qspec, qvalues, que_ttl, que_ctx in in_queue:

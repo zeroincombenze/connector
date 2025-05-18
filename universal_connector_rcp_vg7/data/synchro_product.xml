@@ -38,26 +38,26 @@
     <record forcecreate="1" id="product_product_name" model="synchro.mapper">
         <field name="name">name</field>
         <field name="counterpart_name">name</field>
-        <field name="apply">set_tmp_name(),product_vg7_naming()</field>
+        <field name="apply4">set_tmp_name(),product_vg7_naming()</field>
         <field name="model_id" ref="product_product"/>
     </record>
 
     <record forcecreate="1" id="product_product_description_sale" model="synchro.mapper">
         <field name="name">description_sale</field>
         <field name="counterpart_name">description</field>
-        <field name="apply">set_tmp_name(),product_vg7_naming()</field>
+        <field name="apply4">set_tmp_name(),product_vg7_naming()</field>
         <field name="model_id" ref="product_product"/>
     </record>
 
     <record forcecreate="1" id="product_product_type" model="synchro.mapper">
         <field name="name">type</field>
-        <field name="apply">consu</field>
+        <field name="apply4">consu</field>
         <field name="model_id" ref="product_product"/>
     </record>
 
     <record forcecreate="1" id="product_product_invoice_policy" model="synchro.mapper">
         <field name="name">invoice_policy</field>
-        <field name="apply">order</field>
+        <field name="apply4">order</field>
         <field name="model_id" ref="product_product"/>
     </record>
 
@@ -71,19 +71,19 @@
     <record forcecreate="1" id="product_template_name" model="synchro.mapper">
         <field name="name">name</field>
         <field name="counterpart_name">description</field>
-        <field name="apply">set_tmp_name()</field>
+        <field name="apply4">set_tmp_name()</field>
         <field name="model_id" ref="product_template"/>
     </record>
 
     <record forcecreate="1" id="product_template_type" model="synchro.mapper">
         <field name="name">type</field>
-        <field name="apply">consu</field>
+        <field name="apply4">consu</field>
         <field name="model_id" ref="product_template"/>
     </record>
 
     <record forcecreate="1" id="product_template_invoice_policy" model="synchro.mapper">
         <field name="name">invoice_policy</field>
-        <field name="apply">order</field>
+        <field name="apply4">order</field>
         <field name="model_id" ref="product_template"/>
     </record>
 
@@ -91,31 +91,31 @@
     <record forcecreate="1" id="product_uom_name" model="synchro.mapper">
         <field name="name">name</field>
         <field name="counterpart_name">code</field>
-        <field name="apply">set_tmp_name()</field>
+        <field name="apply4">set_tmp_name()</field>
         <field name="model_id" ref="product_uom"/>
     </record>
 
     <record forcecreate="1" id="product_uom_type" model="synchro.mapper">
         <field name="name">uom_type</field>
-        <field name="apply">reference</field>
+        <field name="apply4">reference</field>
         <field name="model_id" ref="product_uom"/>
     </record>
 
     <record forcecreate="1" id="product_uom_factor" model="synchro.mapper">
         <field name="name">factor</field>
-        <field name="apply">1</field>
+        <field name="apply4">1</field>
         <field name="model_id" ref="product_uom"/>
     </record>
 
     <record forcecreate="1" id="product_uom_rounding" model="synchro.mapper">
         <field name="name">rounding</field>
-        <field name="apply">0.00000001</field>
+        <field name="apply4">0.00000001</field>
         <field name="model_id" ref="product_uom"/>
     </record>
 
     <record forcecreate="1" id="product_uom_category_id" model="synchro.mapper">
         <field name="name">category_id</field>
-        <field name="apply" ref="uom.product_uom_categ_unit"/>
+        <field name="apply4" ref="uom.product_uom_categ_unit"/>
         <field name="model_id" ref="product_uom"/>
     </record>
 

@@ -144,11 +144,19 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 ChangeLog History | Cronologia modifiche
 ----------------------------------------
 
-12.0.0.3.14 (2025-04-13)
+<<<<<<< HEAD
+12.0.1.3.14 (2025-05-18)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-* [IMP] Split from universal_connecto_base
-* [QUA] Test coverage 100% (106: 0+106) [114 TestPoints] - quality rating 233 (target 100)
+* [IMP] Split from universal_connector_base
+* [QUA] Test coverage 98% (132: 2+130) [222 TestPoints] - quality rating 175 (target 100)
+=========================================================================================
+12.0.1.3.14 (2025-05-18)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] Split from universal_connector_base
+* [QUA] Test coverage 98% (132: 2+130) [161 TestPoints] - quality rating 142 (target 100)
+>>>>>>> 10.0-tmp-20250515
 
 
 
@@ -199,7 +207,7 @@ La distribuzione `Zeroincombenze® <https://www.zeroincombenze.it/>`__ è proget
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2025-05-10
+Last Update / Ultimo aggiornamento: 2025-05-18
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status
