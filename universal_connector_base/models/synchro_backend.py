@@ -501,7 +501,7 @@ class SynchroChannel(models.Model):
                     errcode=-13,
                 )
                 self.state = "failed"
-            elif not self.company_id:
+            elif not loc_ext_ids and not self.company_id:
                 self.env["synchro.log"].logmsg(
                     "error",
                     "No company assigned to backend!",
@@ -568,51 +568,15 @@ class SynchroChannel(models.Model):
                 res_rec=self,
                 backend=self,
             )
-            if not self.model_ids:
+            if self.model_ids:
+                self.button_rebuild_model_map()
+            else:
                 self.button_build_model_map(force=True)
-            self.assure_technical_models()
             managed_models = set([x.name for x in self.model_ids])
             for dir_mapper in self.model_ids:
-                dir_mapper.build_dir_mapper(
-                    self,
-                    ext_model=dir_mapper.counterpart_name,
-                    model=dir_mapper.name,
-                    model_spec=dir_mapper.model_spec,
-                )
                 dir_mapper.analyze_dir_mapper(managed_models)
             self._set_model_priority(managed_models)
             self._synchronize_company()
-
-    @api.multi
-    def assure_technical_models(self):
-        self.ensure_one()
-        # Technical model "ir.model.data" and "ir.module.module" must be present
-        found_models = {
-            "ir.model.data": False,
-            "ir.module.module": False,
-            "res.country": False,
-            "res.country.state": False,
-            "res.currency": False,
-            "res.currency.rate": False,
-            "res.lang": False,
-            "res.groups": False,
-            "res.company": False,
-            "res.users": False,
-        }
-        for dir_mapper in self.model_ids:
-            if dir_mapper.name in found_models:
-                found_models[dir_mapper.name] = True
-        for binding_model, found in found_models.items():
-            if not found:
-                # if self.identity_id.code in ("odoo", "openerp"):
-                #     raise UserError(_("Missed mapping for %s" % binding_model))
-                self.env["synchro.model"].build_dir_mapper(
-                    self,
-                    ext_model=False,
-                    model=binding_model,
-                    model_spec=False,
-                    force=True,
-                )
 
     @api.multi
     def button_reset_to_draft(self):
@@ -633,6 +597,21 @@ class SynchroChannel(models.Model):
         session = self.get_session()
         if self.env["synchro.api"].session_is_active(session) and self.state == "ready":
             model_list = self.env["synchro.api"].get_model_list(session, self)
+            local_list = [x[0] for x in model_list]
+            for model in [
+                "ir.model.data",
+                "ir.module.module",
+                "res.country",
+                "res.country.state",
+                "res.currency",
+                "res.currency.rate",
+                "res.lang",
+                "res.groups",
+                "res.company",
+                "res.users",
+            ]:
+                if model not in local_list:
+                    model_list.append(model, False, False)
             for binding_model, remote_model, model_spec in model_list:
                 if binding_model and binding_model not in self.env:
                     continue
@@ -648,7 +627,7 @@ class SynchroChannel(models.Model):
 
     @api.multi
     def button_rebuild_model_map(self):
-        return self.button_rebuild_model_map(force=True)
+        return self.button_build_model_map(force=True)
 
     def get_loc_ext_id(self):
         return "%s_id" % self.prefix

@@ -81,7 +81,6 @@
                                     <field name="counterpart_name"/>
                                     <field name="use_remote_xref"/>
                                     <field name="auth_action"/>
-                                    <field name="field_uname"/>
                                     <field name="parent_name"/>
                                     <field name="childs_name"/>
                                 </tree>

@@ -40,10 +40,16 @@ class WizardSynchroPullRecord(models.TransientModel):
     # )
     remote_ids = fields.Char(
         "Remote IDs",
-        help="List of remote Ids, comma or space separated;\n"
+        help="List of remote IDs, comma or space separated;\n"
         "you can declare a range using format low-high;\n"
         'i.e.  "4 10-12" declares records 4,10,11,12.\n'
-        "Leave empty to import all IDs",
+        "Type * to import all IDs",
+    )
+    exclude_remote_ids = fields.Char(
+        "Exclude remote IDs",
+        help="List of remote IDs to exclude, comma or space separated;\n"
+        "you can declare a range using format low-high;\n"
+        'i.e.  "4 10-12" declares records 4,10,11,12.\n'
     )
 
     @api.onchange("backend_id")
@@ -62,17 +68,20 @@ class WizardSynchroPullRecord(models.TransientModel):
     #     if rec_counter:
     #         self.remote_ids = "%s-" % (rec_counter + 1)
 
-    def evaluate_remote_ids(self):
+    def evaluate_remote_ids(self, ids_range, all_remote_ids):
+        ids_range = ids_range or ""
         remote_ids = []
         for item in (
-            self.remote_ids.strip()
+            ids_range.strip()
             .replace("[", "")
             .replace("]", "")
             .replace(",", " ")
             .replace("  ", " ")
             .split(" ")
         ):
-            if item.strip().isdigit():
+            if item.strip() == "*":
+                remote_ids = all_remote_ids
+            elif item.strip().isdigit():
                 remote_ids.append(int(item))
             else:
                 if "-" not in item:
@@ -80,20 +89,28 @@ class WizardSynchroPullRecord(models.TransientModel):
                 low, high = item.split("-", 1)
                 if low.strip().isdigit():
                     low = int(low)
-                elif high.strip().isdigit():
-                    low = max(int(high) - 100, 1)
                 else:
                     low = 1
                 if high.strip().isdigit():
                     high = int(high)
                 else:
-                    high = low + 100
+                    high = max(all_remote_ids)
                 remote_ids += eval("range(%d,%d)" % (low, high + 1))
         return remote_ids
 
     def pull_full_records(self):
         Cache = self.env["synchro.cache"]
-        remote_ids = self.evaluate_remote_ids()
+        Api = self.env["synchro.api"]
+        session = Api.get_session(self.dir_mapper_id.backend_id)
+        all_remote_ids = Api.get_record_list(session, self.dir_mapper_id)
+        remote_ids = self.evaluate_remote_ids(self.remote_ids, all_remote_ids)
+        exclude_remote_ids = self.evaluate_remote_ids(
+            self.exclude_remote_ids, all_remote_ids)
+        if all_remote_ids:
+            remote_ids = sorted(list(
+                (set(remote_ids) - set(exclude_remote_ids)) & set(all_remote_ids)))
+        else:
+            remote_ids = sorted(list(set(remote_ids) - set(exclude_remote_ids)))
         for res_id in remote_ids:
             Cache.que_push(
                 self.backend_id,

@@ -25,5 +25,5 @@
         'universal_connector_zeroincombenze',
     ],
     'website': 'https://www.zeroincombenze.it/',
-    'installable': True,
+    'installable': False,
 }

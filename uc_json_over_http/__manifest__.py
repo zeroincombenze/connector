@@ -21,5 +21,5 @@
     ],
     'website': 'https://www.zeroincombenze.it/',
     'post_init_hook': 'set_available_protocol_post',
-    'installable': True,
+    'installable': False,
 }

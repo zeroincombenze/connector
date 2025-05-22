@@ -12,6 +12,7 @@
                     <group>
                         <field name="timestamp"/>
                         <field name="odoo_id"/>
+                        <field name="odoo18_id"/>
                         <field name="odoo16_id"/>
                         <field name="odoo14_id"/>
                         <field name="odoo12_id"/>
@@ -30,6 +31,7 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='parent_id']" position="after">
                 <field name="odoo_id"/>
+                <field name="odoo18_id"/>
                 <field name="odoo16_id"/>
                 <field name="odoo14_id"/>
                 <field name="odoo12_id"/>

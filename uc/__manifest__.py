@@ -38,6 +38,6 @@
         "views/synchro_backend_model.xml",
         "views/odoo_connector_menus.xml",
     ],
-    'installable': True,
+    'installable': False,
     'development_status': 'Alpha',
 }

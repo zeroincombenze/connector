@@ -18,6 +18,7 @@ class ResUsers(models.Model):
 
     _sql_constraints = [
         ('ref_unique_odoo_id', 'unique(odoo_id)', 'Remote ref must be unique!'),
+        ('ref_unique_odoo18_id', 'unique(odoo18_id)', 'Remote ref must be unique!'),
         ('ref_unique_odoo16_id', 'unique(odoo16_id)', 'Remote ref must be unique!'),
         ('ref_unique_odoo14_id', 'unique(odoo14_id)', 'Remote ref must be unique!'),
         ('ref_unique_odoo12_id', 'unique(odoo12_id)', 'Remote ref must be unique!'),
@@ -25,16 +26,11 @@ class ResUsers(models.Model):
     ]
 
     odoo_id = fields.Integer("Odoo ID", copy=False)
+    odoo18_id = fields.Integer("Odoo18 ID", copy=False)
     odoo16_id = fields.Integer("Odoo16 ID", copy=False)
     odoo14_id = fields.Integer("Odoo14 ID", copy=False)
     odoo12_id = fields.Integer("Odoo12 ID", copy=False)
     odoo10_id = fields.Integer("Odoo10 ID", copy=False)
-
-    def assure_values(self, vals, rec):
-        if "notify_emails" in vals:
-            # Avoid synchonizzazion notify
-            vals["notify_emails"] = "None"
-        return vals
 
 
 class ResGroups(models.Model):
@@ -42,6 +38,7 @@ class ResGroups(models.Model):
 
     _sql_constraints = [
         ('ref_unique_odoo_id', 'unique(odoo_id)', 'Remote ref must be unique!'),
+        ('ref_unique_odoo18_id', 'unique(odoo18_id)', 'Remote ref must be unique!'),
         ('ref_unique_odoo16_id', 'unique(odoo16_id)', 'Remote ref must be unique!'),
         ('ref_unique_odoo14_id', 'unique(odoo14_id)', 'Remote ref must be unique!'),
         ('ref_unique_odoo12_id', 'unique(odoo12_id)', 'Remote ref must be unique!'),
@@ -49,6 +46,7 @@ class ResGroups(models.Model):
     ]
 
     odoo_id = fields.Integer("Odoo ID", copy=False)
+    odoo18_id = fields.Integer("Odoo18 ID", copy=False)
     odoo16_id = fields.Integer("Odoo16 ID", copy=False)
     odoo14_id = fields.Integer("Odoo14 ID", copy=False)
     odoo12_id = fields.Integer("Odoo12 ID", copy=False)

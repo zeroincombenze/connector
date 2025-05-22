@@ -1,5 +1,5 @@
 =============================================================================================
-|icon| Universal Connector: product management/Prodotti per connettore universale 10.0.1.3.14
+|icon| Universal Connector: product management/Prodotti per connettore universale 10.0.1.3.15
 =============================================================================================
 
 **Add product models to Universal Connector**
@@ -160,7 +160,7 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 ChangeLog History | Cronologia modifiche
 ----------------------------------------
 
-10.0.1.3.14 (2025-05-18)
+10.0.1.3.14 (2025-05-19)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 * [QUA] Test coverage 54% (116: 53+63) [18 TestPoints] - quality rating 43 (target 100)
@@ -231,11 +231,7 @@ La distribuzione `Zeroincombenze® <https://www.zeroincombenze.it/>`__ è proget
 
 This module is part of connector project.
 
-<<<<<<< HEAD
-Last Update / Ultimo aggiornamento: 2025-05-10
-=======
-Last Update / Ultimo aggiornamento: 2025-05-18
->>>>>>> 10.0-tmp-20250515
+Last Update / Ultimo aggiornamento: 2025-05-19
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status

@@ -1,0 +1,694 @@
+2025-05-22 12:53:32,764 964615 INFO ? odoo: Odoo version 12.0 
+2025-05-22 12:53:32,765 964615 INFO ? odoo: Using configuration file at /home/odoo/12.0/connector/universal_connector_by_csv/tests/logs/zero12.connector.universal_connector_by_csv.conf 
+2025-05-22 12:53:32,765 964615 INFO ? odoo: addons paths: ['/home/odoo/.local/share/Odoo12/addons/12.0', '/home/odoo/12.0/odoo/addons', '/home/odoo/12.0/addons', '/home/odoo/.local/share/Odoo12/addons', '/home/odoo/12.0/account-analytic', '/home/odoo/12.0/account-budgeting', '/home/odoo/12.0/account-closing', '/home/odoo/12.0/account-consolidation', '/home/odoo/12.0/account-financial-reporting', '/home/odoo/12.0/account-financial-tools', '/home/odoo/12.0/account-fiscal-rule', '/home/odoo/12.0/account-invoice-reporting', '/home/odoo/12.0/account-invoicing', '/home/odoo/12.0/account-payment', '/home/odoo/12.0/account-reconcile', '/home/odoo/12.0/bank-payment', '/home/odoo/12.0/bank-statement-import', '/home/odoo/12.0/brand', '/home/odoo/12.0/calendar', '/home/odoo/12.0/commission', '/home/odoo/12.0/community-data-files', '/home/odoo/12.0/connector', '/home/odoo/12.0/contract', '/home/odoo/12.0/credit-control', '/home/odoo/12.0/crm', '/home/odoo/12.0/currency', '/home/odoo/12.0/data-protection', '/home/odoo/12.0/ddmrp', '/home/odoo/12.0/delivery-carrier', '/home/odoo/12.0/dms', '/home/odoo/12.0/e-commerce', '/home/odoo/12.0/edi', '/home/odoo/12.0/field-service', '/home/odoo/12.0/helpdesk', '/home/odoo/12.0/hr', '/home/odoo/12.0/intrastat-extrastat', '/home/odoo/12.0/knowledge', '/home/odoo/12.0/l10n-italy', '/home/odoo/12.0/l10n-italy-supplemental', '/home/odoo/12.0/maintenance', '/home/odoo/12.0/management-system', '/home/odoo/12.0/manufacture', '/home/odoo/12.0/margin-analysis', '/home/odoo/12.0/marketplace', '/home/odoo/12.0/mis-builder', '/home/odoo/12.0/multi-company', '/home/odoo/12.0/partner-contact', '/home/odoo/12.0/product-attribute', '/home/odoo/12.0/product-kitting', '/home/odoo/12.0/product-pack', '/home/odoo/12.0/product-variant', '/home/odoo/12.0/profiles', '/home/odoo/12.0/project', '/home/odoo/12.0/purchase-reporting', '/home/odoo/12.0/purchase-workflow', '/home/odoo/12.0/queue', '/home/odoo/12.0/report-print-send', '/home/odoo/12.0/reporting-engine', '/home/odoo/12.0/rma', '/home/odoo/12.0/sale-financial', '/home/odoo/12.0/sale-reporting', '/home/odoo/12.0/sale-workflow', '/home/odoo/12.0/search-engine', '/home/odoo/12.0/server-auth', '/home/odoo/12.0/server-backend', '/home/odoo/12.0/server-brand', '/home/odoo/12.0/server-env', '/home/odoo/12.0/server-tools', '/home/odoo/12.0/server-ux', '/home/odoo/12.0/social', '/home/odoo/12.0/stock-logistics-barcode', '/home/odoo/12.0/stock-logistics-reporting', '/home/odoo/12.0/stock-logistics-tracking', '/home/odoo/12.0/stock-logistics-transport', '/home/odoo/12.0/stock-logistics-warehouse', '/home/odoo/12.0/stock-logistics-workflow', '/home/odoo/12.0/storage', '/home/odoo/12.0/timesheet', '/home/odoo/12.0/uncovered', '/home/odoo/12.0/web', '/home/odoo/12.0/webhook', '/home/odoo/12.0/website', '/home/odoo/12.0/wms', '/home/odoo/12.0/zerobug-test', '/home/odoo/12.0/venv_odoo/lib/python3.7/site-packages/odoo/addons'] 
+2025-05-22 12:53:32,765 964615 INFO ? odoo: database: odoo12@localhost:5432 
+2025-05-22 12:53:32,786 964615 INFO ? odoo.addons.server_environment.serv_config: not using server_environment_files for configuration, no directory found 
+2025-05-22 12:53:32,787 964615 INFO ? odoo.addons.server_environment.serv_config: `running_env` not found. Using default = `test`. 
+2025-05-22 12:53:32,787 964615 INFO ? odoo.addons.server_environment.serv_config: We strongly recommend against using the rc file but instead use an explicit config file or env variable. 
+2025-05-22 12:53:32,904 964615 INFO ? odoo.addons.base.models.ir_actions_report: Will use the Wkhtmltopdf binary at /home/odoo/12.0/venv_odoo/bin/wkhtmltopdf 
+2025-05-22 12:53:32,989 964615 INFO ? odoo.service.server: HTTP service (werkzeug) running on NB200Z0.:29373 
+2025-05-22 12:53:33,001 964615 INFO test_universal_connector_by_csv_12 odoo.modules.loading: loading 1 modules... 
+2025-05-22 12:53:33,007 964615 INFO test_universal_connector_by_csv_12 odoo.modules.loading: 1 modules loaded in 0.01s, 0 queries 
+2025-05-22 12:53:33,103 964615 INFO test_universal_connector_by_csv_12 odoo.modules.loading: updating modules list 
+2025-05-22 12:53:33,105 964615 INFO test_universal_connector_by_csv_12 odoo.addons.base.models.ir_module: ALLOW access to module.update_list on [] to user __system__ #1 via n/a 
+2025-05-22 12:53:41,630 964615 INFO test_universal_connector_by_csv_12 odoo.addons.base.models.ir_module: ALLOW access to module.button_install on ['universal_connector_by_csv'] to user __system__ #1 via n/a 
+2025-05-22 12:53:41,841 964615 INFO test_universal_connector_by_csv_12 odoo.modules.loading: loading 10 modules... 
+2025-05-22 12:53:42,038 964615 INFO test_universal_connector_by_csv_12 odoo.modules.loading: 10 modules loaded in 0.20s, 0 queries 
+2025-05-22 12:53:42,042 964615 INFO test_universal_connector_by_csv_12 odoo.modules.loading: loading 11 modules... 
+2025-05-22 12:53:42,208 964615 INFO test_universal_connector_by_csv_12 odoo.modules.registry: module universal_connector_by_csv: creating or updating database tables 
+2025-05-22 12:53:42,234 964615 INFO test_universal_connector_by_csv_12 odoo.modules.loading: loading universal_connector_by_csv/data/synchro_protocol.xml 
+2025-05-22 12:53:42,241 964615 INFO test_universal_connector_by_csv_12 odoo.modules.loading: Module universal_connector_by_csv: loading demo 
+2025-05-22 12:53:42,281 964615 INFO test_universal_connector_by_csv_12 odoo.modules.module: odoo.addons.universal_connector_by_csv.tests.test_backend running tests. 
+2025-05-22 12:53:42,282 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_by_csv.tests.test_backend: test_connection (odoo.addons.universal_connector_by_csv.tests.test_backend.MyTest) 
+2025-05-22 12:53:42,390 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_by_csv.tests.testenv: 🎺🎺🎺 Starting test v2.0.22 (debug_level=0, commit=True) 
+2025-05-22 12:53:42,392 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_by_csv.tests.testenv: 🎺🎺 Testing module: universal_connector_by_csv (12.0.1.3.15) 
+2025-05-22 12:53:42,392 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_by_csv.tests.testenv: 🎺🎺 Loading data from: synchro.backend  
+2025-05-22 12:53:42,443 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_by_csv.tests.test_backend: 🎺 Starting connection test 
+2025-05-22 12:53:42,459 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.button_check_connection(ep=http://admin@localhost:8270/xmlrpc/2/common,h=False) 
+2025-05-22 12:53:47,435 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.company,odoo10,ext_id=1,ttl=1) 
+2025-05-22 12:53:47,443 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:id': 1, 'odoo10:name': ,backend=Test Odoo 10.0,min=True),ttl=1 
+2025-05-22 12:53:47,465 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.button_reset_to_draft(ep=http://admin@localhost:8270/xmlrpc/2/common,h=False): 
+2025-05-22 12:53:47,480 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.button_check_connection(ep=http://admin@localhost:8270/xmlrpc/2/common,h=False) 
+2025-05-22 12:53:49,995 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo10,ext_id=1,ttl=None) 
+2025-05-22 12:53:50,005 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:id': 1, 'odoo10:name': ,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:53:50,018 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo10,ext_id=3,ttl=None) 
+2025-05-22 12:53:50,020 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:id': 3, 'odoo10:name': ,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:53:50,042 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.button_check_connection(ep=http://admin@localhost:8272/xmlrpc/2/common,h=False) 
+2025-05-22 12:53:54,140 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.company,odoo12,ext_id=1,ttl=1) 
+2025-05-22 12:53:54,150 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 1, 'odoo12:name': ,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:53:54,172 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.button_reset_to_draft(ep=http://admin@localhost:8272/xmlrpc/2/common,h=False): 
+2025-05-22 12:53:54,185 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.button_check_connection(ep=http://admin@localhost:8272/xmlrpc/2/common,h=False) 
+2025-05-22 12:53:56,754 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo12,ext_id=1,ttl=None) 
+2025-05-22 12:53:56,762 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 1, 'odoo12:name': ,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:53:56,773 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo12,ext_id=2,ttl=None) 
+2025-05-22 12:53:56,774 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 2, 'odoo12:name': ,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:53:56,795 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.button_check_connection(ep=False,h=False) 
+2025-05-22 12:54:01,380 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.company,odoo14,ext_id=1,ttl=1) 
+2025-05-22 12:54:01,386 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 1, 'odoo14:name': ,backend=Test Odoo 14.0,min=True),ttl=1 
+2025-05-22 12:54:01,407 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.button_reset_to_draft(ep=False,h=False): 
+2025-05-22 12:54:01,422 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.button_check_connection(ep=False,h=False) 
+2025-05-22 12:54:03,954 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo14,ext_id=1,ttl=None) 
+2025-05-22 12:54:03,962 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 1, 'odoo14:name': ,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:54:03,972 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo14,ext_id=2,ttl=None) 
+2025-05-22 12:54:03,974 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 2, 'odoo14:name': ,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:54:03,985 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country,odoo10,ext_id=235,ttl=None) 
+2025-05-22 12:54:03,989 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:id': 235, 'odoo10:code',backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:54:04,002 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=3,ttl=None) 
+2025-05-22 12:54:04,007 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:id': 3, 'odoo10:name': ,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:54:04,033 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=11,ttl=None) 
+2025-05-22 12:54:04,034 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:id': 11, 'odoo10:name':,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:54:04,071 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=10,ttl=None) 
+2025-05-22 12:54:04,074 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:id': 10, 'odoo10:name':,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:54:04,121 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:id': 10, 'odoo10:name':,backend=Test Odoo 10.0,min=False),ttl=3 
+2025-05-22 12:54:04,135 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=7,ttl=None) 
+2025-05-22 12:54:04,141 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:id': 7, 'odoo10:name': ,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:54:04,186 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:id': 7, 'odoo10:name': ,backend=Test Odoo 10.0,min=False),ttl=3 
+2025-05-22 12:54:04,202 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country,odoo12,ext_id=233,ttl=None) 
+2025-05-22 12:54:04,206 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 233, 'odoo12:code',backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:54:04,217 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=3,ttl=None) 
+2025-05-22 12:54:04,222 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 3, 'odoo12:name': ,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:54:04,243 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=13,ttl=None) 
+2025-05-22 12:54:04,245 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 13, 'odoo12:name':,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:54:04,280 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=12,ttl=None) 
+2025-05-22 12:54:04,282 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 12, 'odoo12:name':,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:54:04,322 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=9,ttl=None) 
+2025-05-22 12:54:04,323 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 9, 'odoo12:name': ,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:54:04,360 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country,odoo14,ext_id=233,ttl=None) 
+2025-05-22 12:54:04,364 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 233, 'odoo14:code',backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:54:04,373 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=3,ttl=None) 
+2025-05-22 12:54:04,377 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 3, 'odoo14:name': ,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:54:04,393 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=13,ttl=None) 
+2025-05-22 12:54:04,395 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 13, 'odoo14:name':,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:54:04,429 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=12,ttl=None) 
+2025-05-22 12:54:04,431 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 12, 'odoo14:name':,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:54:04,462 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=9,ttl=None) 
+2025-05-22 12:54:04,464 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 9, 'odoo14:name': ,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:54:04,496 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=3,ttl=None) 
+2025-05-22 12:54:04,503 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:id': 3, 'odoo10:name': ,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:54:04,525 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=11,ttl=None) 
+2025-05-22 12:54:04,528 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:id': 11, 'odoo10:name':,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:54:04,539 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=3,ttl=None) 
+2025-05-22 12:54:04,541 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:id': 3, 'odoo10:name': ,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:54:04,551 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=11,ttl=None) 
+2025-05-22 12:54:04,553 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:id': 11, 'odoo10:name':,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:54:04,561 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=10,ttl=None) 
+2025-05-22 12:54:04,563 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:id': 10, 'odoo10:name':,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:54:04,572 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=7,ttl=None) 
+2025-05-22 12:54:04,574 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:id': 7, 'odoo10:name': ,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:54:04,584 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo10,ext_id=1,ttl=None) 
+2025-05-22 12:54:04,587 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:id': 1, 'odoo10:name': ,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:54:04,593 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo10,ext_id=3,ttl=None) 
+2025-05-22 12:54:04,594 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:id': 3, 'odoo10:name': ,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:54:04,601 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country,odoo10,ext_id=235,ttl=None) 
+2025-05-22 12:54:04,603 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:id': 235, 'odoo10:code',backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:54:04,610 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=3,ttl=None) 
+2025-05-22 12:54:04,612 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:id': 3, 'odoo10:name': ,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:54:04,621 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=11,ttl=None) 
+2025-05-22 12:54:04,623 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:id': 11, 'odoo10:name':,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:54:04,632 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=10,ttl=None) 
+2025-05-22 12:54:04,634 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:id': 10, 'odoo10:name':,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:54:04,642 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=7,ttl=None) 
+2025-05-22 12:54:04,644 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:id': 7, 'odoo10:name': ,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:54:04,655 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=3,ttl=None) 
+2025-05-22 12:54:04,657 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 3, 'odoo12:name': ,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:54:04,673 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=13,ttl=None) 
+2025-05-22 12:54:04,675 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 13, 'odoo12:name':,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:54:04,684 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=12,ttl=None) 
+2025-05-22 12:54:04,686 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 12, 'odoo12:name':,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:54:04,695 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=9,ttl=None) 
+2025-05-22 12:54:04,697 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 9, 'odoo12:name': ,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:54:04,709 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo12,ext_id=1,ttl=None) 
+2025-05-22 12:54:04,712 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 1, 'odoo12:name': ,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:54:04,718 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo12,ext_id=2,ttl=None) 
+2025-05-22 12:54:04,719 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 2, 'odoo12:name': ,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:54:04,726 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country,odoo12,ext_id=233,ttl=None) 
+2025-05-22 12:54:04,727 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 233, 'odoo12:code',backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:54:04,735 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=3,ttl=None) 
+2025-05-22 12:54:04,736 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 3, 'odoo12:name': ,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:54:04,746 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=13,ttl=None) 
+2025-05-22 12:54:04,749 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 13, 'odoo12:name':,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:54:04,757 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=12,ttl=None) 
+2025-05-22 12:54:04,759 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 12, 'odoo12:name':,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:54:04,768 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=9,ttl=None) 
+2025-05-22 12:54:04,770 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 9, 'odoo12:name': ,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:54:04,781 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=3,ttl=None) 
+2025-05-22 12:54:04,783 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 3, 'odoo14:name': ,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:54:04,793 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=13,ttl=None) 
+2025-05-22 12:54:04,795 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 13, 'odoo14:name':,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:54:04,805 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=12,ttl=None) 
+2025-05-22 12:54:04,807 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 12, 'odoo14:name':,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:54:04,816 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=9,ttl=None) 
+2025-05-22 12:54:04,818 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 9, 'odoo14:name': ,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:54:04,828 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo14,ext_id=1,ttl=None) 
+2025-05-22 12:54:04,830 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 1, 'odoo14:name': ,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:54:04,835 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo14,ext_id=2,ttl=None) 
+2025-05-22 12:54:04,837 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 2, 'odoo14:name': ,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:54:04,844 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country,odoo14,ext_id=233,ttl=None) 
+2025-05-22 12:54:04,846 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 233, 'odoo14:code',backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:54:04,854 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=3,ttl=None) 
+2025-05-22 12:54:04,856 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 3, 'odoo14:name': ,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:54:04,867 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=13,ttl=None) 
+2025-05-22 12:54:04,869 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 13, 'odoo14:name':,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:54:04,878 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=12,ttl=None) 
+2025-05-22 12:54:04,881 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 12, 'odoo14:name':,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:54:04,889 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=9,ttl=None) 
+2025-05-22 12:54:04,891 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 9, 'odoo14:name': ,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:54:04,910 964615 INFO test_universal_connector_by_csv_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_csv_12/e7/e7aa49e28912f86a83133bd5730a9f410d778dff 
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 3
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('res.partner(3,).image', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 4
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('ir.attachment(4,).datas', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
+    r = base64.b64encode(open(full_path,'rb').read())
+FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_csv_12/e7/e7aa49e28912f86a83133bd5730a9f410d778dff'
+2025-05-22 12:54:04,915 964615 INFO test_universal_connector_by_csv_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_csv_12/ce/ce9e7f90952a124be08d13907563c451acc1c099 
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 3
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('res.partner(3,).image_medium', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 5
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('ir.attachment(5,).datas', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
+    r = base64.b64encode(open(full_path,'rb').read())
+FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_csv_12/ce/ce9e7f90952a124be08d13907563c451acc1c099'
+2025-05-22 12:54:04,918 964615 INFO test_universal_connector_by_csv_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_csv_12/c9/c947cb81093ee89c7b1fe232191108af0ab4ff15 
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 3
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('res.partner(3,).image_small', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 6
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('ir.attachment(6,).datas', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
+    r = base64.b64encode(open(full_path,'rb').read())
+FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_csv_12/c9/c947cb81093ee89c7b1fe232191108af0ab4ff15'
+2025-05-22 12:54:04,925 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=3,ttl=None) 
+2025-05-22 12:54:04,929 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:id': 3, 'odoo10:name': ,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:54:04,943 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=3,ttl=None) 
+2025-05-22 12:54:04,946 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 3, 'odoo12:name': ,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:54:04,962 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=3,ttl=None) 
+2025-05-22 12:54:04,965 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 3, 'odoo14:name': ,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:54:04,989 964615 INFO test_universal_connector_by_csv_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_csv_12/c8/c8fd583925c09ec326a3b997cd044a0ad7636db7 
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 13
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('res.partner(13,).image', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 312
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('ir.attachment(312,).datas', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
+    r = base64.b64encode(open(full_path,'rb').read())
+FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_csv_12/c8/c8fd583925c09ec326a3b997cd044a0ad7636db7'
+2025-05-22 12:54:04,989 964615 INFO test_universal_connector_by_csv_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_csv_12/c2/c28cdedc140a4b729eb9f679eeaf01e26c8ed0f5 
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 13
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('res.partner(13,).image', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 312
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('ir.attachment(312,).datas', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
+    r = base64.b64encode(open(full_path,'rb').read())
+FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_csv_12/c2/c28cdedc140a4b729eb9f679eeaf01e26c8ed0f5'
+2025-05-22 12:54:04,990 964615 INFO test_universal_connector_by_csv_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_csv_12/d6/d694aedb3fd293b0ad70a7ee7cbc4c0918d51d21 
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 13
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('res.partner(13,).image', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 312
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('ir.attachment(312,).datas', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
+    r = base64.b64encode(open(full_path,'rb').read())
+FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_csv_12/d6/d694aedb3fd293b0ad70a7ee7cbc4c0918d51d21'
+2025-05-22 12:54:04,993 964615 INFO test_universal_connector_by_csv_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_csv_12/d1/d11256bbbee226b9d70934d607d8c2623ac43bee 
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 13
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('res.partner(13,).image_medium', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 313
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('ir.attachment(313,).datas', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
+    r = base64.b64encode(open(full_path,'rb').read())
+FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_csv_12/d1/d11256bbbee226b9d70934d607d8c2623ac43bee'
+2025-05-22 12:54:04,994 964615 INFO test_universal_connector_by_csv_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_csv_12/25/25668fabdb766827cb0d7b27736d60b093e4ebf7 
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 13
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('res.partner(13,).image_medium', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 313
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('ir.attachment(313,).datas', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
+    r = base64.b64encode(open(full_path,'rb').read())
+FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_csv_12/25/25668fabdb766827cb0d7b27736d60b093e4ebf7'
+2025-05-22 12:54:04,994 964615 INFO test_universal_connector_by_csv_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_csv_12/6f/6f80f3a5e33f5557299ffb9f6b5e3d396bdb0ad7 
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 13
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('res.partner(13,).image_medium', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 313
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('ir.attachment(313,).datas', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
+    r = base64.b64encode(open(full_path,'rb').read())
+FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_csv_12/6f/6f80f3a5e33f5557299ffb9f6b5e3d396bdb0ad7'
+2025-05-22 12:54:04,998 964615 INFO test_universal_connector_by_csv_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_csv_12/5c/5c8ecc838115f07c84f25dd094d612b8a89fec21 
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 13
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('res.partner(13,).image_small', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 314
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('ir.attachment(314,).datas', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
+    r = base64.b64encode(open(full_path,'rb').read())
+FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_csv_12/5c/5c8ecc838115f07c84f25dd094d612b8a89fec21'
+2025-05-22 12:54:04,999 964615 INFO test_universal_connector_by_csv_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_csv_12/54/540cd5df37c8e514fc17ce34fcf5723bb4fc371f 
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 13
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('res.partner(13,).image_small', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 314
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('ir.attachment(314,).datas', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
+    r = base64.b64encode(open(full_path,'rb').read())
+FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_csv_12/54/540cd5df37c8e514fc17ce34fcf5723bb4fc371f'
+2025-05-22 12:54:04,999 964615 INFO test_universal_connector_by_csv_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_csv_12/1c/1c0493f280e96b469f86725a32c39cae72bb9b5f 
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 13
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('res.partner(13,).image_small', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 314
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('ir.attachment(314,).datas', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
+    r = base64.b64encode(open(full_path,'rb').read())
+FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_by_csv_12/1c/1c0493f280e96b469f86725a32c39cae72bb9b5f'
+2025-05-22 12:54:05,005 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=11,ttl=None) 
+2025-05-22 12:54:05,009 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:id': 11, 'odoo10:name':,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:54:05,028 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=13,ttl=None) 
+2025-05-22 12:54:05,031 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 13, 'odoo12:name':,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:54:05,042 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=13,ttl=None) 
+2025-05-22 12:54:05,046 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 13, 'odoo14:name':,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:54:05,065 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=3,ttl=None) 
+2025-05-22 12:54:05,066 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:id': 3, 'odoo10:name': ,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:54:05,082 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=3,ttl=None) 
+2025-05-22 12:54:05,084 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 3, 'odoo12:name': ,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:54:05,100 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=3,ttl=None) 
+2025-05-22 12:54:05,102 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 3, 'odoo14:name': ,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:54:05,123 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=11,ttl=None) 
+2025-05-22 12:54:05,125 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:id': 11, 'odoo10:name':,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:54:05,142 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=13,ttl=None) 
+2025-05-22 12:54:05,144 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 13, 'odoo12:name':,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:54:05,154 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=13,ttl=None) 
+2025-05-22 12:54:05,156 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 13, 'odoo14:name':,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:54:05,173 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=3,ttl=None) 
+2025-05-22 12:54:05,175 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:id': 3, 'odoo10:name': ,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:54:05,191 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=3,ttl=None) 
+2025-05-22 12:54:05,192 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 3, 'odoo12:name': ,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:54:05,208 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=3,ttl=None) 
+2025-05-22 12:54:05,210 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 3, 'odoo14:name': ,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:54:05,229 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=11,ttl=None) 
+2025-05-22 12:54:05,231 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:id': 11, 'odoo10:name':,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:54:05,248 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=13,ttl=None) 
+2025-05-22 12:54:05,251 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 13, 'odoo12:name':,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:54:05,261 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=13,ttl=None) 
+2025-05-22 12:54:05,263 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 13, 'odoo14:name':,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:54:05,274 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:name': 'base', 'odoo10:,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:54:05,284 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:code': 'it_IT', 'odoo10,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:54:05,318 964615 INFO test_universal_connector_by_csv_12 odoo.addons.base.models.ir_translation: module base: loading translation file (it) for language it_IT 
+2025-05-22 12:54:05,318 964615 INFO test_universal_connector_by_csv_12 odoo.tools.translate: loading /home/odoo/12.0/odoo/addons/base/i18n/it.po 
+2025-05-22 12:54:06,965 964615 INFO test_universal_connector_by_csv_12 odoo.addons.base.models.ir_translation: module web: loading translation file (it) for language it_IT 
+2025-05-22 12:54:06,965 964615 INFO test_universal_connector_by_csv_12 odoo.tools.translate: loading /home/odoo/12.0/addons/web/i18n/it.po 
+2025-05-22 12:54:07,051 964615 INFO test_universal_connector_by_csv_12 odoo.addons.base.models.ir_translation: module base_import: loading translation file (it) for language it_IT 
+2025-05-22 12:54:07,051 964615 INFO test_universal_connector_by_csv_12 odoo.tools.translate: loading /home/odoo/12.0/addons/base_import/i18n/it.po 
+2025-05-22 12:54:07,074 964615 INFO test_universal_connector_by_csv_12 odoo.addons.base.models.ir_translation: module web_settings_dashboard: loading translation file (it) for language it_IT 
+2025-05-22 12:54:07,074 964615 INFO test_universal_connector_by_csv_12 odoo.tools.translate: loading /home/odoo/12.0/addons/web_settings_dashboard/i18n/it.po 
+2025-05-22 12:54:07,085 964615 INFO test_universal_connector_by_csv_12 odoo.addons.base.models.ir_translation: module iap: loading translation file (it) for language it_IT 
+2025-05-22 12:54:07,085 964615 INFO test_universal_connector_by_csv_12 odoo.tools.translate: loading /home/odoo/12.0/addons/iap/i18n/it.po 
+2025-05-22 12:54:07,095 964615 INFO test_universal_connector_by_csv_12 odoo.addons.base.models.ir_translation: module universal_connector_base: loading translation file (it) for language it_IT 
+2025-05-22 12:54:07,096 964615 INFO test_universal_connector_by_csv_12 odoo.tools.translate: loading /home/odoo/12.0/connector/universal_connector_base/i18n/it.po 
+2025-05-22 12:54:07,111 964615 INFO test_universal_connector_by_csv_12 odoo.addons.base.models.ir_translation: module web_diagram: loading translation file (it) for language it_IT 
+2025-05-22 12:54:07,112 964615 INFO test_universal_connector_by_csv_12 odoo.tools.translate: loading /home/odoo/12.0/addons/web_diagram/i18n/it.po 
+2025-05-22 12:54:07,120 964615 INFO test_universal_connector_by_csv_12 odoo.addons.base.models.ir_translation: module web_editor: loading translation file (it) for language it_IT 
+2025-05-22 12:54:07,120 964615 INFO test_universal_connector_by_csv_12 odoo.tools.translate: loading /home/odoo/12.0/addons/web_editor/i18n/it.po 
+2025-05-22 12:54:07,154 964615 INFO test_universal_connector_by_csv_12 odoo.addons.base.models.ir_translation: module web_kanban_gauge: loading translation file (it) for language it_IT 
+2025-05-22 12:54:07,154 964615 INFO test_universal_connector_by_csv_12 odoo.tools.translate: loading /home/odoo/12.0/addons/web_kanban_gauge/i18n/it.po 
+2025-05-22 12:54:07,161 964615 INFO test_universal_connector_by_csv_12 odoo.addons.base.models.ir_translation: module web_tour: loading translation file (it) for language it_IT 
+2025-05-22 12:54:07,161 964615 INFO test_universal_connector_by_csv_12 odoo.tools.translate: loading /home/odoo/12.0/addons/web_tour/i18n/it.po 
+2025-05-22 12:54:07,195 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:currency_id': 1, 'odoo1,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:54:07,214 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:currency_id': 1, 'odoo1,backend=Test Odoo 10.0,min=False),ttl=3 
+2025-05-22 12:54:07,236 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:is_company': True, 'odo,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:54:07,293 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:is_company': True, 'odo,backend=Test Odoo 10.0,min=False),ttl=3 
+2025-05-22 12:54:07,324 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:name': 'base', 'odoo12:,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:54:07,330 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:code': 'it_IT', 'odoo12,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:54:07,337 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:currency_id': 1, 'odoo1,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:54:07,352 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:is_company': True, 'odo,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:54:07,406 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:is_company': True, 'odo,backend=Test Odoo 12.0,min=False),ttl=3 
+2025-05-22 12:54:07,435 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:name': 'base', 'odoo14:,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:54:07,442 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:code': 'it_IT', 'odoo14,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:54:07,450 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:currency_id': 1, 'odoo1,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:54:07,468 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:is_company': True, 'odo,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:54:07,523 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:is_company': True, 'odo,backend=Test Odoo 14.0,min=False),ttl=3 
+2025-05-22 12:54:07,551 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_by_csv.tests.test_backend: 🎺 Starting purge log test ... 
+2025-05-22 12:54:07,552 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_by_csv.tests.testenv: 🏆🥇 [1;32m384 tests SUCCESSFULLY completed[0m 
+2025-05-22 12:54:07,588 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_by_csv.tests.test_backend: Ran 1 test in 25.307s 
+2025-05-22 12:54:07,588 964615 INFO test_universal_connector_by_csv_12 odoo.addons.universal_connector_by_csv.tests.test_backend: OK 
+2025-05-22 12:54:07,588 964615 INFO test_universal_connector_by_csv_12 odoo.modules.module: odoo.addons.universal_connector_by_csv.tests.test_backend tested in 25.31s, 25074 queries 
+2025-05-22 12:54:07,598 964615 INFO test_universal_connector_by_csv_12 odoo.modules.loading: 11 modules loaded in 25.56s, 25074 queries 
+2025-05-22 12:54:07,788 964615 INFO test_universal_connector_by_csv_12 odoo.modules.loading: Modules loaded. 
+2025-05-22 12:54:07,790 964615 INFO test_universal_connector_by_csv_12 odoo.service.server: Starting post tests 
+2025-05-22 12:54:07,791 964615 INFO test_universal_connector_by_csv_12 odoo.service.server: All post-tested in 0.00s, 0 queries 
+2025-05-22 12:54:07,791 964615 INFO test_universal_connector_by_csv_12 odoo.service.server: Initiating shutdown 
+2025-05-22 12:54:07,791 964615 INFO test_universal_connector_by_csv_12 odoo.service.server: Hit CTRL-C again or send a second signal to force the shutdown. 
+
++===================================================================
+| please test [36muniversal_connector_by_csv[0m (12.0): [32mSUCCESS![0m
++===================================================================
+
+[1;37;44m$ coverage report --rcfile=/home/odoo/12.0/connector/universal_connector_by_csv/tests/logs/coverage_universal_connector_by_csv_12rc -m
+[34;107mName                                                         Stmts   Miss  Cover   Missing
+------------------------------------------------------------------------------------------
+connector/universal_connector_by_csv/models/synchro_api.py     111     13    88%   25-28, 34, 36, 68, 81, 89, 99, 112, 125, 139
+------------------------------------------------------------------------------------------
+TOTAL                                                          111     13    88%
+[0m

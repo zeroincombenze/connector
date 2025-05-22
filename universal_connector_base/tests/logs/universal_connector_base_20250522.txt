@@ -1,0 +1,1154 @@
+2025-05-22 14:50:23,000 937205 DAEMON test_universal_connector_base_12 run_odoo_debug.sh: cd /home/odoo/12.0/venv_odoo && source ./bin/activate
+2025-05-22 12:50:28,368 939746 INFO ? odoo: Odoo version 12.0 
+2025-05-22 12:50:28,368 939746 INFO ? odoo: Using configuration file at /home/odoo/12.0/connector/universal_connector_base/tests/logs/zero12.connector.universal_connector_base.conf 
+2025-05-22 12:50:28,368 939746 INFO ? odoo: addons paths: ['/home/odoo/.local/share/Odoo12/addons/12.0', '/home/odoo/12.0/odoo/addons', '/home/odoo/12.0/addons', '/home/odoo/.local/share/Odoo12/addons', '/home/odoo/12.0/account-analytic', '/home/odoo/12.0/account-budgeting', '/home/odoo/12.0/account-closing', '/home/odoo/12.0/account-consolidation', '/home/odoo/12.0/account-financial-reporting', '/home/odoo/12.0/account-financial-tools', '/home/odoo/12.0/account-fiscal-rule', '/home/odoo/12.0/account-invoice-reporting', '/home/odoo/12.0/account-invoicing', '/home/odoo/12.0/account-payment', '/home/odoo/12.0/account-reconcile', '/home/odoo/12.0/bank-payment', '/home/odoo/12.0/bank-statement-import', '/home/odoo/12.0/brand', '/home/odoo/12.0/calendar', '/home/odoo/12.0/commission', '/home/odoo/12.0/community-data-files', '/home/odoo/12.0/connector', '/home/odoo/12.0/contract', '/home/odoo/12.0/credit-control', '/home/odoo/12.0/crm', '/home/odoo/12.0/currency', '/home/odoo/12.0/data-protection', '/home/odoo/12.0/ddmrp', '/home/odoo/12.0/delivery-carrier', '/home/odoo/12.0/dms', '/home/odoo/12.0/e-commerce', '/home/odoo/12.0/edi', '/home/odoo/12.0/field-service', '/home/odoo/12.0/helpdesk', '/home/odoo/12.0/hr', '/home/odoo/12.0/intrastat-extrastat', '/home/odoo/12.0/knowledge', '/home/odoo/12.0/l10n-italy', '/home/odoo/12.0/l10n-italy-supplemental', '/home/odoo/12.0/maintenance', '/home/odoo/12.0/management-system', '/home/odoo/12.0/manufacture', '/home/odoo/12.0/margin-analysis', '/home/odoo/12.0/marketplace', '/home/odoo/12.0/mis-builder', '/home/odoo/12.0/multi-company', '/home/odoo/12.0/partner-contact', '/home/odoo/12.0/product-attribute', '/home/odoo/12.0/product-kitting', '/home/odoo/12.0/product-pack', '/home/odoo/12.0/product-variant', '/home/odoo/12.0/profiles', '/home/odoo/12.0/project', '/home/odoo/12.0/purchase-reporting', '/home/odoo/12.0/purchase-workflow', '/home/odoo/12.0/queue', '/home/odoo/12.0/report-print-send', '/home/odoo/12.0/reporting-engine', '/home/odoo/12.0/rma', '/home/odoo/12.0/sale-financial', '/home/odoo/12.0/sale-reporting', '/home/odoo/12.0/sale-workflow', '/home/odoo/12.0/search-engine', '/home/odoo/12.0/server-auth', '/home/odoo/12.0/server-backend', '/home/odoo/12.0/server-brand', '/home/odoo/12.0/server-env', '/home/odoo/12.0/server-tools', '/home/odoo/12.0/server-ux', '/home/odoo/12.0/social', '/home/odoo/12.0/stock-logistics-barcode', '/home/odoo/12.0/stock-logistics-reporting', '/home/odoo/12.0/stock-logistics-tracking', '/home/odoo/12.0/stock-logistics-transport', '/home/odoo/12.0/stock-logistics-warehouse', '/home/odoo/12.0/stock-logistics-workflow', '/home/odoo/12.0/storage', '/home/odoo/12.0/timesheet', '/home/odoo/12.0/uncovered', '/home/odoo/12.0/web', '/home/odoo/12.0/webhook', '/home/odoo/12.0/website', '/home/odoo/12.0/wms', '/home/odoo/12.0/zerobug-test', '/home/odoo/12.0/venv_odoo/lib/python3.7/site-packages/odoo/addons'] 
+2025-05-22 12:50:28,368 939746 INFO ? odoo: database: odoo12@localhost:5432 
+2025-05-22 12:50:28,389 939746 INFO ? odoo.addons.server_environment.serv_config: not using server_environment_files for configuration, no directory found 
+2025-05-22 12:50:28,389 939746 INFO ? odoo.addons.server_environment.serv_config: `running_env` not found. Using default = `test`. 
+2025-05-22 12:50:28,389 939746 INFO ? odoo.addons.server_environment.serv_config: We strongly recommend against using the rc file but instead use an explicit config file or env variable. 
+2025-05-22 12:50:28,511 939746 INFO ? odoo.addons.base.models.ir_actions_report: Will use the Wkhtmltopdf binary at /home/odoo/12.0/venv_odoo/bin/wkhtmltopdf 
+2025-05-22 12:50:28,596 939746 INFO ? odoo.service.server: HTTP service (werkzeug) running on NB200Z0.:29221 
+2025-05-22 12:50:28,609 939746 INFO test_universal_connector_base_12 odoo.modules.loading: loading 1 modules... 
+2025-05-22 12:50:28,616 939746 INFO test_universal_connector_base_12 odoo.modules.loading: 1 modules loaded in 0.01s, 0 queries 
+2025-05-22 12:50:28,705 939746 INFO test_universal_connector_base_12 odoo.modules.loading: updating modules list 
+2025-05-22 12:50:28,707 939746 INFO test_universal_connector_base_12 odoo.addons.base.models.ir_module: ALLOW access to module.update_list on [] to user __system__ #1 via n/a 
+2025-05-22 12:50:37,093 939746 INFO test_universal_connector_base_12 odoo.addons.base.models.ir_module: ALLOW access to module.button_install on ['universal_connector_base'] to user __system__ #1 via n/a 
+2025-05-22 12:50:37,433 939746 INFO test_universal_connector_base_12 odoo.modules.loading: loading 9 modules... 
+2025-05-22 12:50:37,490 939746 INFO test_universal_connector_base_12 odoo.modules.loading: 9 modules loaded in 0.06s, 0 queries 
+2025-05-22 12:50:37,493 939746 INFO test_universal_connector_base_12 odoo.modules.loading: loading 10 modules... 
+2025-05-22 12:50:37,796 939746 INFO test_universal_connector_base_12 odoo.modules.registry: module universal_connector_base: creating or updating database tables 
+2025-05-22 12:50:39,140 939746 WARNING test_universal_connector_base_12 odoo.addons.base.models.ir_model: Two fields (name, model_id) of synchro.model() have the same label: Odoo model name. 
+2025-05-22 12:50:39,797 939746 INFO test_universal_connector_base_12 odoo.modules.loading: loading universal_connector_base/security/ir.model.access.csv 
+2025-05-22 12:50:39,904 939746 INFO test_universal_connector_base_12 odoo.modules.loading: loading universal_connector_base/data/synchro_protocol.xml 
+2025-05-22 12:50:39,912 939746 INFO test_universal_connector_base_12 odoo.modules.loading: loading universal_connector_base/data/synchro_identity.xml 
+2025-05-22 12:50:39,919 939746 INFO test_universal_connector_base_12 odoo.modules.loading: loading universal_connector_base/data/synchro_backend.xml 
+2025-05-22 12:50:39,951 939746 INFO test_universal_connector_base_12 odoo.modules.loading: loading universal_connector_base/wizard/wizard_pull_record_view.xml 
+2025-05-22 12:50:39,974 939746 INFO test_universal_connector_base_12 odoo.modules.loading: loading universal_connector_base/views/synchro_menu.xml 
+2025-05-22 12:50:39,985 939746 INFO test_universal_connector_base_12 odoo.modules.loading: loading universal_connector_base/views/synchro_identity_view.xml 
+2025-05-22 12:50:40,025 939746 INFO test_universal_connector_base_12 odoo.modules.loading: loading universal_connector_base/views/synchro_protocol_view.xml 
+2025-05-22 12:50:40,063 939746 INFO test_universal_connector_base_12 odoo.modules.loading: loading universal_connector_base/views/synchro_backend_view.xml 
+2025-05-22 12:50:40,110 939746 INFO test_universal_connector_base_12 odoo.modules.loading: loading universal_connector_base/views/synchro_model_view.xml 
+2025-05-22 12:50:40,260 939746 INFO test_universal_connector_base_12 odoo.modules.loading: loading universal_connector_base/views/synchro_log_view.xml 
+2025-05-22 12:50:40,301 939746 INFO test_universal_connector_base_12 odoo.modules.loading: loading universal_connector_base/views/country_view.xml 
+2025-05-22 12:50:40,349 939746 INFO test_universal_connector_base_12 odoo.modules.loading: loading universal_connector_base/views/currency_view.xml 
+2025-05-22 12:50:40,377 939746 INFO test_universal_connector_base_12 odoo.modules.loading: loading universal_connector_base/views/partner_view.xml 
+2025-05-22 12:50:40,446 939746 INFO test_universal_connector_base_12 odoo.modules.loading: loading universal_connector_base/views/company_view.xml 
+2025-05-22 12:50:40,476 939746 INFO test_universal_connector_base_12 odoo.modules.loading: loading universal_connector_base/views/user_view.xml 
+2025-05-22 12:50:40,550 939746 INFO test_universal_connector_base_12 odoo.modules.loading: Module universal_connector_base: loading demo 
+2025-05-22 12:50:40,590 939746 INFO test_universal_connector_base_12 odoo.modules.module: odoo.addons.universal_connector_base.tests.test_backend running tests. 
+2025-05-22 12:50:40,590 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.tests.test_backend: test_connection (odoo.addons.universal_connector_base.tests.test_backend.MyTest) 
+2025-05-22 12:50:40,696 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.tests.testenv: 🎺🎺🎺 Starting test v2.0.22 (debug_level=0, commit=True) 
+2025-05-22 12:50:40,698 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.tests.testenv: 🎺🎺 Testing module: universal_connector_base (12.0.1.3.15) 
+2025-05-22 12:50:40,698 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.tests.testenv: 🎺🎺 Loading data from: synchro.backend  
+2025-05-22 12:50:40,743 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.tests.test_backend: 🎺 Starting connection test on ports 8170 (db=demo10) and 8272 (db=demo12) and 8174 (db=demo14) ... 
+2025-05-22 12:50:40,831 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.button_check_connection(ep=http://admin@localhost:8170/xmlrpc/2/common,h=localhost) 
+2025-05-22 12:50:46,708 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.company,odoo10,ext_id=1,ttl=1) 
+2025-05-22 12:50:46,804 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:sequence': 0, 'odoo10:c,backend=Test Odoo 10.0,min=True),ttl=1 
+2025-05-22 12:50:46,926 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.button_reset_to_draft(ep=http://admin@localhost:8170/xmlrpc/2/common,h=localhost): 
+2025-05-22 12:50:47,026 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.button_check_connection(ep=http://admin@localhost:8170/xmlrpc/2/common,h=localhost) 
+2025-05-22 12:50:51,702 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo10,ext_id=1,ttl=None) 
+2025-05-22 12:50:51,786 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:rate_ids': [130], 'odoo,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:50:51,810 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo10,ext_id=3,ttl=None) 
+2025-05-22 12:50:51,889 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:rate_ids': [2, 1], 'odo,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:50:51,990 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.button_check_connection(ep=http://admin@localhost:8272/xmlrpc/2/common,h=localhost) 
+2025-05-22 12:50:57,284 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.company,odoo12,ext_id=1,ttl=1) 
+2025-05-22 12:50:57,390 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 1, 'odoo12:account,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:50:57,531 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.button_reset_to_draft(ep=http://admin@localhost:8272/xmlrpc/2/common,h=localhost): 
+2025-05-22 12:50:57,615 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.button_check_connection(ep=http://admin@localhost:8272/xmlrpc/2/common,h=localhost) 
+2025-05-22 12:51:04,010 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo12,ext_id=1,ttl=None) 
+2025-05-22 12:51:04,152 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 1, 'odoo12:active',backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:51:04,173 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo12,ext_id=2,ttl=None) 
+2025-05-22 12:51:04,286 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 2, 'odoo12:active',backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:51:04,350 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.button_check_connection(ep=http://admin@localhost:8174/xmlrpc/2/common,h=localhost) 
+2025-05-22 12:51:09,224 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.company,odoo14,ext_id=1,ttl=1) 
+2025-05-22 12:51:09,280 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 1, 'odoo14:country,backend=Test Odoo 14.0,min=True),ttl=1 
+2025-05-22 12:51:09,377 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.button_reset_to_draft(ep=http://admin@localhost:8174/xmlrpc/2/common,h=localhost): 
+2025-05-22 12:51:09,424 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.button_check_connection(ep=http://admin@localhost:8174/xmlrpc/2/common,h=localhost) 
+2025-05-22 12:51:13,282 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo14,ext_id=1,ttl=None) 
+2025-05-22 12:51:13,343 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 1, 'odoo14:date': ,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:51:13,367 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo14,ext_id=2,ttl=None) 
+2025-05-22 12:51:13,419 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 2, 'odoo14:date': ,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:51:13,448 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country,odoo10,ext_id=235,ttl=None) 
+2025-05-22 12:51:13,545 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:currency_id': [3, 'USD',backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:51:13,608 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=68,ttl=3) 
+2025-05-22 12:51:13,707 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Armed F,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:13,810 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=69,ttl=3) 
+2025-05-22 12:51:13,890 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Armed F,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:13,986 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=10,ttl=3) 
+2025-05-22 12:51:14,062 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Alaska',backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:14,154 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=9,ttl=3) 
+2025-05-22 12:51:14,232 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Alabama,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:14,322 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=70,ttl=3) 
+2025-05-22 12:51:14,406 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Armed F,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:14,498 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=12,ttl=3) 
+2025-05-22 12:51:14,579 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Arkansa,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:14,678 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=60,ttl=3) 
+2025-05-22 12:51:14,754 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'America,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:14,875 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=11,ttl=3) 
+2025-05-22 12:51:15,038 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Arizona,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:15,188 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=13,ttl=3) 
+2025-05-22 12:51:15,296 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Califor,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:15,414 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=14,ttl=3) 
+2025-05-22 12:51:15,511 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Colorad,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:15,615 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=15,ttl=3) 
+2025-05-22 12:51:15,696 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Connect,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:15,800 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=17,ttl=3) 
+2025-05-22 12:51:15,915 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Distric,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:16,010 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=16,ttl=3) 
+2025-05-22 12:51:16,090 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Delawar,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:16,186 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=18,ttl=3) 
+2025-05-22 12:51:16,271 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Florida,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:16,366 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=61,ttl=3) 
+2025-05-22 12:51:16,444 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Federat,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:16,541 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=19,ttl=3) 
+2025-05-22 12:51:16,628 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Georgia,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:16,716 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=62,ttl=3) 
+2025-05-22 12:51:16,810 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Guam', ,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:16,901 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=20,ttl=3) 
+2025-05-22 12:51:16,983 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Hawaii',backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:17,078 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=24,ttl=3) 
+2025-05-22 12:51:17,169 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Iowa', ,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:17,264 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=21,ttl=3) 
+2025-05-22 12:51:17,344 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Idaho',,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:17,440 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=22,ttl=3) 
+2025-05-22 12:51:17,524 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Illinoi,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:17,612 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=23,ttl=3) 
+2025-05-22 12:51:17,715 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Indiana,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:17,807 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=25,ttl=3) 
+2025-05-22 12:51:17,885 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Kansas',backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:17,978 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=26,ttl=3) 
+2025-05-22 12:51:18,054 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Kentuck,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:18,143 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=27,ttl=3) 
+2025-05-22 12:51:18,225 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Louisia,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:18,321 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=42,ttl=3) 
+2025-05-22 12:51:18,401 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Massach,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:18,496 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=41,ttl=3) 
+2025-05-22 12:51:18,576 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Marylan,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:18,675 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=28,ttl=3) 
+2025-05-22 12:51:18,766 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Maine',,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:18,863 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=63,ttl=3) 
+2025-05-22 12:51:18,942 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Marshal,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:19,030 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=43,ttl=3) 
+2025-05-22 12:51:19,107 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Michiga,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:19,196 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=44,ttl=3) 
+2025-05-22 12:51:19,283 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Minneso,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:19,391 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=46,ttl=3) 
+2025-05-22 12:51:19,478 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Missour,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:19,570 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=64,ttl=3) 
+2025-05-22 12:51:19,648 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Norther,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:19,753 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=45,ttl=3) 
+2025-05-22 12:51:19,839 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Mississ,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:19,931 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=29,ttl=3) 
+2025-05-22 12:51:20,013 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Montana,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:20,105 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=36,ttl=3) 
+2025-05-22 12:51:20,182 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'North C,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:20,300 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=37,ttl=3) 
+2025-05-22 12:51:20,405 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'North D,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:20,506 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=30,ttl=3) 
+2025-05-22 12:51:20,589 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Nebrask,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:20,688 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=32,ttl=3) 
+2025-05-22 12:51:20,768 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'New Ham,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:20,865 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=33,ttl=3) 
+2025-05-22 12:51:20,945 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'New Jer,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:21,039 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=34,ttl=3) 
+2025-05-22 12:51:21,126 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'New Mex,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:21,219 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=31,ttl=3) 
+2025-05-22 12:51:21,323 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Nevada',backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:21,414 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=35,ttl=3) 
+2025-05-22 12:51:21,501 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'New Yor,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:21,593 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=38,ttl=3) 
+2025-05-22 12:51:21,668 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Ohio', ,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:21,761 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=39,ttl=3) 
+2025-05-22 12:51:21,839 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Oklahom,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:21,932 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=40,ttl=3) 
+2025-05-22 12:51:22,010 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Oregon',backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:22,100 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=47,ttl=3) 
+2025-05-22 12:51:22,183 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Pennsyl,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:22,273 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=66,ttl=3) 
+2025-05-22 12:51:22,353 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Puerto ,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:22,446 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=65,ttl=3) 
+2025-05-22 12:51:22,526 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Palau',,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:22,623 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=48,ttl=3) 
+2025-05-22 12:51:22,697 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Rhode I,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:22,788 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=49,ttl=3) 
+2025-05-22 12:51:22,877 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'South C,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:22,976 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=50,ttl=3) 
+2025-05-22 12:51:23,072 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'South D,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:23,174 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=51,ttl=3) 
+2025-05-22 12:51:23,261 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Tenness,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:23,351 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=52,ttl=3) 
+2025-05-22 12:51:23,425 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Texas',,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:23,528 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=53,ttl=3) 
+2025-05-22 12:51:23,599 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Utah', ,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:23,695 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=55,ttl=3) 
+2025-05-22 12:51:23,768 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Virgini,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:23,865 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=67,ttl=3) 
+2025-05-22 12:51:23,969 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Virgin ,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:24,072 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=54,ttl=3) 
+2025-05-22 12:51:24,168 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Vermont,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:24,276 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=56,ttl=3) 
+2025-05-22 12:51:24,346 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Washing,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:24,455 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=58,ttl=3) 
+2025-05-22 12:51:24,543 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Wiscons,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:24,645 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=57,ttl=3) 
+2025-05-22 12:51:24,720 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'West Vi,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:24,820 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo10,ext_id=59,ttl=3) 
+2025-05-22 12:51:24,901 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:display_name': 'Wyoming,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:25,026 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=3,ttl=None) 
+2025-05-22 12:51:25,122 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:comment': False, 'odoo1,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:51:25,285 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=11,ttl=None) 
+2025-05-22 12:51:25,370 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:comment': False, 'odoo1,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:51:25,550 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=10,ttl=None) 
+2025-05-22 12:51:25,648 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:comment': False, 'odoo1,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:51:25,839 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=7,ttl=None) 
+2025-05-22 12:51:25,931 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:comment': False, 'odoo1,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:51:26,108 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country,odoo10,ext_id=229,ttl=3) 
+2025-05-22 12:51:26,193 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:currency_id': [141, 'TW,backend=Test Odoo 10.0,min=True),ttl=3 
+2025-05-22 12:51:26,210 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo10,ext_id=141,ttl=2) 
+2025-05-22 12:51:26,295 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country,odoo12,ext_id=233,ttl=None) 
+2025-05-22 12:51:26,451 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 233, 'odoo12:addre,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:51:26,505 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=68,ttl=3) 
+2025-05-22 12:51:26,634 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 68, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:26,794 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=69,ttl=3) 
+2025-05-22 12:51:26,930 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 69, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:27,097 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=10,ttl=3) 
+2025-05-22 12:51:27,225 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 10, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:27,385 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=9,ttl=3) 
+2025-05-22 12:51:27,517 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 9, 'odoo12:country,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:27,677 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=70,ttl=3) 
+2025-05-22 12:51:27,805 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 70, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:27,960 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=12,ttl=3) 
+2025-05-22 12:51:28,042 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 12, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:28,141 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=60,ttl=3) 
+2025-05-22 12:51:28,225 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 60, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:28,337 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=11,ttl=3) 
+2025-05-22 12:51:28,433 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 11, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:28,546 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=13,ttl=3) 
+2025-05-22 12:51:28,641 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 13, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:28,749 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=14,ttl=3) 
+2025-05-22 12:51:28,834 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 14, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:28,940 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=15,ttl=3) 
+2025-05-22 12:51:29,034 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 15, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:29,147 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=17,ttl=3) 
+2025-05-22 12:51:29,229 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 17, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:29,333 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=16,ttl=3) 
+2025-05-22 12:51:29,418 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 16, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:29,529 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=18,ttl=3) 
+2025-05-22 12:51:29,625 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 18, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:29,754 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=61,ttl=3) 
+2025-05-22 12:51:29,839 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 61, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:30,049 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=19,ttl=3) 
+2025-05-22 12:51:30,173 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 19, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:30,318 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=62,ttl=3) 
+2025-05-22 12:51:30,442 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 62, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:30,564 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=20,ttl=3) 
+2025-05-22 12:51:30,656 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 20, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:30,782 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=24,ttl=3) 
+2025-05-22 12:51:30,883 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 24, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:30,987 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=21,ttl=3) 
+2025-05-22 12:51:31,127 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 21, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:31,232 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=22,ttl=3) 
+2025-05-22 12:51:31,318 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 22, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:31,434 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=23,ttl=3) 
+2025-05-22 12:51:31,513 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 23, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:31,648 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=25,ttl=3) 
+2025-05-22 12:51:31,730 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 25, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:31,862 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=26,ttl=3) 
+2025-05-22 12:51:31,947 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 26, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:32,051 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=27,ttl=3) 
+2025-05-22 12:51:32,135 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 27, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:32,240 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=42,ttl=3) 
+2025-05-22 12:51:32,321 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 42, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:32,424 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=41,ttl=3) 
+2025-05-22 12:51:32,508 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 41, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:32,630 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=28,ttl=3) 
+2025-05-22 12:51:32,715 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 28, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:32,823 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=63,ttl=3) 
+2025-05-22 12:51:32,905 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 63, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:33,015 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=43,ttl=3) 
+2025-05-22 12:51:33,103 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 43, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:33,214 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=44,ttl=3) 
+2025-05-22 12:51:33,320 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 44, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:33,428 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=46,ttl=3) 
+2025-05-22 12:51:33,510 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 46, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:33,618 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=64,ttl=3) 
+2025-05-22 12:51:33,711 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 64, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:33,818 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=45,ttl=3) 
+2025-05-22 12:51:33,903 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 45, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:34,011 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=29,ttl=3) 
+2025-05-22 12:51:34,106 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 29, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:34,209 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=36,ttl=3) 
+2025-05-22 12:51:34,310 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 36, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:34,438 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=37,ttl=3) 
+2025-05-22 12:51:34,522 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 37, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:34,628 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=30,ttl=3) 
+2025-05-22 12:51:34,739 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 30, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:34,845 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=32,ttl=3) 
+2025-05-22 12:51:34,943 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 32, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:35,042 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=33,ttl=3) 
+2025-05-22 12:51:35,128 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 33, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:35,241 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=34,ttl=3) 
+2025-05-22 12:51:35,347 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 34, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:35,451 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=31,ttl=3) 
+2025-05-22 12:51:35,535 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 31, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:35,654 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=35,ttl=3) 
+2025-05-22 12:51:35,742 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 35, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:35,858 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=38,ttl=3) 
+2025-05-22 12:51:35,940 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 38, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:36,062 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=39,ttl=3) 
+2025-05-22 12:51:36,161 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 39, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:36,274 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=40,ttl=3) 
+2025-05-22 12:51:36,367 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 40, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:36,485 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=47,ttl=3) 
+2025-05-22 12:51:36,566 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 47, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:36,677 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=66,ttl=3) 
+2025-05-22 12:51:36,761 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 66, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:36,865 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=65,ttl=3) 
+2025-05-22 12:51:36,945 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 65, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:37,053 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=48,ttl=3) 
+2025-05-22 12:51:37,142 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 48, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:37,256 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=49,ttl=3) 
+2025-05-22 12:51:37,347 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 49, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:37,456 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=50,ttl=3) 
+2025-05-22 12:51:37,543 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 50, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:37,640 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=51,ttl=3) 
+2025-05-22 12:51:37,728 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 51, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:37,919 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=52,ttl=3) 
+2025-05-22 12:51:38,008 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 52, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:38,175 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=53,ttl=3) 
+2025-05-22 12:51:38,341 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 53, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:38,461 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=55,ttl=3) 
+2025-05-22 12:51:38,608 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 55, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:38,715 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=67,ttl=3) 
+2025-05-22 12:51:38,878 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 67, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:38,989 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=54,ttl=3) 
+2025-05-22 12:51:39,123 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 54, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:39,236 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=56,ttl=3) 
+2025-05-22 12:51:39,381 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 56, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:39,523 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=58,ttl=3) 
+2025-05-22 12:51:39,626 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 58, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:39,793 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=57,ttl=3) 
+2025-05-22 12:51:39,926 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 57, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:40,029 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=59,ttl=3) 
+2025-05-22 12:51:40,159 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 59, 'odoo12:countr,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:40,276 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=3,ttl=None) 
+2025-05-22 12:51:40,432 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 3, 'odoo12:company,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:51:40,663 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=13,ttl=None) 
+2025-05-22 12:51:40,763 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 13, 'odoo12:compan,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:51:40,948 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=307,ttl=3) 
+2025-05-22 12:51:41,034 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 307, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:41,051 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country,odoo12,ext_id=109,ttl=2) 
+2025-05-22 12:51:41,140 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 109, 'odoo12:addre,backend=Test Odoo 12.0,min=True),ttl=2 
+2025-05-22 12:51:41,217 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=306,ttl=1) 
+2025-05-22 12:51:41,304 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 306, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:41,316 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=307,ttl=1) 
+2025-05-22 12:51:41,402 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 307, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:41,419 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=12,ttl=None) 
+2025-05-22 12:51:41,521 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 12, 'odoo12:compan,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:51:41,733 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=308,ttl=1) 
+2025-05-22 12:51:41,821 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 308, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:41,832 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=309,ttl=1) 
+2025-05-22 12:51:41,914 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 309, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:41,925 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=311,ttl=1) 
+2025-05-22 12:51:42,007 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 311, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:42,018 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=350,ttl=1) 
+2025-05-22 12:51:42,112 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 350, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:42,124 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=310,ttl=1) 
+2025-05-22 12:51:42,215 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 310, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:42,226 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=312,ttl=1) 
+2025-05-22 12:51:42,311 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 312, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:42,323 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=313,ttl=1) 
+2025-05-22 12:51:42,415 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 313, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:42,426 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=314,ttl=1) 
+2025-05-22 12:51:42,515 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 314, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:42,526 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=318,ttl=1) 
+2025-05-22 12:51:42,659 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 318, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:42,671 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=319,ttl=1) 
+2025-05-22 12:51:42,764 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 319, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:42,776 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=316,ttl=1) 
+2025-05-22 12:51:42,858 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 316, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:42,870 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=317,ttl=1) 
+2025-05-22 12:51:42,969 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 317, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:42,981 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=320,ttl=1) 
+2025-05-22 12:51:43,070 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 320, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:43,082 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=323,ttl=1) 
+2025-05-22 12:51:43,167 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 323, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:43,179 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=322,ttl=1) 
+2025-05-22 12:51:43,282 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 322, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:43,293 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=315,ttl=1) 
+2025-05-22 12:51:43,423 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 315, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:43,434 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=321,ttl=1) 
+2025-05-22 12:51:43,542 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 321, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:43,554 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=324,ttl=1) 
+2025-05-22 12:51:43,651 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 324, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:43,663 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=326,ttl=1) 
+2025-05-22 12:51:43,757 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 326, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:43,768 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=328,ttl=1) 
+2025-05-22 12:51:43,856 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 328, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:43,869 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=331,ttl=1) 
+2025-05-22 12:51:44,039 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 331, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:44,054 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=327,ttl=1) 
+2025-05-22 12:51:44,154 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 327, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:44,169 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=325,ttl=1) 
+2025-05-22 12:51:44,274 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 325, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:44,287 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=336,ttl=1) 
+2025-05-22 12:51:44,383 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 336, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:44,399 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=332,ttl=1) 
+2025-05-22 12:51:44,496 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 332, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:44,513 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=334,ttl=1) 
+2025-05-22 12:51:44,636 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 334, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:44,655 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=333,ttl=1) 
+2025-05-22 12:51:44,832 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 333, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:44,845 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=329,ttl=1) 
+2025-05-22 12:51:45,096 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 329, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:45,132 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=330,ttl=1) 
+2025-05-22 12:51:45,281 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 330, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:45,300 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=337,ttl=1) 
+2025-05-22 12:51:45,455 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 337, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:45,471 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=342,ttl=1) 
+2025-05-22 12:51:45,604 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 342, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:45,618 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=339,ttl=1) 
+2025-05-22 12:51:45,739 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 339, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:45,753 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=341,ttl=1) 
+2025-05-22 12:51:45,904 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 341, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:45,917 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=340,ttl=1) 
+2025-05-22 12:51:46,011 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 340, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:46,025 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=338,ttl=1) 
+2025-05-22 12:51:46,114 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 338, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:46,127 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=343,ttl=1) 
+2025-05-22 12:51:46,208 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 343, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:46,221 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=344,ttl=1) 
+2025-05-22 12:51:46,314 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 344, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:46,324 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=345,ttl=1) 
+2025-05-22 12:51:46,410 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 345, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:46,422 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=346,ttl=1) 
+2025-05-22 12:51:46,566 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 346, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:46,582 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=347,ttl=1) 
+2025-05-22 12:51:46,670 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 347, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:46,682 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=348,ttl=1) 
+2025-05-22 12:51:46,765 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 348, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:46,777 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=335,ttl=1) 
+2025-05-22 12:51:46,865 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 335, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:46,876 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=353,ttl=1) 
+2025-05-22 12:51:46,959 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 353, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:46,970 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=352,ttl=1) 
+2025-05-22 12:51:47,055 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 352, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:47,068 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=354,ttl=1) 
+2025-05-22 12:51:47,155 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 354, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:47,168 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=355,ttl=1) 
+2025-05-22 12:51:47,273 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 355, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:47,286 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=351,ttl=1) 
+2025-05-22 12:51:47,400 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 351, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:47,412 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=356,ttl=1) 
+2025-05-22 12:51:47,493 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 356, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:47,505 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=365,ttl=1) 
+2025-05-22 12:51:47,591 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 365, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:47,606 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=357,ttl=1) 
+2025-05-22 12:51:47,697 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 357, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:47,709 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=362,ttl=1) 
+2025-05-22 12:51:47,791 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 362, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:47,802 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=363,ttl=1) 
+2025-05-22 12:51:47,894 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 363, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:47,907 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=358,ttl=1) 
+2025-05-22 12:51:47,992 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 358, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:48,004 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=364,ttl=1) 
+2025-05-22 12:51:48,089 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 364, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:48,101 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=359,ttl=1) 
+2025-05-22 12:51:48,196 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 359, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:48,208 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=360,ttl=1) 
+2025-05-22 12:51:48,294 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 360, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:48,307 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=366,ttl=1) 
+2025-05-22 12:51:48,392 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 366, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:48,405 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=367,ttl=1) 
+2025-05-22 12:51:48,496 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 367, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:48,508 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=368,ttl=1) 
+2025-05-22 12:51:48,590 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 368, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:48,603 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=369,ttl=1) 
+2025-05-22 12:51:48,687 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 369, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:48,699 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=371,ttl=1) 
+2025-05-22 12:51:48,779 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 371, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:48,791 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=370,ttl=1) 
+2025-05-22 12:51:48,883 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 370, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:48,895 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=373,ttl=1) 
+2025-05-22 12:51:48,982 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 373, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:48,995 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=379,ttl=1) 
+2025-05-22 12:51:49,080 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 379, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:49,090 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=372,ttl=1) 
+2025-05-22 12:51:49,173 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 372, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:49,184 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=378,ttl=1) 
+2025-05-22 12:51:49,267 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 378, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:49,279 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=376,ttl=1) 
+2025-05-22 12:51:49,363 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 376, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:49,375 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=380,ttl=1) 
+2025-05-22 12:51:49,458 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 380, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:49,470 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=382,ttl=1) 
+2025-05-22 12:51:49,556 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 382, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:49,568 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=384,ttl=1) 
+2025-05-22 12:51:49,653 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 384, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:49,665 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=374,ttl=1) 
+2025-05-22 12:51:49,751 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 374, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:49,765 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=381,ttl=1) 
+2025-05-22 12:51:49,859 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 381, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:49,877 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=377,ttl=1) 
+2025-05-22 12:51:50,093 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 377, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:50,112 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=375,ttl=1) 
+2025-05-22 12:51:50,221 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 375, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:50,235 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=383,ttl=1) 
+2025-05-22 12:51:50,326 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 383, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:50,340 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=386,ttl=1) 
+2025-05-22 12:51:50,429 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 386, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:50,442 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=387,ttl=1) 
+2025-05-22 12:51:50,529 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 387, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:50,541 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=388,ttl=1) 
+2025-05-22 12:51:50,629 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 388, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:50,640 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=385,ttl=1) 
+2025-05-22 12:51:50,726 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 385, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:50,738 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=389,ttl=1) 
+2025-05-22 12:51:50,827 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 389, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:50,839 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=391,ttl=1) 
+2025-05-22 12:51:50,921 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 391, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:50,933 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=390,ttl=1) 
+2025-05-22 12:51:51,012 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 390, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:51,022 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=392,ttl=1) 
+2025-05-22 12:51:51,104 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 392, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:51,115 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=393,ttl=1) 
+2025-05-22 12:51:51,195 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 393, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:51,206 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=396,ttl=1) 
+2025-05-22 12:51:51,299 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 396, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:51,311 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=398,ttl=1) 
+2025-05-22 12:51:51,400 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 398, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:51,413 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=349,ttl=1) 
+2025-05-22 12:51:51,569 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 349, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:51,582 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=397,ttl=1) 
+2025-05-22 12:51:51,681 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 397, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:51,694 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=394,ttl=1) 
+2025-05-22 12:51:51,794 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 394, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:51,807 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=399,ttl=1) 
+2025-05-22 12:51:51,910 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 399, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:51,926 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=395,ttl=1) 
+2025-05-22 12:51:52,014 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 395, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:52,025 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=400,ttl=1) 
+2025-05-22 12:51:52,124 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 400, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:52,137 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=401,ttl=1) 
+2025-05-22 12:51:52,225 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 401, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:52,237 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=405,ttl=1) 
+2025-05-22 12:51:52,319 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 405, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:52,330 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=403,ttl=1) 
+2025-05-22 12:51:52,440 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 403, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:52,452 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=404,ttl=1) 
+2025-05-22 12:51:52,533 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 404, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:52,545 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=402,ttl=1) 
+2025-05-22 12:51:52,634 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 402, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:52,645 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=407,ttl=1) 
+2025-05-22 12:51:52,771 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 407, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:52,783 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=406,ttl=1) 
+2025-05-22 12:51:52,903 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 406, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:52,915 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=408,ttl=1) 
+2025-05-22 12:51:53,002 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 408, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:53,014 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=409,ttl=1) 
+2025-05-22 12:51:53,123 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 409, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:53,135 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=411,ttl=1) 
+2025-05-22 12:51:53,229 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 411, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:53,239 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=412,ttl=1) 
+2025-05-22 12:51:53,328 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 412, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:53,339 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=410,ttl=1) 
+2025-05-22 12:51:53,422 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 410, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:53,436 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=415,ttl=1) 
+2025-05-22 12:51:53,542 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 415, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:53,554 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=413,ttl=1) 
+2025-05-22 12:51:53,658 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 413, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:53,669 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=361,ttl=1) 
+2025-05-22 12:51:53,816 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 361, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:53,826 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=416,ttl=1) 
+2025-05-22 12:51:53,912 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 416, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:53,923 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=414,ttl=1) 
+2025-05-22 12:51:54,017 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 414, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:54,031 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=184,ttl=3) 
+2025-05-22 12:51:54,118 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 184, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=3 
+2025-05-22 12:51:54,136 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country,odoo12,ext_id=90,ttl=2) 
+2025-05-22 12:51:54,237 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 90, 'odoo12:addres,backend=Test Odoo 12.0,min=True),ttl=2 
+2025-05-22 12:51:54,275 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=179,ttl=1) 
+2025-05-22 12:51:54,378 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 179, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:54,392 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=180,ttl=1) 
+2025-05-22 12:51:54,483 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 180, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:54,500 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=9,ttl=None) 
+2025-05-22 12:51:54,616 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 9, 'odoo12:company,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:51:54,922 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=181,ttl=1) 
+2025-05-22 12:51:55,010 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 181, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:55,020 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=182,ttl=1) 
+2025-05-22 12:51:55,112 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 182, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:55,124 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=183,ttl=1) 
+2025-05-22 12:51:55,222 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 183, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:55,234 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=184,ttl=1) 
+2025-05-22 12:51:55,334 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 184, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:55,346 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=185,ttl=1) 
+2025-05-22 12:51:55,441 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 185, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:55,453 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=186,ttl=1) 
+2025-05-22 12:51:55,554 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 186, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:55,566 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=187,ttl=1) 
+2025-05-22 12:51:55,653 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 187, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:55,664 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=188,ttl=1) 
+2025-05-22 12:51:55,749 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 188, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:55,759 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=189,ttl=1) 
+2025-05-22 12:51:55,846 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 189, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:55,860 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=190,ttl=1) 
+2025-05-22 12:51:55,955 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 190, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:55,968 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=191,ttl=1) 
+2025-05-22 12:51:56,079 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 191, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:56,090 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=192,ttl=1) 
+2025-05-22 12:51:56,178 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 192, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:56,189 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=193,ttl=1) 
+2025-05-22 12:51:56,274 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 193, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:56,285 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=194,ttl=1) 
+2025-05-22 12:51:56,372 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 194, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:56,386 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=195,ttl=1) 
+2025-05-22 12:51:56,471 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 195, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:56,481 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=197,ttl=1) 
+2025-05-22 12:51:56,577 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 197, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:56,588 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=196,ttl=1) 
+2025-05-22 12:51:56,682 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 196, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:56,692 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=198,ttl=1) 
+2025-05-22 12:51:56,773 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 198, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:56,784 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=199,ttl=1) 
+2025-05-22 12:51:56,875 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 199, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:56,888 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo12,ext_id=200,ttl=1) 
+2025-05-22 12:51:56,975 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 200, 'odoo12:count,backend=Test Odoo 12.0,min=True),ttl=1 
+2025-05-22 12:51:56,987 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo12,ext_id=171,ttl=1) 
+2025-05-22 12:51:57,081 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country,odoo14,ext_id=233,ttl=None) 
+2025-05-22 12:51:57,127 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 233, 'odoo14:addre,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:51:57,173 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=68,ttl=3) 
+2025-05-22 12:51:57,218 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 68, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:51:57,283 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=69,ttl=3) 
+2025-05-22 12:51:57,325 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 69, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:51:57,388 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=10,ttl=3) 
+2025-05-22 12:51:57,429 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 10, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:51:57,504 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=9,ttl=3) 
+2025-05-22 12:51:57,551 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 9, 'odoo14:country,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:51:57,614 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=70,ttl=3) 
+2025-05-22 12:51:57,660 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 70, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:51:57,729 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=12,ttl=3) 
+2025-05-22 12:51:57,775 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 12, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:51:57,839 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=60,ttl=3) 
+2025-05-22 12:51:57,882 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 60, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:51:57,951 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=11,ttl=3) 
+2025-05-22 12:51:57,993 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 11, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:51:58,058 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=13,ttl=3) 
+2025-05-22 12:51:58,098 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 13, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:51:58,165 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=14,ttl=3) 
+2025-05-22 12:51:58,212 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 14, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:51:58,285 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=15,ttl=3) 
+2025-05-22 12:51:58,331 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 15, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:51:58,399 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=17,ttl=3) 
+2025-05-22 12:51:58,455 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 17, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:51:58,521 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=16,ttl=3) 
+2025-05-22 12:51:58,564 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 16, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:51:58,633 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=18,ttl=3) 
+2025-05-22 12:51:58,681 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 18, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:51:58,746 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=61,ttl=3) 
+2025-05-22 12:51:58,795 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 61, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:51:58,857 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=19,ttl=3) 
+2025-05-22 12:51:58,900 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 19, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:51:58,968 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=62,ttl=3) 
+2025-05-22 12:51:59,015 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 62, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:51:59,077 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=20,ttl=3) 
+2025-05-22 12:51:59,118 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 20, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:51:59,183 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=24,ttl=3) 
+2025-05-22 12:51:59,225 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 24, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:51:59,291 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=21,ttl=3) 
+2025-05-22 12:51:59,333 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 21, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:51:59,395 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=22,ttl=3) 
+2025-05-22 12:51:59,439 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 22, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:51:59,503 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=23,ttl=3) 
+2025-05-22 12:51:59,547 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 23, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:51:59,626 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=25,ttl=3) 
+2025-05-22 12:51:59,680 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 25, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:51:59,757 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=26,ttl=3) 
+2025-05-22 12:51:59,810 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 26, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:51:59,923 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=27,ttl=3) 
+2025-05-22 12:52:00,041 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 27, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:52:00,164 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=42,ttl=3) 
+2025-05-22 12:52:00,225 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 42, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:52:00,308 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=41,ttl=3) 
+2025-05-22 12:52:00,360 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 41, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:52:00,439 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=28,ttl=3) 
+2025-05-22 12:52:00,494 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 28, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:52:00,569 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=63,ttl=3) 
+2025-05-22 12:52:00,624 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 63, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:52:00,703 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=43,ttl=3) 
+2025-05-22 12:52:00,750 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 43, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:52:00,817 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=44,ttl=3) 
+2025-05-22 12:52:00,860 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 44, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:52:00,921 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=46,ttl=3) 
+2025-05-22 12:52:00,966 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 46, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:52:01,048 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=64,ttl=3) 
+2025-05-22 12:52:01,092 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 64, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:52:01,162 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=45,ttl=3) 
+2025-05-22 12:52:01,210 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 45, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:52:01,281 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=29,ttl=3) 
+2025-05-22 12:52:01,323 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 29, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:52:01,394 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=36,ttl=3) 
+2025-05-22 12:52:01,441 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 36, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:52:01,504 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=37,ttl=3) 
+2025-05-22 12:52:01,547 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 37, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:52:01,610 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=30,ttl=3) 
+2025-05-22 12:52:01,656 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 30, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:52:01,722 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=32,ttl=3) 
+2025-05-22 12:52:01,771 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 32, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:52:01,838 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=33,ttl=3) 
+2025-05-22 12:52:01,888 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 33, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:52:01,966 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=34,ttl=3) 
+2025-05-22 12:52:02,014 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 34, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:52:02,086 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=31,ttl=3) 
+2025-05-22 12:52:02,129 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 31, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:52:02,196 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=35,ttl=3) 
+2025-05-22 12:52:02,243 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 35, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:52:02,308 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=38,ttl=3) 
+2025-05-22 12:52:02,355 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 38, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:52:02,421 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=39,ttl=3) 
+2025-05-22 12:52:02,465 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 39, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:52:02,532 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=40,ttl=3) 
+2025-05-22 12:52:02,574 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 40, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:52:02,636 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=47,ttl=3) 
+2025-05-22 12:52:02,753 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 47, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:52:02,831 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=66,ttl=3) 
+2025-05-22 12:52:02,878 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 66, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:52:02,942 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=65,ttl=3) 
+2025-05-22 12:52:02,984 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 65, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:52:03,053 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=48,ttl=3) 
+2025-05-22 12:52:03,093 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 48, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:52:03,151 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=49,ttl=3) 
+2025-05-22 12:52:03,193 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 49, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:52:03,273 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=50,ttl=3) 
+2025-05-22 12:52:03,314 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 50, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:52:03,383 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=51,ttl=3) 
+2025-05-22 12:52:03,429 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 51, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:52:03,491 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=52,ttl=3) 
+2025-05-22 12:52:03,535 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 52, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:52:03,600 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=53,ttl=3) 
+2025-05-22 12:52:03,641 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 53, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:52:03,706 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=55,ttl=3) 
+2025-05-22 12:52:03,754 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 55, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:52:03,817 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=67,ttl=3) 
+2025-05-22 12:52:03,859 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 67, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:52:03,923 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=54,ttl=3) 
+2025-05-22 12:52:03,973 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 54, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:52:04,041 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=56,ttl=3) 
+2025-05-22 12:52:04,083 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 56, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:52:04,142 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=58,ttl=3) 
+2025-05-22 12:52:04,181 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 58, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:52:04,246 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=57,ttl=3) 
+2025-05-22 12:52:04,292 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 57, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:52:04,359 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country.state,odoo14,ext_id=59,ttl=3) 
+2025-05-22 12:52:04,400 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 59, 'odoo14:countr,backend=Test Odoo 14.0,min=True),ttl=3 
+2025-05-22 12:52:04,466 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=3,ttl=None) 
+2025-05-22 12:52:04,531 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 3, 'odoo14:company,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:52:04,665 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=13,ttl=None) 
+2025-05-22 12:52:04,724 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 13, 'odoo14:compan,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:52:04,865 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=12,ttl=None) 
+2025-05-22 12:52:04,917 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 12, 'odoo14:compan,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:52:05,047 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=9,ttl=None) 
+2025-05-22 12:52:05,108 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 9, 'odoo14:company,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:52:05,244 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=3,ttl=None) 
+2025-05-22 12:52:05,349 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:comment': False, 'odoo1,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:52:05,440 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=11,ttl=None) 
+2025-05-22 12:52:05,526 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:comment': False, 'odoo1,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:52:05,609 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=3,ttl=None) 
+2025-05-22 12:52:05,721 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:comment': False, 'odoo1,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:52:05,794 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=11,ttl=None) 
+2025-05-22 12:52:05,885 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:comment': False, 'odoo1,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:52:05,960 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=10,ttl=None) 
+2025-05-22 12:52:06,042 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:comment': False, 'odoo1,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:52:06,164 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=7,ttl=None) 
+2025-05-22 12:52:06,275 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:comment': False, 'odoo1,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:52:06,383 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo10,ext_id=1,ttl=None) 
+2025-05-22 12:52:06,493 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:rate_ids': [130], 'odoo,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:52:06,506 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo10,ext_id=3,ttl=None) 
+2025-05-22 12:52:06,587 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:rate_ids': [2, 1], 'odo,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:52:06,603 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country,odoo10,ext_id=235,ttl=None) 
+2025-05-22 12:52:06,692 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:currency_id': [3, 'USD',backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:52:06,741 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=3,ttl=None) 
+2025-05-22 12:52:06,835 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:comment': False, 'odoo1,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:52:06,910 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=11,ttl=None) 
+2025-05-22 12:52:07,010 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:comment': False, 'odoo1,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:52:07,082 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=10,ttl=None) 
+2025-05-22 12:52:07,186 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:comment': False, 'odoo1,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:52:07,266 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=7,ttl=None) 
+2025-05-22 12:52:07,359 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:comment': False, 'odoo1,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:52:07,436 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=3,ttl=None) 
+2025-05-22 12:52:07,542 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 3, 'odoo12:company,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:52:07,620 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=13,ttl=None) 
+2025-05-22 12:52:07,724 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 13, 'odoo12:compan,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:52:07,797 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=12,ttl=None) 
+2025-05-22 12:52:07,898 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 12, 'odoo12:compan,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:52:07,987 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=9,ttl=None) 
+2025-05-22 12:52:08,088 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 9, 'odoo12:company,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:52:08,181 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo12,ext_id=1,ttl=None) 
+2025-05-22 12:52:08,269 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 1, 'odoo12:active',backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:52:08,288 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo12,ext_id=2,ttl=None) 
+2025-05-22 12:52:08,387 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 2, 'odoo12:active',backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:52:08,405 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country,odoo12,ext_id=233,ttl=None) 
+2025-05-22 12:52:08,503 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 233, 'odoo12:addre,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:52:08,552 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=3,ttl=None) 
+2025-05-22 12:52:08,649 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 3, 'odoo12:company,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:52:08,721 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=13,ttl=None) 
+2025-05-22 12:52:08,824 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 13, 'odoo12:compan,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:52:08,898 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=12,ttl=None) 
+2025-05-22 12:52:09,008 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 12, 'odoo12:compan,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:52:09,092 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=9,ttl=None) 
+2025-05-22 12:52:09,202 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 9, 'odoo12:company,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:52:09,281 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=3,ttl=None) 
+2025-05-22 12:52:09,339 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 3, 'odoo14:company,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:52:09,413 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=13,ttl=None) 
+2025-05-22 12:52:09,469 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 13, 'odoo14:compan,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:52:09,544 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=12,ttl=None) 
+2025-05-22 12:52:09,612 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 12, 'odoo14:compan,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:52:09,693 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=9,ttl=None) 
+2025-05-22 12:52:09,748 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 9, 'odoo14:company,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:52:09,828 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo14,ext_id=1,ttl=None) 
+2025-05-22 12:52:09,878 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 1, 'odoo14:date': ,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:52:09,895 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.currency,odoo14,ext_id=2,ttl=None) 
+2025-05-22 12:52:09,947 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 2, 'odoo14:date': ,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:52:09,965 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.country,odoo14,ext_id=233,ttl=None) 
+2025-05-22 12:52:10,011 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 233, 'odoo14:addre,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:52:10,051 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=3,ttl=None) 
+2025-05-22 12:52:10,109 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 3, 'odoo14:company,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:52:10,183 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=13,ttl=None) 
+2025-05-22 12:52:10,237 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 13, 'odoo14:compan,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:52:10,320 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=12,ttl=None) 
+2025-05-22 12:52:10,382 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 12, 'odoo14:compan,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:52:10,469 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=9,ttl=None) 
+2025-05-22 12:52:10,524 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 9, 'odoo14:company,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:52:10,623 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=3,ttl=None) 
+2025-05-22 12:52:10,716 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:comment': False, 'odoo1,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:52:10,792 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=3,ttl=None) 
+2025-05-22 12:52:10,899 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 3, 'odoo12:company,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:52:10,982 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=3,ttl=None) 
+2025-05-22 12:52:11,038 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 3, 'odoo14:company,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:52:11,130 939746 INFO test_universal_connector_base_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_base_12/c8/c8fd583925c09ec326a3b997cd044a0ad7636db7 
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 13
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('res.partner(13,).image', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 312
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('ir.attachment(312,).datas', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
+    r = base64.b64encode(open(full_path,'rb').read())
+FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_base_12/c8/c8fd583925c09ec326a3b997cd044a0ad7636db7'
+2025-05-22 12:52:11,132 939746 INFO test_universal_connector_base_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_base_12/d6/d694aedb3fd293b0ad70a7ee7cbc4c0918d51d21 
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 13
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('res.partner(13,).image', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 312
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('ir.attachment(312,).datas', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
+    r = base64.b64encode(open(full_path,'rb').read())
+FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_base_12/d6/d694aedb3fd293b0ad70a7ee7cbc4c0918d51d21'
+2025-05-22 12:52:11,135 939746 INFO test_universal_connector_base_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_base_12/d1/d11256bbbee226b9d70934d607d8c2623ac43bee 
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 13
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('res.partner(13,).image_medium', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 313
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('ir.attachment(313,).datas', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
+    r = base64.b64encode(open(full_path,'rb').read())
+FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_base_12/d1/d11256bbbee226b9d70934d607d8c2623ac43bee'
+2025-05-22 12:52:11,136 939746 INFO test_universal_connector_base_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_base_12/25/25668fabdb766827cb0d7b27736d60b093e4ebf7 
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 13
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('res.partner(13,).image_medium', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 313
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('ir.attachment(313,).datas', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
+    r = base64.b64encode(open(full_path,'rb').read())
+FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_base_12/25/25668fabdb766827cb0d7b27736d60b093e4ebf7'
+2025-05-22 12:52:11,139 939746 INFO test_universal_connector_base_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_base_12/5c/5c8ecc838115f07c84f25dd094d612b8a89fec21 
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 13
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('res.partner(13,).image_small', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 314
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('ir.attachment(314,).datas', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
+    r = base64.b64encode(open(full_path,'rb').read())
+FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_base_12/5c/5c8ecc838115f07c84f25dd094d612b8a89fec21'
+2025-05-22 12:52:11,139 939746 INFO test_universal_connector_base_12 odoo.addons.base.models.ir_attachment: _read_file reading /home/odoo/.local/share/Odoo12/filestore/test_universal_connector_base_12/1c/1c0493f280e96b469f86725a32c39cae72bb9b5f 
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 13
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('res.partner(13,).image_small', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/api.py", line 1050, in get
+    value = self._data[key][field][record._ids[0]]
+KeyError: 314
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/fields.py", line 1064, in __get__
+    value = record.env.cache.get(record, self)
+  File "/home/odoo/12.0/odoo/api.py", line 1052, in get
+    raise CacheMiss(record, field)
+odoo.exceptions.CacheMiss: ('ir.attachment(314,).datas', None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/odoo/12.0/odoo/addons/base/models/ir_attachment.py", line 113, in _file_read
+    r = base64.b64encode(open(full_path,'rb').read())
+FileNotFoundError: [Errno 2] No such file or directory: '/home/odoo/.local/share/Odoo12/filestore/test_universal_connector_base_12/1c/1c0493f280e96b469f86725a32c39cae72bb9b5f'
+2025-05-22 12:52:11,144 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=11,ttl=None) 
+2025-05-22 12:52:11,235 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:comment': False, 'odoo1,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:52:11,324 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=13,ttl=None) 
+2025-05-22 12:52:11,491 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 13, 'odoo12:compan,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:52:11,577 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=13,ttl=None) 
+2025-05-22 12:52:11,637 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 13, 'odoo14:compan,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:52:11,738 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=3,ttl=None) 
+2025-05-22 12:52:11,850 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:comment': False, 'odoo1,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:52:11,935 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=3,ttl=None) 
+2025-05-22 12:52:12,039 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 3, 'odoo12:company,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:52:12,125 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=3,ttl=None) 
+2025-05-22 12:52:12,178 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 3, 'odoo14:company,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:52:12,277 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=11,ttl=None) 
+2025-05-22 12:52:12,365 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:comment': False, 'odoo1,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:52:12,454 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=13,ttl=None) 
+2025-05-22 12:52:12,553 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 13, 'odoo12:compan,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:52:12,634 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=13,ttl=None) 
+2025-05-22 12:52:12,686 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 13, 'odoo14:compan,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:52:12,782 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=3,ttl=None) 
+2025-05-22 12:52:12,871 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:comment': False, 'odoo1,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:52:12,948 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=3,ttl=None) 
+2025-05-22 12:52:13,045 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 3, 'odoo12:company,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:52:13,130 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=3,ttl=None) 
+2025-05-22 12:52:13,194 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 3, 'odoo14:company,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:52:13,288 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo10,ext_id=11,ttl=None) 
+2025-05-22 12:52:13,390 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:comment': False, 'odoo1,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:52:13,479 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo12,ext_id=13,ttl=None) 
+2025-05-22 12:52:13,580 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:id': 13, 'odoo12:compan,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:52:13,659 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: trigger_one_record(res.partner,odoo14,ext_id=13,ttl=None) 
+2025-05-22 12:52:13,716 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:id': 13, 'odoo14:compan,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:52:13,798 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:name': 'base', 'odoo10:,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:52:13,806 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:code': 'it_IT', 'odoo10,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:52:13,839 939746 INFO test_universal_connector_base_12 odoo.addons.base.models.ir_translation: module base: loading translation file (it) for language it_IT 
+2025-05-22 12:52:13,839 939746 INFO test_universal_connector_base_12 odoo.tools.translate: loading /home/odoo/12.0/odoo/addons/base/i18n/it.po 
+2025-05-22 12:52:15,419 939746 INFO test_universal_connector_base_12 odoo.addons.base.models.ir_translation: module web: loading translation file (it) for language it_IT 
+2025-05-22 12:52:15,419 939746 INFO test_universal_connector_base_12 odoo.tools.translate: loading /home/odoo/12.0/addons/web/i18n/it.po 
+2025-05-22 12:52:15,583 939746 INFO test_universal_connector_base_12 odoo.addons.base.models.ir_translation: module base_import: loading translation file (it) for language it_IT 
+2025-05-22 12:52:15,584 939746 INFO test_universal_connector_base_12 odoo.tools.translate: loading /home/odoo/12.0/addons/base_import/i18n/it.po 
+2025-05-22 12:52:15,614 939746 INFO test_universal_connector_base_12 odoo.addons.base.models.ir_translation: module web_settings_dashboard: loading translation file (it) for language it_IT 
+2025-05-22 12:52:15,615 939746 INFO test_universal_connector_base_12 odoo.tools.translate: loading /home/odoo/12.0/addons/web_settings_dashboard/i18n/it.po 
+2025-05-22 12:52:15,628 939746 INFO test_universal_connector_base_12 odoo.addons.base.models.ir_translation: module iap: loading translation file (it) for language it_IT 
+2025-05-22 12:52:15,628 939746 INFO test_universal_connector_base_12 odoo.tools.translate: loading /home/odoo/12.0/addons/iap/i18n/it.po 
+2025-05-22 12:52:15,640 939746 INFO test_universal_connector_base_12 odoo.addons.base.models.ir_translation: module web_diagram: loading translation file (it) for language it_IT 
+2025-05-22 12:52:15,640 939746 INFO test_universal_connector_base_12 odoo.tools.translate: loading /home/odoo/12.0/addons/web_diagram/i18n/it.po 
+2025-05-22 12:52:15,651 939746 INFO test_universal_connector_base_12 odoo.addons.base.models.ir_translation: module web_editor: loading translation file (it) for language it_IT 
+2025-05-22 12:52:15,651 939746 INFO test_universal_connector_base_12 odoo.tools.translate: loading /home/odoo/12.0/addons/web_editor/i18n/it.po 
+2025-05-22 12:52:15,689 939746 INFO test_universal_connector_base_12 odoo.addons.base.models.ir_translation: module web_kanban_gauge: loading translation file (it) for language it_IT 
+2025-05-22 12:52:15,689 939746 INFO test_universal_connector_base_12 odoo.tools.translate: loading /home/odoo/12.0/addons/web_kanban_gauge/i18n/it.po 
+2025-05-22 12:52:15,700 939746 INFO test_universal_connector_base_12 odoo.addons.base.models.ir_translation: module web_tour: loading translation file (it) for language it_IT 
+2025-05-22 12:52:15,700 939746 INFO test_universal_connector_base_12 odoo.tools.translate: loading /home/odoo/12.0/addons/web_tour/i18n/it.po 
+2025-05-22 12:52:15,741 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:currency_id': 1, 'odoo1,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:52:15,759 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:currency_id': 1, 'odoo1,backend=Test Odoo 10.0,min=False),ttl=3 
+2025-05-22 12:52:15,783 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:is_company': True, 'odo,backend=Test Odoo 10.0,min=True),ttl=4 
+2025-05-22 12:52:15,837 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo10:is_company': True, 'odo,backend=Test Odoo 10.0,min=False),ttl=3 
+2025-05-22 12:52:15,873 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:name': 'base', 'odoo12:,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:52:15,882 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:code': 'it_IT', 'odoo12,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:52:15,888 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:currency_id': 1, 'odoo1,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:52:15,906 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:is_company': True, 'odo,backend=Test Odoo 12.0,min=True),ttl=4 
+2025-05-22 12:52:15,958 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo12:is_company': True, 'odo,backend=Test Odoo 12.0,min=False),ttl=3 
+2025-05-22 12:52:15,990 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:name': 'base', 'odoo14:,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:52:15,997 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:code': 'it_IT', 'odoo14,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:52:16,004 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:currency_id': 1, 'odoo1,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:52:16,022 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:is_company': True, 'odo,backend=Test Odoo 14.0,min=True),ttl=4 
+2025-05-22 12:52:16,078 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.models.synchro_log: False.synchro({'odoo14:is_company': True, 'odo,backend=Test Odoo 14.0,min=False),ttl=3 
+2025-05-22 12:52:16,107 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.tests.test_backend: 🎺 Starting purge log test ... 
+2025-05-22 12:52:16,108 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.tests.testenv: 🏆🥇 [1;32m384 tests SUCCESSFULLY completed[0m 
+2025-05-22 12:52:16,146 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.tests.test_backend: Ran 1 test in 95.556s 
+2025-05-22 12:52:16,146 939746 INFO test_universal_connector_base_12 odoo.addons.universal_connector_base.tests.test_backend: OK 
+2025-05-22 12:52:16,146 939746 INFO test_universal_connector_base_12 odoo.modules.module: odoo.addons.universal_connector_base.tests.test_backend tested in 95.56s, 39162 queries 
+2025-05-22 12:52:16,177 939746 INFO test_universal_connector_base_12 odoo.modules.loading: 10 modules loaded in 98.68s, 39162 queries 
+2025-05-22 12:52:16,427 939746 INFO test_universal_connector_base_12 odoo.modules.loading: Modules loaded. 
+2025-05-22 12:52:16,431 939746 INFO test_universal_connector_base_12 odoo.service.server: Starting post tests 
+2025-05-22 12:52:16,433 939746 INFO test_universal_connector_base_12 odoo.service.server: All post-tested in 0.00s, 0 queries 
+2025-05-22 12:52:16,433 939746 INFO test_universal_connector_base_12 odoo.service.server: Initiating shutdown 
+2025-05-22 12:52:16,433 939746 INFO test_universal_connector_base_12 odoo.service.server: Hit CTRL-C again or send a second signal to force the shutdown. 
+
++===================================================================
+| please test [36muniversal_connector_base[0m (12.0): [32mSUCCESS![0m
++===================================================================
+
+[1;37;44m$ coverage report --rcfile=/home/odoo/12.0/connector/universal_connector_base/tests/logs/coverage_universal_connector_base_12rc -m
+[34;107mName                                                                               Stmts   Miss  Cover   Missing
+----------------------------------------------------------------------------------------------------------------
+/home/odoo/12.0/connector/universal_connector_base/models/ir_model.py                 17      2    88%   10, 44
+/home/odoo/12.0/connector/universal_connector_base/models/ir_model_synchro.py        206     27    87%   180, 183, 205, 209, 217-223, 226, 233, 235, 243, 249, 253, 257, 318, 364, 369, 392, 451, 510, 630, 636, 638
+/home/odoo/12.0/connector/universal_connector_base/models/ir_model_to_map.py          19      0   100%
+/home/odoo/12.0/connector/universal_connector_base/models/res_company.py              10      0   100%
+/home/odoo/12.0/connector/universal_connector_base/models/res_country.py              21      0   100%
+/home/odoo/12.0/connector/universal_connector_base/models/res_currency.py             21      0   100%
+/home/odoo/12.0/connector/universal_connector_base/models/res_lang.py                 12      0   100%
+/home/odoo/12.0/connector/universal_connector_base/models/res_partner.py              24      0   100%
+/home/odoo/12.0/connector/universal_connector_base/models/res_users.py                21      0   100%
+/home/odoo/12.0/connector/universal_connector_base/models/synchro_alias.py            10      0   100%
+/home/odoo/12.0/connector/universal_connector_base/models/synchro_api.py             203     10    95%   89, 153, 228, 280, 282-287, 481, 588, 604
+/home/odoo/12.0/connector/universal_connector_base/models/synchro_apply.py           161    118    27%   26, 55, 66-72, 89-100, 137-139, 222-226, 237-248, 260-280, 292-302, 372-391, 402-410, 421-425, 436-444, 455-463, 474-476, 490-495, 506-518, 529-533, 574-582
+/home/odoo/12.0/connector/universal_connector_base/models/synchro_backend.py         391     49    87%   322-328, 333, 390, 397, 399, 401, 403, 405, 408, 418, 433, 471, 493, 505-511, 560, 582, 614, 617, 619, 629, 636-637, 663-666, 669, 671, 690, 696, 701, 742, 748, 811, 838, 843, 862-867, 877, 881, 890, 896
+/home/odoo/12.0/connector/universal_connector_base/models/synchro_cache.py           185     64    65%   326, 332-333, 338, 341, 354, 363-369, 375, 383, 391, 398, 400, 419, 424-425, 428-431, 446, 450, 455, 460-462, 465, 476-477, 482-484, 489-490, 496, 501-504, 509-510, 513-521, 528, 532, 534, 538-540, 544, 554-556, 560
+/home/odoo/12.0/connector/universal_connector_base/models/synchro_identity.py         26      6    77%   62-67
+/home/odoo/12.0/connector/universal_connector_base/models/synchro_log.py             140     33    76%   91, 97, 106-107, 111-139, 141, 198-201, 203, 231, 243, 249, 253, 257, 281
+/home/odoo/12.0/connector/universal_connector_base/models/synchro_mapper.py          238     45    81%   99-100, 103, 124, 126, 186, 188, 200, 227, 246, 258, 263, 266, 276, 291, 301, 305, 328, 333, 345-366, 405, 432, 451, 459
+/home/odoo/12.0/connector/universal_connector_base/models/synchro_model.py           744    134    82%   165-178, 181-182, 212, 229-233, 261-262, 274-300, 351, 357, 361, 387, 394, 398, 417, 419, 423, 455-457, 460, 486-494, 528, 537, 555-566, 652, 654, 675-676, 698, 723-727, 736, 755, 762, 770-774, 841, 895, 909, 963-964, 977-978, 991, 1011, 1013, 1017, 1031, 1063, 1070, 1168, 1184, 1186-1191, 1196, 1201-1204, 1211, 1227, 1255-1262, 1268, 1330, 1342-1353, 1358-1361, 1367, 1380-1381, 1383-1384, 1389-1391, 1402-1404, 1406-1407, 1409, 1420, 1428, 1431-1432, 1437-1439, 1451, 1458, 1462, 1466, 1470, 1476
+/home/odoo/12.0/connector/universal_connector_base/models/synchro_protocol.py         21      6    71%   45-50
+/home/odoo/12.0/connector/universal_connector_base/wizard/wizard_pull_records.py      46     33    28%   56-57, 72-99, 102-126
+----------------------------------------------------------------------------------------------------------------
+TOTAL                                                                               2516    527    79%
+[0m

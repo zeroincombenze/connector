@@ -137,7 +137,7 @@ class SynchroModel(models.Model):
             ("no", "Never"),
             ("yes", "Always"),
         ],
-        string="Load with Ext.Ref.",
+        string="Use Ext.Ref.",
         required=True,
         default="auto",
         help=(
@@ -176,6 +176,10 @@ class SynchroModel(models.Model):
                 )
             result.append((dir_mapper.id, name))
         return result
+
+    @api.onchange("model_id")
+    def onchange_model_id(self):
+        self.name = self.model_id.model
 
     def get_loc_ext_id(self):
         return (
@@ -228,7 +232,7 @@ class SynchroModel(models.Model):
             vmodel = binding_model
         return vmodel
 
-    def get_mapper(self, loc_name=None, ext_name=None, spec=None):
+    def get_mapper(self, loc_name=None, ext_name=None, spec=None, multiple=False):
         Mapper = self.env["synchro.mapper"]
         domain = [("model_id", "=", self.id)]
         if loc_name:
@@ -244,7 +248,7 @@ class SynchroModel(models.Model):
         if spec is not None:
             domain.append(("spec", "=", spec))
         mapper = Mapper.search(domain)
-        return mapper if len(mapper) == 1 else Mapper
+        return mapper if len(mapper) == 1 or multiple else Mapper
 
     def get_map_from_ext_ref(self, ext_ref, struct, spec=None):
         Cache = self.env["synchro.cache"]
@@ -425,7 +429,7 @@ class SynchroModel(models.Model):
                 list_9.append(ext_ref)
             maps[ext_ref] = field
         return (
-            list_1 + list_2 + list_3 + list_6 + list_8 + list_9,
+            list_1 + list_2 + list_3 + list_4 + list_6 + list_8 + list_9,
             with_company_id,
             maps,
         )
@@ -679,7 +683,7 @@ class SynchroModel(models.Model):
                 and ext_ref in vals
                 and vals[ext_ref]
                 and loc_name not in ("id", loc_ext_id)
-                and field["store"]
+                and (field["store"] or field.get("company_dependent"))
             ):
                 method = "map_%s_to_local" % ftype
                 method = method if hasattr(self, method) else "map_base_to_local"
@@ -688,8 +692,9 @@ class SynchroModel(models.Model):
                 )
             if ext_ref in vals and loc_name != ext_ref:
                 del vals[ext_ref]
+        prefix = self.backend_id.prefix + ":"
         for loc_name, value in vals.copy().items():
-            if value is None:
+            if value is None or loc_name.startswith(prefix):
                 del vals[loc_name]
         return vals, incomplete_record
 
@@ -697,24 +702,18 @@ class SynchroModel(models.Model):
     def compile_required_fields(self, vals, ctx=None):
         self.ensure_one()
         magic_fields = self.backend_id.get_magic_fields(system=True)
-        record = self.new(values=vals)
-        struct = self.env[self._name].fields_get()
-        for loc_name in struct.keys():
+        Binder = self.env[self.name]
+        def_values = Binder.default_get(Binder.fields_get_keys())
+        for loc_name in Binder.fields_get_keys():
             if (
                     (loc_name in vals and vals[loc_name])
-                    or not hasattr(record, loc_name)
-                    or not getattr(record, loc_name)
                     or loc_name in magic_fields
+                    or loc_name not in def_values
             ):
                 continue
-            if struct[loc_name]["type"] == "many2many":
-                vals[loc_name] = [x.id for x in getattr(record, loc_name)]
-            elif struct[loc_name]["type"] == "many2one":
-                vals[loc_name] = getattr(record, loc_name).id
-            else:
-                vals[loc_name] = getattr(record, loc_name)
+            vals[loc_name] = def_values[loc_name]
         required_fields = [x for x in self.field_ids
-                           if x.required and not x.fields_id[0].related]
+                           if x.name and x.required and not x.fields_id[0].related]
         IrApply = self.env["synchro.apply"]
         for mapper in required_fields:
             if mapper.name not in vals:
@@ -781,6 +780,7 @@ class SynchroModel(models.Model):
                     return False  # pragma: no cover
                 vals = {
                     "backend_id": backend.id,
+                    "model_id":  self.get_odoo_model_id(name=binding_model),
                     "name": binding_model,
                     "counterpart_name": ext_model or False,
                     "model_spec": model_spec if model_spec is not None else False,
@@ -871,12 +871,14 @@ class SynchroModel(models.Model):
                                                           self.childs_name)}
             )
             if missed_fields:
-                raise UserError(
-                    _(
-                        "Missed mapping for field %s of %s"
-                        % (missed_fields, binding_model)
+                for loc_name in missed_fields:
+                    self.env["synchro.mapper"].build_mapper(
+                        self,
+                        loc_name,
+                        False,
+                        spec=False,
+                        force=True
                     )
-                )
         for mapper in self.field_ids:
             if (
                 not mapper.name
@@ -886,7 +888,7 @@ class SynchroModel(models.Model):
                 continue
             comodel = struct.get(mapper.name, {}).get("relation")
             if comodel and comodel not in managed_models:
-                mapper.write({"name": False})
+                mapper.write({"protect_update": "3"})
 
         child_models = []
         if binding_model == "product.template":
@@ -1016,8 +1018,7 @@ class SynchroModel(models.Model):
             required_ancillary += [
                 x
                 for x in item["key"]
-                if x in ancillary_fields
-                or x in ("company_id", "parent_id", self.parent_name)
+                if x in ("company_id", "parent_id", self.parent_name)
             ]
         for mapper in self.field_ids:
             if mapper.name in required_ancillary and not mapper.required:
@@ -1336,6 +1337,20 @@ class SynchroModel(models.Model):
         return self.bind_search_record(Binder, vals, model_spec=model_spec, ctx=ctx)
 
     def bind_search_record(self, Binder, vals, model_spec=None, ctx=None):
+        search_keys = []
+        if not self.search_keys:
+            struct = self.env[Binder._name].fields_get()
+            if "code" in struct:
+                search_keys.append(["code"])
+            if "name" in struct:
+                search_keys.append(["name"])
+            if not search_keys:
+                self.env["synchro.log"].logmsg(
+                    "info",
+                    "Cannot search for unmanaged model %(model)s",
+                    res_model=Binder._name,
+                )
+                return False
         ctx = ctx or {}
         loc_ext_id = self.get_loc_ext_id()
         rec = candidate = None
@@ -1344,8 +1359,9 @@ class SynchroModel(models.Model):
             if len(rec) == 1:
                 candidate = rec[0]
                 rec = []
+        def_values = Binder.default_get(Binder.fields_get_keys())
         prio = 8
-        for keys in unicodes(eval(self.search_keys)):
+        for keys in unicodes(search_keys or eval(self.search_keys)):
             domain = []
             if isinstance(keys, str):
                 keys = [keys]
@@ -1363,12 +1379,15 @@ class SynchroModel(models.Model):
                     if def_key in ctx:
                         domain.append((key, "=", ctx[def_key]))
                         continue
+                    elif key in def_values and def_values[key]:
+                        domain.append((key, "=", def_values[key]))
+                        continue
                     else:
                         mapper = self.get_mapper(loc_name=key)
                         def_value = mapper.get_default_apply()[1]
                         if def_value:
-                            ctx[def_key] = def_value
-                            domain.append((key, "=", ctx[def_key]))
+                            def_values[key] = def_value
+                            domain.append((key, "=", def_values[key]))
                             continue
                     if key in ctx:
                         domain.append((key, "=", ctx[key]))
@@ -1433,8 +1452,8 @@ class SynchroModel(models.Model):
         return rec
 
     @api.model
-    def get_odoo_model_id(self):
-        models = self.env["ir.model"].search([("model", "=", self.name)])
+    def get_odoo_model_id(self, name=None):
+        models = self.env["ir.model"].search([("model", "=", name or self.name)])
         if not models:
             return False
         return models[0].id

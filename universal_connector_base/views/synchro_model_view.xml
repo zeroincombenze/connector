@@ -7,12 +7,11 @@
         <field name="arch" type="xml">
             <tree string="Synchonization model">
                 <field name="sequence" widget="handle"/>
-                <field name="name"/>
+                <field name="model_id"/>
                 <field name="model_spec"/>
                 <field name="counterpart_name"/>
                 <field name="use_remote_xref"/>
                 <field name="auth_action"/>
-                <field name="field_uname"/>
                 <field name="parent_name"/>
                 <field name="childs_name"/>
                 <field name="backend_id"/>
@@ -27,7 +26,7 @@
             <form string="Synchonization Model">
                 <group>
                     <group>
-                        <field name="name"/>
+                        <field name="model_id"/>
                         <field name="model_spec"/>
                         <field name="counterpart_name"/>
                         <field name="use_remote_xref"/>
@@ -37,7 +36,6 @@
                         <field name="rec_counter"/>
                     </group>
                     <group>
-                        <field name="field_uname"/>
                         <field name="search_keys"/>
                         <field name="search_with_company"/>
                         <field name="parent_name"/>
@@ -54,6 +52,7 @@
                         <field name="counterpart_name"/>
                         <field name="apply4"/>
                         <field name="default"/>
+                        <field name="company_dependent"/>
                         <field name="ttype"/>
                         <field name="protect_update"/>
                         <field name="required"/>
@@ -76,11 +75,12 @@
         <field name="arch" type="xml">
             <tree string="Synchonization Field">
                 <field name="sequence" widget="handle"/>
-                <field name="name"/>
+                <field name="fields_id"/>
                 <field name="spec"/>
                 <field name="counterpart_name"/>
                 <field name="apply4"/>
                 <field name="default"/>
+                <field name="company_dependent"/>
                 <field name="ttype"/>
                 <field name="protect_update"/>
                 <field name="required"/>
@@ -98,11 +98,12 @@
             <form string="Synchonization Field">
                 <group>
                     <field name="sequence" widget="handle"/>
-                    <field name="name"/>
+                    <field name="fields_id"/>
                     <field name="spec"/>
                     <field name="counterpart_name"/>
                     <field name="apply4"/>
                     <field name="default"/>
+                    <field name="company_dependent"/>
                     <field name="ttype"/>
                     <field name="protect_update"/>
                     <field name="required"/>
@@ -155,6 +156,7 @@
         <field name="arch" type="xml">
             <search string="Model search">
                 <field name="name"/>
+                <field name="model_id"/>
                 <field name="counterpart_name"/>
                 <field name="backend_id"/>
                 <group expand="0" string="Group By...">
@@ -169,8 +171,9 @@
         <field name="name">synchro.field.search</field>
         <field name="model">synchro.mapper</field>
         <field name="arch" type="xml">
-            <search string="Search search">
+            <search string="Field search">
                 <field name="name"/>
+                <field name="fields_id"/>
                 <field name="counterpart_name"/>
                 <field name="model_id"/>
                 <field name="backend_id"/>

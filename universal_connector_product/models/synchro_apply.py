@@ -52,7 +52,7 @@ class IrModelSynchroApply(models.Model):
         if vals.get("product_id"):
             Product = self.env["product.product"]
             product = Product.browse(vals["product_id"])
-            vmodel = mapper.model_id.name
+            binding_model = mapper.model_id.name
             if not vals.get("product_uom"):
                 vals = self.apply_uom(
                     mapper,
@@ -62,7 +62,7 @@ class IrModelSynchroApply(models.Model):
                     None,
                     product=product,
                 )
-            if vmodel == "purchase.order.line" and not vals.get("taxes_id"):
+            if binding_model == "purchase.order.line" and not vals.get("taxes_id"):
                 vals = self.apply_tax(
                     mapper,
                     vals,
@@ -71,7 +71,7 @@ class IrModelSynchroApply(models.Model):
                     None,
                     product=product,
                 )
-            elif vmodel == "sale.order.line" and not vals.get("tax_id"):
+            elif binding_model == "sale.order.line" and not vals.get("tax_id"):
                 vals = self.apply_tax(
                     mapper,
                     vals,
@@ -80,7 +80,7 @@ class IrModelSynchroApply(models.Model):
                     None,
                     product=product,
                 )
-            elif vmodel == "account.invoice.line" and not vals.get(
+            elif binding_model == "account.invoice.line" and not vals.get(
                 "invoice_line_tax_ids"
             ):
                 vals = self.apply_tax(
@@ -91,7 +91,7 @@ class IrModelSynchroApply(models.Model):
                     None,
                     product=product,
                 )
-            elif vmodel == "stock.picking.package.preparation.line" and not vals.get(
+            elif binding_model == "stock.picking.package.preparation.line" and not vals.get(
                 "tax_ids"
             ):
                 vals = self.apply_tax(
@@ -102,7 +102,7 @@ class IrModelSynchroApply(models.Model):
                     None,
                     product=product,
                 )
-            if vmodel == "account.invoice.line" and not vals.get("account_id"):
+            if binding_model == "account.invoice.line" and not vals.get("account_id"):
                 vals = self.apply_account(
                     mapper,
                     vals,

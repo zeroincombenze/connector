@@ -8,7 +8,7 @@
 #
 {
     "name": "Universal Connector protocol jsonrpc",
-    "version": "12.0.1.3.14",
+    "version": "12.0.1.3.15",
     "category": "Generic Modules",
     "summary": "Add protocol jsonrpc (Odoo 10+) to Universal Connector",
     "author": "SHS-AV s.r.l.",
@@ -16,7 +16,7 @@
     "development_status": "Beta",
     "license": "LGPL-3",
     "depends": ["universal_connector_base"],
-    "version_depends": ["universal_connector_base>=12.0.1.3.14"],
+    "version_depends": ["universal_connector_base>=12.0.1.3.15"],
     "external_dependencies": {
         "python": [
             "python_plus",

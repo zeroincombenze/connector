@@ -1,8 +1,12 @@
-<<<<<<< HEAD
+12.0.1.3.15 (2025-05-22)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [FIX] No enough data
+* [IMP] Automatic rebuild
+* [IMP] Odoo 18.0 interface
+* [QUA] Test coverage 79% (2516: 527+1989) [384 TestPoints] - quality rating 62 (target 100)
+
 12.0.1.3.14 (2025-05-18)
-=======
-12.0.1.3.14 (2025-05-18)
->>>>>>> 10.0-tmp-20250515
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 * [IMP] Separate apply e default functions

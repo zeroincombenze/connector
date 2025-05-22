@@ -299,6 +299,7 @@ class IrModelSynchroCache(models.Model):
             "company_id": {"readonly": True},
             "login_date": {"readonly": True},
             "new_password": {"readonly": True, "protect_update": 3},
+            "notify_emails": {"protect_update": 3, "apply": "None"},
             "opt_out": {"readonly": True},
             "password": {"readonly": True, "ancillary": False, "protect_update": 3},
             "password_crypt": {"readonly": True, "protect_update": 3},

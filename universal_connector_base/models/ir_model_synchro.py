@@ -602,6 +602,12 @@ class IrModelSynchro(models.Model):
             and vals["company_id"]
             and vals["company_id"] != backend.company_id.id
         ):  # pragma: no cover
+            ctx["logrec"].logmsg(
+                "error",
+                "%(model)s.synchro(): invalid company",
+                res_model=Binder if isinstance(Binder, str) else Binder._name,
+                errcode=-15,
+            )
             rec = -15
             return rec
         postponed = False

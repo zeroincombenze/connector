@@ -1,10 +1,10 @@
 ======================================================================
-|icon| Universal Connector Base/Base connettore universale 10.0.1.3.14
+|icon| Universal Connector Base/Base connettore universale 12.0.1.3.15
 ======================================================================
 
 **Basic features for Universal Connector**
 
-.. |icon| image:: https://raw.githubusercontent.com/zeroincombenze/connector/10.0/universal_connector_base/static/description/icon.png
+.. |icon| image:: https://raw.githubusercontent.com/zeroincombenze/connector/12.0/universal_connector_base/static/description/icon.png
 
 
 .. contents::
@@ -64,7 +64,7 @@ Per versioni precedenti è disponibile il modulo *universal_connector_openerp*
 
 |thumbnail|
 
-.. |thumbnail| image:: https://raw.githubusercontent.com/zeroincombenze/connector/10.0/universal_connector_base/static/description/
+.. |thumbnail| image:: https://raw.githubusercontent.com/zeroincombenze/connector/12.0/universal_connector_base/static/description/
 
 
 Configuration | Configurazione
@@ -103,8 +103,8 @@ Getting started | Primi passi
 Prerequisites | Prerequisiti
 ----------------------------
 
-* python 2.7+ (best 2.7.5+)
-* postgresql 9.2+ (best 9.5)
+* python 3.7
+* postgresql 9.6+ (best 10.0+)
 
 ::
 
@@ -134,15 +134,15 @@ Installation | Installazione
 +---------------------------------+------------------------------------------+
 | Suggested deployment is:        | Posizione suggerita per l'installazione: |
 +---------------------------------+------------------------------------------+
-| $HOME/10.0 |
+| $HOME/12.0 |
 +----------------------------------------------------------------------------+
 
 ::
 
     # Odoo repository installation; OCB repository must be installed
-    deploy_odoo clone -r connector -b 10.0 -G zero -p $HOME/10.0
+    deploy_odoo clone -r connector -b 12.0 -G zero -p $HOME/12.0
     # Upgrade virtual environment
-    vem amend $HOME/10.0/venv_odoo
+    vem amend $HOME/12.0/venv_odoo
 
 
 
@@ -151,8 +151,8 @@ Upgrade | Aggiornamento
 
 ::
 
-    deploy_odoo update -r connector -b 10.0 -G zero -p $HOME/10.0
-    vem amend $HOME/10.0/venv_odoo
+    deploy_odoo update -r connector -b 12.0 -G zero -p $HOME/12.0
+    vem amend $HOME/12.0/venv_odoo
     # Adjust following statements as per your system
     sudo systemctl restart odoo
 
@@ -189,12 +189,16 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 ChangeLog History | Cronologia modifiche
 ----------------------------------------
 
-<<<<<<< HEAD
-10.0.1.3.14 (2025-05-18)
-========================
-10.0.1.3.14 (2025-05-18)
->>>>>>> 10.0-tmp-20250515
-~~~~~~~~~~~~~~~~~~~~~~~~~
+12.0.1.3.15 (2025-05-22)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [FIX] No enough data
+* [IMP] Automatic rebuild
+* [IMP] Odoo 18.0 interface
+* [QUA] Test coverage 79% (2516: 527+1989) [384 TestPoints] - quality rating 62 (target 100)
+
+12.0.1.3.14 (2025-05-18)
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 * [IMP] Separate apply e default functions
 * [IMP] Protocol items to manage in backend
@@ -203,7 +207,7 @@ ChangeLog History | Cronologia modifiche
 * [IMP] Automatic propagation limitation for \*many fields
 * [QUA] Test coverage 81% (2463: 464+1999) [281 TestPoints] - quality rating 59 (target 100)
 
-10.0.1.3.13 (2025-04-05)
+12.0.1.3.13 (2025-04-05)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 * [FIX] company synchronization best algorithm
@@ -214,7 +218,7 @@ ChangeLog History | Cronologia modifiche
 * [IMP] Identity model
 * [QUA] Test coverage 81% (2326: 447+1879) [134 TestPoints] - quality rating 58 (target 100)
 
-10.0.1.3.12 (2025-01-03)
+12.0.1.3.12 (2025-01-03)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 * [IMP] Message log improvements / Migliorie elencazione messeggi
@@ -224,7 +228,7 @@ ChangeLog History | Cronologia modifiche
 * [IMP] Button "Pull record" / Bottone "Prelevare dati"
 * [QUA] Test coverage 80% (2330: 455+1875) [244 TestPoints] - quality rating 66 (target 100)
 
-10.0.1.3.11 (2024-12-29)
+12.0.1.3.11 (2024-12-29)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 * [FIX] Context values / Valori in contesto
@@ -237,7 +241,7 @@ ChangeLog History | Cronologia modifiche
 * [IMP] New tests / Nuovi test
 * [QUA] Test coverage 80% (2256: 453+1803) [244 TestPoints] - quality rating 66 (target 100)
 
-10.0.1.3.10 (2024-12-20)
+12.0.1.3.10 (2024-12-20)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 * [IMP] Split from universal_connector
@@ -293,7 +297,7 @@ La distribuzione `Zeroincombenze® <https://www.zeroincombenze.it/>`__ è proget
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2025-05-18
+Last Update / Ultimo aggiornamento: 2025-05-22
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status
@@ -304,8 +308,8 @@ Last Update / Ultimo aggiornamento: 2025-05-18
 .. |license opl| image:: https://img.shields.io/badge/licence-OPL-7379c3.svg
     :target: https://www.odoo.com/documentation/user/14.0/legal/licenses/licenses.html
     :alt: License: OPL
-.. |Try Me| image:: https://www.zeroincombenze.it/wp-content/uploads/ci-ct/prd/button-try-it-10.svg
-    :target: https://erp10.zeroincombenze.it
+.. |Try Me| image:: https://www.zeroincombenze.it/wp-content/uploads/ci-ct/prd/button-try-it-12.svg
+    :target: https://erp12.zeroincombenze.it
     :alt: Try Me
 .. |Zeroincombenze| image:: https://avatars0.githubusercontent.com/u/6972555?s=460&v=4
    :target: https://www.zeroincombenze.it/

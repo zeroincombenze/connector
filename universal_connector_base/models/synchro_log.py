@@ -73,15 +73,6 @@ class IrModelSynchroLog(models.Model):
             )
         return json.dumps(values, indent=2)
 
-    # def get_logrec(self, binding_model, ctx):
-    #     binding_model = binding_model or False
-    #     if "logrec" not in ctx:
-    #         ctx["logrec"] = {}
-    #     if binding_model not in ctx["logrec"]:
-    #         ctx["logrec"][binding_model] = self.env[self._name].with_context(
-    #             {"logrec": ctx["logrec"]})
-    #     return ctx["logrec"][binding_model]
-
     def logger(
         self,
         hdr_msg,
@@ -203,10 +194,8 @@ class IrModelSynchroLog(models.Model):
         # so in this case we have to create rather tha update record
         try:
             upd_log = True
-            getattr(self, "id")
-            getattr(self, "loglevel")
-            getattr(self, "errmsg")
-            upd_log = upd_log and self.id and self.loglevel
+            if self.exists():
+                upd_log = upd_log and self.id and self.loglevel
         except BaseException:
             self.env.cr.rollback()  # pylint: disable=invalid-commit
             upd_log = False
@@ -301,7 +290,7 @@ class IrModelSynchroLog(models.Model):
                 values = (
                     self.pretty_print(values)
                     if isinstance(values, dict)
-                    else str(values) if values is not None else None
+                    else str(values) if values is not None else ""
                 )
                 body_msg = body_msg % values
             if reqloglevel >= 4 - curloglevel:

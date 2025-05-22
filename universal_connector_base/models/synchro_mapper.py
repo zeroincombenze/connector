@@ -25,10 +25,10 @@ class SynchroMapper(models.Model):
         )
     ]
     fields_id = fields.Many2one("ir.model.fields", string="Odoo field name")
-    name = fields.Char("Odoo field name")
+    name = fields.Char("Odoo name")
     counterpart_name = fields.Char("Counterpart field name")
     apply4 = fields.Char(
-        string="Apply function from counterpart value",
+        string="Apply on counterpart value",
         help="Declare 1+ functions, comma separated, to apply on counterpart value\n"
         "Function names are in format 'name()'.\n"
         "Some available functions are:\n"
@@ -71,6 +71,7 @@ class SynchroMapper(models.Model):
         default="0",
     )
     required = fields.Boolean("Required field", default=False)
+    company_dependent = fields.Boolean("Depends on company", default=False)
     search_role = fields.Selection(
         [
             ("unique", "Field with unique index"),
@@ -93,6 +94,17 @@ class SynchroMapper(models.Model):
         string="Odoo type", store=True, related="fields_id.ttype"
     )
     sequence = fields.Integer("Priority", default=16)
+
+    @api.onchange("fields_id")
+    def onchange_fields_id(self):
+        self.name = self.fields_id.name
+
+    def get_loc_ext_id(self):
+        return (
+            "%s_id" % self.prefix
+            if self.prefix
+            else "" or self.backend_id.get_loc_ext_id()
+        )
 
     def get_loc_fname(self, fct):
         return "apply_%s" % (fct[:-2] if fct.endswith("()") else fct)
@@ -152,7 +164,7 @@ class SynchroMapper(models.Model):
             fix_required if fix_required is not None else required,
         )
 
-    def get_default_apply(self, magic_fields=None):
+    def get_default_apply(self, magic_fields=None, force=False):
         def append_fct(fct):
             if fct and fct not in apply4:
                 apply4.append(fct)
@@ -168,10 +180,10 @@ class SynchroMapper(models.Model):
         struct = self.env[binding_model].fields_get()
         field_def = Cache.TABLE_DEF.get(binding_model, {}).get(loc_name, {})
         global_def = Cache.TABLE_DEF.get("base", {}).get(loc_name, {})
-        apply4 = self.apply4 or ""
-        default = self.default or ""
+        apply4 = "" if not force else (self.apply4 or "")
+        default = "" if not force else (self.default or "")
         if not Cache.is_manageable(binding_model) or not loc_name:
-            pass
+            return apply4, default, loc_name
         elif loc_name not in struct:
             raise UserError(
                 _("Field %s does not exist in %s!" % (loc_name, binding_model))
@@ -222,12 +234,17 @@ class SynchroMapper(models.Model):
                     "monetary": "float()",
                     "datetime": "now()",
                     "date": "today()",
-                    "many2one": "property()",
+                    # "many2one": "property()",
                     "selection": "selection()",
                 }.get(struct[loc_name]["type"])
                 if fct:
                     append_def(fct)
-            if struct[loc_name].get("relation") and (
+            if (
+                    struct[loc_name]["type"] == "many2one"
+                    and struct[loc_name]["company_dependent"]
+            ):
+                append_def("property()")
+            elif struct[loc_name].get("relation") and (
                 struct[loc_name]["relation"] != "res.company"
                 or binding_model != "res.users"
             ):
@@ -263,7 +280,7 @@ class SynchroMapper(models.Model):
                         ctx={"f": fct, "name": loc_name},
                     )
             default = ",".join(default)
-        return apply4, default
+        return apply4, default, struct[loc_name].get("company_dependent", False)
 
     def get_default_priority(self, magic_fields=None, apply=None):
         binding_model = self.model_id.split_binding_model_n_spec(self.model_id.name)[0]
@@ -309,19 +326,46 @@ class SynchroMapper(models.Model):
     ):
         if not dir_mapper.id:
             return False
-        mapper = dir_mapper.get_mapper(loc_name=loc_name, ext_name=ext_name, spec=spec)
-        if not mapper:
+        mappers = dir_mapper.get_mapper(
+            loc_name=loc_name, ext_name=ext_name, spec=spec, multiple=True)
+        if not mappers:
             if not force:
-                return mapper
+                return mappers
             mapper = self.create(
                 {
                     "model_id": dir_mapper.id,
+                    "fields_id": self.get_odoo_fields_id(name=loc_name),
                     "name": loc_name,
                     "spec": spec,
                     "counterpart_name": ext_name,
                 }
             )
             force = True
+        elif len(mappers) > 1:
+            candidate = False
+            weight = 0
+            for mapper in mappers:
+                if mapper.name and mapper.counterpart_name and mapper.spec:
+                    candidate = mapper
+                    break
+                elif mapper.name and mapper.spec and weight < 10:
+                    candidate = mapper
+                    weight = 10
+                elif mapper.name and weight < 8:
+                    candidate = mapper
+                    weight = 8
+                elif mapper.counterpart_name and mapper.spec and weight < 6:
+                    candidate = mapper
+                    weight = 6
+                elif mapper.counterpart_name and weight < 4:
+                    candidate = mapper
+                    weight = 4
+            for mapper in mappers:
+                if mapper != candidate:
+                    mapper.unlink()
+            mapper = candidate
+        else:
+            mapper = mappers[0]
         magic_fields = magic_fields or self.backend_id.get_magic_fields(system=True)
         if force:
             protect_update, required = mapper.get_default_protection(
@@ -329,16 +373,21 @@ class SynchroMapper(models.Model):
                 fix_required=fix_required,
                 magic_fields=magic_fields,
             )
-            apply4, default = mapper.get_default_apply(magic_fields=magic_fields)
+            apply4, default, company_dependent = mapper.get_default_apply(
+                magic_fields=magic_fields, force=force,)
             sequence = mapper.get_default_priority(
                 magic_fields=magic_fields, apply=apply4
             )
             mapper.write(
                 {
+                    "name": loc_name,
+                    "spec": spec,
+                    "counterpart_name": ext_name,
                     "protect_update": protect_update,
                     "required": required,
                     "apply4": apply4,
                     "default": default,
+                    "company_dependent": company_dependent,
                     "sequence": sequence,
                 }
             )
@@ -389,9 +438,10 @@ class SynchroMapper(models.Model):
         return vals
 
     @api.model
-    def get_odoo_fields_id(self):
+    def get_odoo_fields_id(self, name=None):
         fields = self.env["ir.model.fields"].search(
-            [("model_id", "=", self.model_id.model_id.id), ("name", "=", self.name)]
+            [("model_id", "=", self.model_id.model_id.id),
+             ("name", "=", name or self.name)]
         )
         if not fields:
             return False

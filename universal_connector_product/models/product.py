@@ -14,6 +14,7 @@ class ProductTemplate(models.Model):
 
     _sql_constraints = [
         ('ref_unique_odoo_id', 'unique(odoo_id)', 'Remote ref must be unique!'),
+        ('ref_unique_odoo18_id', 'unique(odoo18_id)', 'Remote ref must be unique!'),
         ('ref_unique_odoo16_id', 'unique(odoo16_id)', 'Remote ref must be unique!'),
         ('ref_unique_odoo14_id', 'unique(odoo14_id)', 'Remote ref must be unique!'),
         ('ref_unique_odoo12_id', 'unique(odoo12_id)', 'Remote ref must be unique!'),
@@ -21,6 +22,7 @@ class ProductTemplate(models.Model):
     ]
 
     odoo_id = fields.Integer("Odoo ID", copy=False)
+    odoo18_id = fields.Integer("Odoo18 ID", copy=False)
     odoo16_id = fields.Integer("Odoo16 ID", copy=False)
     odoo14_id = fields.Integer("Odoo14 ID", copy=False)
     odoo12_id = fields.Integer("Odoo12 ID", copy=False)
@@ -34,6 +36,7 @@ class ProductProduct(models.Model):
 
     _sql_constraints = [
         ('ref_unique_odoo_id', 'unique(odoo_id)', 'Remote ref must be unique!'),
+        ('ref_unique_odoo18_id', 'unique(odoo18_id)', 'Remote ref must be unique!'),
         ('ref_unique_odoo16_id', 'unique(odoo16_id)', 'Remote ref must be unique!'),
         ('ref_unique_odoo14_id', 'unique(odoo14_id)', 'Remote ref must be unique!'),
         ('ref_unique_odoo12_id', 'unique(odoo12_id)', 'Remote ref must be unique!'),
@@ -41,6 +44,7 @@ class ProductProduct(models.Model):
     ]
 
     odoo_id = fields.Integer("Odoo ID", copy=False)
+    odoo18_id = fields.Integer("Odoo18 ID", copy=False)
     odoo16_id = fields.Integer("Odoo16 ID", copy=False)
     odoo14_id = fields.Integer("Odoo14 ID", copy=False)
     odoo12_id = fields.Integer("Odoo12 ID", copy=False)
@@ -48,18 +52,18 @@ class ProductProduct(models.Model):
     timestamp = fields.Datetime("Timestamp", copy=False, readonly=True)
     errmsg = fields.Char("Error message", copy=False, readonly=True)
 
-    @api.model
-    def preprocess(self, backend_id, vals):
-        cache = self.env["synchro.cache"]
-        if ("vg7_id" in vals or "vg7:id" in vals) and cache.get_attr(
-            backend_id, "NO_VARIANTS"
-        ):
-            tmpl_vals = vals.copy()
-            if "id" in tmpl_vals:
-                del tmpl_vals["id"]
-            id = self.env["product.template"].synchro(tmpl_vals)
-            if id > 0:
-                vals["product_tmpl_id"] = id
+    # @api.model
+    # def preprocess(self, backend_id, vals):
+    #     cache = self.env["synchro.cache"]
+    #     if ("vg7_id" in vals or "vg7:id" in vals) and cache.get_attr(
+    #         backend_id, "NO_VARIANTS"
+    #     ):
+    #         tmpl_vals = vals.copy()
+    #         if "id" in tmpl_vals:
+    #             del tmpl_vals["id"]
+    #         id = self.env["product.template"].synchro(tmpl_vals)
+    #         if id > 0:
+    #             vals["product_tmpl_id"] = id
 
 
 class UomUom(models.Model):
@@ -67,6 +71,7 @@ class UomUom(models.Model):
 
     _sql_constraints = [
         ('ref_unique_odoo_id', 'unique(odoo_id)', 'Remote ref must be unique!'),
+        ('ref_unique_odoo18_id', 'unique(odoo18_id)', 'Remote ref must be unique!'),
         ('ref_unique_odoo16_id', 'unique(odoo16_id)', 'Remote ref must be unique!'),
         ('ref_unique_odoo14_id', 'unique(odoo14_id)', 'Remote ref must be unique!'),
         ('ref_unique_odoo12_id', 'unique(odoo12_id)', 'Remote ref must be unique!'),
@@ -74,6 +79,7 @@ class UomUom(models.Model):
     ]
 
     odoo_id = fields.Integer("Odoo ID", copy=False)
+    odoo18_id = fields.Integer("Odoo18 ID", copy=False)
     odoo16_id = fields.Integer("Odoo16 ID", copy=False)
     odoo14_id = fields.Integer("Odoo14 ID", copy=False)
     odoo12_id = fields.Integer("Odoo12 ID", copy=False)
@@ -85,6 +91,7 @@ class UomCategory(models.Model):
 
     _sql_constraints = [
         ('ref_unique_odoo_id', 'unique(odoo_id)', 'Remote ref must be unique!'),
+        ('ref_unique_odoo18_id', 'unique(odoo18_id)', 'Remote ref must be unique!'),
         ('ref_unique_odoo16_id', 'unique(odoo16_id)', 'Remote ref must be unique!'),
         ('ref_unique_odoo14_id', 'unique(odoo14_id)', 'Remote ref must be unique!'),
         ('ref_unique_odoo12_id', 'unique(odoo12_id)', 'Remote ref must be unique!'),
@@ -92,6 +99,7 @@ class UomCategory(models.Model):
     ]
 
     odoo_id = fields.Integer("Odoo ID", copy=False)
+    odoo18_id = fields.Integer("Odoo18 ID", copy=False)
     odoo16_id = fields.Integer("Odoo16 ID", copy=False)
     odoo14_id = fields.Integer("Odoo14 ID", copy=False)
     odoo12_id = fields.Integer("Odoo12 ID", copy=False)
@@ -103,6 +111,7 @@ class ProductCategory(models.Model):
 
     _sql_constraints = [
         ('ref_unique_odoo_id', 'unique(odoo_id)', 'Remote ref must be unique!'),
+        ('ref_unique_odoo18_id', 'unique(odoo18_id)', 'Remote ref must be unique!'),
         ('ref_unique_odoo16_id', 'unique(odoo16_id)', 'Remote ref must be unique!'),
         ('ref_unique_odoo14_id', 'unique(odoo14_id)', 'Remote ref must be unique!'),
         ('ref_unique_odoo12_id', 'unique(odoo12_id)', 'Remote ref must be unique!'),
@@ -110,6 +119,7 @@ class ProductCategory(models.Model):
     ]
 
     odoo_id = fields.Integer("Odoo ID", copy=False)
+    odoo18_id = fields.Integer("Odoo18 ID", copy=False)
     odoo16_id = fields.Integer("Odoo16 ID", copy=False)
     odoo14_id = fields.Integer("Odoo14 ID", copy=False)
     odoo12_id = fields.Integer("Odoo12 ID", copy=False)
@@ -121,6 +131,7 @@ class ProductPricelist(models.Model):
 
     _sql_constraints = [
         ('ref_unique_odoo_id', 'unique(odoo_id)', 'Remote ref must be unique!'),
+        ('ref_unique_odoo18_id', 'unique(odoo18_id)', 'Remote ref must be unique!'),
         ('ref_unique_odoo16_id', 'unique(odoo16_id)', 'Remote ref must be unique!'),
         ('ref_unique_odoo14_id', 'unique(odoo14_id)', 'Remote ref must be unique!'),
         ('ref_unique_odoo12_id', 'unique(odoo12_id)', 'Remote ref must be unique!'),
@@ -128,6 +139,7 @@ class ProductPricelist(models.Model):
     ]
 
     odoo_id = fields.Integer("Odoo ID", copy=False)
+    odoo18_id = fields.Integer("Odoo18 ID", copy=False)
     odoo16_id = fields.Integer("Odoo16 ID", copy=False)
     odoo14_id = fields.Integer("Odoo14 ID", copy=False)
     odoo12_id = fields.Integer("Odoo12 ID", copy=False)

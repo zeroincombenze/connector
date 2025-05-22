@@ -8,7 +8,7 @@
 #
 {
     "name": "Universal Connector Openerp",
-    "version": "12.0.1.3.14",
+    "version": "12.0.1.3.15",
     "category": "Generic Modules",
     "summary": "Manage remote old openerp version",
     "author": "SHS-AV s.r.l.",

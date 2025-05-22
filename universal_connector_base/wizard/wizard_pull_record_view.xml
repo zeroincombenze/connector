@@ -12,6 +12,7 @@
                         <field name="backend_id"/>
                         <field name="dir_mapper_id"/>
                         <field name="remote_ids" string="Remote IDs"/>
+                        <field name="exclude_remote_ids" string="Exclude remote IDs"/>
                     </group>
                 </sheet>
                 <footer>

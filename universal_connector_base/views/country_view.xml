@@ -12,6 +12,7 @@
                 </group>
                 <group>
                     <field name="odoo_id"/>
+                    <field name="odoo18_id"/>
                     <field name="odoo16_id"/>
                     <field name="odoo14_id"/>
                     <field name="odoo12_id"/>
@@ -29,6 +30,7 @@
             <xpath expr="//form/group" position="inside">
                 <group string="Synchronization">
                     <field name="odoo_id"/>
+                    <field name="odoo18_id"/>
                     <field name="odoo16_id"/>
                     <field name="odoo14_id"/>
                     <field name="odoo12_id"/>

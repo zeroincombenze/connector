@@ -20,5 +20,5 @@
      'universal_connector_json_over_http',
  ],
  'website': 'https://www.zeroincombenze.it/',
- 'installable': True,
+ 'installable': False,
  }
