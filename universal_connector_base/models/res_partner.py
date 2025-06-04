@@ -37,7 +37,7 @@ class ResPartner(models.Model):
     CONTRAINTS = [["id", "!=", "parent_id"]]
 
 
-class ResCategory(models.Model):
+class ResPartnerCategory(models.Model):
     _inherit = "res.partner.category"
 
     _sql_constraints = [

@@ -20,7 +20,7 @@ except ImportError:
     from urlparse import urlparse
 
 
-class SynchroChannel(models.Model):
+class SynchroBackend(models.Model):
     """Odoo Backends"""
 
     _name = "synchro.backend"
@@ -98,6 +98,16 @@ class SynchroChannel(models.Model):
         readonly=True,
         states={"draft": [("readonly", False)]},
     )
+    scope_id = fields.Many2one(
+        comodel_name="synchro.scope",
+        string="Scope fro synchronization",
+        required=True,
+        default=lambda self:
+            self.env["synchro.scope"].search([("code", "=", "synchro")]),
+        help="Reason to synchronize DB: may limit some updates",
+        readonly=True,
+        states={"draft": [("readonly", False)]},
+    )
     identity_id = fields.Many2one(
         comodel_name="synchro.identity",
         string="Counterpart identity",
@@ -154,8 +164,6 @@ class SynchroChannel(models.Model):
             " This value, by cron interrupts, impacts on CPU execution.\n"
             " Warning! Do not use 'test' payload! May be dangerous!"
         ),
-        readonly=True,
-        states={"draft": [("readonly", False)]},
     )
     remote_sw_version = fields.Selection(
         lambda self: self.selection_for_version(),
@@ -461,7 +469,7 @@ class SynchroChannel(models.Model):
 
     def _synchronize_company(self):
         self.ensure_one()
-        dir_mapper = self.get_dir_mapper(model="res.company")
+        dir_mapper = self.get_dir_mapper(binding_model="res.company")
         if dir_mapper.counterpart_name:
             session = self.get_session()
             ext_company_ids = self.env["synchro.api"].get_record_list(session,
@@ -525,7 +533,7 @@ class SynchroChannel(models.Model):
                 if comodel and comodel != dir_mapper.name:
                     dir_mappers[dir_mapper]["depends"].add(comodel)
             for model in dir_mappers[dir_mapper]["depends"]:
-                dir_mapper = self.get_dir_mapper(model=model)
+                dir_mapper = self.get_dir_mapper(binding_model=model)
                 if dir_mapper and dir_mapper not in dir_mappers:
                     dir_mappers = self._build_models_info(
                         dir_mappers,
@@ -597,30 +605,13 @@ class SynchroChannel(models.Model):
         session = self.get_session()
         if self.env["synchro.api"].session_is_active(session) and self.state == "ready":
             model_list = self.env["synchro.api"].get_model_list(session, self)
-            local_list = [x[0] for x in model_list]
-            for model in [
-                "ir.model.data",
-                "ir.module.module",
-                "res.country",
-                "res.country.state",
-                "res.currency",
-                "res.currency.rate",
-                "res.lang",
-                "res.groups",
-                "res.company",
-                "res.users",
-            ]:
-                if model not in local_list:
-                    model_list.append(model, False, False)
             for binding_model, remote_model, model_spec in model_list:
                 if binding_model and binding_model not in self.env:
                     continue
-                if self.identity_id.code not in ("odoo", "openerp"):
-                    remote_model = False
                 self.env["synchro.model"].build_dir_mapper(
                     self,
                     ext_model=remote_model,
-                    model=binding_model,
+                    binding_model=binding_model,
                     model_spec=model_spec,
                     force=force,
                 )
@@ -633,8 +624,9 @@ class SynchroChannel(models.Model):
         return "%s_id" % self.prefix
 
     def ext_model_field_list(self, backend, ext_model=None, model=None, spec=None):
-        dir_mapper = backend.get_dir_mapper(model=model, ext_model=ext_model, spec=spec)
-        return dir_mapper.get_field_list()
+        dir_mapper = backend.get_dir_mapper(
+            binding_model=model, ext_model=ext_model, spec=spec)
+        return dir_mapper.get_ext_field_list()
 
     def get_default_from_identity(self, param):
         return (
@@ -786,23 +778,24 @@ class SynchroChannel(models.Model):
                 magic_fields.append(name)
         return magic_fields
 
-    def get_dir_mapper(self, model=None, ext_model=None, spec=None, multiple=False):
+    def get_dir_mapper(
+            self, binding_model=None, ext_model=None, spec=None, multi=False):
         DirMapper = self.env["synchro.model"]
         domain = [("backend_id", "=", self.id)]
-        if model:
+        if binding_model:
             if ext_model:
                 domain.append("|")
                 domain.append(("name", "=", False))
-            domain.append(("name", "=", model))
+            domain.append(("name", "=", binding_model))
         if ext_model:
-            if model:
+            if binding_model:
                 domain.append("|")
                 domain.append(("counterpart_name", "=", False))
             domain.append(("counterpart_name", "=", ext_model))
         if spec is not None:
             domain.append(("model_spec", "=", spec))
         dir_mapper = DirMapper.search(domain)
-        return dir_mapper if len(dir_mapper) == 1 or multiple else DirMapper
+        return dir_mapper if len(dir_mapper) == 1 or multi else DirMapper
 
     @api.model
     def synchro_queue(self, prio=None, max_recs=0, mode=None, commit=False):

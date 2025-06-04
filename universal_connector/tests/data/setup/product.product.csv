@@ -1,6 +1,0 @@
-id,vg7_id,oe8_id,name,default_code,type,product_tmpl_id,description_sale
-z0bug.product_product_1,11,82,Prodotto Alpha,AAA,consu,z0bug.product_template_1,\N
-z0bug.product_product_2,12,83,Prodotto Beta,BBB,consu,z0bug.product_template_2,Begonia baccata bianca
-z0bug.product_product_7,,88,Prodotto Gamma,GGG,consu,z0bug.product_template_7,\N
-z0bug.product_product_18,28,99,Prodotto Rho,RRR,product,z0bug.product_template_18,\N
-z0bug.product_product_23,33,104,Special Worldwide service,WWW,service,z0bug.product_template_23,\N

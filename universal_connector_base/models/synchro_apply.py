@@ -19,7 +19,6 @@ _logger = logging.getLogger(__name__)
 
 class IrModelSynchroApply(models.Model):
     _name = "synchro.apply"
-    # _inherit = "ir.model"
     _description = "Functions to convert field data"
 
     def is_purchase(self, vals, vmodel):
@@ -52,23 +51,6 @@ class IrModelSynchroApply(models.Model):
         default=None,
         ctx=None,
     ):
-        return vals
-
-    def apply_set_value(
-        self,
-        mapper,
-        vals,
-        loc_name,
-        ext_ref,
-        default=None,
-        ctx=None,
-    ):
-        if (
-            (loc_name not in vals or not vals.get(loc_name))
-            and not vals.get(ext_ref)
-            and default
-        ):
-            vals[ext_ref] = default
         return vals
 
     def apply_set_tmp_name(

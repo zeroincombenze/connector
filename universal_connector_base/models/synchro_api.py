@@ -42,7 +42,7 @@ class SynchroApi(models.Model):
             (local model, remote table, model spec)
     validate_ext_model_list(session,model_list): validate model list
             against remote structure
-    get_field_list(session,model,magic_fields=None):
+    get_field_list(session,dir_mapper,magic_fields=None):
             return field list of Odoo model that can be synchronized with counterparty
     validate_ext_field_list(session,ext_model,field_list): validate field list
             against remote structure
@@ -154,34 +154,75 @@ class SynchroApi(models.Model):
 
     def get_model_list(self, session, backend):
         """Return list of (local model, remote model) to manage"""
+        # Some tables/models may be defined by xml file in data of module,
+        # and we search for them
+        values = [(x.name, x.counterpart_name, x.model_spec)
+                  for x in self.env["synchro.model"].search(
+                      [("backend_id", "=", backend.id)])]
+        local_list = [x[0] for x in values]
         fct = self.get_overridden_fct(backend, "get_model_list")
-        values = unicodes(getattr(self, fct or "odoo_get_model_list")(session, backend))
+        for item in getattr(self, fct or "odoo_get_model_list")(session, backend):
+            if item[0] not in local_list:
+                values.append(item)
+        # Some Odoo models are mandatory
+        local_list = [x[0] for x in values]
+        for model in [
+            "ir.model.data",
+            "ir.module.module",
+            "res.country",
+            "res.country.state",
+            "res.currency",
+            "res.currency.rate",
+            "res.lang",
+            "res.groups",
+            "res.company",
+            "res.users",
+        ]:
+            if model not in local_list:
+                values.append((model, False, False))
+        values = unicodes(values)
         fct = self.get_overridden_fct(backend, "validate_ext_model_list")
         if fct:
             values = unicodes(getattr(self, fct)(session, values))
+        valid_values = []
+        for item in values:
+            if item[0] in self.env:
+                valid_values.append(item)
         self.env["synchro.log"].logmsg(
             "debug",
             "%(model)s[%(id)s].%(fct)s():",
             res_rec=backend,
             backend=backend,
-            values=values,
+            values=valid_values,
             ctx={"fct": fct},
         )
-        return values
+        return valid_values
 
-    def get_field_list(self, session, backend, model, magic_fields=None):
+    def get_field_list(self, session, dir_mapper, magic_fields=None):
         """Return field list of Odoo model that can be synchronized with counterparty"""
-        fct = self.get_overridden_fct(backend, "get_field_list")
-        values = unicodes(
-            getattr(self, fct or "odoo_get_field_list")(
-                session, backend, model, magic_fields=magic_fields)
-        )
-        fct = self.get_overridden_fct(backend, "validate_ext_field_list")
+        # Some tables/models may be defined by xml file in data of module,
+        # and we search for them
+        values = [(x.name, x.counterpart_name, x.spec)
+                  for x in self.env["synchro.mapper"].search(
+                      [("model_id", "=", dir_mapper.id)])]
+        local_list = [x[0] for x in values]
+        fct = self.get_overridden_fct(dir_mapper.backend_id, "get_field_list")
+        for item in getattr(self, fct or "odoo_get_field_list")(
+                session, dir_mapper, magic_fields=magic_fields):
+            if item[0] not in local_list:
+                values.append(item)
+        values = unicodes(values)
+        fct = self.get_overridden_fct(dir_mapper.backend_id, "validate_ext_field_list")
         if fct:
-            dir_mapper = backend.get_dir_mapper(model=model)
+            # dir_mapper = backend.get_dir_mapper(model=model)
             values = unicodes(getattr(self, fct)(
                 session, dir_mapper.counterpart_name, values))
-        return values
+        odoo_fields = list(self.env[dir_mapper.name].fields_get().keys())
+        valid_values = []
+        for item in values:
+            if item[0] in odoo_fields:
+                valid_values.append(item)
+        return valid_values
 
     def get_record_list(self, session, dir_mapper):
         "Get record list of model from remote counterparty"
@@ -197,7 +238,7 @@ class SynchroApi(models.Model):
         if not fct:  # pragma: no cover
             return fct
         ext_model = dir_mapper.counterpart_name
-        fields = dir_mapper.get_field_list()
+        fields = dir_mapper.get_ext_field_list()
         values = self.adapt_values(
             getattr(self, fct)(session, dir_mapper, ext_id, fields=fields)
         )
@@ -219,7 +260,7 @@ class SynchroApi(models.Model):
         xref = False
         if xrefs:
             xref_dir_mapper = dir_mapper.backend_id.get_dir_mapper(
-                model="ir.model.data"
+                binding_model="ir.model.data"
             )
             if xref_dir_mapper:
                 xrefs = self.get_response(session, xref_dir_mapper, xrefs[0])
@@ -459,7 +500,7 @@ class SynchroApi(models.Model):
                 domain=[("model", "=", ext_model)],
                 fields=["name"])
         ]
-        return [(x[0], x[1] if x[1] in values else False) for x in field_list]
+        return [(x[0], x[1] if x[1] in values else False, x[2]) for x in field_list]
 
     def validate_ext_field_list_odoo_xmlrpc_http(self, session, ext_model, field_list):
         return self.validate_ext_field_list_odoo_xmlrpc_https(
@@ -589,20 +630,21 @@ class SynchroApi(models.Model):
             model_list.append((name, ext_name, False))
         return model_list
 
-    def odoo_get_field_list(self, session, backend, model, magic_fields=None):
+    def odoo_get_field_list(self, session, dir_mapper, magic_fields=None):
+        backend = dir_mapper.backend_id
         magic_fields = magic_fields or backend.get_magic_fields(system=True)
-        loc_ext_id = backend.get_loc_ext_id()
+        loc_ext_id = dir_mapper.get_loc_ext_id()
         res = []
-        for loc_name in list(self.env[model].fields_get().keys()):
+        for loc_name in list(self.env[dir_mapper.name].fields_get().keys()):
             if loc_name == "id":
-                res.append((loc_ext_id, loc_name))
+                res.append((loc_ext_id, loc_name, False))
             elif loc_name not in magic_fields:
                 if backend.identity_id.code in ("odoo", "openerp"):
                     ext_name = self.odoo_tnl_local_field_to_ext(
-                        backend, model, loc_name) or False
+                        backend, dir_mapper.name, loc_name) or False
                 else:
                     ext_name = False
-                res.append((loc_name, ext_name))
+                res.append((loc_name, ext_name, False))
         return res
 
     def get_record_list_odoo_xmlrpc_https(self, session, dir_mapper):

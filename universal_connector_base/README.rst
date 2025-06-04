@@ -1,5 +1,5 @@
 ======================================================================
-|icon| Universal Connector Base/Base connettore universale 12.0.1.3.15
+|icon| Universal Connector Base/Base connettore universale 12.0.1.3.16
 ======================================================================
 
 **Basic features for Universal Connector**
@@ -189,13 +189,24 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 ChangeLog History | Cronologia modifiche
 ----------------------------------------
 
+12.0.1.3.16 (2025-06-06)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] New model backend scope
+* [IMP] New model wrap to replace spec
+* [IMP] Dynamic protection based on scope too
+* [IMP] Best integration external tables with internal Odoo models
+* [IMP] First synchronization is faster
+* [IMP] Test improvements
+* [QUA] Test coverage 80% (2566: 515+2051) [276 TestPoints] - quality rating 57 (target 100)
+
 12.0.1.3.15 (2025-05-22)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 * [FIX] No enough data
 * [IMP] Automatic rebuild
 * [IMP] Odoo 18.0 interface
-* [QUA] Test coverage 79% (2516: 527+1989) [384 TestPoints] - quality rating 62 (target 100)
+* [QUA] Test coverage 79% (2516: 519+1997) [281 TestPoints] - quality rating 58 (target 100)
 
 12.0.1.3.14 (2025-05-18)
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -297,7 +308,7 @@ La distribuzione `Zeroincombenze® <https://www.zeroincombenze.it/>`__ è proget
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2025-05-22
+Last Update / Ultimo aggiornamento: 2025-06-06
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status

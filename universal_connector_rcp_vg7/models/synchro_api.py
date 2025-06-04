@@ -119,7 +119,8 @@ class SynchroApi(models.Model):
             backend, ext_model=ext_model, model=model, spec=spec)
         endpoint = session["data_endpoint"]
         endpoint = os.path.join(endpoint, ext_model, str(ext_id))
-        dir_mapper = backend.get_dir_mapper(ext_model=ext_model, model=model, spec=spec)
+        dir_mapper = backend.get_dir_mapper(
+            ext_model=ext_model, binding_model=model, spec=spec)
         res = self.get_response_https(
             session, dir_mapper,  ext_id=ext_id, endpoint=endpoint, fields=fields,
         )

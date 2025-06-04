@@ -51,13 +51,13 @@
 
     <record forcecreate="1" id="product_product_type" model="synchro.mapper">
         <field name="name">type</field>
-        <field name="apply4">consu</field>
+        <field name="default">consu</field>
         <field name="model_id" ref="product_product"/>
     </record>
 
     <record forcecreate="1" id="product_product_invoice_policy" model="synchro.mapper">
         <field name="name">invoice_policy</field>
-        <field name="apply4">order</field>
+        <field name="default">order</field>
         <field name="model_id" ref="product_product"/>
     </record>
 
@@ -77,13 +77,13 @@
 
     <record forcecreate="1" id="product_template_type" model="synchro.mapper">
         <field name="name">type</field>
-        <field name="apply4">consu</field>
+        <field name="default">consu</field>
         <field name="model_id" ref="product_template"/>
     </record>
 
     <record forcecreate="1" id="product_template_invoice_policy" model="synchro.mapper">
         <field name="name">invoice_policy</field>
-        <field name="apply4">order</field>
+        <field name="default">order</field>
         <field name="model_id" ref="product_template"/>
     </record>
 
@@ -97,25 +97,25 @@
 
     <record forcecreate="1" id="product_uom_type" model="synchro.mapper">
         <field name="name">uom_type</field>
-        <field name="apply4">reference</field>
+        <field name="default">reference</field>
         <field name="model_id" ref="product_uom"/>
     </record>
 
     <record forcecreate="1" id="product_uom_factor" model="synchro.mapper">
         <field name="name">factor</field>
-        <field name="apply4">1</field>
+        <field name="default">1</field>
         <field name="model_id" ref="product_uom"/>
     </record>
 
     <record forcecreate="1" id="product_uom_rounding" model="synchro.mapper">
         <field name="name">rounding</field>
-        <field name="apply4">0.00000001</field>
+        <field name="default">0.00000001</field>
         <field name="model_id" ref="product_uom"/>
     </record>
 
     <record forcecreate="1" id="product_uom_category_id" model="synchro.mapper">
         <field name="name">category_id</field>
-        <field name="apply4" ref="uom.product_uom_categ_unit"/>
+        <field name="default" ref="uom.product_uom_categ_unit"/>
         <field name="model_id" ref="product_uom"/>
     </record>
 

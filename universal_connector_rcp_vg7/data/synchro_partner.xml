@@ -71,7 +71,7 @@
 
     <record forcecreate="1" id="res_partner_customer" model="synchro.mapper">
         <field name="name">customer</field>
-        <field name="apply4">True</field>
+        <field name="default" eval="True"/>
         <field name="model_id" ref="res_partner"/>
     </record>
 
@@ -110,7 +110,7 @@
 
     <record forcecreate="1" id="res_partner_is_company" model="synchro.mapper">
         <field name="name">is_company</field>
-        <field name="apply4">True</field>
+        <field name="default" eval="True"/>
         <field name="model_id" ref="res_partner"/>
     </record>
 
@@ -166,32 +166,32 @@
 
     <record forcecreate="1" id="res_partner_rea_member_type" model="synchro.mapper">
         <field name="name">rea_member_type</field>
-        <field name="apply4">SM</field>
+        <field name="default">SM</field>
         <field name="model_id" ref="res_partner"/>
     </record>
 
     <record forcecreate="1" id="res_partner_rea_liquidation_state" model="synchro.mapper">
         <field name="name">rea_liquidation_state</field>
-        <field name="apply4">LN</field>
+        <field name="default">LN</field>
         <field name="model_id" ref="res_partner"/>
     </record>
 
     <record forcecreate="1" id="res_partner_type" model="synchro.mapper">
         <field name="name">type</field>
-        <field name="apply4">contact</field>
+        <field name="default">contact</field>
         <field name="model_id" ref="res_partner"/>
     </record>
 
     <record forcecreate="1" id="res_partner_supplier" model="synchro.mapper">
         <field name="name">supplier</field>
-        <field name="apply4">False</field>
+        <field name="default" eval="False"/>
         <field name="model_id" ref="res_partner"/>
     </record>
 
     <record forcecreate="1" id="res_partner_vat" model="synchro.mapper">
         <field name="name">vat</field>
         <field name="counterpart_name">piva</field>
-        <field name="apply4">vat()</field>
+        <field name="apply4">sanitize_vat()</field>
         <field name="model_id" ref="res_partner"/>
     </record>
 
@@ -308,7 +308,7 @@
 
     <record forcecreate="1" id="res_partner_shipping_is_company" model="synchro.mapper">
         <field name="name">is_company</field>
-        <field name="apply4">False</field>
+        <field name="default" eval="False"/>
         <field name="model_id" ref="res_partner_shipping"/>
     </record>
 
@@ -358,7 +358,7 @@
 
     <record forcecreate="1" id="res_partner_shipping_type" model="synchro.mapper">
         <field name="name">type</field>
-        <field name="apply4">delivery</field>
+        <field name="default">delivery</field>
         <field name="model_id" ref="res_partner_shipping"/>
     </record>
 
@@ -441,7 +441,7 @@
 
     <record forcecreate="1" id="res_partner_invoice_is_company" model="synchro.mapper">
         <field name="name">is_company</field>
-        <field name="apply4">True</field>
+        <field name="default" eval="True"/>
         <field name="model_id" ref="res_partner_invoice"/>
     </record>
 
@@ -491,7 +491,7 @@
 
     <record forcecreate="1" id="res_partner_invoice_type" model="synchro.mapper">
         <field name="name">type</field>
-        <field name="apply4">delivery</field>
+        <field name="default">delivery</field>
         <field name="model_id" ref="res_partner_invoice"/>
     </record>
 
@@ -569,13 +569,13 @@
 
     <record forcecreate="1" id="res_partner_supplier_is_company" model="synchro.mapper">
         <field name="name">is_company</field>
-        <field name="apply4">True</field>
+        <field name="default" eval="True"/>
         <field name="model_id" ref="res_partner_supplier_rec"/>
     </record>
 
     <record forcecreate="1" id="res_partner_supplier_supplier" model="synchro.mapper">
         <field name="name">supplier</field>
-        <field name="apply4">True</field>
+        <field name="default" eval="True"/>
         <field name="model_id" ref="res_partner_supplier_rec"/>
     </record>
 
@@ -618,7 +618,7 @@
 
     <record forcecreate="1" id="res_partner_supplier_type" model="synchro.mapper">
         <field name="name">type</field>
-        <field name="apply4">contact</field>
+        <field name="default">contact</field>
         <field name="model_id" ref="res_partner_supplier_rec"/>
     </record>
 
@@ -631,7 +631,7 @@
     <record forcecreate="1" id="res_partner_supplier_vat" model="synchro.mapper">
         <field name="name">vat</field>
         <field name="counterpart_name">piva</field>
-        <field name="apply4">vat()</field>
+        <field name="apply4">sanitize_vat()</field>
         <field name="model_id" ref="res_partner_supplier_rec"/>
     </record>
 

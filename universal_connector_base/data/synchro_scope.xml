@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <record id="scope_synchro" model="synchro.scope">
+        <field name="code">synchro</field>
+        <field name="name">Synchronization external DB</field>
+        <field name="disable_xref_module">base,product</field>
+        <field name="enable_user_partner" eval="False"/>
+    </record>
+
+    <record id="scope_backup" model="synchro.scope">
+        <field name="code">backup</field>
+        <field name="name">Backup</field>
+        <field name="disable_xref_module"/>
+        <field name="enable_user_partner" eval="True"/>
+    </record>
+
+    <record id="scope_migrate" model="synchro.scope">
+        <field name="code">migrate</field>
+        <field name="name">Migrate Odoo DB</field>
+        <field name="disable_xref_module">base</field>
+        <field name="enable_user_partner" eval="True"/>
+    </record>
+
+    <record id="scope_import" model="synchro.scope">
+        <field name="code">import</field>
+        <field name="name">Import/Migrate from another software</field>
+        <field name="disable_xref_module">base,product</field>
+        <field name="enable_user_partner" eval="True"/>
+    </record>
+
+    <record id="scope_test" model="synchro.scope">
+        <field name="code">test</field>
+        <field name="name">Internal test: do not use</field>
+        <field name="disable_xref_module">product</field>
+        <field name="enable_user_partner" eval="True"/>
+    </record>
+
+</odoo>

@@ -327,7 +327,7 @@ class SynchroMapper(models.Model):
         if not dir_mapper.id:
             return False
         mappers = dir_mapper.get_mapper(
-            loc_name=loc_name, ext_name=ext_name, spec=spec, multiple=True)
+            loc_name=loc_name, ext_name=ext_name, spec=spec, multi=True)
         if not mappers:
             if not force:
                 return mappers
@@ -401,8 +401,8 @@ class SynchroMapper(models.Model):
         if default.endswith("()"):
             apply4 = [self.get_loc_fname(fct) for fct in default.split(",")]
             default = False
-        elif default:
-            apply4 = ["apply_set_value"]
+        # elif default:
+        #     apply4 = ["apply_set_default_value"]
         else:
             apply4 = ""
         if ftype == "boolean":
@@ -447,12 +447,24 @@ class SynchroMapper(models.Model):
             return False
         return fields[0].id
 
+    def get_combined_protection(self, rec):
+        magic_fields = self.backend_id.get_magic_fields()
+        if self.name not in magic_fields and rec:
+            for xref in self.env["ir.model.data"].search(
+                    [("model", "=", self.model_id.name), ("res_id", "=", rec.id)]):
+                if xref.module in self.backend_id.scope_id.disable_xref_module.split(
+                        ","):
+                    return "3"
+        return self.protect_update
+
     @api.model
     def create(self, vals):
         self.env["synchro.cache"].clean_cache()
         field = super().create(vals)
         if not field.fields_id:
             field.write({"fields_id": field.get_odoo_fields_id()})
+        elif not field.name:
+            field.write({"name": field.fields_id.name})
         return field
 
     @api.multi
@@ -463,4 +475,6 @@ class SynchroMapper(models.Model):
             for field in self:
                 if not field.fields_id:
                     field.write({"fields_id": field.get_odoo_fields_id()})
+                elif not field.name:
+                    field.write({"name": field.fields_id.name})
         return res

@@ -8,7 +8,7 @@
 #
 {
     "name": "Universal Connector Base",
-    "version": "12.0.1.3.15",
+    "version": "12.0.1.3.16",
     "category": "Generic Modules",
     "summary": "Basic features for Universal Connector",
     "author": "SHS-AV s.r.l.",
@@ -34,9 +34,12 @@
         "security/ir.model.access.csv",
         "data/synchro_protocol.xml",
         "data/synchro_identity.xml",
+        "data/synchro_scope.xml",
         "data/synchro_backend.xml",
+        "data/synchro_wrap.xml",
         "wizard/wizard_pull_record_view.xml",
         "views/synchro_menu.xml",
+        "views/synchro_scope_view.xml",
         "views/synchro_identity_view.xml",
         "views/synchro_protocol_view.xml",
         "views/synchro_backend_view.xml",

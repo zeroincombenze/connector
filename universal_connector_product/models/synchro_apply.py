@@ -91,8 +91,9 @@ class IrModelSynchroApply(models.Model):
                     None,
                     product=product,
                 )
-            elif binding_model == "stock.picking.package.preparation.line" and not vals.get(
-                "tax_ids"
+            elif (
+                    binding_model == "stock.picking.package.preparation.line"
+                    and not vals.get("tax_ids")
             ):
                 vals = self.apply_tax(
                     mapper,

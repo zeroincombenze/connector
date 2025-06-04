@@ -18,7 +18,7 @@ from python_plus import _u
 _logger = logging.getLogger(__name__)
 
 
-class IrModelSynchroLog(models.Model):
+class SynchroLog(models.Model):
     _name = "synchro.log"
     _description = "Universal Connector Logger"
     _order = "timestamp desc, id desc"
@@ -193,9 +193,9 @@ class IrModelSynchroLog(models.Model):
         # Current self could be in delete cache if prior ORM error happened
         # so in this case we have to create rather tha update record
         try:
-            upd_log = True
+            upd_log = False
             if self.exists():
-                upd_log = upd_log and self.id and self.loglevel
+                upd_log = self.id and self.loglevel
         except BaseException:
             self.env.cr.rollback()  # pylint: disable=invalid-commit
             upd_log = False

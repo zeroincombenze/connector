@@ -1,10 +1,12 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_synchro_backend_system,access_synchro_backend_system,model_synchro_backend,base.group_system,1,1,1,1
 access_synchro_backend_user,access_synchro_backend_user,model_synchro_backend,base.group_system,1,0,0,0
+access_synchro_scope_system,access_synchro_scope_system,model_synchro_scope,base.group_system,1,1,1,1
+access_synchro_scope_user,access_synchro_scope_user,model_synchro_scope,base.group_system,1,0,0,0
 access_synchro_model_system,access_synchro_model_system,model_synchro_model,base.group_system,1,1,1,1
 access_synchro_model_user,access_synchro_model_user,model_synchro_model,base.group_user,1,0,0,0
-access_synchro_model_forge_system,access_synchro_model_forge_system,model_synchro_model_forge,base.group_system,1,1,1,1
-access_synchro_model_forge_user,access_synchro_model_forge_user,model_synchro_model_forge,base.group_user,1,0,0,0
+access_synchro_wrap_system,access_synchro_wrap_system,model_synchro_wrap,base.group_system,1,1,1,1
+access_synchro_wrap_user,access_synchro_wrap_user,model_synchro_wrap,base.group_user,1,0,0,0
 access_synchro_field_system,access_synchro_field_system,model_synchro_mapper,base.group_system,1,1,1,1
 access_synchro_field_user,access_synchro_field_user,model_synchro_mapper,base.group_user,1,0,0,0
 access_synchro_alias_system,access_synchro_alias_system,model_synchro_alias,base.group_system,1,1,1,1

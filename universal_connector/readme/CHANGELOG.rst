@@ -1,3 +1,8 @@
+12.0.0.3.16 (2025-06-02)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] New improvements of modules / Migliorie dei singoli moduli
+
 12.0.0.3.14 (2025-01-04)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 

@@ -8,7 +8,7 @@
 #
 {
     "name": "Universal Connector: product management",
-    "version": "12.0.1.3.15",
+    "version": "12.0.1.3.16",
     "category": "Generic Modules",
     "summary": "Add product models to Universal Connector",
     "author": "SHS-AV s.r.l.",
@@ -21,7 +21,7 @@
         "stock",
         "universal_connector_base",
     ],
-    "version_depends": ["universal_connector_base>=12.0.1.3.15"],
+    "version_depends": ["universal_connector_base>=12.0.1.3.16"],
     "external_dependencies": {
         "python": [
             "python_plus",

@@ -67,7 +67,7 @@ ANCILLARY_LINE_KEYS = [
 ]
 
 
-class IrModelSynchroCache(models.Model):
+class SynchroCache(models.Model):
     _name = "synchro.cache"
     _description = "Internal Universal Connector cache"
 

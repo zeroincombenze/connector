@@ -8,7 +8,7 @@
 #
 {
     "name": "Universal Connector VG7",
-    "version": "12.0.1.3.15",
+    "version": "12.0.1.3.16",
     "category": "Generic Modules",
     "summary": "Add Remote Counterparty VG7 to Universal Connector",
     "author": "SHS-AV s.r.l.",
@@ -20,7 +20,7 @@
         "universal_connector_by_http",
         "universal_connector_product",
     ],
-    "version_depends": ["universal_connector_base>=12.0.1.3.15"],
+    "version_depends": ["universal_connector_base>=12.0.1.3.16"],
     "external_dependencies": {
         "python": [
             "python_plus",

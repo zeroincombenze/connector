@@ -45,13 +45,27 @@ class BaseModel(models.BaseModel):
         for backend in self.env["synchro.backend"].search(
             [], order="sequence desc,name desc"
         ):
-            dir_mapper = backend.get_dir_mapper(model=self._name)
-            if not dir_mapper:  # pragma: no cover
-                continue
-            loc_ext_id = dir_mapper.get_loc_ext_id()
-            if hasattr(self, loc_ext_id) and getattr(self, loc_ext_id):
-                self.env["ir.model.synchro"].trigger_one_record(
-                    dir_mapper.counterpart_name,
-                    backend.prefix,
-                    dir_mapper.get_external_pk(getattr(self, loc_ext_id)),
-                )
+            for dir_mapper in backend.get_dir_mapper(
+                    binding_model=self._name, multi=True):
+                pass
+                loc_ext_id = dir_mapper.get_loc_ext_id()
+                if hasattr(self, loc_ext_id) and getattr(self, loc_ext_id):
+                    res_id = self.env["ir.model.synchro"].trigger_one_record(
+                        dir_mapper.counterpart_name,
+                        backend.prefix,
+                        dir_mapper.get_external_pk(getattr(self, loc_ext_id)),
+                    )
+                    if res_id > 0:
+                        # Found external record: store recurse on other tables
+                        break
+
+
+class IrModel(models.Model):
+    _inherit = "ir.model"
+
+    @api.multi
+    def name_get(self):
+        res = []
+        for model in self:
+            res.append((model.id, '%s (%s)' % (model.name, model.model)))
+        return res

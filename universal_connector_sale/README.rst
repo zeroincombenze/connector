@@ -1,5 +1,5 @@
 ==========================================================================================
-|icon| Universal Connector: Sale Management/Prodotti per connettore universale 12.0.1.3.15
+|icon| Universal Connector: Sale Management/Prodotti per connettore universale 12.0.1.3.16
 ==========================================================================================
 
 **Add sale order models to Universal Connector**
@@ -154,6 +154,11 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 ChangeLog History | Cronologia modifiche
 ----------------------------------------
 
+12.0.1.3.16 (2025-06-06)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [QUA] Test coverage 100% (26: 0+26) [0 TestPoints] - quality rating 57 (target 100)
+
 12.0.1.3.15 (2025-05-22)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -229,7 +234,7 @@ La distribuzione `Zeroincombenze® <https://www.zeroincombenze.it/>`__ è proget
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2025-05-22
+Last Update / Ultimo aggiornamento: 2025-06-06
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status

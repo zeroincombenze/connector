@@ -1,5 +1,0 @@
-id,vg7_id,oe8_id,payment_id,sequence,value,days
-,,103,z0bug.payment_1,9,balance,30
-,,109,z0bug.payment_2,9,percent,30
-,,110,z0bug.payment_2,10,balance,60
-,,130,z0bug.payment_3,9,balance,30

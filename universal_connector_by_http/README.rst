@@ -1,5 +1,5 @@
 ===============================================================================================================
-|icon| Universal Connector protocol XML-RPC (requests)/XML-RPC (requests) per connettore universale 12.0.1.3.15
+|icon| Universal Connector protocol XML-RPC (requests)/XML-RPC (requests) per connettore universale 12.0.1.3.16
 ===============================================================================================================
 
 **Add protocol XML-RPC (by requests) to Universal Connector**
@@ -151,10 +151,15 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 ChangeLog History | Cronologia modifiche
 ----------------------------------------
 
+12.0.0.3.16 (2025-06-06)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [QUA] Test coverage 65% (52: 18+34) [141 TestPoints] - quality rating 183 (target 100)
+
 12.0.0.3.15 (2025-05-22)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-* [QUA] Test coverage 65% (52: 18+34) [102 TestPoints] - quality rating 143 (target 100)
+* [QUA] Test coverage 65% (52: 18+34) [72 TestPoints] - quality rating 113 (target 100)
 
 12.0.0.3.14 (2025-05-18)
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -234,7 +239,7 @@ La distribuzione `Zeroincombenze® <https://www.zeroincombenze.it/>`__ è proget
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2025-05-22
+Last Update / Ultimo aggiornamento: 2025-06-06
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status

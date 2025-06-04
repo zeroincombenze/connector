@@ -46,12 +46,12 @@ class SynchroApi(models.Model):
         )
         return session
 
-    def csv_login(self, cnx, backend):
+    def csv_authorize(self, cnx, backend):
         cnx["session"] = True
         return cnx
 
     def csv_session(self, backend):
-        return self.csv_login(
+        return self.csv_authorize(
             self.csv_connect(backend.exchange_path),
             backend,
         )

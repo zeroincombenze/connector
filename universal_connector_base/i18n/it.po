@@ -32,13 +32,13 @@ msgid ""
 "3th Party Sender URL to get data;\n"
 "format should be [https://][username@]url[:port]/data_path"
 msgstr ""
-"URL per leggere dati 3.za parte;\n"
+"URL per leggere dati controparte;\n"
 "il formato dovrebbe essere  [https://][username@]url[:port]/data_path"
 
 #. module: universal_connector_base
 #: model:ir.model,name:universal_connector_base.model_synchro_api
 msgid "API for Odoo Backend"
-msgstr "Dorsale odoo non valida in codice iva api"
+msgstr "API per controparte Odoo"
 
 #. module: universal_connector_base
 #: model:ir.model.fields,field_description:universal_connector_base.field_synchro_channel__active
@@ -53,7 +53,7 @@ msgstr "Tutto/i"
 #. module: universal_connector_base
 #: selection:synchro.mappers,protect_update:0
 msgid "Always Update"
-msgstr "Sempre sempre"
+msgstr "Modifica sempre"
 
 #. module: universal_connector_base
 #: model:ir.model.fields,field_description:universal_connector_base.field_synchro_channel__auto_reconnect
@@ -63,12 +63,12 @@ msgstr "Riconnettere automaticamente con controparte remota"
 #. module: universal_connector_base
 #: model:ir.model.fields,field_description:universal_connector_base.field_ir_model_synchro_log__backend_id
 msgid "Backend"
-msgstr "Dorsale"
+msgstr "Controparte esterna"
 
 #. module: universal_connector_base
 #: model:ir.model.fields,field_description:universal_connector_base.field_synchro_channel__name
 msgid "Backend Name"
-msgstr "Nome dorsale"
+msgstr "Nome controparte esterna"
 
 #. module: universal_connector_base
 #: selection:synchro.mappers,protect_update:0
@@ -83,12 +83,12 @@ msgstr "Solo se nuovo valore non è vuoto"
 #. module: universal_connector_base
 #: selection:synchro.backend,method:0
 msgid "By xmlrpc over http"
-msgstr "Non tutti richiedono lo stesso accesso al tuo sito Web più di xmlrpc da"
+msgstr "Tramite xmlrpc su http"
 
 #. module: universal_connector_base
 #: selection:synchro.backend,method:0
 msgid "By xmlrpc over https"
-msgstr "Xmlrpc su https"
+msgstr "Tramite xmlrpc su https"
 
 #. module: universal_connector_base
 #: model_terms:ir.ui.view,arch_db:universal_connector_base.view_synchro_channel_form
@@ -108,7 +108,7 @@ msgstr "Chiave cliente"
 #. module: universal_connector_base
 #: model:ir.model.fields,help:universal_connector_base.field_synchro_channel__client_key
 msgid "Client key assigned by 3th Party Sender"
-msgstr "Chiave assegna da controparte"
+msgstr "Chiave assegnata da controparte"
 
 #. module: universal_connector_base
 #: model:ir.model.fields,field_description:universal_connector_base.field_synchro_channel__port
@@ -133,7 +133,7 @@ msgstr "Connessione fallita"
 #. module: universal_connector_base
 #: model:ir.model.fields,field_description:universal_connector_base.field_synchro_channel__counterpart_data_url
 msgid "Counterpart data endpoint"
-msgstr "Endpoint controparte dati"
+msgstr "Punto accesso dati controparte"
 
 #. module: universal_connector_base
 #: model:ir.model.fields,field_description:universal_connector_base.field_synchro_channel_model_fields__counterpart_name
@@ -143,12 +143,12 @@ msgstr "Nome campo controparte"
 #. module: universal_connector_base
 #: model:ir.model.fields,field_description:universal_connector_base.field_synchro_channel__identity
 msgid "Counterpart identity"
-msgstr "Controparte controparte"
+msgstr "Identità controparte"
 
 #. module: universal_connector_base
 #: model:ir.model.fields,field_description:universal_connector_base.field_synchro_channel__counterpart_url
 msgid "Counterpart login endpoint"
-msgstr "Endpoint login controparte"
+msgstr "Punto di autorizzazione controparte"
 
 #. module: universal_connector_base
 #: model:ir.model.fields,field_description:universal_connector_base.field_synchro_channel_model__counterpart_name
@@ -200,7 +200,7 @@ msgstr "Percorso dati per carico con rpc su https"
 #. module: universal_connector_base
 #: model:ir.model.fields,field_description:universal_connector_base.field_synchro_channel__database
 msgid "Database"
-msgstr "Banca"
+msgstr "Banca dati"
 
 #. module: universal_connector_base
 #: model:ir.model.fields,help:universal_connector_base.field_synchro_channel__database
@@ -261,12 +261,12 @@ msgstr "Associazione campi"
 #. module: universal_connector_base
 #: model:ir.model,name:universal_connector_base.model_synchro_channel_model_fields
 msgid "Field mapping for Synchonization"
-msgstr "Mappatura campo per sincronizzazione"
+msgstr "Associazione campo per sincronizzazione"
 
 #. module: universal_connector_base
 #: model:ir.model,name:universal_connector_base.model_synchro_channel_domain_translation
 msgid "Field translation for field"
-msgstr "Campo traduzione non valida in codice IVA campo"
+msgstr "Campo traduzione non valido per campo"
 
 #. module: universal_connector_base
 #: model:ir.model.fields,help:universal_connector_base.field_synchro_channel_model_fields__apply
@@ -284,7 +284,7 @@ msgstr ""
 #. module: universal_connector_base
 #: model:ir.model.fields,field_description:universal_connector_base.field_synchro_channel_model_fields__apply
 msgid "Function to apply for supply value or default value."
-msgstr "Funzione a applicare non valida in codice IVA supply valore o calendario\" ecc valore."
+msgstr "Funzione da applicare per valorizzare."
 
 #. module: universal_connector_base
 #: selection:synchro.model,model_spec:0
@@ -304,7 +304,7 @@ msgstr "Ottenere lista"
 #. module: universal_connector_base
 #: model:ir.model.fields,help:universal_connector_base.field_synchro_channel__name
 msgid "Give a unique name for Backend"
-msgstr "Assegna un nome univoco alla dorsale"
+msgstr "Assegnare un nome univoco a controparte"
 
 #. module: universal_connector_base
 #: model:ir.model.fields,help:universal_connector_base.field_synchro_channel__hostname
@@ -330,7 +330,7 @@ msgstr "ID"
 #: model:ir.model.fields,field_description:universal_connector_base.field_synchro_channel__rec_counter
 #: model:ir.model.fields,field_description:universal_connector_base.field_synchro_channel_model__rec_counter
 msgid "Import Counter"
-msgstr "Contatori importare"
+msgstr "Contatore importazioni"
 
 #. module: universal_connector_base
 #: model:ir.model.fields,field_description:universal_connector_base.field_synchro_channel__import_workflow
@@ -340,12 +340,12 @@ msgstr "Importare flusso di lavoro"
 #. module: universal_connector_base
 #: model:ir.model.fields,help:universal_connector_base.field_synchro_channel__import_workflow
 msgid "Import status"
-msgstr "Status importare"
+msgstr "Stato importazione"
 
 #. module: universal_connector_base
 #: selection:synchro.backend,state:0
 msgid "In Production"
-msgstr "Produzione applicazioni"
+msgstr "In produzione"
 
 #. module: universal_connector_base
 #: selection:synchro.model,model_spec:0 selection:synchro.mappers,spec:0
@@ -395,7 +395,7 @@ msgid ""
 "Login path when load by rpc over https\n"
 "or where file will be read and written when load by csv"
 msgstr ""
-"Percorso login path per rpc over https\n"
+"Percorso autorizzazione per rpc su https\n"
 "oppure percorso dove leggere e scrivere file csv"
 
 #. module: universal_connector_base
@@ -406,12 +406,12 @@ msgstr "Elencazioni"
 #. module: universal_connector_base
 #: selection:synchro.backend,tracelevel:0
 msgid "Main + Inner functions"
-msgstr "Main + Funzioni inner"
+msgstr "Main + Funzioni interne"
 
 #. module: universal_connector_base
 #: selection:synchro.backend,tracelevel:0
 msgid "Main functions"
-msgstr "Funzioni funzioni"
+msgstr "Funzioni principali"
 
 #. module: universal_connector_base
 #: selection:synchro.mappers,protect_update:0
@@ -433,7 +433,7 @@ msgstr "ID modello"
 #: model:ir.model.fields,field_description:universal_connector_base.field_synchro_channel__model_ids
 #: model:ir.model.fields,field_description:universal_connector_base.field_synchro_channel_model__field_ids model_terms:ir.ui.view,arch_db:universal_connector_base.view_synchro_channel_form
 msgid "Model mapping"
-msgstr "Modello modello"
+msgstr "Associazione modello"
 
 #. module: universal_connector_base
 #: model:ir.model,name:universal_connector_base.model_synchro_channel_model
@@ -454,17 +454,17 @@ msgstr "Modelli"
 #: code:addons/universal_connector_base/models/ir_model_synchro_log.py:51
 #, python-format
 msgid "No Error"
-msgstr "Errore mai"
+msgstr "Nessun errore"
 
 #. module: universal_connector_base
 #: selection:synchro.backend,tracelevel:0
 msgid "No Trace"
-msgstr "Traccia mai"
+msgstr "Non tracciare"
 
 #. module: universal_connector_base
 #: model:ir.model,name:universal_connector_base.model_synchro_channel
 msgid "Odoo Backend"
-msgstr "Dorsale Odoo"
+msgstr "Controparte Odoo"
 
 #. module: universal_connector_base
 #: model:ir.model.fields,field_description:universal_connector_base.field_synchro_channel_domain_translation__key
@@ -480,7 +480,7 @@ msgstr "Valore campo Odoo"
 #. module: universal_connector_base
 #: selection:synchro.backend,identity:0
 msgid "Odoo instance"
-msgstr "Istanza istanza"
+msgstr "Istanza Odoo"
 
 #. module: universal_connector_base
 #: model:ir.model.fields,field_description:universal_connector_base.field_synchro_channel_domain_translation__model
@@ -491,12 +491,12 @@ msgstr "Nome modello Odoo"
 #. module: universal_connector_base
 #: model:ir.model.fields,field_description:universal_connector_base.field_synchro_channel__pylib
 msgid "PYPI library"
-msgstr "library pypi"
+msgstr "Libraria PYPI"
 
 #. module: universal_connector_base
 #: model:ir.model.fields,field_description:universal_connector_base.field_synchro_channel__password
 msgid "Password"
-msgstr "Parola"
+msgstr "Password"
 
 #. module: universal_connector_base
 #: model:ir.model.fields,help:universal_connector_base.field_synchro_channel__port
@@ -551,7 +551,7 @@ msgstr "Sequenza ricerca chiave"
 #. module: universal_connector_base
 #: model_terms:ir.ui.view,arch_db:universal_connector_base.view_synchro_log_form
 msgid "Record"
-msgstr ""
+msgstr "Registrazione"
 
 #. module: universal_connector_base
 #: model:ir.model.fields,field_description:universal_connector_base.field_ir_model_synchro_log__reference
@@ -571,7 +571,7 @@ msgstr "Campo obbligatorio"
 #. module: universal_connector_base
 #: model_terms:ir.ui.view,arch_db:universal_connector_base.view_synchro_channel_form
 msgid "Reset to draft Connection"
-msgstr "Riportare connessione modificabile"
+msgstr "Impostare connessione modificabile"
 
 #. module: universal_connector_base
 #: model:ir.model.fields,field_description:universal_connector_base.field_synchro_channel__method
@@ -592,17 +592,17 @@ msgstr ""
 #. module: universal_connector_base
 #: model:ir.model.fields,help:universal_connector_base.field_synchro_channel__company_id
 msgid "Set company, if specific company backend"
-msgstr ""
+msgstr "Impostare azienda, se controparte specifica di azienda"
 
 #. module: universal_connector_base
 #: model:ir.model.fields,field_description:universal_connector_base.field_synchro_channel_model_fields__spec
 msgid "Specific search"
-msgstr "Ricerca specific"
+msgstr "Ricerca specifica"
 
 #. module: universal_connector_base
 #: model:ir.model.fields,field_description:universal_connector_base.field_synchro_channel_model__model_spec
 msgid "Specific search domain"
-msgstr "Dominio ricerca specific"
+msgstr "Dominio ricerca specifica"
 
 #. module: universal_connector_base
 #: model:ir.model.fields,field_description:universal_connector_base.field_synchro_channel__state
@@ -617,7 +617,7 @@ msgstr "Estratti conto"
 #. module: universal_connector_base
 #: selection:synchro.mappers,spec:0
 msgid "Suplier"
-msgstr ""
+msgstr "Fornitore"
 
 #. module: universal_connector_base
 #: selection:synchro.model,model_spec:0
@@ -628,7 +628,7 @@ msgstr "Fornitore"
 #: model:ir.actions.act_window,name:universal_connector_base.action_synchro_channel model:ir.ui.menu,name:universal_connector_base.menu_synchro_channel
 #: model_terms:ir.ui.view,arch_db:universal_connector_base.view_synchro_channel_form model_terms:ir.ui.view,arch_db:universal_connector_base.view_synchro_channel_tree
 msgid "Synchonization Channel"
-msgstr "Dorsale di sincronizzazione"
+msgstr "Controparte da sincronizzare"
 
 #. module: universal_connector_base
 #: model_terms:ir.ui.view,arch_db:universal_connector_base.view_synchro_tnl_form model_terms:ir.ui.view,arch_db:universal_connector_base.view_synchro_tnl_tree
@@ -655,7 +655,7 @@ msgstr "Modello di sincronizzazione"
 #. module: universal_connector_base
 #: model:ir.model.fields,field_description:universal_connector_base.field_synchro_channel_model__backend_id
 msgid "Synchro Channel"
-msgstr "Per menzionare un canale synchro"
+msgstr ""
 
 #. module: universal_connector_base
 #: model:ir.actions.act_window,name:universal_connector_base.action_synchro_log

@@ -8,7 +8,7 @@
 #
 {
     "name": "Universal Connector",
-    "version": "12.0.1.3.15",
+    "version": "12.0.1.3.16",
     "category": "Generic Modules",
     "summary": "Universal Connector complete suite",
     "author": "SHS-AV s.r.l.",

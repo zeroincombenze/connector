@@ -65,7 +65,7 @@ class SynchroApi(models.Model):
                 domain=[("model", "=", ext_model)],
                 fields=["name"])
         ]
-        return [(x[0], x[1] if x[1] in values else False) for x in field_list]
+        return [(x[0], x[1] if x[1] in values else False, x[2]) for x in field_list]
 
     def get_ext_id_of_ext_ref_odoo_jsonrpc(self, session, dir_mapper, ext_id):
         ext_model = dir_mapper.counterpart_name

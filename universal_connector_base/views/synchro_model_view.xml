@@ -47,7 +47,7 @@
                 <field name="field_ids">
                     <tree string="Field mapping" editable="bottom">
                         <field name="sequence" widget="handle"/>
-                        <field name="name"/>
+                        <field name="fields_id"/>
                         <field name="spec"/>
                         <field name="counterpart_name"/>
                         <field name="apply4"/>

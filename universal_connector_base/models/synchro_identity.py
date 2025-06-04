@@ -9,7 +9,7 @@
 from odoo import api, fields, models
 
 
-class SynchroConnectorIdentity(models.Model):
+class SynchroIdentity(models.Model):
     _name = "synchro.identity"
     _description = "Counterpart identity"
     _order = "sequence,code desc"

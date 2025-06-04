@@ -40,11 +40,15 @@ to read this data from a local file, not published which can be found in
 
 Data to test, declared in local text file, must be formatted as follows:
 
-    type,backed,loc.model,ext.model,loc.field,ext.field,ext_id,op,value
-    * type is "=" if record contains data to store or configure
-    * type is "?" if record contains data to compare
-    * backend may "*" for all backends (only for test to compare)
+    type,backed,loc.model,ext.model,loc.field,ext.field,ext_id,op,value,group_id
+    * type is "=" if line contains data to store or configure
+    * type is "?" if line contains data to compare
+    * backend value "*" means all backends (only for test to compare)
     * op is "%" if test is <value in field> else is <value == field>
+    * group_id = 0, record matches with all Odoo version which have the same value
+    * group_id = 1, record matches single value, local ID is unknown
+    * group_id = 2, record matches just new records added by push test
+    * group_id > 10, record matches with Odoo version which have the same group_id
 
 This test is based on zeroincombenze(R) test flow (read testenv documentation), which
 declares backends in global variables TEST_SYNCHRO_BACKEND and TEST_SETUP_LIST.
@@ -64,6 +68,7 @@ _logger = logging.getLogger(__name__)
 TEST_SYNCHRO_BACKEND = {
     "universal_connector_openerp.backend_openerp7": {
         "name": "Test OpenERP 7.0",
+        "scope_id": "universal_connector_base.scope_test",
         "hostname": "localhost",
         "identity_id": "universal_connector_openerp.identity_openerp",
         "database": "demo7",
@@ -79,6 +84,7 @@ TEST_SYNCHRO_BACKEND = {
     },
     "universal_connector_openerp.backend_openerp8": {
         "name": "Test Odoo 8.0",
+        "scope_id": "universal_connector_base.scope_test",
         "hostname": "localhost",
         "identity_id": "universal_connector_openerp.identity_openerp",
         "database": "demo8",
@@ -116,6 +122,16 @@ class MyTest(SingleTransactionCase):
 
     def get_data_test(self):
         # This function must be executed before setup_env()
+        # Internal structure is:
+        #  Odoo model to match/test
+        #    \_  GRPKEY: group id or value with all data version to compare
+        #          \_ backend (xref)
+        #               \_ 'EXT_NAME': external table name for backend
+        #                  'ext_id' external id
+        #                     \_ 'loc_field': field name
+        #                        'ext_field': external field name
+        #                        'op': match operator
+        #                        'value'; value to match
         self.test_data = {}
         data_fqn = pth.join("/home/odoo/.local", self.module.name + ".dat")
         if not pth.isfile(data_fqn):
@@ -135,7 +151,7 @@ class MyTest(SingleTransactionCase):
                 "ext_id",
                 "op",
                 "value",
-                "no_local",
+                "group_id",
             ]
             for line in fd.read().split("\n"):
                 # Remove comments
@@ -146,13 +162,24 @@ class MyTest(SingleTransactionCase):
                 if not line:
                     continue
                 #
-                # type,backed,loc.model,ext.model,loc.field,ext.field,op,value
+                # type,backed,loc.model,ext.model,loc.field,ext.field,op,value,group_id
                 values = qsplit(line, ",", quotes='"', escape=True)
                 items = dict(zip(keys, values))
                 if items["ext_id"]:
                     items["ext_id"] = int(items["ext_id"])
-                items["no_local"] = int(items["no_local"]) if items["no_local"] else 0
+                items["group_id"] = int(
+                    items["group_id"]) if items["group_id"] else 0
+                if items["value"]:
+                    # This code must be run with python 2.7,
+                    # so, we cannot use isnumeric() builtin function
+                    if (
+                            isinstance(items["value"], str)
+                            and all([x.isdigit()
+                                     for x in items["value"].split(".")])
+                    ):
+                        items["value"] = eval(items["value"])
                 if items["type"] == "=":
+                    # Backend assignment
                     if items["backend"] not in TEST_SYNCHRO_BACKEND:
                         raise ValueError(items["backend"])
                     TEST_SYNCHRO_BACKEND[items["backend"]][items["loc_field"]] = items[
@@ -164,126 +191,126 @@ class MyTest(SingleTransactionCase):
                         if items["backend"] == "*"
                         else [items["backend"]]
                     ):
-                        if xref not in self.test_data:
-                            self.test_data[xref] = {}
                         loc_model = items["loc_model"]
-                        if loc_model not in self.test_data[xref]:
-                            self.test_data[xref][loc_model] = {}
-                            self.test_data[xref][loc_model]["EXT_NAME"] = items[
+                        if loc_model not in self.test_data:
+                            self.test_data[loc_model] = {}
+                        key = items["group_id"] or items["value"]
+                        if not key:
+                            raise ValueError(line)
+                        if key not in self.test_data[loc_model]:
+                            self.test_data[loc_model][key] = {}
+                        if xref not in self.test_data[loc_model][key]:
+                            self.test_data[loc_model][key][xref] = {}
+                            self.test_data[loc_model][key][xref]["EXT_NAME"] = items[
                                 "ext_model"
                             ]
-                        loc_field = items["loc_field"]
-                        if not loc_field:
-                            continue
-                        if loc_field not in self.test_data[xref][loc_model]:
-                            self.test_data[xref][loc_model][loc_field] = {}
-                            self.test_data[xref][loc_model][loc_field]["EXT_NAME"] = (
-                                items["ext_field"]
-                            )
-                        if items["value"]:
-                            # This code must be run with python 2.7,
-                            # so, we cannot use isnumeric() builtin function
-                            if (
-                                    isinstance(items["value"], str)
-                                    and all([x.isdigit()
-                                             for x in items["value"].split(".")])
-                            ):
-                                items["value"] = eval(items["value"])
-                            self.test_data[xref][loc_model][loc_field][
-                                items["ext_id"]
-                            ] = (items["op"], items["value"], items["no_local"])
+                        ext_id = items["ext_id"]
+                        if ext_id not in self.test_data[loc_model][key]:
+                            self.test_data[loc_model][key][xref][ext_id] = {}
+                        for name in ("loc_field", "ext_field", "op", "value"):
+                            self.test_data[loc_model][key][xref][ext_id][name] = (
+                                items[name])
                 else:
-                    raise ValueError(items["type"])
-        for xref, backend in TEST_SYNCHRO_BACKEND.items():
+                    raise ValueError(line)
+        for xref, backend in TEST_SYNCHRO_BACKEND.copy().items():
             if "active" in backend and not backend["active"]:
                 del TEST_SYNCHRO_BACKEND[xref]
+                continue
+            for loc_model in self.test_data.copy().keys():
+                if loc_model not in self.env:
+                    del self.test_data[loc_model]
+
+    def get_node_of_model_xref(self, xref, loc_model):
+        return [node.get(xref) for node in self.test_data[loc_model].values()][0]
 
     def get_model_list(self, xref):
         models = []
-        for loc_model in self.test_data[xref].keys():
-            models.append(
-                (loc_model, self.test_data[xref][loc_model]["EXT_NAME"], False)
-            )
+        for loc_model in self.test_data.keys():
+            ext_node = self.get_node_of_model_xref(xref, loc_model)
+            if ext_node:
+                models.append((loc_model, ext_node["EXT_NAME"], False))
         return models
+
+    def get_ext_model(self, xref, loc_model):
+        ext_node = self.get_node_of_model_xref(xref, loc_model)
+        return ext_node["EXT_NAME"] if ext_node else None
 
     def get_field_list(self, xref, loc_model):
         fields = []
-        for loc_name in self.test_data[xref][loc_model].keys():
-            if loc_name == "EXT_NAME":
-                continue
-            fields.append(
-                (loc_name, self.test_data[xref][loc_model][loc_name]["EXT_NAME"])
-            )
-        return fields
-
-    def get_ext_id_list(self, xref, loc_model):
-        ext_ids = []
-        for loc_name in self.test_data[xref][loc_model].keys():
-            if loc_name == "EXT_NAME":
-                continue
-            for ext_id in self.test_data[xref][loc_model][loc_name].keys():
+        node = self.get_node_of_model_xref(xref, loc_model)
+        if node:
+            for ext_id in node.keys():
                 if ext_id == "EXT_NAME":
                     continue
-                if ext_id and ext_id not in ext_ids:
-                    ext_ids.append(ext_id)
-        return ext_ids
+                fields.append(
+                    (node[ext_id]["loc_field"], node[ext_id]["ext_field"], False))
+                break
+        return fields
+
+    def get_ext_id_list(self, xref, loc_model, group_id=False):
+        ext_ids = []
+        for key, node in self.test_data[loc_model].items():
+            if (
+                xref not in node
+                or (not group_id and key == 2)
+                or (group_id and key != group_id)
+            ):
+                continue
+            for ext_id in node[xref].keys():
+                if not ext_id or ext_id == "EXT_NAME":
+                    continue
+                ext_ids.append(ext_id)
+        return sorted(list(set(ext_ids)))
+
+    def get_local_xref(self):
+        for node_model in self.test_data.values():
+            for node_key in node_model.values():
+                for loc_xref in node_key.keys():
+                    if loc_xref.endswith(str(self.odoo_major_version)):
+                        return loc_xref
+        return False
 
     def get_loc_id(self, xref, loc_model, ext_id):
-        value = ""
-        loc_id = False
-        for loc_name in self.test_data[xref][loc_model].keys():
-            if loc_name == "EXT_NAME":
+        loc_xref = self.get_local_xref()
+        for ext_key, ext_node in self.test_data[loc_model].items():
+            if xref not in ext_node or ext_id not in ext_node[xref]:
                 continue
-            if ext_id in self.test_data[xref][loc_model][loc_name]:
-                value = self.test_data[xref][loc_model][loc_name][ext_id][1]
-                break
-        if not value:
-            raise ValueError("%s.%s.%s" % (xref, loc_model, ext_id))
-        found = False
-        for xxref in self.test_data.keys():
-            if xxref.endswith(str(self.odoo_major_version)):
-                found = True
-                break
-        if found:
-            for loc_name in self.test_data[xxref][loc_model].keys():
-                if loc_name == "EXT_NAME":
+            for loc_key, loc_node in self.test_data[loc_model].items():
+                if loc_key != ext_key or loc_xref not in loc_node:
                     continue
-                for xext_id in self.test_data[xxref][loc_model][loc_name].keys():
-                    if (
-                        self.test_data[xxref][loc_model][loc_name][xext_id][1] == value
-                        and not self.test_data[xxref][loc_model][loc_name][xext_id][2]
-                    ):
-                        loc_id = xext_id
-                        break
-        return loc_id
+                for loc_id in loc_node[loc_xref]:
+                    if not loc_id or loc_id == "EXT_NAME":
+                        continue
+                    return loc_id
+        backend = self.resource_browse(xref)
+        loc_ext_id = backend.get_loc_ext_id()
+        recs = self.env[loc_model].search([(loc_ext_id, "=", ext_id)])
+        if recs:
+            return recs[0].id
+        return False
 
     def get_test_pattern(self, xref, loc_model, ext_id):
         patterns = []
-        for loc_name in self.test_data[xref][loc_model].keys():
-            if loc_name == "EXT_NAME":
+        for key, node in self.test_data[loc_model].items():
+            if isinstance(key, int):
+                # No value to match
                 continue
-            if ext_id in self.test_data[xref][loc_model][loc_name]:
-                patterns.append(
-                    (
-                        loc_name,
-                        self.test_data[xref][loc_model][loc_name][ext_id][0],
-                        self.test_data[xref][loc_model][loc_name][ext_id][1],
-                    )
-                )
+            for xxref, node2 in node.items():
+                if xxref != xref or ext_id not in node2:
+                    continue
+                patterns.append((
+                    node2[ext_id]["loc_field"],
+                    node2[ext_id]["op"],
+                    node2[ext_id]["value"],
+                ))
         return patterns
 
-    def get_ext_model(self, xref, model):
-        return self.test_data[xref][model]["EXT_NAME"]
-
-    def is_no_local(self, xref, loc_model, ext_id):
-        no_local = False
-        for loc_name in self.test_data[xref][loc_model].keys():
-            if loc_name == "EXT_NAME":
+    def get_group_id(self, xref, loc_model, ext_id):
+        for group_id, node in self.test_data[loc_model].items():
+            if xref not in node or ext_id not in node[xref]:
                 continue
-            if ext_id in self.test_data[xref][loc_model][loc_name]:
-                no_local = self.test_data[xref][loc_model][loc_name][ext_id][2]
-                break
-        return no_local
+            return group_id
+        return False
 
     def validate_result(self, xref, record, loc_model, loc_field, ext_id, op, value):
         res = getattr(record, loc_field)
@@ -341,40 +368,44 @@ class MyTest(SingleTransactionCase):
             backend,
             actions="button_build_model_map",
         )
-        for model, ext_model, model_spec in self.get_model_list(xref):
+        for loc_model, ext_model, model_spec in self.get_model_list(xref):
             backend_model = self.env["synchro.model"].search(
                 [
-                    ("name", "=", model),
+                    ("name", "=", loc_model),
                     ("counterpart_name", "=", ext_model),
                     ("model_spec", "=", model_spec),
                     ("backend_id", "=", backend.id),
                 ]
             )
             self.assertEqual(
-                len(backend_model), 1, msg="Too many ext model %s" % ext_model
+                len(backend_model),
+                1,
+                msg="Model %s not found or oo many matches with %s!"
+                    % (loc_model, ext_model)
             )
 
-            for loc_name, ext_name in self.get_field_list(xref, model):
+            for loc_name, ext_name, spec in self.get_field_list(xref, loc_model):
                 backend_field = self.env["synchro.mapper"].search(
                     [
                         ("name", "=", loc_name),
                         ("counterpart_name", "=", ext_name),
+                        ("spec", "=", spec),
                         ("model_id", "=", backend_model[0].id),
                     ]
                 )
                 self.assertEqual(
                     len(backend_field),
                     1,
-                    msg="Too many field for %s.%s" % (ext_model, ext_name),
+                    msg="Field %s.%s not found or too many matches with %s!"
+                        % (loc_model, loc_name, ext_name)
                 )
 
     def _test_import_model(self, xref, loc_model):
         Synchro = self.env["ir.model.synchro"]
         backend = self.resource_browse(xref)
-        loc_ext_id = "%s_id" % backend.prefix
+        loc_ext_id = backend.get_loc_ext_id()
+        self.assertTrue(loc_ext_id, "%s_id" % backend.prefix)
         for ext_id in self.get_ext_id_list(xref, loc_model):
-            if self.is_no_local(xref, loc_model, ext_id) == 2:
-                continue
             ext_model = self.get_ext_model(xref, loc_model)
             loc_id = self.get_loc_id(xref, loc_model, ext_id)
             rec_id = Synchro.trigger_one_record(ext_model, backend.prefix, ext_id)
@@ -391,64 +422,8 @@ class MyTest(SingleTransactionCase):
                 self.validate_result(
                     xref, record, loc_model, loc_field, ext_id, op, value)
 
-    def _test_import_partner2(self, xref):
-        Synchro = self.env["ir.model.synchro"]
-        backend = self.resource_browse(xref)
-        loc_ext_id = "%s_id" % backend.prefix
-        loc_model = "res.partner"
-
-        if (
-            self.odoo_major_version >= 12
-            and int(backend.remote_sw_version.split(".")[0]) < 12
-        ) or (
-            self.odoo_major_version < 12
-            and int(backend.remote_sw_version.split(".")[0]) >= 12
-        ):
-            for ext_id in self.get_ext_id_list(xref, loc_model):
-                # This test load counterpart record with local record which must be
-                # present in DB. If ext_if has no_local attribute means this test
-                # is to skip
-                if self.is_no_local(xref, loc_model, ext_id):
-                    continue
-                ext_model = self.get_ext_model(xref, loc_model)
-                loc_id = self.get_loc_id(xref, loc_model, ext_id)
-                # Already synchronized
-                partner = self.env[loc_model].browse(loc_id)
-                partner.write({"%s_id" % backend.prefix: ext_id})
-                rec_id = Synchro.trigger_one_record(ext_model, backend.prefix, ext_id)
-                self.assertEqual(rec_id, loc_id, msg="Unexpected local record ID")
-                partner = self.env[loc_model].browse(rec_id)
-                self.assertEqual(
-                    getattr(partner, loc_ext_id), ext_id, msg="Synchronization failed"
-                )
-                for loc_field, op, value in self.get_test_pattern(
-                    xref, loc_model, ext_id
-                ):
-                    self.validate_result(
-                        xref, partner, loc_model, loc_field, ext_id, op, value)
-
-        for ext_id in self.get_ext_id_list(xref, loc_model):
-            if self.is_no_local(xref, loc_model, ext_id) == 2:
-                continue
-            ext_model = self.get_ext_model(xref, loc_model)
-            loc_id = self.get_loc_id(xref, loc_model, ext_id)
-            rec_id = Synchro.trigger_one_record(ext_model, backend.prefix, ext_id)
-            if loc_id:
-                self.assertEqual(rec_id, loc_id, msg="Unexpected local record ID")
-            partner = self.env[loc_model].browse(rec_id)
-            self.assertEqual(
-                getattr(partner, loc_ext_id), ext_id, msg="Synchronization failed"
-            )
-            for loc_field, op, value in self.get_test_pattern(xref, loc_model, ext_id):
-                self.validate_result(
-                    xref, partner, loc_model, loc_field, ext_id, op, value)
-
     def _test_pull_record(self, xref, loc_model):
         for ext_id in self.get_ext_id_list(xref, loc_model):
-            # This test run pull_record function of existent and synchronized record.
-            # If ext_if has no_local attribute we cannot find record to pull
-            if self.is_no_local(xref, loc_model, ext_id):
-                continue
             loc_id = self.get_loc_id(xref, loc_model, ext_id)
             self.assertTrue(
                 loc_id,
@@ -477,7 +452,7 @@ class MyTest(SingleTransactionCase):
         ext_id = vals["id"]
         # This test run push_record function in order to test magic record which
         # do not exist in local DB
-        if self.is_no_local(xref, loc_model, ext_id) != 2:
+        if self.get_group_id(xref, loc_model, ext_id) != 2:
             raise IOError("Invalid external id %s for model %s" % (ext_id, loc_model))
         backend = self.resource_browse(xref)
         loc_id = self.env["ir.model.synchro"].push_record(
@@ -503,59 +478,55 @@ class MyTest(SingleTransactionCase):
         )
         for xref in sorted(self.get_resource_data_list("synchro.backend")):
             self._test_check_connection(xref)
-            self._test_reset_connection(xref)
-            self._test_check_connection(xref)
             self._test_check_models(xref)
             self._test_import_model(xref, "res.currency")
         for xref in sorted(self.get_resource_data_list("synchro.backend")):
+            self._test_reset_connection(xref)
+            self._test_check_connection(xref)
             self._test_import_model(xref, "res.country")
             self._test_import_model(xref, "res.partner")
         for xref in sorted(self.get_resource_data_list("synchro.backend")):
-            self._test_import_partner2(xref)
             # Now repeat some test in order to check for resync records
             self._test_import_model(xref, "res.currency")
             self._test_import_model(xref, "res.country")
-            self._test_import_model(xref, "res.partner")
         for xref in sorted(self.get_resource_data_list("synchro.backend")):
             self._test_pull_record(xref, "res.partner")
         for xref in sorted(self.get_resource_data_list("synchro.backend")):
-            self._test_push_record(
-                xref,
-                "ir.module.module",
-                {
+            # 1. res.country.state requires country_id; we want to check for right code
+            #    recognition; so, we must test a code which exists in 2+ countries.
+            #    We use 'CA' which means California in the USA and Cagliari in Italy
+            # 2. We check VAT w/o ISO code to test apply_sanitize_vat()
+            # 3. We force default value for name to test apply_set_tmp_name()
+            # 4. We force default value for name to test apply_set_default_value()
+            backend = self.resource_browse(xref)
+            dir_mapper = backend.get_dir_mapper(binding_model="res.partner")
+            dir_mapper.get_mapper(loc_name="name").write({"apply4": "set_tmp_name()"})
+            dir_mapper.get_mapper(loc_name="ref").write({"default": xref})
+            self.env["synchro.mapper"].search([])
+            for loc_model, vals in (
+                ("ir.module.module", {
                     "name": "base",
                     "id": 13,
                     "state": "installed",
-                })
-            self._test_push_record(
-                xref,
-                "res.lang",
-                {
+                }),
+                ("res.lang", {
                     "code": "it_IT",
                     "id": 17,
-                })
-            self._test_push_record(
-                xref,
-                "res.currency.rate",
-                {
+                }),
+                ("res.currency.rate", {
                     "currency_id": self.env.ref("base.EUR").id,
                     "name": "2025-01-01 01:00:00",
                     "rate": 1.23,
                     "id": 12,
-                })
-            # res.country.state requires country_id; we want to check for right code
-            # recognition; so, we must test a code which exists in 2+ countries.
-            # We use 'CA' which means California in the USA and Cagliari in Italy
-            # We check VAT w/o ISO code
-            self._test_push_record(
-                xref,
-                "res.partner",
-                {
+                }),
+                ("res.partner", {
                     "is_company": True,
-                    "name": xref,
+                    "name": "",
                     "country_id": "IT",
                     "state_id": "CA",
                     "vat": "12345670017",
                     "id": 1001,
-                })
+                }),
+            ):
+                self._test_push_record(xref, loc_model, vals)
         # self._test_purge()

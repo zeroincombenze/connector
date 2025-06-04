@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="view_synchro_scope_form" model="ir.ui.view">
+        <field name="name">view.synchro.scope.form</field>
+        <field name="model">synchro.scope</field>
+        <field name="arch" type="xml">
+            <form string="Backend Scope">
+                <sheet>
+                    <group>
+                        <field name="code"/>
+                        <field name="name"/>
+                        <field name="disable_xref_module"/>
+                        <field name="enable_user_partner"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_synchro_scope_tree" model="ir.ui.view">
+        <field name="name">view.synchro.scope.tree</field>
+        <field name="model">synchro.scope</field>
+        <field name="arch" type="xml">
+            <tree string="Backend Scope">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="disable_xref_module"/>
+                <field name="enable_user_partner"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_synchro_scope" model="ir.actions.act_window">
+        <field name="name">Backend Scope</field>
+        <field name="res_model">synchro.scope</field>
+        <field name="view_id" ref="view_synchro_scope_tree"/>
+    </record>
+
+    <menuitem id="menu_synchro_scope" name="Backend Scope" action="action_synchro_scope" parent="menu_universal_connector" groups="base.group_no_one" sequence="50"/>
+
+</odoo>

@@ -82,7 +82,7 @@
 
     <record forcecreate="1" id="account_payment_term_line_to_delete" model="synchro.mapper">
         <field name="name">to_delete</field>
-        <field name="apply4">false</field>
+        <field name="default" eval="False"/>
         <field name="model_id" ref="account_payment_term_line"/>
     </record>
 

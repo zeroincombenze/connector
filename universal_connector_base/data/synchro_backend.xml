@@ -3,6 +3,7 @@
 
     <record id="backend_odoo10" model="synchro.backend">
         <field name="name">Odoo 10.0</field>
+        <field name="scope_id" ref="universal_connector_base.scope_synchro"/>
         <field name="protocol_id" ref="universal_connector_base.protocol_xmlrpc_http"/>
         <field name="identity_id" ref="universal_connector_base.identity_odoo"/>
         <field name="prefix">odoo10</field>
@@ -19,6 +20,7 @@
 
     <record id="backend_odoo12" model="synchro.backend">
         <field name="name">Odoo 12.0</field>
+        <field name="scope_id" ref="universal_connector_base.scope_synchro"/>
         <field name="protocol_id" ref="universal_connector_base.protocol_xmlrpc_http"/>
         <field name="identity_id" ref="universal_connector_base.identity_odoo"/>
         <field name="prefix">odoo12</field>

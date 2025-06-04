@@ -1452,7 +1452,7 @@ class IrModelSynchro(models.Model):
             apply4 = ",".join(["apply_%s" % fct[:-2] for fct in default.split(",")])
             default = False
         elif default:
-            apply4 = "apply_set_value"
+            apply4 = "apply_set_default_value"
         else:
             apply4 = ""
         if ttype == "boolean":
@@ -3401,7 +3401,7 @@ class IrModelSynchro(models.Model):
                 ):
                     if identity == "odoo":
                         if not self.env["synchro.model"].build_dir_mapper(
-                            channel_id, None, model=vmodel
+                            channel_id, None, binding_model=vmodel
                         ):
                             continue
                     else:

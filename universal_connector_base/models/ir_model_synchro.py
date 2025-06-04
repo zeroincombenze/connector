@@ -429,6 +429,7 @@ class IrModelSynchro(models.Model):
             if dir_mapper.auth_action not in ("upd", "lock"):
                 vals = dir_mapper.compile_required_fields(
                     vals,
+                    only_minimal,
                     ctx=ctx,
                 )
                 if only_minimal or incomplete_record:
@@ -573,7 +574,8 @@ class IrModelSynchro(models.Model):
             return -16
         if backend.state in ("ready", "failed"):
             backend.write({"state": "run"})
-        dir_mapper = backend.get_dir_mapper(model=binding_model, spec=model_spec)
+        dir_mapper = backend.get_dir_mapper(
+            binding_model=binding_model, spec=model_spec)
         # if not dir_mapper:
         #     # Compatibility with old release of UC
         #     dir_mapper = backend.get_dir_mapper(model=vmodel)
@@ -732,7 +734,7 @@ class IrModelSynchro(models.Model):
             )
             return -6
 
-        dir_mappers = backend.get_dir_mapper(ext_model=ext_model, multiple=True)
+        dir_mappers = backend.get_dir_mapper(ext_model=ext_model, multi=True)
         if not dir_mappers:  # pragma: no cover
             Cache.clean_cache()
             logrec.logmsg(

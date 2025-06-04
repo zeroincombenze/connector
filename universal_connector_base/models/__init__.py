@@ -15,9 +15,11 @@ from . import synchro_apply
 from . import synchro_api
 from . import synchro_protocol
 from . import synchro_identity
+from . import synchro_scope
 from . import synchro_backend
 from . import synchro_model
 from . import synchro_mapper
+from . import synchro_wrap
 from . import synchro_alias
 from . import res_country
 from . import res_currency
