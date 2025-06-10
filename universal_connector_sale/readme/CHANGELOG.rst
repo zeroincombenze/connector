@@ -1,4 +1,9 @@
-12.0.1.3.16 (2025-06-06)
+12.0.1.3.17 (2025-06-09)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [QUA] Test coverage 100% (26: 0+26) [0 TestPoints] - quality rating 57 (target 100)
+
+12.0.1.3.16 (2025-06-05)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 * [QUA] Test coverage 100% (26: 0+26) [0 TestPoints] - quality rating 57 (target 100)

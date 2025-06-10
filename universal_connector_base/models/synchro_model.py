@@ -800,7 +800,7 @@ class SynchroDirMapper(models.Model):
                 try:
                     dir_mapper = self.create(vals)
                 except BaseException as e:  # pragma: no cover
-                    self.env.cr.rollback()  # pylint: disable=invalid-commit
+                    # self.env.cr.rollback()  # pylint: disable=invalid-commit
                     self.env["synchro.log"].logmsg(
                         "error",
                         "!%(E)s! ERROR %(e)s: %(model)s.create(%(vals)s)",
@@ -1205,7 +1205,7 @@ class SynchroDirMapper(models.Model):
             else:
                 rec = Binder.search(full_domain, limit=2 if company_lev < 2 else 16)
         except BaseException as e:  # pragma: no cover
-            self.env.cr.rollback()  # pylint: disable=invalid-commit
+            # self.env.cr.rollback()  # pylint: disable=invalid-commit
             self.env["synchro.log"].logmsg(
                 "error",
                 "!%(E)s! ERROR %(e)s: %(model)s.atomic_search(%(domain)s)",

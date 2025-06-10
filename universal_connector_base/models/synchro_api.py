@@ -410,7 +410,7 @@ class SynchroApi(models.Model):
                 {"fields": fields},
             )
         except BaseException as e:  # pragma: no cover
-            self.env.cr.rollback()  # pylint: disable=invalid-commit
+            # self.env.cr.rollback()  # pylint: disable=invalid-commit
             self.env["synchro.log"].logmsg(
                 "error",
                 "!%(E)s! ERROR %(e)s browse(db=%(db)s, model=%(model)s, %(id)s)",
@@ -440,7 +440,7 @@ class SynchroApi(models.Model):
                 {"fields": fields},
             )
         except BaseException as e:  # pragma: no cover
-            self.env.cr.rollback()  # pylint: disable=invalid-commit
+            # self.env.cr.rollback()  # pylint: disable=invalid-commit
             self.env["synchro.log"].logmsg(
                 "error",
                 "!%(E)s! ERROR %(e)s searching(db=%(db)s, model=%(model)s, %(d)s)",
@@ -466,7 +466,7 @@ class SynchroApi(models.Model):
                 [domain],
             )
         except BaseException as e:  # pragma: no cover
-            self.env.cr.rollback()  # pylint: disable=invalid-commit
+            # self.env.cr.rollback()  # pylint: disable=invalid-commit
             self.env["synchro.log"].logmsg(
                 "error",
                 "!%(E)s! ERROR %(e)s searching(db=%(db)s, model=%(model)s, %(d)s)",
@@ -533,7 +533,7 @@ class SynchroApi(models.Model):
         try:
             cnx = client.ServerProxy(login_endpoint)
         except BaseException as e:  # pragma: no cover
-            self.env.cr.rollback()  # pylint: disable=invalid-commit
+            # self.env.cr.rollback()  # pylint: disable=invalid-commit
             self.env["synchro.log"].logmsg(
                 "error",
                 "!%(E)s! ERROR %(e)s opening session on %(ep)s",
@@ -548,7 +548,7 @@ class SynchroApi(models.Model):
                 cnx_data = client.ServerProxy(data_endpoint)
                 # cnx = (cnx, cnx_data)
             except BaseException as e:  # pragma: no cover
-                self.env.cr.rollback()  # pylint: disable=invalid-commit
+                # self.env.cr.rollback()  # pylint: disable=invalid-commit
                 self.env["synchro.log"].logmsg(
                     "error",
                     "!%(E)s ERROR %(e)s opening session on %(ep)s",
@@ -574,7 +574,7 @@ class SynchroApi(models.Model):
         try:
             session = cnx["cnx_lgi"].authenticate(database, login, passwd, {})
         except BaseException as e:  # pragma: no cover
-            self.env.cr.rollback()  # pylint: disable=invalid-commit
+            # self.env.cr.rollback()  # pylint: disable=invalid-commit
             self.env["synchro.log"].logmsg(
                 "error",
                 "!%(E)s! ERROR %(e)s during login(db=%(db)s, user=%(u)s)",

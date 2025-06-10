@@ -15,7 +15,10 @@
     "website": "https://www.zeroincombenze.it/",
     "development_status": "Beta",
     "license": "LGPL-3",
-    "depends": ["base"],
+    "depends": [
+        "base",
+        "base_vat",
+    ],
     "external_dependencies": {
         "python": [
             "python_plus",

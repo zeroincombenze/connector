@@ -1,10 +1,10 @@
 ============================================================
-|icon| Universal Connector/Connettore universale 10.0.0.3.13
+|icon| Universal Connector/Connettore universale 12.0.1.3.16
 ============================================================
 
 **Universal Connector complete suite**
 
-.. |icon| image:: https://raw.githubusercontent.com/zeroincombenze/connector/10.0/universal_connector/static/description/icon.png
+.. |icon| image:: https://raw.githubusercontent.com/zeroincombenze/connector/12.0/universal_connector/static/description/icon.png
 
 
 .. contents::
@@ -71,7 +71,7 @@ Questa suite può essere utilizzata per:
 
 |thumbnail|
 
-.. |thumbnail| image:: https://raw.githubusercontent.com/zeroincombenze/connector/10.0/universal_connector/static/description/description.gif
+.. |thumbnail| image:: https://raw.githubusercontent.com/zeroincombenze/connector/12.0/universal_connector/static/description/description.gif
 
 
 Configuration | Configurazione
@@ -175,8 +175,8 @@ Getting started | Primi passi
 Prerequisites | Prerequisiti
 ----------------------------
 
-* python 2.7+ (best 2.7.5+)
-* postgresql 9.2+ (best 9.5)
+* python 3.7
+* postgresql 9.6+ (best 10.0+)
 
 ::
 
@@ -206,15 +206,15 @@ Installation | Installazione
 +---------------------------------+------------------------------------------+
 | Suggested deployment is:        | Posizione suggerita per l'installazione: |
 +---------------------------------+------------------------------------------+
-| $HOME/10.0 |
+| $HOME/12.0 |
 +----------------------------------------------------------------------------+
 
 ::
 
     # Odoo repository installation; OCB repository must be installed
-    deploy_odoo clone -r connector -b 10.0 -G zero -p $HOME/10.0
+    deploy_odoo clone -r connector -b 12.0 -G zero -p $HOME/12.0
     # Upgrade virtual environment
-    vem amend $HOME/10.0/venv_odoo
+    vem amend $HOME/12.0/venv_odoo
 
 
 
@@ -223,8 +223,8 @@ Upgrade | Aggiornamento
 
 ::
 
-    deploy_odoo update -r connector -b 10.0 -G zero -p $HOME/10.0
-    vem amend $HOME/10.0/venv_odoo
+    deploy_odoo update -r connector -b 12.0 -G zero -p $HOME/12.0
+    vem amend $HOME/12.0/venv_odoo
     # Adjust following statements as per your system
     sudo systemctl restart odoo
 
@@ -261,39 +261,60 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 ChangeLog History | Cronologia modifiche
 ----------------------------------------
 
-10.0.0.3.13 (2025-01-04)
+12.0.1.3.17 (2025-06-06)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [QUA]
+
+12.0.0.3.16 (2025-06-02)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] New improvements of modules / Migliorie dei singoli moduli
+
+12.0.0.3.14 (2025-01-04)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] New improvements of modules / Migliorie dei singoli moduli
+* [IMP] synchro parameters
+* [IMP] cache management
+* [IMP] virtual model are deprecated
+* [IMP] Protocol model
+* [IMP] Identity model
+* [QUA] Test coverage 80% (2330: 455+1875) [244 TestPoints] - quality rating 66 (target 100)
+
+12.0.0.3.13 (2025-01-04)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 * [IMP] New improvements of modules / Migliorie dei singoli moduli
 * [QUA] Test coverage 80% (2330: 455+1875) [244 TestPoints] - quality rating 66 (target 100)
 
-10.0.0.3.12 (2025-01-03)
+12.0.0.3.12 (2025-01-03)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 * [IMP] New improvements of modules / Migliorie dei singoli moduli
 * [QUA] Test coverage 80% (2330: 455+1875) [244 TestPoints] - quality rating 66 (target 100)
 
-10.0.0.3.11 (2024-12-29)
+12.0.0.3.11 (2024-12-29)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 * [IMP] Full refactoring: most functions moved in specific modules
 * [IMP] New tests / Nuovi test
 * [QUA] Test coverage 80% (2256: 453+1803) [244 TestPoints] - quality rating 66 (target 100)
 
-10.0.0.3.10 (2024-11-16)
+12.0.0.3.10 (2024-11-16)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 * [IMP] Minor aesthetic update
 * [QUA] Test coverage 28% (3919: 2836+1083) [20 TestPoints] - quality rating 18 (target 100)
 
-10.0.0.3.9 (2024-08-10)
+12.0.0.3.9 (2024-08-10)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 * [FIX] Import person from vg7
 * [IMP] Some internal field renamed
 * [QUA] Test coverage 64% (5068: 1832+3236) [1376 TestPoints] - quality rating 82 (target 100)
 
-10.0.0.3.8 (2024-07-01)
+12.0.0.3.8 (2024-07-01)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 * [FIX] Search for shipping and invoice addresses / Migliorie ricerca indirizzi di spedizione e fatturazione
@@ -302,7 +323,7 @@ ChangeLog History | Cronologia modifiche
 * [IMP] uom from vg7 purchase orders
 * [QUA] Test coverage 64% (5084: 1855+3229) [1253 TestPoints] - quality rating 78 (target 100)
 
-10.0.0.3.7 (2024-06-27)
+12.0.0.3.7 (2024-06-27)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 * [FIX] apply date/time functions
@@ -310,7 +331,7 @@ ChangeLog History | Cronologia modifiche
 * [IMP] Test on vg7 suppliers
 * [QUA] Test coverage 43% (5092: 2879+2213) [1189 TestPoints] - quality rating 64 (target 100)
 
-10.0.0.3.6 (2024-06-24)
+12.0.0.3.6 (2024-06-24)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 * [FIX] Double function after import
@@ -320,39 +341,12 @@ ChangeLog History | Cronologia modifiche
 * [IMP] Double product description and name / Descrizione prodotto doppia
 * [QUA] Test coverage 42% (5031: 2908+2123) [1051 TestPoints] - quality rating 59 (target 100)
 
-10.0.0.3.5 (2024-06-20)
+12.0.0.3.5 (2024-06-20)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 * [IMP] This is the 1.st application with 1000+ test points!
 * [FIX] No price with VAT from VF7 order / Prezzo ordine VG7 senza scorporo IVA
 * [QUA] Test coverage 33% (4993: 3342+1651) [1037 TestPoints] - quality rating 54 (target 100)
-
-10.0.0.3.4 (2024-06-19)
-~~~~~~~~~~~~~~~~~~~~~~~
-
-* [FIX] Model res.lang
-* [FIX] Model account.payment.term
-* [FIX] Automatic reset -9 status
-* [FIX] Search tax by amount only if amount > 0
-* [IMP] Minor improvements: only minimal data is the default
-* [IMP] Model with sequences get data even if > 16 records
-* [IMP] Casting improvements
-* [IMP] New versioned dependency control
-* [REF] New concurrent tests
-* [IMP] Test trace "why"
-* [QUA] Test coverage 32% (4993: 3373+1620) [1005 TestPoints] - quality rating 52 (target 100)
-
-10.0.0.3.3 (2023-10-31)
-~~~~~~~~~~~~~~~~~~~~~~~
-
-* [IMP] Unit price without tax / Scorporo IVA
-* [QUA] Test coverage 45% (4960: 2735+2225) [6 TestPoints] - quality rating 1336 (target 100)
-
-10.0.0.3.2 (2023-03-02)
-~~~~~~~~~~~~~~~~~~~~~~~
-
-* [IMP] Pull records sto last remote pulled record id
-* [FIX] Excel backend with connected test
 
 
 
@@ -403,7 +397,7 @@ La distribuzione `Zeroincombenze® <https://www.zeroincombenze.it/>`__ è proget
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2025-01-04
+Last Update / Ultimo aggiornamento: 2025-06-10
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status
@@ -414,8 +408,8 @@ Last Update / Ultimo aggiornamento: 2025-01-04
 .. |license opl| image:: https://img.shields.io/badge/licence-OPL-7379c3.svg
     :target: https://www.odoo.com/documentation/user/14.0/legal/licenses/licenses.html
     :alt: License: OPL
-.. |Try Me| image:: https://www.zeroincombenze.it/wp-content/uploads/ci-ct/prd/button-try-it-10.svg
-    :target: https://erp10.zeroincombenze.it
+.. |Try Me| image:: https://www.zeroincombenze.it/wp-content/uploads/ci-ct/prd/button-try-it-12.svg
+    :target: https://erp12.zeroincombenze.it
     :alt: Try Me
 .. |Zeroincombenze| image:: https://avatars0.githubusercontent.com/u/6972555?s=460&v=4
    :target: https://www.zeroincombenze.it/

@@ -19,7 +19,8 @@ The conditions to validate module are:
 
     1. One or more external Odoo instances must be live
     2. Odoo instances had to be created with demo data, english, no country
-    3. External software instance must be live, for specific tests
+    3. Odoo instances must have product (better sale and purchase) modules installed
+    4. External software instance must be live, for specific tests
 
 Tests are designed to run in the same way with all connector modules but every
 connector module could connect just with some specific instances.
@@ -226,9 +227,9 @@ class MyTest(SingleTransactionCase):
             if "active" in backend and not backend["active"]:
                 del TEST_SYNCHRO_BACKEND[xref]
                 continue
-            for loc_model in self.test_data.copy().keys():
-                if loc_model not in self.env:
-                    del self.test_data[loc_model]
+        for loc_model in self.test_data.copy().keys():
+            if loc_model not in self.env or not hasattr(self.env[loc_model], "odoo_id"):
+                del self.test_data[loc_model]
 
     def get_node_of_model_xref(self, xref, loc_model):
         return [node.get(xref) for node in self.test_data[loc_model].values()][0]
@@ -390,7 +391,7 @@ class MyTest(SingleTransactionCase):
             self.assertEqual(
                 len(backend_model),
                 1,
-                msg="Model %s not found or oo many matches with %s!"
+                msg="Model %s not found or too many matches with %s!"
                     % (loc_model, ext_model)
             )
 
@@ -477,6 +478,10 @@ class MyTest(SingleTransactionCase):
         ):
             self.validate_result(xref, record, loc_model, loc_field, ext_id, op, value)
 
+    def _test_err_logmsg(self, xref, loc_model, vals):
+        backend = self.resource_browse(xref)
+        self.env["ir.model.synchro"].push_record(loc_model, backend.prefix, vals)
+
     def _test_purge(self):
         _logger.info("🎺 Starting purge log test ...")
         self.env["synchro.log"].purge_log()
@@ -502,7 +507,7 @@ class MyTest(SingleTransactionCase):
             self._test_import_model(xref, "res.country")
         for xref in sorted(self.get_resource_data_list("synchro.backend")):
             self._test_pull_record(xref, "res.partner")
-        for xref in sorted(self.get_resource_data_list("synchro.backend")):
+
             # 1. res.country.state requires country_id; we want to check for right code
             #    recognition; so, we must test a code which exists in 2+ countries.
             #    We use 'CA' which means California in the USA and Cagliari in Italy
@@ -540,4 +545,17 @@ class MyTest(SingleTransactionCase):
                 }),
             ):
                 self._test_push_record(xref, loc_model, vals)
+
+            if self.env["ir.module.module"].search(
+                    [("name", "=", "base_vat"), ("state", "=", "installed")]):
+                self._test_err_logmsg(
+                    xref,
+                    "res.partner",
+                    {
+                        "is_company": True,
+                        "name": "WRONG VAT NUMBER",
+                        "vat": "IT1234567890",
+                        "id": 1234,
+                    },
+                )
         # self._test_purge()

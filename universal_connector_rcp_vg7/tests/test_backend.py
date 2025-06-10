@@ -19,7 +19,8 @@ The conditions to validate module are:
 
     1. One or more external Odoo instances must be live
     2. Odoo instances had to be created with demo data, english, no country
-    3. External software instance must be live, for specific tests
+    3. Odoo instances must have product (better sale and purchase) modules installed
+    4. External software instance must be live, for specific tests
 
 Tests are designed to run in the same way with all connector modules but every
 connector module could connect just with some specific instances.
@@ -196,9 +197,9 @@ class MyTest(SingleTransactionCase):
             if "active" in backend and not backend["active"]:
                 del TEST_SYNCHRO_BACKEND[xref]
                 continue
-            for loc_model in self.test_data.copy().keys():
-                if loc_model not in self.env:
-                    del self.test_data[loc_model]
+        for loc_model in self.test_data.copy().keys():
+            if loc_model not in self.env or not hasattr(self.env[loc_model], "odoo_id"):
+                del self.test_data[loc_model]
 
     def get_node_of_model_xref(self, xref, loc_model):
         return [node.get(xref) for node in self.test_data[loc_model].values()][0]
@@ -360,7 +361,7 @@ class MyTest(SingleTransactionCase):
             self.assertEqual(
                 len(backend_model),
                 1,
-                msg="Model %s not found or oo many matches with %s!"
+                msg="Model %s not found or too many matches with %s!"
                     % (loc_model, ext_model)
             )
 
@@ -446,6 +447,10 @@ class MyTest(SingleTransactionCase):
             xref, loc_model, ext_id
         ):
             self.validate_result(xref, record, loc_model, loc_field, ext_id, op, value)
+
+    def _test_err_logmsg(self, xref, loc_model, vals):
+        backend = self.resource_browse(xref)
+        self.env["ir.model.synchro"].push_record(loc_model, backend.prefix, vals)
 
     def _test_purge(self):
         _logger.info("🎺 Starting purge log test ...")

@@ -11,6 +11,7 @@ from datetime import datetime, timedelta
 import json
 import logging
 
+# import odoo
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 from python_plus import _u
@@ -106,7 +107,7 @@ class SynchroLog(models.Model):
             elif body_msg:
                 vals["values"] = self.values + "\n\n--------\n" + body_msg
             try:
-                self.write(vals)
+                self.write_log(vals)
                 logrec = self
             except BaseException:
                 return self.logger(
@@ -136,7 +137,7 @@ class SynchroLog(models.Model):
             if res_rec and len(res_rec) > 1:
                 vals["errmsg"] += " # (%s)" % ",".join([str(x.id) for x in res_rec])
             vals["values"] = body_msg
-            logrec = self.create(vals)
+            logrec = self.create_log(vals)
         if res_rec and hasattr(res_rec, "timestamp") and hasattr(res_rec, "errmsg"):
             res_rec.write({"timestamp": now, "errmsg": hdr_msg})
         return logrec or self.env["synchro.log"]
@@ -192,13 +193,15 @@ class SynchroLog(models.Model):
         loglevel = loglevel or 2
         # Current self could be in delete cache if prior ORM error happened
         # so in this case we have to create rather tha update record
-        try:
-            upd_log = False
-            if self.exists():
-                upd_log = self.id and self.loglevel
-        except BaseException:
-            self.env.cr.rollback()  # pylint: disable=invalid-commit
-            upd_log = False
+        # try:
+        #     upd_log = False
+        #     if self.exists():
+        #         upd_log = self.id and self.loglevel
+        # except BaseException:
+        #     self.env.cr.rollback()  # pylint: disable=invalid-commit
+        #     upd_log = False
+        self = self.search([("id", "=", self.id)])
+        upd_log = self
         if res_rec and len(res_rec) > 1:
             res_rec0 = res_rec[0]
         else:
@@ -319,3 +322,80 @@ class SynchroLog(models.Model):
             #         ctx["logrec"][res_model] = logrec
             #         del ctx[logrec][False]
             return logrec
+
+    def clean_values(self, values):
+        for (k, v) in values.copy().items():
+            if v is None or v is False:
+                del values[k]
+
+    def autocommit_sql(self, query, values, fetch_id=False):
+        # db = odoo.sql_db.db_connect(self.env.cr.dbname)
+        # registry = odoo.registry(self.env.cr.dbname)
+        id_new = None
+        # with db.cursor() as log_cr:
+        with self.env.registry.cursor() as log_cr:
+            log_cr.execute(query, values)
+            if fetch_id:
+                id_new, = log_cr.fetchone()
+            log_cr._cnx.commit()
+            # log_cr.close()
+        return id_new
+
+    def write_log(self, values):
+        self.clean_values(values)
+        # query = "UPDATE %s SET %s WHERE ID = %s" % (
+        #     self._table,
+        #     ",".join(["%s=%%(%s)s" % (k, k) for k in list(values.keys())]),
+        #     self.id,
+        # )
+        # self.autocommit_sql(query, values)
+        # #return self.browse(self.id)
+        # with api.Environment.manage():
+        #     log_cr = api.Environment(
+        #         self.env.registry.cursor(), self.env.user.id, {})[self._name]
+        #     # log_cr.env.cr.execute(query, values)
+        #     # id_new, = log_cr.env.cr.fetchone()
+        #     try:
+        #         log_cr.browse(self.id).write(values)
+        #     except BaseException as e:
+        #         pass
+        #     log_cr.env.cr.commit()
+        #     if not log_cr.env.cr.closed:
+        #         log_cr.env.cr.close()
+        # return self.browse(self.id)
+        # return self.env["synchro.log"].browse(self.id).write(values)
+        # log_id = False
+        # with self.pool.cursor() as new_cr:
+        #     new_env = api.Environment(new_cr, 1, self.env.context)
+        #     new_env["synchro.log"].browse(self.id).write(values)
+        # return self.browse(self.id)
+        return self.write(values)
+
+    def create_log(self, values):
+        self.clean_values(values)
+        # query = "INSERT INTO %s (%s) VALUES (%s) RETURNING id" % (
+        #     self._table,
+        #     ",".join(list(values.keys())),
+        #     ",".join(["%%(%s)s" % k for k in list(values.keys())])
+        # )
+        # id_new = self.autocommit_sql(query, values, fetch_id=True)
+        # with api.Environment.manage():
+        #     log_cr = api.Environment(
+        #         self.env.registry.cursor(), self.env.user.id, {})[self._name]
+        #     # log_cr.env.cr.execute(query, values)
+        #     # id_new, = log_cr.env.cr.fetchone()
+        #     try:
+        #         id_new = log_cr.create(values).id
+        #     except BaseException as e:
+        #         pass
+        #     log_cr.env.cr.commit()
+        #     if not log_cr.env.cr.closed:
+        #         log_cr.env.cr.close()
+        # return self.browse(id_new)
+        # log_id = False
+        # with self.pool.cursor() as new_cr:
+        #     new_env = api.Environment(new_cr, 1, self.env.context)
+        #     log_id = new_env["synchro.log"].create(values).id
+        # # return self.env["synchro.log"].create(values)
+        # return self.browse(log_id)
+        return self.create(values)

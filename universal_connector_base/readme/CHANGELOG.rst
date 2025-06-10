@@ -1,3 +1,9 @@
+12.0.1.3.17 (2025-06-09)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [FIX] New import error management w/o log loss
+* [QUA] Test coverage 80% (2577: 514+2063) [276 TestPoints] - quality rating 57 (target 100)
+
 12.0.1.3.16 (2025-06-06)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -7,7 +13,7 @@
 * [IMP] Best integration external tables with internal Odoo models
 * [IMP] First synchronization is faster
 * [IMP] Test improvements
-* [QUA] Test coverage 80% (2566: 515+2051) [276 TestPoints] - quality rating 57 (target 100)
+* [QUA] Test coverage 80% (2566: 505+2061) [198 TestPoints] - quality rating 54 (target 100)
 
 12.0.1.3.15 (2025-05-22)
 ~~~~~~~~~~~~~~~~~~~~~~~~

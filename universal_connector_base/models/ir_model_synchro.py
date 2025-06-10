@@ -321,7 +321,7 @@ class IrModelSynchro(models.Model):
             try:
                 modules.button_immediate_install()
             except BaseException as e:  # pragma: no cover
-                self.env.cr.rollback()  # pylint: disable=invalid-commit
+                # self.env.cr.rollback()  # pylint: disable=invalid-commit
                 self.env["synchro.log"].logmsg(
                     "error",
                     "!%(E)s! ERROR %(e)s Module %(vals)s not installable",
@@ -363,13 +363,9 @@ class IrModelSynchro(models.Model):
         if Binder._name.startswith("account.move") and not ctx:
             ctx = {"check_move_validity": False}
         try:
-            if ctx:
-                rec = Binder.create(vals)
-            else:
-                rec = Binder.create(vals)
-            ctx["logrec"].logmsg("warning", "", res_rec=rec, values=vals)
+            rec = Binder.create(vals)
         except BaseException as e:  # pragma: no cover
-            self.env.cr.rollback()  # pylint: disable=invalid-commit
+            # self.env.cr.rollback()  # pylint: disable=invalid-commit
             rec = -1
             self.env["synchro.log"].logmsg(
                 "error",
@@ -379,6 +375,8 @@ class IrModelSynchro(models.Model):
                 errmsg=e,
                 errcode=-1,
             )
+            return -1
+        ctx["logrec"].logmsg("warning", "", res_rec=rec, values=vals)
         return rec
 
     def rewrite(self, rec, vals, dir_mapper, only_minimal=False, ctx=None):
@@ -392,9 +390,8 @@ class IrModelSynchro(models.Model):
                     rec.with_context(check_move_validity=False).write(vals)
                 else:
                     rec.write(vals)
-                ctx["logrec"].logmsg("warning", "", res_rec=rec, values=vals)
             except BaseException as e:  # pragma: no cover
-                self.env.cr.rollback()  # pylint: disable=invalid-commit
+                # self.env.cr.rollback()  # pylint: disable=invalid-commit
                 self.env["synchro.log"].logmsg(
                     "error",
                     "%(model)s.write(%(vals)s)",
@@ -404,6 +401,7 @@ class IrModelSynchro(models.Model):
                     errcode=-2,
                 )
                 return -2
+            ctx["logrec"].logmsg("warning", "", res_rec=rec, values=vals)
         else:
             ctx["logrec"] = ctx["logrec"].logmsg("warning", "", res_rec=rec, errcode=-9)
         return rec
