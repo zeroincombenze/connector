@@ -1,6 +1,0 @@
-_action,_identity,_only_reset,description,name,_why
-d,,True,a15,,Record created by prior tests
-d,,True,22%,,Record created by prior tests
-,oe8:,,22v,Iva debito 22%,Dirty name
-,oe8:,,10v,Iva debito 10%,Dirty name
-,oe8:,,22a,Iva credito 22%,Dirty name

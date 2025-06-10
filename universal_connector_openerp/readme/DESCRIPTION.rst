@@ -1,1 +1,0 @@
-This module makes available to manage remote old openerp version, 6.1 and 7.0

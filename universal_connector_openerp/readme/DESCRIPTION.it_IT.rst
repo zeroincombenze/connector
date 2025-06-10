@@ -1,1 +1,0 @@
-Questo modulo permette di gestore le vecchie versioni di openerp 6.1 e 7.0

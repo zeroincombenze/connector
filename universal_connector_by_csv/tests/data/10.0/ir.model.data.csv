@@ -1,9 +1,0 @@
-id,name,module,model,res_id
-50,user_root,base,res.users,1
-51,main_partner,base,res.partner,1
-52,main_company,base,res.company,1
-53,partner_root,base,res.partner,3
-54,res_partner_1,base,res.partner,7
-55,res_partner_2,base,res.partner,8
-58,res_partner_4,base,res.partner,10
-64,res_partner_10,base,res.partner,11

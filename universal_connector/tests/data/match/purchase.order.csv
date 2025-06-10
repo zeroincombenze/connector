@@ -1,4 +1,0 @@
-id,vg7_id,oe8_id,name,partner_id,date_order,state,payment_term_id,partner_ref,notes,origin
-z0bug.purchase_1,111,,240111,z0bug.res_partner_3,2024-05-17 00:00:00,draft,\N,PO-24517,\N,\N
-z0bug.purchase_2,121,,240121,z0bug.res_partner_3,2024-05-31 00:00:00,draft,\N,PO-24531,\N,\N
-z0bug.purchase_3,,45,PO045,z0bug.res_partner_3,2024-05-31 00:00:00,purchase,z0bug.payment_1,PO-24616,Carrier Test,Test 8.0

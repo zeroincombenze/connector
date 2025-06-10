@@ -1,4 +1,0 @@
-id,code,name,type,company_id
-1,FAT,Fatture di vendita,sale,3
-2,ACQ,Fatture di acquisto,purchase,3
-3,MISC,Operazioni varie,general,3
