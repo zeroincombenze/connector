@@ -1,0 +1,3 @@
+payment_id,order_rows,iva,customer_shipping_id,date,order_state,customer_id,order_number,id,name
+31,"[{u'job_name': u'Prodotto Alpha - Azalea', u'order_id': 131, u'product_name': 11, u'unitary_price': 1.05, u'_why': u'', u'id': 1311, u'quantity': 50.0}]",22,101,2024-05-15,2,101,240131,131,telefonico
+30,"[{'job_name': 'Prodotto Beta - Begonia', 'order_id': 210, 'product_name': 12, 'unitary_price': 5.35, '_why': '', 'id': 2101, 'quantity': 60.0}]",22,101,2024-05-31,2,101,240210,210,website

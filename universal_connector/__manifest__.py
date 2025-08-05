@@ -39,6 +39,7 @@
     "version_external_dependencies": [
         "clodoo>=2.0.11",
         "python_plus>=2.0.12",
+        "odoo_score>=2.0.11",
     ],
     "data": [
         "security/ir.model.access.csv",

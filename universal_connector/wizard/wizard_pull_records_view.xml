@@ -10,6 +10,7 @@
                     <group>
                         <separator colspan="2"
                                    string="Pull (import) record from counterpart"/>
+                        <field name="backend_id" string="Backend"/>
                         <field name="ir_model_id" string="Model"/>
                         <field name="sel_rec" string="Record Selection"/>
                         <field name="nesting_level" string="Nesting Level"/>

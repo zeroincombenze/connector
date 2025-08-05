@@ -1,4 +1,4 @@
-10.0.0.3.12 (2025-04-09)
+10.0.0.3.13 (2025-07-31)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 * [FIX] Import new product from VG7 / Import nuovi prodotti da VG7

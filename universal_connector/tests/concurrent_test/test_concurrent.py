@@ -396,6 +396,7 @@ TNL_OE8_DICT = {
 THIS_MODULE = "universal_connector"
 COA_MODULE = "l10n_it_coa"
 MODULE_LIST = [
+    "mk_test_env",
     THIS_MODULE,
     COA_MODULE,
     "account",
@@ -415,7 +416,7 @@ class ExtTestEnv(object):
 
     def __init__(self, *args):
         self.parseoptargs(args)
-        for item in ("ask", "config", "database", "lang", "conai"):
+        for item in ("ask", "config", "database", "lang", "conai", "xmlrpc_port"):
             setattr(self, item, getattr(self.opt_args, item))
             print_flush("# %s=%s" % (item, getattr(self, item)))
         self.config = self.config or os.environ.get("TEST_CONFN")
@@ -463,6 +464,10 @@ class ExtTestEnv(object):
             "--conai",
             action="store_true",
             help="Test with CONAI module",
+        )
+        parser.add_argument(
+            "-x",
+            "--xmlrpc_port",
         )
         self.opt_args = parser.parse_args(*args)
 
@@ -762,6 +767,13 @@ class ExtTestEnv(object):
                                % (model, domains, why),
                                echo=False)
 
+    def connect_user(self):
+        uid, self.ctx = clodoo.oerp_set_env(
+            confn=self.config, db=self.database, xmlrpc_port=self.xmlrpc_port)
+        if not uid:
+            raise IOError("DB %s not connected via json/xmlrpc!" % self.database)
+        self.user = self.ctx["user"]
+
     def init_new_db(self):
         self.write_log("init_new_db(%s, %s)" % (self.database, self.config))
         print_flush(
@@ -777,20 +789,18 @@ class ExtTestEnv(object):
         if "psycopg2 = 1" not in contents:
             with open(self.config, "a") as fd:
                 fd.write("psycopg2 = 1\n")
-        uid, self.ctx = clodoo.oerp_set_env(confn=self.config, db=self.database)
-        if not uid:
-            raise IOError("DB %s not connected via json/xmlrpc!" % self.database)
-        self.user = self.ctx["user"]
+        self.connect_user()
 
     def install_module(self, modname, connector_installed=False):
-        self.write_log("install_module(%s)" % modname)
         model = "ir.module.module"
         if connector_installed:
-            vals = {"name": modname}
+            self.write_log("install_module(%s) # via universal_connector" % modname)
+            vals = {"name": modname, "state": "installed"}
             res_id = clodoo.executeL8(self.ctx, model, "synchro", vals)
             if res_id < 0:
                 raise IOError("!!Error %s installing %s!" % (res_id, modname))
         else:
+            self.write_log("install_module(%s) # via rcp" % modname)
             module_ids = clodoo.searchL8(self.ctx, model, [("name", "=", modname)])
             if not module_ids:
                 raise IOError("Module %s does not exist!!!" % modname)
@@ -812,7 +822,7 @@ class ExtTestEnv(object):
             raise IOError("Module %s does not exist!!!" % modname)
         state = "uninstalled"
         if len(module_ids) == 1:
-            ctr = 40 if wait else 1
+            ctr = 40 if wait else 2
             while ctr > 0 and state != "installed":
                 state = clodoo.browseL8(self.ctx, model, module_ids[0]).state
                 ctr -= 2 if not state.startswith("to ") else 1
@@ -861,6 +871,12 @@ class ExtTestEnv(object):
                 vals["currency_id"] = self.env_ref("base.EUR")
                 self.company_id = self.resource_create(model, values=vals, xref=xref)
                 company = self.resource_browse(model, self.company_id)
+                # Enable user to new company and set it ad default company
+                self.resource_write(
+                    "res.users", self.user.id, {"company_ids": [(4, company.id)]})
+                self.resource_write(
+                    "res.users", self.user.id, {"company_id": company.id})
+                self.connect_user()
         else:
             company = self.resource_browse(model, self.company_id)
             vals = {}
@@ -909,7 +925,7 @@ class ExtTestEnv(object):
                         "client_key": "oca10",
                         "password": "admin",
                         "counterpart_url": "admin@localhost:8270",
-                        "sequence": 20,
+                        # "sequence": 10,
                         "tracelevel": "4"
                     },
                 )
@@ -989,14 +1005,17 @@ class ExtTestEnv(object):
         ):
             self.resource_write(model, domain, vals)
 
-    def action_after_installed(self, modname, connector_installed):
+    def action_after_installed(self, modname, connector_installed, mk_dev=False):
         if modname == "mk_test_env":
-            pass
+            mk_dev = True
         elif modname == THIS_MODULE:
             connector_installed = True
             self.assure_cache()
             self.assure_all_backends()
-        return connector_installed
+            if mk_dev:
+                self.assure_lang()
+                self.assure_company()
+        return connector_installed, mk_dev
 
     def setup(self):
         self.write_log("** self.setup() **")
@@ -1006,6 +1025,7 @@ class ExtTestEnv(object):
         # model = "ir.module.module"
         maxctr = len(MODULE_LIST)
         connector_installed = False
+        mk_dev = False
         for ctr, modname in enumerate(MODULE_LIST):
             installed = self.check_if_module_installed(modname, ctr=ctr, maxctr=maxctr)
             if "conai" in modname and not self.conai:
@@ -1015,12 +1035,10 @@ class ExtTestEnv(object):
             if not installed:
                 self.install_module(modname, connector_installed=connector_installed)
                 self.wait_4_module_installed(modname, ctr, maxctr)
-            connector_installed = self.action_after_installed(
-                modname, connector_installed)
+            connector_installed, mk_dev = self.action_after_installed(
+                modname, connector_installed, mk_dev=mk_dev)
 
         self.ask_4_ret()
-        self.assure_lang()
-        self.assure_company()
         self.assure_user()
         self.model_wkf = {}
         ext_id_field_oe8 = self.get_ext_id_field("oe8:")
@@ -1947,10 +1965,12 @@ def main(cli_args=[]):
     # if "--database" not in cli_args:
     #     cli_args.append("--database")
     #     cli_args.append("connect10")
+    #     cli_args.append("--xmlrpc_port")
+    #     cli_args.append("8170")
     # if "--database" in cli_args and "--ask" not in cli_args:
-    #     cli_args.append("--ask")
-    if "--conai" not in cli_args:
-        cli_args.append("--conai")
+    cli_args.append("--ask")
+    # if "--conai" not in cli_args:
+    #     cli_args.append("--conai")
     if not os.environ.get("TEST_CONFN") and "--config" not in cli_args:
         cli_args.append("--config")
         cli_args.append("./tests/logs/zero10.connector.universal_connector.conf")

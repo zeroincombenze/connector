@@ -282,10 +282,9 @@ class IrModelSynchroCache(models.Model):
         cache_model = "_QUEUE_SYNC"
         if self.get_struct_model_attr(cache_model, "XPIRE"):
             self.set_struct_model(cache_model)
-            self.CACHE.set_struct_cache(self._cr.dbname, cache_model)
         if self.get_model_attr(backend_id, cache_model, "XPIRE"):
             self.set_attr(backend_id, cache_model, {})
-            self.CACHE.set_model_cache(self._cr.dbname, backend_id, cache_model)
+            # self.CACHE.set_model_cache(self._cr.dbname, backend_id, cache_model)
 
     @api.model_cr_context
     def push_id(self, backend_id, vmodel, model, loc_id=None, ext_id=None):
@@ -399,12 +398,13 @@ class IrModelSynchroCache(models.Model):
     #
     @api.model_cr_context
     def get_channel_list(self):
-        return [
-            x
-            for x in self.env["synchro.channel"].browse(
-                self.CACHE.get_channel_list(self._cr.dbname)
-            )
-        ]
+        # return [
+        #     x
+        #     for x in self.env["synchro.channel"].browse(
+        #         self.CACHE.get_channel_list(self._cr.dbname)
+        #     )
+        # ]
+        return self.env["synchro.channel"].search([], order="sequence")
 
     @api.model_cr_context
     def set_channel_base(self, backend_id):
@@ -423,24 +423,23 @@ class IrModelSynchroCache(models.Model):
 
     @api.model_cr_context
     def set_attr(self, backend_id, attrib, value):
-        self.set_channel_base(backend_id)
         return self.CACHE.set_attr(self._cr.dbname, backend_id, attrib, value)
 
     @api.model_cr_context
     def get_attr(self, backend_id, attrib, default=None):
-        self.set_channel_base(backend_id)
+        # self.set_channel_base(backend_id)
         return self.CACHE.get_attr(self._cr.dbname, backend_id, attrib, default=default)
 
     @api.model_cr_context
     def get_model_attr(self, backend_id, model, attrib, default=None):
-        self.set_model(backend_id, model)
+        # self.set_model(backend_id, model)
         return self.CACHE.get_model_attr(
             self._cr.dbname, backend_id, model, attrib, default=default
         )
 
     @api.model_cr_context
     def set_model_attr(self, backend_id, model, attrib, value):
-        self.set_model(backend_id, model)
+        # self.set_model(backend_id, model)
         return self.CACHE.set_model_attr(
             self._cr.dbname, backend_id, model, attrib, value
         )
@@ -537,8 +536,6 @@ class IrModelSynchroCache(models.Model):
 
     @api.model_cr_context
     def set_struct_model(self, model):
-        if model not in self.model_list():
-            pass
         self.CACHE.set_struct_model(self._cr.dbname, model)
 
     @api.model_cr_context
@@ -552,7 +549,7 @@ class IrModelSynchroCache(models.Model):
 
     @api.model_cr_context
     def get_struct_model_attr(self, model, attrib, default=None):
-        self.set_struct_model(model)
+        # self.set_struct_model(model)
         return self.CACHE.get_struct_model_attr(
             self._cr.dbname, model, attrib, default=default
         )
@@ -627,7 +624,6 @@ class IrModelSynchroCache(models.Model):
             for fieldname in indexes[index_name]:
                 keys.append(fieldname)
             if not keys:
-                # print('@@@ Invalid index %s' % index_name)  # debug
                 continue
             if len(keys) == 1 and not uname:
                 uname = keys[0]
@@ -635,7 +631,6 @@ class IrModelSynchroCache(models.Model):
             for kk in skeys:
                 if set(keys) == set(kk):
                     found = True
-                    # print('@@@ Duplicate search index %s.%s' % (model, kk))  # debug
                     break
             if not found:
                 if pos < 0:
@@ -852,19 +847,16 @@ class IrModelSynchroCache(models.Model):
 
     @api.model_cr_context
     def setup_ext_model(self, backend_id, rec):
-        self.env["ir.model.synchro"].logmsg("any", "$$$>>> setup_ext_model()")
         if (
             backend_id
             and backend_id == rec.synchro_channel_id.id
             and backend_id in [x.id for x in self.get_channel_list()]
         ):
-            self.env["ir.model.synchro"].logmsg("any", "$$$>>> ALREADY SET")
             return
         model = rec.name
         if not backend_id:
             backend_id = rec.synchro_channel_id.id
         if self.get_model_attr(backend_id, model, "XPIRE"):
-            self.env["ir.model.synchro"].logmsg("any", "$$$>>> NOT EXPIRED")
             return
         channel = self.env["synchro.channel"].browse(backend_id)
         self.setup_1_channel(channel)
@@ -874,9 +866,7 @@ class IrModelSynchroCache(models.Model):
 
     @api.model_cr_context
     def setup_1_channel(self, backend):
-        self.env["ir.model.synchro"].logmsg("any", "$$$>>> setup_1_channel()")
         if self.get_attr(backend.id, "XPIRE"):
-            self.env["ir.model.synchro"].logmsg("any", "$$$>>> NOT EXPIRED")
             return
         self.set_channel_base(backend.id)
         self.set_attr(backend.id, "PRIO", backend.sequence)
@@ -948,20 +938,14 @@ class IrModelSynchroCache(models.Model):
         """Store model structure into memory"""
         actual_model = actual_model or model
         model = model or actual_model
-        self.env["ir.model.synchro"].logmsg(
-            "any",
-            "$$$>>> %(model)s.setup_model_structure(%(amodel)s)",
-            model=model,
-            ctx={"amodel": actual_model},
-        )
         if not model or self.get_struct_model_attr(model, "XPIRE"):
-            self.env["ir.model.synchro"].logmsg("any", "$$$>>> NOT EXPIRED")
             return
-        ir_model = self.env["ir.model.fields"]
+        # IrModelFields = self.env["ir.model.fields"]
         self.set_struct_model(actual_model)
-        for field in ir_model.search([("model", "=", actual_model)]):
-            global_def = self.TABLE_DEF.get("base", {}).get(field.name, {})
-            field_def = self.TABLE_DEF.get(model, {}).get(field.name, {})
+        struct = self.env[actual_model].fields_get()
+        for name, field in struct.items():
+            global_def = self.TABLE_DEF.get("base", {}).get(name, {})
+            field_def = self.TABLE_DEF.get(model, {}).get(name, {})
             attrs = {}
             for attr in ("required", "readonly", "protect_update"):
                 if attr in field_def:
@@ -969,10 +953,12 @@ class IrModelSynchroCache(models.Model):
                 elif attr in global_def:
                     attrs[attr] = global_def[attr]
                 elif attr == "readonly" and (
-                    field.ttype in ("binary", "reference")
-                    or (field.related and not field.required)
+                    field["type"] in ("binary", "reference")
+                    or (field.get("relation") and not field["required"])
                 ):
                     attrs["readonly"] = True
+                elif attr == "protect_update":
+                    attrs[attr] = "0"
                 else:
                     attrs[attr] = field[attr]
             if attrs["required"]:
@@ -981,67 +967,64 @@ class IrModelSynchroCache(models.Model):
                 attrs["readonly"] = True
             self.set_struct_model_attr(
                 actual_model,
-                field.name,
+                name,
                 {
-                    "ttype": field.ttype,
-                    "relation": field.relation,
+                    "ttype": field["type"],
+                    "relation": field.get("relation", False),
                     "required": attrs["required"],
                     "readonly": attrs["readonly"],
                     "protect_update": attrs["protect_update"],
                 },
             )
-            if field.relation != actual_model:
-                if field.relation and field.relation == ("%s.line" % actual_model):
-                    self.set_struct_model_attr(actual_model, "CHILD_IDS", field.name)
+            if field.get("relation") != actual_model:
+                if (
+                    field.get("relation")
+                    and field.get("relation") == ("%s.line" % actual_model)
+                ):
+                    self.set_struct_model_attr(actual_model, "CHILD_IDS", name)
                     self.set_struct_model_attr(
-                        actual_model, "MODEL_CHILD", field.relation
+                        actual_model, "MODEL_CHILD", field.get("relation")
                     )
                 elif (
                     actual_model.endswith(".line")
-                    and field.relation
-                    and actual_model.startswith(field.relation)
+                    and field.get("relation")
+                    and actual_model.startswith(field.get("relation"))
                 ):
-                    self.set_struct_model_attr(actual_model, "PARENT_ID", field.name)
-                elif field.relation and actual_model.startswith(field.relation):
-                    self.set_struct_model_attr(actual_model, "SUPPL_KEY", field.name)
+                    self.set_struct_model_attr(actual_model, "PARENT_ID", name)
+                elif (
+                    field.get("relation")
+                    and actual_model.startswith(field.get("relation"))
+                ):
+                    self.set_struct_model_attr(actual_model, "SUPPL_KEY", name)
                 # TODO:avoid recursive loop
-                # elif field.relation == actual_model:
-                #    constraints = ['id', '<>', field.name]
-            if field.name == "original_state":
+                # elif field[relation == actual_model:
+                #    constraints = ['id', '<>', field[name]
+            if name == "original_state":
                 self.set_struct_model_attr(actual_model, "MODEL_STATE", True)
-            elif field.name == "to_delete":
+            elif name == "to_delete":
                 self.set_struct_model_attr(actual_model, "MODEL_2DELETE", True)
-            elif field.name == "name":
+            elif name == "name":
                 self.set_struct_model_attr(actual_model, "MODEL_WITH_NAME", True)
-            elif field.name == "active":
+            elif name == "active":
                 self.set_struct_model_attr(actual_model, "MODEL_WITH_ACTIVE", True)
-            elif field.name == "dim_name":
+            elif name == "dim_name":
                 self.set_struct_model_attr(actual_model, "MODEL_WITH_DIMNAME", True)
-            elif field.name == "company_id":
+            elif name == "company_id":
                 self.set_struct_model_attr(actual_model, "MODEL_WITH_COMPANY", True)
-            elif field.name == "country_id":
+            elif name == "country_id":
                 self.set_struct_model_attr(actual_model, "MODEL_WITH_COUNTRY", True)
-        self.CACHE.set_struct_cache(self._cr.dbname, model)
+        # self.CACHE.set_struct_cache(self._cr.dbname, model)
 
     @api.model_cr_context
     def setup_model_in_channels(self, backend=None, model=None, ext_model=None):
         """Read model value from all active channel model table and store
         them into memory"""
-        self.env["ir.model.synchro"].logmsg(
-            "any",
-            "$$$>>> %(model)s.setup_model_in_channels(%(vmodel)s)",
-            model=model,
-            ctx={"vmodel": ext_model},
-        )
         channel_model_model = self.env["synchro.channel.model"]
         if model:
             domain = [("name", "=", model)]
         elif ext_model:
             domain = [("counterpart_name", "=", ext_model)]
         else:
-            self.env["ir.model.synchro"].logmsg(
-                "any", "$$$>>> NO MODEL NEITHER EXT_MODEL"
-            )
             return
         if backend:
             domain.append(("synchro_channel_id", "=", backend.id))
@@ -1066,12 +1049,6 @@ class IrModelSynchroCache(models.Model):
     @api.model_cr_context
     def open(self, backend=None, model=None, ext_model=None, cls=None):
         """Setup cache if needed, setup model cache if required and needed"""
-        self.env["ir.model.synchro"].logmsg(
-            "any",
-            "$$$>>> %(model)s.open(%(vmodel)s)",
-            model=model,
-            ctx={"vmodel": ext_model},
-        )
         ir_synchro_model = self.env["ir.model.synchro"]
         if backend and backend.identity == "odoo":
             if ext_model in ("ir.model", "ir.module.module") and not model:

@@ -21,6 +21,7 @@ class WizardExportFatturapa(models.TransientModel):
     _name = "wizard.synchro.pull.records"
     _description = "Pull Records from counterpart"
 
+    backend_id = fields.Many2one("synchro.channel", string="Backend")
     ir_model_id = fields.Many2one(
         comodel_name="ir.model", help="Select model to import"
     )
@@ -90,6 +91,7 @@ class WizardExportFatturapa(models.TransientModel):
                 only_minimal=only_minimal,
                 no_deep_fields=no_deep_fields,
                 remote_ids=self.remote_ids,
+                sel_backend=self.backend_id,
             )
         return {
             "name": "Data imported",

@@ -133,29 +133,49 @@
     <record forcecreate="1" id="product_uom_N" model="synchro.channel.domain.translation">
         <field name="model">product.uom</field>
         <field name="key">name</field>
-        <field name="odoo_value" ref="product.product_uom_unit"/>
+        <field name="odoo_value"></field>
+        <field name="odoo_loc_id" ref="product.product_uom_unit"/>
         <field name="ext_value">N</field>
     </record>
 
     <record forcecreate="1" id="product_uom_N_" model="synchro.channel.domain.translation">
         <field name="model">product.uom</field>
         <field name="key">name</field>
-        <field name="odoo_value" ref="product.product_uom_unit"/>
+        <field name="odoo_value"></field>
+        <field name="odoo_loc_id" ref="product.product_uom_unit"/>
         <field name="ext_value">N.</field>
     </record>
 
     <record forcecreate="1" id="product_uom_NR" model="synchro.channel.domain.translation">
         <field name="model">product.uom</field>
         <field name="key">name</field>
-        <field name="odoo_value" ref="product.product_uom_unit"/>
+        <field name="odoo_value"></field>
+        <field name="odoo_loc_id" ref="product.product_uom_unit"/>
         <field name="ext_value">NR</field>
     </record>
 
     <record forcecreate="1" id="product_uom_PZ" model="synchro.channel.domain.translation">
         <field name="model">product.uom</field>
         <field name="key">name</field>
-        <field name="odoo_value" ref="product.product_uom_unit"/>
+        <field name="odoo_value"></field>
+        <field name="odoo_loc_id" ref="product.product_uom_unit"/>
         <field name="ext_value">PZ</field>
+    </record>
+
+    <record forcecreate="1" id="product_uom_KG" model="synchro.channel.domain.translation">
+        <field name="model">product.uom</field>
+        <field name="key">name</field>
+        <field name="odoo_value"></field>
+        <field name="odoo_loc_id" ref="product.product_uom_kgm"/>
+        <field name="ext_value">KG</field>
+    </record>
+
+    <record forcecreate="1" id="product_uom_Kg" model="synchro.channel.domain.translation">
+        <field name="model">product.uom</field>
+        <field name="key">name</field>
+        <field name="odoo_value"></field>
+        <field name="odoo_loc_id" ref="product.product_uom_kgm"/>
+        <field name="ext_value">Kg</field>
     </record>
 
 </odoo>

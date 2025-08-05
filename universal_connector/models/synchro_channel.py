@@ -187,7 +187,7 @@ class SynchroChannel(models.Model):
                 pfx_depr = "%s_" % cache.get_attr(channel_id, "PREFIX")
                 if cache.get_attr(channel_id, "PRIO") < channel_prio:
                     def_channel = channel_id
-                    channel_prio = cache.get_attr(channel_id, "PRIO")
+                    channel_prio = cache.get_attr(channel_id, "PRIO", default=16)
                 if (
                     cache.get_attr(channel_id, "IDENTITY") == "odoo"
                     and cache.get_attr(channel_id, "PRIO") < odoo_prio
@@ -831,4 +831,5 @@ class SynchroChannelDomainTnl(models.Model):
     model = fields.Char("Odoo model name")
     key = fields.Char("Odoo field name")
     odoo_value = fields.Char("Odoo field value")
+    odoo_loc_id = fields.Integer("Odoo internal ID")
     ext_value = fields.Char("External field value")

@@ -293,7 +293,8 @@ class ResPartner(models.Model):
                 else:
                     # Force error
                     vals["name"] = None
-            if parent and vals.get("individual"):
+            if parent and (vals.get("individual")
+                           or vals.get("type") in ("delivery", "invoice")):
                 vals["is_company"] = False
 
         if "codice_destinatario" in vals and not vals["codice_destinatario"]:
