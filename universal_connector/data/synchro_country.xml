@@ -85,26 +85,17 @@
     <record forcecreate="1" id="country_id_IT" model="synchro.channel.domain.translation">
         <field name="model">res.country</field>
         <field name="key">name</field>
-        <field name="odoo_value"></field>
-        <field name="odoo_loc_id" ref="base.it"/>
-        <field name="ext_value">Italy</field>
+        <field name="odoo_value">Italy</field>
+        <field name="ext_value">Italia</field>
     </record>
 
     <record forcecreate="1" id="country_id_US" model="synchro.channel.domain.translation">
         <field name="model">res.country</field>
         <field name="key">name</field>
-        <field name="odoo_value"></field>
-        <field name="odoo_loc_id" ref="base.us"/>
+        <field name="odoo_value">United States</field>
         <field name="ext_value">Stati Uniti</field>
     </record>
 
-    <record forcecreate="1" id="country_id_UK" model="synchro.channel.domain.translation">
-        <field name="model">res.country</field>
-        <field name="key">name</field>
-        <field name="odoo_value"></field>
-        <field name="odoo_loc_id" ref="base.uk"/>
-        <field name="ext_value">Inghilterra</field>
-    </record>
 
     <record forcecreate="1" id="country_state_AP" model="synchro.channel.domain.translation">
         <field name="model">res.country.state</field>

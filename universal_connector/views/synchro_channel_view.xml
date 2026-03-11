@@ -32,7 +32,6 @@
                             type="action"
                             string="Pull Records" class="oe_highlight"
                             attrs="{'invisible':['|',('state','in',['draft']),('active','=',False)]}"
-                            context="{'default_backend_id': id}"
                     />
                     <button name="button_reset_to_draft"
                             type="object"
@@ -144,7 +143,6 @@
                 <field name="model"/>
                 <field name="key"/>
                 <field name="odoo_value"/>
-                <field name="odoo_loc_id"/>
                 <field name="ext_value"/>
             </tree>
         </field>
@@ -159,7 +157,6 @@
                     <field name="model"/>
                     <field name="key"/>
                     <field name="odoo_value"/>
-                    <field name="odoo_loc_id"/>
                     <field name="ext_value"/>
                 </group>
             </form>

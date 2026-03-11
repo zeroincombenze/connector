@@ -1,6 +1,101 @@
-2026-03-05 17:00:01 ** self.setup() **
-2026-03-05 17:00:01 init_new_db(test_universal_connector_10, /home/odoo/10.0/connector/universal_connector/tests/logs/connector.universal_connector_10.conf)
-2026-03-05 17:00:13 check_if_module_installed(mk_test_env, 1/12)
-2026-03-05 17:00:14 install_module(mk_test_env) # via rcp
-2026-03-05 17:00:16 check_if_module_installed(mk_test_env)
-2026-03-05 17:00:17 check_if_module_installed(universal_connector, 2/12)
+2026-03-07 07:45:14 ** self.setup() **
+2026-03-07 07:45:14 init_new_db(test_universal_connector_10, /home/odoo/10.0/connector/universal_connector/tests/logs/connector.universal_connector_10.conf)
+2026-03-07 07:45:20 check_if_module_installed(mk_test_env, 1/12)
+2026-03-07 07:45:21 install_module(mk_test_env) # via rcp
+2026-03-07 07:45:25 check_if_module_installed(mk_test_env)
+2026-03-07 07:45:27 check_if_module_installed(universal_connector, 2/12)
+
+2026-03-07 07:45:28 Activate language it_IT ...
+2026-03-07 07:45:51 Installing language it_IT ...
+
+2026-03-07 07:45:52 assure_company()
+2026-03-07 07:45:52 resource_browse(res.company, 1, xref=base.main_company)
+2026-03-07 07:45:52 resource_create(res.company, {u'currency_id': 1, u'sale_note': u'Si prega di controllare i dati entro le 24h.', u'country_id': 110, u'name': u'Test Company'}, xref=z0bug.mycompany)  ##<> -> 4
+2026-03-07 07:45:53 resource_browse(res.company, 4, xref=4)
+2026-03-07 07:45:53 resource_write(res.users, 1, {u'company_ids': [(4, 4)]}, xref=None)  ##<> -> [1]
+2026-03-07 07:45:54 resource_write(res.users, 1, {u'company_id': 4}, xref=None)  ##<> -> [1]
+2026-03-07 07:45:54 resource_write(res.partner, 47, {u'lang': u'it_IT'}, xref=z0bug.partner_mycompany)  ##<> -> [47]
+2026-03-07 07:45:55 check_if_module_installed(l10n_it_coa, 3/12)
+2026-03-07 07:45:56 install_module(l10n_it_coa) # via universal_connector
+2026-03-07 07:46:26 check_if_module_installed(l10n_it_coa)
+2026-03-07 07:46:28 check_if_module_installed(account, 4/12)
+2026-03-07 07:46:29 check_if_module_installed(account_payment_term_extension, 5/12)
+2026-03-07 07:46:30 install_module(account_payment_term_extension) # via universal_connector
+2026-03-07 07:46:52 check_if_module_installed(account_payment_term_extension)
+2026-03-07 07:46:54 check_if_module_installed(purchase, 6/12)
+2026-03-07 07:46:55 check_if_module_installed(sale, 7/12)
+2026-03-07 07:46:56 check_if_module_installed(stock, 8/12)
+2026-03-07 07:46:57 check_if_module_installed(l10n_it_fiscalcode, 9/12)
+2026-03-07 07:46:58 check_if_module_installed(l10n_it_conai, 10/12)
+2026-03-07 07:46:59 check_if_module_installed(l10n_it_einvoice_base, 11/12)
+2026-03-07 07:47:00 check_if_module_installed(connector_vg7_conai, 12/12)
+
+2026-03-07 07:47:04 assure_user(lang=None)
+2026-03-07 07:47:04 resource_browse(res.users, 1, xref=1)
+2026-03-07 07:47:04 resource_write(res.users, 1, {u'lang': u'it_IT', u'tz': u'Europe/Rome'}, xref=None)  ##<> -> [1]
+2026-03-07 07:47:04 # setup(account.account.type)
+2026-03-07 07:47:04 No setup records for model account.account.type)
+2026-03-07 07:47:04 # setup(res.country)
+2026-03-07 07:47:05 # setup(res.country.state)
+2026-03-07 07:47:05 # setup(res.partner)
+2026-03-07 07:47:06 resource_write(res.partner, 47, {'city': 'Ozzero', 'codice_destinatario': 'URCROKA', 'zip': '20080', 'electronic_invoice_subjected': True, 'street': 'Via dei Matti, 0', 'vat': 'IT05111810015', 'state_id': 363, 'fiscalcode': ''}, xref=47)  ##<> -> [47]
+2026-03-07 07:47:07 resource_write(res.partner, 3, {'codice_destinatario': False}, xref=3)  ##<> -> [3]
+2026-03-07 07:47:07 resource_create(res.partner, {'customer': True, 'city': 'Castano Primo', 'codice_destinatario': 'A1B2C3X', 'name': 'Prima Alpha S.p.A.', 'zip': '20022', 'electronic_invoice_subjected': True, 'country_id': 110, 'vg72_id': False, 'parent_id': False, 'street': 'Via I Maggio, 101', 'vat': 'IT00115719999', u'vg7_id': False, 'supplier': False, 'state_id': 363, u'oe8_id': False, 'type': 'contact', 'is_company': True, 'fiscalcode': ''}, xref=z0bug.res_partner_1)  ##<> -> 48
+2026-03-07 07:47:07 resource_create(res.partner, {'customer': True, 'city': 'Belluno', 'codice_destinatario': False, u'vg7_id': False, 'zip': '32100', 'electronic_invoice_subjected': False, 'country_id': 110, 'vg72_id': False, 'parent_id': 48, 'street': "C. Unita d'Italia, 61", u'oe8_id': False, 'supplier': False, 'state_id': 316, 'type': 'delivery', 'is_company': False, 'fiscalcode': ''}, xref=None)  ##<> -> 49
+2026-03-07 07:47:08 resource_create(res.partner, {'customer': False, 'city': 'Terzo', 'codice_destinatario': False, 'name': 'Import Export Trifoglio s.r.l.', 'zip': '15010', 'electronic_invoice_subjected': False, 'country_id': 110, 'vg72_id': 101, 'parent_id': False, 'street': 'Centro commerciale Gatta Treviso', 'vat': 'IT01234560017', u'vg7_id': False, 'supplier': True, 'state_id': 307, u'oe8_id': False, 'type': 'contact', 'is_company': True, 'fiscalcode': ''}, xref=z0bug.res_partner_3)  ##<> -> 50
+2026-03-07 07:47:08 resource_create(res.partner, {'customer': True, 'city': 'Roma', 'codice_destinatario': '0000000', 'name': 'Rossi Mario', 'zip': '00195', 'electronic_invoice_subjected': True, 'country_id': 110, 'vg72_id': False, 'parent_id': False, 'street': 'Via Figliata, 99', 'vat': '', u'vg7_id': False, 'supplier': False, 'state_id': 391, u'oe8_id': False, 'type': 'contact', 'is_company': True, 'fiscalcode': 'RSSMRA69C02D612M'}, xref=z0bug.res_partner_9)  ##<> -> 51
+2026-03-07 07:47:08 # setup(res.partner.supplier)
+2026-03-07 07:47:08 No setup records for model res.partner.supplier)
+2026-03-07 07:47:08 # setup(res.users)
+2026-03-07 07:47:09 # setup(res.company)
+2026-03-07 07:47:09 # setup(account.account)
+2026-03-07 07:47:09 No setup records for model account.account)
+2026-03-07 07:47:09 # setup(account.journal)
+2026-03-07 07:47:09 No setup records for model account.journal)
+2026-03-07 07:47:09 resource_write(account.journal, [(u'update_posted', u'=', False)], {u'update_posted': True}, xref=None)  ##<> -> [8, 1, 9, 2, 3, 10, 5, 12, 11, 4, 7, 14, 13, 6]
+2026-03-07 07:47:09 # setup(account.tax)
+2026-03-07 07:47:10 # setup(account.payment.term, account.payment.term.line)
+2026-03-07 07:47:10 resource_create(account.payment.term, {u'oe8_id': False, 'name': 'RiBA 30GG/FM', u'vg7_id': False, 'company_id': 4}, xref=z0bug.payment_1)  ##<> -> 7
+2026-03-07 07:47:11 resource_write(account.payment.term.line, 9, {'days': 30}, xref=None)  ##<> -> [9]
+2026-03-07 07:47:11 resource_create(account.payment.term, {u'oe8_id': False, 'name': 'RiBA 30/60 GG/FM', u'vg7_id': False, 'company_id': 4}, xref=z0bug.payment_2)  ##<> -> 8
+2026-03-07 07:47:11 resource_create(account.payment.term.line, {'payment_id': 8, u'vg7_id': False, 'sequence': 9, 'days': 30, 'value': 'percent', u'oe8_id': False}, xref=None)  ##<> -> 11
+2026-03-07 07:47:11 resource_create(account.payment.term.line, {'payment_id': 8, u'vg7_id': False, 'sequence': 10, 'days': 60, 'value': 'balance', u'oe8_id': False}, xref=None)  ##<> -> 12
+2026-03-07 07:47:11 DEVEL TROUBLE: found too many child record of account.payment.term.line
+2026-03-07 07:47:11 resource_create(account.payment.term, {u'oe8_id': False, 'name': 'BB 30GG/FM+10', u'vg7_id': False, 'company_id': 4}, xref=z0bug.payment_3)  ##<> -> 9
+2026-03-07 07:47:12 resource_create(account.payment.term.line, {'payment_id': 9, u'vg7_id': False, 'sequence': 9, 'days': 30, 'value': 'balance', u'oe8_id': False}, xref=None)  ##<> -> 14
+2026-03-07 07:47:12 # setup(product.template)
+2026-03-07 07:47:12 resource_create(product.template, {'name': 'Prodotto Alpha', u'vg7_id': False, 'description_sale': '', 'default_code': 'AAA', 'type': 'consu', u'oe8_id': False}, xref=z0bug.product_template_1)  ##<> -> 39
+2026-03-07 07:47:12 resource_create(product.template, {'name': 'Prodotto Beta', u'vg7_id': False, 'description_sale': 'Begonia baccata bianca', 'default_code': 'BBB', 'type': 'consu', u'oe8_id': False}, xref=z0bug.product_template_2)  ##<> -> 40
+2026-03-07 07:47:12 resource_create(product.template, {'name': 'Prodotto Gamma', u'vg7_id': False, 'description_sale': '', 'default_code': 'GGG', 'type': 'consu', u'oe8_id': False}, xref=z0bug.product_template_7)  ##<> -> 41
+2026-03-07 07:47:13 resource_create(product.template, {'name': 'Prodotto Rho', u'vg7_id': False, 'description_sale': '', 'default_code': 'RRR', 'type': 'product', u'oe8_id': False}, xref=z0bug.product_template_18)  ##<> -> 42
+2026-03-07 07:47:13 resource_create(product.template, {'name': 'Special Worldwide service', u'vg7_id': False, 'description_sale': '', 'default_code': 'WWW', 'type': 'service', u'oe8_id': False}, xref=z0bug.product_template_23)  ##<> -> 43
+2026-03-07 07:47:13 # setup(stock.picking.transportation_reason)
+2026-03-07 07:47:13 # setup(stock.picking.carriage_condition)
+2026-03-07 07:47:13 # setup(stock.picking.goods_description)
+2026-03-07 07:47:14 # setup(stock.picking.transportation_method)
+
+
+
+2026-03-07 07:47:14 *** Starting VG7: test ***
+2026-03-07 07:47:14 store_csv_response(vg7:, (u'res.country', u'res.country.state', u'res.partner', u'res.partner.supplier', u'product.uom', u'product.product', u'account.tax', u'account.payment.term', u'stock.picking.transportation_reason', u'sale.order', u'purchase.order', u'stock.picking.package.preparation'))
+2026-03-07 07:47:14 res.partner.write(50, {vg7_id: False})
+2026-03-07 07:47:14 res.partner.write(48, {vg7_id: False})
+2026-03-07 07:47:14 res.partner.write(49, {vg7_id: False})
+2026-03-07 07:47:14 res.partner.write(51, {vg7_id: False})
+2026-03-07 07:47:14 DEVEL TROUBLE: model product.uom without initialization
+2026-03-07 07:47:14 DEVEL TROUBLE: model product.product without initialization
+2026-03-07 07:47:14 account.payment.term.write(9, {vg7_id: False})
+2026-03-07 07:47:14 account.payment.term.write(8, {vg7_id: False})
+2026-03-07 07:47:14 account.payment.term.write(7, {vg7_id: False})
+2026-03-07 07:47:14 DEVEL TROUBLE: model sale.order without initialization
+2026-03-07 07:47:14 DEVEL TROUBLE: model purchase.order without initialization
+2026-03-07 07:47:14 DEVEL TROUBLE: model stock.picking.package.preparation without initialization
+
+
+2026-03-07 07:47:14 ** load_n_test_model(vg7:, res.country, mode=None, fct=synchro, ctx={}) **
+2026-03-07 07:47:14 * init_model(vg7:, res.country, code=code, name=name, domain=[], ctx={})
+2026-03-07 07:47:14 Match records for model res.country are the same of setup
+2026-03-07 07:47:15 No record to delete(res.country, [[(u'code', u'ilike', '%'), (u'id', u'not in', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 42, 41, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 83, 81, 82, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 254, 247, 248, 249, 250, 251, 252, 253])]])  ##<Remove all no standard countries>
+2026-03-07 07:47:15 Match records for model res.country are the same of setup
+2026-03-07 07:47:15 # Starting synchro tests on res.country
+2026-03-07 07:47:15 synchro(res.country, {u'vg7:code': 'IT', u'vg7:description': 'Italia', '_why': '', u'vg7:id': 39}) -> -7

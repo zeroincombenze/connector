@@ -416,12 +416,25 @@ class ExtTestEnv(object):
 
     def __init__(self, *args):
         self.parseoptargs(args)
+        # Comment or activate following lines for specific test
+        force = {}
+        force["ask"] = True
+        # force["config"] = "./tests/logs/connector.universal_connector_10.conf"
+        # force["database"] = "connect10"
+        # force["conai"] = True
+        # force["xmlrpc_port"] = 8170
         for item in ("ask", "config", "database", "lang", "conai", "xmlrpc_port"):
-            setattr(self, item, getattr(self.opt_args, item))
+            if force.get(item):
+                setattr(self, item, force[item])
+            elif item == "config" and os.environ.get("TEST_CONFN"):
+                setattr(self, item, os.environ.get("TEST_CONFN"))
+            elif item == "database" and os.environ.get("TEST_DB"):
+                setattr(self, item, os.environ.get("TEST_DB"))
+            else:
+                setattr(self, item, getattr(self.opt_args, item))
+                if item == "lang" and not getattr(self, item):
+                    setattr(self, item, "it_IT")
             print_flush("# %s=%s" % (item, getattr(self, item)))
-        self.config = self.config or os.environ.get("TEST_CONFN")
-        self.database = self.database or os.environ.get("TEST_DB")
-        self.lang = self.lang or "it_IT"
         self.logfn = __file__.replace(".py", ".log")
         self.ctr = 0
         if pth.isfile(self.logfn):
@@ -797,7 +810,11 @@ class ExtTestEnv(object):
             self.write_log("install_module(%s) # via universal_connector" % modname)
             vals = {"name": modname, "state": "installed"}
             res_id = clodoo.executeL8(self.ctx, model, "synchro", vals)
-            if res_id < 0:
+            if res_id < 0 and modname in (COA_MODULE, "account_payment_term_extension"):
+                print_flush("# Module %s not installed!" % modname)
+                print_flush("# Please install %s" % modname)
+                self.ask_4_ret()
+            elif res_id < 0:
                 raise IOError("!!Error %s installing %s!" % (res_id, modname))
         else:
             self.write_log("install_module(%s) # via rcp" % modname)
@@ -1961,20 +1978,8 @@ def run_full_identity_test(ext_test_env, model, test_prio, identity, lang=None):
 def main(cli_args=[]):
     if not cli_args:
         cli_args = sys.argv[1:]
-    # Comment or activate following lines for specific test
-    # if "--database" not in cli_args:
-    #     cli_args.append("--database")
-    #     cli_args.append("connect10")
-    #     cli_args.append("--xmlrpc_port")
-    #     cli_args.append("8170")
-    # if "--database" in cli_args and "--ask" not in cli_args:
-    cli_args.append("--ask")
-    # if "--conai" not in cli_args:
-    #     cli_args.append("--conai")
-    if not os.environ.get("TEST_CONFN") and "--config" not in cli_args:
-        cli_args.append("--config")
-        cli_args.append("./tests/logs/zero10.connector.universal_connector.conf")
     ext_test_env = ExtTestEnv(cli_args)
+
     ext_test_env.setup()
 
     identity = "vg7:"

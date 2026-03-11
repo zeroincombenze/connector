@@ -404,7 +404,7 @@ class SynchroChannelModel(models.Model):
             ctx={"xid": ext_id, "csv": file_csv},
         )
         cache = self.env["ir.model.synchro.cache"]
-        ext_id_name = cache.get_model_attr(
+        counterpart_pk = cache.get_model_attr(
             self.synchro_channel_id.id, model, "KEY_ID", default="id"
         )
         if not os.path.isfile(file_csv):
@@ -420,7 +420,7 @@ class SynchroChannelModel(models.Model):
                     hdr = row
                     continue
                 row_id += 1
-                row_res = {ext_id_name: row_id}
+                row_res = {counterpart_pk: row_id}
                 row_billing = {}
                 row_shipping = {}
                 row_contact = {}
@@ -436,7 +436,7 @@ class SynchroChannelModel(models.Model):
                             value = False
                         elif value in ("None", r"\N"):
                             value = None
-                    if hdr[ix] == ext_id_name:
+                    if hdr[ix] == counterpart_pk:
                         if not value:
                             continue
                         row_id = value
@@ -462,7 +462,7 @@ class SynchroChannelModel(models.Model):
                         row_res["shipping"] = row_shipping
                 if row_contact:
                     row_res["contact"] = row_contact
-                if (ext_id and not mode) and row_res[ext_id_name] != ext_id:
+                if (ext_id and not mode) and row_res[counterpart_pk] != ext_id:
                     continue
                 if ext_id:
                     vals = row_res
@@ -831,5 +831,4 @@ class SynchroChannelDomainTnl(models.Model):
     model = fields.Char("Odoo model name")
     key = fields.Char("Odoo field name")
     odoo_value = fields.Char("Odoo field value")
-    odoo_loc_id = fields.Integer("Odoo internal ID")
     ext_value = fields.Char("External field value")

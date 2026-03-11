@@ -6,7 +6,6 @@
         <field name="field_uname">name</field>
         <field name="search_keys">(['name',],)</field>
         <field name="counterpart_name">orders</field>
-        <field name="cron_sync">True</field>
         <field name="synchro_channel_id" ref="channel_vg7"/>
     </record>
 
@@ -15,7 +14,6 @@
         <field name="field_uname">name</field>
         <field name="search_keys">(['order_id', 'sequence'], ['order_id', 'name'])</field>
         <field name="sequence">18</field>
-        <field name="cron_sync">True</field>
         <field name="synchro_channel_id" ref="channel_vg7"/>
     </record>
 
@@ -138,7 +136,6 @@
     <record forcecreate="1" id="sale_order_fiscal_position_id" model="synchro.channel.model.fields">
         <field name="name">fiscal_position_id</field>
         <field name="apply">partner_info()</field>
-        <!-- <field name="counterpart_name">iva</field> -->
         <field name="required" eval="True"/>
         <field name="model_id" ref="sale_order"/>
     </record>

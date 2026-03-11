@@ -282,9 +282,10 @@ class IrModelSynchroCache(models.Model):
         cache_model = "_QUEUE_SYNC"
         if self.get_struct_model_attr(cache_model, "XPIRE"):
             self.set_struct_model(cache_model)
+            self.CACHE.set_struct_cache(self._cr.dbname, cache_model)
         if self.get_model_attr(backend_id, cache_model, "XPIRE"):
             self.set_attr(backend_id, cache_model, {})
-            # self.CACHE.set_model_cache(self._cr.dbname, backend_id, cache_model)
+            self.CACHE.set_model_cache(self._cr.dbname, backend_id, cache_model)
 
     @api.model_cr_context
     def push_id(self, backend_id, vmodel, model, loc_id=None, ext_id=None):
@@ -398,13 +399,12 @@ class IrModelSynchroCache(models.Model):
     #
     @api.model_cr_context
     def get_channel_list(self):
-        # return [
-        #     x
-        #     for x in self.env["synchro.channel"].browse(
-        #         self.CACHE.get_channel_list(self._cr.dbname)
-        #     )
-        # ]
-        return self.env["synchro.channel"].search([], order="sequence")
+        return [
+            x
+            for x in self.env["synchro.channel"].browse(
+                self.CACHE.get_channel_list(self._cr.dbname)
+            )
+        ]
 
     @api.model_cr_context
     def set_channel_base(self, backend_id):
@@ -423,23 +423,24 @@ class IrModelSynchroCache(models.Model):
 
     @api.model_cr_context
     def set_attr(self, backend_id, attrib, value):
+        self.set_channel_base(backend_id)
         return self.CACHE.set_attr(self._cr.dbname, backend_id, attrib, value)
 
     @api.model_cr_context
     def get_attr(self, backend_id, attrib, default=None):
-        # self.set_channel_base(backend_id)
+        self.set_channel_base(backend_id)
         return self.CACHE.get_attr(self._cr.dbname, backend_id, attrib, default=default)
 
     @api.model_cr_context
     def get_model_attr(self, backend_id, model, attrib, default=None):
-        # self.set_model(backend_id, model)
+        self.set_model(backend_id, model)
         return self.CACHE.get_model_attr(
             self._cr.dbname, backend_id, model, attrib, default=default
         )
 
     @api.model_cr_context
     def set_model_attr(self, backend_id, model, attrib, value):
-        # self.set_model(backend_id, model)
+        self.set_model(backend_id, model)
         return self.CACHE.set_model_attr(
             self._cr.dbname, backend_id, model, attrib, value
         )
@@ -536,6 +537,8 @@ class IrModelSynchroCache(models.Model):
 
     @api.model_cr_context
     def set_struct_model(self, model):
+        if model not in self.model_list():
+            pass
         self.CACHE.set_struct_model(self._cr.dbname, model)
 
     @api.model_cr_context
@@ -549,7 +552,7 @@ class IrModelSynchroCache(models.Model):
 
     @api.model_cr_context
     def get_struct_model_attr(self, model, attrib, default=None):
-        # self.set_struct_model(model)
+        self.set_struct_model(model)
         return self.CACHE.get_struct_model_attr(
             self._cr.dbname, model, attrib, default=default
         )
@@ -940,12 +943,11 @@ class IrModelSynchroCache(models.Model):
         model = model or actual_model
         if not model or self.get_struct_model_attr(model, "XPIRE"):
             return
-        # IrModelFields = self.env["ir.model.fields"]
+        ir_model = self.env["ir.model.fields"]
         self.set_struct_model(actual_model)
-        struct = self.env[actual_model].fields_get()
-        for name, field in struct.items():
-            global_def = self.TABLE_DEF.get("base", {}).get(name, {})
-            field_def = self.TABLE_DEF.get(model, {}).get(name, {})
+        for field in ir_model.search([("model", "=", actual_model)]):
+            global_def = self.TABLE_DEF.get("base", {}).get(field.name, {})
+            field_def = self.TABLE_DEF.get(model, {}).get(field.name, {})
             attrs = {}
             for attr in ("required", "readonly", "protect_update"):
                 if attr in field_def:
@@ -953,12 +955,10 @@ class IrModelSynchroCache(models.Model):
                 elif attr in global_def:
                     attrs[attr] = global_def[attr]
                 elif attr == "readonly" and (
-                    field["type"] in ("binary", "reference")
-                    or (field.get("relation") and not field["required"])
+                    field.ttype in ("binary", "reference")
+                    or (field.related and not field.required)
                 ):
                     attrs["readonly"] = True
-                elif attr == "protect_update":
-                    attrs[attr] = "0"
                 else:
                     attrs[attr] = field[attr]
             if attrs["required"]:
@@ -967,53 +967,47 @@ class IrModelSynchroCache(models.Model):
                 attrs["readonly"] = True
             self.set_struct_model_attr(
                 actual_model,
-                name,
+                field.name,
                 {
-                    "ttype": field["type"],
-                    "relation": field.get("relation", False),
+                    "ttype": field.ttype,
+                    "relation": field.relation,
                     "required": attrs["required"],
                     "readonly": attrs["readonly"],
                     "protect_update": attrs["protect_update"],
                 },
             )
-            if field.get("relation") != actual_model:
-                if (
-                    field.get("relation")
-                    and field.get("relation") == ("%s.line" % actual_model)
-                ):
-                    self.set_struct_model_attr(actual_model, "CHILD_IDS", name)
+            if field.relation != actual_model:
+                if field.relation and field.relation == ("%s.line" % actual_model):
+                    self.set_struct_model_attr(actual_model, "CHILD_IDS", field.name)
                     self.set_struct_model_attr(
-                        actual_model, "MODEL_CHILD", field.get("relation")
+                        actual_model, "MODEL_CHILD", field.relation
                     )
                 elif (
                     actual_model.endswith(".line")
-                    and field.get("relation")
-                    and actual_model.startswith(field.get("relation"))
+                    and field.relation
+                    and actual_model.startswith(field.relation)
                 ):
-                    self.set_struct_model_attr(actual_model, "PARENT_ID", name)
-                elif (
-                    field.get("relation")
-                    and actual_model.startswith(field.get("relation"))
-                ):
-                    self.set_struct_model_attr(actual_model, "SUPPL_KEY", name)
+                    self.set_struct_model_attr(actual_model, "PARENT_ID", field.name)
+                elif field.relation and actual_model.startswith(field.relation):
+                    self.set_struct_model_attr(actual_model, "SUPPL_KEY", field.name)
                 # TODO:avoid recursive loop
-                # elif field[relation == actual_model:
-                #    constraints = ['id', '<>', field[name]
-            if name == "original_state":
+                # elif field.relation == actual_model:
+                #    constraints = ['id', '<>', field.name]
+            if field.name == "original_state":
                 self.set_struct_model_attr(actual_model, "MODEL_STATE", True)
-            elif name == "to_delete":
+            elif field.name == "to_delete":
                 self.set_struct_model_attr(actual_model, "MODEL_2DELETE", True)
-            elif name == "name":
+            elif field.name == "name":
                 self.set_struct_model_attr(actual_model, "MODEL_WITH_NAME", True)
-            elif name == "active":
+            elif field.name == "active":
                 self.set_struct_model_attr(actual_model, "MODEL_WITH_ACTIVE", True)
-            elif name == "dim_name":
+            elif field.name == "dim_name":
                 self.set_struct_model_attr(actual_model, "MODEL_WITH_DIMNAME", True)
-            elif name == "company_id":
+            elif field.name == "company_id":
                 self.set_struct_model_attr(actual_model, "MODEL_WITH_COMPANY", True)
-            elif name == "country_id":
+            elif field.name == "country_id":
                 self.set_struct_model_attr(actual_model, "MODEL_WITH_COUNTRY", True)
-        # self.CACHE.set_struct_cache(self._cr.dbname, model)
+        self.CACHE.set_struct_cache(self._cr.dbname, model)
 
     @api.model_cr_context
     def setup_model_in_channels(self, backend=None, model=None, ext_model=None):
