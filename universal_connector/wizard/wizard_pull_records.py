@@ -33,8 +33,8 @@ class WizardExportFatturapa(models.TransientModel):
             ("unk", "Only Unknown Records"),
         ],
         "Which Records",
-        default="new",
-        help="Selet which records you want to import",
+        default="all",
+        help="Select which records you want to import",
     )
     nesting_level = fields.Selection(
         [

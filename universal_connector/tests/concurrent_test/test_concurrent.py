@@ -254,6 +254,7 @@ SETUP_MODEL_LIST = (
     "account.tax",
     "account.payment.term",
     "product.template",
+    "product.uom",
     "stock.picking.transportation_reason",
     "stock.picking.carriage_condition",
     "stock.picking.goods_description",

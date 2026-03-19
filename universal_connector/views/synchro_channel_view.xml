@@ -32,6 +32,7 @@
                             type="action"
                             string="Pull Records" class="oe_highlight"
                             attrs="{'invisible':['|',('state','in',['draft']),('active','=',False)]}"
+                            context="{'default_backend_id': id}"
                     />
                     <button name="button_reset_to_draft"
                             type="object"

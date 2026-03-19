@@ -386,10 +386,10 @@ class IrModelSynchroCache(models.Model):
         return model < "A" or model > "["
 
     # ------------------
-    # Channel primitives
+    # Backend primitives
     # ------------------
     #
-    # channel_id
+    # backend_id
     #    \_______ model
     #    \ ...      \____ LOC_FIELDS
     #               |           \____  field_name
@@ -416,10 +416,10 @@ class IrModelSynchroCache(models.Model):
             self._cr.dbname, backend_id, default=default
         )
 
-    @api.model_cr_context
-    def set_model(self, backend_id, model):
-        if model not in self.get_channel_models(backend_id):
-            self.init_model(backend_id, model)
+    # @api.model_cr_context
+    # def set_model(self, backend_id, model):
+    #     if not self.get_attr(backend_id, model):
+    #         self.init_model(backend_id, model)
 
     @api.model_cr_context
     def set_attr(self, backend_id, attrib, value):
@@ -433,14 +433,14 @@ class IrModelSynchroCache(models.Model):
 
     @api.model_cr_context
     def get_model_attr(self, backend_id, model, attrib, default=None):
-        self.set_model(backend_id, model)
+        # self.set_model(backend_id, model)
         return self.CACHE.get_model_attr(
             self._cr.dbname, backend_id, model, attrib, default=default
         )
 
     @api.model_cr_context
     def set_model_attr(self, backend_id, model, attrib, value):
-        self.set_model(backend_id, model)
+        # self.set_model(backend_id, model)
         return self.CACHE.set_model_attr(
             self._cr.dbname, backend_id, model, attrib, value
         )
@@ -452,7 +452,6 @@ class IrModelSynchroCache(models.Model):
     @api.model_cr_context
     def get_model_field_attr(self, backend_id, model, field, attrib, default=None):
         # Warning! Hierarchy at this level is not linear
-        # self.set_model_attr(channel_id, model, field, attrib)
         return self.CACHE.get_model_field_attr(
             self._cr.dbname, backend_id, model, field, attrib, default=default
         )
@@ -460,13 +459,12 @@ class IrModelSynchroCache(models.Model):
     @api.model_cr_context
     def set_model_field_attr(self, backend_id, model, field, attrib, value):
         # Warning! Hierarchy at this level is not linear
-        # self.set_model_attr(channel_id, model, field, attrib)
         return self.CACHE.set_model_field_attr(
             self._cr.dbname, backend_id, model, field, attrib, value
         )
 
     @api.model_cr_context
-    def init_model(self, backend_id, model):
+    def init_backend_model(self, backend_id, model):
         self.set_channel_base(backend_id)
         self.set_attr(backend_id, model, self.get_attr(backend_id, model) or {})
         self.set_model_attr(backend_id, model, "LOC_FIELDS", {})
@@ -537,8 +535,6 @@ class IrModelSynchroCache(models.Model):
 
     @api.model_cr_context
     def set_struct_model(self, model):
-        if model not in self.model_list():
-            pass
         self.CACHE.set_struct_model(self._cr.dbname, model)
 
     @api.model_cr_context
@@ -645,8 +641,8 @@ class IrModelSynchroCache(models.Model):
     @api.model_cr_context
     def store_model_field(self, channel_id, model, loc_name, ext_name, apply,
                           protect_update, spec, required):
-        if model == "res.partner" and loc_name == "assigned_bank":
-            pass
+        # if model == "res.partner" and loc_name == "assigned_bank":
+        #     pass
         self.set_model_field_attr(channel_id, model, loc_name, "LOC_FIELDS", ext_name)
         self.set_model_field_attr(channel_id, model, ext_name, "EXT_FIELDS", loc_name)
         if apply:
@@ -756,122 +752,118 @@ class IrModelSynchroCache(models.Model):
     @api.model_cr_context
     def setup_channel_model_fields(self, model_rec):
         model = model_rec.name
-        channel_id = model_rec.synchro_channel_id.id
-        channel = self.env["synchro.channel"].browse(channel_id)
+        backend = model_rec.synchro_channel_id
         for field in self.env["synchro.channel.model.fields"].search(
             [("model_id", "=", model_rec.id)]
         ):
-            self.store_field_from_rec(channel_id, model, field)
-        if channel.identity == "odoo":
+            self.store_field_from_rec(backend.id, model, field)
+        if backend.identity == "odoo":
             for field in self.get_struct_attr(model):
                 if (
                     (self.is_struct(field)
                      and field not in ("id", "vg7_id", "oe7_id", "oe8_id", "oe10_id"))
-                    and not self.get_model_attr(channel_id, model, "XPIRE")
+                    and not self.get_model_attr(backend.id, model, "XPIRE")
                     and field
-                    not in self.get_model_attr(channel_id, model, "LOC_FIELDS")
+                    not in self.get_model_attr(backend.id, model, "LOC_FIELDS")
                 ):
-                    self.store_odoo_field_from_rec(channel_id, model, field)
+                    self.store_odoo_field_from_rec(backend.id, model, field)
         # special names
-        ext_ref = "%s_id" % self.get_attr(channel_id, "PREFIX")
-        self.set_model_field_attr(channel_id, model, "id", "LOC_FIELDS", "")
-        self.set_model_field_attr(channel_id, model, ext_ref, "LOC_FIELDS", "id")
-        self.set_model_field_attr(channel_id, model, "id", "EXT_FIELDS", ext_ref)
+        ext_ref = "%s_id" % self.get_attr(backend.id, "PREFIX")
+        self.set_model_field_attr(backend.id, model, "id", "LOC_FIELDS", "")
+        self.set_model_field_attr(backend.id, model, ext_ref, "LOC_FIELDS", "id")
+        self.set_model_field_attr(backend.id, model, "id", "EXT_FIELDS", ext_ref)
 
     @api.model_cr_context
-    def store_model_1_channel(self, backend_id, rec):
+    def store_model_1_backend(self, backend, rec):
         model = rec.name
-        if rec.cron_sync:
-            self.set_model_attr(backend_id, model, "2PULL", True)
-        if not self.get_attr(backend_id, "TNL"):
+        if not self.get_attr(backend.id, "TNL"):
             tnldict = {}
             transodoo.read_stored_dict(tnldict)
-            self.set_attr(backend_id, "TNL", tnldict)
-        # TODO: debug -> minutes=1 production -> minutes=9900
-        deltatime = ((self.lifetime(0) / 20) + 1) ** 2
+            self.set_attr(backend.id, "TNL", tnldict)
         if (
-            datetime.strptime(rec.write_date, "%Y-%m-%d %H:%M:%S")
-            + timedelta(minutes=deltatime)
-        ) < datetime.now():
-            if not self.get_struct_model_attr(model, "SKEYS"):
-                actual_model = self.env["ir.model.synchro"].get_actual_model(
-                    model, only_name=True
-                )
-                uname, skeys = self.get_default_keys(actual_model)
-                # self.set_struct_model_attr(model, "SKEYS", skeys)
-                self.set_struct_model_attr(model, "SKEYS", eval(rec.search_keys))
-                # self.set_struct_model_attr(model, "MODEL_KEY", uname)
-                self.set_struct_model_attr(model, "MODEL_KEY", rec.field_uname)
-                rec.write({"search_keys": skeys, "field_uname": uname})
-                self.env["ir.model.synchro"].logmsg(
-                    "debug",
-                    "### %(model)s SKEYS=%(skeys)s UNAME=%(uname)s",
-                    model=model,
-                    ctx={"skeys": skeys, "uname": uname},
-                )
-        else:
+            self.get_struct_model_attr(model, "SKEYS")
+            and self.get_struct_model_attr(model, "XPIRE")
+        ):
+            return
+        deltatime = ((self.lifetime(0) / 20) + 1) ** 2
+        # TODO: debug -> minutes=1 production -> minutes=9900
+        if not rec.search_keys or (
+                datetime.strptime(rec.write_date, "%Y-%m-%d %H:%M:%S")
+                + timedelta(minutes=deltatime)) < datetime.now():
+            actual_model = self.env["ir.model.synchro"].get_actual_model(
+                model, only_name=True
+            )
+            uname, skeys = self.get_default_keys(actual_model)
             self.set_struct_model_attr(model, "SKEYS", eval(rec.search_keys))
             self.set_struct_model_attr(model, "MODEL_KEY", rec.field_uname)
-        self.set_model_attr(backend_id, model, "BIND", rec.counterpart_name)
-        channel = self.env["synchro.channel"].browse(backend_id)
+            rec.write({"search_keys": skeys, "field_uname": uname})
+            self.env["ir.model.synchro"].logmsg(
+                "debug",
+                "### %(model)s SKEYS=%(skeys)s UNAME=%(uname)s",
+                model=model,
+                ctx={"skeys": skeys, "uname": uname},
+            )
+        self.set_model_attr(backend.id, model, "2PULL", rec.cron_sync)
+        self.set_struct_model_attr(model, "SKEYS", eval(rec.search_keys))
+        self.set_struct_model_attr(model, "MODEL_KEY", rec.field_uname)
+        self.set_model_attr(backend.id, model, "BIND", rec.counterpart_name)
+        # backend = self.env["synchro.channel"].browse(backend_id)
         if rec.model_spec:
-            self.set_model_attr(backend_id, model, "MODEL_SPEC", rec.model_spec)
-        if channel.identity == "vg7" and model == "res.partner.shipping":
-            self.set_model_attr(backend_id, model, "KEY_ID", "customer_shipping_id")
+            self.set_model_attr(backend.id, model, "MODEL_SPEC", rec.model_spec)
+        if backend.identity == "vg7" and model == "res.partner.shipping":
+            self.set_model_attr(backend.id, model, "KEY_ID", "customer_shipping_id")
         else:
-            self.set_model_attr(backend_id, model, "KEY_ID", "id")
-        if channel.identity == "vg7" and model == "res.partner.supplier":
+            self.set_model_attr(backend.id, model, "KEY_ID", "id")
+        if backend.identity == "vg7" and model == "res.partner.supplier":
             self.set_model_attr(
-                backend_id,
+                backend.id,
                 model,
                 "EXT_ID",
-                "%s2_id" % self.get_attr(backend_id, "PREFIX"),
+                "%s2_id" % self.get_attr(backend.id, "PREFIX"),
             )
-        elif channel.identity == "vg7" and model == "res.partner.bank.company":
+        elif backend.identity == "vg7" and model == "res.partner.bank.company":
             self.set_model_attr(
-                backend_id,
+                backend.id,
                 model,
                 "EXT_ID",
-                "%s2_id" % self.get_attr(backend_id, "PREFIX"),
+                "%s2_id" % self.get_attr(backend.id, "PREFIX"),
             )
         else:
             self.set_model_attr(
-                backend_id,
+                backend.id,
                 model,
                 "EXT_ID",
-                "%s_id" % self.get_attr(backend_id, "PREFIX"),
+                "%s_id" % self.get_attr(backend.id, "PREFIX"),
             )
-        if channel.identity == "vg7":
+        if backend.identity == "vg7":
             if model == "res.partner.invoice":
-                self.set_model_attr(backend_id, model, "ID_OFFSET", 200000000)
+                self.set_model_attr(backend.id, model, "ID_OFFSET", 200000000)
             elif model == "res.partner.shipping":
-                self.set_model_attr(backend_id, model, "ID_OFFSET", 100000000)
+                self.set_model_attr(backend.id, model, "ID_OFFSET", 100000000)
         self.setup_channel_model_fields(rec)
 
     @api.model_cr_context
-    def setup_ext_model(self, backend_id, rec):
+    def setup_backend_ext_model(self, backend, rec):
+        model = rec.name
         if (
-            backend_id
-            and backend_id == rec.synchro_channel_id.id
-            and backend_id in [x.id for x in self.get_channel_list()]
+            self.get_struct_model_attr(model, "SKEYS")
+            and self.get_struct_model_attr(model, "XPIRE")
         ):
             return
-        model = rec.name
-        if not backend_id:
-            backend_id = rec.synchro_channel_id.id
-        if self.get_model_attr(backend_id, model, "XPIRE"):
-            return
-        channel = self.env["synchro.channel"].browse(backend_id)
-        self.setup_1_channel(channel)
-        self.init_model(backend_id, model)
-        self.store_model_1_channel(backend_id, rec)
-        self.CACHE.set_model_cache(self._cr.dbname, backend_id, model)
+        self.setup_1_backend(backend)
+        self.init_backend_model(backend.id, model)
+        self.store_model_1_backend(backend, rec)
+        self.CACHE.set_model_cache(self._cr.dbname, backend.id, model)
 
     @api.model_cr_context
-    def setup_1_channel(self, backend):
-        if self.get_attr(backend.id, "XPIRE"):
+    def setup_1_backend(self, backend):
+        if (
+            self.get_attr(backend.id, "PREFIX")
+            and self.get_attr(backend.id, "XPIRE")
+        ):
             return
         self.set_channel_base(backend.id)
+        self.set_attr(backend.id, "PREFIX", backend.prefix)
         self.set_attr(backend.id, "PRIO", backend.sequence)
         self.set_attr(
             backend.id, "OUT_QUEUE", self.get_attr(backend.id, "OUT_QUEUE", default=[])
@@ -884,7 +876,6 @@ class IrModelSynchroCache(models.Model):
             "_QUEUE_SYNC",
             self.get_attr(backend.id, "_QUEUE_SYNC", default={}),
         )
-        self.set_attr(backend.id, "PREFIX", backend.prefix)
         self.set_attr(
             backend.id,
             "ODOO_FVER",
@@ -921,10 +912,6 @@ class IrModelSynchroCache(models.Model):
         self.set_attr(backend.id, "PASSWORD", backend.password)
         if backend.product_without_variants:
             self.set_attr(backend.id, "NO_VARIANTS", True)
-        # if channel.trace:
-        #     self.set_attr(channel.id, 'LOGLEVEL', 'info')
-        # else:
-        #     self.set_attr(channel.id, 'LOGLEVEL', 'debug')
         self.set_attr(backend.id, "LOGLEVEL", backend.tracelevel)
         self.CACHE.set_channel_cache(self._cr.dbname, backend.id)
 
@@ -934,18 +921,19 @@ class IrModelSynchroCache(models.Model):
         and store them into memory"""
         if not len(self.get_channel_list()) or all:
             for channel in self.env["synchro.channel"].search([], order="sequence"):
-                self.setup_1_channel(channel)
+                self.setup_1_backend(channel)
 
     @api.model_cr_context
     def setup_model_structure(self, model, actual_model):
         """Store model structure into memory"""
         actual_model = actual_model or model
         model = model or actual_model
-        if not model or self.get_struct_model_attr(model, "XPIRE"):
+        if not model or (self.get_struct_model_attr(model, "id")
+                         and self.get_struct_model_attr(model, "XPIRE")):
             return
-        ir_model = self.env["ir.model.fields"]
+        IrModelFields = self.env["ir.model.fields"]
         self.set_struct_model(actual_model)
-        for field in ir_model.search([("model", "=", actual_model)]):
+        for field in IrModelFields.search([("model", "=", actual_model)]):
             global_def = self.TABLE_DEF.get("base", {}).get(field.name, {})
             field_def = self.TABLE_DEF.get(model, {}).get(field.name, {})
             attrs = {}
@@ -976,7 +964,7 @@ class IrModelSynchroCache(models.Model):
                     "protect_update": attrs["protect_update"],
                 },
             )
-            if field.relation != actual_model:
+            if field.relation and field.relation != actual_model:
                 if field.relation and field.relation == ("%s.line" % actual_model):
                     self.set_struct_model_attr(actual_model, "CHILD_IDS", field.name)
                     self.set_struct_model_attr(
@@ -990,60 +978,43 @@ class IrModelSynchroCache(models.Model):
                     self.set_struct_model_attr(actual_model, "PARENT_ID", field.name)
                 elif field.relation and actual_model.startswith(field.relation):
                     self.set_struct_model_attr(actual_model, "SUPPL_KEY", field.name)
-                # TODO:avoid recursive loop
-                # elif field.relation == actual_model:
-                #    constraints = ['id', '<>', field.name]
-            if field.name == "original_state":
-                self.set_struct_model_attr(actual_model, "MODEL_STATE", True)
-            elif field.name == "to_delete":
-                self.set_struct_model_attr(actual_model, "MODEL_2DELETE", True)
-            elif field.name == "name":
+            if field.name == "name":
                 self.set_struct_model_attr(actual_model, "MODEL_WITH_NAME", True)
-            elif field.name == "active":
-                self.set_struct_model_attr(actual_model, "MODEL_WITH_ACTIVE", True)
             elif field.name == "dim_name":
                 self.set_struct_model_attr(actual_model, "MODEL_WITH_DIMNAME", True)
             elif field.name == "company_id":
                 self.set_struct_model_attr(actual_model, "MODEL_WITH_COMPANY", True)
             elif field.name == "country_id":
                 self.set_struct_model_attr(actual_model, "MODEL_WITH_COUNTRY", True)
+        # Refresh cache
+        # self.set_struct_model("_QUEUE_SYNC")
         self.CACHE.set_struct_cache(self._cr.dbname, model)
 
     @api.model_cr_context
-    def setup_model_in_channels(self, backend=None, model=None, ext_model=None):
+    def setup_model_in_backends(self, backend, model=None, ext_model=None):
         """Read model value from all active channel model table and store
         them into memory"""
-        channel_model_model = self.env["synchro.channel.model"]
+        Backend = self.env["synchro.channel.model"]
         if model:
             domain = [("name", "=", model)]
         elif ext_model:
             domain = [("counterpart_name", "=", ext_model)]
         else:
             return
-        if backend:
-            domain.append(("synchro_channel_id", "=", backend.id))
-        recs = channel_model_model.search(domain)
+        domain.append(("synchro_channel_id", "=", backend.id))
+        recs = Backend.search(domain)
         if not recs and backend and backend.identity == "odoo":
             if ext_model:
-                channel_model_model.build_odoo_synchro_model(backend.id, ext_model)
+                Backend.build_odoo_synchro_model(backend.id, ext_model)
             elif model:
-                channel_model_model.build_odoo_synchro_model(
-                    backend.id, None, model=model
-                )
-        elif not recs and not backend:
-            self.setup_channels(all=True)
-            for channel in self.get_channel_list():
-                channel_id = channel.id
-                backend = self.env["synchro.channel"].browse(channel_id)
-                if backend.identity == "odoo":
-                    channel_model_model.build_odoo_synchro_model(channel_id, ext_model)
-        for rec in channel_model_model.search(domain):
-            self.setup_ext_model(False, rec)
+                Backend.build_odoo_synchro_model(backend.id, None, model=model)
+        for rec in Backend.search(domain):
+            self.setup_backend_ext_model(backend, rec)
 
     @api.model_cr_context
     def open(self, backend=None, model=None, ext_model=None, cls=None):
         """Setup cache if needed, setup model cache if required and needed"""
-        ir_synchro_model = self.env["ir.model.synchro"]
+        IrSynchroModel = self.env["ir.model.synchro"]
         if backend and backend.identity == "odoo":
             if ext_model in ("ir.model", "ir.module.module") and not model:
                 model = ext_model
@@ -1051,9 +1022,9 @@ class IrModelSynchroCache(models.Model):
                 ext_model = model
         actual_model = model
         if backend and ext_model and not model and backend.identity == "odoo":
-            ext_odoo_ver = ir_synchro_model.get_ext_odoo_ver(backend.prefix)
+            ext_odoo_ver = IrSynchroModel.get_ext_odoo_ver(backend.prefix)
             if ext_odoo_ver:
-                tnldict = ir_synchro_model.get_tnldict(backend.id)
+                tnldict = IrSynchroModel.get_tnldict(backend.id)
                 actual_model = transodoo.translate_from_to(
                     tnldict,
                     "ir.model",
@@ -1077,23 +1048,5 @@ class IrModelSynchroCache(models.Model):
             )
         if actual_model:
             self.setup_model_structure(model, actual_model)
-        self.setup_model_in_channels(backend=backend, model=model, ext_model=ext_model)
-        self.set_struct_model("_QUEUE_SYNC")
-        if cls is not None:
-            if cls.__class__.__name__ != model:
-                raise RuntimeError(
-                    "Class %s not of declared model %s"
-                    % (cls.__class__.__name__, model)
-                )
-            if hasattr(cls, "CHILD_IDS"):
-                self.set_struct_model_attr(
-                    actual_model, "CHILD_IDS", getattr(cls, "CHILD_IDS")
-                )
-            if hasattr(cls, "MODEL_CHILD"):
-                self.set_struct_model_attr(
-                    actual_model, "MODEL_CHILD", getattr(cls, "MODEL_CHILD")
-                )
-            if hasattr(cls, "PARENT_ID"):
-                self.set_struct_model_attr(
-                    actual_model, "PARENT_ID", getattr(cls, "PARENT_ID")
-                )
+        if backend:
+            self.setup_model_in_backends(backend, model=model, ext_model=ext_model)

@@ -1,3 +1,11 @@
+10.0.0.3.14 (2026-03-19)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [FIX] Import new product from VG7 / Import nuovi prodotti da VG7
+* [FIX] Import res.partner.bank
+* [IMP] Weight in sale.order.line
+* [QUA] Test coverage 64% (5066: 1822+3244) [1376 TestPoints] - quality rating 82 (target 100)
+
 10.0.0.3.13 (2025-07-31)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 

@@ -188,6 +188,14 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 ChangeLog History | Cronologia modifiche
 ----------------------------------------
 
+10.0.0.3.14 (2026-03-19)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [FIX] Import new product from VG7 / Import nuovi prodotti da VG7
+* [FIX] Import res.partner.bank
+* [IMP] Weight in sale.order.line
+* [QUA] Test coverage 64% (5066: 1822+3244) [1376 TestPoints] - quality rating 82 (target 100)
+
 10.0.0.3.13 (2025-07-31)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -283,7 +291,6 @@ Authors | Autori
 ----------------
 
 * `SHS-AV s.r.l. <https://www.zeroincombenze.it>`__
-* `Odoo Community Association (OCA) <https://odoo-community.org>`__
 
 
 
@@ -318,7 +325,7 @@ La distribuzione `Zeroincombenze® <https://www.zeroincombenze.it/>`__ è proget
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2026-03-07
+Last Update / Ultimo aggiornamento: 2026-03-19
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status

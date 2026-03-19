@@ -161,16 +161,16 @@ class SynchroChannel(models.Model):
         self.write({"state": "draft"})
 
     def assign_backend(self, vals):
-        channel = False
+        backend = False
         for ext_ref in vals.keys():
             refs = ext_ref.split(":")
             if len(refs) == 2:
                 prefix = refs[0]
-                channel = self.search([("prefix", "=", prefix)])
-                if channel:
-                    channel = channel[0]
+                backend = self.search([("prefix", "=", prefix)])
+                if backend:
+                    backend = backend[0]
                     break
-        if not channel:
+        if not backend:
             cache = self.env["ir.model.synchro.cache"]
             odoo_prio = 999999
             channel_prio = 999999
@@ -178,25 +178,25 @@ class SynchroChannel(models.Model):
             channel_ctr = 0
             if not cache.get_channel_list():
                 cache.setup_channels(all=True)
-            for channel in cache.get_channel_list():
-                channel_id = channel.id
+            for backend in cache.get_channel_list():
+                backend_id = backend.id
                 if channel_from:
                     break
                 channel_ctr += 1
-                pfx_ext = "%s:" % cache.get_attr(channel_id, "PREFIX")
-                pfx_depr = "%s_" % cache.get_attr(channel_id, "PREFIX")
-                if cache.get_attr(channel_id, "PRIO") < channel_prio:
-                    def_channel = channel_id
-                    channel_prio = cache.get_attr(channel_id, "PRIO", default=16)
+                pfx_ext = "%s:" % cache.get_attr(backend_id, "PREFIX")
+                pfx_depr = "%s_" % cache.get_attr(backend_id, "PREFIX")
+                if cache.get_attr(backend_id, "PRIO") < channel_prio:
+                    def_channel = backend_id
+                    channel_prio = cache.get_attr(backend_id, "PRIO", default=16)
                 if (
-                    cache.get_attr(channel_id, "IDENTITY") == "odoo"
-                    and cache.get_attr(channel_id, "PRIO") < odoo_prio
+                    cache.get_attr(backend_id, "IDENTITY") == "odoo"
+                    and cache.get_attr(backend_id, "PRIO") < odoo_prio
                 ):
-                    odoo_channel = channel_id
-                    odoo_prio = cache.get_attr(channel_id, "PRIO")
+                    odoo_channel = backend_id
+                    odoo_prio = cache.get_attr(backend_id, "PRIO")
                 for ext_ref in vals:
                     if ext_ref.startswith(pfx_ext) or ext_ref.startswith(pfx_depr):
-                        channel_from = channel_id
+                        channel_from = backend_id
                         break
             if not channel_from:
                 if channel_prio < odoo_prio:
@@ -204,8 +204,8 @@ class SynchroChannel(models.Model):
                 else:
                     channel_from = odoo_channel
             if channel_from:
-                channel = self.browse(channel_from)
-        return channel
+                backend = self.browse(channel_from)
+        return backend
 
     @api.model
     def find_model_channel(self, model_name=None, ext_model=None):
@@ -351,7 +351,7 @@ class SynchroChannel(models.Model):
 
 class SynchroChannelModel(models.Model):
     _name = "synchro.channel.model"
-    _description = "Model mapping for Synchonization"
+    _description = "Model mapping for Synchronization"
     _order = "sequence, id"
 
     name = fields.Char("Odoo model name", required=True)
@@ -666,6 +666,25 @@ class SynchroChannelModel(models.Model):
                     cnx, session, ext_id=ext_id, domain=domain, mode=mode
                 )
                 break
+
+        if not isinstance(vals, (list, tuple)):
+            for name in vals.copy().keys():
+                if vals[name] is None:
+                    del vals[name]
+            if vals.keys() == ["id"]:
+                vals = {}
+        else:
+            vals_list = vals
+            new_vals = []
+            for vals in vals_list:
+                for name in vals.copy().keys():
+                    if vals[name] is None:
+                        del vals[name]
+                if vals.keys() == ["id"]:
+                    vals = {}
+                if vals:
+                    new_vals.append(vals)
+
         if not isinstance(vals, dict) and not isinstance(vals, (list, tuple)):
             self.env["ir.model.synchro"].logmsg(
                 "error",

@@ -12,7 +12,7 @@
     "version": "10.0.0.3.14",
     "category": "Generic Modules",
     "summary": "Universal Connector",
-    "author": "SHS-AV s.r.l.,Odoo Community Association (OCA)",
+    "author": "SHS-AV s.r.l.",
     "website": "https://www.zeroincombenze.it/",
     "development_status": "Beta",
     "license": "LGPL-3",
