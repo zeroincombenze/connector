@@ -1,0 +1,6 @@
+type,description_sale,default_code,name,id
+consu,,AAA,Prodotto Alpha,81
+consu,Begonia baccata bianca,BBB,Prodotto Beta,82
+consu,,GGG,Prodotto Gamma,87
+product,,RRR,Prodotto Rho,98
+service,,WWW,Special Worldwide service,103

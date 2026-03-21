@@ -1,0 +1,5 @@
+customer,city,codice_destinatario,name,zip,country_id,electronic_invoice_subjected,parent_id,street,vat,supplier,state_id,type,id,is_company,_why
+\N,Ozzero,URCROKA,Test Company,20080,9,True,False,"Via dei Matti, 0",IT05111810015,\N,102,contact,2,True,
+\N,\N,False,Administrator,\N,False,False,False,,,\N,False,contact,3,False,
+True,Castano Primo,A1B2C3X,Prima Alpha S.p.A.,20022,9,True,False,"Via I Maggio, 101",IT00115719999,False,102,contact,801,True,
+False,Terzo,False,Import Export Trifoglio s.r.l.,15010,9,False,False,Centro commerciale Gatta Treviso,IT01234560017,True,115,contact,803,True,

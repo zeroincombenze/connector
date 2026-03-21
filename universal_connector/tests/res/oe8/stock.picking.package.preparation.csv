@@ -1,0 +1,2 @@
+transportation_method_id,carriage_condition_id,ddt_number,note,state,date,line_ids,transportation_reason_id,partner_id,id,goods_description_id
+3,1,DDT/24/180,Opening 9-17,done,2024-05-31 00:00:00,"[{'product_id': 88, 'sequence': 10, 'package_preparation_id': 180, 'price_unit': 0.6, 'product_uom_qty': 50.0, 'name': 'Prodotto Gamma - Golden wattle', 'id': 8110, 'tax_ids': [1]}]",2,801,180,4

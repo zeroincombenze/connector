@@ -345,7 +345,7 @@ class SynchroChannel(models.Model):
 
     @api.multi
     def write(self, vals):
-        self.env["ir.model.synchro.cache"].clean_cache()
+        # self.env["ir.model.synchro.cache"].clean_cache()
         return super(SynchroChannel, self).write(vals)
 
 
@@ -667,13 +667,13 @@ class SynchroChannelModel(models.Model):
                 )
                 break
 
-        if not isinstance(vals, (list, tuple)):
+        if isinstance(vals, dict):
             for name in vals.copy().keys():
                 if vals[name] is None:
                     del vals[name]
             if vals.keys() == ["id"]:
                 vals = {}
-        else:
+        elif isinstance(vals, (list, tuple)):
             vals_list = vals
             new_vals = []
             for vals in vals_list:
@@ -684,6 +684,7 @@ class SynchroChannelModel(models.Model):
                     vals = {}
                 if vals:
                     new_vals.append(vals)
+            vals = new_vals
 
         if not isinstance(vals, dict) and not isinstance(vals, (list, tuple)):
             self.env["ir.model.synchro"].logmsg(
@@ -794,7 +795,7 @@ class SynchroChannelModel(models.Model):
 
     @api.multi
     def write(self, vals):
-        self.env["ir.model.synchro.cache"].clean_cache()
+        # self.env["ir.model.synchro.cache"].clean_cache()
         return super(SynchroChannelModel, self).write(vals)
 
 
@@ -839,7 +840,7 @@ class SynchroChannelModelFields(models.Model):
 
     @api.multi
     def write(self, vals):
-        self.env["ir.model.synchro.cache"].clean_cache()
+        # self.env["ir.model.synchro.cache"].clean_cache()
         return super(SynchroChannelModelFields, self).write(vals)
 
 

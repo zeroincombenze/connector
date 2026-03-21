@@ -1,0 +1,2 @@
+origin,name,payment_term,order_line,note,state,client_order_ref,date_order,partner_id,id
+Test 8.0,SO080,51,"[{'name': 'Prodotto Gamma - Golden wattle', 'sequence': 10, 'order_id': 80, 'price_unit': 0.6, 'product_uom_qty': 50.0, 'product_tmpl_id': 41, 'discount': 0.0, 'product_id': 88, 'id': 8010, 'tax_id': [1]}]",Payment bank: BPS,manual,mail,2024-05-31 00:00:00,801,80

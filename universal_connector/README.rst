@@ -194,7 +194,7 @@ ChangeLog History | Cronologia modifiche
 * [FIX] Import new product from VG7 / Import nuovi prodotti da VG7
 * [FIX] Import res.partner.bank
 * [IMP] Weight in sale.order.line
-* [QUA] Test coverage 64% (5066: 1822+3244) [1376 TestPoints] - quality rating 82 (target 100)
+* [QUA] Test coverage 60% (5019: 1997+3022) [560 TestPoints]
 
 10.0.0.3.13 (2025-07-31)
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -325,7 +325,7 @@ La distribuzione `Zeroincombenze® <https://www.zeroincombenze.it/>`__ è proget
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2026-03-19
+Last Update / Ultimo aggiornamento: 2026-03-21
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status

@@ -20,6 +20,7 @@
         </field>
     </record>
 
+    <!--
     <record id="view_account_type_synchro_form" model="ir.ui.view">
         <field name="name">account.type.synchro.form</field>
         <field name="model">account.account.type</field>
@@ -36,5 +37,6 @@
             </xpath>
         </field>
     </record>
-
+    -->
+    
 </odoo>

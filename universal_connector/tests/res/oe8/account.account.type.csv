@@ -1,0 +1,10 @@
+code,id,report_type,name
+receivable,1,receivable,Receivable
+payable,2,payable,Payable
+bank,3,liquidity,Bank
+asset,5,other,Assets
+liability,6,other,Liability
+income,7,other,Income
+expense,8,other,Expense
+credit_card,9,liquidity,Credit Card
+equity,10,other,Equity

@@ -1,0 +1,2 @@
+origin,date_order,name,order_line,notes,state,payment_term_id,partner_ref,partner_id,id
+Test 8.0,2024-05-31 00:00:00,PO045,"[{'name': 'Prodotto Gamma - Golden wattle', 'product_uom': 2, 'sequence': 10, 'order_id': 45, 'price_unit': 0.6, 'date_planned': '2024-08-03', 'product_tmpl_id': 87, 'discount': 0.0, 'taxes_id': [1], 'product_qty': 50, 'id': 4510, 'product_id': 88}]",Carrier Test,purchase,51,PO-24616,803,45

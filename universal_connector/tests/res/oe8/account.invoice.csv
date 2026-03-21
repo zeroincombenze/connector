@@ -1,0 +1,4 @@
+payment_term,date_invoice,state,partner_id,id,invoice_line
+53,2024-05-31,\N,801,91,[]
+51,2024-05-31,\N,801,92,[]
+51,2024-05-31,\N,801,93,[]

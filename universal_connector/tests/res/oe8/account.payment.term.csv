@@ -1,0 +1,4 @@
+line_ids,company_id,name,id
+"[{u'payment_id': 51, u'id': 103, u'days': 30, u'value': u'balance', u'sequence': 9}]",3,RiBA 30GG/FM,51
+"[{u'payment_id': 52, u'days': 30, u'id': 109, u'value': u'procent', u'sequence': 9}, {u'payment_id': 52, u'days': 60, u'id': 110, u'value': u'balance', u'sequence': 10}]",3,RiBA 30/60 GG/FM,52
+"[{'payment_id': 53, 'id': 130, 'days': 30, 'value': 'balance', 'sequence': 9}]",3,BB 30GG/FM+10,53

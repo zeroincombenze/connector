@@ -419,7 +419,7 @@ class ExtTestEnv(object):
         self.parseoptargs(args)
         # Comment or activate following lines for specific test
         force = {}
-        force["ask"] = True
+        force["ask"] = False
         # force["config"] = "./tests/logs/connector.universal_connector_10.conf"
         # force["database"] = "connect10"
         # force["conai"] = True
@@ -781,9 +781,11 @@ class ExtTestEnv(object):
                                % (model, domains, why),
                                echo=False)
 
-    def connect_user(self):
+    def connect_user(self, xmlrpc_port=None):
         uid, self.ctx = clodoo.oerp_set_env(
-            confn=self.config, db=self.database, xmlrpc_port=self.xmlrpc_port)
+            confn=self.config,
+            db=self.database,
+            xmlrpc_port=xmlrpc_port or self.xmlrpc_port)
         if not uid:
             raise IOError("DB %s not connected via json/xmlrpc!" % self.database)
         self.user = self.ctx["user"]
@@ -1881,9 +1883,11 @@ class ExtTestEnv(object):
         ext_recs_image = self.load_ext_values(identity, model, lang=lang)
         test_recs, child_test_recs, child_model = self.load_test_recs(model, lang=lang)
         main_ext_id = False
-        # wa = "w"
         ext_id_field = self.get_ext_id_field(identity, model=model)
         self.write_log("# Starting %s tests on %s" % (fct_test, model), echo=False)
+        # if ext_model == "purchase_orders":  #debug
+        #     self.ask_4_ret()
+        #     self.connect_user(xmlrpc_port=8170)
         for ext_rec in ext_recs_image:
             loc_id = ext_id = -127
             if fct_test == "synchro":
@@ -2005,49 +2009,49 @@ def main(cli_args=[]):
     for model in MODELS:
         test_prio = run_full_identity_test(ext_test_env, model, test_prio, identity)
 
-    identity = "oe8:"
-    ext_test_env.write_log(
-        "*** Starting %s test ***" % identity.upper(), echo=True, bb=3)
-    MODELS = (
-            "account.account.type",
-            "res.country",
-            "res.country.state",
-            "account.account",
-            "res.partner",
-            "res.company",
-            "res.users",
-            "product.uom",
-            "product.template",
-            "product.product",
-            "account.tax",
-            "account.journal",
-            "account.payment.term",
-            "stock.picking.transportation_reason",
-            "stock.picking.carriage_condition",
-            "stock.picking.goods_description",
-            "stock.picking.transportation_method",
-            "sale.order",
-            "purchase.order",
-            "stock.picking.package.preparation",
-            "account.invoice",
-    )
-    ext_test_env.store_csv_response(identity, MODELS)
-    test_prio = "synchro"
-    for model in MODELS:
-        test_prio = run_full_identity_test(ext_test_env, model, test_prio, identity)
-
-    lang = "en_US"
-    ext_test_env.write_log(
-        "*** Starting %s test (%s) ***" % (identity.upper(), lang), echo=True, bb=3)
-    MODELS = (
-            # "account.account.type",
-            "res.country",
-    )
-    ext_test_env.store_csv_response(identity, MODELS, lang=lang)
-    test_prio = "synchro"
-    for model in MODELS:
-        test_prio = run_full_identity_test(
-            ext_test_env, model, test_prio, identity, lang=lang)
+    # identity = "oe8:"
+    # ext_test_env.write_log(
+    #     "*** Starting %s test ***" % identity.upper(), echo=True, bb=3)
+    # MODELS = (
+    #         "account.account.type",
+    #         "res.country",
+    #         "res.country.state",
+    #         "account.account",
+    #         "res.partner",
+    #         "res.company",
+    #         "res.users",
+    #         "product.uom",
+    #         "product.template",
+    #         "product.product",
+    #         "account.tax",
+    #         "account.journal",
+    #         "account.payment.term",
+    #         "stock.picking.transportation_reason",
+    #         "stock.picking.carriage_condition",
+    #         "stock.picking.goods_description",
+    #         "stock.picking.transportation_method",
+    #         "sale.order",
+    #         "purchase.order",
+    #         "stock.picking.package.preparation",
+    #         "account.invoice",
+    # )
+    # ext_test_env.store_csv_response(identity, MODELS)
+    # test_prio = "synchro"
+    # for model in MODELS:
+    #     test_prio = run_full_identity_test(ext_test_env, model, test_prio, identity)
+    #
+    # lang = "en_US"
+    # ext_test_env.write_log(
+    #     "*** Starting %s test (%s) ***" % (identity.upper(), lang), echo=True, bb=3)
+    # MODELS = (
+    #         # "account.account.type",
+    #         "res.country",
+    # )
+    # ext_test_env.store_csv_response(identity, MODELS, lang=lang)
+    # test_prio = "synchro"
+    # for model in MODELS:
+    #     test_prio = run_full_identity_test(
+    #         ext_test_env, model, test_prio, identity, lang=lang)
 
     ext_test_env.teardown()
     return 0

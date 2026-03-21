@@ -501,15 +501,23 @@ class IrModelSynchro(models.Model):
     def get_loc_ext_id_name(self, backend_id, model, spec=None, force=None):
         """Get local name for external reference
         """
-        cache = self.env["ir.model.synchro.cache"]
+        Cache = self.env["ir.model.synchro.cache"]
         vmodel = self.get_vmodel(model, spec)
-        cache.open(model=vmodel)
-        loc_ext_id_name = cache.get_model_attr(
-            backend_id,
-            vmodel,
-            "EXT_ID",
-            default="%s_id" % cache.get_attr(backend_id, "PREFIX"),
-        )
+        Cache.open(model=vmodel)
+        if vmodel in ("res.partner.supplier", "res.partner.bank.company"):
+            loc_ext_id_name = Cache.get_model_attr(
+                backend_id,
+                vmodel,
+                "EXT_ID",
+                default="%s2_id" % Cache.get_attr(backend_id, "PREFIX"),
+            )
+        else:
+            loc_ext_id_name = Cache.get_model_attr(
+                backend_id,
+                vmodel,
+                "EXT_ID",
+                default="%s_id" % Cache.get_attr(backend_id, "PREFIX"),
+            )
         return loc_ext_id_name
 
     @api.model
@@ -1020,6 +1028,23 @@ class IrModelSynchro(models.Model):
         return self.generic_synchro(
             cls, vals, channel_id=backend_id, jacket=True, only_minimal=only_minimal)
 
+    def get_alias(self, actual_model, name, value, type=None):
+        translation_model = self.env["synchro.channel.domain.translation"]
+        domain = [
+            ("model", "=", actual_model),
+            ("key", "=", name),
+            ("ext_value", "ilike", self.dim_text(value)),
+        ]
+        rec = translation_model.search(domain)
+        if not rec:
+            return value
+        if rec[0].odoo_value.isdigit():
+            res_id = int(rec[0].odoo_value)
+            # if type == "many2one":
+            #     return res_id
+            return self.env[actual_model].browse(res_id)[name]
+        return rec[0].odoo_value
+
     def create_new_ref(
         self, backend_id, actual_model, key_name, value, ext_value, ctx=None, spec=None
     ):
@@ -1204,18 +1229,18 @@ class IrModelSynchro(models.Model):
         suppl_key = cache.get_struct_model_attr(actual_model, "SUPPL_KEY")
         vmodel = self.get_vmodel(actual_model, spec)
         loc_ext_id_name = self.get_loc_ext_id_name(backend_id, vmodel)
-        if mode == "tnl":
-            translation_model = self.env["synchro.channel.domain.translation"]
-            domain = [
-                ("model", "=", actual_model),
-                ("key", "=", name),
-                ("ext_value", "ilike", self.dim_text(value)),
-            ]
-            rec = translation_model.search(domain)
-            if not rec:
-                return False
-            value = rec[0].odoo_value
-            mode = "ilike"
+        # if mode == "tnl":
+        #     translation_model = self.env["synchro.channel.domain.translation"]
+        #     domain = [
+        #         ("model", "=", actual_model),
+        #         ("key", "=", name),
+        #         ("ext_value", "ilike", self.dim_text(value)),
+        #     ]
+        #     rec = translation_model.search(domain)
+        #     if not rec:
+        #         return False
+        #     value = rec[0].odoo_value
+        #     mode = "ilike"
         domain = [(name, mode, value)]
         if name not in (counterpart_pk, loc_ext_id_name):
             if cache.get_struct_model_attr(
@@ -1225,10 +1250,10 @@ class IrModelSynchro(models.Model):
             if suppl_key and ctx.get(suppl_key):
                 domain.append((suppl_key, "=", ctx[suppl_key]))
         rec, maybe_dif = self.do_search(actual_model, domain, spec=spec)
-        if not rec and mode != "tnl" and isinstance(value, basestring):
-            rec = self.get_rec_by_reference(
-                backend_id, actual_model, name, value, ctx=ctx, mode="tnl", spec=spec
-            )
+        # if not rec and mode != "tnl" and isinstance(value, basestring):
+        #     rec = self.get_rec_by_reference(
+        #         backend_id, actual_model, name, value, ctx=ctx, mode="tnl", spec=spec
+        #     )
         if not rec:
             if mode == "=" and name == key_name:
                 return self.get_rec_by_reference(
@@ -1900,6 +1925,15 @@ class IrModelSynchro(models.Model):
                 vals = rm_ext_value(vals, loc_name, ext_name, ext_ref, is_foreign)
                 continue
 
+            if (
+                loc_name
+                and ext_ref in vals
+                and vals[ext_ref]
+                and isinstance(vals[ext_ref], basestring)
+            ):
+                vals[ext_ref] = self.get_alias(actual_model, loc_name, vals[ext_ref],
+                                               type=struct[loc_name]["type"])
+
             if not vals[ext_ref] or (isinstance(vals[ext_ref], basestring)
                                      and not vals[ext_ref].strip()):
                 if isinstance(vals[ext_ref], basestring):
@@ -2145,9 +2179,7 @@ class IrModelSynchro(models.Model):
             vals = cls.assure_values(vals, None)
         return vals
 
-    def bind_record(
-        self, struct, backend_id, vmodel, vals, constraints, chk_in_queue=None, ctx=None
-    ):
+    def bind_record(self, struct, backend_id, vmodel, vals, constraints, ctx=None):
         def add_constraints(domain, constraints):
             for constr in constraints:
                 add_domain = False
@@ -2279,9 +2311,7 @@ class IrModelSynchro(models.Model):
                     rec=rec,
                 )
             return rec.id, rec
-        if not chk_in_queue and found_valid_key:
-            return -9, None
-        return -7, None
+        return -9 if found_valid_key else -7, None
 
     def get_xmlrpc_response(
         self, backend_id, vmodel, ext_id=False, select=None, mode=None
