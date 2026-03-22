@@ -731,24 +731,24 @@ class IrModelSynchroApply(models.Model):
                 vals[loc_name] = state
         return vals
 
-    def apply_set_weight_vg7(
-        self,
-        backend_id,
-        vals,
-        loc_name,
-        ext_ref,
-        loc_ext_id_name,
-        vmodel,
-        default=None,
-        ctx=None,
-    ):
-        if vals.get(ext_ref):
-            vals[loc_name] = vals[ext_ref]
-            for nm in ("product_uom_qty", "vg7:peso"):
-                if nm in vals:
-                    vals[loc_name] = vals[ext_ref] * vals[nm]
-                    break
-        return vals
+    # def apply_set_weight_vg7(
+    #     self,
+    #     backend_id,
+    #     vals,
+    #     loc_name,
+    #     ext_ref,
+    #     loc_ext_id_name,
+    #     vmodel,
+    #     default=None,
+    #     ctx=None,
+    # ):
+    #     if vals.get(ext_ref):
+    #         vals[loc_name] = vals[ext_ref]
+    #         for nm in ("product_uom_qty", "vg7:peso"):
+    #             if nm in vals:
+    #                 vals[loc_name] = vals[ext_ref] * vals[nm]
+    #                 break
+    #     return vals
 
     def apply_unit_price_vg7(
         self,

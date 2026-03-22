@@ -89,8 +89,7 @@ class SaleOrder(models.Model):
         for nm in ("partner_shipping_id", "partner_invoice_id"):
             if isinstance(vals.get(nm), int) and vals[nm] <= 0:
                 del vals[nm]
-            # if not vals.get(nm) and (not rec or vals.get('partner_id')):
-            if not vals.get(nm) and not rec:
+            if not vals.get(nm) and not rec and vals.get('partner_id'):
                 vals[nm] = vals["partner_id"]
         return vals
 

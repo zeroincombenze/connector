@@ -29,7 +29,6 @@
         "python": [
             "python_plus",
             "odoo_score",
-            "os0",
             "clodoo",
             "z0lib",
             "unidecode",
@@ -37,8 +36,8 @@
         ]
     },
     "version_external_dependencies": [
-        "clodoo>=2.0.11",
-        "python_plus>=2.0.12",
+        "clodoo>=2.0.16",
+        "python_plus>=2.0.18",
         "odoo_score>=2.0.11",
     ],
     "data": [

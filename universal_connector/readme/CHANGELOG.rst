@@ -1,10 +1,10 @@
-10.0.0.3.14 (2026-03-19)
+10.0.0.3.14 (2026-03-22)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 * [FIX] Import new product from VG7 / Import nuovi prodotti da VG7
 * [FIX] Import res.partner.bank
 * [IMP] Weight in sale.order.line
-* [QUA] Test coverage 60% (5019: 1997+3022) [560 TestPoints]
+* [QUA] Test coverage 61% (4903: 1903+3000) [564 TestPoints]
 
 10.0.0.3.13 (2025-07-31)
 ~~~~~~~~~~~~~~~~~~~~~~~~

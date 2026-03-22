@@ -169,15 +169,11 @@ from odoo.osv import expression
 
 _logger = logging.getLogger(__name__)
 try:
-    from python_plus import unicodes
+    from python_plus import unicodes, _u, _b, str2bool
 except ImportError as err:  # pragma: no cover
     _logger.error(err)
 try:
     from unidecode import unidecode
-except ImportError as err:  # pragma: no cover
-    _logger.error(err)
-try:
-    from os0 import os0
 except ImportError as err:  # pragma: no cover
     _logger.error(err)
 try:
@@ -429,9 +425,9 @@ class IrModelSynchro(models.Model):
         if not curloglevel.isdigit():
             curloglevel = loglevel2num.get(curloglevel, "3")
         try:
-            full_msg = os0.u(msg_text % ctx)
+            full_msg = _u(msg_text % ctx)
         except BaseException:   # pragma: no cover
-            full_msg = os0.u(msg_text)
+            full_msg = _u(msg_text)
         if reqloglevel >= curloglevel:
             _logger.info(full_msg)
         if reqloglevel in ("!", "4"):   # pragma: no cover
@@ -1149,18 +1145,11 @@ class IrModelSynchro(models.Model):
         maybe_dif = False
         has_sequence = cache.get_struct_model_attr(actual_model, "sequence")
         has_active = cache.get_struct_model_attr(actual_model, "active")
-        # TODO
-        # if actual_model == "account.account" and req_domain[0][2] == 1434:
-        #     for i, x in enumerate(req_domain):
-        #         if isinstance(x, tuple):
-        #             req_domain[i] = list(x)
-        #     req_domain[0][2] = 1499
         if len(req_domain) == 1 and not cache.get_struct_model_attr(
             actual_model, req_domain[0][0]
         ) and ext_id_name and ext_id_name == req_domain[0][0]:
             domain = [
                 ("model", "=", actual_model),
-                # ("ext_id_name", "=", req_domain[0][0]),
                 ("res_id", req_domain[0][1], req_domain[0][2]),
             ]
             rec = self.env["ir.model.synchro.data"].search(domain)
@@ -1191,12 +1180,8 @@ class IrModelSynchro(models.Model):
                 domain = reduce_domain(req_domain, (["company_id", "", ""]))
                 if domain:
                     rec = exec_search(cls, domain, has_sequence, has_active)
-                # if not rec:
-                #     domain = reduce_domain(req_domain, (["type", "", ""]))
-                #     if domain:
-                #         rec = exec_search(cls, domain, has_sequence, has_active)
         if rec:
-            if not has_sequence and len(rec) > 16:
+            if not has_sequence and len(rec) > 8:
                 rec = False
             elif len(rec) > 1:
                 maybe_dif = True
@@ -1229,18 +1214,6 @@ class IrModelSynchro(models.Model):
         suppl_key = cache.get_struct_model_attr(actual_model, "SUPPL_KEY")
         vmodel = self.get_vmodel(actual_model, spec)
         loc_ext_id_name = self.get_loc_ext_id_name(backend_id, vmodel)
-        # if mode == "tnl":
-        #     translation_model = self.env["synchro.channel.domain.translation"]
-        #     domain = [
-        #         ("model", "=", actual_model),
-        #         ("key", "=", name),
-        #         ("ext_value", "ilike", self.dim_text(value)),
-        #     ]
-        #     rec = translation_model.search(domain)
-        #     if not rec:
-        #         return False
-        #     value = rec[0].odoo_value
-        #     mode = "ilike"
         domain = [(name, mode, value)]
         if name not in (counterpart_pk, loc_ext_id_name):
             if cache.get_struct_model_attr(
@@ -1250,10 +1223,6 @@ class IrModelSynchro(models.Model):
             if suppl_key and ctx.get(suppl_key):
                 domain.append((suppl_key, "=", ctx[suppl_key]))
         rec, maybe_dif = self.do_search(actual_model, domain, spec=spec)
-        # if not rec and mode != "tnl" and isinstance(value, basestring):
-        #     rec = self.get_rec_by_reference(
-        #         backend_id, actual_model, name, value, ctx=ctx, mode="tnl", spec=spec
-        #     )
         if not rec:
             if mode == "=" and name == key_name:
                 return self.get_rec_by_reference(
@@ -1490,8 +1459,6 @@ class IrModelSynchro(models.Model):
         cache = self.env["ir.model.synchro.cache"]
         pfx_depr = "%s_" % cache.get_attr(backend_id, "PREFIX")
         pfx_ext = "%s:" % cache.get_attr(backend_id, "PREFIX")
-        # identity = cache.get_attr(channel_id, 'IDENTITY')
-        # tnldict = self.get_tnldict(channel_id) if identity == 'odoo' else {}
         loc_ext_id_name = self.get_loc_ext_id_name(backend_id, vmodel, force=True)
         counterpart_pk = cache.get_model_attr(
             backend_id, vmodel, "KEY_ID", default="id")
@@ -1542,7 +1509,6 @@ class IrModelSynchro(models.Model):
         self, backend_id, vmodel, loc_name, ext_name, is_foreign, ttype=None
     ):
         cache = self.env["ir.model.synchro.cache"]
-        # identity = cache.get_attr(channel_id, 'IDENTITY')
         actual_model = self.get_actual_model(vmodel, only_name=True)
         if not cache.get_attr(backend_id, actual_model):
             # TODO: channel_id
@@ -1569,7 +1535,7 @@ class IrModelSynchro(models.Model):
         else:
             apply4 = ""
         if ttype == "boolean":
-            default = os0.str2bool(default, True)
+            default = str2bool(default, True)
         spec = cache.get_model_field_attr(
             backend_id, vmodel, loc_name or ".%s" % ext_name, "SPEC", default=""
         )
@@ -1660,7 +1626,7 @@ class IrModelSynchro(models.Model):
 
     def translate_from_to(
             self, tnldict, vmodel, src_value, ext_odoo_ver, fld_name=None):
-        value = os0.u(
+        value = _u(
             transodoo.translate_from_to(
                 tnldict,
                 vmodel,
@@ -1865,7 +1831,7 @@ class IrModelSynchro(models.Model):
                 struct[loc_name]["type"] == "boolean"
                 and isinstance(vals[ext_ref], basestring)
             ):
-                vals[ext_ref] = os0.str2bool(vals[ext_ref], True)
+                vals[ext_ref] = str2bool(vals[ext_ref], True)
             elif (
                 struct[loc_name]["type"] in ("float", "monetary")
                 and isinstance(vals[ext_ref], basestring)
@@ -2206,7 +2172,6 @@ class IrModelSynchro(models.Model):
         if actual_model == "res.partner" and spec in ("delivery", "invoice"):
             ctx["type"] = spec
         cache = self.env["ir.model.synchro.cache"]
-        # def_loc_ext_id_name = self.get_loc_ext_id_name(backend_id, vmodel, force=True)
         loc_ext_id_name = self.get_loc_ext_id_name(backend_id, vmodel)
         if loc_ext_id_name:
             use_sync = cache.get_struct_model_attr(actual_model, loc_ext_id_name)
@@ -2277,7 +2242,7 @@ class IrModelSynchro(models.Model):
                         domain = []
                         break
                     else:
-                        domain.append((key, "=", os0.b(vals[key])))
+                        domain.append((key, "=", _b(vals[key])))
                         if key not in ("type", "is_company"):
                             valid_domain = True
                 if domain and valid_domain:

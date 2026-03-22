@@ -422,7 +422,7 @@ class ExtTestEnv(object):
         force["ask"] = False
         # force["config"] = "./tests/logs/connector.universal_connector_10.conf"
         # force["database"] = "connect10"
-        # force["conai"] = True
+        force["conai"] = True
         # force["xmlrpc_port"] = 8170
         for item in ("ask", "config", "database", "lang", "conai", "xmlrpc_port"):
             if force.get(item):
@@ -1042,7 +1042,6 @@ class ExtTestEnv(object):
         self.init_new_db()
         self.ask_4_ret()
         self.prior_model = self.prior_fct = ""
-        # model = "ir.module.module"
         maxctr = len(MODULE_LIST)
         connector_installed = False
         mk_dev = False
@@ -1885,7 +1884,7 @@ class ExtTestEnv(object):
         main_ext_id = False
         ext_id_field = self.get_ext_id_field(identity, model=model)
         self.write_log("# Starting %s tests on %s" % (fct_test, model), echo=False)
-        # if ext_model == "purchase_orders":  #debug
+        # if ext_model == "orders":  #debug
         #     self.ask_4_ret()
         #     self.connect_user(xmlrpc_port=8170)
         for ext_rec in ext_recs_image:
@@ -2013,13 +2012,13 @@ def main(cli_args=[]):
     # ext_test_env.write_log(
     #     "*** Starting %s test ***" % identity.upper(), echo=True, bb=3)
     # MODELS = (
-    #         "account.account.type",
-    #         "res.country",
-    #         "res.country.state",
-    #         "account.account",
-    #         "res.partner",
-    #         "res.company",
-    #         "res.users",
+    #         # "account.account.type",
+    #         # "res.country",
+    #         # "res.country.state",
+    #         # "account.account",
+    #         # "res.partner",
+    #         # "res.company",
+    #         # "res.users",
     #         "product.uom",
     #         "product.template",
     #         "product.product",
@@ -2033,7 +2032,7 @@ def main(cli_args=[]):
     #         "sale.order",
     #         "purchase.order",
     #         "stock.picking.package.preparation",
-    #         "account.invoice",
+    #         # "account.invoice",
     # )
     # ext_test_env.store_csv_response(identity, MODELS)
     # test_prio = "synchro"
