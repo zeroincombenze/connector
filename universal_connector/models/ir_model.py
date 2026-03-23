@@ -1061,12 +1061,6 @@ class IrModelSynchro(models.Model):
             vals[loc_ext_id_name] = self.get_loc_ext_id_value(
                 backend_id, actual_model, ext_value, spec=spec
             )
-        if (
-            key_name != "company_id"
-            and cache.get_struct_model_attr(actual_model, "MODEL_WITH_COMPANY")
-            and ctx.get("company_id")
-        ):
-            vals["company_id"] = ctx["company_id"]
         if suppl_key and key_name != suppl_key and suppl_key in ctx:
             vals[suppl_key] = ctx[suppl_key]
         if key_name != "name" and cache.get_struct_model_attr(actual_model, "name"):
@@ -1862,6 +1856,12 @@ class IrModelSynchro(models.Model):
             ext_name, loc_name, is_foreign = self.name_from_ref(
                 backend_id, vmodel, ext_ref
             )
+            if loc_name == "company_id" and ctx.get("company_id"):
+                vals["company_id"] = ctx["company_id"]
+                if ext_ref in vals:
+                    del vals[ext_ref]
+                continue
+
             default, apply4, spec = self.get_default_n_apply(
                 backend_id,
                 vmodel,
