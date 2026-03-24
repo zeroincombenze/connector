@@ -656,18 +656,18 @@ class IrModelSynchroCache(models.Model):
 
     def store_field_from_rec(self, backend_id, model, field):
         if field.name:
-            loc_name = field.name
+            loc_name = field.name.strip()
         else:
-            loc_name = ".%s" % field.counterpart_name
+            loc_name = ".%s" % field.counterpart_name.strip()
         if field.counterpart_name:
-            ext_name = field.counterpart_name
+            ext_name = field.counterpart_name.strip()
         else:
-            ext_name = ".%s" % field.name
+            ext_name = ".%s" % field.name.strip()
         required = (
             self.get_struct_model_field_attr(model, loc_name, "required")
             or field.required
         )
-        apply = field.apply
+        apply = field.apply.strip()
         if (
             loc_name
             in itertools.chain.from_iterable(self.get_struct_model_attr(model, "SKEYS"))

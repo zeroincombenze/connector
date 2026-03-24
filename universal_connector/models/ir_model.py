@@ -1450,11 +1450,11 @@ class IrModelSynchro(models.Model):
         return new_value
 
     def name_from_ref(self, backend_id, vmodel, ext_ref):
-        cache = self.env["ir.model.synchro.cache"]
-        pfx_depr = "%s_" % cache.get_attr(backend_id, "PREFIX")
-        pfx_ext = "%s:" % cache.get_attr(backend_id, "PREFIX")
+        Cache = self.env["ir.model.synchro.cache"]
+        pfx_depr = "%s_" % Cache.get_attr(backend_id, "PREFIX")
+        pfx_ext = "%s:" % Cache.get_attr(backend_id, "PREFIX")
         loc_ext_id_name = self.get_loc_ext_id_name(backend_id, vmodel, force=True)
-        counterpart_pk = cache.get_model_attr(
+        counterpart_pk = Cache.get_model_attr(
             backend_id, vmodel, "KEY_ID", default="id")
         if ext_ref == loc_ext_id_name:
             # Case #1 - field is external id like <vg7_id>
@@ -1468,7 +1468,7 @@ class IrModelSynchro(models.Model):
             if loc_name == "id":
                 loc_name = ext_name = ext_ref
             else:
-                ext_name = cache.get_model_field_attr(
+                ext_name = Cache.get_model_field_attr(
                     backend_id, vmodel, loc_name, "LOC_FIELDS", default=""
                 )
                 if ext_name.startswith("."):
@@ -1481,11 +1481,11 @@ class IrModelSynchro(models.Model):
             # Case #3 - field like <vg7:order_id>: both name and value are
             #           of counterpart refs
             is_foreign = True
-            ext_name = ext_ref.split(":", 1)[1]
+            ext_name = ext_ref.split(":", 1)[1].strip()
             if ext_name == counterpart_pk and loc_ext_id_name:
                 loc_name = loc_ext_id_name
             else:
-                loc_name = cache.get_model_field_attr(
+                loc_name = Cache.get_model_field_attr(
                     backend_id, vmodel, ext_name, "EXT_FIELDS", default=""
                 )
             if loc_name.startswith("."):
@@ -2466,8 +2466,8 @@ class IrModelSynchro(models.Model):
             model=vmodel,
             ctx={"chid": backend_id, "xid": ext_id},
         )
-        cache = self.env["ir.model.synchro.cache"]
-        endpoint = cache.get_attr(backend_id, "COUNTERPART_URL")
+        Cache = self.env["ir.model.synchro.cache"]
+        endpoint = Cache.get_attr(backend_id, "COUNTERPART_URL")
         if not endpoint:
             self.logmsg(
                 "error",
@@ -2475,7 +2475,7 @@ class IrModelSynchro(models.Model):
                 ctx={"chid": backend_id},
             )
             return False
-        ext_model = cache.get_model_attr(backend_id, vmodel, "BIND")
+        ext_model = Cache.get_model_attr(backend_id, vmodel, "BIND")
         if not ext_model:
             _logger.error("Model %s not managed by external partner!" % vmodel)
             return False
@@ -2485,7 +2485,7 @@ class IrModelSynchro(models.Model):
             url = os.path.join(endpoint, ext_model, str(ext_id))
         headers = {
             "Authorization": "access_token %s"
-            % cache.get_attr(backend_id, "CLIENT_KEY")
+            % Cache.get_attr(backend_id, "CLIENT_KEY")
         }
         self.logmsg(
             "info",
@@ -2508,11 +2508,11 @@ class IrModelSynchro(models.Model):
                 "sts": getattr(response, "status_code", "N/A"),
                 "chid": backend_id,
                 "url": url,
-                "key": cache.get_attr(backend_id, "CLIENT_KEY"),
-                "pfx": cache.get_attr(backend_id, "PREFIX"),
+                "key": Cache.get_attr(backend_id, "CLIENT_KEY"),
+                "pfx": Cache.get_attr(backend_id, "PREFIX"),
             },
         )
-        cache.clean_cache(backend_id=backend_id, model=vmodel)
+        # Cache.clean_cache(backend_id=backend_id, model=vmodel)
         return {}
 
     def get_csv_response(self, backend_id, vmodel, ext_id=False, mode=None):
@@ -2837,7 +2837,7 @@ class IrModelSynchro(models.Model):
             no_deep_fields = list(set(no_deep_fields) | set(self.DEF_EXCL_FLDS))
             no_deep_fields = list(set(no_deep_fields) - set(self.DEF_INCL_FLDS))
         if not backend_id:
-            cache.clean_cache()
+            # cache.clean_cache()
             _logger.error("!-6! No channel found!")
             return -6
         self.logmsg("debug", "### assigned channel is %s" % backend_id)
@@ -3844,29 +3844,26 @@ class IrModelSynchro(models.Model):
         )
         if not prefix:
             return -7
-        cache = self.env["ir.model.synchro.cache"]
-        channel = self.env["synchro.channel"].assign_backend({"%s:" % prefix: ""})
-        channel_id = channel.id
-        if not channel_id:
-            cache.clean_cache()
+        Cache = self.env["ir.model.synchro.cache"]
+        backend = self.env["synchro.channel"].assign_backend({"%s:" % prefix: ""})
+        backend_id = backend.id
+        if not backend_id:
+            # Cache.clean_cache()
             _logger.error("!-6! No channel found!")
             return -6
         self.logmsg(
-            "debug", "### assigned channel is %(chid)s", ctx={"chid": channel_id}
+            "debug", "### assigned channel is %(chid)s", ctx={"chid": backend_id}
         )
-        # TODO: channel_id
-        cache.open(
-            backend=self.env["synchro.channel"].browse(channel_id), ext_model=ext_model
-        )
-        for model in cache.get_channel_models(channel_id):
-            if not cache.is_struct(model):
+        Cache.open(backend=backend, ext_model=ext_model)
+        for model in Cache.get_channel_models(backend_id):
+            if not Cache.is_struct(model):
                 continue
-            if ext_model != cache.get_model_attr(channel_id, model, "BIND"):
+            if ext_model != Cache.get_model_attr(backend_id, model, "BIND"):
                 continue
             self.logmsg(
                 "info", "### Pulling %(model)s.%(id)s", model=model, ctx={"id": ext_id}
             )
-            return self.pull_1_record(channel_id, model, ext_id)
+            return self.pull_1_record(backend_id, model, ext_id)
         return -8
 
     def manage_module(self, vals):
