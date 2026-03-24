@@ -2684,6 +2684,10 @@ class IrModelSynchro(models.Model):
             )
         if not rec_ids:
             return -7
+
+        if "to_delete" in cls._fields:
+            cls.search([(parent_id_name, "=", parent_id)]).write({"to delete": True})
+
         ext_id_name = Cache.get_model_attr(backend_id, model_child, "", default="id")
         for item in rec_ids:
             if isinstance(item, (int, long)):
@@ -2701,6 +2705,8 @@ class IrModelSynchro(models.Model):
                 vals = item
                 vals[":%s" % parent_id_name] = parent_id
             try:
+                if "to_delete" in cls._fields:
+                    vals[":to delete"] = False
                 id = self.generic_synchro(
                     cls,
                     vals,
@@ -2727,6 +2733,12 @@ class IrModelSynchro(models.Model):
                     ctx={"e": e, "id": item},
                 )
                 return -12
+
+        if "to_delete" in cls._fields:
+            for rec in cls.search([(parent_id_name, "=", parent_id),
+                                   ("to_delete", "=", True)]):
+                rec.unlink()
+
         self.commit(self.env[actual_model], parent_id)
         return ext_id
 
@@ -2741,7 +2753,7 @@ class IrModelSynchro(models.Model):
         """
 
         def pop_ref(backend_id, vmodel, actual_model, id, ext_id):
-            cache.pop_id(backend_id, vmodel, actual_model, loc_id=id, ext_id=ext_id)
+            Cache.pop_id(backend_id, vmodel, actual_model, loc_id=id, ext_id=ext_id)
             self.logmsg(
                 "debug",
                 "Pop %(model)s[%(id)s](%(xid)s) from queue!",
@@ -2767,7 +2779,7 @@ class IrModelSynchro(models.Model):
                         _logger.warning("Ignored field name %s!" % nm)
             if vmodel == "res.partner" and vals.get("type"):
                 vmodel = self.get_vmodel(actual_model, vals["type"])
-                cache.open(model=vmodel)
+                Cache.open(model=vmodel)
             return vmodel, vals
 
         def browse_from_id(actual_cls, vals):
@@ -2816,11 +2828,11 @@ class IrModelSynchro(models.Model):
         actual_model = self.get_actual_model(vmodel, only_name=True)
         struct = self.env[actual_model].fields_get()
         actual_cls = self.get_actual_model(vmodel)
-        cache = self.env["ir.model.synchro.cache"]
+        Cache = self.env["ir.model.synchro.cache"]
         backend = self.env["synchro.channel"].assign_backend(vals)
         backend_id = backend.id
-        identity = cache.get_attr(backend_id, "IDENTITY")
-        cache.open(
+        identity = Cache.get_attr(backend_id, "IDENTITY")
+        Cache.open(
             model=vmodel,
             cls=cls,
             backend=backend,
@@ -2849,20 +2861,20 @@ class IrModelSynchro(models.Model):
         has_state = "state" in struct
         has_2delete = "to_delete" in struct
         has_active = "active" in struct
-        child_ids = cache.get_struct_model_attr(
+        child_ids = Cache.get_struct_model_attr(
             actual_model, "CHILD_IDS", default=False
         )
-        model_child = cache.get_struct_model_attr(actual_model, "MODEL_CHILD")
+        model_child = Cache.get_struct_model_attr(actual_model, "MODEL_CHILD")
         do_auto_process = True
         if has_2delete or (
-            cache.get_model_attr(backend_id, vmodel, "BIND")
-            and cache.get_attr(backend_id, "IDENTITY") == "vg7"
+            Cache.get_model_attr(backend_id, vmodel, "BIND")
+            and Cache.get_attr(backend_id, "IDENTITY") == "vg7"
         ):
             do_auto_process = False
-        if cache.get_attr(backend_id, "IDENTITY") == "vg7":
+        if Cache.get_attr(backend_id, "IDENTITY") == "vg7":
             vmodel, vals = protect_against_vg7(vmodel, actual_model, vals)
         # TODO: channel_id
-        cache.open(backend=backend, ext_model=vmodel)
+        Cache.open(backend=backend, ext_model=vmodel)
         spec = ""
         if vmodel == actual_model:
             if hasattr(cls, "preprocess"):
@@ -2872,7 +2884,7 @@ class IrModelSynchro(models.Model):
             if spec:
                 vmodel = self.get_vmodel(actual_model, spec)
                 actual_model = self.get_actual_model(vmodel)
-                cache.open(model=vmodel)
+                Cache.open(model=vmodel)
             self.logmsg(
                 "debug",
                 '>>> %(vals)s,"%(spec)s"=%(model)s.preprocess()',
@@ -2907,7 +2919,7 @@ class IrModelSynchro(models.Model):
             self.logmsg("info", "### No values passed(%s.%s)" % (vmodel, actual_model))
             return loc_id
         if (
-            cache.get_attr(backend_id, "IDENTITY") == "vg7"
+            Cache.get_attr(backend_id, "IDENTITY") == "vg7"
             and not rec
             and actual_model == "res.partner"
             and spec in ("delivery", "invoice")
@@ -2921,20 +2933,18 @@ class IrModelSynchro(models.Model):
                 _logger.error("!%s! Returned error code!" % erc)
                 pop_ref(backend_id, vmodel, actual_model, loc_id, ext_id)
                 return erc
-        elif has_2delete:
-            vals["to_delete"] = False
         self.drop_invalid_fields(vmodel, vals)
         do_write = True
         if loc_id > 0 and parent_child_mode == "C":
             parent_child_mode = "B"
         if parent_child_mode == "B":
-            cache.set_model_attr(
+            Cache.set_model_attr(
                 backend_id, vmodel, "__%s_ids" % actual_model, vals[child_ids]
             )
             del vals[child_ids]
         elif parent_child_mode == "A":
             # No child passed
-            cache.set_model_attr(backend_id, vmodel, "__%s_ids" % actual_model, [])
+            Cache.set_model_attr(backend_id, vmodel, "__%s_ids" % actual_model, [])
         if loc_id < 1:
             if has_state or has_2delete or not ext_id or parent_child_mode == "C":
                 min_vals = vals
@@ -3029,36 +3039,28 @@ class IrModelSynchro(models.Model):
                     self.logmsg(
                         "debug", "### Nothing to update(%s.%s)" % (actual_model, loc_id)
                     )
-                if do_write and rec and child_ids and hasattr(rec, child_ids):
+                if (
+                    do_write and rec and child_ids and hasattr(rec, child_ids)
+                    and actual_model == "account.payment.term"
+                ):
                     for num, line in enumerate(rec[child_ids]):
-                        # self.logmsg(
-                        #     "debug",
-                        #     '>>>   for %(n)s,"%(line)s" in ' "enumerate(rec.%(ids)s)",
-                        #     ctx={"n": num, "line": line, "ids": child_ids},
-                        # )
                         seq = num + 1
-                        if not hasattr(line, "to_delete"):
-                            child_vals = {}
-                        else:
-                            child_vals = {"to_delete": True}
-                        if actual_model == "account.payment.term":
-                            child_vals["sequence"] = seq
-                        if child_vals:
-                            try:
-                                line.write(child_vals)
-                                self.logmsg(
-                                    "debug",
-                                    ">>> line.write(%(vals)s)",
-                                    ctx={"vals": child_vals},
-                                )
-                            except BaseException as e:  # pragma: no cover
-                                self.env.cr.rollback()  # pylint: disable=invalid-commit
-                                self.logmsg(
-                                    "error",
-                                    "!-2! %(e)s\nvalues=%(val)s",
-                                    model=vmodel,
-                                    ctx={"e": e, "val": child_vals},
-                                )
+                        child_vals = {"sequence": seq}
+                        try:
+                            line.write(child_vals)
+                            self.logmsg(
+                                "debug",
+                                ">>> line.write(%(vals)s)",
+                                ctx={"vals": child_vals},
+                            )
+                        except BaseException as e:  # pragma: no cover
+                            self.env.cr.rollback()  # pylint: disable=invalid-commit
+                            self.logmsg(
+                                "error",
+                                "!-2! %(e)s\nvalues=%(val)s",
+                                model=vmodel,
+                                ctx={"e": e, "val": child_vals},
+                            )
 
         # commit to avoid lost data in recursive write
         self.env.cr.commit()  # pylint: disable=invalid-commit
@@ -3133,11 +3135,6 @@ class IrModelSynchro(models.Model):
         except BaseException:
             _logger.error("!-3! Errore retriving %s.%s!" % (vmodel, loc_id))
             return -3
-        if "to_delete" in struct:
-            cls = self.get_actual_model(model_child)
-            for rec in cls.search([(parent_id_name, "=", loc_id),
-                                   ("to_delete", "=", True)]):
-                rec.unlink()
         loc_id = 0
         if has_state:
             loc_id = self.set_actual_state(struct, vmodel, rec_2_commit)
