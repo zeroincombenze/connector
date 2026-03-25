@@ -42,13 +42,15 @@ class ResPartnerBank(models.Model):
         return vals, ""
 
     @api.model
-    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None):
+    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,
+                no_del_child=False):
         return self.env["ir.model.synchro"].synchro(
             self,
             vals,
             chk_in_queue=chk_in_queue,
             only_minimal=only_minimal,
             no_deep_fields=no_deep_fields,
+            no_del_child=no_del_child,
         )
 
     @api.multi
@@ -61,7 +63,8 @@ class ResPartnerBankCompany(models.Model):
     _inherit = "res.partner.bank"
 
     @api.model
-    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None):
+    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,
+                no_del_child=False):
         if not chk_in_queue:
             vals[":type"] = "company"
         return self.env["ir.model.synchro"].synchro(
@@ -70,6 +73,7 @@ class ResPartnerBankCompany(models.Model):
             chk_in_queue=chk_in_queue,
             only_minimal=only_minimal,
             no_deep_fields=no_deep_fields,
+            no_del_child=no_del_child,
         )
 
     @api.multi

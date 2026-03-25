@@ -61,13 +61,15 @@ class AccountJournal(models.Model):
         return text
 
     @api.model
-    def synchro(self, vals, chk_in_queue=None, no_deep_fields=None, only_minimal=None):
+    def synchro(self, vals, chk_in_queue=None, no_deep_fields=None, only_minimal=None,
+                no_del_child=False):
         return self.env["ir.model.synchro"].synchro(
             self,
             vals,
             chk_in_queue=chk_in_queue,
             no_deep_fields=no_deep_fields,
             only_minimal=only_minimal,
+            no_del_child=no_del_child,
         )
 
     @api.multi

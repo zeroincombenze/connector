@@ -60,7 +60,7 @@
         "views/payment_term_view.xml",
         "views/picking_view.xml",
         "views/partner_bank_view.xml",
-        "views/sequence_view.xml",
+        # "views/sequence_view.xml",
         "views/journal_view.xml",
         "views/synchro_channel_view.xml",
         "views/model_view.xml",

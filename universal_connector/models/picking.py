@@ -38,7 +38,8 @@ class StockPickingPackagePreparation(models.Model):
         return res
 
     @api.model
-    def synchro(self, vals, chk_in_queue=None):
+    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,
+                no_del_child=False):
         # TODO: correct workaround!!
         do_rewrite = False
         if "vg7:ddt_number" in vals:
@@ -48,7 +49,12 @@ class StockPickingPackagePreparation(models.Model):
         if id > 0 and do_rewrite:
             saved_vals["id"] = id
             id = self.env["ir.model.synchro"].synchro(
-                self, saved_vals, chk_in_queue=True
+                self,
+                vals,
+                chk_in_queue=True,
+                only_minimal=only_minimal,
+                no_deep_fields=no_deep_fields,
+                no_del_child=no_del_child,
             )
         return id
 

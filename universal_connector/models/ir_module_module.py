@@ -20,13 +20,15 @@ class IrModuleModule(models.Model):
     original_state = fields.Char("Original Status", copy=False)
 
     @api.model
-    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None):
+    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,
+                no_del_child=False):
         return self.env["ir.model.synchro"].synchro(
             self,
             vals,
             chk_in_queue=chk_in_queue,
             only_minimal=only_minimal,
             no_deep_fields=no_deep_fields,
+            no_del_child=no_del_child,
         )
 
 
@@ -46,11 +48,13 @@ class IrModuleCategory(models.Model):
         return res
 
     @api.model
-    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None):
+    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,
+                no_del_child=False):
         return self.env["ir.model.synchro"].synchro(
             self,
             vals,
             chk_in_queue=chk_in_queue,
             only_minimal=only_minimal,
             no_deep_fields=no_deep_fields,
+            no_del_child=no_del_child,
         )

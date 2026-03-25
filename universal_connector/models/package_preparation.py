@@ -38,7 +38,8 @@ class StockPickingPackagePreparation(models.Model):
         return res
 
     @api.model
-    def synchro(self, vals, chk_in_queue=None, no_deep_fields=None, only_minimal=None):
+    def synchro(self, vals, chk_in_queue=None, no_deep_fields=None, only_minimal=None,
+                no_del_child=False):
         # TODO: correct workaround!!
         do_rewrite = False
         if "vg7:ddt_number" in vals:
@@ -50,11 +51,12 @@ class StockPickingPackagePreparation(models.Model):
             chk_in_queue=chk_in_queue,
             only_minimal=only_minimal,
             no_deep_fields=no_deep_fields,
+            no_del_child=no_del_child,
         )
         if id > 0 and do_rewrite:
             saved_vals["id"] = id
             id = self.env["ir.model.synchro"].synchro(
-                self, saved_vals, chk_in_queue=True
+                self, saved_vals, chk_in_queue=True, no_del_child=no_del_child,
             )
         return id
 
@@ -84,7 +86,8 @@ class StockPickingPackagePreparationLine(models.Model):
         return res
 
     @api.model
-    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None):
+    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,
+                no_del_child=False):
         # TODO: correct workaround!!
         do_rewrite = False
         if "vg7:order_row_id" in vals:
@@ -96,6 +99,7 @@ class StockPickingPackagePreparationLine(models.Model):
             chk_in_queue=chk_in_queue,
             only_minimal=only_minimal,
             no_deep_fields=no_deep_fields,
+            no_del_child=no_del_child
         )
         if id > 0 and do_rewrite:
             id = self.env["ir.model.synchro"].synchro(
@@ -104,6 +108,7 @@ class StockPickingPackagePreparationLine(models.Model):
                 chk_in_queue=chk_in_queue,
                 only_minimal=only_minimal,
                 no_deep_fields=no_deep_fields,
+                no_del_child=no_del_child,
             )
         return id
 
@@ -148,13 +153,15 @@ class StockPickingGoods_description(models.Model):
         return text
 
     @api.model
-    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None):
+    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,
+                no_del_child=False):
         return self.env["ir.model.synchro"].synchro(
             self,
             vals,
             chk_in_queue=chk_in_queue,
             only_minimal=only_minimal,
             no_deep_fields=no_deep_fields,
+            no_del_child=no_del_child,
         )
 
 
@@ -199,13 +206,15 @@ class StockPickingCarriageCondition(models.Model):
         return text
 
     @api.model
-    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None):
+    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,
+                no_del_child=False):
         return self.env["ir.model.synchro"].synchro(
             self,
             vals,
             chk_in_queue=chk_in_queue,
             only_minimal=only_minimal,
             no_deep_fields=no_deep_fields,
+            no_del_child=no_del_child
         )
 
 
@@ -250,13 +259,15 @@ class StockPickingTransportationReason(models.Model):
         return text
 
     @api.model
-    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None):
+    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,
+                no_del_child=False):
         return self.env["ir.model.synchro"].synchro(
             self,
             vals,
             chk_in_queue=chk_in_queue,
             only_minimal=only_minimal,
             no_deep_fields=no_deep_fields,
+            no_del_child=no_del_child
         )
 
 
@@ -301,11 +312,13 @@ class StockPickingTransportationMethod(models.Model):
         return text
 
     @api.model
-    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None):
+    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,
+                no_del_child=False):
         return self.env["ir.model.synchro"].synchro(
             self,
             vals,
             chk_in_queue=chk_in_queue,
             only_minimal=only_minimal,
             no_deep_fields=no_deep_fields,
+            no_del_child=no_del_child
         )

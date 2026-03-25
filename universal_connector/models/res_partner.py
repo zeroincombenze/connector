@@ -322,7 +322,8 @@ class ResPartner(models.Model):
         return vals
 
     @api.model
-    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None):
+    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,
+                no_del_child=False):
         if not chk_in_queue:
             vals[":type"] = "contact"
         return self.env["ir.model.synchro"].synchro(
@@ -331,6 +332,7 @@ class ResPartner(models.Model):
             chk_in_queue=chk_in_queue,
             only_minimal=only_minimal,
             no_deep_fields=no_deep_fields,
+            no_del_child=no_del_child,
         )
 
     @api.multi
@@ -345,7 +347,8 @@ class ResPartnerShipping(models.Model):
     CONTRAINTS = ["id", "!=", "parent_id"]
 
     @api.model
-    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None):
+    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,
+                no_del_child=False):
         vals = self.env["res.partner"].shirt_vals(vals, "vg7:shipping")
         vals[":type"] = "delivery"
         return self.env["ir.model.synchro"].synchro(
@@ -354,6 +357,7 @@ class ResPartnerShipping(models.Model):
             chk_in_queue=chk_in_queue,
             only_minimal=only_minimal,
             no_deep_fields=no_deep_fields,
+            no_del_child=no_del_child,
         )
 
 
@@ -364,7 +368,8 @@ class ResPartnerInvoice(models.Model):
     CONTRAINTS = ["id", "!=", "parent_id"]
 
     @api.model
-    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None):
+    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,
+                no_del_child=False):
         vals = self.env["res.partner"].shirt_vals(vals, "vg7:billing")
         vals[":type"] = "invoice"
         return self.env["ir.model.synchro"].synchro(
@@ -373,6 +378,7 @@ class ResPartnerInvoice(models.Model):
             chk_in_queue=chk_in_queue,
             only_minimal=only_minimal,
             no_deep_fields=no_deep_fields,
+            no_del_child=no_del_child,
         )
 
 
@@ -381,7 +387,8 @@ class ResPartnerSupplier(models.Model):
     _inherit = "res.partner"
 
     @api.model
-    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None):
+    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,
+                no_del_child=False):
         vals["supplier"] = True
         vals[":type"] = "contact"
         return self.env["ir.model.synchro"].synchro(
@@ -390,4 +397,5 @@ class ResPartnerSupplier(models.Model):
             chk_in_queue=chk_in_queue,
             only_minimal=only_minimal,
             no_deep_fields=no_deep_fields,
+            no_del_child=no_del_child,
         )

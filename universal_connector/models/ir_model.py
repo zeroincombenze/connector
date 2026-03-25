@@ -2171,10 +2171,10 @@ class IrModelSynchro(models.Model):
         spec = spec if spec != "supplier" else ""
         if actual_model == "res.partner" and spec in ("delivery", "invoice"):
             ctx["type"] = spec
-        cache = self.env["ir.model.synchro.cache"]
+        Cache = self.env["ir.model.synchro.cache"]
         loc_ext_id_name = self.get_loc_ext_id_name(backend_id, vmodel)
         if loc_ext_id_name:
-            use_sync = cache.get_struct_model_attr(actual_model, loc_ext_id_name)
+            use_sync = Cache.get_struct_model_attr(actual_model, loc_ext_id_name)
         else:
             use_sync = False
         rec = False
@@ -2200,9 +2200,9 @@ class IrModelSynchro(models.Model):
                     ctx={"id": loc_ext_id_name},
                 )
         if not rec:
-            parent_id_name = cache.get_struct_model_attr(actual_model, "PARENT_ID")
+            parent_id_name = Cache.get_struct_model_attr(actual_model, "PARENT_ID")
             found_valid_key = True if parent_id_name else False
-            for keys in cache.get_struct_model_attr(actual_model, "SKEYS") or []:
+            for keys in Cache.get_struct_model_attr(actual_model, "SKEYS") or []:
                 domain = []
                 valid_domain = False
                 if isinstance(keys, basestring):
@@ -2636,7 +2636,7 @@ class IrModelSynchro(models.Model):
 
     @api.model
     def synchro_childs(
-        self, backend_id, vmodel, actual_model, parent_id, ext_id, only_minimal=None
+        self, backend_id, vmodel, actual_model, parent_id, ext_id, only_minimal=None,
     ):
         self.logmsg(
             "debug",
@@ -2687,9 +2687,11 @@ class IrModelSynchro(models.Model):
 
         if "to_delete" in cls._fields:
             cls.search([(parent_id_name, "=", parent_id)]).write({"to delete": True})
-
+        if "sequence" in cls._fields:
+            has_sequence = True
         ext_id_name = Cache.get_model_attr(backend_id, model_child, "", default="id")
-        for item in rec_ids:
+        for num, item in enumerate(rec_ids):
+            seq = num + 1
             if isinstance(item, (int, long)):
                 vals = self.get_model_of_channel(
                     backend_id, model_child
@@ -2704,6 +2706,8 @@ class IrModelSynchro(models.Model):
             else:
                 vals = item
                 vals[":%s" % parent_id_name] = parent_id
+                if has_sequence:
+                    vals[":sequence"] = seq
             try:
                 if "to_delete" in cls._fields:
                     vals[":to delete"] = False
@@ -2713,6 +2717,7 @@ class IrModelSynchro(models.Model):
                     channel_id=backend_id,
                     jacket=True,
                     only_minimal=only_minimal,
+                    no_del_child=True,
                 )
                 if id < 0:
                     self.logmsg(
@@ -2735,16 +2740,16 @@ class IrModelSynchro(models.Model):
                 return -12
 
         if "to_delete" in cls._fields:
-            for rec in cls.search([(parent_id_name, "=", parent_id),
-                                   ("to_delete", "=", True)]):
-                rec.unlink()
+            cls.search(
+                [(parent_id_name, "=", parent_id), ("to_delete", "=", True)]).unlink()
 
         self.commit(self.env[actual_model], parent_id)
         return ext_id
 
     @api.model
     def synchro(
-        self, cls, vals, chk_in_queue=None, no_deep_fields=[], only_minimal=True
+        self, cls, vals, chk_in_queue=None, no_deep_fields=[], only_minimal=True,
+        no_del_child=False
     ):
         """Generic synchronizer entry
         The external counterpart can call this method to synchronize a record;
@@ -2783,7 +2788,6 @@ class IrModelSynchro(models.Model):
             return vmodel, vals
 
         def browse_from_id(actual_cls, vals):
-            # vmodel?
             id = 0
             rec = None
             if "id" in vals:
@@ -2821,9 +2825,13 @@ class IrModelSynchro(models.Model):
         )
         self.logrec = self.logmsg(
             "trace",
-            "synchro(%(vals)s,%(x)s)",
+            "synchro(%(vals)s,%(x)s,%(y)s)",
             model=vmodel,
-            ctx={"vals": vals, "x": chk_in_queue},
+            ctx={
+                "vals": vals,
+                "x": "in que" if chk_in_queue else "",
+                "y": "internal" if no_del_child else ""
+            },
         )
         actual_model = self.get_actual_model(vmodel, only_name=True)
         struct = self.env[actual_model].fields_get()
@@ -2933,6 +2941,8 @@ class IrModelSynchro(models.Model):
                 _logger.error("!%s! Returned error code!" % erc)
                 pop_ref(backend_id, vmodel, actual_model, loc_id, ext_id)
                 return erc
+        elif has_2delete:
+            vals["to_delete"] = False
         self.drop_invalid_fields(vmodel, vals)
         do_write = True
         if loc_id > 0 and parent_child_mode == "C":
@@ -3037,11 +3047,14 @@ class IrModelSynchro(models.Model):
                         return -2
                 elif do_write:
                     self.logmsg(
-                        "debug", "### Nothing to update(%s.%s)" % (actual_model, loc_id)
+                        "debug", "### Nothing to update(%s.%s)"
+                                 % (actual_model, loc_id),
+                        rec=rec
                     )
                 if (
                     do_write and rec and child_ids and hasattr(rec, child_ids)
-                    and actual_model == "account.payment.term"
+                    # and actual_model == "account.payment.term"
+                    and Cache.get_struct_model_attr(model_child, "sequence")
                 ):
                     for num, line in enumerate(rec[child_ids]):
                         seq = num + 1
@@ -3079,6 +3092,7 @@ class IrModelSynchro(models.Model):
             elif do_auto_process:
                 done_post = self.postprocess(backend_id, vmodel, loc_id, vals)
             self.synchro_queue(backend_id)
+        parent_id_name = Cache.get_struct_model_attr(actual_model, "PARENT_ID")
         if parent_child_mode == "B" and not done_post:
             sts = self.synchro_childs(
                 backend_id,
@@ -3097,6 +3111,9 @@ class IrModelSynchro(models.Model):
                 "### Child mode %s: counterpart must send child records"
                 % parent_child_mode,
             )
+        elif rec and loc_id > 0 and "to_delete" in rec and not no_del_child:
+            actual_cls.search([(parent_id_name, "=", rec[parent_id_name].id),
+                               ("to_delete", "=", True)]).unlink()
         pop_ref(backend_id, vmodel, actual_model, loc_id, ext_id)
         _logger.info("!%s! Returned ID of %s" % (loc_id, vmodel))
         return loc_id
@@ -3154,6 +3171,7 @@ class IrModelSynchro(models.Model):
         channel_id=None,
         only_minimal=True,
         no_deep_fields=None,
+        no_del_child=False,
     ):
         self.logmsg(
             "debug",
@@ -3169,6 +3187,7 @@ class IrModelSynchro(models.Model):
                     chk_in_queue=chk_in_queue,
                     only_minimal=only_minimal,
                     no_deep_fields=no_deep_fields,
+                    no_del_child=no_del_child,
                 )
             else:
                 return cls.synchro(
@@ -3176,6 +3195,7 @@ class IrModelSynchro(models.Model):
                     chk_in_queue=chk_in_queue,
                     only_minimal=only_minimal,
                     no_deep_fields=no_deep_fields,
+                    no_del_child=no_del_child,
                 )
         else:
             if jacket:
