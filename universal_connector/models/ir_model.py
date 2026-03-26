@@ -3092,7 +3092,7 @@ class IrModelSynchro(models.Model):
                 done_post = cls.postprocess(backend_id, loc_id, vals)
             elif do_auto_process:
                 done_post = self.postprocess(backend_id, vmodel, loc_id, vals)
-            self.synchro_queue(backend_id)
+            # self.synchro_queue(backend_id)
         parent_id_name = Cache.get_struct_model_attr(actual_model, "PARENT_ID")
         if parent_child_mode == "B" and not done_post:
             sts = self.synchro_childs(
@@ -3115,6 +3115,13 @@ class IrModelSynchro(models.Model):
         elif rec and loc_id > 0 and "to_delete" in rec and not no_del_child:
             actual_cls.search([(parent_id_name, "=", rec[parent_id_name].id),
                                ("to_delete", "=", True)]).unlink()
+        if (
+            loc_id > 0
+            and not chk_in_queue
+            and vmodel == actual_model
+            and not no_del_child
+        ):
+            self.synchro_queue(backend_id)
         pop_ref(backend_id, vmodel, actual_model, loc_id, ext_id)
         _logger.info("!%s! Returned ID of %s" % (loc_id, vmodel))
         return loc_id
