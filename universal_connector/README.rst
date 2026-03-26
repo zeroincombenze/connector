@@ -1,5 +1,5 @@
 ============================================================
-|icon| Universal Connector/Connettore universale 10.0.0.3.14
+|icon| Universal Connector/Connettore universale 10.0.0.3.15
 ============================================================
 
 .. |icon| image:: https://raw.githubusercontent.com/zeroincombenze/connector/10.0/universal_connector/static/description/icon.png
@@ -187,6 +187,12 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 
 ChangeLog History | Cronologia modifiche
 ----------------------------------------
+
+10.0.0.3.14 (2026-03-26)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [FIX] Minor fixes
+* [QUA] Test coverage 61% (4903: 1903+3000) [564 TestPoints]
 
 10.0.0.3.14 (2026-03-22)
 ~~~~~~~~~~~~~~~~~~~~~~~~
