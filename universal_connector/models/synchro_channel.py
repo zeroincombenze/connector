@@ -613,8 +613,8 @@ class SynchroChannelModel(models.Model):
                 datas.append(ixs[id])
             return datas
 
-        cache = self.env["ir.model.synchro.cache"]
-        cache.open(backend=self.synchro_channel_id, model=self.name)
+        Cache = self.env["ir.model.synchro.cache"]
+        Cache.open(backend=self.synchro_channel_id, model=self.name)
         if not self.counterpart_name:
             return {}
         channel = self.synchro_channel_id
@@ -626,8 +626,8 @@ class SynchroChannelModel(models.Model):
                 ctx={"chid": channel.id},
             )
             return {}
-        cnx = cache.get_attr(channel.id, "CNX")
-        session = cache.get_attr(channel.id, "SESSION")
+        cnx = Cache.get_attr(channel.id, "CNX")
+        session = Cache.get_attr(channel.id, "SESSION")
         method = channel.method.lower()
         super_method = "rpc" if channel.method in ("XML", "JSON") else "gen"
         if not cnx or not session:
@@ -645,8 +645,8 @@ class SynchroChannelModel(models.Model):
                         ctx={"fct": fct, "ep": endpoint},
                     )
                     cnx, session = getattr(channel, fct)()
-                    cache.set_attr(channel.id, "CNX", cnx)
-                    cache.set_attr(channel.id, "SESSION", session)
+                    Cache.set_attr(channel.id, "CNX", cnx)
+                    Cache.set_attr(channel.id, "SESSION", session)
                     break
         vals = False
         for fct in (
@@ -697,7 +697,7 @@ class SynchroChannelModel(models.Model):
                     "pfx": channel.prefix,
                 },
             )
-            cache.clean_cache(backend_id=channel.id, model=channel.name)
+            Cache.clean_cache(backend_id=channel.id, model=channel.name)
             vals = {} if (ext_id and not mode) else []
         return sort_data(vals)
 

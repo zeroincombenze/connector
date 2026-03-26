@@ -1,3 +1,0 @@
-mezzo,tipo_porto,order_rows,causal_id,aspetto_esteriore_dei_beni,ddt_number,note,data_emissione,customer_id,id
-Corriere,Porto Assegnato (EXW),"[{u'product_id': 11, u'quantita': 50.0, u'ddt_id': 231, u'descrizione': u'Prodotto Alpha - Azalea', u'prezzo_unitario': 1.05, u'id': 2311, u'_why': u'Price with tax amount'}]",3,Cartoni su Bancale,24/231,Controllare la merce prima del ritiro,2024-05-16,101,231
-Corriere,Porto Assegnato (EXW),"[{'product_id': 12, 'quantita': 60.0, 'ddt_id': 310, 'descrizione': 'Prodotto Beta - Begonia', 'prezzo_unitario': 5.35, 'id': 3101, '_why': 'Price with tax amount'}]",3,Cartoni su Bancale,24/310,Controllare la merce prima del ritiro,2024-05-31,101,310

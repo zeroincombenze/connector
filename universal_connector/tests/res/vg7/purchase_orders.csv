@@ -1,3 +1,0 @@
-payment_id,order_rows,supplier_id,order_id,date,order_state,order_number,id
-31,"[{u'quantita': 50, u'order_id': 111, u'descrizione': u'Prodotto Alpha', u'um': u'', u'prodotto': u'', u'um_id': False, u'prezzo_unitario': 1.05, u'id': 1111, u'_why': u''}]",101,240111,2024-05-17,In lavorazione,PO-24517,111
-30,"[{'quantita': 60, 'order_id': 121, 'descrizione': 'Prodotto Beta - Begonia', 'um': '', 'prodotto': '', 'um_id': False, 'prezzo_unitario': 5.35, 'id': 1211, '_why': ''}]",101,240121,2024-05-31,In lavorazione,PO-24531,121

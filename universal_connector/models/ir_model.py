@@ -1068,11 +1068,8 @@ class IrModelSynchro(models.Model):
                 vals["name"] = "Unknown %s" % ext_value
             else:
                 vals["name"] = "%s=%s" % (key_name, value)
-        elif key_name != "code" and cache.get_struct_model_attr(actual_model, "code"):
-            if ext_value:
-                vals["name"] = "Unknown %s" % ext_value
-            else:
-                vals["code"] = "%s=%s" % (key_name, value)
+        if cache.get_struct_model_attr(actual_model, "code") and ext_value:
+            vals["code"] = "code %s" % ext_value
         if actual_model == "res.partner" and spec in ("delivery", "invoice"):
             vals["type"] = spec
         if vmodel == "stock.picking.goods_description":
@@ -1924,16 +1921,11 @@ class IrModelSynchro(models.Model):
             vals = cast_type(vals, actual_model, loc_name, ext_ref, struct)
 
             if loc_name == child_ids:
-                if isinstance(vals[ext_ref], (list, tuple)):
-                    if only_internal:
-                        parent_child_mode = "C"
-                        for x in vals[ext_ref]:
-                            if not isinstance(vals[ext_ref][x], dict):
-                                parent_child_mode = "B"
-                                break
-                    else:
-                        parent_child_mode = "B"
-                vals = rm_ext_value(vals, loc_name, ext_name, ext_ref, is_foreign)
+                Cache.set_model_attr(
+                    backend_id, vmodel, "__%s_ids" % actual_model, vals[ext_ref]
+                )
+                del vals[ext_ref]
+                parent_child_mode = "B"
                 continue
 
             elif is_foreign:
@@ -2686,12 +2678,13 @@ class IrModelSynchro(models.Model):
             return -7
 
         if "to_delete" in cls._fields:
-            cls.search([(parent_id_name, "=", parent_id)]).write({"to delete": True})
+            cls.search([(parent_id_name, "=", parent_id),
+                        ("to_delete", "=", False)]).write({"to_delete": True})
         if "sequence" in cls._fields:
             has_sequence = True
         ext_id_name = Cache.get_model_attr(backend_id, model_child, "", default="id")
         for num, item in enumerate(rec_ids):
-            seq = num + 1
+            sequence = num + 1
             if isinstance(item, (int, long)):
                 vals = self.get_model_of_channel(
                     backend_id, model_child
@@ -2705,12 +2698,12 @@ class IrModelSynchro(models.Model):
                     continue
             else:
                 vals = item
-                vals[":%s" % parent_id_name] = parent_id
-                if has_sequence:
-                    vals[":sequence"] = seq
+            vals[":%s" % parent_id_name] = parent_id
+            if has_sequence:
+                vals[":sequence"] = sequence
+            if "to_delete" in cls._fields:
+                vals[":to delete"] = False
             try:
-                if "to_delete" in cls._fields:
-                    vals[":to delete"] = False
                 id = self.generic_synchro(
                     cls,
                     vals,
@@ -2743,7 +2736,7 @@ class IrModelSynchro(models.Model):
             cls.search(
                 [(parent_id_name, "=", parent_id), ("to_delete", "=", True)]).unlink()
 
-        self.commit(self.env[actual_model], parent_id)
+        self.commit_child(self.env[actual_model], parent_id)
         return ext_id
 
     @api.model
@@ -2869,10 +2862,20 @@ class IrModelSynchro(models.Model):
         has_state = "state" in struct
         has_2delete = "to_delete" in struct
         has_active = "active" in struct
+        has_sequence = "sequence" in struct
         child_ids = Cache.get_struct_model_attr(
             actual_model, "CHILD_IDS", default=False
         )
         model_child = Cache.get_struct_model_attr(actual_model, "MODEL_CHILD")
+        if no_del_child:
+            sequence = 0
+        else:
+            last_model = Cache.get_attr(backend_id, "LAST_MODEL")
+            sequence = Cache.get_attr(
+                backend_id, "CTR", default=0) + 1 if last_model == actual_model else 1
+            if has_sequence and "sequence" not in vals:
+                vals["sequence"] = sequence
+
         do_auto_process = True
         if has_2delete or (
             Cache.get_model_attr(backend_id, vmodel, "BIND")
@@ -2905,6 +2908,8 @@ class IrModelSynchro(models.Model):
         vals, ref_in_queue, parent_child_mode = self.map_to_internal(
             struct, backend_id, vmodel, vals, no_deep_fields=no_deep_fields
         )
+        if has_sequence and "sequence" in vals:
+            sequence = vals["sequence"]
         ext_id_name = self.get_loc_ext_id_name(backend_id, vmodel)
         ext_id = vals.get(ext_id_name)
         if ref_in_queue:
@@ -2924,7 +2929,9 @@ class IrModelSynchro(models.Model):
                 struct, backend_id, vmodel, vals, constraints)
         if loc_id == -7 and not has_state:
             pop_ref(backend_id, vmodel, actual_model, False, ext_id)
-            self.logmsg("info", "### No values passed(%s.%s)" % (vmodel, actual_model))
+            self.logmsg("info",
+                        "### No values passed(%s.%s)" % (vmodel, actual_model),
+                        logrec=self.logrec)
             return loc_id
         if (
             Cache.get_attr(backend_id, "IDENTITY") == "vg7"
@@ -2941,22 +2948,12 @@ class IrModelSynchro(models.Model):
                 _logger.error("!%s! Returned error code!" % erc)
                 pop_ref(backend_id, vmodel, actual_model, loc_id, ext_id)
                 return erc
-        elif has_2delete:
+        if has_2delete:
             vals["to_delete"] = False
         self.drop_invalid_fields(vmodel, vals)
         do_write = True
-        if loc_id > 0 and parent_child_mode == "C":
-            parent_child_mode = "B"
-        if parent_child_mode == "B":
-            Cache.set_model_attr(
-                backend_id, vmodel, "__%s_ids" % actual_model, vals[child_ids]
-            )
-            del vals[child_ids]
-        elif parent_child_mode == "A":
-            # No child passed
-            Cache.set_model_attr(backend_id, vmodel, "__%s_ids" % actual_model, [])
         if loc_id < 1:
-            if has_state or has_2delete or not ext_id or parent_child_mode == "C":
+            if has_state or has_2delete or not ext_id:
                 min_vals = vals
                 do_write = False
                 vals = self.set_default_values(cls, backend_id, vmodel, vals)
@@ -3012,6 +3009,7 @@ class IrModelSynchro(models.Model):
                     "error",
                     "!-3! %(e)s\nvalues=%(val)s",
                     model=vmodel,
+                    logrec=self.logrec,
                     rec=rec,
                     ctx={"e": e, "val": saved_vals},
                 )
@@ -3049,16 +3047,16 @@ class IrModelSynchro(models.Model):
                     self.logmsg(
                         "debug", "### Nothing to update(%s.%s)"
                                  % (actual_model, loc_id),
+                        logrec=self.logrec,
                         rec=rec
                     )
                 if (
                     do_write and rec and child_ids and hasattr(rec, child_ids)
-                    # and actual_model == "account.payment.term"
                     and Cache.get_struct_model_attr(model_child, "sequence")
                 ):
                     for num, line in enumerate(rec[child_ids]):
-                        seq = num + 1
-                        child_vals = {"sequence": seq}
+                        sequence = num + 1
+                        child_vals = {"sequence": sequence}
                         try:
                             line.write(child_vals)
                             self.logmsg(
@@ -3078,6 +3076,9 @@ class IrModelSynchro(models.Model):
         # commit to avoid lost data in recursive write
         self.env.cr.commit()  # pylint: disable=invalid-commit
 
+        if not no_del_child:
+            Cache.set_attr(backend_id, "LAST_MODEL", actual_model)
+            Cache.get_attr(backend_id, "CTR", sequence)
         done_post = False
         if loc_id > 0 and not chk_in_queue and vmodel == actual_model:
             if actual_model == "res.lang":
@@ -3119,7 +3120,7 @@ class IrModelSynchro(models.Model):
         return loc_id
 
     @api.model
-    def commit(self, cls, loc_id, ext_id=None):
+    def commit_child(self, cls, loc_id, ext_id=None):
         vmodel = cls.__class__.__name__
         actual_model = self.get_actual_model(vmodel, only_name=True)
         self.logmsg(
@@ -3147,6 +3148,7 @@ class IrModelSynchro(models.Model):
             return -5
         if (not loc_id or loc_id < 1) and ext_id:
             loc_id = self.bind_record(struct, 1, vmodel, {"id": ext_id}, [], False)
+
         try:
             rec_2_commit = self.get_actual_model(vmodel).browse(loc_id)
         except BaseException:
