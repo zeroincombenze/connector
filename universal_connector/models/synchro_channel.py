@@ -398,8 +398,8 @@ class SynchroChannelModel(models.Model):
         model = self.name
         file_csv = os.path.expanduser(os.path.join(dirname, ext_model + ".csv"))
         self.env["ir.model.synchro"].logmsg(
-            "info",
-            ">>> %(model)s.get_csv_response(cnx,session,id=%(xid)s,%(csv)s)",
+            "warning",
+            "%(model)s.get_csv_response(cnx,session,id=%(xid)s,%(csv)s)",
             model=model,
             ctx={"xid": ext_id, "csv": file_csv},
         )

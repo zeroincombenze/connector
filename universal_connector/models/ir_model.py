@@ -404,6 +404,7 @@ class IrModelSynchro(models.Model):
     def logmsg(
         self, loglevel, msg_text, rec=None, model=None, id=None, logrec=None, ctx=None
     ):
+
         ctx = ctx or {}
         ctx["model"] = ctx.get("model", model or "")
         ctx["id"] = id or ctx.get("id", rec and rec.id or False)
@@ -430,7 +431,6 @@ class IrModelSynchro(models.Model):
             full_msg = _u(msg_text)
         if reqloglevel >= curloglevel:
             _logger.info(full_msg)
-        if reqloglevel in ("!", "4"):   # pragma: no cover
             return self.env["ir.model.synchro.log"].logger(
                 model, rec, full_msg, logrec=logrec, id=ctx["id"]
             )
@@ -517,31 +517,31 @@ class IrModelSynchro(models.Model):
 
     @api.model
     def get_loc_ext_id_value(self, backend_id, model, ext_id, spec=None):
-        cache = self.env["ir.model.synchro.cache"]
+        Cache = self.env["ir.model.synchro.cache"]
         vmodel = self.get_vmodel(model, spec)
-        cache.open(model=vmodel)
-        offset = cache.get_model_attr(backend_id, vmodel, "ID_OFFSET", default=0)
+        Cache.open(model=vmodel)
+        offset = Cache.get_model_attr(backend_id, vmodel, "ID_OFFSET", default=0)
         if ext_id < offset:
             return ext_id + offset
         return ext_id
 
     @api.model
     def get_actual_ext_id_value(self, backend_id, model, ext_id, spec=None):
-        cache = self.env["ir.model.synchro.cache"]
+        Cache = self.env["ir.model.synchro.cache"]
         vmodel = self.get_vmodel(model, spec)
-        cache.open(model=vmodel)
-        offset = cache.get_model_attr(backend_id, vmodel, "ID_OFFSET", default=0)
+        Cache.open(model=vmodel)
+        offset = Cache.get_model_attr(backend_id, vmodel, "ID_OFFSET", default=0)
         if ext_id > offset:
             return ext_id - offset
         return ext_id
 
     def get_tnldict(self, backend_id):
-        cache = self.env["ir.model.synchro.cache"]
-        tnldict = cache.get_attr(backend_id, "TNL")
+        Cache = self.env["ir.model.synchro.cache"]
+        tnldict = Cache.get_attr(backend_id, "TNL")
         if not tnldict:
             tnldict = {}
             transodoo.read_stored_dict(tnldict)
-            cache.set_attr(backend_id, "TNL", tnldict)
+            Cache.set_attr(backend_id, "TNL", tnldict)
         return tnldict
 
     def get_ext_odoo_ver(self, prefix):
@@ -566,7 +566,7 @@ class IrModelSynchro(models.Model):
         return vals
 
     def drop_invalid_fields(self, vmodel, vals, backend_id=None):
-        cache = self.env["ir.model.synchro.cache"]
+        Cache = self.env["ir.model.synchro.cache"]
         saved_ext_id = None
         if backend_id:
             ext_id_name = self.get_loc_ext_id_name(backend_id, vmodel)
@@ -575,18 +575,18 @@ class IrModelSynchro(models.Model):
         actual_model = self.get_actual_model(vmodel, only_name=True)
         if isinstance(vals, (list, tuple)):     # pragma: no cover
             to_delete = list(
-                set(vals) - set(cache.get_struct_attr(actual_model).keys())
+                set(vals) - set(Cache.get_struct_attr(actual_model).keys())
             )
         else:
             to_delete = list(
-                set(vals.keys()) - set(cache.get_struct_attr(actual_model).keys())
+                set(vals.keys()) - set(Cache.get_struct_attr(actual_model).keys())
             )
         if saved_ext_id:
             vals[ext_id_name] = saved_ext_id
         return self.drop_fields(vals, to_delete)
 
     def drop_protected_fields(self, backend_id, vmodel, vals, rec):
-        cache = self.env["ir.model.synchro.cache"]
+        Cache = self.env["ir.model.synchro.cache"]
         actual_model = self.get_actual_model(vmodel, only_name=True)
         loc_ext_id_name = self.get_loc_ext_id_name(backend_id, vmodel)
         for field in vals.copy():
@@ -595,12 +595,12 @@ class IrModelSynchro(models.Model):
                 continue
             protect_update = max(
                 int(
-                    cache.get_struct_model_field_attr(
+                    Cache.get_struct_model_field_attr(
                         actual_model, field, "protect_update", default="0"
                     )
                 ),
                 int(
-                    cache.get_model_field_attr(
+                    Cache.get_model_field_attr(
                         backend_id, vmodel, field, "PROTECT", default="0"
                     )
                 ),
@@ -618,7 +618,7 @@ class IrModelSynchro(models.Model):
                 del vals[field]
             elif isinstance(vals[field], (basestring, int, long, float, bool)):
                 if (
-                    cache.get_struct_model_field_attr(actual_model, field, "ttype")
+                    Cache.get_struct_model_field_attr(actual_model, field, "ttype")
                     == "many2one"
                 ):
                     if (rec[field] and vals[field] == rec[field].id) or (
@@ -1050,10 +1050,10 @@ class IrModelSynchro(models.Model):
             ctx={"key": key_name, "id": value, "ext_id": ext_value},
         )
         ctx = ctx or {}
-        cache = self.env["ir.model.synchro.cache"]
+        Cache = self.env["ir.model.synchro.cache"]
         vmodel = self.get_vmodel(actual_model, spec)
         loc_ext_id_name = self.get_loc_ext_id_name(backend_id, vmodel)
-        suppl_key = cache.get_struct_model_attr(actual_model, "SUPPL_KEY")
+        suppl_key = Cache.get_struct_model_attr(actual_model, "SUPPL_KEY")
         cls = self.env[vmodel]
         vals = {key_name: value}
         if ext_value and loc_ext_id_name:
@@ -1062,12 +1062,12 @@ class IrModelSynchro(models.Model):
             )
         if suppl_key and key_name != suppl_key and suppl_key in ctx:
             vals[suppl_key] = ctx[suppl_key]
-        if key_name != "name" and cache.get_struct_model_attr(actual_model, "name"):
+        if key_name != "name" and Cache.get_struct_model_attr(actual_model, "name"):
             if ext_value:
                 vals["name"] = "Unknown %s" % ext_value
             else:
                 vals["name"] = "%s=%s" % (key_name, value)
-        if cache.get_struct_model_attr(actual_model, "code") and ext_value:
+        if Cache.get_struct_model_attr(actual_model, "code") and ext_value:
             vals["code"] = "code %s" % ext_value
         if actual_model == "res.partner" and spec in ("delivery", "invoice"):
             vals["type"] = spec
@@ -1078,9 +1078,10 @@ class IrModelSynchro(models.Model):
                 cls, vals, chk_in_queue=True, only_minimal=True
             )
             if new_value > 0:
-                in_queue = cache.get_attr(backend_id, "IN_QUEUE")
+                in_queue = Cache.get_attr(backend_id, "IN_QUEUE")
                 in_queue.append([vmodel, new_value])
-                cache.set_attr(backend_id, "IN_QUEUE", in_queue)
+                (Cache.
+                 r(backend_id, "IN_QUEUE", in_queue))
             else:
                 new_value = False
         except BaseException as e:  # pragma: no cover
@@ -1130,12 +1131,12 @@ class IrModelSynchro(models.Model):
                 domain = []
             return domain
 
-        cache = self.env["ir.model.synchro.cache"]
+        Cache = self.env["ir.model.synchro.cache"]
         cls = self.env[actual_model]
         maybe_dif = False
-        has_sequence = cache.get_struct_model_attr(actual_model, "sequence")
-        has_active = cache.get_struct_model_attr(actual_model, "active")
-        if len(req_domain) == 1 and not cache.get_struct_model_attr(
+        has_sequence = Cache.get_struct_model_attr(actual_model, "sequence")
+        has_active = Cache.get_struct_model_attr(actual_model, "active")
+        if len(req_domain) == 1 and not Cache.get_struct_model_attr(
             actual_model, req_domain[0][0]
         ) and ext_id_name and ext_id_name == req_domain[0][0]:
             domain = [
@@ -1190,23 +1191,23 @@ class IrModelSynchro(models.Model):
             ctx={"name": name, "id": value, "m": mode},
         )
         ctx = ctx or {}
-        cache = self.env["ir.model.synchro.cache"]
-        if not cache.is_manageable(actual_model):
+        Cache = self.env["ir.model.synchro.cache"]
+        if not Cache.is_manageable(actual_model):
             return False
-        counterpart_pk = cache.get_model_attr(
+        counterpart_pk = Cache.get_model_attr(
             backend_id, actual_model, "KEY_ID", default="id"
         )
-        key_name = cache.get_struct_model_attr(
+        key_name = Cache.get_struct_model_attr(
             actual_model, "MODEL_KEY", default="name"
         )
         if not key_name:
             return False
-        suppl_key = cache.get_struct_model_attr(actual_model, "SUPPL_KEY")
+        suppl_key = Cache.get_struct_model_attr(actual_model, "SUPPL_KEY")
         vmodel = self.get_vmodel(actual_model, spec)
         loc_ext_id_name = self.get_loc_ext_id_name(backend_id, vmodel)
         domain = [(name, mode, value)]
         if name not in (counterpart_pk, loc_ext_id_name):
-            if cache.get_struct_model_attr(
+            if Cache.get_struct_model_attr(
                 actual_model, "MODEL_WITH_COMPANY"
             ) and ctx.get("company_id"):
                 domain.append(("company_id", "=", ctx["company_id"]))
@@ -1224,7 +1225,7 @@ class IrModelSynchro(models.Model):
                     mode="ilike",
                     spec=spec,
                 )
-            elif name in ("code", "description") and cache.get_struct_model_attr(
+            elif name in ("code", "description") and Cache.get_struct_model_attr(
                 actual_model, "MODEL_WITH_NAME"
             ):
                 return self.get_rec_by_reference(
@@ -1259,8 +1260,8 @@ class IrModelSynchro(models.Model):
                 return self.env.ref(value).id
             except BaseException:  # pragma: no cover
                 pass
-        cache = self.env["ir.model.synchro.cache"]
-        key_name = cache.get_struct_model_attr(
+        Cache = self.env["ir.model.synchro.cache"]
+        key_name = Cache.get_struct_model_attr(
             actual_model, "MODEL_KEY", default="name"
         )
         if not key_name:
@@ -1271,7 +1272,7 @@ class IrModelSynchro(models.Model):
         )
         if rec:
             new_value = rec[0].id
-        if not new_value and not no_create and cache.is_manageable(actual_model):
+        if not new_value and not no_create and Cache.is_manageable(actual_model):
             new_value = self.create_new_ref(
                 backend_id, actual_model, key_name, value, False, ctx=ctx, spec=spec
             )
@@ -1297,7 +1298,7 @@ class IrModelSynchro(models.Model):
             model=actual_model,
             ctx={"id": value_id, "spec": spec},
         )
-        cache = self.env["ir.model.synchro.cache"]
+        Cache = self.env["ir.model.synchro.cache"]
         loc_ext_id_name = self.get_loc_ext_id_name(
             backend_id, actual_model, spec=spec, force=True
         )
@@ -1328,7 +1329,7 @@ class IrModelSynchro(models.Model):
         if not new_value and not no_create:
             if vmodel:
                 new_value = self.sync_rec_from_counterpart(backend_id, vmodel, value_id)
-        if not new_value and not no_create and cache.is_manageable(vmodel):
+        if not new_value and not no_create and Cache.is_manageable(vmodel):
             new_value = self.create_new_ref(
                 backend_id,
                 vmodel,
@@ -1376,7 +1377,7 @@ class IrModelSynchro(models.Model):
         # VG7 wrong data
         if value == -1:
             return False
-        cache = self.env["ir.model.synchro.cache"]
+        Cache = self.env["ir.model.synchro.cache"]
         actual_model = self.get_actual_model(vmodel, only_name=True)
         relation = struct[name]["relation"]
         if not relation:
@@ -1386,11 +1387,11 @@ class IrModelSynchro(models.Model):
         if relation == actual_model and ttype == "one2many":
             # Avoid recursive request, i.e. res.partner
             return []
-        if not cache.is_manageable(relation):
+        if not Cache.is_manageable(relation):
             return []
         tomany = True if ttype in ("one2many", "many2many") else False
         # TODO: channel_id
-        cache.open(
+        Cache.open(
             backend=self.env["synchro.channel"].browse(backend_id), model=relation
         )
         if isinstance(value, basestring):
@@ -1498,19 +1499,19 @@ class IrModelSynchro(models.Model):
     def get_default_n_apply(
         self, backend_id, vmodel, loc_name, ext_name, is_foreign, ttype=None
     ):
-        cache = self.env["ir.model.synchro.cache"]
+        Cache = self.env["ir.model.synchro.cache"]
         actual_model = self.get_actual_model(vmodel, only_name=True)
-        if not cache.get_attr(backend_id, actual_model):
+        if not Cache.get_attr(backend_id, actual_model):
             # TODO: channel_id
-            cache.open(
+            Cache.open(
                 backend=self.env["synchro.channel"].browse(backend_id),
                 model=actual_model,
             )
-        default = cache.get_model_field_attr(
+        default = Cache.get_model_field_attr(
             backend_id, vmodel, loc_name or ".%s" % ext_name, "APPLY", default=""
         )
         if not default:
-            default = cache.get_model_field_attr(
+            default = Cache.get_model_field_attr(
                 backend_id,
                 actual_model,
                 loc_name or ".%s" % ext_name,
@@ -1526,7 +1527,7 @@ class IrModelSynchro(models.Model):
             apply4 = ""
         if ttype == "boolean":
             default = str2bool(default, True)
-        spec = cache.get_model_field_attr(
+        spec = Cache.get_model_field_attr(
             backend_id, vmodel, loc_name or ".%s" % ext_name, "SPEC", default=""
         )
         return default, apply4, spec
@@ -1726,8 +1727,8 @@ class IrModelSynchro(models.Model):
             return vals
 
         def priority_fields(backend_id, vals, loc_ext_id, vmodel):
-            cache = self.env["ir.model.synchro.cache"]
-            child_ids = cache.get_struct_model_attr(
+            Cache = self.env["ir.model.synchro.cache"]
+            child_ids = Cache.get_struct_model_attr(
                 actual_model, "CHILD_IDS", default=False
             )
             fields = vals.keys()
@@ -2122,20 +2123,6 @@ class IrModelSynchro(models.Model):
                                     default=default,
                                     ctx=Cache.get_attr(backend_id, "CTX"),
                                 )
-                                # self.logmsg(
-                                #     "debug",
-                                #     ">>> %(loc)s=%(fct)s(%(name)s,%(src)s,"
-                                #     "%(xid)s,%(d)s)",
-                                #     model=vmodel,
-                                #     ctx={
-                                #         "loc": vals.get(loc_name),
-                                #         "fct": fct,
-                                #         "name": loc_name,
-                                #         "src": src,
-                                #         "xid": loc_ext_id_name,
-                                #         "d": default,
-                                #     },
-                                # )
                                 src = field
         if hasattr(cls, "assure_values"):
             vals = cls.assure_values(vals, None)
@@ -2266,7 +2253,7 @@ class IrModelSynchro(models.Model):
                 return rec[0].id, rec[0]
             else:
                 self.logmsg(
-                    "info",
+                    "warning",
                     ">>> %(model)s[%(id)s].bind_record()",
                     model=actual_model,
                     rec=rec,
@@ -2294,21 +2281,21 @@ class IrModelSynchro(models.Model):
             return protocol, endpoint, port, login
 
         def xml_connect(endpoint, protocol=None, port=None):
-            cnx = cache.get_attr(backend_id, "CNX")
+            cnx = Cache.get_attr(backend_id, "CNX")
             if not cnx:
                 prot, endpoint, def_port, login = parse_endpoint(endpoint)
                 protocol = protocol or prot
                 port = port or def_port
                 try:
                     cnx = oerplib.OERP(server=endpoint, protocol=protocol, port=port)
-                    cache.set_attr(backend_id, "CNX", cnx)
+                    Cache.set_attr(backend_id, "CNX", cnx)
                 except BaseException:  # pragma: no cover
                     self.env.cr.rollback()  # pylint: disable=invalid-commit
                     cnx = False
             return cnx
 
         def xml_login(cnx, endpoint, db=None, login=None, passwd=None):
-            session = cache.get_attr(backend_id, "SESSION")
+            session = Cache.get_attr(backend_id, "SESSION")
             if not session:
                 login = login or self.env.user.login
                 prot, endpoint, port, user = parse_endpoint(endpoint)
@@ -2317,7 +2304,7 @@ class IrModelSynchro(models.Model):
                 login = login or user
                 try:
                     session = cnx.login(database=db, user=login, passwd=passwd)
-                    cache.set_attr(backend_id, "SESSION", session)
+                    Cache.set_attr(backend_id, "SESSION", session)
                 except BaseException:  # pragma: no cover
                     self.env.cr.rollback()  # pylint: disable=invalid-commit
                     session = False
@@ -2325,15 +2312,15 @@ class IrModelSynchro(models.Model):
 
         def connect_params():
             protocol, port, db, login, passwd = default_params()
-            endpoint = cache.get_attr(backend_id, "COUNTERPART_URL")
-            db = cache.get_attr(backend_id, "CLIENT_KEY")
-            passwd = cache.get_attr(backend_id, "PASSWORD")
+            endpoint = Cache.get_attr(backend_id, "COUNTERPART_URL")
+            db = Cache.get_attr(backend_id, "CLIENT_KEY")
+            passwd = Cache.get_attr(backend_id, "PASSWORD")
             protocol, endpoint, port, login = parse_endpoint(endpoint)
             return protocol, endpoint, port, db, login, passwd
 
         def rpc_session():
-            cnx = cache.get_attr(backend_id, "CNX")
-            session = cache.get_attr(backend_id, "SESSION")
+            cnx = Cache.get_attr(backend_id, "CNX")
+            session = Cache.get_attr(backend_id, "SESSION")
             tnldict = self.get_tnldict(backend_id)
             if cnx and session:
                 return cnx, session, tnldict
@@ -2424,13 +2411,13 @@ class IrModelSynchro(models.Model):
             model=vmodel,
             ctx={"chid": backend_id, "xid": ext_id, "sel": select},
         )
-        cache = self.env["ir.model.synchro.cache"]
+        Cache = self.env["ir.model.synchro.cache"]
         cnx, session, tnldict = rpc_session()
         actual_model = self.get_actual_model(vmodel, only_name=True)
         if ext_id:
             if mode:
                 return cnx.search(actual_model, [(mode, "=", ext_id)])
-            return browse_rec(cache, actual_model, ext_id, tnldict)
+            return browse_rec(Cache, actual_model, ext_id, tnldict)
         else:
             try:
                 ids = cnx.search(actual_model, [])
@@ -2484,7 +2471,7 @@ class IrModelSynchro(models.Model):
             % Cache.get_attr(backend_id, "CLIENT_KEY")
         }
         self.logmsg(
-            "info",
+            "warning",
             ">>> %(model)s.vg7_requests(%(url)s,%(hdr)s):",
             model=vmodel,
             ctx={"url": url, "hdr": headers},
@@ -2518,8 +2505,8 @@ class IrModelSynchro(models.Model):
             model=vmodel,
             ctx={"chid": backend_id, "xid": ext_id},
         )
-        cache = self.env["ir.model.synchro.cache"]
-        endpoint = cache.get_attr(backend_id, "EXCHANGE_PATH")
+        Cache = self.env["ir.model.synchro.cache"]
+        endpoint = Cache.get_attr(backend_id, "EXCHANGE_PATH")
         if not endpoint:
             self.logmsg(
                 "error",
@@ -2527,15 +2514,15 @@ class IrModelSynchro(models.Model):
                 ctx={"chid": backend_id},
             )
             return False
-        ext_model = cache.get_model_attr(backend_id, vmodel, "BIND")
-        counterpart_pk = cache.get_model_attr(
+        ext_model = Cache.get_model_attr(backend_id, vmodel, "BIND")
+        counterpart_pk = Cache.get_model_attr(
             backend_id, vmodel, "KEY_ID", default="id")
         if not ext_model:
             _logger.error("Model %s not managed by external partner!" % vmodel)
             return False
         file_csv = os.path.expanduser(os.path.join(endpoint, ext_model + ".csv"))
         self.logmsg(
-            "info",
+            "warning",
             ">>> %(model)s.csv_requests(%(csv)s)",
             model=vmodel,
             ctx={"csv": file_csv},
@@ -2606,12 +2593,12 @@ class IrModelSynchro(models.Model):
 
     def get_counterpart_response(self, backend_id, vmodel, ext_id=False, mode=None):
         """Get data from counterpart"""
-        cache = self.env["ir.model.synchro.cache"]
-        if not cache.is_manageable(vmodel):
+        Cache = self.env["ir.model.synchro.cache"]
+        if not Cache.is_manageable(vmodel):
             return False
         # TODO: channel_id
-        cache.open(backend=self.env["synchro.channel"].browse(backend_id), model=vmodel)
-        method = cache.get_attr(backend_id, "METHOD")
+        Cache.open(backend=self.env["synchro.channel"].browse(backend_id), model=vmodel)
+        method = Cache.get_attr(backend_id, "METHOD")
         if method == "XML":
             return self.get_xmlrpc_response(backend_id, vmodel, ext_id, mode=mode)
         elif method == "JSON":
@@ -2629,6 +2616,17 @@ class IrModelSynchro(models.Model):
                 "res_id": loc_id,
             }
         )
+
+    @api.model
+    def assign_backend_loglevel(self, backend):
+        Cache = self.env["ir.model.synchro.cache"]
+        Cache.set_attr(backend.id, "LOGLEVEL", backend.tracelevel)
+        self.LOGLEVEL = {
+            "1": "error",
+            "2": "info",
+            "3": "warning",
+            "4": "debug",
+        }.get(Cache.get_attr(backend.id, "LOGLEVEL", "2"))
 
     @api.model
     def synchro_childs(
@@ -2680,8 +2678,8 @@ class IrModelSynchro(models.Model):
         if "to_delete" in cls._fields:
             cls.search([(parent_id_name, "=", parent_id),
                         ("to_delete", "=", False)]).write({"to_delete": True})
-        if "sequence" in cls._fields:
-            has_sequence = True
+        # if "sequence" in cls._fields:
+        #     has_sequence = True
         # ext_id_name = Cache.get_model_attr(backend_id, model_child, "", default="id")
         for num, vals in enumerate(rec_ids):
             vals[":%s" % parent_id_name] = parent_id
@@ -2698,10 +2696,10 @@ class IrModelSynchro(models.Model):
                 )
                 if id < 0:
                     self.logmsg(
-                        "info",
+                        "warning",
                         "Error pulling from %(model)s.%(id)s",
                         model=model_child,
-                        ctx={"id": item},
+                        ctx={"id": vals},
                     )
                     return id
                 # commit every table to avoid too big transaction
@@ -2709,10 +2707,10 @@ class IrModelSynchro(models.Model):
             except BaseException as e:  # pragma: no cover
                 self.env.cr.rollback()  # pylint: disable=invalid-commit
                 self.logmsg(
-                    "info",
+                    "error",
                     "Error %(e) pulling from %(model)s.%(id)s",
                     model=model_child,
-                    ctx={"e": e, "id": item},
+                    ctx={"e": e, "id": vals},
                 )
                 return -12
 
@@ -2794,8 +2792,14 @@ class IrModelSynchro(models.Model):
         vals = unicodes(vals)
         saved_vals = vals.copy()
         vmodel = cls.__class__.__name__
+        actual_model = self.get_actual_model(vmodel, only_name=True)
+        struct = self.env[actual_model].fields_get()
+        actual_cls = self.get_actual_model(vmodel)
+        Cache = self.env["ir.model.synchro.cache"]
+        backend = self.env["synchro.channel"].assign_backend(vals)
+        self.assign_backend_loglevel(backend)
         self.logrec = self.logmsg(
-            "trace" if self.LOGLEVEL == "trace" else "info",
+            "info",
             "synchro(%(vals)s,%(x)s,%(y)s)",
             model=vmodel,
             ctx={
@@ -2804,11 +2808,6 @@ class IrModelSynchro(models.Model):
                 "y": "internal" if no_del_child else ""
             },
         )
-        actual_model = self.get_actual_model(vmodel, only_name=True)
-        struct = self.env[actual_model].fields_get()
-        actual_cls = self.get_actual_model(vmodel)
-        Cache = self.env["ir.model.synchro.cache"]
-        backend = self.env["synchro.channel"].assign_backend(vals)
         backend_id = backend.id
         identity = Cache.get_attr(backend_id, "IDENTITY")
         Cache.open(
@@ -2967,13 +2966,13 @@ class IrModelSynchro(models.Model):
                     do_write = False
                 if not do_write and min_vals != vals:
                     self.logmsg(
-                        "info",
+                        "warning",
                         ">>> %s=%s.min_create(%s)" % (loc_id, actual_model, min_vals),
                         logrec=self.logrec,
                     )
                 else:
                     self.logmsg(
-                        "info", ">>> %s=%s.create(%s)" % (loc_id, actual_model, vals),
+                        "warning", "%s=%s.create(%s)" % (loc_id, actual_model, vals),
                         logrec=self.logrec,
                     )
         if loc_id > 0 and do_write:
@@ -3008,7 +3007,7 @@ class IrModelSynchro(models.Model):
                         else:
                             rec.write(vals)
                         self.logmsg(
-                            "trace" if self.LOGLEVEL == "trace" else "info",
+                            "warning",
                             ">>> synchro: %s.write(%s)" % (actual_model, vals),
                             logrec=self.logrec,
                         )
@@ -3112,8 +3111,8 @@ class IrModelSynchro(models.Model):
         vmodel = cls.__class__.__name__
         actual_model = self.get_actual_model(vmodel, only_name=True)
         self.logmsg(
-            "info",
-            ">>> %(model)s[%(id)s].commit(%(x)s)",
+            "warning",
+            "%(model)s[%(id)s].commit(%(x)s)",
             model=vmodel,
             ctx={"id": loc_id, "x": ext_id},
         )
@@ -3169,11 +3168,11 @@ class IrModelSynchro(models.Model):
             model=cls.__class__.__name__,
             ctx={"j": jacket, "d": chk_in_queue},
         )
-        cache = self.env["ir.model.synchro.cache"]
+        Cache = self.env["ir.model.synchro.cache"]
         if hasattr(cls, "synchro"):
             if jacket:
                 return cls.synchro(
-                    self.jacket_vals(cache.get_attr(channel_id, "PREFIX"), vals),
+                    self.jacket_vals(Cache.get_attr(channel_id, "PREFIX"), vals),
                     chk_in_queue=chk_in_queue,
                     only_minimal=only_minimal,
                     no_deep_fields=no_deep_fields,
@@ -3191,7 +3190,7 @@ class IrModelSynchro(models.Model):
             if jacket:
                 return self.synchro(
                     cls,
-                    self.jacket_vals(cache.get_attr(channel_id, "PREFIX"), vals),
+                    self.jacket_vals(Cache.get_attr(channel_id, "PREFIX"), vals),
                     chk_in_queue=chk_in_queue,
                     only_minimal=only_minimal,
                     no_deep_fields=no_deep_fields,
@@ -3234,21 +3233,21 @@ class IrModelSynchro(models.Model):
             model=model,
             ctx={"id": parent_id},
         )
-        cache = self.env["ir.model.synchro.cache"]
-        cache.open(model=model)
+        Cache = self.env["ir.model.synchro.cache"]
+        Cache.open(model=model)
         cls = self.env[model]
         stored_field = "__%s" % model
         done = False
-        if cache.get_model_attr(backend_id, model, stored_field):
-            vals = cache.get_model_attr(backend_id, model, stored_field)
-            cache.del_model_attr(backend_id, model, stored_field)
+        if Cache.get_model_attr(backend_id, model, stored_field):
+            vals = Cache.get_model_attr(backend_id, model, stored_field)
+            Cache.del_model_attr(backend_id, model, stored_field)
             self.generic_synchro(cls, vals, chk_in_queue=True)
             done = True
         return done
 
     @api.model
     def synchro_queue(self, backend_id):
-        self.logmsg("info", ">>> synchro_queue()")
+        self.logmsg("warning", ">>> synchro_queue()")
         cache = self.env["ir.model.synchro.cache"]
         max_ctr = 16
         queue = cache.get_attr(backend_id, "IN_QUEUE")
@@ -3327,7 +3326,7 @@ class IrModelSynchro(models.Model):
                 loc_ix = -2
             return loc_id, loc_ix
 
-        self.logmsg("info", ">>> pull_recs_2_complete(%(x)s)", ctx={"x": only_model})
+        self.logmsg("warning", ">>> pull_recs_2_complete(%(x)s)", ctx={"x": only_model})
         cache = self.env["ir.model.synchro.cache"]
         cache.open()
         cache.setup_channels(all=True)
@@ -3610,7 +3609,7 @@ class IrModelSynchro(models.Model):
                         channel_id, vmodel
                     ).get_counterpart_response()
                 self.logmsg(
-                    "info",
+                    "warning",
                     "### Pulling %(model)s(%(d)s)",
                     model=vmodel,
                     ctx={"d": datas},
@@ -3801,7 +3800,7 @@ class IrModelSynchro(models.Model):
         cache = self.env["ir.model.synchro.cache"]
         for rec in cls:
             model = cls.__class__.__name__
-            self.logmsg("info", ">>> %s.pull_record()" % model)
+            self.logmsg("info", "%s.pull_record()" % model)
             if not cache.is_struct(model):
                 continue
             cache.setup_channels(all=True)
@@ -3844,15 +3843,16 @@ class IrModelSynchro(models.Model):
 
     @api.model
     def trigger_one_record(self, ext_model, prefix, ext_id):
-        self.logmsg(
-            "info",
-            ">>> trigger_one_record(%(xm)s,%(xid)s,%(pfx)s)",
-            ctx={"xm": ext_model, "xid": ext_id, "pfx": prefix},
-        )
         if not prefix:
             return -7
         Cache = self.env["ir.model.synchro.cache"]
         backend = self.env["synchro.channel"].assign_backend({"%s:" % prefix: ""})
+        self.assign_backend_loglevel(backend)
+        self.logmsg(
+            "info",
+            "trigger_one_record(%(xm)s,%(xid)s,%(pfx)s)",
+            ctx={"xm": ext_model, "xid": ext_id, "pfx": prefix},
+        )
         backend_id = backend.id
         if not backend_id:
             # Cache.clean_cache()
@@ -3868,7 +3868,10 @@ class IrModelSynchro(models.Model):
             if ext_model != Cache.get_model_attr(backend_id, model, "BIND"):
                 continue
             self.logmsg(
-                "info", "### Pulling %(model)s.%(id)s", model=model, ctx={"id": ext_id}
+                "warning",
+                "### Pulling %(model)s.%(id)s",
+                model=model,
+                ctx={"id": ext_id}
             )
             return self.pull_1_record(backend_id, model, ext_id)
         return -8
@@ -3907,8 +3910,8 @@ class IrModelSynchro(models.Model):
         if module.state != "installed":
             self.logmsg("error", "Module %s not installed" % vals["name"])
             return -4
-        self.logmsg("trace" if self.LOGLEVEL == "trace" else "info",
-                    ">>> %s.install(%s)" % ("ir.module.module", module.name))
+        self.logmsg("info",
+                    "%s.install(%s)" % ("ir.module.module", module.name))
         return module.id
 
     def manage_language(self, vals):
@@ -4029,15 +4032,18 @@ class IrModelSynchroLog(models.Model):
                 {"timestamp": now, "res_id": res_id, "errmsg": errmsg or logrec.errmsg}
             )
         else:
-            errmsg = errmsg or _("No Error")
-            logrec = self.create(
-                {
-                    "timestamp": now,
-                    "model": vmodel or "",
-                    "res_id": res_id,
-                    "errmsg": self.pretty_print(errmsg),
-                }
-            )
+            try:
+                errmsg = errmsg or _("No Error")
+                logrec = self.create(
+                    {
+                        "timestamp": now,
+                        "model": vmodel or "",
+                        "res_id": res_id,
+                        "errmsg": errmsg,
+                    }
+                )
+            except BaseException:
+                pass
         if rec and hasattr(rec, "timestamp") and hasattr(rec, "errmsg"):
             rec.write({"timestamp": now, "errmsg": errmsg})
         self.env.cr.commit()  # pylint: disable=invalid-commit
