@@ -16,12 +16,12 @@ SALE_ORDER_LINE_1_1 = {
     "weight": 0,
     "product_name": "grafica . smart (ps.g)",
     "product_id": 300000084,
-    "unitary_price": 0,
-    "job_name": """Codice: gs
+    "unitary_price": 0.42508196721311,
+    "job_name": """Codice: cpb
 grafica . smart (ps.g)
 concorso spese: impaginata su tracciato pf (file fornito dal cliente in vettoriale)
 Quantit\\xe0: 1""",
-    "quantity": 1
+    "quantity": 100
 }
 SALE_ORDER_LINE_1_2 = {
     "id": 3452,
@@ -29,7 +29,7 @@ SALE_ORDER_LINE_1_2 = {
     "weight": 0,
     "product_name": "clich\\xe9 serigrafia 1col (smart)",
     "product_id": 300000081,
-    "unitary_price": 10,
+    "unitary_price": 0,
     "job_name": """Codice: cs1s
 clich\\xe9 serigrafia 1col (smart)
 concorso spese: impaginata su tracciato pf (file fornito dal cliente in vettoriale)
@@ -45,7 +45,7 @@ SALE_ORDER_LINE_1_3 = {
     "weight": 0,
     "product_name": "serigrafia combi cliche e ink (smart)",
     "product_id": 300000153,
-    "unitary_price": -10,
+    "unitary_price": 10.0,
     "job_name": """Codice: sccis
 serigrafia combi cliche' e ink
 Quantit\\xe0: 1
@@ -58,13 +58,13 @@ SALE_ORDER_LINE_1_4 = {
     "weight": 13,
     "product_name": "mix natural strong (e.n1) . cordino paper bag (e)",
     "product_id": 300000121,
-    "unitary_price": 0.42508196721311,
+    "unitary_price": -10.0,
     "job_name": """Codice: cpb
 mix natural strong (e.n1) . cordino paper bag (e)
 Prodotto: mix natural strong (e.n1) . cordino paper bag (e)
 bianco spl (wl) 540x140x500 (120pf) (epbc.mns.n1): 100
 unit\\xe0 di misura: pezzi""",
-    "quantity": 100
+    "quantity": 1
 }
 SALE_ORDER_LINE_1_5 = {
     "id": 3455,
@@ -92,7 +92,7 @@ SALE_ORDER_1 = {
         "shipping_surename": ""
     },
     "total_taxed": 51.86,
-    "order_number": "26-O261353",
+    "order_number": "26-O261361",
     "iva": 22,
     "billing": {
         "billing_region": "BENEVENTO",
@@ -120,9 +120,9 @@ SALE_ORDER_1 = {
         SALE_ORDER_LINE_1_5
     ],
     "customer_id": 425,
-    "order_id": 1353,
-    "id": 1353,
-    "date": "2026-03-24",
+    "order_id": 1361,
+    "id": 1361,
+    "date": "2026-03-26",
     "agent_id": 90
 }
 
@@ -173,20 +173,20 @@ class ExtTestEnv(object):
         id = clodoo.executeL8(
             self.ctx,
             "ir.model.synchro", "trigger_one_record", "orders", "vg7", ext_id)
-        for line in (
-                SALE_ORDER_LINE_1_1,
-                SALE_ORDER_LINE_1_2,
-                SALE_ORDER_LINE_1_3,
-                SALE_ORDER_LINE_1_4,
-                SALE_ORDER_LINE_1_5,
-        ):
-            ext_id = line["id"]
-            clodoo.executeL8(
-                self.ctx,
-                "ir.model.synchro",
-                "trigger_one_record",
-                "orders.line",
-                "vg7", ext_id)
+        # for line in (
+        #         SALE_ORDER_LINE_1_1,
+        #         SALE_ORDER_LINE_1_2,
+        #         SALE_ORDER_LINE_1_3,
+        #         SALE_ORDER_LINE_1_4,
+        #         SALE_ORDER_LINE_1_5,
+        # ):
+        #     ext_id = line["id"]
+        #     clodoo.executeL8(
+        #         self.ctx,
+        #         "ir.model.synchro",
+        #         "trigger_one_record",
+        #         "orders.line",
+        #         "vg7", ext_id)
         return id
 
     def send_order(self):

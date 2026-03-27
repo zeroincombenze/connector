@@ -445,7 +445,6 @@ class IrModelSynchro(models.Model):
                 rec = model_model.with_context(context).create(vals)
             else:
                 rec = model_model.create(vals)
-            self.logmsg("trace", "", rec=rec, logrec=logrec)
             # commit to avoid lost data in recursive write
             self.env.cr.commit()  # pylint: disable=invalid-commit
         except BaseException as e:  # pragma: no cover
@@ -1916,13 +1915,18 @@ class IrModelSynchro(models.Model):
                         struct,
                         ctx=ctx,
                     )
-                continue
+                    continue
 
             vals = cast_type(vals, actual_model, loc_name, ext_ref, struct)
 
             if loc_name == child_ids:
+                lines = []
+                for num, item in enumerate(vals[ext_ref]):
+                    sequence = num + 1
+                    item[":sequence"] = sequence
+                    lines.append(item)
                 Cache.set_model_attr(
-                    backend_id, vmodel, "__%s_ids" % actual_model, vals[ext_ref]
+                    backend_id, vmodel, "__%s_ids" % actual_model, lines
                 )
                 del vals[ext_ref]
                 parent_child_mode = "B"
@@ -2671,10 +2675,6 @@ class IrModelSynchro(models.Model):
         rec_ids = Cache.get_model_attr(backend_id, vmodel, "__%s_ids" % actual_model)
         Cache.del_model_attr(backend_id, vmodel, "__%s_ids" % actual_model)
         if not rec_ids:
-            rec_ids = channel.get_counterpart_response(
-                ext_id=ext_id, mode=parent_id_name
-            )
-        if not rec_ids:
             return -7
 
         if "to_delete" in cls._fields:
@@ -2682,25 +2682,9 @@ class IrModelSynchro(models.Model):
                         ("to_delete", "=", False)]).write({"to_delete": True})
         if "sequence" in cls._fields:
             has_sequence = True
-        ext_id_name = Cache.get_model_attr(backend_id, model_child, "", default="id")
-        for num, item in enumerate(rec_ids):
-            sequence = num + 1
-            if isinstance(item, (int, long)):
-                vals = self.get_model_of_channel(
-                    backend_id, model_child
-                ).get_counterpart_response(ext_id=item)
-                if ext_id_name not in vals:
-                    self.logmsg(
-                        "debug",
-                        "Model %(model)s data received w/o id",
-                        model=model_child,
-                    )
-                    continue
-            else:
-                vals = item
+        # ext_id_name = Cache.get_model_attr(backend_id, model_child, "", default="id")
+        for num, vals in enumerate(rec_ids):
             vals[":%s" % parent_id_name] = parent_id
-            if has_sequence:
-                vals[":sequence"] = sequence
             if "to_delete" in cls._fields:
                 vals[":to delete"] = False
             try:
@@ -2736,7 +2720,7 @@ class IrModelSynchro(models.Model):
             cls.search(
                 [(parent_id_name, "=", parent_id), ("to_delete", "=", True)]).unlink()
 
-        self.commit_child(self.env[actual_model], parent_id)
+        self.commit_parent(self.env[actual_model], parent_id)
         return ext_id
 
     @api.model
@@ -2810,14 +2794,8 @@ class IrModelSynchro(models.Model):
         vals = unicodes(vals)
         saved_vals = vals.copy()
         vmodel = cls.__class__.__name__
-        self.logmsg(
-            "info",
-            ">>> %(model)s.synchro(%(vals)s,%(x)s)",
-            model=vmodel,
-            ctx={"vals": vals, "x": chk_in_queue},
-        )
         self.logrec = self.logmsg(
-            "trace",
+            "trace" if self.LOGLEVEL == "trace" else "info",
             "synchro(%(vals)s,%(x)s,%(y)s)",
             model=vmodel,
             ctx={
@@ -2991,10 +2969,12 @@ class IrModelSynchro(models.Model):
                     self.logmsg(
                         "info",
                         ">>> %s=%s.min_create(%s)" % (loc_id, actual_model, min_vals),
+                        logrec=self.logrec,
                     )
                 else:
                     self.logmsg(
-                        "info", ">>> %s=%s.create(%s)" % (loc_id, actual_model, vals)
+                        "info", ">>> %s=%s.create(%s)" % (loc_id, actual_model, vals),
+                        logrec=self.logrec,
                     )
         if loc_id > 0 and do_write:
             # if ext_id_name in vals:
@@ -3028,9 +3008,10 @@ class IrModelSynchro(models.Model):
                         else:
                             rec.write(vals)
                         self.logmsg(
-                            "info", ">>> synchro: %s.write(%s)" % (actual_model, vals),
+                            "trace" if self.LOGLEVEL == "trace" else "info",
+                            ">>> synchro: %s.write(%s)" % (actual_model, vals),
+                            logrec=self.logrec,
                         )
-                        self.logmsg("trace", "", logrec=self.logrec, rec=rec)
                     except BaseException as e:  # pragma: no cover
                         self.env.cr.rollback()  # pylint: disable=invalid-commit
                         self.logmsg(
@@ -3127,7 +3108,7 @@ class IrModelSynchro(models.Model):
         return loc_id
 
     @api.model
-    def commit_child(self, cls, loc_id, ext_id=None):
+    def commit_parent(self, cls, loc_id, ext_id=None):
         vmodel = cls.__class__.__name__
         actual_model = self.get_actual_model(vmodel, only_name=True)
         self.logmsg(
@@ -3896,11 +3877,6 @@ class IrModelSynchro(models.Model):
         if "name" not in vals:
             self.logmsg("error", "Invalid module name")
             return -7
-        # if vals.get("state", "installed") != "installed":
-        #     self.logmsg(
-        #         "error", "Module %s is not installed on counterpart" % vals["name"]
-        #     )
-        #     return -4
         module_model = self.env["ir.module.module"]
         modules = module_model.search([("name", "=", vals["name"])])
         if not modules:
@@ -3931,8 +3907,8 @@ class IrModelSynchro(models.Model):
         if module.state != "installed":
             self.logmsg("error", "Module %s not installed" % vals["name"])
             return -4
-        self.logmsg("info", ">>> %s.install(%s)" % ("ir.module.module", module.name))
-        self.logmsg("trace", "", model="ir.module.module", rec=module)
+        self.logmsg("trace" if self.LOGLEVEL == "trace" else "info",
+                    ">>> %s.install(%s)" % ("ir.module.module", module.name))
         return module.id
 
     def manage_language(self, vals):

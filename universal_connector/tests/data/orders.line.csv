@@ -1,22 +1,22 @@
 job_name,product_id,iva,weight,unitary_price,quantity,id,product_name
-"Codice: gs
+"Codice: cpb
 grafica . smart (ps.g)
-grafica . smart (g) . concorso spese: impaginata su tracciato pf (file fornito dal cliente in vettoriale)
-Quantit\xe0: 1",300000084,22,0,0,1,3451,grafica . smart (ps.g)
+concorso spese: impaginata su tracciato pf (file fornito dal cliente in vettoriale)
+Quantit\xe0: 1",300000084,22,0,0.42508196721311,100,3451,grafica . smart (ps.g)
 "Codice: cs1s
 clich\xe9 serigrafia 1col (smart)
-grafica . smart (g) . concorso spese: impaginata su tracciato pf (file fornito dal cliente in vettoriale)
+concorso spese: impaginata su tracciato pf (file fornito dal cliente in vettoriale)
 quantit\xe0: 1
 tipologia: nuovo
 nota: .
-(necessario per la creazione del pf: visibile su ddt, no consegna)",300000081,22,0,10,1,3452,clich\xe9 serigrafia 1col (smart)
+(necessario per la creazione del pf: visibile su ddt, no consegna)",300000081,22,0,0,1,3452,clich\xe9 serigrafia 1col (smart)
 "Codice: sccis
 serigrafia combi cliche' e ink
 Quantit\xe0: 1
-sconto: 1 cliche' per 2 referenze bag",300000153,22,0,-10,1,3453,serigrafia combi cliche e ink (smart)
+sconto: 1 cliche' per 2 referenze bag",300000153,22,0,10.0,1,3453,serigrafia combi cliche e ink (smart)
 "Codice: cpb
 mix natural strong (e.n1) . cordino paper bag (e)
 Prodotto: mix natural strong (e.n1) . cordino paper bag (e)
 bianco spl (wl) 540x140x500 (120pf) (epbc.mns.n1): 100
-unit\xe0 di misura: pezzi",300000121,22,13,0.42508196721311,100,3454,mix natural strong (e.n1) . cordino paper bag (e)
+unit\xe0 di misura: pezzi",300000121,22,13,-10.0,1,3454,mix natural strong (e.n1) . cordino paper bag (e)
 Spedizione,100000011,22,0,0,1,3455,Spedizione
