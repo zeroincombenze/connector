@@ -376,9 +376,9 @@ class IrModelSynchroCache(models.Model):
     @api.model_cr_context
     def set_loglevel(self, loglevel):
         self.setup_channels(all=True)
-        for channel in self.get_channel_list():
-            channel_id = channel.id
-            self.set_attr(channel_id, "LOGLEVEL", loglevel)
+        # for channel in self.get_channel_list():
+        #     channel_id = channel.id
+        #     self.set_attr(channel_id, "LOGLEVEL", loglevel)
         return True
 
     @api.model_cr_context
@@ -912,7 +912,7 @@ class IrModelSynchroCache(models.Model):
         self.set_attr(backend.id, "PASSWORD", backend.password)
         if backend.product_without_variants:
             self.set_attr(backend.id, "NO_VARIANTS", True)
-        self.set_attr(backend.id, "LOGLEVEL", backend.tracelevel)
+        # self.set_attr(backend.id, "LOGLEVEL", backend.tracelevel)
         self.CACHE.set_channel_cache(self._cr.dbname, backend.id)
 
     @api.model_cr_context

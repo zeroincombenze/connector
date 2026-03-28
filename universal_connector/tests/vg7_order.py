@@ -13,7 +13,7 @@ except ImportError:
 SALE_ORDER_LINE_1_1 = {
     "id": 3451,
     "iva": 22,
-    "weight": 0,
+    "weight": 13,
     "product_name": "grafica . smart (ps.g)",
     "product_id": 300000084,
     "unitary_price": 0.42508196721311,
@@ -55,7 +55,7 @@ sconto: 1 cliche' per 2 referenze bag""",
 SALE_ORDER_LINE_1_4 = {
     "id": 3454,
     "iva": 22,
-    "weight": 13,
+    "weight": 0,
     "product_name": "mix natural strong (e.n1) . cordino paper bag (e)",
     "product_id": 300000121,
     "unitary_price": -10.0,
