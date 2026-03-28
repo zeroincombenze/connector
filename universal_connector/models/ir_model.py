@@ -1464,6 +1464,21 @@ class IrModelSynchro(models.Model):
             # Case #1 - field is external id like <vg7_id>
             is_foreign = True
             loc_name = ext_name = ext_ref
+
+        elif ext_ref.startswith(pfx_ext):
+            # Case #3 - field like <vg7:order_id>: both name and value are
+            #           of counterpart refs
+            is_foreign = True
+            ext_name = ext_ref.split(":", 1)[1].strip()
+            if ext_name == counterpart_pk and loc_ext_id_name:
+                loc_name = loc_ext_id_name
+            else:
+                loc_name = Cache.get_model_field_attr(
+                    backend_id, vmodel, ext_name, "EXT_FIELDS", default=""
+                )
+            if loc_name.startswith("."):
+                loc_name = ""
+
         elif ext_ref.startswith(pfx_depr):
             # Case #2 - (deprecated) field like <vg7_order_id>:
             #           local name is odoo but value id is of counterpart ref
@@ -1481,19 +1496,6 @@ class IrModelSynchro(models.Model):
                 "warning", "### Deprecated field name %(id)s!", ctx={"id": ext_ref}
             )
 
-        elif ext_ref.startswith(pfx_ext):
-            # Case #3 - field like <vg7:order_id>: both name and value are
-            #           of counterpart refs
-            is_foreign = True
-            ext_name = ext_ref.split(":", 1)[1].strip()
-            if ext_name == counterpart_pk and loc_ext_id_name:
-                loc_name = loc_ext_id_name
-            else:
-                loc_name = Cache.get_model_field_attr(
-                    backend_id, vmodel, ext_name, "EXT_FIELDS", default=""
-                )
-            if loc_name.startswith("."):
-                loc_name = ""
         else:
             # Case #4 - field and value are Odoo
             is_foreign = False
@@ -2796,7 +2798,7 @@ class IrModelSynchro(models.Model):
 
         vals = unicodes(vals)
         saved_vals = vals.copy()
-        vmodel = cls.__class__.__name__
+        vmodel = cls._name
         actual_model = self.get_actual_model(vmodel, only_name=True)
         struct = self.env[actual_model].fields_get()
         actual_cls = self.get_actual_model(vmodel)
@@ -2894,9 +2896,6 @@ class IrModelSynchro(models.Model):
             sequence = vals["sequence"]
         ext_id_name = self.get_loc_ext_id_name(backend_id, vmodel)
         ext_id = vals.get(ext_id_name)
-        # if ref_in_queue:
-        #     pop_ref(backend_id, vmodel, actual_model, False, ext_id)
-        #     return -9
 
         loc_id, rec = browse_from_id(actual_cls, vals)
         if loc_id < 0:
@@ -2904,6 +2903,11 @@ class IrModelSynchro(models.Model):
         elif loc_id == 0:
             loc_id, rec = self.bind_record(
                 struct, backend_id, vmodel, vals, constraints)
+        if loc_id > 0 and "sequence" in rec:
+            sequence = rec["sequence"]
+        if not no_del_child:
+            Cache.set_attr(backend_id, "LAST_MODEL", actual_model)
+            Cache.set_attr(backend_id, "CTR", sequence)
         if loc_id == -7 and not has_state:
             # pop_ref(backend_id, vmodel, actual_model, False, ext_id)
             self.logmsg("info",
@@ -2965,8 +2969,6 @@ class IrModelSynchro(models.Model):
                 if only_minimal:
                     do_write = False
         if loc_id > 0 and do_write:
-            # if ext_id_name in vals:
-            #     del vals[ext_id_name]
             try:
                 rec = actual_cls.with_context({"lang": self.env.user.lang}).browse(
                     loc_id
@@ -3051,9 +3053,6 @@ class IrModelSynchro(models.Model):
         # commit to avoid lost data in recursive write
         self.env.cr.commit()  # pylint: disable=invalid-commit
 
-        if not no_del_child:
-            Cache.set_attr(backend_id, "LAST_MODEL", actual_model)
-            Cache.get_attr(backend_id, "CTR", sequence)
         done_post = False
         if loc_id > 0 and not chk_in_queue and vmodel == actual_model:
             if actual_model == "res.lang":

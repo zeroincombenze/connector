@@ -5,6 +5,7 @@ Simulate VG7: send order
 import os.path
 import sys
 import csv
+
 try:
     from clodoo import clodoo
 except ImportError:
@@ -182,24 +183,30 @@ class ExtTestEnv(object):
                         except BaseException:
                             pass
 
-        id = clodoo.executeL8(
+        loc_id = clodoo.executeL8(
             self.ctx,
             "ir.model.synchro", "trigger_one_record", "orders", "vg7", ext_id)
-        # for line in (
-        #         SALE_ORDER_LINE_1_1,
-        #         SALE_ORDER_LINE_1_2,
-        #         SALE_ORDER_LINE_1_3,
-        #         SALE_ORDER_LINE_1_4,
-        #         SALE_ORDER_LINE_1_5,
-        # ):
-        #     ext_id = line["id"]
-        #     clodoo.executeL8(
-        #         self.ctx,
-        #         "ir.model.synchro",
-        #         "trigger_one_record",
-        #         "orders.line",
-        #         "vg7", ext_id)
-        return id
+        for line in (
+                SALE_ORDER_LINE_1_1,
+                SALE_ORDER_LINE_1_2,
+                SALE_ORDER_LINE_1_3,
+                SALE_ORDER_LINE_1_4,
+                SALE_ORDER_LINE_1_5,
+        ):
+            # ext_id = line["id"]
+            clodoo.executeL8(
+                self.ctx,
+                "sale.order.line",
+                "synchro",
+                {"vg7:" + k: v for (k, v) in line.items()}
+            )
+        clodoo.executeL8(
+            self.ctx,
+            "sale.order",
+            "commit",
+            loc_id
+        )
+        return loc_id
 
     def send_order(self):
         self.connect_user()
