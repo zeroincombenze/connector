@@ -1006,7 +1006,7 @@ class IrModelSynchro(models.Model):
         )
         return channel_model[0] if channel_model else self.env["synchro.channel.model"]
 
-    def sync_rec_from_counterpart(self, backend_id, model, vg7_id, only_minimal=True):
+    def sync_rec_from_counterparty(self, backend_id, model, vg7_id, only_minimal=True):
         if not vg7_id:
             self.logmsg(
                 "error", "### Missing id for %(model)s counterpart request", model=model
@@ -1078,14 +1078,12 @@ class IrModelSynchro(models.Model):
         if vmodel == "stock.picking.goods_description":
             pass
         try:
-            new_value = self.generic_synchro(
-                cls, vals, chk_in_queue=True, only_minimal=True
-            )
+            new_value = self.generic_synchro(cls, vals, chk_in_queue=True)
             if new_value > 0:
-                in_queue = Cache.get_attr(backend_id, "IN_QUEUE")
-                in_queue.append([vmodel, new_value])
-                (Cache.
-                 r(backend_id, "IN_QUEUE", in_queue))
+                # in_queue = Cache.get_attr(backend_id, "IN_QUEUE")
+                # in_queue.append([vmodel, new_value])
+                # Cache.set_attr(backend_id, "IN_QUEUE", in_queue)
+                pass
             else:
                 new_value = False
         except BaseException as e:  # pragma: no cover
@@ -1333,7 +1331,8 @@ class IrModelSynchro(models.Model):
         vmodel = self.get_vmodel(actual_model, spec)
         if not new_value and not no_create:
             if vmodel:
-                new_value = self.sync_rec_from_counterpart(backend_id, vmodel, value_id)
+                new_value = self.sync_rec_from_counterparty(
+                    backend_id, vmodel, value_id)
         if not new_value and not no_create and Cache.is_manageable(vmodel):
             new_value = self.create_new_ref(
                 backend_id,
@@ -3221,23 +3220,24 @@ class IrModelSynchro(models.Model):
 
     @api.model
     def postprocess(self, backend_id, model, parent_id, vals):
-        self.logmsg(
-            "debug",
-            "%(model)s.postprocess(%(id)s)",
-            model=model,
-            ctx={"id": parent_id},
-        )
-        Cache = self.env["ir.model.synchro.cache"]
-        Cache.open(model=model)
-        cls = self.env[model]
-        stored_field = "__%s" % model
-        done = False
-        if Cache.get_model_attr(backend_id, model, stored_field):
-            vals = Cache.get_model_attr(backend_id, model, stored_field)
-            Cache.del_model_attr(backend_id, model, stored_field)
-            self.generic_synchro(cls, vals, chk_in_queue=True)
-            done = True
-        return done
+        # self.logmsg(
+        #     "debug",
+        #     "%(model)s.postprocess(%(id)s)",
+        #     model=model,
+        #     ctx={"id": parent_id},
+        # )
+        # Cache = self.env["ir.model.synchro.cache"]
+        # Cache.open(model=model)
+        # cls = self.env[model]
+        # stored_field = "__%s" % model
+        # done = False
+        # if Cache.get_model_attr(backend_id, model, stored_field):
+        #     vals = Cache.get_model_attr(backend_id, model, stored_field)
+        #     Cache.del_model_attr(backend_id, model, stored_field)
+        #     self.generic_synchro(cls, vals, chk_in_queue=True)
+        #     done = True
+        # return done
+        return False
 
     @api.model
     def synchro_queue(self, backend_id):
