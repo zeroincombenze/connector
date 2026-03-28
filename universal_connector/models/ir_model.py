@@ -2718,7 +2718,7 @@ class IrModelSynchro(models.Model):
             cls.search(
                 [(parent_id_name, "=", parent_id), ("to_delete", "=", True)]).unlink()
 
-        self.commit_parent(self.env[actual_model], parent_id)
+        self.commit(self.env[actual_model], parent_id)
         return ext_id
 
     @api.model
@@ -3097,12 +3097,12 @@ class IrModelSynchro(models.Model):
         return loc_id
 
     @api.model
-    def commit_parent(self, cls, loc_id, ext_id=None):
-        vmodel = cls.__class__.__name__
+    def commit(self, cls, loc_id, ext_id=None):
+        vmodel = cls._name
         actual_model = self.get_actual_model(vmodel, only_name=True)
         self.logmsg(
             "warning",
-            "%(model)s[%(id)s].commit_parent(%(x)s)",
+            "%(model)s[%(id)s].commit(%(x)s)",
             model=vmodel,
             ctx={"id": loc_id, "x": ext_id},
         )
@@ -3784,6 +3784,8 @@ class IrModelSynchro(models.Model):
     @api.multi
     def pull_record(self, cls, backend_id=None):
         """Button synchronize at record UI page"""
+        import pdb; pdb.set_trace()     #debug
+        print("pull_record(%s,backend=%s)" % (cls._name, backend_id))     #debug
         self.logmsg("debug", "pull_record()")
         cache = self.env["ir.model.synchro.cache"]
         for rec in cls:
@@ -3831,6 +3833,8 @@ class IrModelSynchro(models.Model):
 
     @api.model
     def trigger_one_record(self, ext_model, prefix, ext_id):
+        import pdb; pdb.set_trace()     #debug
+        print("trigger_one_record(%s,%s,%s)" % (ext_model, prefix, ext_id))     #debug
         if not prefix:
             return -7
         Cache = self.env["ir.model.synchro.cache"]
