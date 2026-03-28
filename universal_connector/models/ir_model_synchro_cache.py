@@ -287,48 +287,50 @@ class IrModelSynchroCache(models.Model):
             self.set_attr(backend_id, cache_model, {})
             self.CACHE.set_model_cache(self._cr.dbname, backend_id, cache_model)
 
-    @api.model_cr_context
-    def push_id(self, backend_id, vmodel, model, loc_id=None, ext_id=None):
-        self.expired_cache(backend_id, vmodel, model)
-        cache_model = "_QUEUE_SYNC"
-        if loc_id:
-            rec_list = self.get_struct_model_attr(cache_model, model, default=[])
-            if loc_id not in rec_list:
-                rec_list.append(loc_id)
-                self.set_struct_model_attr(cache_model, model, rec_list)
-        if ext_id:
-            rec_list = self.get_model_attr(backend_id, cache_model, vmodel, default=[])
-            if ext_id not in rec_list:
-                rec_list.append(ext_id)
-                self.set_model_attr(backend_id, cache_model, vmodel, rec_list)
+    # @api.model_cr_context
+    # def push_id(self, backend_id, vmodel, model, loc_id=None, ext_id=None):
+    #     self.expired_cache(backend_id, vmodel, model)
+    #     cache_model = "_QUEUE_SYNC"
+    #     if loc_id:
+    #         rec_list = self.get_struct_model_attr(cache_model, model, default=[])
+    #         if loc_id not in rec_list:
+    #             rec_list.append(loc_id)
+    #             self.set_struct_model_attr(cache_model, model, rec_list)
+    #     if ext_id:
+    #         rec_list = self.get_model_attr(
+    #           backend_id, cache_model, vmodel, default=[])
+    #         if ext_id not in rec_list:
+    #             rec_list.append(ext_id)
+    #             self.set_model_attr(backend_id, cache_model, vmodel, rec_list)
 
-    @api.model_cr_context
-    def pop_id(self, backend_id, vmodel, model, loc_id=None, ext_id=None):
-        self.expired_cache(backend_id, vmodel, model)
-        cache_model = "_QUEUE_SYNC"
-        if loc_id:
-            rec_list = self.get_struct_model_attr(cache_model, model, default=[])
-            if loc_id in rec_list:
-                rec_list.pop(rec_list.index(loc_id))
-                self.set_struct_model_attr(cache_model, model, rec_list)
-        if ext_id:
-            rec_list = self.get_model_attr(backend_id, cache_model, vmodel, default=[])
-            if ext_id in rec_list:
-                rec_list.pop(rec_list.index(ext_id))
-                self.set_model_attr(backend_id, cache_model, vmodel, rec_list)
+    # @api.model_cr_context
+    # def pop_id(self, backend_id, vmodel, model, loc_id=None, ext_id=None):
+    #     self.expired_cache(backend_id, vmodel, model)
+    #     cache_model = "_QUEUE_SYNC"
+    #     if loc_id:
+    #         rec_list = self.get_struct_model_attr(cache_model, model, default=[])
+    #         if loc_id in rec_list:
+    #             rec_list.pop(rec_list.index(loc_id))
+    #             self.set_struct_model_attr(cache_model, model, rec_list)
+    #     if ext_id:
+    #         rec_list = self.get_model_attr(
+    #           backend_id, cache_model, vmodel, default=[])
+    #         if ext_id in rec_list:
+    #             rec_list.pop(rec_list.index(ext_id))
+    #             self.set_model_attr(backend_id, cache_model, vmodel, rec_list)
 
-    @api.model_cr_context
-    def id_is_in_cache(self, backend_id, vmodel, model, loc_id=None, ext_id=None):
-        self.expired_cache(backend_id, vmodel, model)
-        cache_model = "_QUEUE_SYNC"
-        return (
-            loc_id
-            and loc_id in self.get_struct_model_attr(cache_model, model, default=[])
-        ) or (
-            ext_id
-            and ext_id
-            in self.get_model_attr(backend_id, cache_model, vmodel, default=[])
-        )
+    # @api.model_cr_context
+    # def id_is_in_cache(self, backend_id, vmodel, model, loc_id=None, ext_id=None):
+    #     self.expired_cache(backend_id, vmodel, model)
+    #     cache_model = "_QUEUE_SYNC"
+    #     return (
+    #         loc_id
+    #         and loc_id in self.get_struct_model_attr(cache_model, model, default=[])
+    #     ) or (
+    #         ext_id
+    #         and ext_id
+    #         in self.get_model_attr(backend_id, cache_model, vmodel, default=[])
+    #     )
 
     # -------------------------
     # General purpose functions

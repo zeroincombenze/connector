@@ -15,7 +15,7 @@ SALE_ORDER_LINE_1_1 = {
     "iva": 22,
     "weight": 13,
     "product_name": "grafica . smart (ps.g)",
-    "product_id": 300000084,
+    "product_id": 300000184,
     "unitary_price": 0.42508196721311,
     "job_name": """Codice: cpb
 grafica . smart (ps.g)
@@ -28,7 +28,7 @@ SALE_ORDER_LINE_1_2 = {
     "iva": 22,
     "weight": 0,
     "product_name": "clich\\xe9 serigrafia 1col (smart)",
-    "product_id": 300000081,
+    "product_id": 300000181,
     "unitary_price": 0,
     "job_name": """Codice: cs1s
 clich\\xe9 serigrafia 1col (smart)
@@ -128,7 +128,7 @@ SALE_ORDER_1 = {
 
 
 class ExtTestEnv(object):
-    def __init__(self, config=None, database=None):
+    def __init__(self, config=None, database=None, reset_prod=False):
         if os.path.isfile(config):
             self.config = config
         else:
@@ -136,6 +136,7 @@ class ExtTestEnv(object):
         self.database = database
         self.ctx = {}
         self.user = False
+        self.reset_prod = reset_prod
 
     def connect_user(self):
         uid, ctx = clodoo.oerp_set_env(
@@ -169,6 +170,17 @@ class ExtTestEnv(object):
                     SALE_ORDER_LINE_1_5,
             ):
                 writer.writerow(line.values())
+                if self.reset_prod:
+                    product_id = clodoo.searchL8(
+                        self.ctx,
+                        "product.product",
+                        [("vg7_id", "=", line["product_id"])])
+                    if product_id:
+                        try:
+                            clodoo.unlinkL8(
+                                self.ctx, "product.product", product_id)
+                        except BaseException:
+                            pass
 
         id = clodoo.executeL8(
             self.ctx,
@@ -200,8 +212,11 @@ def main(cli_args=[]):
     help = False
     config = "/home/odoo/clodoo/confs/odoo10.conf"
     database = "paperservice"
+    reset_prod = False
     for arg in cli_args:
-        if arg.startswith("-"):
+        if arg.endswith("--reset"):
+            reset_prod = True
+        elif arg.startswith("-"):
             if "h" in arg:
                 help = True
             if arg.endswith("c"):
@@ -215,9 +230,9 @@ def main(cli_args=[]):
         else:
             pass
     if help:
-        print("usage: vg7_order -c CONFIG -d DATABASE")
+        print("usage: vg7_order -c CONFIG -d DATABASE --reset")
         exit(0)
-    Conn = ExtTestEnv(config=config, database=database)
+    Conn = ExtTestEnv(config=config, database=database, reset_prod=reset_prod)
     return Conn.send_order()
 
 

@@ -2,14 +2,14 @@ job_name,product_id,iva,weight,unitary_price,quantity,id,product_name
 "Codice: cpb
 grafica . smart (ps.g)
 concorso spese: impaginata su tracciato pf (file fornito dal cliente in vettoriale)
-Quantit\xe0: 1",300000084,22,13,0.42508196721311,100,3451,grafica . smart (ps.g)
+Quantit\xe0: 1",300000184,22,13,0.42508196721311,100,3451,grafica . smart (ps.g)
 "Codice: cs1s
 clich\xe9 serigrafia 1col (smart)
 concorso spese: impaginata su tracciato pf (file fornito dal cliente in vettoriale)
 quantit\xe0: 1
 tipologia: nuovo
 nota: .
-(necessario per la creazione del pf: visibile su ddt, no consegna)",300000081,22,0,0,1,3452,clich\xe9 serigrafia 1col (smart)
+(necessario per la creazione del pf: visibile su ddt, no consegna)",300000181,22,0,0,1,3452,clich\xe9 serigrafia 1col (smart)
 "Codice: sccis
 serigrafia combi cliche' e ink
 Quantit\xe0: 1

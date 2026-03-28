@@ -1540,22 +1540,22 @@ class IrModelSynchro(models.Model):
         )
         return default, apply4, spec
 
-    def ref_is_in_queue(
-        self,
-        channel_id,
-        cache,
-        vmodel,
-        actual_model,
-        ext_ref,
-        vals,
-        loc_id=None,
-        ext_id=None,
-    ):
-        if cache.id_is_in_cache(
-            channel_id, vmodel, actual_model, loc_id=loc_id, ext_id=ext_id
-        ):
-            return self.found_ref_in_queue(vmodel, vals, ext_ref)
-        return False
+    # def ref_is_in_queue(
+    #     self,
+    #     channel_id,
+    #     cache,
+    #     vmodel,
+    #     actual_model,
+    #     ext_ref,
+    #     vals,
+    #     loc_id=None,
+    #     ext_id=None,
+    # ):
+    #     if cache.id_is_in_cache(
+    #         channel_id, vmodel, actual_model, loc_id=loc_id, ext_id=ext_id
+    #     ):
+    #         return self.found_ref_in_queue(vmodel, vals, ext_ref)
+    #     return False
 
     def found_ref_in_queue(self, vmodel, vals, ext_ref):
         self.logmsg(
@@ -1566,21 +1566,21 @@ class IrModelSynchro(models.Model):
         )
         return True
 
-    def pop_ref(self, backend_id, vmodel, actual_model, loc_id, ext_id):
-        Cache = self.env["ir.model.synchro.cache"]
-        Cache.pop_id(backend_id, vmodel, actual_model, loc_id=loc_id, ext_id=ext_id)
-        self.logmsg(
-            "debug",
-            "Pop %(model)s[%(id)s](%(xid)s) from queue!",
-            model=vmodel,
-            ctx={"id": loc_id, "xid": ext_id},
-        )
+    # def pop_ref(self, backend_id, vmodel, actual_model, loc_id, ext_id):
+    #     Cache = self.env["ir.model.synchro.cache"]
+    #     Cache.pop_id(backend_id, vmodel, actual_model, loc_id=loc_id, ext_id=ext_id)
+    #     self.logmsg(
+    #         "debug",
+    #         "Pop %(model)s[%(id)s](%(xid)s) from queue!",
+    #         model=vmodel,
+    #         ctx={"id": loc_id, "xid": ext_id},
+    #     )
 
     def reset_refs(self, backend_id, vmodel, actual_model):
         if hasattr(self, "ref_stack"):
             while len(self.ref_stack):
                 (loc_id, ext_id) = self.ref_stack.pop()
-                self.pop_ref(backend_id, vmodel, actual_model, loc_id, ext_id)
+                # self.pop_ref(backend_id, vmodel, actual_model, loc_id, ext_id)
 
     def drop_unuset_addresses(self, loc_id):
         for rec in self.env["res.partner"].search(
@@ -1797,28 +1797,28 @@ class IrModelSynchro(models.Model):
                     del vals[nm]
             return vals
 
-        def found_ref_in_queue(vmodel, vals, ext_ref):
-            self.logmsg(
-                "warning",
-                "### Found %(model)s[%(id)s] in queue!",
-                model=vmodel,
-                ctx={"id": vals[ext_ref]},
-            )
-            return True
+        # def found_ref_in_queue(vmodel, vals, ext_ref):
+        #     self.logmsg(
+        #         "warning",
+        #         "### Found %(model)s[%(id)s] in queue!",
+        #         model=vmodel,
+        #         ctx={"id": vals[ext_ref]},
+        #     )
+        #     return True
 
-        def store_in_queue(backend_id, cache, loc_name, vmodel, vals):
-            actual_model = self.get_actual_model(vmodel, only_name=True)
-            cache.push_id(backend_id, vmodel, actual_model, ext_id=vals[loc_name])
-            self.logmsg(
-                "debug",
-                "Push %(model)s[%(xid)s] in queue!",
-                model=vmodel,
-                ctx={"xid": vals[loc_name]},
-            )
+        # def store_in_queue(backend_id, cache, loc_name, vmodel, vals):
+        #     actual_model = self.get_actual_model(vmodel, only_name=True)
+        #     cache.push_id(backend_id, vmodel, actual_model, ext_id=vals[loc_name])
+        #     self.logmsg(
+        #         "debug",
+        #         "Push %(model)s[%(xid)s] in queue!",
+        #         model=vmodel,
+        #         ctx={"xid": vals[loc_name]},
+        #     )
 
-        def pop_from_queue(backend_id, cache, vmodel, actual_model, ext_id):
-            actual_model = self.get_actual_model(vmodel, only_name=True)
-            cache.pop_id(backend_id, vmodel, actual_model, ext_id=ext_id)
+        # def pop_from_queue(backend_id, cache, vmodel, actual_model, ext_id):
+        #     actual_model = self.get_actual_model(vmodel, only_name=True)
+        #     cache.pop_id(backend_id, vmodel, actual_model, ext_id=ext_id)
 
         def cast_type(vals, actual_model, loc_name, ext_ref, struct):
             if (
@@ -1856,7 +1856,7 @@ class IrModelSynchro(models.Model):
         )
         ctx = Cache.get_attr(backend_id, "CTX") or {}
         ctx["ext_key_id"] = counterpart_pk
-        ref_in_queue = False
+        # ref_in_queue = False
         for ext_ref in field_list:
             if not Cache.is_struct(ext_ref):
                 continue
@@ -1954,16 +1954,17 @@ class IrModelSynchro(models.Model):
                     vals[ext_ref] = self.get_loc_ext_id_value(
                         backend_id, vmodel, vals[ext_ref]
                     )
-                    if vmodel == actual_model:
-                        if Cache.id_is_in_cache(
-                            backend_id, vmodel, actual_model, ext_id=vals[ext_ref]
-                        ):
-                            ref_in_queue = found_ref_in_queue(vmodel, vals, ext_ref)
-                            pop_from_queue(
-                                backend_id, Cache, vmodel, actual_model, vals[ext_ref])
-                            break
-                        else:
-                            store_in_queue(backend_id, Cache, ext_ref, vmodel, vals)
+                    # if vmodel == actual_model:
+                    #     if Cache.id_is_in_cache(
+                    #         backend_id, vmodel, actual_model, ext_id=vals[ext_ref]
+                    #     ):
+                    #         ref_in_queue = found_ref_in_queue(vmodel, vals, ext_ref)
+                    #         pop_from_queue(
+                    #             backend_id,
+                    #             Cache, vmodel, actual_model, vals[ext_ref])
+                    #         break
+                    #     else:
+                    #         store_in_queue(backend_id, Cache, ext_ref, vmodel, vals)
                     vals = rm_ext_value(vals, loc_name, ext_name, ext_ref, is_foreign)
                     continue
 
@@ -1981,8 +1982,8 @@ class IrModelSynchro(models.Model):
                     else:
                         condition = "exclude"
                     if (
-                        ref_in_queue
-                        or (condition == "include" and loc_name not in no_deep_fields)
+                        # ref_in_queue
+                        (condition == "include" and loc_name not in no_deep_fields)
                         or (condition == "exclude" and loc_name in no_deep_fields)
                     ):
                         if loc_name in vals and (
@@ -2018,13 +2019,10 @@ class IrModelSynchro(models.Model):
                             spec=spec,
                             fmt="cmd",
                         )
-                        if loc_id:
-                            if isinstance(loc_id, (tuple, list)):
-                                vals[loc_name] = loc_id
-                            elif loc_id > 0:
-                                vals[loc_name] = loc_id
-                            elif loc_name:
-                                vals[loc_name] = False
+                        if isinstance(loc_id, (tuple, list)):
+                            vals[loc_name] = loc_id
+                        elif loc_id > 0:
+                            vals[loc_name] = loc_id
                         elif loc_name:
                             vals[loc_name] = False
                         vals = rm_ext_value(
@@ -2045,17 +2043,17 @@ class IrModelSynchro(models.Model):
                         ctx=ctx,
                     )
 
-            elif ext_ref == "id":
-                if vmodel == actual_model:
-                    if Cache.id_is_in_cache(
-                        backend_id, vmodel, actual_model, loc_id=vals[ext_ref]
-                    ):
-                        ref_in_queue = found_ref_in_queue(vmodel, vals, ext_ref)
-                        pop_from_queue(
-                            backend_id, Cache, vmodel, actual_model, vals[ext_ref])
-                        break
-                    else:
-                        store_in_queue(backend_id, Cache, ext_ref, vmodel, vals)
+            # elif ext_ref == "id":
+            #     if vmodel == actual_model:
+            #         if Cache.id_is_in_cache(
+            #             backend_id, vmodel, actual_model, loc_id=vals[ext_ref]
+            #         ):
+            #             ref_in_queue = found_ref_in_queue(vmodel, vals, ext_ref)
+            #             pop_from_queue(
+            #                 backend_id, Cache, vmodel, actual_model, vals[ext_ref])
+            #             break
+            #         else:
+            #             store_in_queue(backend_id, Cache, ext_ref, vmodel, vals)
                 continue
             if (
                 loc_name in vals
@@ -2080,7 +2078,7 @@ class IrModelSynchro(models.Model):
         if "ext_key_id" in ctx:
             del ctx["ext_key_id"]
         Cache.set_attr(backend_id, "CTX", ctx)
-        return vals, ref_in_queue, parent_child_mode
+        return vals, parent_child_mode
 
     def set_default_values(self, cls, backend_id, vmodel, vals):
         actual_model = self.get_actual_model(vmodel, only_name=True)
@@ -2684,9 +2682,6 @@ class IrModelSynchro(models.Model):
         if "to_delete" in cls._fields:
             cls.search([(parent_id_name, "=", parent_id),
                         ("to_delete", "=", False)]).write({"to_delete": True})
-        # if "sequence" in cls._fields:
-        #     has_sequence = True
-        # ext_id_name = Cache.get_model_attr(backend_id, model_child, "", default="id")
         for num, vals in enumerate(rec_ids):
             vals[":%s" % parent_id_name] = parent_id
             if "to_delete" in cls._fields:
@@ -2738,14 +2733,14 @@ class IrModelSynchro(models.Model):
         Prefix ia associated to conversion/mapping rule.
         """
 
-        def pop_ref(backend_id, vmodel, actual_model, id, ext_id):
-            Cache.pop_id(backend_id, vmodel, actual_model, loc_id=id, ext_id=ext_id)
-            self.logmsg(
-                "debug",
-                "Pop %(model)s[%(id)s](%(xid)s) from queue!",
-                model=vmodel,
-                ctx={"id": id, "xid": ext_id},
-            )
+        # def pop_ref(backend_id, vmodel, actual_model, id, ext_id):
+        #     Cache.pop_id(backend_id, vmodel, actual_model, loc_id=id, ext_id=ext_id)
+        #     self.logmsg(
+        #         "debug",
+        #         "Pop %(model)s[%(id)s](%(xid)s) from queue!",
+        #         model=vmodel,
+        #         ctx={"id": id, "xid": ext_id},
+        #     )
 
         def protect_against_vg7(vmodel, actual_model, vals):
             # Protect against VG7 mistakes
@@ -2784,7 +2779,7 @@ class IrModelSynchro(models.Model):
                     pass
                 if not rec or rec.id != id:
                     _logger.error("!-3! ID %s does not exist in %s" % (id, vmodel))
-                    pop_ref(backend_id, vmodel, actual_model, id, ext_id)
+                    # pop_ref(backend_id, vmodel, actual_model, id, ext_id)
                     return -3, None
                 id = rec.id
                 self.logmsg(
@@ -2888,16 +2883,16 @@ class IrModelSynchro(models.Model):
         else:
             spec = self.get_spec_from_vmodel(vmodel)
         # Warning! After this function, return MUST pop ref_id
-        vals, ref_in_queue, parent_child_mode = self.map_to_internal(
+        vals, parent_child_mode = self.map_to_internal(
             struct, backend_id, vmodel, vals, no_deep_fields=no_deep_fields
         )
         if has_sequence and "sequence" in vals:
             sequence = vals["sequence"]
         ext_id_name = self.get_loc_ext_id_name(backend_id, vmodel)
         ext_id = vals.get(ext_id_name)
-        if ref_in_queue:
-            pop_ref(backend_id, vmodel, actual_model, False, ext_id)
-            return -9
+        # if ref_in_queue:
+        #     pop_ref(backend_id, vmodel, actual_model, False, ext_id)
+        #     return -9
 
         loc_id, rec = browse_from_id(actual_cls, vals)
         if loc_id < 0:
@@ -2906,7 +2901,7 @@ class IrModelSynchro(models.Model):
             loc_id, rec = self.bind_record(
                 struct, backend_id, vmodel, vals, constraints)
         if loc_id == -7 and not has_state:
-            pop_ref(backend_id, vmodel, actual_model, False, ext_id)
+            # pop_ref(backend_id, vmodel, actual_model, False, ext_id)
             self.logmsg("info",
                         "### No values passed(%s.%s)" % (vmodel, actual_model),
                         logrec=self.logrec, id=loc_id)
@@ -2924,7 +2919,7 @@ class IrModelSynchro(models.Model):
             vals, erc = self.set_state_to_draft(struct, vmodel, rec, vals)
             if erc < 0:
                 _logger.error("!%s! Returned error code!" % erc)
-                pop_ref(backend_id, vmodel, actual_model, loc_id, ext_id)
+                # pop_ref(backend_id, vmodel, actual_model, loc_id, ext_id)
                 return erc
         if has_2delete:
             vals["to_delete"] = False
@@ -2958,7 +2953,7 @@ class IrModelSynchro(models.Model):
                 if not rec and min_vals != vals:
                     rec = self.create_n_commit(actual_model, vals, logrec=self.logrec)
                 if not rec:
-                    pop_ref(backend_id, vmodel, actual_model, loc_id, ext_id)
+                    # pop_ref(backend_id, vmodel, actual_model, loc_id, ext_id)
                     return loc_id
                 loc_id = rec.id
                 if not ext_id_name:
@@ -3013,7 +3008,7 @@ class IrModelSynchro(models.Model):
                             rec=rec,
                             ctx={"e": e, "val": saved_vals},
                         )
-                        pop_ref(backend_id, vmodel, actual_model, loc_id, ext_id)
+                        # pop_ref(backend_id, vmodel, actual_model, loc_id, ext_id)
                         return -2
                 elif do_write:
                     self.logmsg(
@@ -3062,7 +3057,7 @@ class IrModelSynchro(models.Model):
             elif actual_model == "ir.module.module":
                 loc_id = self.set_actual_state(struct, actual_model, rec)
                 if loc_id < 0:
-                    pop_ref(backend_id, vmodel, actual_model, rec.id, ext_id)
+                    # pop_ref(backend_id, vmodel, actual_model, rec.id, ext_id)
                     return loc_id
             elif hasattr(cls, "postprocess"):
                 done_post = cls.postprocess(backend_id, loc_id, vals)
@@ -3080,7 +3075,7 @@ class IrModelSynchro(models.Model):
                 only_minimal=only_minimal,
             )
             if sts < 1:
-                pop_ref(backend_id, vmodel, actual_model, loc_id, ext_id)
+                # pop_ref(backend_id, vmodel, actual_model, loc_id, ext_id)
                 return sts - 100
         elif model_child:
             self.logmsg(
@@ -3098,7 +3093,7 @@ class IrModelSynchro(models.Model):
             and not no_del_child
         ):
             self.synchro_queue(backend_id)
-        pop_ref(backend_id, vmodel, actual_model, loc_id, ext_id)
+        # pop_ref(backend_id, vmodel, actual_model, loc_id, ext_id)
         _logger.info("!%s! Returned ID of %s" % (loc_id, vmodel))
         return loc_id
 
