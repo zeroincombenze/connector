@@ -1884,9 +1884,6 @@ class ExtTestEnv(object):
         main_ext_id = False
         ext_id_field = self.get_ext_id_field(identity, model=model)
         self.write_log("# Starting %s tests on %s" % (fct_test, model), echo=False)
-        # if ext_model == "orders":  #debug
-        #     self.ask_4_ret()
-        #     self.connect_user(xmlrpc_port=8170)
         for ext_rec in ext_recs_image:
             loc_id = ext_id = -127
             if fct_test == "synchro":

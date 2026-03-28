@@ -2684,7 +2684,7 @@ class IrModelSynchro(models.Model):
         for num, vals in enumerate(rec_ids):
             vals[":%s" % parent_id_name] = parent_id
             if "to_delete" in cls._fields:
-                vals[":to delete"] = False
+                vals[":to_delete"] = False
             try:
                 id = self.generic_synchro(
                     cls,
@@ -2715,6 +2715,11 @@ class IrModelSynchro(models.Model):
                 return -12
 
         if "to_delete" in cls._fields:
+            self.logmsg(
+                "warning",
+                "Removing deleted lines [%s]" % [x.id for x in cls.search(
+                    [(parent_id_name, "=", parent_id), ("to_delete", "=", True)])]
+            )
             cls.search(
                 [(parent_id_name, "=", parent_id), ("to_delete", "=", True)]).unlink()
 
@@ -3784,8 +3789,6 @@ class IrModelSynchro(models.Model):
     @api.multi
     def pull_record(self, cls, backend_id=None):
         """Button synchronize at record UI page"""
-        import pdb; pdb.set_trace()     #debug
-        print("pull_record(%s,backend=%s)" % (cls._name, backend_id))     #debug
         self.logmsg("debug", "pull_record()")
         cache = self.env["ir.model.synchro.cache"]
         for rec in cls:
@@ -3833,8 +3836,6 @@ class IrModelSynchro(models.Model):
 
     @api.model
     def trigger_one_record(self, ext_model, prefix, ext_id):
-        import pdb; pdb.set_trace()     #debug
-        print("trigger_one_record(%s,%s,%s)" % (ext_model, prefix, ext_id))     #debug
         if not prefix:
             return -7
         Cache = self.env["ir.model.synchro.cache"]

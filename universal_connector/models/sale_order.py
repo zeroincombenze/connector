@@ -111,8 +111,6 @@ class SaleOrder(models.Model):
 
     @api.multi
     def pull_record(self):
-        import pdb; pdb.set_trace()     #debug
-        print("sale.order.pull_record()")     #debug
         self.env["ir.model.synchro"].pull_record(self)
 
 
