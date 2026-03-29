@@ -669,7 +669,7 @@ class IrModelSynchroCache(models.Model):
             self.get_struct_model_field_attr(model, loc_name, "required")
             or field.required
         )
-        apply = field.apply.strip()
+        apply = field.apply.strip() if field.apply else field.apply
         if (
             loc_name
             in itertools.chain.from_iterable(self.get_struct_model_attr(model, "SKEYS"))
