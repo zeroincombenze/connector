@@ -12,7 +12,7 @@ from datetime import datetime, timedelta
 import re
 import itertools
 
-from odoo import models
+from odoo import fields, models
 from odoo import release
 
 _logger = logging.getLogger(__name__)
@@ -507,13 +507,42 @@ class IrModelSynchroApply(models.Model):
         ctx=None,
     ):
         if (
-            loc_name in vals
-            and isinstance(vals.get(loc_name), int)
-            and vals[loc_name] > 0
+            "partner_id" in vals
+            and ext_ref in vals
+            and isinstance(vals[ext_ref], dict)
         ):
-            return vals
-        if "partner_id" in vals:
             vals[loc_name] = vals["partner_id"]
+            domain = []
+            ship_vals = {}
+            item = (vals[ext_ref].get("name", "") + " "
+                    + vals[ext_ref].get("surename", "")).strip()
+            if item:
+                domain.append(("name", "=", item))
+                ship_vals["name"] = item
+            item = (vals[ext_ref].get("street", "") + ", "
+                    + vals[ext_ref].get("street_number", "")).strip()
+            if item:
+                domain.append(("street", "=", item))
+                ship_vals["street"] = item
+            item = vals[ext_ref].get("city", "").strip()
+            if item:
+                domain.append(("city", "=", item))
+                ship_vals["city"] = item
+            item = vals[ext_ref].get("postal_code", "").strip()
+            if item:
+                domain.append(("zip", "=", item))
+                ship_vals["zip"] = item
+            if domain:
+                domain.append(("parent_id", "=", vals["partner_id"]))
+                ship_vals["parent_id"] = vals["partner_id"]
+            partner = fields.first(self.env["res.partner"].search(domain))
+            if not partner:
+                try:
+                    partner = self.env["res.partner"].create(ship_vals)
+                except BaseException:
+                    pass
+            if partner:
+                vals[loc_name] = partner.id
         return vals
 
     def apply_company_info(

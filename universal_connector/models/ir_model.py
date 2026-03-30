@@ -1798,29 +1798,6 @@ class IrModelSynchro(models.Model):
                     del vals[nm]
             return vals
 
-        # def found_ref_in_queue(vmodel, vals, ext_ref):
-        #     self.logmsg(
-        #         "warning",
-        #         "### Found %(model)s[%(id)s] in queue!",
-        #         model=vmodel,
-        #         ctx={"id": vals[ext_ref]},
-        #     )
-        #     return True
-
-        # def store_in_queue(backend_id, cache, loc_name, vmodel, vals):
-        #     actual_model = self.get_actual_model(vmodel, only_name=True)
-        #     cache.push_id(backend_id, vmodel, actual_model, ext_id=vals[loc_name])
-        #     self.logmsg(
-        #         "debug",
-        #         "Push %(model)s[%(xid)s] in queue!",
-        #         model=vmodel,
-        #         ctx={"xid": vals[loc_name]},
-        #     )
-
-        # def pop_from_queue(backend_id, cache, vmodel, actual_model, ext_id):
-        #     actual_model = self.get_actual_model(vmodel, only_name=True)
-        #     cache.pop_id(backend_id, vmodel, actual_model, ext_id=ext_id)
-
         def cast_type(vals, actual_model, loc_name, ext_ref, struct):
             if (
                 struct[loc_name]["type"] in (
@@ -1955,19 +1932,25 @@ class IrModelSynchro(models.Model):
                     vals[ext_ref] = self.get_loc_ext_id_value(
                         backend_id, vmodel, vals[ext_ref]
                     )
-                    # if vmodel == actual_model:
-                    #     if Cache.id_is_in_cache(
-                    #         backend_id, vmodel, actual_model, ext_id=vals[ext_ref]
-                    #     ):
-                    #         ref_in_queue = found_ref_in_queue(vmodel, vals, ext_ref)
-                    #         pop_from_queue(
-                    #             backend_id,
-                    #             Cache, vmodel, actual_model, vals[ext_ref])
-                    #         break
-                    #     else:
-                    #         store_in_queue(backend_id, Cache, ext_ref, vmodel, vals)
                     vals = rm_ext_value(vals, loc_name, ext_name, ext_ref, is_foreign)
                     continue
+
+                if is_foreign and apply4:
+                    vals = do_apply(
+                        backend_id,
+                        vals,
+                        loc_name,
+                        ext_ref,
+                        loc_ext_id_name,
+                        apply4,
+                        default,
+                        vmodel,
+                        ctx=ctx,
+                    )
+                    if loc_name in vals:
+                        vals = rm_ext_value(
+                            vals, loc_name, ext_name, ext_ref, is_foreign)
+                        continue
 
                 if struct[loc_name]["type"] in (
                         "many2one",
@@ -1998,17 +1981,6 @@ class IrModelSynchro(models.Model):
                         if ext_ref in vals and ext_ref != loc_name:
                             del vals[ext_ref]
                     else:
-                        vals = do_apply(
-                            backend_id,
-                            vals,
-                            ext_ref,
-                            ext_ref,
-                            loc_ext_id_name,
-                            apply4,
-                            default,
-                            vmodel,
-                            ctx=ctx,
-                        )
                         loc_id = self.get_foreign_value(
                             backend_id,
                             vmodel,

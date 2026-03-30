@@ -18,7 +18,7 @@ SALE_ORDER_LINE_1_1 = {
     "product_name": "grafica . smart (ps.g)",
     "product_id": 300000184,
     "unitary_price": 0.42508196721311,
-    "job_name": """Codice: cpb
+    "job_name": """Codice: cpb#1
 grafica . smart (ps.g)
 concorso spese: impaginata su tracciato pf (file fornito dal cliente in vettoriale)
 Quantit\\xe0: 1""",
@@ -31,7 +31,7 @@ SALE_ORDER_LINE_1_2 = {
     "product_name": "clich\\xe9 serigrafia 1col (smart)",
     "product_id": 300000181,
     "unitary_price": 0,
-    "job_name": """Codice: cs1s
+    "job_name": """Codice: cs1s#2
 clich\\xe9 serigrafia 1col (smart)
 concorso spese: impaginata su tracciato pf (file fornito dal cliente in vettoriale)
 quantit\\xe0: 1
@@ -47,7 +47,7 @@ SALE_ORDER_LINE_1_3 = {
     "product_name": "serigrafia combi cliche e ink (smart)",
     "product_id": 300000153,
     "unitary_price": 10.0,
-    "job_name": """Codice: sccis
+    "job_name": """Codice: sccis#3
 serigrafia combi cliche' e ink
 Quantit\\xe0: 1
 sconto: 1 cliche' per 2 referenze bag""",
@@ -60,7 +60,7 @@ SALE_ORDER_LINE_1_4 = {
     "product_name": "mix natural strong (e.n1) . cordino paper bag (e)",
     "product_id": 300000121,
     "unitary_price": -10.0,
-    "job_name": """Codice: cpb
+    "job_name": """Codice: cpb#4
 mix natural strong (e.n1) . cordino paper bag (e)
 Prodotto: mix natural strong (e.n1) . cordino paper bag (e)
 bianco spl (wl) 540x140x500 (120pf) (epbc.mns.n1): 100
@@ -74,7 +74,7 @@ SALE_ORDER_LINE_1_5 = {
     "product_name": "Spedizione",
     "product_id": 100000011,
     "unitary_price": 0,
-    "job_name": "Spedizione",
+    "job_name": "Spedizione #5",
     "quantity": 1
 }
 
@@ -129,7 +129,7 @@ SALE_ORDER_1 = {
 
 
 class ExtTestEnv(object):
-    def __init__(self, config=None, database=None, reset_prod=False):
+    def __init__(self, config=None, database=None, reset_data=False):
         if os.path.isfile(config):
             self.config = config
         else:
@@ -137,9 +137,10 @@ class ExtTestEnv(object):
         self.database = database
         self.ctx = {}
         self.user = False
-        self.reset_prod = reset_prod
+        self.reset_data = reset_data
 
     def connect_user(self):
+        print("Connecting to database %s" % self.database)
         uid, ctx = clodoo.oerp_set_env(
             confn=self.config,
             db=self.database,
@@ -158,6 +159,29 @@ class ExtTestEnv(object):
             keys = list(order.keys())
             writer.writerow(keys)
             writer.writerow(order.values())
+            if self.reset_data:
+                partner_id = clodoo.searchL8(
+                    self.ctx,
+                    "res.partner",
+                    [("vg7_id", "=", order["customer_id"])])
+                if partner_id:
+                    try:
+                        clodoo.unlinkL8(
+                            self.ctx, "res.partner", partner_id)
+                    except BaseException:
+                        print("Cannot unlink partner %s" % partner_id)
+        fqn = "/home/odoo/10.0/connector/universal_connector/tests/data/customers.csv"
+        with open(fqn, "wb") as fd:
+            partner_values = {
+                "id": order["customer_id"],
+                "name": "Customer Test",
+                "city": "City Test",
+            }
+            writer = csv.writer(fd)
+            keys = list(partner_values.keys())
+            writer.writerow(keys)
+            writer.writerow(partner_values.values())
+
         fqn = "/home/odoo/10.0/connector/universal_connector/tests/data/orders.line.csv"
         with open(fqn, "wb") as fd:
             writer = csv.writer(fd)
@@ -171,7 +195,7 @@ class ExtTestEnv(object):
                     SALE_ORDER_LINE_1_5,
             ):
                 writer.writerow(line.values())
-                if self.reset_prod:
+                if self.reset_data:
                     product_id = clodoo.searchL8(
                         self.ctx,
                         "product.product",
@@ -181,8 +205,14 @@ class ExtTestEnv(object):
                             clodoo.unlinkL8(
                                 self.ctx, "product.product", product_id)
                         except BaseException:
-                            pass
+                            print("Cannot unlink product %s" % product_id)
 
+        if self.reset_data:
+            loc_id = clodoo.searchL8(self.ctx,
+                                     "sale.order",
+                                     [("name", "like", str(ext_id))])
+            if loc_id:
+                print("Please, delete order id=%s name=%s" % (loc_id, ext_id))
         loc_id = clodoo.executeL8(
             self.ctx,
             "ir.model.synchro", "trigger_one_record", "orders", "vg7", ext_id)
@@ -193,12 +223,13 @@ class ExtTestEnv(object):
                 SALE_ORDER_LINE_1_4,
                 SALE_ORDER_LINE_1_5,
         ):
-            # ext_id = line["id"]
+            line_vals = {"vg7:" + k: v for (k, v) in line.items()}
+            line_vals["job_name"] = "\n".join(line["job_name"].split("\n")[0:2])
             clodoo.executeL8(
                 self.ctx,
                 "sale.order.line",
                 "synchro",
-                {"vg7:" + k: v for (k, v) in line.items()}
+                line_vals
             )
         clodoo.executeL8(
             self.ctx,
@@ -206,6 +237,7 @@ class ExtTestEnv(object):
             "commit",
             loc_id
         )
+        print("Order %s created from ext ref %s" % (loc_id, ext_id))
         return loc_id
 
     def send_order(self):
@@ -219,10 +251,10 @@ def main(cli_args=[]):
     help = False
     config = "/home/odoo/clodoo/confs/odoo10.conf"
     database = "paperservice"
-    reset_prod = False
+    reset_data = False
     for arg in cli_args:
         if arg.endswith("--reset"):
-            reset_prod = True
+            reset_data = True
         elif arg.startswith("-"):
             if "h" in arg:
                 help = True
@@ -239,7 +271,7 @@ def main(cli_args=[]):
     if help:
         print("usage: vg7_order -c CONFIG -d DATABASE --reset")
         exit(0)
-    Conn = ExtTestEnv(config=config, database=database, reset_prod=reset_prod)
+    Conn = ExtTestEnv(config=config, database=database, reset_data=reset_data)
     return Conn.send_order()
 
 

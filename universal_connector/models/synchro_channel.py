@@ -387,10 +387,6 @@ class SynchroChannelModel(models.Model):
         "Import Counter", default=0, help="Last imported record number"
     )
 
-    def select_by_domain(self, vals, domain):
-        # TODO
-        return vals
-
     def get_csv_response(self, cnx, session, ext_id=False, domain=None, mode=None):
         """In CSV session is the dirname"""
         dirname = session
@@ -468,7 +464,7 @@ class SynchroChannelModel(models.Model):
                     vals = row_res
                     break
                 vals.append(row_res)
-        return self.select_by_domain(vals, domain)
+        return vals
 
     def get_vg7_json_response(self, cnx, session, ext_id=False, domain=None, mode=None):
         """In JSON cnx contains the headers and session is the endpoint"""
@@ -490,7 +486,7 @@ class SynchroChannelModel(models.Model):
             )
             return getattr(response, "status_code", "N/A")
         if response:
-            return self.select_by_domain(response.json(), domain)
+            return response.json()
         return False
 
     def browse_odoo_rec(self, cnx, ext_model, ext_id, method="json"):
