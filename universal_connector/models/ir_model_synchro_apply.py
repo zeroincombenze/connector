@@ -297,43 +297,43 @@ class IrModelSynchroApply(models.Model):
                 loc_name = "street"
             else:
                 loc_name = "%s:street" % ext_ref[0:3]
-            if loc_name in vals:
+            if loc_name in vals and vals[loc_name] and vals[ext_ref]:
                 vals[loc_name] = "%s, %s" % (vals[loc_name], vals[ext_ref])
             del vals[ext_ref]
         return vals
 
-    def apply_invoice_number(
-        self,
-        backend_id,
-        vals,
-        loc_name,
-        ext_ref,
-        loc_ext_id_name,
-        vmodel,
-        default=None,
-        ctx=None,
-    ):
-        """Invoice number"""
-        if ext_ref in vals:
-            vals["move_name"] = vals[ext_ref]
-        return vals
+    # def apply_invoice_number(
+    #     self,
+    #     backend_id,
+    #     vals,
+    #     loc_name,
+    #     ext_ref,
+    #     loc_ext_id_name,
+    #     vmodel,
+    #     default=None,
+    #     ctx=None,
+    # ):
+    #     """Invoice number"""
+    #     if ext_ref in vals:
+    #         vals["move_name"] = vals[ext_ref]
+    #     return vals
 
-    def apply_journal(
-        self,
-        backend_id,
-        vals,
-        loc_name,
-        ext_ref,
-        loc_ext_id_name,
-        vmodel,
-        default=None,
-        ctx=None,
-    ):
-        if "journal_id" not in vals:
-            journal = self.env["account.invoice"]._default_journal()
-            if journal:
-                vals["journal_id"] = journal[0].id
-        return vals
+    # def apply_journal(
+    #     self,
+    #     backend_id,
+    #     vals,
+    #     loc_name,
+    #     ext_ref,
+    #     loc_ext_id_name,
+    #     vmodel,
+    #     default=None,
+    #     ctx=None,
+    # ):
+    #     if "journal_id" not in vals:
+    #         journal = self.env["account.invoice"]._default_journal()
+    #         if journal:
+    #             vals["journal_id"] = fields.first(journal).id
+    #     return vals
 
     def apply_account(
         self,
@@ -412,6 +412,9 @@ class IrModelSynchroApply(models.Model):
                 tax = product.supplier_taxes_id
             else:
                 tax = product.taxes_id
+            if not tax:
+                tax = self.env["account.tax"].search([("amount", "=", 22),
+                                                      ("type", "=", "alse")], limit=1)
             if tax:
                 vals[loc_name] = [(6, 0, [tax.id])]
         return vals
@@ -543,6 +546,50 @@ class IrModelSynchroApply(models.Model):
                     pass
             if partner:
                 vals[loc_name] = partner.id
+        return vals
+
+    def apply_merge_shipping_address(
+        self,
+        backend_id,
+        vals,
+        loc_name,
+        ext_ref,
+        loc_ext_id_name,
+        vmodel,
+        default=None,
+        ctx=None,
+    ):
+        if isinstance(vals[ext_ref], dict):
+            if "customer_shipping_id" in vals[ext_ref]:
+                vals[ext_ref]["id"] = vals[ext_ref]["customer_shipping_id"] + 100000000
+                del vals[ext_ref]["customer_shipping_id"]
+            self.env["ir.model.synchro.cache"].set_model_attr(
+                backend_id, vmodel, "__%s" % "partner.shipping", vals[ext_ref]
+            )
+        return vals
+
+    def apply_merge_invoice_address(
+        self,
+        backend_id,
+        vals,
+        loc_name,
+        ext_ref,
+        loc_ext_id_name,
+        vmodel,
+        default=None,
+        ctx=None,
+    ):
+        if isinstance(vals[ext_ref], dict):
+            prefix = ext_ref.split(":")[0]
+            for k, v in vals[ext_ref].items():
+                if not k.startswith("billing_"):
+                    continue
+                ext_name = prefix + ":" + k.split("_", 1)[1]
+                if ext_name not in vals and vals[ext_ref][k]:
+                    vals[ext_name] = vals[ext_ref][k]
+            self.env["ir.model.synchro.cache"].set_model_attr(
+                backend_id, vmodel, "__%s" % "partner.invoice", vals[ext_ref]
+            )
         return vals
 
     def apply_company_info(
@@ -825,7 +872,7 @@ class IrModelSynchroApply(models.Model):
         if not prods:
             prods = Product.search([("default_code", "=", "MISC")])
         if prods:
-            vals[loc_name] = prods[0].id
+            vals[loc_name] = fields.first(prods).id
         return vals
 
     def apply_line_vals_from_prod(

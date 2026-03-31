@@ -1758,7 +1758,7 @@ class IrModelSynchro(models.Model):
                     list_1.append(ext_ref)
                 elif loc_name in ("country_id", "company_id"):
                     list_2.append(ext_ref)
-                elif loc_name in ("partner_id", "street"):
+                elif loc_name in ("partner_id", "street", "shipping", "billing"):
                     list_3.insert(0, ext_ref)
                 elif loc_name in (
                     "is_company",
@@ -1872,6 +1872,15 @@ class IrModelSynchro(models.Model):
                     vmodel,
                     ctx=ctx,
                 )
+            if apply4 and apply4.startswith("apply_merge_"):
+                if "vg7_id" in vals:
+                    vals["vg7:id"] = vals["vg7_id"]
+                    del vals["vg7_id"]
+                if ext_ref in vals:
+                    del vals[ext_ref]
+                return self.map_to_internal(
+                    struct, backend_id, vmodel, vals,
+                    no_deep_fields=no_deep_fields, only_minimal=only_minimal)
             if not loc_name or loc_name not in struct:
                 vals = rm_ext_value(vals, loc_name, ext_name, ext_ref, is_foreign)
                 continue
@@ -1947,7 +1956,7 @@ class IrModelSynchro(models.Model):
                         vmodel,
                         ctx=ctx,
                     )
-                    if loc_name in vals:
+                    if loc_name in vals and vals[loc_name]:
                         vals = rm_ext_value(
                             vals, loc_name, ext_name, ext_ref, is_foreign)
                         continue
@@ -3025,6 +3034,24 @@ class IrModelSynchro(models.Model):
         # commit to avoid lost data in recursive write
         self.env.cr.commit()  # pylint: disable=invalid-commit
 
+        if loc_id > 0 and not chk_in_queue and actual_model == "res.partner":
+            child_vals = Cache.get_model_attr(
+                backend_id, vmodel, "__partner.invoice")
+            if child_vals:
+                # partner_child[":parent_id"] = loc_id
+                # self.sync_rec_from_counterparty(
+                #     backend_id, "res.partner.invoice", partner_child)
+                Cache.del_model_attr(backend_id, vmodel,  "__partner.invoice")
+            child_vals = Cache.get_model_attr(
+                backend_id, vmodel, "__partner.shipping")
+            if child_vals:
+                child_vals[":parent_id"] = loc_id
+                Cache.del_model_attr(backend_id, vmodel, "__partner.shipping")
+                cls = self.env["res.partner.shipping"]
+                self.generic_synchro(
+                    cls, child_vals, channel_id=backend_id,
+                    jacket=True, only_minimal=True)
+
         done_post = False
         if loc_id > 0 and not chk_in_queue and vmodel == actual_model:
             if actual_model == "res.lang":
@@ -3038,7 +3065,7 @@ class IrModelSynchro(models.Model):
                 done_post = cls.postprocess(backend_id, loc_id, vals)
             elif do_auto_process:
                 done_post = self.postprocess(backend_id, vmodel, loc_id, vals)
-            # self.synchro_queue(backend_id)
+
         parent_id_name = Cache.get_struct_model_attr(actual_model, "PARENT_ID")
         if parent_child_mode == "B" and not done_post:
             sts = self.synchro_childs(

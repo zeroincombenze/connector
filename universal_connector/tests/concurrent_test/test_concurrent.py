@@ -421,9 +421,9 @@ class ExtTestEnv(object):
         force = {}
         force["ask"] = False
         # force["config"] = "./tests/logs/connector.universal_connector_10.conf"
-        # force["database"] = "connect10"
-        force["conai"] = True
-        # force["xmlrpc_port"] = 8170
+        # force["database"] = "test_universal_connector_10"
+        force["conai"] = False
+        force["xmlrpc_port"] = 8170
         for item in ("ask", "config", "database", "lang", "conai", "xmlrpc_port"):
             if force.get(item):
                 setattr(self, item, force[item])
@@ -782,6 +782,8 @@ class ExtTestEnv(object):
                                echo=False)
 
     def connect_user(self, xmlrpc_port=None):
+        print("xmlrpc_port = %s" % xmlrpc_port)
+        print("self.xmlrpc_port = %s" % self.xmlrpc_port)
         uid, self.ctx = clodoo.oerp_set_env(
             confn=self.config,
             db=self.database,
@@ -1886,6 +1888,9 @@ class ExtTestEnv(object):
         self.write_log("# Starting %s tests on %s" % (fct_test, model), echo=False)
         for ext_rec in ext_recs_image:
             loc_id = ext_id = -127
+            if model in ("res.partner", "sale.order"):
+                print_flush("# Test model %s[%s]" % (model, ext_rec))   #debug
+                self.ask_4_ret()                                        #debug
             if fct_test == "synchro":
                 ext_rec, ext_id, main_ext_id = self.prepare_rec(ext_rec, main_ext_id)
                 loc_id = self.test_function_synchro(

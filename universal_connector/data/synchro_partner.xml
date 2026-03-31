@@ -279,10 +279,23 @@
         <field name="model_id" ref="res_partner"/>
     </record>
 
+    <record forcecreate="1" id="res_partner_vg7_billing" model="synchro.channel.model.fields">
+        <field name="name"></field>
+        <field name="counterpart_name">billing</field>
+        <field name="apply">merge_invoice_address()</field>
+        <field name="model_id" ref="res_partner"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_vg7_shipping" model="synchro.channel.model.fields">
+        <field name="name"></field>
+        <field name="counterpart_name">shipping</field>
+        <field name="apply">merge_shipping_address()</field>
+        <field name="model_id" ref="res_partner"/>
+    </record>
 
     <record forcecreate="1" id="res_partner_shipping_id" model="synchro.channel.model.fields">
         <field name="name">vg7_id</field>
-        <field name="counterpart_name">customer_shipping_id</field>
+        <field name="counterpart_name">id</field>
         <field name="model_id" ref="res_partner_shipping"/>
     </record>
 
@@ -294,7 +307,7 @@
 
     <record forcecreate="1" id="res_partner_shipping_city" model="synchro.channel.model.fields">
         <field name="name">city</field>
-        <field name="counterpart_name">city</field>
+        <field name="counterpart_name">shipping_city</field>
         <field name="model_id" ref="res_partner_shipping"/>
     </record>
 
@@ -305,25 +318,25 @@
 
     <record forcecreate="1" id="res_partner_shipping_country_id" model="synchro.channel.model.fields">
         <field name="name">country_id</field>
-        <field name="counterpart_name">country_id</field>
+        <field name="counterpart_name">shipping_country_id</field>
         <field name="model_id" ref="res_partner_shipping"/>
     </record>
 
     <record forcecreate="1" id="res_partner_shipping_email" model="synchro.channel.model.fields">
         <field name="name">email</field>
-        <field name="counterpart_name">email</field>
+        <field name="counterpart_name">shipping_email</field>
         <field name="model_id" ref="res_partner_shipping"/>
     </record>
 
     <record forcecreate="1" id="res_partner_shipping_fax" model="synchro.channel.model.fields">
         <field name="name">fax</field>
-        <field name="counterpart_name">fax</field>
+        <field name="counterpart_name">shipping_fax</field>
         <field name="model_id" ref="res_partner_shipping"/>
     </record>
 
     <record forcecreate="1" id="res_partner_shipping_firstname" model="synchro.channel.model.fields">
         <field name="name">firstname</field>
-        <field name="counterpart_name">name</field>
+        <field name="counterpart_name">shipping_name</field>
         <field name="apply">person()</field>
         <field name="model_id" ref="res_partner_shipping"/>
     </record>
@@ -336,44 +349,44 @@
 
     <record forcecreate="1" id="res_partner_shipping_lastname" model="synchro.channel.model.fields">
         <field name="name">lastname</field>
-        <field name="counterpart_name">surename</field>
+        <field name="counterpart_name">shipping_surename</field>
         <field name="apply">person()</field>
         <field name="model_id" ref="res_partner_shipping"/>
     </record>
 
     <record forcecreate="1" id="res_partner_shipping_mobile" model="synchro.channel.model.fields">
         <field name="name">mobile</field>
-        <field name="counterpart_name">telephone2</field>
+        <field name="counterpart_name">shipping_telephone2</field>
         <field name="model_id" ref="res_partner_shipping"/>
     </record>
 
     <record forcecreate="1" id="res_partner_shipping_name" model="synchro.channel.model.fields">
         <field name="name">name</field>
-        <field name="counterpart_name">company</field>
+        <field name="counterpart_name">shipping_company</field>
         <field name="model_id" ref="res_partner_shipping"/>
     </record>
 
     <record forcecreate="1" id="res_partner_shipping_phone" model="synchro.channel.model.fields">
         <field name="name">phone</field>
-        <field name="counterpart_name">telephone</field>
+        <field name="counterpart_name">shipping_telephone</field>
         <field name="model_id" ref="res_partner_shipping"/>
     </record>
 
     <record forcecreate="1" id="res_partner_shipping_state_id" model="synchro.channel.model.fields">
         <field name="name">state_id</field>
-        <field name="counterpart_name">region_id</field>
+        <field name="counterpart_name">shipping_region_id</field>
         <field name="model_id" ref="res_partner_shipping"/>
     </record>
 
     <record forcecreate="1" id="res_partner_shipping_street" model="synchro.channel.model.fields">
         <field name="name">street</field>
-        <field name="counterpart_name">street</field>
+        <field name="counterpart_name">shipping_street</field>
         <field name="model_id" ref="res_partner_shipping"/>
     </record>
 
     <record forcecreate="1" id="res_partner_shipping_street2" model="synchro.channel.model.fields">
         <field name="name"></field>
-        <field name="counterpart_name">street_number</field>
+        <field name="counterpart_name">shipping_street_number</field>
         <field name="apply">street_number()</field>
         <field name="model_id" ref="res_partner_shipping"/>
     </record>
@@ -386,7 +399,7 @@
 
     <record forcecreate="1" id="res_partner_shipping_zip" model="synchro.channel.model.fields">
         <field name="name">zip</field>
-        <field name="counterpart_name">postal_code</field>
+        <field name="counterpart_name">shipping_postal_code</field>
         <field name="model_id" ref="res_partner_shipping"/>
     </record>
 

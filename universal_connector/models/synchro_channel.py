@@ -422,7 +422,11 @@ class SynchroChannelModel(models.Model):
                 row_contact = {}
                 for ix, value in enumerate(row):
                     if isinstance(value, basestring):
-                        if value.isdigit() and not value.startswith("0"):
+                        if (
+                                value.isdigit()
+                                and not value.startswith("0")
+                                and hdr[ix] != "iva"
+                        ):
                             value = int(value)
                         elif value.startswith("[") and value.endswith("]"):
                             value = eval(value)
