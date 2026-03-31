@@ -887,6 +887,12 @@ class IrModelSynchro(models.Model):
                 rec._amount_all()
                 if "agents" in self.env["sale.order.line"]._fields:
                     rec._compute_commission_total()
+                if (
+                    hasattr(rec, "delivery_set")
+                    and hasattr(rec, "carrier_id")
+                    and rec.carrier_id
+                ):
+                    rec.delivery_set()
                 try:
                     rec.action_confirm()
                 except BaseException as e:  # pragma: no cover

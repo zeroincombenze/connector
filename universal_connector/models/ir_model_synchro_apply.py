@@ -403,27 +403,28 @@ class IrModelSynchroApply(models.Model):
         ctx=None,
         product=None,
     ):
-        if (
-                (loc_name not in vals or not vals.get(loc_name))
-                and (product or "product_id" in vals)
-        ):
-            product = product or self.env["product.product"].browse(vals["product_id"])
-            if self.is_purchase(vals, vmodel):
-                tax = product.supplier_taxes_id
-            else:
-                tax = product.taxes_id
-            if not tax:
-                tax = self.env["account.tax"].search([
-                    ("amount", "=", 22),
-                    ("type_tax_use", "=", "sale")], limit=1)
-            if tax:
-                vals[loc_name] = [(6, 0, [tax.id])]
-        else:
-            tax = self.env["account.tax"].search([
-                ("amount", "=", 22),
-                ("type_tax_use", "=", "sale")], limit=1)
-            if tax:
-                vals[loc_name] = [(6, 0, [tax.id])]
+        # if (
+        #         (loc_name not in vals or not vals.get(loc_name))
+        #         and (product or "product_id" in vals)
+        # ):
+        #     product = product or self.env["product.product"].browse(
+        #       vals["product_id"])
+        #     if self.is_purchase(vals, vmodel):
+        #         tax = product.supplier_taxes_id
+        #     else:
+        #         tax = product.taxes_id
+        #     if not tax:
+        #         tax = self.env["account.tax"].search([
+        #             ("amount", "=", 22),
+        #             ("type_tax_use", "=", "sale")], limit=1)
+        #     if tax:
+        #         vals[loc_name] = [(6, 0, [tax.id])]
+        # else:
+        tax = self.env["account.tax"].search([
+            ("amount", "=", 22),
+            ("type_tax_use", "=", "sale")], limit=1)
+        if tax:
+            vals[loc_name] = [(6, 0, [tax.id])]
         return vals
 
     def apply_agents(
@@ -574,7 +575,12 @@ class IrModelSynchroApply(models.Model):
     ):
         if isinstance(vals[ext_ref], dict):
             if "customer_shipping_id" in vals[ext_ref]:
-                vals[ext_ref]["id"] = vals[ext_ref]["customer_shipping_id"] + 100000000
+                if isinstance(vals[ext_ref]["customer_shipping_id"], basestring):
+                    vals[ext_ref]["id"] = int(
+                        vals[ext_ref]["customer_shipping_id"]) + 100000000
+                else:
+                    vals[ext_ref]["id"] = (
+                        vals[ext_ref]["customer_shipping_id"] + 100000000)
                 del vals[ext_ref]["customer_shipping_id"]
             self.env["ir.model.synchro.cache"].set_model_attr(
                 backend_id, vmodel, "__%s" % "partner.shipping", vals[ext_ref]
