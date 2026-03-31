@@ -55,11 +55,6 @@ class SaleOrder(models.Model):
                 vals["user_id"] = partner.agents[0].id
         return vals, ""
 
-    def __postprocess(self, backend_id, parent_id, vals):
-        # _logger.info(
-        #     '> postprocess(%d,%s)' % (parent_id, vals))  # debug
-        return False
-
     @api.model
     def set_defaults(self):
         for nm in ("pricelist_id", "payment_term_id", "fiscal_position_id"):

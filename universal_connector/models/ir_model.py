@@ -587,7 +587,7 @@ class IrModelSynchro(models.Model):
             vals[ext_id_name] = saved_ext_id
         return self.drop_fields(vals, to_delete)
 
-    def drop_protected_fields(self, backend_id, vmodel, vals, rec):
+    def drop_protected_fields(self, backend_id, vmodel, vals, rec, no_del_child=False):
         Cache = self.env["ir.model.synchro.cache"]
         actual_model = self.get_actual_model(vmodel, only_name=True)
         loc_ext_id_name = self.get_loc_ext_id_name(backend_id, vmodel)
@@ -607,7 +607,9 @@ class IrModelSynchro(models.Model):
                     )
                 ),
             )
-            if (
+            if vmodel == "sale.order.line" and field == "name" and no_del_child:
+                del vals[field]
+            elif (
                 protect_update == 3
                 or (protect_update == 4
                     and rec[field] and int(vals[field]) <= int(rec[field]))
@@ -2971,7 +2973,8 @@ class IrModelSynchro(models.Model):
                 if vals:
                     if has_active and not rec.active:
                         vals["active"] = True
-                    vals = self.drop_protected_fields(backend_id, vmodel, vals, rec)
+                    vals = self.drop_protected_fields(
+                        backend_id, vmodel, vals, rec, no_del_child=no_del_child)
                 if vals:
                     try:
                         if actual_model.startswith("account.move"):
@@ -3052,7 +3055,6 @@ class IrModelSynchro(models.Model):
                     cls, child_vals, channel_id=backend_id,
                     jacket=True, only_minimal=True)
 
-        done_post = False
         if loc_id > 0 and not chk_in_queue and vmodel == actual_model:
             if actual_model == "res.lang":
                 self.manage_language(vals)
@@ -3061,13 +3063,9 @@ class IrModelSynchro(models.Model):
                 if loc_id < 0:
                     # pop_ref(backend_id, vmodel, actual_model, rec.id, ext_id)
                     return loc_id
-            elif hasattr(cls, "postprocess"):
-                done_post = cls.postprocess(backend_id, loc_id, vals)
-            elif do_auto_process:
-                done_post = self.postprocess(backend_id, vmodel, loc_id, vals)
 
         parent_id_name = Cache.get_struct_model_attr(actual_model, "PARENT_ID")
-        if parent_child_mode == "B" and not done_post:
+        if parent_child_mode == "B":
             sts = self.synchro_childs(
                 backend_id,
                 vmodel,
@@ -3220,27 +3218,6 @@ class IrModelSynchro(models.Model):
     @api.model
     def preprocess(self, backend_id, vmodel, vals):
         return vals, ""
-
-    @api.model
-    def postprocess(self, backend_id, model, parent_id, vals):
-        # self.logmsg(
-        #     "debug",
-        #     "%(model)s.postprocess(%(id)s)",
-        #     model=model,
-        #     ctx={"id": parent_id},
-        # )
-        # Cache = self.env["ir.model.synchro.cache"]
-        # Cache.open(model=model)
-        # cls = self.env[model]
-        # stored_field = "__%s" % model
-        # done = False
-        # if Cache.get_model_attr(backend_id, model, stored_field):
-        #     vals = Cache.get_model_attr(backend_id, model, stored_field)
-        #     Cache.del_model_attr(backend_id, model, stored_field)
-        #     self.generic_synchro(cls, vals, chk_in_queue=True)
-        #     done = True
-        # return done
-        return False
 
     @api.model
     def synchro_queue(self, backend_id):

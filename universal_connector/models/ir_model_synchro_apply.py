@@ -413,8 +413,15 @@ class IrModelSynchroApply(models.Model):
             else:
                 tax = product.taxes_id
             if not tax:
-                tax = self.env["account.tax"].search([("amount", "=", 22),
-                                                      ("type", "=", "alse")], limit=1)
+                tax = self.env["account.tax"].search([
+                    ("amount", "=", 22),
+                    ("type_tax_use", "=", "sale")], limit=1)
+            if tax:
+                vals[loc_name] = [(6, 0, [tax.id])]
+        else:
+            tax = self.env["account.tax"].search([
+                ("amount", "=", 22),
+                ("type_tax_use", "=", "sale")], limit=1)
             if tax:
                 vals[loc_name] = [(6, 0, [tax.id])]
         return vals
@@ -522,8 +529,14 @@ class IrModelSynchroApply(models.Model):
             if item:
                 domain.append(("name", "=", item))
                 ship_vals["name"] = item
-            item = (vals[ext_ref].get("street", "") + ", "
-                    + vals[ext_ref].get("street_number", "")).strip()
+            if (
+                vals[ext_ref].get("street", "")
+                and vals[ext_ref].get("street_number", "")
+            ):
+                item = (vals[ext_ref].get("street", "") + ", "
+                        + vals[ext_ref].get("street_number", "")).strip()
+            else:
+                item = False
             if item:
                 domain.append(("street", "=", item))
                 ship_vals["street"] = item
@@ -538,14 +551,14 @@ class IrModelSynchroApply(models.Model):
             if domain:
                 domain.append(("parent_id", "=", vals["partner_id"]))
                 ship_vals["parent_id"] = vals["partner_id"]
-            partner = fields.first(self.env["res.partner"].search(domain))
-            if not partner:
-                try:
-                    partner = self.env["res.partner"].create(ship_vals)
-                except BaseException:
-                    pass
-            if partner:
-                vals[loc_name] = partner.id
+                partner = fields.first(self.env["res.partner"].search(domain))
+                if not partner:
+                    try:
+                        partner = self.env["res.partner"].create(ship_vals)
+                    except BaseException:
+                        pass
+                if partner:
+                    vals[loc_name] = partner.id
         return vals
 
     def apply_merge_shipping_address(
