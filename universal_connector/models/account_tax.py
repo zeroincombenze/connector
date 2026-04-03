@@ -61,10 +61,10 @@ class AccountTax(models.Model):
         return text
 
     @api.model
-    def preprocess(self, backend_id, vals):
+    def preprocess(self, backend, vals):
         if (
             "type_tax_use" not in vals
-            and self.env["synchro.channel"].browse(backend_id).identity == "vg7"
+            and backend.identity == "vg7"
         ):
             vals["type_tax_use"] = "sale"
         return vals, ""

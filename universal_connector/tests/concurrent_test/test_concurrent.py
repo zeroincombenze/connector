@@ -62,6 +62,9 @@ Dirty csv files can have some magic fields:
 from __future__ import print_function, unicode_literals
 from __future__ import division
 from __future__ import absolute_import
+
+import time
+
 from future import standard_library
 
 standard_library.install_aliases()  # noqa: E402
@@ -485,11 +488,13 @@ class ExtTestEnv(object):
         )
         self.opt_args = parser.parse_args(*args)
 
-    def ask_4_ret(self, force=False):
+    def ask_4_ret(self, force=False, wait=False):
         if force or self.ask:
             print_flush("Press RET to continue ...")
             input("")
             print_flush("")
+        elif wait:
+            sleep(wait)
 
     def write_log(self, mesg, eol=True, echo=True, no_ts=False, bb=0):
         lines = bb * "\n"
@@ -844,11 +849,11 @@ class ExtTestEnv(object):
             raise IOError("Module %s does not exist!!!" % modname)
         state = "uninstalled"
         if len(module_ids) == 1:
-            ctr = 40 if wait else 2
+            ctr = 25 if wait else 2
             while ctr > 0 and state != "installed":
                 state = clodoo.browseL8(self.ctx, model, module_ids[0]).state
                 ctr -= 2 if not state.startswith("to ") else 1
-                sleep(1.0)
+                sleep(2.0)
                 # Following statement should clear the rcp cache
                 clodoo.searchL8(self.ctx, model, [])
         return state == "installed"

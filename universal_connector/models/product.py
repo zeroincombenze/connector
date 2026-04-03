@@ -124,10 +124,10 @@ class ProductProduct(models.Model):
         return text
 
     @api.model
-    def preprocess(self, backend_id, vals):
+    def preprocess(self, backend, vals):
         cache = self.env["ir.model.synchro.cache"]
         if ("vg7_id" in vals or "vg7:id" in vals) and cache.get_attr(
-            backend_id, "NO_VARIANTS"
+            backend.id, "NO_VARIANTS"
         ):
             tmpl_vals = vals.copy()
             if "id" in tmpl_vals:

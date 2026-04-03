@@ -96,7 +96,7 @@ class ResPartner(models.Model):
         return vals
 
     @api.model
-    def preprocess(self, backend_id, vals):
+    def preprocess(self, backend, vals):
         def set_vg7_id(vals):
             for nm in ("customer_shipping_id", "vg7:id", "vg7_id"):
                 if vals.get(nm):
@@ -104,7 +104,7 @@ class ResPartner(models.Model):
                         vals[nm] = int(vals[nm])
                     if vals.get("type"):
                         vals[nm] = self.env["ir.model.synchro"].get_loc_ext_id_value(
-                            backend_id, "res.partner", vals[nm], spec=vals["type"]
+                            backend.id, "res.partner", vals[nm], spec=vals["type"]
                         )
             return vals
 
@@ -112,7 +112,7 @@ class ResPartner(models.Model):
         cache = self.env["ir.model.synchro.cache"]
         # actual_model = "res.partner"
         spec = ""
-        if cache.get_attr(backend_id, "PREFIX") == "vg7":
+        if cache.get_attr(backend.id, "PREFIX") == "vg7":
             if vals.get("type") == "delivery":
                 vals = set_vg7_id(vals)
                 for ext_ref in (
@@ -132,70 +132,6 @@ class ResPartner(models.Model):
                 for ext_ref in ("parent_id", "type_inv_addr"):
                     if ext_ref in vals:
                         del vals[ext_ref]
-                # for ext_ref in ("vg7:billing", "vg7:shipping"):
-                #     # diff = True
-                #     diff = False
-                #     if ext_ref in vals:
-                #         vals[":customer"] = True
-                #         vals[ext_ref] = self.shirt_vals(vals[ext_ref], ext_ref)
-                #         if ext_ref == "vg7:shipping":
-                #             vals[ext_ref]["type"] = "delivery"
-                #             diff = True
-                #         elif ext_ref == "vg7:billing":
-                #             vals[ext_ref]["type"] = "invoice"
-                #             diff = False
-                #             if "vg7:id" not in vals[ext_ref] and "vg7:id" in vals:
-                #                 vals[ext_ref]["vg7:id"] = vals["vg7:id"]
-                #                 vals[ext_ref] = set_vg7_id(vals[ext_ref])
-                #             check_4_diff = True
-                #             for nm in (
-                #                 "vg7:company",
-                #                 "vg7:name",
-                #                 "vg7:surename",
-                #                 "vg7:street",
-                #                 "vg7:street_number",
-                #                 "vg7:postal_code",
-                #                 "vg7:city",
-                #                 "vg7:region",
-                #                 "vg7:region_id",
-                #                 "vg7:email",
-                #                 "vg7:country",
-                #                 "vg7:country_id",
-                #                 "vg7:telephone",
-                #                 "vg7:telephone2",
-                #                 "vg7:type",
-                #                 "vg7:piva",
-                #                 "vg7:cf",
-                #                 "vg7:esonerato_fe",
-                #                 "vg7:codice_univoco",
-                #                 "vg7:bank",
-                #                 "vg7:bank_id",
-                #                 "vg7:payment",
-                #                 "vg7:payment_id",
-                #                 "vg7:pec",
-                #                 "bank_account_id",
-                #             ):
-                #                 if nm == "vg7:type":
-                #                     check_4_diff = False
-                #                 if nm not in vals[ext_ref]:
-                #                     continue
-                #                 elif (
-                #                     nm not in vals
-                #                     or not vals[nm]
-                #                 ):
-                #                     vals[nm] = vals[ext_ref][nm]
-                #                 if check_4_diff and vals[ext_ref][nm] != vals[nm]:
-                #                     diff = True
-                #         if diff:
-                #             self.env["ir.model.synchro"].logmsg(
-                #                 "debug", ">>> store(%s,%s)" % (vals[ext_ref], ext_ref)
-                #             )
-                #             cache.set_model_attr(
-                #                 backend_id, actual_model, ext_ref, vals[ext_ref]
-                #             )
-                #             del vals[ext_ref]
-                #     else:
-                #         cache.set_model_attr(backend_id, actual_model, ext_ref, {})
         return vals, spec
 
     @api.model

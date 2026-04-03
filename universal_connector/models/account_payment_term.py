@@ -61,7 +61,7 @@ class AccountPaymentTerm(models.Model):
         return text
 
     @api.model
-    def preprocess(self, backend_id, vals):
+    def preprocess(self, backend, vals):
         self.env["ir.model.synchro"].logmsg(
             "debug", ">>> account.payment.term.preprocess()"
         )

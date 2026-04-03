@@ -31,7 +31,7 @@ class ResPartnerBank(models.Model):
         return res
 
     @api.model
-    def preprocess(self, backend_id, vals):
+    def preprocess(self, backend, vals):
         """
         Odoo                      Counterpart   Fields
         res.partner.bank          bank          description, IBAN, customer_id

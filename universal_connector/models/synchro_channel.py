@@ -145,6 +145,12 @@ class SynchroChannel(models.Model):
             # ("18.0", "Odoo 18.0 - Python3"),
         ], "External Odoo version"
     )
+    ignore_child_lines = fields.Boolean(
+        "Ignore child lines",
+        default=False,
+        help="Ignore child lines because counterparty send lines after header",
+    )
+    renum_lines = fields.Boolean("Renumber lines", default=False)
 
     @api.multi
     def button_check_connection(self):

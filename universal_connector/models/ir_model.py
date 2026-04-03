@@ -1661,7 +1661,7 @@ class IrModelSynchro(models.Model):
         return value
 
     def map_to_internal(
-        self, struct, backend_id, vmodel, vals, no_deep_fields=None, only_minimal=None
+        self, struct, backend, vmodel, vals, no_deep_fields=None, only_minimal=None
     ):
         def rm_ext_value(vals, loc_name, ext_name, ext_ref, is_foreign):
             if (
@@ -1826,6 +1826,7 @@ class IrModelSynchro(models.Model):
                 vals[ext_ref] = eval(vals[ext_ref].replace(",", "."))
             return vals
 
+        backend_id = backend.id
         Cache = self.env["ir.model.synchro.cache"]
         actual_model = self.get_actual_model(vmodel, only_name=True)
         loc_ext_id_name = self.get_loc_ext_id_name(backend_id, vmodel)
@@ -1887,7 +1888,7 @@ class IrModelSynchro(models.Model):
                 if ext_ref in vals:
                     del vals[ext_ref]
                 return self.map_to_internal(
-                    struct, backend_id, vmodel, vals,
+                    struct, backend, vmodel, vals,
                     no_deep_fields=no_deep_fields, only_minimal=only_minimal)
             if not loc_name or loc_name not in struct:
                 vals = rm_ext_value(vals, loc_name, ext_name, ext_ref, is_foreign)
@@ -2032,18 +2033,6 @@ class IrModelSynchro(models.Model):
                         struct,
                         ctx=ctx,
                     )
-
-            # elif ext_ref == "id":
-            #     if vmodel == actual_model:
-            #         if Cache.id_is_in_cache(
-            #             backend_id, vmodel, actual_model, loc_id=vals[ext_ref]
-            #         ):
-            #             ref_in_queue = found_ref_in_queue(vmodel, vals, ext_ref)
-            #             pop_from_queue(
-            #                 backend_id, Cache, vmodel, actual_model, vals[ext_ref])
-            #             break
-            #         else:
-            #             store_in_queue(backend_id, Cache, ext_ref, vmodel, vals)
                 continue
             if (
                 loc_name in vals
@@ -2822,11 +2811,10 @@ class IrModelSynchro(models.Model):
         else:
             no_deep_fields = list(set(no_deep_fields) | set(self.DEF_EXCL_FLDS))
             no_deep_fields = list(set(no_deep_fields) - set(self.DEF_INCL_FLDS))
-        if not backend_id:
+        if not backend:
             # cache.clean_cache()
             _logger.error("!-6! No channel found!")
             return -6
-        # self.logmsg("debug", "### assigned channel is %s" % backend_id)
 
         if hasattr(actual_cls, "CONTRAINTS"):
             constraints = actual_cls.CONTRAINTS
@@ -2862,9 +2850,9 @@ class IrModelSynchro(models.Model):
         spec = ""
         if vmodel == actual_model:
             if hasattr(cls, "preprocess"):
-                vals, spec = cls.preprocess(backend_id, vals)
+                vals, spec = cls.preprocess(backend, vals)
             elif do_auto_process:
-                vals, spec = self.preprocess(backend_id, vmodel, vals)
+                vals, spec = self.preprocess(backend, vmodel, vals)
             if spec:
                 vmodel = self.get_vmodel(actual_model, spec)
                 actual_model = self.get_actual_model(vmodel)
@@ -2879,7 +2867,7 @@ class IrModelSynchro(models.Model):
             spec = self.get_spec_from_vmodel(vmodel)
         # Warning! After this function, return MUST pop ref_id
         vals, parent_child_mode = self.map_to_internal(
-            struct, backend_id, vmodel, vals, no_deep_fields=no_deep_fields
+            struct, backend, vmodel, vals, no_deep_fields=no_deep_fields
         )
         if has_sequence and "sequence" in vals:
             sequence = vals["sequence"]
@@ -2952,6 +2940,8 @@ class IrModelSynchro(models.Model):
                 if not rec:
                     # pop_ref(backend_id, vmodel, actual_model, loc_id, ext_id)
                     return loc_id
+                if backend.ignore_child_lines and parent_child_mode == "B":
+                    parent_child_mode = "A"
                 loc_id = rec.id
                 if not ext_id_name:
                     self.create_ext_id(backend_id, actual_model, loc_id, ext_id)
@@ -3222,7 +3212,7 @@ class IrModelSynchro(models.Model):
         return jvals
 
     @api.model
-    def preprocess(self, backend_id, vmodel, vals):
+    def preprocess(self, backend, vmodel, vals):
         return vals, ""
 
     @api.model
