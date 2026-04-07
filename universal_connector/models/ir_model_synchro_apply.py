@@ -211,24 +211,27 @@ class IrModelSynchroApply(models.Model):
             vals[loc_name] = vals[ext_ref]
             del vals[ext_ref]
         if (
-            vals.get("lastname", "") and vals.get("firstname", "")
+            "firstname" in vals
+            and "lastname" in vals
+            and (vals["firstname"] or vals["lastname"])
         ):
-            if self.env.user.company_id.partner_id.splitmode.startswith("F"):
-                vals["name"] = (
-                    vals.get("firstname", "")
-                    + " "
-                    + vals.get("lastname", "")
-                ).replace("  ", " ").strip()
-            else:
-                vals["name"] = (
-                    vals.get("lastname", "")
-                    + " "
-                    + vals.get("firstname", "")
-                ).replace("  ", " ").strip()
+            if not vals.get("name") or vals.get("name", "").startswith("Unknown"):
+                if self.env.user.company_id.partner_id.splitmode.startswith("F"):
+                    vals["name"] = (
+                        vals["firstname"]
+                        + " "
+                        + vals["lastname"]
+                    ).replace("  ", " ").strip()
+                else:
+                    vals["name"] = (
+                        vals["lastname"]
+                        + " "
+                        + vals["firstname"]
+                    ).replace("  ", " ").strip()
+                vals["is_company"] = True
+                vals["individual"] = True
             del vals["firstname"]
             del vals["lastname"]
-            vals["is_company"] = True
-            vals["individual"] = True
         elif (
             not vals.get("name")
             or vals.get("individual")
@@ -403,28 +406,57 @@ class IrModelSynchroApply(models.Model):
         ctx=None,
         product=None,
     ):
-        # if (
-        #         (loc_name not in vals or not vals.get(loc_name))
-        #         and (product or "product_id" in vals)
-        # ):
-        #     product = product or self.env["product.product"].browse(
-        #       vals["product_id"])
-        #     if self.is_purchase(vals, vmodel):
-        #         tax = product.supplier_taxes_id
-        #     else:
-        #         tax = product.taxes_id
-        #     if not tax:
-        #         tax = self.env["account.tax"].search([
-        #             ("amount", "=", 22),
-        #             ("type_tax_use", "=", "sale")], limit=1)
-        #     if tax:
-        #         vals[loc_name] = [(6, 0, [tax.id])]
-        # else:
-        tax = self.env["account.tax"].search([
-            ("amount", "=", 22),
-            ("type_tax_use", "=", "sale")], limit=1)
-        if tax:
-            vals[loc_name] = [(6, 0, [tax.id])]
+        if loc_name not in vals or not vals.get(loc_name):
+            tax = False
+            if (
+                ext_ref.startswith("vg7")
+                and ext_ref in vals
+                and vals[ext_ref]
+                and isinstance(vals[ext_ref], basestring)
+                and all([x.isdigit() for x in vals[ext_ref].split(".", 1)])
+            ):
+                tax = self.env["account.tax"].search([
+                    ("amount", "=", eval(vals[ext_ref])),
+                    ("type_tax_use", "=", "sale")], limit=1)
+            elif (
+                ext_ref.startswith("vg7")
+                and ext_ref in vals
+                and vals[ext_ref]
+                and isinstance(vals[ext_ref], (int, long))
+            ):
+                tax = self.env["account.tax"].search([
+                    ("amount", "=", vals[ext_ref]),
+                    ("type_tax_use", "=", "sale")], limit=1)
+            elif (
+                not ext_ref.startswith("vg7")
+                and ext_ref in vals
+                and vals[ext_ref]
+            ):
+                tax = self.env["account.tax"].search([
+                    ("description", "=", vals[ext_ref]),
+                    ("type_tax_use", "=", "sale")], limit=1)
+            elif product or "product_id" in vals:
+                product = product or self.env["product.product"].browse(
+                    vals["product_id"])
+                if self.is_purchase(vals, vmodel):
+                    tax = product.supplier_taxes_id
+                else:
+                    tax = product.taxes_id
+            if not tax:
+                tax = self.env["account.tax"].search([
+                    ("amount", "=", 22),
+                    ("type_tax_use", "=", "sale")], limit=1)
+            if tax:
+                vals[loc_name] = [(6, 0, [tax.id])]
+        elif (
+            loc_name in vals
+            and isinstance(vals[loc_name], basestring)
+        ):
+            tax = self.env["account.tax"].search([
+                ("description", "=", vals[loc_name]),
+                ("type_tax_use", "=", "sale")], limit=1)
+            if tax:
+                vals[loc_name] = [(6, 0, [tax.id])]
         return vals
 
     def apply_agents(
@@ -517,35 +549,39 @@ class IrModelSynchroApply(models.Model):
         default=None,
         ctx=None,
     ):
+        def get_item_val(name):
+            return vals[ext_ref].get(name, vals[ext_ref].get("shipping_" + name, ""))
+
         if (
             "partner_id" in vals
             and ext_ref in vals
             and isinstance(vals[ext_ref], dict)
         ):
+            if not loc_name:
+                loc_name = "partner_shipping_id"
             vals[loc_name] = vals["partner_id"]
             domain = []
             ship_vals = {}
-            item = (vals[ext_ref].get("name", "") + " "
-                    + vals[ext_ref].get("surename", "")).strip()
+            item = (get_item_val("name") + " " + get_item_val("surename")).strip()
             if item:
                 domain.append(("name", "=", item))
                 ship_vals["name"] = item
             if (
-                vals[ext_ref].get("street", "")
-                and vals[ext_ref].get("street_number", "")
+                get_item_val("street")
+                and get_item_val("street_number")
             ):
-                item = (vals[ext_ref].get("street", "") + ", "
-                        + vals[ext_ref].get("street_number", "")).strip()
+                item = (get_item_val("street") + ", "
+                        + get_item_val("street_number")).strip()
             else:
                 item = False
             if item:
                 domain.append(("street", "=", item))
                 ship_vals["street"] = item
-            item = vals[ext_ref].get("city", "").strip()
+            item = get_item_val("city").strip()
             if item:
                 domain.append(("city", "=", item))
                 ship_vals["city"] = item
-            item = vals[ext_ref].get("postal_code", "").strip()
+            item = get_item_val("postal_code").strip()
             if item:
                 domain.append(("zip", "=", item))
                 ship_vals["zip"] = item

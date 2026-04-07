@@ -44,7 +44,7 @@
         "security/ir.model.access.csv",
         "wizard/wizard_pull_records_view.xml",
         "views/country_view.xml",
-        "views/account_account_view.xml",
+        # "views/account_account_view.xml",
         "views/account_fiscal_view.xml",
         "views/partner_view.xml",
         "views/user_view.xml",

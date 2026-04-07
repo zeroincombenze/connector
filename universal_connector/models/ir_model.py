@@ -587,7 +587,8 @@ class IrModelSynchro(models.Model):
             vals[ext_id_name] = saved_ext_id
         return self.drop_fields(vals, to_delete)
 
-    def drop_protected_fields(self, backend_id, vmodel, vals, rec, no_del_child=False):
+    def drop_protected_fields(self, backend, vmodel, vals, rec, no_del_child=False):
+        backend_id = backend.id
         Cache = self.env["ir.model.synchro.cache"]
         actual_model = self.get_actual_model(vmodel, only_name=True)
         loc_ext_id_name = self.get_loc_ext_id_name(backend_id, vmodel)
@@ -1252,7 +1253,7 @@ class IrModelSynchro(models.Model):
 
     def get_foreign_text(
         self,
-        backend_id,
+        backend,
         actual_model,
         value,
         is_foreign,
@@ -1279,13 +1280,13 @@ class IrModelSynchro(models.Model):
             return False
         new_value = False
         rec = self.get_rec_by_reference(
-            backend_id, actual_model, key_name, value, ctx=ctx, spec=spec
+            backend.id, actual_model, key_name, value, ctx=ctx, spec=spec
         )
         if rec:
             new_value = rec[0].id
         if not new_value and not no_create and Cache.is_manageable(actual_model):
             new_value = self.create_new_ref(
-                backend_id, actual_model, key_name, value, False, ctx=ctx, spec=spec
+                backend.id, actual_model, key_name, value, False, ctx=ctx, spec=spec
             )
         self.logmsg(
             "debug", "", logrec=logrec, ctx={"id": new_value}
@@ -1294,7 +1295,7 @@ class IrModelSynchro(models.Model):
 
     def get_foreign_ref(
         self,
-        backend_id,
+        backend,
         actual_model,
         value_id,
         is_foreign,
@@ -1305,7 +1306,7 @@ class IrModelSynchro(models.Model):
         """Value is a local ID or an external ID (is_foreign=True)"""
         Cache = self.env["ir.model.synchro.cache"]
         loc_ext_id_name = self.get_loc_ext_id_name(
-            backend_id, actual_model, spec=spec, force=True
+            backend.id, actual_model, spec=spec, force=True
         )
         new_value = False
         if not value_id or value_id < 1:
@@ -1320,7 +1321,7 @@ class IrModelSynchro(models.Model):
         if is_foreign:
             if spec:
                 value_id = self.get_loc_ext_id_value(
-                    backend_id, actual_model, value_id, spec=spec
+                    backend.id, actual_model, value_id, spec=spec
                 )
             domain = [(loc_ext_id_name, "=", value_id)]
             rec, maybe_dif = self.do_search(actual_model, domain, only_id=True)
@@ -1340,10 +1341,10 @@ class IrModelSynchro(models.Model):
         if not new_value and not no_create:
             if vmodel:
                 new_value = self.sync_rec_from_counterparty(
-                    backend_id, vmodel, value_id)
+                    backend.id, vmodel, value_id)
         if not new_value and not no_create and Cache.is_manageable(vmodel):
             new_value = self.create_new_ref(
-                backend_id,
+                backend.id,
                 vmodel,
                 loc_ext_id_name,
                 new_value,
@@ -1361,7 +1362,7 @@ class IrModelSynchro(models.Model):
 
     def get_foreign_value(
         self,
-        backend_id,
+        backend,
         vmodel,
         value,
         name,
@@ -1405,12 +1406,10 @@ class IrModelSynchro(models.Model):
             return []
         tomany = True if ttype in ("one2many", "many2many") else False
         # TODO: channel_id
-        Cache.open(
-            backend=self.env["synchro.channel"].browse(backend_id), model=relation
-        )
+        Cache.open(backend=backend, model=relation)
         if isinstance(value, basestring):
             new_value = self.get_foreign_text(
-                backend_id,
+                backend,
                 relation,
                 value,
                 is_foreign,
@@ -1426,7 +1425,7 @@ class IrModelSynchro(models.Model):
             new_value = []
             for loc_id in value:
                 new_id = self.get_foreign_ref(
-                    backend_id,
+                    backend,
                     relation,
                     loc_id,
                     is_foreign,
@@ -1438,7 +1437,7 @@ class IrModelSynchro(models.Model):
                     new_value.append(new_id)
         else:
             new_value = self.get_foreign_ref(
-                backend_id,
+                backend,
                 relation,
                 value,
                 is_foreign,
@@ -1766,7 +1765,12 @@ class IrModelSynchro(models.Model):
                     list_1.append(ext_ref)
                 elif loc_name in ("country_id", "company_id"):
                     list_2.append(ext_ref)
-                elif loc_name in ("partner_id", "street", "shipping", "billing"):
+                elif loc_name in (
+                        "partner_id",
+                        "street",
+                        "shipping",
+                        "billing",
+                ):
                     list_3.insert(0, ext_ref)
                 elif loc_name in (
                     "is_company",
@@ -1776,7 +1780,11 @@ class IrModelSynchro(models.Model):
                     "electronic_invoice_subjected",
                 ):
                     list_8.append(ext_ref)
-                elif loc_name == child_ids:
+                elif loc_name in (
+                        child_ids,
+                        "firstname",
+                        "lastname",
+                ):
                     list_9.append(ext_ref)
                 else:
                     list_6.append(ext_ref)
@@ -2000,7 +2008,7 @@ class IrModelSynchro(models.Model):
                             del vals[ext_ref]
                     else:
                         loc_id = self.get_foreign_value(
-                            backend_id,
+                            backend,
                             vmodel,
                             vals[ext_ref],
                             loc_name,
@@ -2034,6 +2042,21 @@ class IrModelSynchro(models.Model):
                         ctx=ctx,
                     )
                 continue
+            else:
+                vals = do_apply_n_clean(
+                    backend_id,
+                    vals,
+                    loc_name,
+                    ext_name,
+                    ext_ref,
+                    loc_ext_id_name,
+                    apply4,
+                    default,
+                    is_foreign,
+                    vmodel,
+                    struct,
+                    ctx=ctx,
+                )
             if (
                 loc_name in vals
                 and vals[loc_name] is False
@@ -2059,7 +2082,8 @@ class IrModelSynchro(models.Model):
         Cache.set_attr(backend_id, "CTX", ctx)
         return vals, parent_child_mode
 
-    def set_default_values(self, cls, backend_id, vmodel, vals):
+    def set_default_values(self, cls, backend, vmodel, vals):
+        backend_id = backend.id
         actual_model = self.get_actual_model(vmodel, only_name=True)
         IrApply = self.env["ir.model.synchro.apply"]
         Cache = self.env["ir.model.synchro.cache"]
@@ -2115,7 +2139,7 @@ class IrModelSynchro(models.Model):
             vals = cls.assure_values(vals, None)
         return vals
 
-    def bind_record(self, struct, backend_id, vmodel, vals, constraints, ctx=None):
+    def bind_record(self, struct, backend, vmodel, vals, constraints, ctx=None):
         def add_constraints(domain, constraints):
             for constr in constraints:
                 add_domain = False
@@ -2129,6 +2153,7 @@ class IrModelSynchro(models.Model):
                     domain.append(constr)
             return domain
 
+        backend_id = backend.id
         Cache = self.env["ir.model.synchro.cache"]
         ctx = ctx or {}
         actual_model = self.get_actual_model(vmodel, only_name=True)
@@ -2593,8 +2618,8 @@ class IrModelSynchro(models.Model):
         elif method == "CSV":
             return self.get_csv_response(backend_id, vmodel, ext_id, mode=mode)
 
-    def create_ext_id(self, backend_id, actual_model, loc_id, ext_id):
-        ext_id_name = self.get_loc_ext_id_name(backend_id, actual_model, force=True)
+    def create_ext_id(self, backend, actual_model, loc_id, ext_id):
+        ext_id_name = self.get_loc_ext_id_name(backend.id, actual_model, force=True)
         self.env["ir.model.synchro.data"].create(
             {
                 "model": actual_model,
@@ -2613,8 +2638,9 @@ class IrModelSynchro(models.Model):
 
     @api.model
     def synchro_childs(
-        self, backend_id, vmodel, actual_model, parent_id, ext_id, only_minimal=None,
+        self, backend, vmodel, actual_model, parent_id, ext_id, only_minimal=None,
     ):
+        backend_id = backend.id
         self.logmsg(
             "debug",
             "%(model)s.synchro_childs(%(chid)s,%(cmodel)s,%(id)s,%(xid)s) ##",
@@ -2661,7 +2687,7 @@ class IrModelSynchro(models.Model):
         if "to_delete" in cls._fields:
             cls.search([(parent_id_name, "=", parent_id),
                         ("to_delete", "=", False)]).write({"to_delete": True})
-        for num, vals in enumerate(rec_ids):
+        for vals in rec_ids:
             vals[":%s" % parent_id_name] = parent_id
             if "to_delete" in cls._fields:
                 vals[":to_delete"] = False
@@ -2716,16 +2742,6 @@ class IrModelSynchro(models.Model):
         datas are prefixed by identification code which is store in channel.
         Prefix ia associated to conversion/mapping rule.
         """
-
-        # def pop_ref(backend_id, vmodel, actual_model, id, ext_id):
-        #     Cache.pop_id(backend_id, vmodel, actual_model, loc_id=id, ext_id=ext_id)
-        #     self.logmsg(
-        #         "debug",
-        #         "Pop %(model)s[%(id)s](%(xid)s) from queue!",
-        #         model=vmodel,
-        #         ctx={"id": id, "xid": ext_id},
-        #     )
-
         def protect_against_vg7(vmodel, actual_model, vals):
             # Protect against VG7 mistakes
             if "vg7_id" in vals and "vg7:id" not in vals:
@@ -2834,7 +2850,7 @@ class IrModelSynchro(models.Model):
             last_model = Cache.get_attr(backend_id, "LAST_MODEL")
             sequence = Cache.get_attr(
                 backend_id, "CTR", default=0) + 1 if last_model == actual_model else 1
-            if has_sequence and "sequence" not in vals:
+            if has_sequence and "sequence" not in vals and backend.renum_lines:
                 vals["sequence"] = sequence
 
         do_auto_process = True
@@ -2879,14 +2895,13 @@ class IrModelSynchro(models.Model):
             return loc_id
         elif loc_id == 0:
             loc_id, rec = self.bind_record(
-                struct, backend_id, vmodel, vals, constraints)
+                struct, backend, vmodel, vals, constraints)
         if loc_id > 0 and "sequence" in rec:
             sequence = rec["sequence"]
         if not no_del_child:
             Cache.set_attr(backend_id, "LAST_MODEL", actual_model)
             Cache.set_attr(backend_id, "CTR", sequence)
         if loc_id == -7 and not has_state:
-            # pop_ref(backend_id, vmodel, actual_model, False, ext_id)
             self.logmsg("info",
                         "### No values passed(%s.%s)" % (vmodel, actual_model),
                         logrec=self.logrec, id=loc_id)
@@ -2904,7 +2919,6 @@ class IrModelSynchro(models.Model):
             vals, erc = self.set_state_to_draft(struct, vmodel, rec, vals)
             if erc < 0:
                 _logger.error("!%s! Returned error code!" % erc)
-                # pop_ref(backend_id, vmodel, actual_model, loc_id, ext_id)
                 return erc
         if has_2delete:
             vals["to_delete"] = False
@@ -2914,16 +2928,16 @@ class IrModelSynchro(models.Model):
             if has_state or has_2delete or not ext_id:
                 min_vals = vals
                 do_write = False
-                vals = self.set_default_values(cls, backend_id, vmodel, vals)
+                vals = self.set_default_values(cls, backend, vmodel, vals)
             else:
-                vals = self.set_default_values(cls, backend_id, vmodel, vals)
+                vals = self.set_default_values(cls, backend, vmodel, vals)
                 min_vals = (
                     {ext_id_name: ext_id} if vals.get(ext_id_name) else {}
                 )
                 for nm in self.DEF_INCL_FLDS:
                     if vals.get(nm):
                         min_vals[nm] = vals[nm]
-                min_vals = self.set_default_values(cls, backend_id, vmodel, min_vals)
+                min_vals = self.set_default_values(cls, backend, vmodel, min_vals)
                 if not min_vals or min_vals == vals:
                     do_write = False
                     min_vals = vals
@@ -2938,13 +2952,12 @@ class IrModelSynchro(models.Model):
                 if not rec and min_vals != vals:
                     rec = self.create_n_commit(actual_model, vals, logrec=self.logrec)
                 if not rec:
-                    # pop_ref(backend_id, vmodel, actual_model, loc_id, ext_id)
                     return loc_id
                 if backend.ignore_child_lines and parent_child_mode == "B":
                     parent_child_mode = "A"
                 loc_id = rec.id
                 if not ext_id_name:
-                    self.create_ext_id(backend_id, actual_model, loc_id, ext_id)
+                    self.create_ext_id(backend, actual_model, loc_id, ext_id)
                 if only_minimal:
                     do_write = False
         if loc_id > 0 and do_write:
@@ -2970,7 +2983,7 @@ class IrModelSynchro(models.Model):
                     if has_active and not rec.active:
                         vals["active"] = True
                     vals = self.drop_protected_fields(
-                        backend_id, vmodel, vals, rec, no_del_child=no_del_child)
+                        backend, vmodel, vals, rec, no_del_child=no_del_child)
                 if vals:
                     try:
                         if actual_model.startswith("account.move"):
@@ -3063,7 +3076,7 @@ class IrModelSynchro(models.Model):
         parent_id_name = Cache.get_struct_model_attr(actual_model, "PARENT_ID")
         if parent_child_mode == "B":
             sts = self.synchro_childs(
-                backend_id,
+                backend,
                 vmodel,
                 actual_model,
                 loc_id,
@@ -3094,7 +3107,7 @@ class IrModelSynchro(models.Model):
         return loc_id
 
     @api.model
-    def commit(self, cls, loc_id, ext_id=None):
+    def commit(self, cls, loc_id, ext_id=None, backend=None):
         vmodel = cls._name
         actual_model = self.get_actual_model(vmodel, only_name=True)
         self.logmsg(
@@ -3121,7 +3134,9 @@ class IrModelSynchro(models.Model):
             _logger.error("!-5! Invalid structure of %s!" % vmodel)
             return -5
         if (not loc_id or loc_id < 1) and ext_id:
-            loc_id = self.bind_record(struct, 1, vmodel, {"id": ext_id}, [], False)
+            backend = backend or fields.first(self.env["synchro.channel"].search([]))
+            loc_id = self.bind_record(
+                struct, backend, vmodel, {"id": ext_id}, [], False)
 
         try:
             rec_2_commit = self.get_actual_model(vmodel).browse(loc_id)

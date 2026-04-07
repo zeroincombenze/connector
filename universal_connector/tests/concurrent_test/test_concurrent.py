@@ -422,7 +422,7 @@ class ExtTestEnv(object):
         self.parseoptargs(args)
         # Comment or activate following lines for specific test
         force = {}
-        force["ask"] = False
+        force["ask"] = True
         # force["config"] = "./tests/logs/connector.universal_connector_10.conf"
         # force["database"] = "test_universal_connector_10"
         force["conai"] = False

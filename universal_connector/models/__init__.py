@@ -8,7 +8,7 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 #
 from . import (
-    account_account,
+    # account_account,
     account_fiscal_position,
     account_invoice,
     account_journal,

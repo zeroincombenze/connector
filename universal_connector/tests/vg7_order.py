@@ -93,7 +93,7 @@ SALE_ORDER_1 = {
         "shipping_surename": ""
     },
     "total_taxed": 51.86,
-    "order_number": "26-O261361",
+    "order_number": "26-O261371",
     "iva": 22,
     "billing": {
         "billing_region": "BENEVENTO",
@@ -121,9 +121,9 @@ SALE_ORDER_1 = {
         SALE_ORDER_LINE_1_5
     ],
     "customer_id": 425,
-    "order_id": 1361,
-    "id": 1361,
-    "date": "2026-03-26",
+    "order_id": 1371,
+    "id": 1371,
+    "date": "2026-04-02",
     "agent_id": 90
 }
 
@@ -212,10 +212,74 @@ class ExtTestEnv(object):
                                      "sale.order",
                                      [("name", "like", str(ext_id))])
             if loc_id:
-                print("Please, delete order id=%s name=%s" % (loc_id, ext_id))
+                try:
+                    clodoo.executeL8(
+                        self.ctx,
+                        "sale.order",
+                        "action_cancel",
+                        loc_id
+                    )
+                except BaseException:
+                    pass
+
+                try:
+                    clodoo.executeL8(
+                        self.ctx,
+                        "sale.order",
+                        "action_draft",
+                        loc_id
+                    )
+                except BaseException:
+                    pass
+                try:
+                    clodoo.unlinkL8(
+                        self.ctx, "sale.order", loc_id)
+                except BaseException:
+                    print("Please, delete order id=%s name=%s" % (loc_id, ext_id))
+
+        CUSTOMER_SHIPPING_ID = 426
+        vals = {
+            "vg7:id": SALE_ORDER_1["customer_id"],
+            "vg7:billing": SALE_ORDER_1["billing"],
+            "vg7:shipping": SALE_ORDER_1["shipping"],
+        }
+
+        vals["vg7:shipping"]["customer_shipping_id"] = CUSTOMER_SHIPPING_ID
+        clodoo.executeL8(
+            self.ctx,
+            "res.partner",
+            "synchro",
+            vals
+        )
+
         loc_id = clodoo.executeL8(
             self.ctx,
             "ir.model.synchro", "trigger_one_record", "orders", "vg7", ext_id)
+
+        # Fase 2
+        vals = {
+            "origin": "3010",
+            "vg7:customer_shipping_id": CUSTOMER_SHIPPING_ID,
+            "state": "sale",
+            "vg7:tax_code_id": 1,
+        }
+        for key in SALE_ORDER_1:
+            if key == "order_number":
+                vals["name"] = SALE_ORDER_1[key]
+            elif key == "customer_id":
+                vals["vg7:customer_id"] = SALE_ORDER_1[key]
+            elif key == "date":
+                vals["date_order"] = SALE_ORDER_1[key]
+            elif key == "agent_id":
+                vals["vg7:agent_id"] = SALE_ORDER_1[key]
+            elif key == "id":
+                vals["vg7:id"] = SALE_ORDER_1[key]
+        clodoo.executeL8(
+            self.ctx,
+            "sale.order",
+            "synchro",
+            vals
+        )
         for line in (
                 SALE_ORDER_LINE_1_1,
                 SALE_ORDER_LINE_1_2,
@@ -223,8 +287,22 @@ class ExtTestEnv(object):
                 SALE_ORDER_LINE_1_4,
                 SALE_ORDER_LINE_1_5,
         ):
-            line_vals = {"vg7:" + k: v for (k, v) in line.items()}
-            line_vals["job_name"] = "\n".join(line["job_name"].split("\n")[0:2])
+            line_vals = {
+                "vg7:order_id": SALE_ORDER_1["id"],
+                "tax_id": "22v",
+            }
+            for key in line:
+                if key == "job_name":
+                    line_vals["name"] = "\n".join(line["job_name"].split("\n")[0:2])
+                elif key == "id":
+                    line_vals["vg7_id"] = line[key]
+                elif key == "unitary_price":
+                    line_vals["price_unit"] = line[key]
+                elif key == "quantity":
+                    line_vals["product_uom_qty"] = line[key]
+                    line_vals["product_qty"] = line[key]
+                elif key == "product_id":
+                    line_vals["vg7_product_id"] = line[key]
             clodoo.executeL8(
                 self.ctx,
                 "sale.order.line",
