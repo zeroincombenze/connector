@@ -238,19 +238,19 @@ class IrModelSynchroApply(models.Model):
         ):
             if self.env.user.company_id.partner_id.splitmode.startswith("F"):
                 vals["name"] = (
-                    vals.get("name", "")
+                    (vals.get("name") or "")
                     + " "
-                    + vals.get("firstname", "")
+                    + (vals.get("firstname") or "")
                     + " "
-                    + vals.get("lastname", "")
+                    + (vals.get("lastname") or "")
                 ).replace("  ", " ").strip()
             else:
                 vals["name"] = (
-                    vals.get("name", "")
+                    (vals.get("name") or "")
                     + " "
-                    + vals.get("lastname", "")
+                    + (vals.get("lastname") or "")
                     + " "
-                    + vals.get("firstname", "")
+                    + (vals.get("firstname") or "")
                 ).replace("  ", " ").strip()
             if not vals["name"] and vals.get("individual"):
                 vals = self.apply_set_tmp_name(
