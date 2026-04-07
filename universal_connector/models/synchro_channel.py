@@ -481,6 +481,7 @@ class SynchroChannelModel(models.Model):
         ext_model = self.counterpart_name
         headers = cnx
         endpoint = session
+        response = False
         if (ext_id and mode) or not ext_id:
             url = os.path.join(endpoint, ext_model)
         else:
@@ -494,7 +495,7 @@ class SynchroChannelModel(models.Model):
                 "Error %(e)s in json request",
                 ctx={"e": e},
             )
-            return getattr(response, "status_code", "N/A")
+            return getattr(response, "status_code", "N/A") if response else False
         if response:
             return response.json()
         return False

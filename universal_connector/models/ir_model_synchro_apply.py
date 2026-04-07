@@ -560,8 +560,8 @@ class IrModelSynchroApply(models.Model):
             if not loc_name:
                 loc_name = "partner_shipping_id"
             vals[loc_name] = vals["partner_id"]
-            domain = []
-            ship_vals = {}
+            domain = [("type", "=", "delivery")]
+            ship_vals = {"type": "delivery"}
             item = (get_item_val("name") + " " + get_item_val("surename")).strip()
             if item:
                 domain.append(("name", "=", item))
@@ -614,7 +614,7 @@ class IrModelSynchroApply(models.Model):
                 if isinstance(vals[ext_ref]["customer_shipping_id"], basestring):
                     vals[ext_ref]["id"] = int(
                         vals[ext_ref]["customer_shipping_id"]) + 100000000
-                else:
+                elif isinstance(vals[ext_ref]["customer_shipping_id"], (int, long)):
                     vals[ext_ref]["id"] = (
                         vals[ext_ref]["customer_shipping_id"] + 100000000)
                 del vals[ext_ref]["customer_shipping_id"]
