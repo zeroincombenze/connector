@@ -77,7 +77,7 @@ SALE_ORDER_LINE_1_5 = {
     "job_name": "Spedizione #5",
     "quantity": 1
 }
-
+CUSTOMER_SHIPPING_ID = 426
 SALE_ORDER_1 = {
     "shipping": {
         "shipping_name": "",
@@ -153,7 +153,8 @@ class ExtTestEnv(object):
     def trigger_order(self):
         order = SALE_ORDER_1
         ext_id = order["id"]
-        fqn = "/home/odoo/10.0/connector/universal_connector/tests/data/orders.csv"
+        data_root = "/home/odoo/10.0/connector/universal_connector/tests/data/"
+        fqn = data_root + "orders.csv"
         with open(fqn, "wb") as fd:
             writer = csv.writer(fd)
             keys = list(order.keys())
@@ -170,7 +171,7 @@ class ExtTestEnv(object):
                             self.ctx, "res.partner", partner_id)
                     except BaseException:
                         print("Cannot unlink partner %s" % partner_id)
-        fqn = "/home/odoo/10.0/connector/universal_connector/tests/data/customers.csv"
+        fqn = data_root + "customers.csv"
         with open(fqn, "wb") as fd:
             partner_values = {
                 "id": order["customer_id"],
@@ -182,7 +183,21 @@ class ExtTestEnv(object):
             writer.writerow(keys)
             writer.writerow(partner_values.values())
 
-        fqn = "/home/odoo/10.0/connector/universal_connector/tests/data/orders.line.csv"
+        fqn = data_root + "customers_shipping_addresses.csv"
+        with open(fqn, "wb") as fd:
+            partner_values = {
+                "id": CUSTOMER_SHIPPING_ID,
+                "customer_shipping_id": CUSTOMER_SHIPPING_ID,
+                "customer_id": order["customer_id"],
+                "shipping_name": "Shipping Address Test",
+                "shipping_city": "City Test",
+            }
+            writer = csv.writer(fd)
+            keys = list(partner_values.keys())
+            writer.writerow(keys)
+            writer.writerow(partner_values.values())
+
+        fqn = data_root + "orders.line.csv"
         with open(fqn, "wb") as fd:
             writer = csv.writer(fd)
             keys = list(SALE_ORDER_LINE_1_1.keys())
@@ -237,7 +252,6 @@ class ExtTestEnv(object):
                 except BaseException:
                     print("Please, delete order id=%s name=%s" % (loc_id, ext_id))
 
-        CUSTOMER_SHIPPING_ID = 426
         vals = {
             "vg7:id": SALE_ORDER_1["customer_id"],
             "vg7:billing": SALE_ORDER_1["billing"],

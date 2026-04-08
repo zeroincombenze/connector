@@ -423,8 +423,9 @@ class ExtTestEnv(object):
         # Comment or activate following lines for specific test
         force = {}
         force["ask"] = True
-        # force["config"] = "./tests/logs/connector.universal_connector_10.conf"
-        # force["database"] = "test_universal_connector_10"
+        force["config"] = ("/home/odoo/10.0/connector/universal_connector/"
+                           "tests/logs/connector.universal_connector_10.conf")
+        force["database"] = "test_universal_connector_10"
         force["conai"] = False
         force["xmlrpc_port"] = 8170
         for item in ("ask", "config", "database", "lang", "conai", "xmlrpc_port"):
@@ -964,7 +965,9 @@ class ExtTestEnv(object):
                     {
                         "method": "CSV",
                         "exchange_path": self.get_exchange_path(backend.prefix),
-                        "tracelevel": "4"
+                        "tracelevel": "4",
+                        "ignore_child_lines": False,
+                        "renum_lines": True,
                     },
                 )
             clodoo.executeL8(
@@ -1893,7 +1896,7 @@ class ExtTestEnv(object):
         self.write_log("# Starting %s tests on %s" % (fct_test, model), echo=False)
         for ext_rec in ext_recs_image:
             loc_id = ext_id = -127
-            if model in ("res.partner", "sale.order"):
+            if model == "sale.order":
                 print_flush("# Test model %s[%s]" % (model, ext_rec))   #debug
                 self.ask_4_ret()                                        #debug
             if fct_test == "synchro":

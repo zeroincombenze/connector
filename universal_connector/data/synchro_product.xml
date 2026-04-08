@@ -48,14 +48,14 @@
     <record forcecreate="1" id="product_product_name" model="synchro.channel.model.fields">
         <field name="name">name</field>
         <field name="counterpart_name">name</field>
-        <field name="apply">set_tmp_name(),product_vg7_naming()</field>
+        <field name="apply">product_vg7_naming()</field>
         <field name="model_id" ref="product_product"/>
     </record>
 
     <record forcecreate="1" id="product_product_description_sale" model="synchro.channel.model.fields">
         <field name="name">description_sale</field>
         <field name="counterpart_name">description</field>
-        <field name="apply">set_tmp_name(),product_vg7_naming()</field>
+        <field name="apply">product_vg7_naming()</field>
         <field name="model_id" ref="product_product"/>
     </record>
 

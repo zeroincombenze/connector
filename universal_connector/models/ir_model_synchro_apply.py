@@ -215,7 +215,12 @@ class IrModelSynchroApply(models.Model):
             and "lastname" in vals
             and (vals["firstname"] or vals["lastname"])
         ):
-            if not vals.get("name") or vals.get("name", "").startswith("Unknown"):
+            if (
+                not vals.get("name")
+                or vals.get("name", "").startswith("Unknown")
+                or (vals["lastname"] and vals["lastname"] in vals.get("name", ""))
+                or (vals["firstname"] and vals["firstname"] in vals.get("name", ""))
+            ):
                 if self.env.user.company_id.partner_id.splitmode.startswith("F"):
                     vals["name"] = (
                         vals["firstname"]
@@ -406,35 +411,39 @@ class IrModelSynchroApply(models.Model):
         ctx=None,
         product=None,
     ):
+        def tax_by_rate(value):
+            return self.env["account.tax"].search([
+                ("amount", "=", value),
+                ("type_tax_use", "=", "sale")], limit=1)
+
+        def tax_by_code(value):
+            return self.env["account.tax"].search([
+                ("description", "=", value),
+                ("type_tax_use", "=", "sale")], limit=1)
+
         if loc_name not in vals or not vals.get(loc_name):
             tax = False
             if (
-                ext_ref.startswith("vg7")
-                and ext_ref in vals
-                and vals[ext_ref]
-                and isinstance(vals[ext_ref], basestring)
-                and all([x.isdigit() for x in vals[ext_ref].split(".", 1)])
+                    ext_ref.startswith("vg7")
+                    and ext_ref in vals
+                    and vals[ext_ref]
+                    and isinstance(vals[ext_ref], basestring)
+                    and all([x.isdigit() for x in vals[ext_ref].split(".", 1)])
             ):
-                tax = self.env["account.tax"].search([
-                    ("amount", "=", eval(vals[ext_ref])),
-                    ("type_tax_use", "=", "sale")], limit=1)
+                tax = tax_by_rate(eval(vals[ext_ref]))
             elif (
-                ext_ref.startswith("vg7")
-                and ext_ref in vals
-                and vals[ext_ref]
-                and isinstance(vals[ext_ref], (int, long))
+                    ext_ref.startswith("vg7")
+                    and ext_ref in vals
+                    and vals[ext_ref]
+                    and isinstance(vals[ext_ref], (int, long))
             ):
-                tax = self.env["account.tax"].search([
-                    ("amount", "=", vals[ext_ref]),
-                    ("type_tax_use", "=", "sale")], limit=1)
+                tax = tax_by_rate(vals[ext_ref])
             elif (
-                not ext_ref.startswith("vg7")
-                and ext_ref in vals
-                and vals[ext_ref]
+                    not ext_ref.startswith("vg7")
+                    and ext_ref in vals
+                    and vals[ext_ref]
             ):
-                tax = self.env["account.tax"].search([
-                    ("description", "=", vals[ext_ref]),
-                    ("type_tax_use", "=", "sale")], limit=1)
+                tax = tax_by_code(vals[ext_ref])
             elif product or "product_id" in vals:
                 product = product or self.env["product.product"].browse(
                     vals["product_id"])
@@ -443,18 +452,14 @@ class IrModelSynchroApply(models.Model):
                 else:
                     tax = product.taxes_id
             if not tax:
-                tax = self.env["account.tax"].search([
-                    ("amount", "=", 22),
-                    ("type_tax_use", "=", "sale")], limit=1)
+                tax = tax_by_rate(22)
             if tax:
                 vals[loc_name] = [(6, 0, [tax.id])]
         elif (
-            loc_name in vals
-            and isinstance(vals[loc_name], basestring)
+                loc_name in vals
+                and isinstance(vals[loc_name], basestring)
         ):
-            tax = self.env["account.tax"].search([
-                ("description", "=", vals[loc_name]),
-                ("type_tax_use", "=", "sale")], limit=1)
+            tax = tax_by_code(vals[ext_ref])
             if tax:
                 vals[loc_name] = [(6, 0, [tax.id])]
         return vals

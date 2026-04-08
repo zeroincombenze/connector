@@ -1317,6 +1317,7 @@ class IrModelSynchro(models.Model):
             model=actual_model,
             ctx={"xid": value_id, "spec": spec},
         )
+        vmodel = self.get_vmodel(actual_model, spec)
         ext_value = value_id
         if is_foreign:
             if spec:
@@ -1337,11 +1338,10 @@ class IrModelSynchro(models.Model):
                     ctx={"id": value_id},
                 )
             new_value = rec[0].id
-        vmodel = self.get_vmodel(actual_model, spec)
         if not new_value and not no_create:
             if vmodel:
                 new_value = self.sync_rec_from_counterparty(
-                    backend.id, vmodel, value_id)
+                    backend.id, vmodel, ext_value)
         if not new_value and not no_create and Cache.is_manageable(vmodel):
             new_value = self.create_new_ref(
                 backend.id,
@@ -1938,7 +1938,8 @@ class IrModelSynchro(models.Model):
                 lines = []
                 for num, item in enumerate(vals[ext_ref]):
                     sequence = num + 1
-                    item[":sequence"] = sequence
+                    if backend.renum_lines:
+                        item[":sequence"] = sequence
                     lines.append(item)
                 Cache.set_model_attr(
                     backend_id, vmodel, "__%s_ids" % actual_model, lines
@@ -2083,33 +2084,33 @@ class IrModelSynchro(models.Model):
         return vals, parent_child_mode
 
     def set_default_values(self, cls, backend, vmodel, vals):
-        backend_id = backend.id
+        # backend_id = backend.id
         actual_model = self.get_actual_model(vmodel, only_name=True)
         IrApply = self.env["ir.model.synchro.apply"]
         Cache = self.env["ir.model.synchro.cache"]
-        loc_ext_id_name = self.get_loc_ext_id_name(backend_id, vmodel)
+        loc_ext_id_name = self.get_loc_ext_id_name(backend.id, vmodel)
         suppl_key = Cache.get_struct_model_attr(actual_model, "SUPPL_KEY")
         for field in Cache.get_struct_attr(actual_model).keys():
             if not Cache.is_struct(field):
                 continue
             ext_name, loc_name, is_foreign = self.name_from_ref(
-                backend_id, vmodel, field
+                backend.id, vmodel, field
             )
             if loc_name not in vals:
-                if loc_name in Cache.get_model_attr(backend_id, vmodel, "LOC_FIELDS"):
+                if loc_name in Cache.get_model_attr(backend.id, vmodel, "LOC_FIELDS"):
                     ttype = Cache.get_struct_model_field_attr(
                         actual_model, loc_name, "ttype"
                     )
                     ext_name = Cache.get_model_field_attr(
-                        backend_id, vmodel, loc_name, "LOC_FIELDS"
+                        backend.id, vmodel, loc_name, "LOC_FIELDS"
                     )
                     default, apply4, spec = self.get_default_n_apply(
-                        backend_id, vmodel, loc_name, ext_name, is_foreign, ttype=ttype
+                        backend.id, vmodel, loc_name, ext_name, is_foreign, ttype=ttype
                     )
                     required = Cache.get_struct_model_field_attr(
                         actual_model, field, "required"
                     ) or Cache.get_model_field_attr(
-                        backend_id, vmodel, loc_name, "REQUIRED"
+                        backend.id, vmodel, loc_name, "REQUIRED"
                     )
                     if required or ext_name.startswith("."):
                         fcts = apply4.split(",")
@@ -2125,19 +2126,36 @@ class IrModelSynchro(models.Model):
                         for fct in fcts:
                             if hasattr(IrApply, fct):
                                 vals = getattr(IrApply, fct)(
-                                    backend_id,
+                                    backend.id,
                                     vals,
                                     loc_name,
                                     src,
                                     loc_ext_id_name,
                                     vmodel,
                                     default=default,
-                                    ctx=Cache.get_attr(backend_id, "CTX"),
+                                    ctx=Cache.get_attr(backend.id, "CTX"),
                                 )
                                 src = field
         if hasattr(cls, "assure_values"):
             vals = cls.assure_values(vals, None)
         return vals
+
+    def load_min_vals(self, backend, vmodel, vals, ext_id_name, ext_id):
+        actual_model = self.get_actual_model(vmodel, only_name=True)
+        Cache = self.env["ir.model.synchro.cache"]
+        min_vals = (
+            {ext_id_name: ext_id} if vals.get(ext_id_name) else {}
+        )
+        for loc_name in Cache.get_struct_attr(actual_model).keys():
+            if loc_name in Cache.get_model_attr(backend.id, vmodel, "LOC_FIELDS"):
+                required = Cache.get_struct_model_field_attr(
+                    actual_model, loc_name, "required"
+                ) or Cache.get_model_field_attr(
+                    backend.id, vmodel, loc_name, "REQUIRED"
+                )
+                if required or loc_name in self.DEF_INCL_FLDS and loc_name in vals:
+                    min_vals[loc_name] = vals[loc_name]
+        return min_vals
 
     def bind_record(self, struct, backend, vmodel, vals, constraints, ctx=None):
         def add_constraints(domain, constraints):
@@ -2931,13 +2949,8 @@ class IrModelSynchro(models.Model):
                 vals = self.set_default_values(cls, backend, vmodel, vals)
             else:
                 vals = self.set_default_values(cls, backend, vmodel, vals)
-                min_vals = (
-                    {ext_id_name: ext_id} if vals.get(ext_id_name) else {}
-                )
-                for nm in self.DEF_INCL_FLDS:
-                    if vals.get(nm):
-                        min_vals[nm] = vals[nm]
-                min_vals = self.set_default_values(cls, backend, vmodel, min_vals)
+                min_vals = self.load_min_vals(
+                    backend, vmodel, vals, ext_id_name, ext_id)
                 if not min_vals or min_vals == vals:
                     do_write = False
                     min_vals = vals
@@ -3019,6 +3032,7 @@ class IrModelSynchro(models.Model):
                 if (
                     do_write and rec and child_ids and hasattr(rec, child_ids)
                     and Cache.get_struct_model_attr(model_child, "sequence")
+                    and backend.renum_lines
                 ):
                     for num, line in enumerate(rec[child_ids]):
                         sequence = num + 1
