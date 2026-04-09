@@ -1329,6 +1329,13 @@ class IrModelSynchro(models.Model):
         else:
             domain = [("id", "=", value_id)]
             rec, maybe_dif = self.do_search(actual_model, domain, only_id=True)
+        if rec and vmodel == "res.partner.shipping" and rec.parent_id:
+            if (
+                        rec.parent_id.street == rec.street
+                        and rec.parent_id.city == rec.city
+                        and rec.parent_id.zip == rec.zip
+                ):
+                    rec = rec.parent_id
         if rec:
             if len(rec) > 1:
                 self.logmsg(
@@ -1399,6 +1406,13 @@ class IrModelSynchro(models.Model):
         )
         if not spec and relation == "res.partner" and actual_model == "purchase.order":
             spec = "supplier"
+        if (
+                not spec
+                and relation == "res.partner"
+                and actual_model == "sale.order"
+                and name == "partner_shipping_id"
+        ):
+            spec = "delivery"
         if relation == actual_model and ttype == "one2many":
             # Avoid recursive request, i.e. res.partner
             return []
