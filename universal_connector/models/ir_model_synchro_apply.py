@@ -416,6 +416,8 @@ class IrModelSynchroApply(models.Model):
         ctx=None,
         product=None,
     ):
+        company_id = vals.get("company_id") or self.env.user.company_id.id
+
         def tax_by_rate(value):
             return self.env["account.tax"].search([
                 ("company_id", "=", company_id),
@@ -429,7 +431,6 @@ class IrModelSynchroApply(models.Model):
                 ("type_tax_use", "=", "sale")], limit=1)
 
         if loc_name not in vals or not vals.get(loc_name):
-            company_id = vals.get("company_id") or self.env.user.company_id.id
             tax = False
             if (
                     ext_ref.startswith("vg7")
