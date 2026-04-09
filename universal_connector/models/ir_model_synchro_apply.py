@@ -234,7 +234,10 @@ class IrModelSynchroApply(models.Model):
                         + vals["firstname"]
                     ).replace("  ", " ").strip()
                 vals["is_company"] = True
-                vals["individual"] = True
+                if vals["firstname"] and vals["lastname"]:
+                    vals["individual"] = True
+                else:
+                    vals["individual"] = False
             del vals["firstname"]
             del vals["lastname"]
         elif (
@@ -284,6 +287,8 @@ class IrModelSynchroApply(models.Model):
                     vals[loc_name] = "IT%s" % vals[ext_ref]
                 elif vals[ext_ref]:
                     vals[loc_name] = vals[ext_ref]
+                if vmodel == "res.partner":
+                    vals["individual"] = False
             elif vals[ext_ref]:
                 vals[loc_name] = vals[ext_ref]
         return vals
@@ -413,15 +418,18 @@ class IrModelSynchroApply(models.Model):
     ):
         def tax_by_rate(value):
             return self.env["account.tax"].search([
+                ("company_id", "=", company_id),
                 ("amount", "=", value),
                 ("type_tax_use", "=", "sale")], limit=1)
 
         def tax_by_code(value):
             return self.env["account.tax"].search([
+                ("company_id", "=", company_id),
                 ("description", "=", value),
                 ("type_tax_use", "=", "sale")], limit=1)
 
         if loc_name not in vals or not vals.get(loc_name):
+            company_id = vals.get("company_id") or self.env.user.company_id.id
             tax = False
             if (
                     ext_ref.startswith("vg7")
@@ -430,14 +438,22 @@ class IrModelSynchroApply(models.Model):
                     and isinstance(vals[ext_ref], basestring)
                     and all([x.isdigit() for x in vals[ext_ref].split(".", 1)])
             ):
-                tax = tax_by_rate(eval(vals[ext_ref]))
+                if eval(vals[ext_ref]) > 0:
+                    tax = tax_by_rate(eval(vals[ext_ref]))
+                else:
+                    tax = tax_by_rate(22)
             elif (
                     ext_ref.startswith("vg7")
                     and ext_ref in vals
                     and vals[ext_ref]
                     and isinstance(vals[ext_ref], (int, long))
             ):
-                tax = tax_by_rate(vals[ext_ref])
+                if vals[ext_ref] > 0:
+                    tax = tax_by_rate(vals[ext_ref])
+                if not tax:
+                    tax = self.env["account.tax"].search([
+                        ("company_id", "=", company_id),
+                        ("vg7_id", "=", vals[ext_ref])], limit=1)
             elif (
                     not ext_ref.startswith("vg7")
                     and ext_ref in vals
@@ -453,15 +469,21 @@ class IrModelSynchroApply(models.Model):
                     tax = product.taxes_id
             if not tax:
                 tax = tax_by_rate(22)
-            if tax:
-                vals[loc_name] = [(6, 0, [tax.id])]
         elif (
                 loc_name in vals
                 and isinstance(vals[loc_name], basestring)
         ):
             tax = tax_by_code(vals[ext_ref])
-            if tax:
-                vals[loc_name] = [(6, 0, [tax.id])]
+        if tax:
+            fiscalpos = self.env["ir.model.synchro.cache"].get_model_attr(
+                backend_id, vmodel, "__%s_FP" % vmodel,
+            )
+            if fiscalpos:
+                for tax_line in fiscalpos.tax_ids:
+                    if tax_line.tax_src_id == tax:
+                        tax = tax_line.tax_dest_id
+                        break
+            vals[loc_name] = [(6, 0, [tax.id])]
         return vals
 
     def apply_agents(
@@ -512,17 +534,13 @@ class IrModelSynchroApply(models.Model):
         default=None,
         ctx=None,
     ):
-        doc_type = "sale"
+        # doc_type = "sale"
         if loc_name in vals:
             return vals
         if vals.get("partner_id"):
             partner = self.env["res.partner"].browse(vals.get("partner_id"))
         elif vals.get("order_id"):
-            if vals.get("order_number"):
-                doc_type = "purchase"
-                partner = self.env["purchase.order"].browse(vals["order_id"]).partner_id
-            else:
-                partner = self.env["sale.order"].browse(vals["order_id"]).partner_id
+            partner = self.env["sale.order"].browse(vals["order_id"]).partner_id
         elif vals.get("invoice_id"):
             partner = self.env["account.invoice"].browse(vals["invoice_id"]).partner_id
         else:
@@ -530,10 +548,7 @@ class IrModelSynchroApply(models.Model):
         if loc_name == "fiscal_position_id":
             partner_nm = "property_account_position_id"
         elif loc_name in ("pricelist_id", "payment_term_id"):
-            if doc_type == "purchase":
-                partner_nm = "property_supplier_%s" % loc_name
-            else:
-                partner_nm = "property_%s" % loc_name
+            partner_nm = "property_%s" % loc_name
         else:
             partner_nm = loc_name
         if partner_nm in partner:
@@ -562,45 +577,55 @@ class IrModelSynchroApply(models.Model):
             and ext_ref in vals
             and isinstance(vals[ext_ref], dict)
         ):
+            partner = self.env["res.partner"].browse(vals["partner_id"])
             if not loc_name:
                 loc_name = "partner_shipping_id"
             vals[loc_name] = vals["partner_id"]
             domain = [("type", "=", "delivery")]
             ship_vals = {"type": "delivery"}
-            item = (get_item_val("name") + " " + get_item_val("surename")).strip()
+            item = (get_item_val("name") + " "
+                    + get_item_val("surename")).strip() or False
             if item:
                 domain.append(("name", "=", item))
-                ship_vals["name"] = item
+            ship_vals["name"] = item
             if (
                 get_item_val("street")
                 and get_item_val("street_number")
             ):
                 item = (get_item_val("street") + ", "
-                        + get_item_val("street_number")).strip()
+                        + get_item_val("street_number")).strip() or False
             else:
                 item = False
             if item:
                 domain.append(("street", "=", item))
-                ship_vals["street"] = item
-            item = get_item_val("city").strip()
+            ship_vals["street"] = item
+            item = get_item_val("city").strip() or False
             if item:
                 domain.append(("city", "=", item))
-                ship_vals["city"] = item
-            item = get_item_val("postal_code").strip()
+            ship_vals["city"] = item
+            item = get_item_val("postal_code").strip() or False
             if item:
                 domain.append(("zip", "=", item))
-                ship_vals["zip"] = item
+            ship_vals["zip"] = item
             if domain:
                 domain.append(("parent_id", "=", vals["partner_id"]))
                 ship_vals["parent_id"] = vals["partner_id"]
-                partner = fields.first(self.env["res.partner"].search(domain))
-                if not partner:
+                if (
+                        ship_vals["street"] == partner.street
+                        and ship_vals["city"] == partner.city
+                        and ship_vals["zip"] == partner.zip
+                ):
+                    partner_shipping = partner
+                else:
+                    partner_shipping = fields.first(
+                        self.env["res.partner"].search(domain))
+                if not partner_shipping:
                     try:
-                        partner = self.env["res.partner"].create(ship_vals)
+                        partner_shipping = self.env["res.partner"].create(ship_vals)
                     except BaseException:
                         pass
-                if partner:
-                    vals[loc_name] = partner.id
+                if partner_shipping:
+                    vals[loc_name] = partner_shipping.id
         return vals
 
     def apply_merge_shipping_address(

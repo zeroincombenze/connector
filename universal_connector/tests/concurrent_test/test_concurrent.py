@@ -245,15 +245,15 @@ TNL_VG7_TABLES = {
 }
 TNL_OE8_TABLES = {}
 SETUP_MODEL_LIST = (
-    "account.account.type",
+    # "account.account.type",
     "res.country",
     "res.country.state",
     "res.partner",
     "res.partner.supplier",
     "res.users",
     "res.company",
-    "account.account",
-    "account.journal",
+    # "account.account",
+    # "account.journal",
     "account.tax",
     "account.payment.term",
     "product.template",
@@ -867,12 +867,13 @@ class ExtTestEnv(object):
             self.ask_4_ret(force=True if modname == THIS_MODULE else self.ask)
             installed = self.check_if_module_installed(modname, wait=True)
 
-    def wait_4_module_installed(self, modname, ctr, maxctr):
+    def wait_4_module_installed(self, modname, ctr, maxctr, connector_installed=False):
         installed = self.check_if_module_installed(modname)
         while not installed:
             print_flush("# Module %s not installed!" % modname)
             print_flush("# Please install %s" % modname)
             self.ask_4_ret()
+            self.install_module(modname, connector_installed=connector_installed)
             installed = self.check_if_module_installed(
                 modname, ctr=ctr, maxctr=maxctr, wait=True)
 
@@ -1059,11 +1060,13 @@ class ExtTestEnv(object):
             installed = self.check_if_module_installed(modname, ctr=ctr, maxctr=maxctr)
             if "conai" in modname and not self.conai:
                 if installed:
-                    self.wait_4_module_uninstalled(modname)
+                    self.wait_4_module_uninstalled(
+                        modname, connector_installed=connector_installed)
                 continue
             if not installed:
                 self.install_module(modname, connector_installed=connector_installed)
-                self.wait_4_module_installed(modname, ctr, maxctr)
+                self.wait_4_module_installed(
+                    modname, ctr, maxctr, connector_installed=connector_installed)
             connector_installed, mk_dev = self.action_after_installed(
                 modname, connector_installed, mk_dev=mk_dev)
 
@@ -1700,26 +1703,38 @@ class ExtTestEnv(object):
         return rec_id
 
     def merge_supplemetal_vals(
-            self, identity, child_model, fn, parent_field, child_field, ext_recs, multi=False):
+            self, identity, child_model, fn, parent_field, child_field, ext_recs,
+            multi=False, rec_id=False, uncheck=False):
         child_ext_recs = self.load_csv_file(
             child_model, pth.join(self.get_csv_path(identity), fn))
         if multi:
             for ext_rec in ext_recs:
                 ext_rec[child_field] = []
+        rec_id = rec_id or "id"
         for child_ext_rec in child_ext_recs:
             child_ext_rec, _, _ = self.prepare_rec(child_ext_rec, 0)
             checked = False
             if parent_field in child_ext_rec:
                 parent_id = child_ext_rec[parent_field]
                 for ext_rec in ext_recs:
-                    if parent_id == ext_rec["id"]:
+                    if parent_id == ext_rec[rec_id]:
                         checked = True
+                        if (
+                                parent_field == "customer_id"
+                                and "customer_id" in child_ext_rec
+                                and (child_field == "billing"
+                                     or (child_field == "shipping" and rec_id != "id"))
+                        ):
+                            del child_ext_rec["customer_id"]
+                        if rec_id != "id" and "customer_shipping_id" in child_ext_rec:
+                            del child_ext_rec["customer_shipping_id"]
                         if not multi:
                             ext_rec[child_field] = child_ext_rec
                         else:
                             ext_rec[child_field].append(child_ext_rec)
-                        break
-            if not checked:
+                        if rec_id == "id":
+                            break
+            if not uncheck and not checked:
                 raise IOError("No match external id name for %s" % child_ext_rec)
 
     def load_ext_values(
@@ -1745,7 +1760,29 @@ class ExtTestEnv(object):
                 "customer_id",
                 "billing",
                 ext_recs_image)
-        elif model in MODEL_WITH_CHILD and identity in MODEL_WITH_CHILD[model]:
+        elif model == "sale.order" and identity.startswith("vg7"):
+            self.merge_supplemetal_vals(
+                identity,
+                "res.partner",
+                "customers_shipping_addresses.csv",
+                "customer_id",
+                "shipping",
+                ext_recs_image,
+                rec_id="customer_shipping_id",
+                uncheck=True)
+            self.merge_supplemetal_vals(
+                identity,
+                "res.partner",
+                "customers_billing_addresses.csv",
+                "customer_id",
+                "billing",
+                ext_recs_image,
+                rec_id="customer_id",
+                uncheck=True)
+            for ext_rec in ext_recs_image:
+                if "customer_shipping_id" in ext_rec:
+                    del ext_rec["customer_shipping_id"]
+        if model in MODEL_WITH_CHILD and identity in MODEL_WITH_CHILD[model]:
             self.merge_supplemetal_vals(
                 identity,
                 MODEL_WITH_CHILD[model]["child_model"],
@@ -1885,6 +1922,9 @@ class ExtTestEnv(object):
             bb=0 if model == self.prior_model and fct_test == self.prior_fct
             else 1 if model == self.prior_model else 2
         )
+        if model == "sale.order":
+            print_flush("# Test model %s" % model)  # debug
+            self.ask_4_ret()  # debug
         self.prior_model = model
         self.fct = fct_test
         self.init_model(identity, model, reset_id=reset_id, lang=lang)
@@ -1896,9 +1936,6 @@ class ExtTestEnv(object):
         self.write_log("# Starting %s tests on %s" % (fct_test, model), echo=False)
         for ext_rec in ext_recs_image:
             loc_id = ext_id = -127
-            if model == "sale.order":
-                print_flush("# Test model %s[%s]" % (model, ext_rec))   #debug
-                self.ask_4_ret()                                        #debug
             if fct_test == "synchro":
                 ext_rec, ext_id, main_ext_id = self.prepare_rec(ext_rec, main_ext_id)
                 loc_id = self.test_function_synchro(
@@ -1946,9 +1983,6 @@ class ExtTestEnv(object):
                 identity, model, ext_model=ext_model, lang=lang, keep_none=True)
             main_ext_id = False
             wa = "w"
-            # ext_id_field = self.get_ext_id_field(identity, model=model)
-            # if not ext_id_field:
-            #    raise IOError("No match external id name for %s" % identity)
             for ext_rec in ext_recs_image:
                 ext_rec, ext_id, main_ext_id = self.prepare_rec(ext_rec, main_ext_id)
                 self.write_file_2_pull(identity, model, ext_model, ext_rec, wa)
@@ -2017,50 +2051,6 @@ def main(cli_args=[]):
     test_prio = "synchro"
     for model in MODELS:
         test_prio = run_full_identity_test(ext_test_env, model, test_prio, identity)
-
-    # identity = "oe8:"
-    # ext_test_env.write_log(
-    #     "*** Starting %s test ***" % identity.upper(), echo=True, bb=3)
-    # MODELS = (
-    #         # "account.account.type",
-    #         # "res.country",
-    #         # "res.country.state",
-    #         # "account.account",
-    #         # "res.partner",
-    #         # "res.company",
-    #         # "res.users",
-    #         "product.uom",
-    #         "product.template",
-    #         "product.product",
-    #         "account.tax",
-    #         "account.journal",
-    #         "account.payment.term",
-    #         "stock.picking.transportation_reason",
-    #         "stock.picking.carriage_condition",
-    #         "stock.picking.goods_description",
-    #         "stock.picking.transportation_method",
-    #         "sale.order",
-    #         "purchase.order",
-    #         "stock.picking.package.preparation",
-    #         # "account.invoice",
-    # )
-    # ext_test_env.store_csv_response(identity, MODELS)
-    # test_prio = "synchro"
-    # for model in MODELS:
-    #     test_prio = run_full_identity_test(ext_test_env, model, test_prio, identity)
-    #
-    # lang = "en_US"
-    # ext_test_env.write_log(
-    #     "*** Starting %s test (%s) ***" % (identity.upper(), lang), echo=True, bb=3)
-    # MODELS = (
-    #         # "account.account.type",
-    #         "res.country",
-    # )
-    # ext_test_env.store_csv_response(identity, MODELS, lang=lang)
-    # test_prio = "synchro"
-    # for model in MODELS:
-    #     test_prio = run_full_identity_test(
-    #         ext_test_env, model, test_prio, identity, lang=lang)
 
     ext_test_env.teardown()
     return 0

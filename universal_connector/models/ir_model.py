@@ -1784,6 +1784,12 @@ class IrModelSynchro(models.Model):
                         child_ids,
                         "firstname",
                         "lastname",
+                        "fiscal_position_id",
+                        "carriage_condition_id",
+                        "goods_description_id",
+                        "payment_term_id",
+                        "pricelist_id",
+                        "transportation_method_id",
                 ):
                     list_9.append(ext_ref)
                 else:
@@ -3088,6 +3094,11 @@ class IrModelSynchro(models.Model):
                     return loc_id
 
         parent_id_name = Cache.get_struct_model_attr(actual_model, "PARENT_ID")
+        if model_child and rec and hasattr(rec, "fiscal_position_id"):
+            Cache.set_model_attr(
+                backend_id, model_child, "__%s_FP" % model_child,
+                rec.fiscal_position_id
+            )
         if parent_child_mode == "B":
             sts = self.synchro_childs(
                 backend,
@@ -3109,6 +3120,8 @@ class IrModelSynchro(models.Model):
         elif rec and loc_id > 0 and "to_delete" in rec and not no_del_child:
             actual_cls.search([(parent_id_name, "=", rec[parent_id_name].id),
                                ("to_delete", "=", True)]).unlink()
+        if model_child and rec and hasattr(rec, "fiscal_position_id"):
+            Cache.del_model_attr(backend_id, model_child, "__%s_FP" % model_child)
         if (
             loc_id > 0
             and not chk_in_queue
@@ -3884,7 +3897,7 @@ class IrModelSynchro(models.Model):
             max_ctr = len(module.dependencies_id) + 3
             query = ("SELECT id FROM ir_module_module WHERE"
                      " name='%s' AND state='installed'" % module.name)
-            # Check for state by sqk to avoid cache trouble
+            # Check for state by sql to avoid cache trouble
             while max_ctr > 0:
                 self.env.cr.execute(query)
                 res = self.env.cr.fetchall()

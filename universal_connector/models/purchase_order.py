@@ -32,13 +32,6 @@ class PurchaseOrder(models.Model):
             self.env["ir.model.synchro"]._build_unique_index(self._inherit, prefix)
         return res
 
-    @api.model
-    def __preprocess(self, backend_id, vals):
-        return vals, ""
-
-    def __postprocess(self, backend_id, parent_id, vals):
-        return False
-
     def assure_values(self, vals, rec):
         for nm in ("partner_shipping_id", "partner_invoice_id"):
             if isinstance(vals.get(nm), int) and vals[nm] <= 0:
