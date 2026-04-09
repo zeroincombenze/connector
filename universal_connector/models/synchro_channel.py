@@ -151,6 +151,7 @@ class SynchroChannel(models.Model):
         help="Ignore child lines because counterparty send lines after header",
     )
     renum_lines = fields.Boolean("Renumber lines", default=False)
+    tax_id = fields.Many2one("account.tax", "Default Tax code")
 
     @api.multi
     def button_check_connection(self):

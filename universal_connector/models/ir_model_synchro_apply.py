@@ -417,6 +417,7 @@ class IrModelSynchroApply(models.Model):
         product=None,
     ):
         company_id = vals.get("company_id") or self.env.user.company_id.id
+        backend = self.env["synchro.channel"].browse(backend_id)
 
         def tax_by_rate(value):
             return self.env["account.tax"].search([
@@ -442,7 +443,7 @@ class IrModelSynchroApply(models.Model):
                 if eval(vals[ext_ref]) > 0:
                     tax = tax_by_rate(eval(vals[ext_ref]))
                 else:
-                    tax = tax_by_rate(22)
+                    tax = backend.tax_id or tax_by_rate(22)
             elif (
                     ext_ref.startswith("vg7")
                     and ext_ref in vals
@@ -469,7 +470,7 @@ class IrModelSynchroApply(models.Model):
                 else:
                     tax = product.taxes_id
             if not tax:
-                tax = tax_by_rate(22)
+                tax = backend.tax_id or tax_by_rate(22)
         elif (
                 loc_name in vals
                 and isinstance(vals[loc_name], basestring)
