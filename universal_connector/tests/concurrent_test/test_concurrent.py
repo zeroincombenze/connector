@@ -422,7 +422,7 @@ class ExtTestEnv(object):
         self.parseoptargs(args)
         # Comment or activate following lines for specific test
         force = {}
-        force["ask"] = True
+        force["ask"] = False
         force["config"] = ("/home/odoo/10.0/connector/universal_connector/"
                            "tests/logs/connector.universal_connector_10.conf")
         force["database"] = "test_universal_connector_10"
@@ -1922,9 +1922,9 @@ class ExtTestEnv(object):
             bb=0 if model == self.prior_model and fct_test == self.prior_fct
             else 1 if model == self.prior_model else 2
         )
-        if model == "sale.order":
-            print_flush("# Test model %s" % model)  # debug
-            self.ask_4_ret()  # debug
+        # if model == "sale.order":
+        #     print_flush("# Test model %s" % model)  # debug
+        #     self.ask_4_ret()  # debug
         self.prior_model = model
         self.fct = fct_test
         self.init_model(identity, model, reset_id=reset_id, lang=lang)

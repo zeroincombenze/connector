@@ -1331,11 +1331,11 @@ class IrModelSynchro(models.Model):
             rec, maybe_dif = self.do_search(actual_model, domain, only_id=True)
         if rec and vmodel == "res.partner.shipping" and rec.parent_id:
             if (
-                        rec.parent_id.street == rec.street
-                        and rec.parent_id.city == rec.city
-                        and rec.parent_id.zip == rec.zip
-                ):
-                    rec = rec.parent_id
+                    rec.parent_id.street == rec.street
+                    and rec.parent_id.city == rec.city
+                    and rec.parent_id.zip == rec.zip
+            ):
+                rec = rec.parent_id
         if rec:
             if len(rec) > 1:
                 self.logmsg(

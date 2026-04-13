@@ -315,38 +315,20 @@ class IrModelSynchroApply(models.Model):
             del vals[ext_ref]
         return vals
 
-    # def apply_invoice_number(
-    #     self,
-    #     backend_id,
-    #     vals,
-    #     loc_name,
-    #     ext_ref,
-    #     loc_ext_id_name,
-    #     vmodel,
-    #     default=None,
-    #     ctx=None,
-    # ):
-    #     """Invoice number"""
-    #     if ext_ref in vals:
-    #         vals["move_name"] = vals[ext_ref]
-    #     return vals
-
-    # def apply_journal(
-    #     self,
-    #     backend_id,
-    #     vals,
-    #     loc_name,
-    #     ext_ref,
-    #     loc_ext_id_name,
-    #     vmodel,
-    #     default=None,
-    #     ctx=None,
-    # ):
-    #     if "journal_id" not in vals:
-    #         journal = self.env["account.invoice"]._default_journal()
-    #         if journal:
-    #             vals["journal_id"] = fields.first(journal).id
-    #     return vals
+    def apply_decode(
+        self,
+        backend_id,
+        vals,
+        loc_name,
+        ext_ref,
+        loc_ext_id_name,
+        vmodel,
+        default=None,
+        ctx=None,
+    ):
+        if ext_ref in vals and isinstance(vals[ext_ref], basestring):
+            vals[loc_name] = vals[ext_ref].replace("\r", "")
+        return vals
 
     def apply_account(
         self,
