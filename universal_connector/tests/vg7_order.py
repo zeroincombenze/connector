@@ -129,7 +129,8 @@ SALE_ORDER_1 = {
 
 
 class ExtTestEnv(object):
-    def __init__(self, config=None, database=None, reset_data=False):
+    def __init__(
+            self, config=None, database=None, reset_data=False, new_shipping=False):
         if os.path.isfile(config):
             self.config = config
         else:
@@ -138,6 +139,7 @@ class ExtTestEnv(object):
         self.ctx = {}
         self.user = False
         self.reset_data = reset_data
+        self.new_shipping = new_shipping
 
     def connect_user(self):
         print("Connecting to database %s" % self.database)
@@ -159,7 +161,10 @@ class ExtTestEnv(object):
             writer = csv.writer(fd)
             keys = list(order.keys())
             writer.writerow(keys)
+            if self.new_shipping:
+                order["shipping"]["shipping_postal_code"] = "12345"
             writer.writerow(order.values())
+            order["shipping"]["shipping_postal_code"] = "82024"
             if self.reset_data:
                 partner_id = clodoo.searchL8(
                     self.ctx,
@@ -190,7 +195,6 @@ class ExtTestEnv(object):
                 "customer_shipping_id": CUSTOMER_SHIPPING_ID,
                 "customer_id": order["customer_id"],
                 "shipping_name": "Shipping Address Test",
-                "shipping_city": "City Test",
             }
             writer = csv.writer(fd)
             keys = list(partner_values.keys())
@@ -343,10 +347,12 @@ def main(cli_args=[]):
     help = False
     config = "/home/odoo/clodoo/confs/odoo10.conf"
     database = "paperservice"
-    reset_data = False
+    reset_data = new_shipping = False
     for arg in cli_args:
         if arg.endswith("--reset"):
             reset_data = True
+        elif arg.endswith("--new-shipping"):
+            new_shipping = True
         elif arg.startswith("-"):
             if "h" in arg:
                 help = True
@@ -361,9 +367,11 @@ def main(cli_args=[]):
         else:
             pass
     if help:
-        print("usage: vg7_order -c CONFIG -d DATABASE --reset")
+        print("usage: vg7_order -c CONFIG -d DATABASE [--reset] [--new_shipping]")
         exit(0)
-    Conn = ExtTestEnv(config=config, database=database, reset_data=reset_data)
+    Conn = ExtTestEnv(
+        config=config, database=database, reset_data=reset_data,
+        new_shipping=new_shipping)
     return Conn.send_order()
 
 

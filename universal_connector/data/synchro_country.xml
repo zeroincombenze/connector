@@ -96,6 +96,12 @@
         <field name="ext_value">Stati Uniti</field>
     </record>
 
+    <record forcecreate="1" id="country_id_US" model="synchro.channel.domain.translation">
+        <field name="model">res.country</field>
+        <field name="key">name</field>
+        <field name="odoo_value">Inghilterra</field>
+        <field name="ext_value">Regno Unito</field>
+    </record>
 
     <record forcecreate="1" id="country_state_AP" model="synchro.channel.domain.translation">
         <field name="model">res.country.state</field>

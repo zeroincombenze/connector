@@ -1,5 +1,5 @@
 ============================================================
-|icon| Universal Connector/Connettore universale 10.0.0.3.15
+|icon| Universal Connector/Connettore universale 10.0.0.3.16
 ============================================================
 
 .. |icon| image:: https://raw.githubusercontent.com/zeroincombenze/connector/10.0/universal_connector/static/description/icon.png
@@ -188,7 +188,13 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 ChangeLog History | Cronologia modifiche
 ----------------------------------------
 
-10.0.0.3.14 (2026-03-26)
+10.0.0.3.16 (2026-04-06)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [FIX] Minor fixes
+* [QUA] Test coverage 61% (4903: 1903+3000) [564 TestPoints]
+
+10.0.0.3.15 (2026-03-26)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 * [FIX] Minor fixes
@@ -267,21 +273,6 @@ ChangeLog History | Cronologia modifiche
 * [FIX] No price with VAT from VF7 order / Prezzo ordine VG7 senza scorporo IVA
 * [QUA] Test coverage 33% (4993: 3342+1651) [1037 TestPoints] - quality rating 54 (target 100)
 
-10.0.0.3.4 (2024-06-19)
-~~~~~~~~~~~~~~~~~~~~~~~
-
-* [FIX] Model res.lang
-* [FIX] Model account.payment.term
-* [FIX] Automatic reset -9 status
-* [FIX] Search tax by amount only if amount > 0
-* [IMP] Minor improvements: only minimal data is the default
-* [IMP] Model with sequences get data even if > 16 records
-* [IMP] Casting improvements
-* [IMP] New versioned dependency control
-* [REF] New concurrent tests
-* [IMP] Test trace "why"
-* [QUA] Test coverage 32% (4993: 3373+1620) [1005 TestPoints] - quality rating 52 (target 100)
-
 
 
 Credits | Ringraziamenti
@@ -331,7 +322,7 @@ La distribuzione `Zeroincombenze® <https://www.zeroincombenze.it/>`__ è proget
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2026-04-04
+Last Update / Ultimo aggiornamento: 2026-04-21
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status

@@ -422,7 +422,7 @@ class ExtTestEnv(object):
         self.parseoptargs(args)
         # Comment or activate following lines for specific test
         force = {}
-        force["ask"] = False
+        force["ask"] = True
         force["config"] = ("/home/odoo/10.0/connector/universal_connector/"
                            "tests/logs/connector.universal_connector_10.conf")
         force["database"] = "test_universal_connector_10"
@@ -2044,7 +2044,7 @@ def main(cli_args=[]):
         "account.payment.term",
         "stock.picking.transportation_reason",
         "sale.order",
-        "purchase.order",
+        # "purchase.order",
         "stock.picking.package.preparation",
     )
     ext_test_env.store_csv_response(identity, MODELS)

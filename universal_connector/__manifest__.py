@@ -15,7 +15,7 @@
     "author": "SHS-AV s.r.l.",
     "website": "https://www.zeroincombenze.it/",
     "development_status": "Beta",
-    "license": "LGPL-3",
+    "license": "AGPL-3",
     "depends": [
         "account",
         "base",

@@ -1075,25 +1075,18 @@ class IrModelSynchro(models.Model):
             )
         if suppl_key and key_name != suppl_key and suppl_key in ctx:
             vals[suppl_key] = ctx[suppl_key]
+        if key_name == "code" and ext_value:
+            vals[key_name] = "code %s" % ext_value
         if key_name != "name" and Cache.get_struct_model_attr(actual_model, "name"):
             if ext_value:
                 vals["name"] = "Unknown %s" % ext_value
             else:
                 vals["name"] = "%s=%s" % (key_name, value)
-        if Cache.get_struct_model_attr(actual_model, "code") and ext_value:
-            vals["code"] = "code %s" % ext_value
         if actual_model == "res.partner" and spec in ("delivery", "invoice"):
             vals["type"] = spec
-        if vmodel == "stock.picking.goods_description":
-            pass
         try:
             new_value = self.generic_synchro(cls, vals, chk_in_queue=True)
-            if new_value > 0:
-                # in_queue = Cache.get_attr(backend_id, "IN_QUEUE")
-                # in_queue.append([vmodel, new_value])
-                # Cache.set_attr(backend_id, "IN_QUEUE", in_queue)
-                pass
-            else:
+            if not isinstance(new_value, (int, long)) or new_value < 1:
                 new_value = False
         except BaseException as e:  # pragma: no cover
             self.env.cr.rollback()  # pylint: disable=invalid-commit
@@ -1110,9 +1103,9 @@ class IrModelSynchro(models.Model):
             self, actual_model, req_domain, only_id=None, spec=None, ext_id_name=None):
         def atomic_search(cls, domain, has_sequence):
             if has_sequence:
-                res = cls.search(domain, order="sequence,id")
+                res = cls.with_context(lang="it_IT").search(domain, order="sequence,id")
             else:
-                res = cls.search(domain)
+                res = cls.with_context(lang="it_IT").search(domain)
             self.logmsg(
                 "debug",
                 "%(model)s.do_search(%(domain)s) -> %(res)s",
@@ -3080,7 +3073,7 @@ class IrModelSynchro(models.Model):
         # commit to avoid lost data in recursive write
         self.env.cr.commit()  # pylint: disable=invalid-commit
 
-        if loc_id > 0 and not chk_in_queue and actual_model == "res.partner":
+        if loc_id > 0 and not chk_in_queue and vmodel == "res.partner":
             child_vals = Cache.get_model_attr(
                 backend_id, vmodel, "__partner.invoice")
             if child_vals:
