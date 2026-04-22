@@ -1104,8 +1104,12 @@ class IrModelSynchro(models.Model):
         def atomic_search(cls, domain, has_sequence):
             if has_sequence:
                 res = cls.with_context(lang="it_IT").search(domain, order="sequence,id")
+                if not res:
+                    res = cls.search(domain, order="sequence,id")
             else:
                 res = cls.with_context(lang="it_IT").search(domain)
+                if not res:
+                    res = cls.search(domain)
             self.logmsg(
                 "debug",
                 "%(model)s.do_search(%(domain)s) -> %(res)s",
