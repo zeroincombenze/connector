@@ -10,7 +10,7 @@
 from . import (
     # account_account,
     account_fiscal_position,
-    account_invoice,
+    # account_invoice,
     account_journal,
     account_move,
     account_payment_term,

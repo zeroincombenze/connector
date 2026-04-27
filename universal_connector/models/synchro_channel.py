@@ -161,6 +161,8 @@ class SynchroChannel(models.Model):
         cnx, session = self.connect()
         if cnx and session:
             self.write({"state": "checked"})
+            return True
+        return False
 
     @api.multi
     def button_reset_to_draft(self):
@@ -383,8 +385,10 @@ class SynchroChannelModel(models.Model):
         ],
         string="Specific search domain",
     )
-    cron_sync = fields.Char("Model to complete asynchronously",
-                            oldname="field_2complete")
+    cron_sync = fields.Boolean(
+        "Model to complete asynchronously",
+        oldname="field_2complete",
+    )
     sequence = fields.Integer("Priority", default=16)
     synchro_channel_id = fields.Many2one("synchro.channel")
     field_ids = fields.One2many(

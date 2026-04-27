@@ -17,7 +17,7 @@
                     ['vat', 'type', 'is_company'],
                     ['name', 'type', 'is_company'],
                     ['dim_name', 'type', 'is_company'],)</field>
-        <field name="cron_sync">True</field>
+        <field name="cron_sync" eval="True"/>
         <field name="sequence">12</field>
     </record>
 
@@ -38,7 +38,7 @@
                     ['vat', 'is_company'],
                     ['name', 'is_company'],
                     ['name'])</field>
-        <field name="cron_sync">True</field>
+        <field name="cron_sync" eval="True"/>
         <field name="sequence">14</field>
     </record>
 
@@ -77,7 +77,7 @@
                         ['vat'],
                         ['name'],
                         ['dim_name', 'type'])</field>
-        <field name="cron_sync">True</field>
+        <field name="cron_sync" eval="True"/>
         <field name="sequence">14</field>
     </record>
 
@@ -251,6 +251,12 @@
         <field name="model_id" ref="res_partner"/>
     </record>
 
+    <record forcecreate="1" id="res_partner_lang" model="synchro.channel.model.fields">
+        <field name="name">lang</field>
+        <field name="apply">it_IT</field>
+        <field name="model_id" ref="res_partner"/>
+    </record>
+
     <!--
     <record forcecreate="1" id="res_partner_property_supplier_payment_term_id" model="synchro.channel.model.fields">
         <field name="name">property_supplier_payment_term_id</field>
@@ -403,6 +409,11 @@
         <field name="model_id" ref="res_partner_shipping"/>
     </record>
 
+    <record forcecreate="1" id="res_partner_shipping_lang" model="synchro.channel.model.fields">
+        <field name="name">lang</field>
+        <field name="apply">it_IT</field>
+        <field name="model_id" ref="res_partner_shipping"/>
+    </record>
 
     <record forcecreate="1" id="res_partner_invoice_id" model="synchro.channel.model.fields">
         <field name="name">vg7_id</field>
@@ -637,6 +648,13 @@
         <field name="apply">upper()</field>
         <field name="model_id" ref="res_partner_supplier_rec"/>
     </record>
+
+    <record forcecreate="1" id="res_partner_supplier_lang" model="synchro.channel.model.fields">
+        <field name="name">lang</field>
+        <field name="apply">it_IT</field>
+        <field name="model_id" ref="res_partner_supplier_rec"/>
+    </record>
+
     <!--
     <record forcecreate="1" id="res_partner_supplier_property_supplier_payment_term_id" model="synchro.channel.model.fields">
         <field name="name">property_supplier_payment_term_id</field>

@@ -1,3 +1,3 @@
-id,ddt_number,customer_id,data_emissione,causal_id,note,causal_id,aspetto_esteriore_dei_beni,tipo_porto,mezzo
-231,24/231,101,2024-05-16,3,Controllare la merce prima del ritiro,3,Cartoni su Bancale,Porto Assegnato (EXW),Corriere
-310,24/310,101,2024-05-31,3,Controllare la merce prima del ritiro,3,Cartoni su Bancale,Porto Assegnato (EXW),Corriere
+id,ddt_number,customer_id,customer_shipping_id,data_emissione,causal_id,note,causal_id,aspetto_esteriore_dei_beni,tipo_porto,mezzo
+231,24/231,101,1,2024-05-16,3,Controllare la merce prima del ritiro,3,Cartoni su Bancale,Porto Assegnato (EXW),Corriere
+310,24/310,101,1,2024-05-31,3,Controllare la merce prima del ritiro,3,Cartoni su Bancale,Porto Assegnato (EXW),Corriere

@@ -1048,8 +1048,6 @@ class IrModelSynchro(models.Model):
             return value
         if rec[0].odoo_value.isdigit():
             res_id = int(rec[0].odoo_value)
-            # if type == "many2one":
-            #     return res_id
             return self.env[actual_model].browse(res_id)[name]
         return rec[0].odoo_value
 
@@ -1523,23 +1521,20 @@ class IrModelSynchro(models.Model):
                 ext_name = loc_name = ext_ref
         return ext_name, loc_name, is_foreign
 
-    def get_default_n_apply(
-        self, backend_id, vmodel, loc_name, ext_name, is_foreign, ttype=None
+    def declared_default_n_apply(
+        self, backend, vmodel, loc_name, ext_name, is_foreign, ttype=None
     ):
         Cache = self.env["ir.model.synchro.cache"]
         actual_model = self.get_actual_model(vmodel, only_name=True)
-        if not Cache.get_attr(backend_id, actual_model):
+        if not Cache.get_attr(backend.id, actual_model):
             # TODO: channel_id
-            Cache.open(
-                backend=self.env["synchro.channel"].browse(backend_id),
-                model=actual_model,
-            )
+            Cache.open(backend, model=actual_model)
         default = Cache.get_model_field_attr(
-            backend_id, vmodel, loc_name or ".%s" % ext_name, "APPLY", default=""
+            backend.id, vmodel, loc_name or ".%s" % ext_name, "APPLY", default=""
         )
         if not default:
             default = Cache.get_model_field_attr(
-                backend_id,
+                backend.id,
                 actual_model,
                 loc_name or ".%s" % ext_name,
                 "APPLY",
@@ -1555,26 +1550,9 @@ class IrModelSynchro(models.Model):
         if ttype == "boolean":
             default = str2bool(default, True)
         spec = Cache.get_model_field_attr(
-            backend_id, vmodel, loc_name or ".%s" % ext_name, "SPEC", default=""
+            backend.id, vmodel, loc_name or ".%s" % ext_name, "SPEC", default=""
         )
         return default, apply4, spec
-
-    # def ref_is_in_queue(
-    #     self,
-    #     channel_id,
-    #     cache,
-    #     vmodel,
-    #     actual_model,
-    #     ext_ref,
-    #     vals,
-    #     loc_id=None,
-    #     ext_id=None,
-    # ):
-    #     if cache.id_is_in_cache(
-    #         channel_id, vmodel, actual_model, loc_id=loc_id, ext_id=ext_id
-    #     ):
-    #         return self.found_ref_in_queue(vmodel, vals, ext_ref)
-    #     return False
 
     def found_ref_in_queue(self, vmodel, vals, ext_ref):
         self.logmsg(
@@ -1584,22 +1562,6 @@ class IrModelSynchro(models.Model):
             ctx={"xid": vals[ext_ref]},
         )
         return True
-
-    # def pop_ref(self, backend_id, vmodel, actual_model, loc_id, ext_id):
-    #     Cache = self.env["ir.model.synchro.cache"]
-    #     Cache.pop_id(backend_id, vmodel, actual_model, loc_id=loc_id, ext_id=ext_id)
-    #     self.logmsg(
-    #         "debug",
-    #         "Pop %(model)s[%(id)s](%(xid)s) from queue!",
-    #         model=vmodel,
-    #         ctx={"id": loc_id, "xid": ext_id},
-    #     )
-
-    def reset_refs(self, backend_id, vmodel, actual_model):
-        if hasattr(self, "ref_stack"):
-            while len(self.ref_stack):
-                (loc_id, ext_id) = self.ref_stack.pop()
-                # self.pop_ref(backend_id, vmodel, actual_model, loc_id, ext_id)
 
     def drop_unuset_addresses(self, loc_id):
         for rec in self.env["res.partner"].search(
@@ -1617,30 +1579,36 @@ class IrModelSynchro(models.Model):
                     self.env.cr.rollback()  # pylint: disable=invalid-commit
                     break
 
-    def diff_parent(self, vals, actual_model):
+    def compare_vals_rec(self, vals, rec, spec):
         diff = False
-        if "parent_id" in vals:
-            parent = self.env[actual_model].browse(vals["parent_id"])
-            for nm in (
-                "name",
-                "street",
-                "zip",
-                "state_id",
-                "email",
-                "country_id",
-                "phone",
-            ):
-                if nm not in vals:
-                    continue
-                if nm.endswith("_id"):
-                    if getattr(parent, nm) and getattr(parent, nm).id != vals[nm]:
-                        diff = True
-                        break
-                else:
-                    if getattr(parent, nm) and getattr(parent, nm) != vals[nm]:
-                        diff = True
-                        break
+        fields = (
+            "street",
+            "zip",
+            "city",
+        ) if spec == "delivery" else (
+            "street",
+            "zip",
+            "city",
+            "state_id",
+            "email",
+            "country_id",
+            "phone",
+        )
+        for nm in fields:
+            if nm.endswith("_id"):
+                if getattr(rec, nm) and getattr(rec, nm).id != vals.get(nm, 0):
+                    diff = True
+                    break
+            else:
+                if getattr(rec, nm) and getattr(rec, nm) != vals.get(nm, False):
+                    diff = True
+                    break
         return diff
+
+    def diff_parent(self, vals, spec, rec=None):
+        parent = rec or (self.env["res.partner"].browse(vals["parent_id"])
+                         if "parent_id" in vals else rec)
+        return self.compare_vals_rec(vals, parent, spec) if parent else False
 
     def translate_from_to(
             self, tnldict, vmodel, src_value, ext_odoo_ver, fld_name=None):
@@ -1683,10 +1651,18 @@ class IrModelSynchro(models.Model):
                 vals[loc_name] = vals[ext_ref]
             if ext_ref in vals and loc_name != ext_ref:
                 del vals[ext_ref]
+            if (
+                loc_name in vals
+                and vals[loc_name] is False
+                and struct[loc_name]["type"] != "boolean"
+            ):
+                del vals[loc_name]
+            if loc_name in ctx and vals.get(loc_name):
+                ctx[loc_name] = vals[loc_name]
             return vals
 
         def do_apply(
-            backend_id,
+            backend,
             vals,
             loc_name,
             ext_ref,
@@ -1697,100 +1673,106 @@ class IrModelSynchro(models.Model):
             ctx=None,
         ):
             ir_apply = self.env["ir.model.synchro.apply"]
-            src = ext_ref
             for fct in apply4.split(","):
                 if fct == "apply_odoo_migrate":
                     ext_odoo_ver = self.get_ext_odoo_ver(ext_ref.split(":")[0])
-                    tnldict = self.get_tnldict(backend_id)
+                    tnldict = self.get_tnldict(backend.id)
                     if ext_odoo_ver:
                         vals[loc_name] = self.translate_from_to(
                             tnldict, vmodel, vals[ext_ref], ext_odoo_ver,
                             fld_name=loc_name)
                     else:
                         vals[loc_name] = vals[ext_ref]
-                    src = loc_name
                 elif hasattr(ir_apply, fct):
                     vals = getattr(ir_apply, fct)(
-                        backend_id,
+                        backend,
                         vals,
                         loc_name,
-                        src,
+                        ext_ref,
                         loc_ext_id_name,
                         vmodel,
                         default=default,
                     )
-                    src = loc_name
             return vals
 
-        def do_apply_n_clean(
-            backend_id,
-            vals,
-            loc_name,
-            ext_name,
-            ext_ref,
-            loc_ext_id_name,
-            apply4,
-            default,
-            is_foreign,
-            vmodel,
-            struct,
-            ctx=None,
-        ):
-            if ext_ref in vals and loc_name:
-                vals = do_apply(
-                    backend_id,
-                    vals,
-                    loc_name,
-                    ext_ref,
-                    loc_ext_id_name,
-                    apply4,
-                    default,
-                    vmodel,
-                    ctx=ctx,
-                )
-            actual_model = self.get_actual_model(vmodel, only_name=True)
-            vals = cast_type(vals, actual_model, loc_name, ext_ref, struct)
-            vals = rm_ext_value(vals, loc_name, ext_name, ext_ref, is_foreign)
-            return vals
-
-        def priority_fields(backend_id, vals, loc_ext_id, vmodel):
+        def priority_fields(struct, backend, vals, loc_ext_id, vmodel):
             Cache = self.env["ir.model.synchro.cache"]
+            ctx = Cache.get_attr(backend.id, "CTX") or {}
             child_ids = Cache.get_struct_model_attr(
                 actual_model, "CHILD_IDS", default=False
             )
             fields = vals.keys()
-            list_1 = []
-            list_2 = []
-            list_3 = []
-            list_6 = []
-            list_8 = []
-            list_9 = []
-            only_internal = True
+            for k, v in Cache.get_model_attr(backend.id, vmodel, "LOC_FIELDS").items():
+                if v == "id" or k == "id":
+                    continue
+                key = backend.prefix + ":" + v if v and not v.startswith(
+                    ".") else ":" + k
+                if key not in fields:
+                    fields.append(key)
+            list1 = []
+            list2 = []
+            list3 = []
+            list6 = []
+            list8 = []
+            list9 = []
+
             for ext_ref in fields:
+                if not Cache.is_struct(ext_ref):
+                    continue
                 ext_name, loc_name, is_foreign = self.name_from_ref(
                     backend_id, vmodel, ext_ref
                 )
-                if loc_name != ext_name:
-                    only_internal = False
+                default, apply4, spec = self.declared_default_n_apply(
+                    backend,
+                    vmodel,
+                    loc_name,
+                    ext_name,
+                    is_foreign,
+                    ttype=Cache.get_struct_model_field_attr(
+                        actual_model, ext_name, "ttype"
+                    ),
+                )
+                if (
+                        apply4 and apply4.startswith("apply_merge_")
+                        and isinstance(vals.get(ext_ref), dict)
+                ):
+                    vals = do_apply(
+                        backend,
+                        vals,
+                        loc_name,
+                        ext_ref,
+                        loc_ext_id_name,
+                        apply4,
+                        default,
+                        vmodel,
+                        ctx=ctx,
+                    )
+                    if ext_ref in vals:
+                        del vals[ext_ref]
+                    return vals
+
+            for ext_ref in fields:
+                ext_name, loc_name, is_foreign = self.name_from_ref(
+                    backend.id, vmodel, ext_ref
+                )
                 if loc_name in (loc_ext_id, "id"):
-                    list_1.append(ext_ref)
+                    list1.append(ext_ref)
                 elif loc_name in ("country_id", "company_id"):
-                    list_2.append(ext_ref)
+                    list2.append(ext_ref)
                 elif loc_name in (
                         "partner_id",
                         "street",
-                        "shipping",
-                        "billing",
                 ):
-                    list_3.insert(0, ext_ref)
+                    list3.append(ext_ref)
                 elif loc_name in (
                     "is_company",
                     "product_uom",
                     "partner_invoice_id",
                     "partner_shipping_id",
                     "electronic_invoice_subjected",
+                    "category_id",
                 ):
-                    list_8.append(ext_ref)
+                    list8.append(ext_ref)
                 elif loc_name in (
                         child_ids,
                         "firstname",
@@ -1802,10 +1784,10 @@ class IrModelSynchro(models.Model):
                         "pricelist_id",
                         "transportation_method_id",
                 ):
-                    list_9.append(ext_ref)
+                    list9.append(ext_ref)
                 else:
-                    list_6.append(ext_ref)
-            return (list_1 + list_2 + list_3 + list_6 + list_8 + list_9, only_internal)
+                    list6.append(ext_ref)
+            return list1 + list2 + list3 + list6 + list8 + list9
 
         def check_4_double_field_id(vals):
             for nm, nm_id in (
@@ -1832,23 +1814,24 @@ class IrModelSynchro(models.Model):
             return vals
 
         def cast_type(vals, actual_model, loc_name, ext_ref, struct):
-            if (
-                struct[loc_name]["type"] in (
-                    "many2one", "one2many", "many2many", "integer")
-                and isinstance(vals[ext_ref], basestring)
-                and (vals[ext_ref].isdigit() or vals[ext_ref] == "-1")
-            ):
-                vals[ext_ref] = int(vals[ext_ref])
-            elif (
-                struct[loc_name]["type"] == "boolean"
-                and isinstance(vals[ext_ref], basestring)
-            ):
-                vals[ext_ref] = str2bool(vals[ext_ref], True)
-            elif (
-                struct[loc_name]["type"] in ("float", "monetary")
-                and isinstance(vals[ext_ref], basestring)
-            ):
-                vals[ext_ref] = eval(vals[ext_ref].replace(",", "."))
+            if ext_ref in vals:
+                if (
+                    struct[loc_name]["type"] in (
+                        "many2one", "one2many", "many2many", "integer")
+                    and isinstance(vals[ext_ref], basestring)
+                    and (vals[ext_ref].isdigit() or vals[ext_ref] == "-1")
+                ):
+                    vals[ext_ref] = int(vals[ext_ref])
+                elif (
+                    struct[loc_name]["type"] == "boolean"
+                    and isinstance(vals[ext_ref], basestring)
+                ):
+                    vals[ext_ref] = str2bool(vals[ext_ref], True)
+                elif (
+                    struct[loc_name]["type"] in ("float", "monetary")
+                    and isinstance(vals[ext_ref], basestring)
+                ):
+                    vals[ext_ref] = eval(vals[ext_ref].replace(",", "."))
             return vals
 
         backend_id = backend.id
@@ -1863,9 +1846,14 @@ class IrModelSynchro(models.Model):
         model_child = Cache.get_struct_model_attr(actual_model, "MODEL_CHILD")
         parent_child_mode = "A" if child_ids and model_child else ""
         vals = check_4_double_field_id(vals)
-        field_list, only_internal = priority_fields(
-            backend_id, vals, loc_ext_id_name, vmodel
+        field_list = priority_fields(
+            struct, backend, vals, loc_ext_id_name, vmodel
         )
+        if isinstance(field_list, dict):
+            return self.map_to_internal(
+                struct, backend, vmodel, field_list,
+                no_deep_fields=no_deep_fields, only_minimal=only_minimal)
+
         ctx = Cache.get_attr(backend_id, "CTX") or {}
         ctx["ext_key_id"] = counterpart_pk
         # ref_in_queue = False
@@ -1875,14 +1863,14 @@ class IrModelSynchro(models.Model):
             ext_name, loc_name, is_foreign = self.name_from_ref(
                 backend_id, vmodel, ext_ref
             )
+
             if loc_name == "company_id" and ctx.get("company_id"):
-                vals["company_id"] = ctx["company_id"]
-                if ext_ref in vals:
-                    del vals[ext_ref]
+                vals[loc_name] = ctx["company_id"]
+                vals = rm_ext_value(vals, loc_name, ext_name, ext_ref, is_foreign)
                 continue
 
-            default, apply4, spec = self.get_default_n_apply(
-                backend_id,
+            default, apply4, spec = self.declared_default_n_apply(
+                backend,
                 vmodel,
                 loc_name,
                 ext_name,
@@ -1891,12 +1879,34 @@ class IrModelSynchro(models.Model):
                     actual_model, ext_name, "ttype"
                 ),
             )
-            if (
-                (not loc_name or loc_name not in struct)
-                and is_foreign and apply4
-            ):
+
+            if not loc_name or loc_name not in struct:
+                if is_foreign and apply4:
+                    vals = do_apply(
+                        backend,
+                        vals,
+                        loc_name,
+                        ext_ref,
+                        loc_ext_id_name,
+                        apply4,
+                        default,
+                        vmodel,
+                        ctx=ctx,
+                    )
+                vals = rm_ext_value(vals, loc_name, ext_name, ext_ref, is_foreign)
+                continue
+
+            if ext_ref in vals and isinstance(vals[ext_ref], basestring):
+                vals[ext_ref] = vals[ext_ref].strip()
+                if vals[ext_ref]:
+                    vals[ext_ref] = self.get_alias(
+                        actual_model, loc_name, vals[ext_ref],
+                        type=struct[loc_name]["type"])
+
+            vals = cast_type(vals, actual_model, loc_name, ext_ref, struct)
+            if apply4:
                 vals = do_apply(
-                    backend_id,
+                    backend,
                     vals,
                     loc_name,
                     ext_ref,
@@ -1906,50 +1916,10 @@ class IrModelSynchro(models.Model):
                     vmodel,
                     ctx=ctx,
                 )
-            if apply4 and apply4.startswith("apply_merge_"):
-                if "vg7_id" in vals:
-                    vals["vg7:id"] = vals["vg7_id"]
-                    del vals["vg7_id"]
-                if ext_ref in vals:
-                    del vals[ext_ref]
-                return self.map_to_internal(
-                    struct, backend, vmodel, vals,
-                    no_deep_fields=no_deep_fields, only_minimal=only_minimal)
-            if not loc_name or loc_name not in struct:
+
+            if not vals.get(ext_ref):
                 vals = rm_ext_value(vals, loc_name, ext_name, ext_ref, is_foreign)
                 continue
-
-            if (
-                loc_name
-                and ext_ref in vals
-                and vals[ext_ref]
-                and isinstance(vals[ext_ref], basestring)
-            ):
-                vals[ext_ref] = self.get_alias(actual_model, loc_name, vals[ext_ref],
-                                               type=struct[loc_name]["type"])
-
-            if not vals[ext_ref] or (isinstance(vals[ext_ref], basestring)
-                                     and not vals[ext_ref].strip()):
-                if isinstance(vals[ext_ref], basestring):
-                    vals[ext_ref] = vals[ext_ref].strip()
-                if is_foreign and apply4:
-                    vals = do_apply_n_clean(
-                        backend_id,
-                        vals,
-                        loc_name,
-                        ext_name,
-                        ext_ref,
-                        loc_ext_id_name,
-                        apply4,
-                        default,
-                        is_foreign,
-                        vmodel,
-                        struct,
-                        ctx=ctx,
-                    )
-                    continue
-
-            vals = cast_type(vals, actual_model, loc_name, ext_ref, struct)
 
             if loc_name == child_ids:
                 lines = []
@@ -1961,42 +1931,31 @@ class IrModelSynchro(models.Model):
                 Cache.set_model_attr(
                     backend_id, vmodel, "__%s_ids" % actual_model, lines
                 )
-                del vals[ext_ref]
                 parent_child_mode = "B"
+                del vals[ext_ref]
                 continue
 
-            elif is_foreign:
-                if loc_name in vals or loc_name == "id":
-                    # If counterpart partner supplies both
-                    # local and external values, just process local value
-                    del vals[ext_ref]
-                    continue
-                if loc_name == loc_ext_id_name:
+            if is_foreign:
+                if loc_name in (loc_ext_id_name, "id"):
                     # Field like <vg7_id> with external ID in local DB
-                    vals[ext_ref] = self.get_loc_ext_id_value(
-                        backend_id, vmodel, vals[ext_ref]
-                    )
+                    if loc_name in vals:
+                        vals[loc_name] = self.get_loc_ext_id_value(
+                            backend_id, vmodel, vals[loc_name]
+                        )
+                    else:
+                        vals[ext_ref] = self.get_loc_ext_id_value(
+                            backend_id, vmodel, vals[ext_ref]
+                        )
                     vals = rm_ext_value(vals, loc_name, ext_name, ext_ref, is_foreign)
                     continue
 
-                if is_foreign and apply4:
-                    vals = do_apply(
-                        backend_id,
-                        vals,
-                        loc_name,
-                        ext_ref,
-                        loc_ext_id_name,
-                        apply4,
-                        default,
-                        vmodel,
-                        ctx=ctx,
-                    )
-                    if loc_name in vals and vals[loc_name]:
-                        vals = rm_ext_value(
-                            vals, loc_name, ext_name, ext_ref, is_foreign)
-                        continue
+                if loc_name in vals:
+                    # If counterpart partner supplies both
+                    # local and external values, just process local value
+                    vals = rm_ext_value(vals, loc_name, ext_name, ext_ref, is_foreign)
+                    continue
 
-                if struct[loc_name]["type"] in (
+                if ext_ref in vals and struct[loc_name]["type"] in (
                         "many2one",
                         "one2many",
                         "many2many",
@@ -2010,79 +1969,31 @@ class IrModelSynchro(models.Model):
                     else:
                         condition = "exclude"
                     if (
-                        # ref_in_queue
                         (condition == "include" and loc_name not in no_deep_fields)
                         or (condition == "exclude" and loc_name in no_deep_fields)
                     ):
-                        if loc_name in vals and (
-                            not vals[loc_name]
-                            or (
-                                isinstance(vals[loc_name], basestring)
-                                and not vals[loc_name].isdigit()
-                            )
-                        ):
-                            del vals[loc_name]
-                        if ext_ref in vals and ext_ref != loc_name:
+                        if ext_ref in vals:
                             del vals[ext_ref]
-                    else:
-                        loc_id = self.get_foreign_value(
-                            backend,
-                            vmodel,
-                            vals[ext_ref],
-                            loc_name,
-                            is_foreign,
-                            struct,
-                            ctx=ctx,
-                            spec=spec,
-                            fmt="cmd",
-                        )
-                        if isinstance(loc_id, (tuple, list)):
-                            vals[loc_name] = loc_id
-                        elif loc_id > 0:
-                            vals[loc_name] = loc_id
-                        elif loc_name:
-                            vals[loc_name] = False
-                        vals = rm_ext_value(
-                            vals, loc_name, ext_name, ext_ref, is_foreign)
-                else:
-                    vals = do_apply_n_clean(
-                        backend_id,
-                        vals,
-                        loc_name,
-                        ext_name,
-                        ext_ref,
-                        loc_ext_id_name,
-                        apply4,
-                        default,
-                        is_foreign,
+                        continue
+                    loc_id = self.get_foreign_value(
+                        backend,
                         vmodel,
+                        vals[ext_ref],
+                        loc_name,
+                        is_foreign,
                         struct,
                         ctx=ctx,
+                        spec=spec,
+                        fmt="cmd",
                     )
-                continue
-            else:
-                vals = do_apply_n_clean(
-                    backend_id,
-                    vals,
-                    loc_name,
-                    ext_name,
-                    ext_ref,
-                    loc_ext_id_name,
-                    apply4,
-                    default,
-                    is_foreign,
-                    vmodel,
-                    struct,
-                    ctx=ctx,
-                )
-            if (
-                loc_name in vals
-                and vals[loc_name] is False
-                and struct[loc_name]["type"] != "boolean"
-            ):
-                del vals[loc_name]
-            if loc_name in ctx and vals.get(loc_name):
-                ctx[loc_name] = vals[loc_name]
+                    if isinstance(loc_id, (tuple, list)):
+                        vals[loc_name] = loc_id
+                    elif loc_id > 0:
+                        vals[loc_name] = loc_id
+                    elif loc_name:
+                        vals[loc_name] = False
+            vals = rm_ext_value(
+                vals, loc_name, ext_name, ext_ref, is_foreign)
 
         prefix = self.env["ir.model.synchro.cache"].get_attr(backend_id, "PREFIX")
         for loc_name in vals.copy().keys():
@@ -2121,8 +2032,8 @@ class IrModelSynchro(models.Model):
                     ext_name = Cache.get_model_field_attr(
                         backend.id, vmodel, loc_name, "LOC_FIELDS"
                     )
-                    default, apply4, spec = self.get_default_n_apply(
-                        backend.id, vmodel, loc_name, ext_name, is_foreign, ttype=ttype
+                    default, apply4, spec = self.declared_default_n_apply(
+                        backend, vmodel, loc_name, ext_name, is_foreign, ttype=ttype
                     )
                     required = Cache.get_struct_model_field_attr(
                         actual_model, field, "required"
@@ -2229,6 +2140,9 @@ class IrModelSynchro(models.Model):
                     model=actual_model,
                     ctx={"id": loc_ext_id_name},
                 )
+        if not rec and vmodel in ("res.partner.shipping",
+                                  "res.partner.invoice"):
+            return -9, None
         if not rec:
             parent_id_name = Cache.get_struct_model_attr(actual_model, "PARENT_ID")
             found_valid_key = True if parent_id_name else False
@@ -2588,17 +2502,11 @@ class IrModelSynchro(models.Model):
                     continue
                 row_id += 1
                 row_res = {counterpart_pk: row_id}
-                row_billing = {}
-                row_shipping = {}
-                row_contact = {}
+                # row_billing = {}
+                # row_shipping = {}
+                # row_contact = {}
                 for ix, value in enumerate(row):
                     if (
-                        isinstance(value, basestring)
-                        and value.isdigit()
-                        and not value.startswith("0")
-                    ):
-                        value = int(value)
-                    elif (
                         isinstance(value, basestring)
                         and value.startswith("[")
                         and value.endswith("]")
@@ -2608,28 +2516,28 @@ class IrModelSynchro(models.Model):
                         if not value:
                             continue
                         row_id = value
-                    if hdr[ix].startswith("billing_"):
-                        row_billing[hdr[ix]] = value
-                    elif hdr[ix].startswith("shipping_"):
-                        row_shipping[hdr[ix]] = value
-                    elif hdr[ix].startswith("contact_"):
-                        row_contact[hdr[ix]] = value
-                    else:
-                        row_res[hdr[ix]] = value
-                if row_billing:
-                    if vmodel == "res.partner.invoice":
-                        row_res = row_billing
-                    else:
-                        row_res["billing"] = row_billing
-                if row_shipping:
-                    if vmodel == "res.partner.shipping":
-                        for nm in ("customer_shipping_id", "customer_id"):
-                            row_shipping[nm] = row_res[nm]
-                        row_res = row_shipping
-                    else:
-                        row_res["shipping"] = row_shipping
-                if row_contact:
-                    row_res["contact"] = row_contact
+                    # if hdr[ix].startswith("billing_"):
+                    #     row_billing[hdr[ix]] = value
+                    # elif hdr[ix].startswith("shipping_"):
+                    #     row_shipping[hdr[ix]] = value
+                    # elif hdr[ix].startswith("contact_"):
+                    #     row_contact[hdr[ix]] = value
+                    # else:
+                    #     row_res[hdr[ix]] = value
+                # if row_billing:
+                #     if vmodel == "res.partner.invoice":
+                #         row_res = row_billing
+                #     else:
+                #         row_res["billing"] = row_billing
+                # if row_shipping:
+                #     if vmodel == "res.partner.shipping":
+                #         for nm in ("customer_shipping_id", "customer_id"):
+                #             row_shipping[nm] = row_res[nm]
+                #         row_res = row_shipping
+                #     else:
+                #         row_res["shipping"] = row_shipping
+                # if row_contact:
+                #     row_res["contact"] = row_contact
                 if ext_id and row_res[counterpart_pk] != ext_id:
                     continue
                 if ext_id:
@@ -2826,7 +2734,7 @@ class IrModelSynchro(models.Model):
             return id, rec
 
         vals = unicodes(vals)
-        saved_vals = vals.copy()
+        jvals = vals.copy()
         vmodel = cls._name
         actual_model = self.get_actual_model(vmodel, only_name=True)
         struct = self.env[actual_model].fields_get()
@@ -2845,17 +2753,13 @@ class IrModelSynchro(models.Model):
             },
         )
         backend_id = backend.id
-        identity = Cache.get_attr(backend_id, "IDENTITY")
+        # identity = Cache.get_attr(backend_id, "IDENTITY")
         Cache.open(
             model=vmodel,
             cls=cls,
             backend=backend,
         )
         no_deep_fields = no_deep_fields or []
-        if identity != "vg7":
-            self.DEF_INCL_FLDS = list(set(self.DEF_INCL_FLDS) | set(["company_id"]))
-        else:
-            self.DEF_INCL_FLDS = list(set(self.DEF_INCL_FLDS) - set(["company_id"]))
         if "*" in no_deep_fields:
             no_deep_fields = list(set(no_deep_fields) - set(self.DEF_EXCL_FLDS))
             no_deep_fields = list(set(no_deep_fields) | set(self.DEF_INCL_FLDS))
@@ -2942,14 +2846,10 @@ class IrModelSynchro(models.Model):
                         logrec=self.logrec, id=loc_id)
             return loc_id
         if (
-            Cache.get_attr(backend_id, "IDENTITY") == "vg7"
-            and not rec
-            and actual_model == "res.partner"
-            and spec in ("delivery", "invoice")
+            vmodel in ("res.partner.shipping", "res.partner.invoice")
+            and not self.diff_parent(vals, spec)
         ):
-            if not self.diff_parent(vals, actual_model):
-                self.reset_refs(backend_id, vmodel, actual_model)
-                return 0
+            vals["active"] = False
         if has_state:
             vals, erc = self.set_state_to_draft(struct, vmodel, rec, vals)
             if erc < 0:
@@ -3003,7 +2903,7 @@ class IrModelSynchro(models.Model):
                     model=vmodel,
                     logrec=self.logrec,
                     rec=rec,
-                    ctx={"e": e, "val": saved_vals},
+                    ctx={"e": e, "val": jvals},
                 )
                 rec = None
             if rec:
@@ -3035,7 +2935,7 @@ class IrModelSynchro(models.Model):
                             model=vmodel,
                             logrec=self.logrec,
                             rec=rec,
-                            ctx={"e": e, "val": saved_vals},
+                            ctx={"e": e, "val": jvals},
                         )
                         # pop_ref(backend_id, vmodel, actual_model, loc_id, ext_id)
                         return -2
@@ -3074,6 +2974,11 @@ class IrModelSynchro(models.Model):
                                 ctx={"e": e, "val": child_vals},
                             )
 
+        if (
+            rec and vmodel in ("res.partner.shipping", "res.partner.invoice")
+            and "active" in vals and vals["active"] != rec.active
+        ):
+            rec.write({"active": vals["active"]})
         # commit to avoid lost data in recursive write
         self.env.cr.commit()  # pylint: disable=invalid-commit
 

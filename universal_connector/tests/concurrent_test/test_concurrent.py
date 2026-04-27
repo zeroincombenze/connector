@@ -28,8 +28,8 @@ All data (dirty, match and counterpaty instance) are stored in csv files, locate
 tests/data path which has the following structure:
     tests/data/dirty -> files with dirty values to load before test
     tests/data/match -> files with expected results
-    tests/data/oe8 -> files with simulated counterpaty Odoo8 instance
-    tests/data/vg7 -> files with simulated counterpaty vg7 instance
+    tests/data/oe8 -> files with simulated counterparty Odoo8 instance
+    tests/data/vg7 -> files with simulated counterparty vg7 instance
 
 Every csv file has the same name of the counterparty model and contains header
 counterparty names required by instance; i.e. "res,partner" model has "res.partner.csv"
@@ -921,6 +921,13 @@ class ExtTestEnv(object):
             company.partner_id.id,
             {"lang": self.lang},
             xref="z0bug.partner_mycompany")
+
+        vals = {
+            "group_uom": 1,
+            "group_sale_delivery_address": 1,
+        }
+        config_id = clodoo.createL8(self.ctx, "sale.config.settings", {})
+        clodoo.writeL8(self.ctx, "sale.config.settings", config_id, vals)
         if self.database != os.environ.get("TEST_DB", self.database):
             print_flush("# Activate Developer Mode and create full test environment")
             print_flush("#     lang=it_IT, no new company, CoA=Zero,%s CONAI ..."
@@ -944,33 +951,33 @@ class ExtTestEnv(object):
             if backend.state != "draft":
                 clodoo.executeL8(
                     self.ctx, model, "button_reset_to_draft", backend.id)
-            if backend.prefix == "oe10":
-                clodoo.writeL8(
-                    self.ctx,
-                    model,
-                    backend.id,
-                    {
-                        "method": "JSON",
-                        "client_key": "oca10",
-                        "password": "admin",
-                        "counterpart_url": "admin@localhost:8270",
-                        # "sequence": 10,
-                        "tracelevel": "4"
-                    },
-                )
-            else:
-                clodoo.writeL8(
-                    self.ctx,
-                    model,
-                    backend.id,
-                    {
-                        "method": "CSV",
-                        "exchange_path": self.get_exchange_path(backend.prefix),
-                        "tracelevel": "4",
-                        "ignore_child_lines": False,
-                        "renum_lines": True,
-                    },
-                )
+            # if backend.prefix == "oe10":
+            #     clodoo.writeL8(
+            #         self.ctx,
+            #         model,
+            #         backend.id,
+            #         {
+            #             "method": "JSON",
+            #             "client_key": "oca10",
+            #             "password": "admin",
+            #             "counterpart_url": "admin@localhost:8270",
+            #             # "sequence": 10,
+            #             "tracelevel": "4"
+            #         },
+            #     )
+            # else:
+            clodoo.writeL8(
+                self.ctx,
+                model,
+                backend.id,
+                {
+                    "method": "CSV",
+                    "exchange_path": self.get_exchange_path(backend.prefix),
+                    "tracelevel": "4",
+                    "ignore_child_lines": False,
+                    "renum_lines": True,
+                },
+            )
             clodoo.executeL8(
                 self.ctx, model, "button_check_connection", backend.id)
             backend = clodoo.browseL8(self.ctx, model, backend.id)
@@ -1728,6 +1735,11 @@ class ExtTestEnv(object):
                             del child_ext_rec["customer_id"]
                         if rec_id != "id" and "customer_shipping_id" in child_ext_rec:
                             del child_ext_rec["customer_shipping_id"]
+                        if rec_id != "id":
+                            for key in ext_rec.keys():
+                                if key.startswith(child_field):
+                                    child_ext_rec[key] = ext_rec[key]
+                                    del ext_rec[key]
                         if not multi:
                             ext_rec[child_field] = child_ext_rec
                         else:
@@ -1946,6 +1958,7 @@ class ExtTestEnv(object):
                 loc_id = self.test_function_trigger(
                     model, ext_model, identity=identity, ext_id=ext_id
                 )
+            # continue    #debug
             if loc_id < 0:
                 raise IOError(
                     "Error %d processing %s=%s" % (loc_id, ext_id_field, ext_id))
@@ -2036,12 +2049,12 @@ def main(cli_args=[]):
     MODELS = (
         "res.country",
         "res.country.state",
+        "account.tax",
+        "account.payment.term",
         "res.partner",
         "res.partner.supplier",
         "product.uom",
         "product.product",
-        "account.tax",
-        "account.payment.term",
         "stock.picking.transportation_reason",
         "sale.order",
         # "purchase.order",

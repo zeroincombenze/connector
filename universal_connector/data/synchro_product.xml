@@ -12,7 +12,7 @@
                ['barcode'],
                ['dim_name'],)</field>
         <field name="synchro_channel_id" ref="channel_vg7"/>
-        <field name="cron_sync">True</field>
+        <field name="cron_sync" eval="True"/>
         <field name="sequence">10</field>
     </record>
 
@@ -31,7 +31,7 @@
     <record forcecreate="1" id="product_uom" model="synchro.channel.model">
         <field name="name">product.uom</field>
         <field name="field_uname">name</field>
-        <field name="cron_sync">True</field>
+        <field name="cron_sync" eval="True"/>
         <field name="counterpart_name">ums</field>
         <field name="search_keys">(['name'])</field>
         <field name="sequence">9</field>
@@ -108,24 +108,28 @@
     <record forcecreate="1" id="product_uom_type" model="synchro.channel.model.fields">
         <field name="name">uom_type</field>
         <field name="apply">reference</field>
+        <field name="protect_update">2</field>
         <field name="model_id" ref="product_uom"/>
     </record>
 
     <record forcecreate="1" id="product_uom_factor" model="synchro.channel.model.fields">
         <field name="name">factor</field>
         <field name="apply">1</field>
+        <field name="protect_update">2</field>
         <field name="model_id" ref="product_uom"/>
     </record>
 
     <record forcecreate="1" id="product_uom_rounding" model="synchro.channel.model.fields">
         <field name="name">rounding</field>
         <field name="apply">0.00000001</field>
+        <field name="protect_update">2</field>
         <field name="model_id" ref="product_uom"/>
     </record>
 
     <record forcecreate="1" id="product_uom_category_id" model="synchro.channel.model.fields">
         <field name="name">category_id</field>
-        <field name="apply" ref="product.product_uom_categ_unit"/>
+        <field name="apply">category_uom()</field>
+        <field name="protect_update">2</field>
         <field name="model_id" ref="product_uom"/>
     </record>
 

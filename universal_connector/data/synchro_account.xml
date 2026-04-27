@@ -22,7 +22,7 @@
         <field name="counterpart_name">payments</field>
         <field name="field_uname">name</field>
         <field name="search_keys">(['name'],)</field>
-        <field name="cron_sync">True</field>
+        <field name="cron_sync" eval="True"/>
         <field name="sequence">8</field>
         <field name="synchro_channel_id" ref="channel_vg7"/>
     </record>

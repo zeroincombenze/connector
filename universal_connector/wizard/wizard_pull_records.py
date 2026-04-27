@@ -75,10 +75,10 @@ class WizardExportFatturapa(models.TransientModel):
         only_model = None
         no_deep_fields = None
         only_minimal = False
-        if self.nesting_level != "all":
+        if self.nesting_level == "all":
             no_deep_fields = ["*"]
-            if self.nesting_level == "min":
-                only_minimal = True
+        elif self.nesting_level == "min":
+            only_minimal = True
         if self.ir_model_id:
             only_model = ir_model.browse(self.ir_model_id.id).model
         if self.sel_rec == "unk":

@@ -13,7 +13,7 @@ import re
 import itertools
 
 from odoo import fields, models
-from odoo import release
+# from odoo import release
 
 _logger = logging.getLogger(__name__)
 
@@ -21,10 +21,10 @@ try:
     from os0 import os0
 except ImportError as err:
     _logger.error(err)
-try:
-    from clodoo import transodoo
-except ImportError as err:
-    _logger.error(err)
+# try:
+#     from clodoo import transodoo
+# except ImportError as err:
+#     _logger.error(err)
 
 
 def split_fragments(text, maxctr=3, minlen=2):
@@ -65,7 +65,7 @@ class IrModelSynchroApply(models.Model):
 
     def apply_set_value(
         self,
-        backend_id,
+        backend,
         vals,
         loc_name,
         ext_ref,
@@ -74,16 +74,13 @@ class IrModelSynchroApply(models.Model):
         default=None,
         ctx=None,
     ):
-        if loc_name not in vals:
-            if vals.get(ext_ref):
-                vals[loc_name] = vals[ext_ref]
-            elif default:
-                vals[loc_name] = default
+        if not vals.get(ext_ref) and default:
+            vals[ext_ref] = default
         return vals
 
     def apply_set_tmp_name(
         self,
-        backend_id,
+        backend,
         vals,
         loc_name,
         ext_ref,
@@ -92,28 +89,25 @@ class IrModelSynchroApply(models.Model):
         default=None,
         ctx=None,
     ):
-        if loc_name in vals and vals[loc_name]:
+        if vals.get(ext_ref) or loc_name in vals and vals[loc_name]:
             return vals
-        if vals.get("type") in ("delivery", "invoice"):
+        if loc_name == "name" and vals.get("type") in ("delivery", "invoice"):
             return vals
-        if vals.get(ext_ref):
-            vals[loc_name] = vals[ext_ref]
-        elif default:
-            vals[loc_name] = default
-        elif loc_ext_id_name in vals:
-            if not isinstance(vals[loc_ext_id_name], (int, long)):
-                vals[loc_ext_id_name] = int(vals[loc_ext_id_name])
+        if not vals.get(ext_ref) and default:
+            vals[ext_ref] = default
+        if ext_ref in vals:
+            if loc_name == loc_ext_id_name:
+                if isinstance(vals[ext_ref], basestring):
+                    vals[ext_ref] = int(vals[ext_ref])
             if loc_name == "code":
-                vals[loc_name] = "%s" % vals[loc_ext_id_name]
+                vals[ext_ref] = "Code %s" % vals[ext_ref]
             else:
-                vals[loc_name] = "Unknown %s" % vals[loc_ext_id_name]
-        else:
-            vals[loc_name] = "Unknown"
+                vals[ext_ref] = "Unknown %s" % vals[ext_ref]
         return vals
 
     def apply_upper(
         self,
-        backend_id,
+        backend,
         vals,
         loc_name,
         ext_ref,
@@ -122,16 +116,13 @@ class IrModelSynchroApply(models.Model):
         default=None,
         ctx=None,
     ):
-        if ext_ref in vals:
-            if isinstance(vals[ext_ref], basestring):
-                vals[loc_name] = vals[ext_ref].upper()
-            else:
-                vals[loc_name] = vals[ext_ref]
+        if ext_ref in vals and isinstance(vals[ext_ref], basestring):
+            vals[ext_ref] = vals[ext_ref].upper()
         return vals
 
     def apply_lower(
         self,
-        backend_id,
+        backend,
         vals,
         loc_name,
         ext_ref,
@@ -140,16 +131,13 @@ class IrModelSynchroApply(models.Model):
         default=None,
         ctx=None,
     ):
-        if ext_ref in vals:
-            if isinstance(vals[ext_ref], basestring):
-                vals[loc_name] = vals[ext_ref].lower()
-            else:
-                vals[loc_name] = vals[ext_ref]
+        if ext_ref in vals and isinstance(vals[ext_ref], basestring):
+            vals[ext_ref] = vals[ext_ref].lower()
         return vals
 
     def apply_bool(
         self,
-        backend_id,
+        backend,
         vals,
         loc_name,
         ext_ref,
@@ -159,12 +147,12 @@ class IrModelSynchroApply(models.Model):
         ctx=None,
     ):
         if ext_ref in vals:
-            vals[loc_name] = os0.str2bool(vals[ext_ref], False)
+            vals[ext_ref] = os0.str2bool(vals[ext_ref], False)
         return vals
 
     def apply_str(
         self,
-        backend_id,
+        backend,
         vals,
         loc_name,
         ext_ref,
@@ -179,7 +167,7 @@ class IrModelSynchroApply(models.Model):
 
     def apply_not(
         self,
-        backend_id,
+        backend,
         vals,
         loc_name,
         ext_ref,
@@ -190,14 +178,14 @@ class IrModelSynchroApply(models.Model):
     ):
         if ext_ref in vals:
             if isinstance(vals[ext_ref], (int, long, bool)):
-                vals[loc_name] = not vals[ext_ref]
+                vals[ext_ref] = not vals[ext_ref]
             else:
-                vals[loc_name] = not os0.str2bool(vals[ext_ref], True)
+                vals[ext_ref] = not os0.str2bool(vals[ext_ref], True)
         return vals
 
     def apply_person(
         self,
-        backend_id,
+        backend,
         vals,
         loc_name,
         ext_ref,
@@ -206,71 +194,44 @@ class IrModelSynchroApply(models.Model):
         default=None,
         ctx=None,
     ):
-        """First name and/or last name"""
-        if ext_ref in vals and loc_name != ext_ref:
+        """First name and/or last name (they are latest fields processed)"""
+        if loc_name and ext_ref in vals:
             vals[loc_name] = vals[ext_ref]
             del vals[ext_ref]
-        if (
-            "firstname" in vals
-            and "lastname" in vals
-            and (vals["firstname"] or vals["lastname"])
-        ):
+        if vals.get("firstname") or vals.get("lastname"):
             if (
                 not vals.get("name")
                 or vals.get("name", "").startswith("Unknown")
-                or (vals["lastname"] and vals["lastname"] in vals.get("name", ""))
-                or (vals["firstname"] and vals["firstname"] in vals.get("name", ""))
+                or (vals.get("lastname") and vals["lastname"] in vals.get("name", ""))
+                or (vals.get("firstname") and vals["firstname"] in vals.get("name", ""))
             ):
                 if self.env.user.company_id.partner_id.splitmode.startswith("F"):
                     vals["name"] = (
-                        vals["firstname"]
+                        vals.get("firstname", "")
                         + " "
-                        + vals["lastname"]
+                        + vals.get("lastname", "")
                     ).replace("  ", " ").strip()
                 else:
                     vals["name"] = (
-                        vals["lastname"]
+                        vals.get("lastname", "")
                         + " "
-                        + vals["firstname"]
+                        + vals.get("firstname", "")
                     ).replace("  ", " ").strip()
-                vals["is_company"] = True
-                if vals["firstname"] and vals["lastname"]:
-                    vals["individual"] = True
-                else:
-                    vals["individual"] = False
+                vals["individual"] = True if vals.get(
+                    "firstname") and vals.get("lastname") else False
+        if "firstname" in vals and "lastname" in vals:
             del vals["firstname"]
             del vals["lastname"]
-        elif (
-            not vals.get("name")
-            or vals.get("individual")
-        ):
-            if self.env.user.company_id.partner_id.splitmode.startswith("F"):
-                vals["name"] = (
-                    (vals.get("name") or "")
-                    + " "
-                    + (vals.get("firstname") or "")
-                    + " "
-                    + (vals.get("lastname") or "")
-                ).replace("  ", " ").strip()
-            else:
-                vals["name"] = (
-                    (vals.get("name") or "")
-                    + " "
-                    + (vals.get("lastname") or "")
-                    + " "
-                    + (vals.get("firstname") or "")
-                ).replace("  ", " ").strip()
-            if not vals["name"] and vals.get("individual"):
-                vals = self.apply_set_tmp_name(
-                    backend_id, vals, "name", ext_ref, loc_ext_id_name
-                )
-            vals["is_company"] = True
+        if vals.get("type") in ("delivery", "invoice"):
             vals["individual"] = False
+            vals["is_company"] = False
+        else:
+            vals["is_company"] = True
         return vals
 
     def apply_vat(
         self,
-        backend_id,
+        backend,
         vals,
         loc_name,
         ext_ref,
@@ -282,20 +243,15 @@ class IrModelSynchroApply(models.Model):
         """External vat may not contain ISO code"""
         if ext_ref in vals:
             if isinstance(vals[ext_ref], basestring):
-                vals[ext_ref] = vals[ext_ref].strip()
                 if len(vals[ext_ref]) == 11 and vals[ext_ref].isdigit():
-                    vals[loc_name] = "IT%s" % vals[ext_ref]
-                elif vals[ext_ref]:
-                    vals[loc_name] = vals[ext_ref]
+                    vals[ext_ref] = "IT%s" % vals[ext_ref]
                 if vmodel == "res.partner":
                     vals["individual"] = False
-            elif vals[ext_ref]:
-                vals[loc_name] = vals[ext_ref]
         return vals
 
     def apply_street_number(
         self,
-        backend_id,
+        backend,
         vals,
         loc_name,
         ext_ref,
@@ -312,12 +268,11 @@ class IrModelSynchroApply(models.Model):
                 loc_name = "%s:street" % ext_ref[0:3]
             if loc_name in vals and vals[loc_name] and vals[ext_ref]:
                 vals[loc_name] = "%s, %s" % (vals[loc_name], vals[ext_ref])
-            del vals[ext_ref]
         return vals
 
     def apply_decode(
         self,
-        backend_id,
+        backend,
         vals,
         loc_name,
         ext_ref,
@@ -327,12 +282,69 @@ class IrModelSynchroApply(models.Model):
         ctx=None,
     ):
         if ext_ref in vals and isinstance(vals[ext_ref], basestring):
-            vals[loc_name] = vals[ext_ref].replace("\r", "")
+            vals[ext_ref] = vals[ext_ref].replace("\r", "")
+        return vals
+    #
+    # def apply_account(
+    #     self,
+    #     backend,
+    #     vals,
+    #     loc_name,
+    #     ext_ref,
+    #     loc_ext_id_name,
+    #     vmodel,
+    #     default=None,
+    #     ctx=None,
+    #     product=None,
+    # ):
+    #     if (
+    #             (loc_name not in vals or not vals.get(loc_name))
+    #             and (product or "product_id" in vals)
+    #     ):
+    #         product = product or self.env["product.product"].browse(
+    #           vals["product_id"])
+    #         accounts = product.product_tmpl_id._get_product_accounts()
+    #         if accounts:
+    #             if self.is_purchase(vals, vmodel):
+    #                 vals[loc_name] = accounts["expense"].id
+    #             else:
+    #                 vals[loc_name] = accounts["income"].id
+    #         else:
+    #             if "journal_id" in vals:
+    #                 journal_id = vals["journal_id"]
+    #             else:
+    #                 journal_id = self.env["account.invoice"]._default_journal()
+    #             journal = self.env["account.journal"].browse(journal_id)
+    #             if self.is_purchase(vals, vmodel):
+    #                 vals[loc_name] = journal.default_debit_account_id.id
+    #             else:
+    #                 vals[loc_name] = journal.default_credit_account_id.id
+    #     return vals
+
+    def apply_uom(
+        self,
+        backend,
+        vals,
+        loc_name,
+        ext_ref,
+        loc_ext_id_name,
+        vmodel,
+        default=None,
+        ctx=None,
+        product=None,
+    ):
+        if (loc_name not in vals or not vals.get(loc_name)) and not vals.get(ext_ref):
+            if product or "product_id" in vals:
+                product = product or self.env["product.product"].browse(
+                    vals["product_id"])
+                vals[ext_ref] = product.uom_id.id
+            else:
+                vals[ext_ref] = self.env.ref("product.product_uom_unit").id
         return vals
 
-    def apply_account(
+    def apply_category_uom(
         self,
-        backend_id,
+        backend,
         vals,
         loc_name,
         ext_ref,
@@ -343,52 +355,19 @@ class IrModelSynchroApply(models.Model):
         product=None,
     ):
         if (
-                (loc_name not in vals or not vals.get(loc_name))
-                and (product or "product_id" in vals)
+            (loc_name not in vals or not vals.get(loc_name)) and vals.get("name")
         ):
-            product = product or self.env["product.product"].browse(vals["product_id"])
-            accounts = product.product_tmpl_id._get_product_accounts()
-            if accounts:
-                if self.is_purchase(vals, vmodel):
-                    vals[loc_name] = accounts["expense"].id
-                else:
-                    vals[loc_name] = accounts["income"].id
+            if vals["name"].upper() in ("NR", "N", "N.", "PZ"):
+                vals[loc_name] = self.env.ref("product.product_uom_categ_unit").id
+            elif vals["name"].upper() in ("M", "MT"):
+                vals[loc_name] = self.env.ref("product.uom_categ_length").id
             else:
-                if "journal_id" in vals:
-                    journal_id = vals["journal_id"]
-                else:
-                    journal_id = self.env["account.invoice"]._default_journal()
-                journal = self.env["account.journal"].browse(journal_id)
-                if self.is_purchase(vals, vmodel):
-                    vals[loc_name] = journal.default_debit_account_id.id
-                else:
-                    vals[loc_name] = journal.default_credit_account_id.id
-        return vals
-
-    def apply_uom(
-        self,
-        backend_id,
-        vals,
-        loc_name,
-        ext_ref,
-        loc_ext_id_name,
-        vmodel,
-        default=None,
-        ctx=None,
-        product=None,
-    ):
-        if loc_name not in vals or not vals.get(loc_name):
-            if product or "product_id" in vals:
-                product = product or self.env["product.product"].browse(
-                    vals["product_id"])
-                vals[loc_name] = product.uom_id.id
-            else:
-                vals[loc_name] = self.env.ref("product.product_uom_unit").id
+                vals[loc_name] = self.env.ref("product.product_uom_categ_unit").id
         return vals
 
     def apply_tax(
         self,
-        backend_id,
+        backend,
         vals,
         loc_name,
         ext_ref,
@@ -399,7 +378,6 @@ class IrModelSynchroApply(models.Model):
         product=None,
     ):
         company_id = vals.get("company_id") or self.env.user.company_id.id
-        backend = self.env["synchro.channel"].browse(backend_id)
 
         def tax_by_rate(value):
             return self.env["account.tax"].search([
@@ -460,7 +438,7 @@ class IrModelSynchroApply(models.Model):
             tax = tax_by_code(vals[ext_ref])
         if tax:
             fiscalpos = self.env["ir.model.synchro.cache"].get_model_attr(
-                backend_id, vmodel, "__%s_FP" % vmodel,
+                backend.id, vmodel, "__%s_FP" % vmodel,
             )
             if fiscalpos:
                 for tax_line in fiscalpos.tax_ids:
@@ -472,7 +450,7 @@ class IrModelSynchroApply(models.Model):
 
     def apply_agents(
         self,
-        backend_id,
+        backend,
         vals,
         loc_name,
         ext_ref,
@@ -509,7 +487,7 @@ class IrModelSynchroApply(models.Model):
 
     def apply_partner_info(
         self,
-        backend_id,
+        backend,
         vals,
         loc_name,
         ext_ref,
@@ -544,7 +522,7 @@ class IrModelSynchroApply(models.Model):
 
     def apply_partner_address(
         self,
-        backend_id,
+        backend,
         vals,
         loc_name,
         ext_ref,
@@ -573,11 +551,11 @@ class IrModelSynchroApply(models.Model):
                 domain.append(("name", "=", item))
             ship_vals["name"] = item
             if (
-                get_item_val("street")
-                and get_item_val("street_number")
+                    get_item_val("street")
+                    and get_item_val("street_number")
             ):
                 item = (get_item_val("street") + ", "
-                        + get_item_val("street_number")).strip() or False
+                        + str(get_item_val("street_number"))).strip() or False
             else:
                 item = False
             if item:
@@ -587,22 +565,20 @@ class IrModelSynchroApply(models.Model):
             if item:
                 domain.append(("city", "=", item))
             ship_vals["city"] = item
-            item = get_item_val("postal_code").strip() or False
+            item = str(get_item_val("postal_code")).strip() or False
             if item:
                 domain.append(("zip", "=", item))
             ship_vals["zip"] = item
             if domain:
                 domain.append(("parent_id", "=", vals["partner_id"]))
                 ship_vals["parent_id"] = vals["partner_id"]
-                if (
-                        ship_vals["street"] == partner.street
-                        and ship_vals["city"] == partner.city
-                        and ship_vals["zip"] == partner.zip
-                ):
-                    partner_shipping = partner
-                else:
+
+                if self.env["ir.model.synchro"].compare_vals_rec(
+                        ship_vals, partner, "delivery"):
                     partner_shipping = fields.first(
                         self.env["res.partner"].search(domain))
+                else:
+                    partner_shipping = partner
                 if not partner_shipping:
                     try:
                         partner_shipping = self.env["res.partner"].create(ship_vals)
@@ -614,7 +590,7 @@ class IrModelSynchroApply(models.Model):
 
     def apply_merge_shipping_address(
         self,
-        backend_id,
+        backend,
         vals,
         loc_name,
         ext_ref,
@@ -623,7 +599,7 @@ class IrModelSynchroApply(models.Model):
         default=None,
         ctx=None,
     ):
-        if isinstance(vals[ext_ref], dict):
+        if isinstance(vals.get(ext_ref), dict):
             if "customer_shipping_id" in vals[ext_ref]:
                 if isinstance(vals[ext_ref]["customer_shipping_id"], basestring):
                     vals[ext_ref]["id"] = int(
@@ -633,13 +609,13 @@ class IrModelSynchroApply(models.Model):
                         vals[ext_ref]["customer_shipping_id"] + 100000000)
                 del vals[ext_ref]["customer_shipping_id"]
             self.env["ir.model.synchro.cache"].set_model_attr(
-                backend_id, vmodel, "__%s" % "partner.shipping", vals[ext_ref]
+                backend.id, vmodel, "__%s" % "partner.shipping", vals[ext_ref]
             )
         return vals
 
     def apply_merge_invoice_address(
         self,
-        backend_id,
+        backend,
         vals,
         loc_name,
         ext_ref,
@@ -648,7 +624,7 @@ class IrModelSynchroApply(models.Model):
         default=None,
         ctx=None,
     ):
-        if isinstance(vals[ext_ref], dict):
+        if isinstance(vals.get(ext_ref), dict):
             prefix = ext_ref.split(":")[0]
             for k, v in vals[ext_ref].items():
                 if not k.startswith("billing_"):
@@ -657,13 +633,13 @@ class IrModelSynchroApply(models.Model):
                 if ext_name not in vals and vals[ext_ref][k]:
                     vals[ext_name] = vals[ext_ref][k]
             self.env["ir.model.synchro.cache"].set_model_attr(
-                backend_id, vmodel, "__%s" % "partner.invoice", vals[ext_ref]
+                backend.id, vmodel, "__%s" % "partner.invoice", vals[ext_ref]
             )
         return vals
 
     def apply_company_info(
         self,
-        backend_id,
+        backend,
         vals,
         loc_name,
         ext_ref,
@@ -695,7 +671,7 @@ class IrModelSynchroApply(models.Model):
 
     def apply_get_global(
         self,
-        backend_id,
+        backend,
         vals,
         loc_name,
         ext_ref,
@@ -713,7 +689,7 @@ class IrModelSynchroApply(models.Model):
 
     def apply_set_einvoice(
         self,
-        backend_id,
+        backend,
         vals,
         loc_name,
         ext_ref,
@@ -730,13 +706,11 @@ class IrModelSynchroApply(models.Model):
                 vals["electronic_invoice_subjected"] = False
                 vals["is_pa"] = True
                 vals["ipa_code"] = vals[ext_ref]
-                if loc_name in vals:
-                    del vals[loc_name]
         return vals
 
     def apply_set_is_pa(
         self,
-        backend_id,
+        backend,
         vals,
         loc_name,
         ext_ref,
@@ -751,7 +725,7 @@ class IrModelSynchroApply(models.Model):
 
     def apply_iban(
         self,
-        backend_id,
+        backend,
         vals,
         loc_name,
         ext_ref,
@@ -761,14 +735,14 @@ class IrModelSynchroApply(models.Model):
         ctx=None,
     ):
         if vals.get(ext_ref):
-            vals[loc_name] = vals[ext_ref].replace(" ", "")
+            vals[ext_ref] = vals[ext_ref].replace(" ", "")
         elif vals.get("vg7:ABI") and vals.get("vg7:CAB"):
-            vals[loc_name] = "IT00A%s%s000000000000" % (vals["ABI"], vals["CAB"])
+            vals[ext_ref] = "IT00A%s%s000000000000" % (vals["ABI"], vals["CAB"])
         return vals
 
     def apply_eom(
         self,
-        backend_id,
+        backend,
         vals,
         loc_name,
         ext_ref,
@@ -795,8 +769,8 @@ class IrModelSynchroApply(models.Model):
             else:
                 num_days = False
             if num_days:
-                cache = self.env["ir.model.synchro.cache"]
-                if cache.get_struct_model_attr("account.payment.term.line", "months"):
+                Cache = self.env["ir.model.synchro.cache"]
+                if Cache.get_struct_model_attr("account.payment.term.line", "months"):
                     vals["months"] = num_days / 30
                     vals["days"] = 0
                 else:
@@ -805,7 +779,7 @@ class IrModelSynchroApply(models.Model):
 
     def apply_set_inv_warn(
         self,
-        backend_id,
+        backend,
         vals,
         loc_name,
         ext_ref,
@@ -816,12 +790,11 @@ class IrModelSynchroApply(models.Model):
     ):
         if vals.get(ext_ref):
             vals["invoice_warn"] = "warning"
-            vals[loc_name] = vals[ext_ref]
         return vals
 
     def apply_datetime(
         self,
-        backend_id,
+        backend,
         vals,
         loc_name,
         ext_ref,
@@ -831,14 +804,13 @@ class IrModelSynchroApply(models.Model):
         ctx=None,
     ):
         if vals.get(ext_ref):
-            vals[loc_name] = vals[ext_ref]
             if len(vals[ext_ref].split(" ")) == 1:
-                vals[loc_name] = "%s 00:00:00" % vals[ext_ref]
+                vals[ext_ref] = "%s 00:00:00" % vals[ext_ref]
         return vals
 
     def apply_set_order_state(
         self,
-        backend_id,
+        backend,
         vals,
         loc_name,
         ext_ref,
@@ -878,7 +850,7 @@ class IrModelSynchroApply(models.Model):
 
     # def apply_set_weight_vg7(
     #     self,
-    #     backend_id,
+    #     backend,
     #     vals,
     #     loc_name,
     #     ext_ref,
@@ -897,7 +869,7 @@ class IrModelSynchroApply(models.Model):
 
     def apply_unit_price_vg7(
         self,
-        backend_id,
+        backend,
         vals,
         loc_name,
         ext_ref,
@@ -907,12 +879,12 @@ class IrModelSynchroApply(models.Model):
         ctx=None,
     ):
         if vals.get(ext_ref):
-            vals[loc_name] = round(vals[ext_ref] * 0.82, 3)
+            vals[ext_ref] = round(vals[ext_ref] * 0.82, 3)
         return vals
 
     def apply_prod_by_name(
         self,
-        backend_id,
+        backend,
         vals,
         loc_name,
         ext_ref,
@@ -941,12 +913,12 @@ class IrModelSynchroApply(models.Model):
         if not prods:
             prods = Product.search([("default_code", "=", "MISC")])
         if prods:
-            vals[loc_name] = fields.first(prods).id
+            vals[ext_ref] = fields.first(prods).id
         return vals
 
     def apply_line_vals_from_prod(
         self,
-        backend_id,
+        backend,
         vals,
         loc_name,
         ext_ref,
@@ -959,7 +931,7 @@ class IrModelSynchroApply(models.Model):
             Product = self.env["product.product"]
             product = Product.browse(vals["product_id"])
             if not vals.get("product_uom"):
-                vals = self.apply_uom(backend_id,
+                vals = self.apply_uom(backend,
                                       vals,
                                       "product_uom",
                                       None,
@@ -970,7 +942,7 @@ class IrModelSynchroApply(models.Model):
                     vmodel == "purchase.order.line"
                     and not vals.get("taxes_id")
             ):
-                vals = self.apply_tax(backend_id,
+                vals = self.apply_tax(backend,
                                       vals,
                                       "taxes_id",
                                       None,
@@ -981,7 +953,7 @@ class IrModelSynchroApply(models.Model):
                     vmodel == "sale.order.line"
                     and not vals.get("tax_id")
             ):
-                vals = self.apply_tax(backend_id,
+                vals = self.apply_tax(backend,
                                       vals,
                                       "tax_id",
                                       None,
@@ -992,7 +964,7 @@ class IrModelSynchroApply(models.Model):
                     vmodel == "account.invoice.line"
                     and not vals.get("invoice_line_tax_ids")
             ):
-                vals = self.apply_tax(backend_id,
+                vals = self.apply_tax(backend,
                                       vals,
                                       "invoice_line_tax_ids",
                                       None,
@@ -1003,26 +975,18 @@ class IrModelSynchroApply(models.Model):
                     vmodel == "stock.picking.package.preparation.line"
                     and not vals.get("tax_ids")
             ):
-                vals = self.apply_tax(backend_id,
+                vals = self.apply_tax(backend,
                                       vals,
                                       "tax_ids",
                                       None,
                                       None,
                                       vmodel,
                                       product=product)
-            if vmodel == "account.invoice.line" and not vals.get("account_id"):
-                vals = self.apply_account(backend_id,
-                                          vals,
-                                          "account_id",
-                                          None,
-                                          None,
-                                          vmodel,
-                                          product=product)
         return vals
 
     def apply_product_vg7_naming(
         self,
-        backend_id,
+        backend,
         vals,
         loc_name,
         ext_ref,
@@ -1044,94 +1008,88 @@ class IrModelSynchroApply(models.Model):
         if des_field and vals[des_field] and (not name_field or not vals[name_field]):
             vals[name_field] = vals[des_field]
             del vals[des_field]
-
-        if loc_name != ext_ref and vals.get(ext_ref):
-            vals[loc_name] = vals[ext_ref]
-            del vals[ext_ref]
-        if loc_name != ext_ref and ext_ref in vals:
-            del vals[ext_ref]
         return vals
-
-    ############################
-    # ODOO MIGRATION FUNCTIONS #fstat
-    ############################
-    def apply_oe_account_tax_amount(
-        self,
-        backend_id,
-        vals,
-        loc_name,
-        ext_ref,
-        loc_ext_id_name,
-        vmodel,
-        default=None,
-        ctx=None,
-    ):
-        synchro_model = self.env["ir.model.synchro"]
-        tnldict = synchro_model.get_tnldict(backend_id)
-        ext_odoo_ver = synchro_model.get_ext_odoo_ver(ext_ref.split(":")[0])
-        vals[loc_name] = transodoo.translate_from_to(
-            tnldict,
-            "account.tax",
-            vals[ext_ref],
-            ext_odoo_ver,
-            release.major_version,
-            type="value",
-            fld_name="amount",
-        )
-        return vals
-
-    def apply_oe_account_account_type_name(
-        self,
-        backend_id,
-        vals,
-        loc_name,
-        ext_ref,
-        loc_ext_id_name,
-        vmodel,
-        default=None,
-        ctx=None,
-    ):
-        if not vals.get(loc_name):
-            synchro_model = self.env["ir.model.synchro"]
-            tnldict = synchro_model.get_tnldict(backend_id)
-            ext_odoo_ver = synchro_model.get_ext_odoo_ver(ext_ref.split(":")[0])
-            names = transodoo.translate_from_to(
-                tnldict,
-                "account.account.type",
-                vals[ext_ref],
-                ext_odoo_ver,
-                release.major_version,
-                type="value",
-                fld_name="report_type",
-            )
-            name = vals.get("name", "").lower()
-            if isinstance(names, list):
-                for nm in names:
-                    if nm == name:
-                        vals[loc_name] = nm
-                        break
-        return vals
-
-    def apply_oe_account_account_type(
-        self,
-        backend_id,
-        vals,
-        loc_name,
-        ext_ref,
-        loc_ext_id_name,
-        vmodel,
-        default=None,
-        ctx=None,
-    ):
-        if vals[ext_ref] == "view":
-            vals[loc_name] = "other"
-        else:
-            vals[loc_name] = vals[ext_ref]
-        return vals
+    #
+    # ############################
+    # # ODOO MIGRATION FUNCTIONS #fstat
+    # ############################
+    # def apply_oe_account_tax_amount(
+    #     self,
+    #     backend,
+    #     vals,
+    #     loc_name,
+    #     ext_ref,
+    #     loc_ext_id_name,
+    #     vmodel,
+    #     default=None,
+    #     ctx=None,
+    # ):
+    #     IrModelSynchro = self.env["ir.model.synchro"]
+    #     tnldict = IrModelSynchro.get_tnldict(backend.id)
+    #     ext_odoo_ver = IrModelSynchro.get_ext_odoo_ver(ext_ref.split(":")[0])
+    #     vals[loc_name] = transodoo.translate_from_to(
+    #         tnldict,
+    #         "account.tax",
+    #         vals[ext_ref],
+    #         ext_odoo_ver,
+    #         release.major_version,
+    #         type="value",
+    #         fld_name="amount",
+    #     )
+    #     return vals
+    #
+    # def apply_oe_account_account_type_name(
+    #     self,
+    #     backend,
+    #     vals,
+    #     loc_name,
+    #     ext_ref,
+    #     loc_ext_id_name,
+    #     vmodel,
+    #     default=None,
+    #     ctx=None,
+    # ):
+    #     if not vals.get(loc_name):
+    #         IrModelSynchro = self.env["ir.model.synchro"]
+    #         tnldict = IrModelSynchro.get_tnldict(backend.id)
+    #         ext_odoo_ver = IrModelSynchro.get_ext_odoo_ver(ext_ref.split(":")[0])
+    #         names = transodoo.translate_from_to(
+    #             tnldict,
+    #             "account.account.type",
+    #             vals[ext_ref],
+    #             ext_odoo_ver,
+    #             release.major_version,
+    #             type="value",
+    #             fld_name="report_type",
+    #         )
+    #         name = vals.get("name", "").lower()
+    #         if isinstance(names, list):
+    #             for nm in names:
+    #                 if nm == name:
+    #                     vals[loc_name] = nm
+    #                     break
+    #     return vals
+    #
+    # def apply_oe_account_account_type(
+    #     self,
+    #     backend,
+    #     vals,
+    #     loc_name,
+    #     ext_ref,
+    #     loc_ext_id_name,
+    #     vmodel,
+    #     default=None,
+    #     ctx=None,
+    # ):
+    #     if vals[ext_ref] == "view":
+    #         vals[loc_name] = "other"
+    #     else:
+    #         vals[loc_name] = vals[ext_ref]
+    #     return vals
 
     def apply_today(
         self,
-        backend_id,
+        backend,
         vals,
         loc_name,
         ext_ref,
@@ -1140,13 +1098,13 @@ class IrModelSynchroApply(models.Model):
         default=None,
         ctx=None,
     ):
-        if not vals.get(loc_name):
-            vals[loc_name] = datetime.today().strftime("%Y-%m-%d")
+        if not vals.get(ext_ref):
+            vals[ext_ref] = datetime.today().strftime("%Y-%m-%d")
         return vals
 
     def apply_now(
         self,
-        backend_id,
+        backend,
         vals,
         loc_name,
         ext_ref,
@@ -1155,13 +1113,13 @@ class IrModelSynchroApply(models.Model):
         default=None,
         ctx=None,
     ):
-        if not vals.get(loc_name):
-            vals[loc_name] = datetime.today().strftime("%Y-%m-%d %H:%M:%S")
+        if not vals.get(ext_ref):
+            vals[ext_ref] = datetime.today().strftime("%Y-%m-%d %H:%M:%S")
         return vals
 
     def apply_next_week_day(
         self,
-        backend_id,
+        backend,
         vals,
         loc_name,
         ext_ref,
@@ -1170,15 +1128,15 @@ class IrModelSynchroApply(models.Model):
         default=None,
         ctx=None,
     ):
-        if not vals.get(loc_name):
-            vals[loc_name] = (datetime.today() + timedelta(7)).strftime(
+        if not vals.get(ext_ref):
+            vals[ext_ref] = (datetime.today() + timedelta(7)).strftime(
                 "%Y-%m-%d %H:%M:%S"
             )
         return vals
 
     def get_default_product(self):
-        cache = self.env["ir.model.synchro.cache"]
-        product = cache.get_struct_model_attr("product.product", "DEF_REC")
+        Cache = self.env["ir.model.synchro.cache"]
+        product = Cache.get_struct_model_attr("product.product", "DEF_REC")
         if product:
             return product
         product = self.env["product.product"].search([("default_code", "=", "MISC")])
@@ -1186,17 +1144,17 @@ class IrModelSynchroApply(models.Model):
             product = self.env["product.product"].search([], limit=1)
         if product:
             product = product[0]
-        cache.set_struct_model_attr("product.product", "DEF_REC", product)
+        Cache.set_struct_model_attr("product.product", "DEF_REC", product)
         return product
 
     def get_default_location_id(self):
-        cache = self.env["ir.model.synchro.cache"]
-        location = cache.get_struct_model_attr("stock.location", "DEF_ID")
+        Cache = self.env["ir.model.synchro.cache"]
+        location = Cache.get_struct_model_attr("stock.location", "DEF_ID")
         if location:
             return location.id
         location = self.env["stock.location"].search([], limit=1, order="id")
         if location:
             location = location[0]
-            cache.set_struct_model_attr("product.product", "DEF_ID", location.id)
+            Cache.set_struct_model_attr("product.product", "DEF_ID", location.id)
             return location.id
         return False

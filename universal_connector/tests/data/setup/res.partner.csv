@@ -4,4 +4,4 @@ base.partner_root,,,3,Administrator,\N,\N,\N,\N,\N,\N,\N,contact,False,False,\N,
 z0bug.res_partner_1,101,,801,Prima Alpha S.p.A.,"Via I Maggio, 101",base.it,20022,Castano Primo,base.state_it_mi,IT00115719999,,contact,True,False,True,False,True,A1B2C3X,Customer
 \N,200000001,,,\N,"C. Unita d'Italia, 61",base.it,32100,Belluno,base.state_it_bl,\N,,delivery,False,z0bug.res_partner_1,True,False,False,False,Delivery address of customer
 z0bug.res_partner_3,,101,803,Import Export Trifoglio s.r.l.,Centro commerciale Gatta Treviso,base.it,15010,Terzo,base.state_it_al,IT01234560017,,contact,True,False,False,True,False,False,Supplier
-z0bug.res_partner_9,109,,,Rossi Mario,"Via Figliata, 99",base.it,00195,Roma,base.state_it_rm,,RSSMRA69C02D612M,contact,True,False,True,False,True,0000000,First+Lastname
+z0bug.res_partner_9,109,,,Rossi Mario,"Via Figliata, 99",base.it,"00195",Roma,base.state_it_rm,,RSSMRA69C02D612M,contact,True,False,True,False,True,"0000000",First+Lastname

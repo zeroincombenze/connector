@@ -18,24 +18,24 @@ from .testenv import MainTest as SingleTransactionCase
 _logger = logging.getLogger(__name__)
 
 TEST_SYNCHRO_CHANNEL = {
-    "z0bug.localhost-oca10": {
-        "name": "Test Odoo 10.0",
-        "identity": "odoo",
-        "client_key": "oca10",
-        "odoo_version": "10.0",
-        "method": "JSON",
-        "password": "admin",
-        "counterpart_url": "admin@localhost:8270",
-        "prefix": "oe10",
-    },
-    "z0bug.localhost-oca12": {
+    # "z0bug.localhost-oca10": {
+    #     "name": "Test Odoo 10.0",
+    #     "identity": "odoo",
+    #     "client_key": "oca10",
+    #     "odoo_version": "10.0",
+    #     "method": "JSON",
+    #     "password": "admin",
+    #     "counterpart_url": "admin@localhost:8270",
+    #     "prefix": "oe10",
+    # },
+    "z0bug.localhost-odoo12": {
         "name": "odoo12",
         "identity": "odoo",
-        "client_key": "oca12",
+        "client_key": "demo12",
         "odoo_version": "12.0",
         "method": "JSON",
         "password": "admin",
-        "counterpart_url": "admin@localhost:8272",
+        "counterpart_url": "admin@localhost:8172",
         "prefix": "oe8",
     },
 }
