@@ -1,5 +1,5 @@
 id,order_id,job_name,product_name,quantity,unitary_price,weight,sequence,_why
-1311,131,Prodotto Alpha - Azalea,Alpha,50.0,1.05,52.5,1,
-1321,132,Prodotto Beta - Begonia,Beta,100.0,5.36,59,1,
-2101,210,Prodotto Beta - Begonia,Beta,60.0,5.35,35.4,1,
-2102,210,Prodotto Rho - Rosa,Rho,10.0,41.35,10.5,2,
+1311,131,Prodotto Alpha - Azalea,Alpha,50.0,1.05,52.5,10,
+1321,132,Prodotto Beta - Begonia,Beta,100.0,5.36,59,10,
+2101,210,Prodotto Beta - Begonia,Beta,60.0,5.35,35.4,10,
+2102,210,Prodotto Rho - Rosa,Rho,10.0,41.35,10.5,10,

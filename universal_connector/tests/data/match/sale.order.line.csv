@@ -1,4 +1,5 @@
 id,vg7_id,oe8_id,order_id,sequence,name,product_uom_qty,price_unit,tax_id,product_id,product_tmpl_id,discount,weight,
 \N,1311,,z0bug.sale_1,10,Prodotto Alpha - Azalea,50.0,1.05,[z0bug.tax_22v],z0bug.product_product_1,z0bug.product_template_1,\N,52.5
-\N,2101,,z0bug.sale_2,10,Prodotto Beta - Begonia,60.0,5.35,[z0bug.tax_22v],z0bug.product_product_2,z0bug.product_template_2,\N,35.4
-\N,,8010,z0bug.sale_3,10,Prodotto Gamma - Golden wattle,50.0,0.60,[z0bug.tax_22v],z0bug.product_product_7,z0bug.product_template_7,0.0,
+\N,1321,,z0bug.sale_2,10,Prodotto Beta - Begonia,100.0,5.36,[z0bug.tax_22v],z0bug.product_product_2,z0bug.product_template_2,\N,59
+\N,2101,,z0bug.sale_3,10,Prodotto Beta - Begonia,60.0,5.35,[z0bug.tax_22v],z0bug.product_product_2,z0bug.product_template_2,\N,35.4
+\N,,8010,z0bug.sale_4,10,Prodotto Gamma - Golden wattle,50.0,0.60,[z0bug.tax_22v],z0bug.product_product_7,z0bug.product_template_7,0.0,

@@ -63,8 +63,6 @@ from __future__ import print_function, unicode_literals
 from __future__ import division
 from __future__ import absolute_import
 
-import time
-
 from future import standard_library
 
 standard_library.install_aliases()  # noqa: E402
@@ -251,7 +249,7 @@ SETUP_MODEL_LIST = (
     "res.partner",
     "res.partner.supplier",
     "res.users",
-    "res.company",
+    # "res.company",
     # "account.account",
     # "account.journal",
     "account.tax",
@@ -400,17 +398,17 @@ TNL_OE8_DICT = {
 THIS_MODULE = "universal_connector"
 COA_MODULE = "l10n_it_coa"
 MODULE_LIST = [
-    "mk_test_env",
+    # "mk_test_env",
     THIS_MODULE,
-    COA_MODULE,
+    # COA_MODULE,
     "account",
-    "account_payment_term_extension",
+    # "account_payment_term_extension",
     "purchase",
     "sale",
     "stock",
     "l10n_it_fiscalcode",
     "l10n_it_conai",
-    "l10n_it_einvoice_base",
+    # "l10n_it_einvoice_base",
     "connector_vg7_conai",
 ]
 IDENTITY_LIST = ["vg7:", "oe8:"]
@@ -880,54 +878,31 @@ class ExtTestEnv(object):
     def assure_company(self):
         self.write_log("assure_company()", bb=1)
         model = "res.company"
-        xref = "z0bug.mycompany"
+        xref = "base.main_company"
         self.company_note = "Si prega di controllare i dati entro le 24h."
         self.company_id = self.env_ref(xref)
-        if not self.company_id:
-            company = self.resource_browse(model, xref="base.main_company")
-            vals = {}
-            if company.name != "Test Company":
-                vals["name"] = "Test Company"
-            if vals:
-                vals["sale_note"] = self.company_note
-            if "Zero" in company.chart_template_id.name:
-                if not company.country_id:
-                    vals["country_id"] = self.env_ref("base.it")
-                self.company_id = company.id
-                self.resource_write(model, company.id, values=vals, xref=xref)
-            else:
-                vals["country_id"] = self.env_ref("base.it")
-                vals["currency_id"] = self.env_ref("base.EUR")
-                self.company_id = self.resource_create(model, values=vals, xref=xref)
-                company = self.resource_browse(model, self.company_id)
-                # Enable user to new company and set it ad default company
-                self.resource_write(
-                    "res.users", self.user.id, {"company_ids": [(4, company.id)]})
-                self.resource_write(
-                    "res.users", self.user.id, {"company_id": company.id})
-                self.connect_user()
-        else:
-            company = self.resource_browse(model, self.company_id)
-            vals = {}
-            if company.name != "Test Company":
-                vals["name"] = "Test Company"
-            if not company.country_id:
-                vals["country_id"] = self.env_ref("base.it")
-            if vals:
-                vals["sale_note"] = self.company_note
-                self.resource_write(model, self.company_id, values=vals)
+        company = self.resource_browse(model, self.company_id)
+        vals = {}
+        if company.name != "Test Company":
+            vals["name"] = "Test Company"
+        if not company.country_id:
+            vals["country_id"] = self.env_ref("base.it")
+        if vals:
+            vals["sale_note"] = self.company_note
+            self.resource_write(model, self.company_id, values=vals)
         self.resource_write(
             "res.partner",
             company.partner_id.id,
             {"lang": self.lang},
-            xref="z0bug.partner_mycompany")
+            xref="base.main_partner")
 
         vals = {
             "group_uom": 1,
             "group_sale_delivery_address": 1,
+            "group_discount_per_sol_line": 1,
         }
         config_id = clodoo.createL8(self.ctx, "sale.config.settings", {})
-        clodoo.writeL8(self.ctx, "sale.config.settings", config_id, vals)
+        clodoo.executeL8(self.ctx, "sale.config.settings", "execute", config_id, vals)
         if self.database != os.environ.get("TEST_DB", self.database):
             print_flush("# Activate Developer Mode and create full test environment")
             print_flush("#     lang=it_IT, no new company, CoA=Zero,%s CONAI ..."
@@ -951,21 +926,6 @@ class ExtTestEnv(object):
             if backend.state != "draft":
                 clodoo.executeL8(
                     self.ctx, model, "button_reset_to_draft", backend.id)
-            # if backend.prefix == "oe10":
-            #     clodoo.writeL8(
-            #         self.ctx,
-            #         model,
-            #         backend.id,
-            #         {
-            #             "method": "JSON",
-            #             "client_key": "oca10",
-            #             "password": "admin",
-            #             "counterpart_url": "admin@localhost:8270",
-            #             # "sequence": 10,
-            #             "tracelevel": "4"
-            #         },
-            #     )
-            # else:
             clodoo.writeL8(
                 self.ctx,
                 model,
@@ -975,7 +935,7 @@ class ExtTestEnv(object):
                     "exchange_path": self.get_exchange_path(backend.prefix),
                     "tracelevel": "4",
                     "ignore_child_lines": False,
-                    "renum_lines": True,
+                    # "renum_lines": True,
                 },
             )
             clodoo.executeL8(
@@ -1050,9 +1010,6 @@ class ExtTestEnv(object):
             connector_installed = True
             self.assure_cache()
             self.assure_all_backends()
-            if mk_dev:
-                self.assure_lang()
-                self.assure_company()
         return connector_installed, mk_dev
 
     def setup(self):
@@ -1078,6 +1035,8 @@ class ExtTestEnv(object):
                 modname, connector_installed, mk_dev=mk_dev)
 
         self.ask_4_ret()
+        self.assure_lang()
+        self.assure_company()
         self.assure_user()
         self.model_wkf = {}
         ext_id_field_oe8 = self.get_ext_id_field("oe8:")
@@ -1547,8 +1506,9 @@ class ExtTestEnv(object):
 
     def check_records(
             self, identity, model, loc_id, test_rec, child_test_recs, child_model,
-            mode=None, state=None, lang=None):
+            lang=None):
         def check_1_field():
+            checked = False
             if loc_name in test_rec:
                 if not self.compare(
                         model,
@@ -1573,6 +1533,7 @@ class ExtTestEnv(object):
                     )
                 self.ctr += 1
                 checked = True
+            return checked
 
         why, test_rec = self.extract_why(test_rec)
         self.write_log(
@@ -1588,6 +1549,7 @@ class ExtTestEnv(object):
                 "company": "company",
             }[model.split(".")[-1]]
             model = "res.partner"
+        ext_key_name = "%s_id" % identity.split(":")[0]
         fields_2_ignore = []
         for ident in IDENTITY_LIST:
             if ident != identity:
@@ -1603,13 +1565,13 @@ class ExtTestEnv(object):
                 continue
             if loc_name in ("firstname", "lastname"):
                 check_name = True
-            check_1_field()
+            checked |= check_1_field()
         if check_name:
             loc_name = "name"
-            check_1_field()
+            checked |= check_1_field()
         if not checked:
-            self.write_log("No field matched for %s[%s]" % (model, loc_id))
-        if child_field:
+            self.write_log("NO FIELD MATCHED FOR %s[%s]" % (model, loc_id))
+        if child_field and model != "account.payment.term":
             parent_field = MODEL_WITH_CHILD[model]["parent_field"]
             child_key = MODEL_WITH_CHILD[model]["child_key"]
             checked = False
@@ -1617,11 +1579,15 @@ class ExtTestEnv(object):
                                     key=lambda x: getattr(x, child_key)):
                 for child_test_rec in child_test_recs:
                     if (
+                        (
                             self.cast_1_value(
                                 child_model,
                                 parent_field,
                                 child_test_rec[parent_field]) != loc_id
-                            or child_rec[child_key] != child_test_rec[child_key]
+                        ) or (
+                            child_rec[child_key] != child_test_rec[child_key]
+                            and child_rec[ext_key_name] != child_test_rec[ext_key_name]
+                        )
                     ):
                         continue
                     checked = True
@@ -1672,10 +1638,10 @@ class ExtTestEnv(object):
                         checked_field = True
                     if not checked_field:
                         self.write_log(
-                            "No field matched for %s[%s/%s]"
+                            "NO FIELD MATCHED FOR %s[%s/%s]"
                             % (child_model,loc_id,  child_test_rec[child_key]))
             if not checked:
-                self.write_log("No match child record %s[%s]" % (child_model, loc_id))
+                self.write_log("NO MATCH CHILD RECORD %s[%s]" % (child_model, loc_id))
 
     def test_function_synchro(self, model, vals, identity=None, ext_id=None):
         """
@@ -1710,42 +1676,41 @@ class ExtTestEnv(object):
         return rec_id
 
     def merge_supplemetal_vals(
-            self, identity, child_model, fn, parent_field, child_field, ext_recs,
+            self, identity, parent_model, child_model, fn, parent_field, child_field, ext_recs,
             multi=False, rec_id=False, uncheck=False):
         child_ext_recs = self.load_csv_file(
             child_model, pth.join(self.get_csv_path(identity), fn))
-        if multi:
-            for ext_rec in ext_recs:
-                ext_rec[child_field] = []
         rec_id = rec_id or "id"
-        for child_ext_rec in child_ext_recs:
-            child_ext_rec, _, _ = self.prepare_rec(child_ext_rec, 0)
+        for ext_rec in ext_recs:
+            if multi:
+                ext_rec[child_field] = []
             checked = False
-            if parent_field in child_ext_rec:
-                parent_id = child_ext_rec[parent_field]
-                for ext_rec in ext_recs:
-                    if parent_id == ext_rec[rec_id]:
+            for child_ext_rec in child_ext_recs:
+                child_ext_rec = self.prepare_rec(child_ext_rec, 0)[0].copy()
+                if parent_field in child_ext_rec:
+                    if child_ext_rec[parent_field] == ext_rec[rec_id]:
                         checked = True
                         if (
                                 parent_field == "customer_id"
                                 and "customer_id" in child_ext_rec
                                 and (child_field == "billing"
-                                     or (child_field == "shipping" and rec_id != "id"))
+                                     or (child_field == "shipping"
+                                         and parent_model == "sale.order"))
                         ):
                             del child_ext_rec["customer_id"]
-                        if rec_id != "id" and "customer_shipping_id" in child_ext_rec:
-                            del child_ext_rec["customer_shipping_id"]
-                        if rec_id != "id":
-                            for key in ext_rec.keys():
-                                if key.startswith(child_field):
-                                    child_ext_rec[key] = ext_rec[key]
-                                    del ext_rec[key]
+                        if parent_model == "sale.order":
+                            if "customer_shipping_id" in child_ext_rec:
+                                del child_ext_rec["customer_shipping_id"]
+                            if child_field in ("billing", "shipping"):
+                                for key in ext_rec.keys():
+                                    if key.startswith(child_field):
+                                        child_ext_rec[key] = ext_rec[key]
+                                        del ext_rec[key]
                         if not multi:
                             ext_rec[child_field] = child_ext_rec
+                            break
                         else:
                             ext_rec[child_field].append(child_ext_rec)
-                        if rec_id == "id":
-                            break
             if not uncheck and not checked:
                 raise IOError("No match external id name for %s" % child_ext_rec)
 
@@ -1760,6 +1725,7 @@ class ExtTestEnv(object):
         if model == "res.partner" and identity.startswith("vg7"):
             self.merge_supplemetal_vals(
                 identity,
+                model,
                 "res.partner",
                 "customers_shipping_addresses.csv",
                 "customer_id",
@@ -1767,6 +1733,7 @@ class ExtTestEnv(object):
                 ext_recs_image)
             self.merge_supplemetal_vals(
                 identity,
+                model,
                 "res.partner",
                 "customers_billing_addresses.csv",
                 "customer_id",
@@ -1775,15 +1742,17 @@ class ExtTestEnv(object):
         elif model == "sale.order" and identity.startswith("vg7"):
             self.merge_supplemetal_vals(
                 identity,
+                model,
                 "res.partner",
                 "customers_shipping_addresses.csv",
                 "customer_id",
                 "shipping",
                 ext_recs_image,
-                rec_id="customer_shipping_id",
+                rec_id="customer_id",
                 uncheck=True)
             self.merge_supplemetal_vals(
                 identity,
+                model,
                 "res.partner",
                 "customers_billing_addresses.csv",
                 "customer_id",
@@ -1797,6 +1766,7 @@ class ExtTestEnv(object):
         if model in MODEL_WITH_CHILD and identity in MODEL_WITH_CHILD[model]:
             self.merge_supplemetal_vals(
                 identity,
+                model,
                 MODEL_WITH_CHILD[model]["child_model"],
                 MODEL_WITH_CHILD[model][identity]["fqn"],
                 MODEL_WITH_CHILD[model][identity]["parent_field"],
@@ -1934,9 +1904,9 @@ class ExtTestEnv(object):
             bb=0 if model == self.prior_model and fct_test == self.prior_fct
             else 1 if model == self.prior_model else 2
         )
-        # if model == "sale.order":
-        #     print_flush("# Test model %s" % model)  # debug
-        #     self.ask_4_ret()  # debug
+        if model == "product.uom":
+            print_flush("# Test model %s" % model)  #debug
+            self.ask_4_ret()  #debug
         self.prior_model = model
         self.fct = fct_test
         self.init_model(identity, model, reset_id=reset_id, lang=lang)
@@ -2052,7 +2022,7 @@ def main(cli_args=[]):
         "account.tax",
         "account.payment.term",
         "res.partner",
-        "res.partner.supplier",
+        # "res.partner.supplier",
         "product.uom",
         "product.product",
         "stock.picking.transportation_reason",

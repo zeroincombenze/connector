@@ -108,8 +108,8 @@ class SynchroChannel(models.Model):
             ("NO", "No interchange"),
             ("JSON", "By JSON (rpc)"),
             ("XML", "By XML (rpc)"),
-            ("PEC", "By mail PEC"),
-            ("FTP", "By FTP"),
+            # ("PEC", "By mail PEC"),
+            # ("FTP", "By FTP"),
             ("CSV", "By file CSV"),
         ],
         "Send/Receive method",
@@ -142,7 +142,7 @@ class SynchroChannel(models.Model):
             ("15.0", "Odoo 15.0 - Python3"),
             ("16.0", "Odoo 16.0 - Python3"),
             ("17.0", "Odoo 17.0 - Python3"),
-            # ("18.0", "Odoo 18.0 - Python3"),
+            ("18.0", "Odoo 18.0 - Python3"),
         ], "External Odoo version"
     )
     ignore_child_lines = fields.Boolean(
@@ -625,46 +625,46 @@ class SynchroChannelModel(models.Model):
                 datas.append(ixs[id])
             return datas
 
-        Cache = self.env["ir.model.synchro.cache"]
-        Cache.open(backend=self.synchro_channel_id, model=self.name)
         if not self.counterpart_name:
             return {}
-        channel = self.synchro_channel_id
-        endpoint = channel.get_endpoint()
-        if not endpoint:
+        backend = self.synchro_channel_id
+        Cache = self.env["ir.model.synchro.cache"]
+        Cache.open(backend=backend, model=self.name)
+        endpoint = backend.get_endpoint()
+        if not endpoint:  # pragma: no cover
             self.env["ir.model.synchro"].logmsg(
                 "error",
                 "Channel %(chid)s without connection parameters!",
-                ctx={"chid": channel.id},
+                ctx={"chid": backend.id},
             )
             return {}
-        cnx = Cache.get_attr(channel.id, "CNX")
-        session = Cache.get_attr(channel.id, "SESSION")
-        method = channel.method.lower()
-        super_method = "rpc" if channel.method in ("XML", "JSON") else "gen"
+        cnx = Cache.get_attr(backend.id, "CNX")
+        session = Cache.get_attr(backend.id, "SESSION")
+        method = backend.method.lower()
+        super_method = "rpc" if backend.method in ("XML", "JSON") else "gen"
         if not cnx or not session:
             for fct in (
-                "%s_%s_session" % (channel.identity, method),
+                "%s_%s_session" % (backend.identity, method),
                 "%s_session" % method,
-                "%s_%s_session" % (channel.identity, super_method),
+                "%s_%s_session" % (backend.identity, super_method),
                 "%s_session" % super_method,
             ):
-                if hasattr(channel, fct):
+                if hasattr(backend, fct):
                     self.env["ir.model.synchro"].logmsg(
                         "debug",
                         ">>> %(model)s.%(fct)s(%(ep)s):",
                         model=self.name,
                         ctx={"fct": fct, "ep": endpoint},
                     )
-                    cnx, session = getattr(channel, fct)()
-                    Cache.set_attr(channel.id, "CNX", cnx)
-                    Cache.set_attr(channel.id, "SESSION", session)
+                    cnx, session = getattr(backend, fct)()
+                    Cache.set_attr(backend.id, "CNX", cnx)
+                    Cache.set_attr(backend.id, "SESSION", session)
                     break
         vals = False
         for fct in (
-            "get_%s_%s_response" % (channel.identity, method),
+            "get_%s_%s_response" % (backend.identity, method),
             "get_%s_response" % method,
-            "get_%s_%s_response" % (channel.identity, super_method),
+            "get_%s_%s_response" % (backend.identity, super_method),
             "get_%s_response" % super_method,
         ):
             if hasattr(self, fct):
@@ -698,18 +698,19 @@ class SynchroChannelModel(models.Model):
                     new_vals.append(vals)
             vals = new_vals
 
-        if not isinstance(vals, dict) and not isinstance(vals, (list, tuple)):
+        if not isinstance(vals, dict) and not isinstance(
+                vals, (list, tuple)): # pragma: no cover
             self.env["ir.model.synchro"].logmsg(
                 "error",
                 "Response error %(sts)s (%(chid)s,%(url)s,%(pfx)s)",
                 model=self.name,
                 ctx={
                     "sts": vals,
-                    "url": channel.counterpart_url,
-                    "pfx": channel.prefix,
+                    "url": backend.counterpart_url,
+                    "pfx": backend.prefix,
                 },
             )
-            Cache.clean_cache(backend_id=channel.id, model=channel.name)
+            Cache.clean_cache(backend_id=backend.id, model=backend.name)
             vals = {} if (ext_id and not mode) else []
         return sort_data(vals)
 
@@ -805,11 +806,6 @@ class SynchroChannelModel(models.Model):
             cache.set_unmanageable(actual_model)
         return False
 
-    @api.multi
-    def write(self, vals):
-        # self.env["ir.model.synchro.cache"].clean_cache()
-        return super(SynchroChannelModel, self).write(vals)
-
 
 class SynchroChannelModelFields(models.Model):
     _name = "synchro.channel.model.fields"
@@ -849,11 +845,6 @@ class SynchroChannelModelFields(models.Model):
     )
     required = fields.Boolean("Required field", default=False)
     model_id = fields.Many2one("synchro.channel.model")
-
-    @api.multi
-    def write(self, vals):
-        # self.env["ir.model.synchro.cache"].clean_cache()
-        return super(SynchroChannelModelFields, self).write(vals)
 
 
 class SynchroChannelDomainTnl(models.Model):

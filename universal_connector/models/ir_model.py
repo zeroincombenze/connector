@@ -1015,7 +1015,7 @@ class IrModelSynchro(models.Model):
         )
         return channel_model[0] if channel_model else self.env["synchro.channel.model"]
 
-    def sync_rec_from_counterparty(self, backend_id, model, vg7_id, only_minimal=True):
+    def sync_rec_from_counterparty(self, backend, model, vg7_id, only_minimal=True):
         if not vg7_id:
             self.logmsg(
                 "error", "### Missing id for %(model)s counterpart request", model=model
@@ -1027,14 +1027,14 @@ class IrModelSynchro(models.Model):
             model=model,
             ctx={"xid": vg7_id},
         )
-        vals = self.get_model_of_channel(backend_id, model).get_counterpart_response(
-            self.get_actual_ext_id_value(backend_id, model, vg7_id)
+        vals = self.get_model_of_channel(backend.id, model).get_counterpart_response(
+            self.get_actual_ext_id_value(backend.id, model, vg7_id)
         )
         if not vals:
             return False
         cls = self.env[model]
         return self.generic_synchro(
-            cls, vals, channel_id=backend_id, jacket=True, only_minimal=only_minimal)
+            cls, vals, channel_id=backend.id, jacket=True, only_minimal=only_minimal)
 
     def get_alias(self, actual_model, name, value, type=None):
         translation_model = self.env["synchro.channel.domain.translation"]
@@ -1343,7 +1343,7 @@ class IrModelSynchro(models.Model):
         if not new_value and not no_create:
             if vmodel:
                 new_value = self.sync_rec_from_counterparty(
-                    backend.id, vmodel, ext_value)
+                    backend, vmodel, ext_value)
         if not new_value and not no_create and Cache.is_manageable(vmodel):
             new_value = self.create_new_ref(
                 backend.id,
@@ -2546,20 +2546,20 @@ class IrModelSynchro(models.Model):
                 res.append(row_res)
         return res
 
-    def get_counterpart_response(self, backend_id, vmodel, ext_id=False, mode=None):
+    def get_counterpart_response(self, backend, vmodel, ext_id=False, mode=None):
         """Get data from counterpart"""
         Cache = self.env["ir.model.synchro.cache"]
         if not Cache.is_manageable(vmodel):
             return False
         # TODO: channel_id
-        Cache.open(backend=self.env["synchro.channel"].browse(backend_id), model=vmodel)
-        method = Cache.get_attr(backend_id, "METHOD")
+        Cache.open(backend=backend, model=vmodel)
+        method = Cache.get_attr(backend.id, "METHOD")
         if method == "XML":
-            return self.get_xmlrpc_response(backend_id, vmodel, ext_id, mode=mode)
+            return self.get_xmlrpc_response(backend.id, vmodel, ext_id, mode=mode)
         elif method == "JSON":
-            return self.get_json_response(backend_id, vmodel, ext_id, mode=mode)
+            return self.get_json_response(backend.id, vmodel, ext_id, mode=mode)
         elif method == "CSV":
-            return self.get_csv_response(backend_id, vmodel, ext_id, mode=mode)
+            return self.get_csv_response(backend.id, vmodel, ext_id, mode=mode)
 
     def create_ext_id(self, backend, actual_model, loc_id, ext_id):
         ext_id_name = self.get_loc_ext_id_name(backend.id, actual_model, force=True)
@@ -2722,7 +2722,7 @@ class IrModelSynchro(models.Model):
                     pass
                 if not rec or rec.id != id:
                     _logger.error("!-3! ID %s does not exist in %s" % (id, vmodel))
-                    # pop_ref(backend_id, vmodel, actual_model, id, ext_id)
+                    # pop_ref(backend.id, vmodel, actual_model, id, ext_id)
                     return -3, None
                 id = rec.id
                 self.logmsg(
@@ -2752,8 +2752,7 @@ class IrModelSynchro(models.Model):
                 "y": "internal" if no_del_child else ""
             },
         )
-        backend_id = backend.id
-        # identity = Cache.get_attr(backend_id, "IDENTITY")
+        # identity = Cache.get_attr(backend.id, "IDENTITY")
         Cache.open(
             model=vmodel,
             cls=cls,
@@ -2786,19 +2785,22 @@ class IrModelSynchro(models.Model):
         if no_del_child:
             sequence = 0
         else:
-            last_model = Cache.get_attr(backend_id, "LAST_MODEL")
+            last_model = Cache.get_attr(backend.id, "LAST_MODEL")
             sequence = Cache.get_attr(
-                backend_id, "CTR", default=0) + 1 if last_model == actual_model else 1
-            if has_sequence and "sequence" not in vals and backend.renum_lines:
+                backend.id, "CTR", default=0) + 1 if last_model == actual_model else 1
+            if (
+                (has_sequence and "sequence" not in vals and backend.renum_lines)
+                or actual_model.startswith("account.payment.term")
+            ):
                 vals["sequence"] = sequence
 
         do_auto_process = True
         if has_2delete or (
-            Cache.get_model_attr(backend_id, vmodel, "BIND")
-            and Cache.get_attr(backend_id, "IDENTITY") == "vg7"
+            Cache.get_model_attr(backend.id, vmodel, "BIND")
+            and Cache.get_attr(backend.id, "IDENTITY") == "vg7"
         ):
             do_auto_process = False
-        if Cache.get_attr(backend_id, "IDENTITY") == "vg7":
+        if Cache.get_attr(backend.id, "IDENTITY") == "vg7":
             vmodel, vals = protect_against_vg7(vmodel, actual_model, vals)
         # TODO: channel_id
         Cache.open(backend=backend, ext_model=vmodel)
@@ -2826,7 +2828,7 @@ class IrModelSynchro(models.Model):
         )
         if has_sequence and "sequence" in vals:
             sequence = vals["sequence"]
-        ext_id_name = self.get_loc_ext_id_name(backend_id, vmodel)
+        ext_id_name = self.get_loc_ext_id_name(backend.id, vmodel)
         ext_id = vals.get(ext_id_name)
 
         loc_id, rec = browse_from_id(actual_cls, vals)
@@ -2838,8 +2840,8 @@ class IrModelSynchro(models.Model):
         if loc_id > 0 and "sequence" in rec:
             sequence = rec["sequence"]
         if not no_del_child:
-            Cache.set_attr(backend_id, "LAST_MODEL", actual_model)
-            Cache.set_attr(backend_id, "CTR", sequence)
+            Cache.set_attr(backend.id, "LAST_MODEL", actual_model)
+            Cache.set_attr(backend.id, "CTR", sequence)
         if loc_id == -7 and not has_state:
             self.logmsg("info",
                         "### No values passed(%s.%s)" % (vmodel, actual_model),
@@ -2937,7 +2939,6 @@ class IrModelSynchro(models.Model):
                             rec=rec,
                             ctx={"e": e, "val": jvals},
                         )
-                        # pop_ref(backend_id, vmodel, actual_model, loc_id, ext_id)
                         return -2
                 elif do_write:
                     self.logmsg(
@@ -2984,20 +2985,17 @@ class IrModelSynchro(models.Model):
 
         if loc_id > 0 and not chk_in_queue and vmodel == "res.partner":
             child_vals = Cache.get_model_attr(
-                backend_id, vmodel, "__partner.invoice")
+                backend.id, vmodel, "__partner.invoice")
             if child_vals:
-                # partner_child[":parent_id"] = loc_id
-                # self.sync_rec_from_counterparty(
-                #     backend_id, "res.partner.invoice", partner_child)
-                Cache.del_model_attr(backend_id, vmodel,  "__partner.invoice")
+                Cache.del_model_attr(backend.id, vmodel,  "__partner.invoice")
             child_vals = Cache.get_model_attr(
-                backend_id, vmodel, "__partner.shipping")
+                backend.id, vmodel, "__partner.shipping")
             if child_vals:
                 child_vals[":parent_id"] = loc_id
-                Cache.del_model_attr(backend_id, vmodel, "__partner.shipping")
+                Cache.del_model_attr(backend.id, vmodel, "__partner.shipping")
                 cls = self.env["res.partner.shipping"]
                 self.generic_synchro(
-                    cls, child_vals, channel_id=backend_id,
+                    cls, child_vals, channel_id=backend.id,
                     jacket=True, only_minimal=True)
 
         if loc_id > 0 and not chk_in_queue and vmodel == actual_model:
@@ -3006,13 +3004,12 @@ class IrModelSynchro(models.Model):
             elif actual_model == "ir.module.module":
                 loc_id = self.set_actual_state(struct, actual_model, rec)
                 if loc_id < 0:
-                    # pop_ref(backend_id, vmodel, actual_model, rec.id, ext_id)
                     return loc_id
 
         parent_id_name = Cache.get_struct_model_attr(actual_model, "PARENT_ID")
         if model_child and rec and hasattr(rec, "fiscal_position_id"):
             Cache.set_model_attr(
-                backend_id, model_child, "__%s_FP" % model_child,
+                backend.id, model_child, "__%s_FP" % model_child,
                 rec.fiscal_position_id
             )
         if parent_child_mode == "B":
@@ -3025,7 +3022,6 @@ class IrModelSynchro(models.Model):
                 only_minimal=only_minimal,
             )
             if sts < 1:
-                # pop_ref(backend_id, vmodel, actual_model, loc_id, ext_id)
                 return sts - 100
         elif model_child:
             self.logmsg(
@@ -3037,15 +3033,14 @@ class IrModelSynchro(models.Model):
             actual_cls.search([(parent_id_name, "=", rec[parent_id_name].id),
                                ("to_delete", "=", True)]).unlink()
         if model_child and rec and hasattr(rec, "fiscal_position_id"):
-            Cache.del_model_attr(backend_id, model_child, "__%s_FP" % model_child)
+            Cache.del_model_attr(backend.id, model_child, "__%s_FP" % model_child)
         if (
             loc_id > 0
             and not chk_in_queue
             and vmodel == actual_model
             and not no_del_child
         ):
-            self.synchro_queue(backend_id)
-        # pop_ref(backend_id, vmodel, actual_model, loc_id, ext_id)
+            self.synchro_queue(backend)
         _logger.info("!%s! Returned ID of %s" % (loc_id, vmodel))
         return loc_id
 
@@ -3174,11 +3169,11 @@ class IrModelSynchro(models.Model):
         return vals, ""
 
     @api.model
-    def synchro_queue(self, backend_id):
+    def synchro_queue(self, backend):
         self.logmsg("warning", "synchro_queue()")
         cache = self.env["ir.model.synchro.cache"]
         max_ctr = 16
-        queue = cache.get_attr(backend_id, "IN_QUEUE")
+        queue = cache.get_attr(backend.id, "IN_QUEUE")
         while queue:
             if max_ctr == 0:
                 break
@@ -3198,9 +3193,9 @@ class IrModelSynchro(models.Model):
                 .with_context({"lang": self.env.user.lang})
                 .browse(loc_id)
             )
-            loc_ext_id_name = self.get_loc_ext_id_name(backend_id, vmodel)
+            loc_ext_id_name = self.get_loc_ext_id_name(backend.id, vmodel)
             if loc_ext_id_name and hasattr(rec, loc_ext_id_name):
-                self.pull_1_record(backend_id, vmodel, getattr(rec, loc_ext_id_name))
+                self.pull_1_record(backend.id, vmodel, getattr(rec, loc_ext_id_name))
 
     @api.model
     def vals_or_id(self, item, ext_key_id):
@@ -3258,17 +3253,16 @@ class IrModelSynchro(models.Model):
         cache = self.env["ir.model.synchro.cache"]
         cache.open()
         cache.setup_channels(all=True)
-        for channel in cache.get_channel_list().copy():
-            channel_id = channel
-            if not cache.get_attr(channel_id, "COUNTERPART_URL") and not cache.get_attr(
-                channel_id, "EXCHANGE_PATH"
+        for backend in cache.get_channel_list().copy():
+            if not cache.get_attr(backend.id, "COUNTERPART_URL") and not cache.get_attr(
+                backend.id, "EXCHANGE_PATH"
             ):
                 continue
-            identity = cache.get_attr(channel_id, "IDENTITY")
+            identity = cache.get_attr(backend.id, "IDENTITY")
             if identity == "odoo":
                 model_list = self.env["ir.model.synchro.cache"].TABLE_DEF.keys()
             else:
-                domain = [("synchro_channel_id", "=", channel_id)]
+                domain = [("synchro_channel_id", "=", backend.id)]
                 model_list = [
                     x.name
                     for x in self.env["synchro.channel.model"].search(
@@ -3281,15 +3275,15 @@ class IrModelSynchro(models.Model):
                     continue
                 cache.open(model=vmodel)
                 if identity != "odoo" and not cache.get_model_attr(
-                    channel_id, vmodel, "BIND"
+                    backend.id, vmodel, "BIND"
                 ):
                     continue
-                loc_ext_id_name = self.get_loc_ext_id_name(channel_id, vmodel)
+                loc_ext_id_name = self.get_loc_ext_id_name(backend.id, vmodel)
                 actual_model = self.get_actual_model(vmodel, only_name=True)
                 self.logmsg("info", "### Checking %s for unlink" % vmodel)
                 cls = self.env[vmodel]
                 datas = self.get_model_of_channel(
-                    channel_id, vmodel
+                    backend.id, vmodel
                 ).get_counterpart_response()
                 if not datas:
                     continue
@@ -3306,7 +3300,7 @@ class IrModelSynchro(models.Model):
                 ext_ix = -1
                 loc_ix = -1
                 ext_id, ext_ix = get_ext_id(ext_ix, datas)
-                loc_id, loc_ix = get_loc_id(loc_ix, recs, loc_ext_id_name, channel_id)
+                loc_id, loc_ix = get_loc_id(loc_ix, recs, loc_ext_id_name, backend.id)
                 while ext_id > 0 and loc_id > 0:
                     if (
                         (loc_id > 0 and 0 < ext_id < loc_id)
@@ -3317,18 +3311,18 @@ class IrModelSynchro(models.Model):
                         )
                     ):
                         if identity == "odoo" or cache.get_model_attr(
-                            channel_id, vmodel, "2PULL", default=True
+                            backend.id, vmodel, "2PULL", default=True
                         ):
                             if isinstance(datas[ext_ix], (int, long)):
                                 vals = self.get_model_of_channel(
-                                    channel_id, vmodel
+                                    backend.id, vmodel
                                 ).get_counterpart_response(id=ext_id)
                             else:
                                 vals = datas[ext_ix]
                             if not vals:
                                 continue
                             self.generic_synchro(
-                                cls, vals, jacket=True, channel_id=channel_id
+                                cls, vals, jacket=True, channel_id=backend.id
                             )
                             self.env.cr.commit()  # pylint: disable=invalid-commit
                         ext_id, ext_ix = get_ext_id(ext_ix, datas)
@@ -3360,15 +3354,15 @@ class IrModelSynchro(models.Model):
                             )
 
                         loc_id, loc_ix = get_loc_id(
-                            loc_ix, recs, loc_ext_id_name, channel_id
+                            loc_ix, recs, loc_ext_id_name, backend.id
                         )
                     else:
                         ext_id, ext_ix = get_ext_id(ext_ix, datas)
                         loc_id, loc_ix = get_loc_id(
-                            loc_ix, recs, loc_ext_id_name, channel_id
+                            loc_ix, recs, loc_ext_id_name, backend.id
                         )
             _logger.info(
-                "%s record successfully unlinked from channel %s" % (ctr, channel_id)
+                "%s record successfully unlinked from channel %s" % (ctr, backend.id)
             )
 
     @api.multi
@@ -3437,17 +3431,17 @@ class IrModelSynchro(models.Model):
                         rec.write(vals)
             return rec_counter
 
-        def do_workflow(channel_id, only_complete, use_workflow, datetime_stop,
+        def do_workflow(backend, only_complete, use_workflow, datetime_stop,
                         local_ids):
-            cur_channel = self.env["synchro.channel"].browse(channel_id)
-            workflow = cur_channel.import_workflow
-            rec_counter = cur_channel.rec_counter
+            cur_backend = backend
+            workflow = cur_backend.import_workflow
+            rec_counter = cur_backend.rec_counter
             self.logmsg(
                 "debug",
                 ">>> WORKFLOW(%(w)s,%(c)s)",
                 ctx={
-                    "w": cur_channel.import_workflow,
-                    "c": cur_channel.rec_counter,
+                    "w": cur_backend.import_workflow,
+                    "c": cur_backend.rec_counter,
                 },
             )
             while workflow in WORKFLOW:
@@ -3471,45 +3465,45 @@ class IrModelSynchro(models.Model):
                     },
                 )
                 rec_counter, loc_ids = pull_model(
-                    channel_id, select, only_complete, use_workflow, only_minimal,
+                    backend, select, only_complete, use_workflow, only_minimal,
                     datetime_stop, no_deep_fields, model_list, remote_ids,
                     rec_counter
                 )
                 if loc_ids:
                     local_ids = local_ids + loc_ids
-                    cur_channel.rec_counter = rec_counter
+                    cur_backend.rec_counter = rec_counter
                 else:
                     workflow += 1
-                    cur_channel.import_workflow = workflow
-                    cur_channel.rec_counter = 0
-                    cur_channel.workflow_model = ""
+                    cur_backend.import_workflow = workflow
+                    cur_backend.rec_counter = 0
+                    cur_backend.workflow_model = ""
                 self.logmsg(
                     "debug",
                     ">>> WORKFLOW(%(w)s,%(c)s)",
                     ctx={
-                        "w": cur_channel.import_workflow,
-                        "c": cur_channel.rec_counter,
+                        "w": cur_backend.import_workflow,
+                        "c": cur_backend.rec_counter,
                     },
                 )
 
-        def pull_model(channel_id, select, only_complete, use_workflow, only_minimal,
+        def pull_model(backend, select, only_complete, use_workflow, only_minimal,
                        datetime_stop, no_deep_fields, model_list,
                        remote_ids, rec_counter):
             cache = self.env["ir.model.synchro.cache"]
-            identity = cache.get_attr(channel_id, "IDENTITY")
-            cur_channel = self.env["synchro.channel"].browse(channel_id)
+            identity = cache.get_attr(backend.id, "IDENTITY")
+            cur_backend = backend
             ctr = 0
             local_ids = []
             for vmodel in model_list:
                 if datetime.now() > datetime_stop:
                     break
                 if not self.env["synchro.channel.model"].search(
-                    [("synchro_channel_id", "=", channel_id), ("name", "=", vmodel)]
+                    [("synchro_channel_id", "=", backend.id), ("name", "=", vmodel)]
                 ):
                     if identity == "odoo":
                         if not self.env[
                             "synchro.channel.model"].build_odoo_synchro_model(
-                            channel_id, None, model=vmodel
+                            backend.id, None, model=vmodel
                         ):
                             continue
                     else:
@@ -3524,7 +3518,7 @@ class IrModelSynchro(models.Model):
                     identity != "odoo"
                     and not only_complete
                     and not cache.get_model_attr(
-                        channel_id, vmodel, "2PULL", default=True
+                        backend.id, vmodel, "2PULL", default=True
                     )
                 ):
                     self.logmsg("info", "### Model %s not pullable" % vmodel)
@@ -3534,7 +3528,7 @@ class IrModelSynchro(models.Model):
                     datas = evaluate_remote_ids(remote_ids)
                 else:
                     datas = self.get_model_of_channel(
-                        channel_id, vmodel
+                        backend.id, vmodel
                     ).get_counterpart_response()
                 if not datas:
                     continue
@@ -3542,7 +3536,7 @@ class IrModelSynchro(models.Model):
                     datas = [datas]
                 if len(datas) and isinstance(datas[0], (int, long)):
                     datas.sort()
-                ext_id_name = self.get_loc_ext_id_name(channel_id, vmodel)
+                ext_id_name = self.get_loc_ext_id_name(backend.id, vmodel)
                 for item in datas:
                     if datetime.now() > datetime_stop:
                         break
@@ -3560,7 +3554,7 @@ class IrModelSynchro(models.Model):
                             and not cls.search([(ext_id_name, "=", ext_id)])
                         ):
                             rec_counter = update_rec_counter(
-                                cur_channel,
+                                cur_backend.id,
                                 ext_id,
                                 rec_counter,
                                 use_workflow,
@@ -3570,10 +3564,11 @@ class IrModelSynchro(models.Model):
                         if use_workflow and ext_id <= rec_counter:
                             continue
                         rec_counter = update_rec_counter(
-                            cur_channel, ext_id, rec_counter, use_workflow, model=vmodel
+                            cur_backend.id, ext_id, rec_counter, use_workflow,
+                            model=vmodel
                         )
                     loc_id = self.pull_1_record(
-                        channel_id,
+                        backend.id,
                         vmodel,
                         vals or ext_id,
                         only_minimal=only_minimal,
@@ -3584,7 +3579,7 @@ class IrModelSynchro(models.Model):
                         "WORKFLOW>>> self.pull_1_record("
                         "ch=%s,%s,%s,min=%s,nodeep=%s)"
                         % (
-                            channel_id,
+                            backend.id,
                             vmodel,
                             vals or ext_id,
                             only_minimal,
@@ -3596,13 +3591,13 @@ class IrModelSynchro(models.Model):
                     if loc_id < 0:
                         continue
                     rec_counter = update_rec_counter(
-                        cur_channel, ext_id, rec_counter, use_workflow
+                        cur_backend.id, ext_id, rec_counter, use_workflow
                     )
                     ctr += 1
                     if loc_id not in local_ids:
                         local_ids.append(loc_id)
             _logger.info(
-                "%s record successfully pulled from channel %s" % (ctr, channel_id))
+                "%s record successfully pulled from channel %s" % (ctr, backend.id))
             return rec_counter, local_ids
 
         self.logmsg(
@@ -3638,14 +3633,14 @@ class IrModelSynchro(models.Model):
             rec_counter = 0
             if use_workflow:
                 do_workflow(
-                    backend.id, only_complete, use_workflow, datetime_stop, local_ids)
+                    backend, only_complete, use_workflow, datetime_stop, local_ids)
             elif identity == "odoo":
                 if only_model:
                     model_list = [only_model]
                 else:
                     model_list = self.env["ir.model.synchro.cache"].TABLE_DEF.keys()
                 rec_counter, local_ids = pull_model(
-                    backend.id, select, only_complete, use_workflow, only_minimal,
+                    backend, select, only_complete, use_workflow, only_minimal,
                     datetime_stop, no_deep_fields, model_list,
                     remote_ids, rec_counter)
             else:
@@ -3659,7 +3654,7 @@ class IrModelSynchro(models.Model):
                     )
                 ]
                 rec_counter, local_ids = pull_model(
-                    backend.id, select, only_complete, use_workflow, only_minimal,
+                    backend, select, only_complete, use_workflow, only_minimal,
                     datetime_stop, no_deep_fields, model_list,
                     remote_ids, rec_counter)
         return local_ids

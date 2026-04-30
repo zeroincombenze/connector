@@ -11,8 +11,10 @@ In order to run full test on the same host MUST be active follow instance:
 * Odoo 12.0 with OCA modules; http/xmlrpc port: 8272; DB name: oca12
 
 """
-# import os
+import os
+import os.path as pth
 import logging
+from python_plus import _u
 from .testenv import MainTest as SingleTransactionCase
 
 _logger = logging.getLogger(__name__)
@@ -37,6 +39,19 @@ TEST_SYNCHRO_CHANNEL = {
         "password": "admin",
         "counterpart_url": "admin@localhost:8172",
         "prefix": "oe8",
+        "tracelevel": "4",
+        "sequence": 16,
+    },
+    "z0bug.csv-vg7": {
+        "name": "vg7",
+        "identity": "vg7",
+        "method": "CSV",
+        # "exchange_path": self.get_exchange_path(backend.prefix),
+        "prefix": "vg7",
+        "ignore_child_lines": False,
+        # "renum_lines": True,
+        "tracelevel": "4",
+        "sequence": 10,
     },
 }
 TEST_SETUP_LIST = ["synchro.channel", ]
@@ -57,44 +72,83 @@ class MyTest(SingleTransactionCase):
     def tearDown(self):
         super(MyTest, self).tearDown()
 
-    def test_component_attrs(self):
-        _logger.info(
-            "🎺 Starting test w/o connection"
+    def get_exchange_path(self, backend):
+        testdir = pth.join(pth.dirname(__file__))
+        root = ""
+        if backend.identity == "vg7":
+            root = pth.join(testdir, "data", "vg7")
+            if not pth.isdir(root):
+                os.makedirs(root)
+        return root
+
+    def _test_assign_backend(self, xref):
+        backend = self.resource_browse(xref)
+        vals = {backend.prefix + ":name": ""}
+        assigned_backed = self.env["synchro.channel"].assign_backend(vals)
+        self.assertEqual(backend, assigned_backed)
+        if backend.identity == "vg7":
+            vals = {"name": ""}
+            assigned_backed = self.env["synchro.channel"].assign_backend(vals)
+            self.assertEqual(backend, assigned_backed)
+
+    def _test_find_model(self, xref):
+        backend = self.resource_browse(xref)
+        model = "res.partner"
+        if backend.identity == "vg7":
+            dirmap = backend.find_model_channel(model_name=model)
+            self.assertTrue(dirmap)
+            self.assertEqual(model, dirmap.name)
+
+            ext_model = "customers"
+            dirmap = backend.find_model_channel(ext_model=ext_model)
+            self.assertTrue(dirmap)
+            self.assertEqual(ext_model, dirmap.counterpart_name)
+            self.assertEqual(model, dirmap.name)
+        else:
+            self.env["synchro.channel.model"].build_odoo_synchro_model(
+                backend.id, model, model=model)
+
+    def _test_counterpart_model_response(self, xref):
+        backend = self.resource_browse(xref)
+        if backend.identity == "vg7":
+            ext_model = "customers"
+            dirmap = backend.find_model_channel(ext_model=ext_model)
+            ext_id = 101
+            vals = dirmap.get_counterpart_response(ext_id=ext_id)
+            self.assertTrue(vals)
+            self.assertEqual("Prima Alpha S.p.A.", vals["name"])
+
+    def _test_simple_connection(self, xref):
+        _logger.info(u"🎺 Connection test backend %s" % _u(xref))
+        backend = self.resource_browse(xref)
+        root = self.get_exchange_path(backend)
+        self.resource_edit(
+            backend,
+            web_changes=[("exchange_path", root)],
+            actions="button_check_connection",
         )
-        editing = False
-        for xref in self.get_resource_data_list("synchro.channel"):
-            backend = self.resource_browse(xref)
-            self.assertEqual(backend.state, 'draft')
-            if not editing:
-                self.resource_edit(
-                    backend,
-                    web_changes=[("identity", backend.identity)],
-                )
-                editing = True
-            self.assertEqual(backend.state, 'draft')
+        self.assertEqual(backend.state, 'checked')
+
+        self.resource_edit(
+            backend,
+            actions="button_reset_to_draft",
+        )
+        self.assertEqual(backend.state, 'draft')
+
+        backend = self.resource_browse(xref)
+        self.resource_edit(
+            backend,
+            actions="button_check_connection",
+        )
+        self.assertEqual(backend.state, 'checked')
 
     def test_connection(self):
         # This test requires external Odoo instance active. See header
         _logger.info(
-            "🎺 Starting connection test on ports 8270 (db=oca10) and 8272 (db=oca12)"
+            "🎺🎺 Starting connection test on ports 8270 (db=oca10) and 8272 (db=oca12)"
         )
         for xref in self.get_resource_data_list("synchro.channel"):
-            backend = self.resource_browse(xref)
-            self.resource_edit(
-                backend,
-                actions="button_check_connection",
-            )
-            self.assertEqual(backend.state, 'checked')
-
-            self.resource_edit(
-                backend,
-                actions="button_reset_to_draft",
-            )
-            self.assertEqual(backend.state, 'draft')
-
-            backend = self.resource_browse(xref)
-            self.resource_edit(
-                backend,
-                actions="button_check_connection",
-            )
-            self.assertEqual(backend.state, 'checked')
+            self._test_simple_connection(xref)
+            self._test_assign_backend(xref)
+            self._test_find_model(xref)
+            self._test_counterpart_model_response(xref)
