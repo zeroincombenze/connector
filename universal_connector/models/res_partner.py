@@ -104,7 +104,7 @@ class ResPartner(models.Model):
                         vals[nm] = int(vals[nm])
                     if vals.get("type"):
                         vals[nm] = self.env["ir.model.synchro"].get_loc_ext_id_value(
-                            backend.id, "res.partner", vals[nm], spec=vals["type"]
+                            backend, "res.partner", vals[nm], spec=vals["type"]
                         )
             return vals
 

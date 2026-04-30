@@ -792,7 +792,7 @@ class SynchroChannelModel(models.Model):
             try:
                 self.create(vals)
                 # commit table to avoid another I/O if next operation fails
-                self.env.cr.commit()  # pylint: disable=invalid-commit
+                # self.env.cr.commit()  # pylint: disable=invalid-commit
                 return True
             except BaseException as e:  # pragma: no cover
                 self.env.cr.rollback()  # pylint: disable=invalid-commit

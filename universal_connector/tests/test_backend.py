@@ -91,9 +91,22 @@ class MyTest(SingleTransactionCase):
             assigned_backed = self.env["synchro.channel"].assign_backend(vals)
             self.assertEqual(backend, assigned_backed)
 
-    def _test_find_model(self, xref):
+    def _test_backend_misc(self, xref):
+        IrModelSynchro = self.env["ir.model.synchro"]
         backend = self.resource_browse(xref)
         model = "res.partner"
+        ext_id_name = IrModelSynchro.get_loc_ext_id_name(backend, model)
+        if backend.identity == "vg7":
+            self.assertEqual("vg7_id", ext_id_name)
+        else:
+            self.assertEqual("oe8_id", ext_id_name)
+
+        ext_id = IrModelSynchro.get_loc_ext_id_value(backend, model, 1)
+        self.assertEqual(1, ext_id)
+        if backend.identity == "vg7":
+            ext_id = IrModelSynchro.get_loc_ext_id_value(backend, model, 1, spec="delivery")
+            self.assertEqual(100000001 , ext_id)
+
         if backend.identity == "vg7":
             dirmap = backend.find_model_channel(model_name=model)
             self.assertTrue(dirmap)
@@ -118,6 +131,24 @@ class MyTest(SingleTransactionCase):
             self.assertTrue(vals)
             self.assertEqual("Prima Alpha S.p.A.", vals["name"])
 
+    def _test_misc(self):
+        IrModelSynchro = self.env["ir.model.synchro"]
+        vmodel = IrModelSynchro.get_vmodel("res.partner", "delivery")
+        self.assertEqual("res.partner.shipping", vmodel)
+        actual_model = IrModelSynchro.get_actual_model(vmodel, only_name=True)
+        self.assertEqual("res.partner", actual_model)
+        spec = IrModelSynchro.get_spec_from_vmodel(vmodel)
+        self.assertEqual("delivery", spec)
+        vmodel = IrModelSynchro.get_vmodel("res.partner", "supplier")
+        self.assertEqual("res.partner.supplier", vmodel)
+        actual_model = IrModelSynchro.get_actual_model(vmodel, only_name=True)
+        self.assertEqual("res.partner", actual_model)
+        spec = IrModelSynchro.get_spec_from_vmodel(vmodel)
+        self.assertEqual("supplier", spec)
+
+    def _test_purge(self):
+        self.env["ir.model.synchro.log"].purge_log()
+
     def _test_simple_connection(self, xref):
         _logger.info(u"🎺 Connection test backend %s" % _u(xref))
         backend = self.resource_browse(xref)
@@ -141,14 +172,21 @@ class MyTest(SingleTransactionCase):
             actions="button_check_connection",
         )
         self.assertEqual(backend.state, 'checked')
+        self.env["ir.model.synchro.cache"].setup_model_in_backends(
+            backend, model="res.partner")
+        if backend.identity == "vg7":
+            self.env["ir.model.synchro.cache"].setup_model_in_backends(
+                backend, model="res.partner.shipping")
 
     def test_connection(self):
         # This test requires external Odoo instance active. See header
         _logger.info(
             "🎺🎺 Starting connection test on ports 8270 (db=oca10) and 8272 (db=oca12)"
         )
+        self._test_misc()
         for xref in self.get_resource_data_list("synchro.channel"):
             self._test_simple_connection(xref)
             self._test_assign_backend(xref)
-            self._test_find_model(xref)
+            self._test_backend_misc(xref)
             self._test_counterpart_model_response(xref)
+        self._test_purge()

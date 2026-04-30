@@ -852,7 +852,7 @@ class IrModelSynchroCache(models.Model):
             and self.get_struct_model_attr(model, "XPIRE")
         ):
             return
-        self.setup_1_backend(backend)
+        # self.setup_1_backend(backend)
         self.init_backend_model(backend.id, model)
         self.store_model_1_backend(backend, rec)
         self.CACHE.set_model_cache(self._cr.dbname, backend.id, model)
@@ -996,6 +996,7 @@ class IrModelSynchroCache(models.Model):
     def setup_model_in_backends(self, backend, model=None, ext_model=None):
         """Read model value from all active channel model table and store
         them into memory"""
+        self.setup_1_backend(backend)
         Backend = self.env["synchro.channel.model"]
         if model:
             domain = [("name", "=", model)]
