@@ -714,25 +714,25 @@ class SynchroChannelModel(models.Model):
             vals = {} if (ext_id and not mode) else []
         return sort_data(vals)
 
-    def build_odoo_synchro_model(self, backend_id, ext_model, model=None):
-        cache = self.env["ir.model.synchro.cache"]
+    def build_odoo_synchro_model(self, backend, ext_model, model=None):
+        Cache = self.env["ir.model.synchro.cache"]
         if (
-            cache.get_attr(backend_id, "IDENTITY") != "odoo"
+            backend.identity != "odoo"
             or (ext_model and ext_model.startswith("ir.")
                 and ext_model != "ir.module.module")
             or (model and model.startswith("ir.") and model != "ir.module.module")
         ):
             return False
-        ir_synchro_model = self.env["ir.model.synchro"]
-        ext_odoo_ver = cache.get_attr(backend_id, "ODOO_FVER")
+        IrModelSynchro = self.env["ir.model.synchro"]
+        ext_odoo_ver = Cache.get_attr(backend.id, "ODOO_FVER")
         if not ext_model and model:
             if self.search(
-                [("name", "=", model), ("synchro_channel_id", "=", backend_id)]
+                [("name", "=", model), ("synchro_channel_id", "=", backend.id)]
             ):
                 return True
             ext_model = actual_model = model
             if ext_odoo_ver:
-                tnldict = ir_synchro_model.get_tnldict(backend_id)
+                tnldict = IrModelSynchro.get_tnldict(backend.id)
                 ext_model = transodoo.translate_from_to(
                     tnldict,
                     "ir.model",
@@ -754,13 +754,13 @@ class SynchroChannelModel(models.Model):
             if self.search(
                 [
                     ("counterpart_name", "=", ext_model),
-                    ("synchro_channel_id", "=", backend_id),
+                    ("synchro_channel_id", "=", backend.id),
                 ]
             ):
                 return True
             actual_model = ext_model
             if ext_odoo_ver:
-                tnldict = ir_synchro_model.get_tnldict(backend_id)
+                tnldict = IrModelSynchro.get_tnldict(backend.id)
                 actual_model = transodoo.translate_from_to(
                     tnldict,
                     "ir.model",
@@ -779,10 +779,10 @@ class SynchroChannelModel(models.Model):
                         type="model",
                     )
 
-        field_uname, skeys = cache.get_default_keys(actual_model)
+        field_uname, skeys = Cache.get_default_keys(actual_model)
         if field_uname and skeys:
             vals = {
-                "synchro_channel_id": backend_id,
+                "synchro_channel_id": backend.id,
                 "name": actual_model,
                 "counterpart_name": ext_model,
                 "field_uname": field_uname,
@@ -790,20 +790,22 @@ class SynchroChannelModel(models.Model):
                 "sequence": 16,
             }
             try:
-                self.create(vals)
+                model_rec = self.create(vals)
                 # commit table to avoid another I/O if next operation fails
                 # self.env.cr.commit()  # pylint: disable=invalid-commit
+                Cache.setup_backend_model(backend, actual_model)
+                Cache.setup_channel_model_fields(model_rec)
                 return True
             except BaseException as e:  # pragma: no cover
                 self.env.cr.rollback()  # pylint: disable=invalid-commit
                 self.env["ir.model.synchro"].logmsg(
                     "warning",
                     "Error %(e) creating %(model)s",
-                    model=self.__name__,
+                    model=model or ext_model,
                     ctx={"e": e},
                 )
         else:
-            cache.set_unmanageable(actual_model)
+            Cache.set_unmanageable(actual_model)
         return False
 
 

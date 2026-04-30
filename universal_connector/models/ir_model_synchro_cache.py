@@ -466,15 +466,15 @@ class IrModelSynchroCache(models.Model):
         )
 
     @api.model_cr_context
-    def init_backend_model(self, backend_id, model):
-        self.set_channel_base(backend_id)
-        self.set_attr(backend_id, model, self.get_attr(backend_id, model) or {})
-        self.set_model_attr(backend_id, model, "LOC_FIELDS", {})
-        self.set_model_attr(backend_id, model, "EXT_FIELDS", {})
-        self.set_model_attr(backend_id, model, "APPLY", {})
-        self.set_model_attr(backend_id, model, "PROTECT", {})
-        self.set_model_attr(backend_id, model, "SPEC", {})
-        self.set_model_attr(backend_id, model, "REQUIRED", {})
+    def setup_backend_model(self, backend, model):
+        self.set_channel_base(backend.id)
+        self.set_attr(backend.id, model, self.get_attr(backend.id, model) or {})
+        self.set_model_attr(backend.id, model, "LOC_FIELDS", {})
+        self.set_model_attr(backend.id, model, "EXT_FIELDS", {})
+        self.set_model_attr(backend.id, model, "APPLY", {})
+        self.set_model_attr(backend.id, model, "PROTECT", {})
+        self.set_model_attr(backend.id, model, "SPEC", {})
+        self.set_model_attr(backend.id, model, "REQUIRED", {})
 
     # --------------------------
     # Model structure primitives
@@ -764,16 +764,11 @@ class IrModelSynchroCache(models.Model):
                 if (
                     (self.is_struct(field)
                      and field not in ("id", "vg7_id", "oe7_id", "oe8_id", "oe10_id"))
-                    and not self.get_model_attr(backend.id, model, "XPIRE")
+                    # and not self.get_model_attr(backend.id, model, "XPIRE")
                     and field
                     not in self.get_model_attr(backend.id, model, "LOC_FIELDS")
                 ):
                     self.store_odoo_field_from_rec(backend.id, model, field)
-        # special names
-        ext_ref = "%s_id" % self.get_attr(backend.id, "PREFIX")
-        self.set_model_field_attr(backend.id, model, "id", "LOC_FIELDS", "")
-        self.set_model_field_attr(backend.id, model, ext_ref, "LOC_FIELDS", "id")
-        self.set_model_field_attr(backend.id, model, "id", "EXT_FIELDS", ext_ref)
 
     @api.model_cr_context
     def store_model_1_backend(self, backend, rec):
@@ -842,6 +837,11 @@ class IrModelSynchroCache(models.Model):
                 self.set_model_attr(backend.id, model, "ID_OFFSET", 200000000)
             elif model == "res.partner.shipping":
                 self.set_model_attr(backend.id, model, "ID_OFFSET", 100000000)
+        # special names
+        ext_ref = "%s_id" % backend.prefix
+        self.set_model_field_attr(backend.id, model, "id", "LOC_FIELDS", "")
+        self.set_model_field_attr(backend.id, model, ext_ref, "LOC_FIELDS", "id")
+        self.set_model_field_attr(backend.id, model, "id", "EXT_FIELDS", ext_ref)
         self.setup_channel_model_fields(rec)
 
     @api.model_cr_context
@@ -853,15 +853,15 @@ class IrModelSynchroCache(models.Model):
         ):
             return
         # self.setup_1_backend(backend)
-        self.init_backend_model(backend.id, model)
+        self.setup_backend_model(backend, model)
         self.store_model_1_backend(backend, rec)
         self.CACHE.set_model_cache(self._cr.dbname, backend.id, model)
 
     @api.model_cr_context
     def setup_1_backend(self, backend):
         if (
-            self.get_attr(backend.id, "PREFIX")
-            and self.get_attr(backend.id, "XPIRE")
+                self.get_attr(backend.id, "PREFIX")
+                and self.get_attr(backend.id, "XPIRE")
         ):
             return
         self.set_channel_base(backend.id)
@@ -1008,9 +1008,9 @@ class IrModelSynchroCache(models.Model):
         recs = Backend.search(domain)
         if not recs and backend and backend.identity == "odoo":
             if ext_model:
-                Backend.build_odoo_synchro_model(backend.id, ext_model)
+                Backend.build_odoo_synchro_model(backend, ext_model)
             elif model:
-                Backend.build_odoo_synchro_model(backend.id, None, model=model)
+                Backend.build_odoo_synchro_model(backend, None, model=model)
         for rec in Backend.search(domain):
             self.setup_backend_ext_model(backend, rec)
 

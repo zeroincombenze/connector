@@ -2576,13 +2576,12 @@ class IrModelSynchro(models.Model):
     def synchro_childs(
         self, backend, vmodel, actual_model, parent_id, ext_id, only_minimal=None,
     ):
-        backend_id = backend.id
         self.logmsg(
             "debug",
             "%(model)s.synchro_childs(%(chid)s,%(cmodel)s,%(id)s,%(xid)s) ##",
             model=vmodel,
             ctx={
-                "chid": backend_id,
+                "chid": backend.id,
                 "cmodel": actual_model,
                 "id": parent_id,
                 "xid": ext_id,
@@ -2590,7 +2589,6 @@ class IrModelSynchro(models.Model):
         )
 
         Cache = self.env["ir.model.synchro.cache"]
-        channel = self.env["synchro.channel"].browse(backend_id)
         child_ids = Cache.get_struct_model_attr(
             actual_model, "CHILD_IDS", default=False
         )
@@ -2599,24 +2597,24 @@ class IrModelSynchro(models.Model):
             _logger.error("!-5! Invalid structure of %s!" % vmodel)
             return -5
         if not self.env["synchro.channel.model"].search(
-            [("synchro_channel_id", "=", backend_id), ("name", "=", model_child)]
+            [("synchro_channel_id", "=", backend.id), ("name", "=", model_child)]
         ):
-            if Cache.get_attr(backend_id, "IDENTITY") == "odoo":
+            if Cache.get_attr(backend.id, "IDENTITY") == "odoo":
                 self.env["synchro.channel.model"].build_odoo_synchro_model(
-                    backend_id, model_child
+                    backend, model_child
                 )
             else:
                 _logger.error("!-11! Unmanaged model %s!" % model_child)
                 return -11
-        Cache.open(model=model_child, backend=channel)
+        Cache.open(model=model_child, backend=backend)
         # Retrieve header id field
         parent_id_name = Cache.get_struct_model_attr(model_child, "PARENT_ID")
         if not parent_id_name:
             _logger.error("!-5! Invalid structure of %s!" % vmodel)
             return -5
         cls = self.get_actual_model(model_child)
-        rec_ids = Cache.get_model_attr(backend_id, vmodel, "__%s_ids" % actual_model)
-        Cache.del_model_attr(backend_id, vmodel, "__%s_ids" % actual_model)
+        rec_ids = Cache.get_model_attr(backend.id, vmodel, "__%s_ids" % actual_model)
+        Cache.del_model_attr(backend.id, vmodel, "__%s_ids" % actual_model)
         if not rec_ids:
             return -7
 
@@ -2631,7 +2629,7 @@ class IrModelSynchro(models.Model):
                 id = self.generic_synchro(
                     cls,
                     vals,
-                    channel_id=backend_id,
+                    channel_id=backend.id,
                     jacket=True,
                     only_minimal=only_minimal,
                     no_del_child=True,
@@ -3496,7 +3494,7 @@ class IrModelSynchro(models.Model):
                     if identity == "odoo":
                         if not self.env[
                             "synchro.channel.model"].build_odoo_synchro_model(
-                            backend.id, None, model=vmodel
+                            backend, None, model=vmodel
                         ):
                             continue
                     else:

@@ -107,19 +107,20 @@ class MyTest(SingleTransactionCase):
             ext_id = IrModelSynchro.get_loc_ext_id_value(backend, model, 1, spec="delivery")
             self.assertEqual(100000001 , ext_id)
 
-        if backend.identity == "vg7":
-            dirmap = backend.find_model_channel(model_name=model)
-            self.assertTrue(dirmap)
-            self.assertEqual(model, dirmap.name)
+        if backend.identity == "odoo":
+            self.env["synchro.channel.model"].build_odoo_synchro_model(
+                backend, model, model=model)
 
+        dirmap = backend.find_model_channel(model_name=model)
+        self.assertTrue(dirmap)
+        self.assertEqual(model, dirmap.name)
+
+        if backend.identity == "vg7":
             ext_model = "customers"
             dirmap = backend.find_model_channel(ext_model=ext_model)
             self.assertTrue(dirmap)
             self.assertEqual(ext_model, dirmap.counterpart_name)
             self.assertEqual(model, dirmap.name)
-        else:
-            self.env["synchro.channel.model"].build_odoo_synchro_model(
-                backend.id, model, model=model)
 
     def _test_counterpart_model_response(self, xref):
         backend = self.resource_browse(xref)
@@ -130,6 +131,13 @@ class MyTest(SingleTransactionCase):
             vals = dirmap.get_counterpart_response(ext_id=ext_id)
             self.assertTrue(vals)
             self.assertEqual("Prima Alpha S.p.A.", vals["name"])
+        elif backend.identity == "odoo":
+            ext_model = "res.partner"
+            dirmap = backend.find_model_channel(ext_model=ext_model)
+            ext_id = 1
+            vals = dirmap.get_counterpart_response(ext_id=ext_id)
+            self.assertTrue(vals)
+            self.assertTrue(vals["name"])
 
     def _test_misc(self):
         IrModelSynchro = self.env["ir.model.synchro"]
