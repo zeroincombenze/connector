@@ -49,7 +49,7 @@
     <record forcecreate="1" id="res_country_name" model="synchro.channel.model.fields">
         <field name="name">name</field>
         <field name="counterpart_name">description</field>
-        <field name="apply">set_tmp_name()</field>
+        <!-- <field name="apply">set_tmp_name()</field> -->
         <field name="model_id" ref="res_country"/>
     </record>
 
@@ -69,6 +69,7 @@
 
     <record forcecreate="1" id="res_country_state_country_id" model="synchro.channel.model.fields">
         <field name="name">country_id</field>
+        <field name="apply">IT</field>
         <field name="protect_update">3</field>
         <field name="model_id" ref="res_country_state"/>
     </record>
@@ -76,7 +77,7 @@
     <record forcecreate="1" id="res_country_state_name" model="synchro.channel.model.fields">
         <field name="name">name</field>
         <field name="counterpart_name">description</field>
-        <field name="apply">set_tmp_name()</field>
+        <!-- <field name="apply">set_tmp_name()</field> -->
         <field name="protect_update">3</field>
         <field name="model_id" ref="res_country_state"/>
     </record>

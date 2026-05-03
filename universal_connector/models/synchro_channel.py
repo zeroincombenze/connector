@@ -167,6 +167,9 @@ class SynchroChannel(models.Model):
     @api.multi
     def button_reset_to_draft(self):
         self.ensure_one()
+        Cache = self.env["ir.model.synchro.cache"]
+        Cache.set_attr(self.id, "CNX", False)
+        Cache.set_attr(self.id, "SESSION", False)
         self.write({"state": "draft"})
 
     def assign_backend(self, vals):
@@ -180,29 +183,29 @@ class SynchroChannel(models.Model):
                     backend = backend[0]
                     break
         if not backend:
-            cache = self.env["ir.model.synchro.cache"]
+            Cache = self.env["ir.model.synchro.cache"]
             odoo_prio = 999999
             channel_prio = 999999
             odoo_channel = def_channel = channel_from = False
             channel_ctr = 0
-            if not cache.get_channel_list():
-                cache.setup_channels(all=True)
-            for backend in cache.get_channel_list():
+            if not Cache.get_channel_list():
+                Cache.setup_channels(all=True)
+            for backend in Cache.get_channel_list():
                 backend_id = backend.id
                 if channel_from:
                     break
                 channel_ctr += 1
-                pfx_ext = "%s:" % cache.get_attr(backend_id, "PREFIX")
-                pfx_depr = "%s_" % cache.get_attr(backend_id, "PREFIX")
-                if cache.get_attr(backend_id, "PRIO") < channel_prio:
+                pfx_ext = "%s:" % Cache.get_attr(backend_id, "PREFIX")
+                pfx_depr = "%s_" % Cache.get_attr(backend_id, "PREFIX")
+                if Cache.get_attr(backend_id, "PRIO") < channel_prio:
                     def_channel = backend_id
-                    channel_prio = cache.get_attr(backend_id, "PRIO", default=16)
+                    channel_prio = Cache.get_attr(backend_id, "PRIO", default=16)
                 if (
-                    cache.get_attr(backend_id, "IDENTITY") == "odoo"
-                    and cache.get_attr(backend_id, "PRIO") < odoo_prio
+                    Cache.get_attr(backend_id, "IDENTITY") == "odoo"
+                    and Cache.get_attr(backend_id, "PRIO") < odoo_prio
                 ):
                     odoo_channel = backend_id
-                    odoo_prio = cache.get_attr(backend_id, "PRIO")
+                    odoo_prio = Cache.get_attr(backend_id, "PRIO")
                 for ext_ref in vals:
                     if ext_ref.startswith(pfx_ext) or ext_ref.startswith(pfx_depr):
                         channel_from = backend_id
@@ -261,9 +264,9 @@ class SynchroChannel(models.Model):
         return protocol, endpoint, port, db, login, passwd
 
     def connect(self, ignore_error=None):
-        cache = self.env["ir.model.synchro.cache"]
-        cnx = cache.get_attr(self.id, "CNX")
-        session = cache.get_attr(self.id, "SESSION")
+        Cache = self.env["ir.model.synchro.cache"]
+        cnx = Cache.get_attr(self.id, "CNX")
+        session = Cache.get_attr(self.id, "SESSION")
         method = self.method.lower()
         super_method = "rpc" if self.method in ("XML", "JSON") else "gen"
         endpoint = self.get_endpoint()
@@ -282,8 +285,8 @@ class SynchroChannel(models.Model):
                         ctx={"fct": fct, "ep": endpoint},
                     )
                     cnx, session = getattr(self, fct)()
-                    cache.set_attr(self.id, "CNX", cnx)
-                    cache.set_attr(self.id, "SESSION", session)
+                    Cache.set_attr(self.id, "CNX", cnx)
+                    Cache.set_attr(self.id, "SESSION", session)
                     break
         return cnx, session
 
@@ -410,8 +413,8 @@ class SynchroChannelModel(models.Model):
             model=model,
             ctx={"xid": ext_id, "csv": file_csv},
         )
-        cache = self.env["ir.model.synchro.cache"]
-        counterpart_pk = cache.get_model_attr(
+        Cache = self.env["ir.model.synchro.cache"]
+        counterpart_pk = Cache.get_model_attr(
             self.synchro_channel_id.id, model, "KEY_ID", default="id"
         )
         if not os.path.isfile(file_csv):
@@ -525,16 +528,16 @@ class SynchroChannelModel(models.Model):
                 rec = Model.browse(ext_id)
             except BaseException:  # pragma: no cover
                 rec = False
-        cache = self.env["ir.model.synchro.cache"]
+        Cache = self.env["ir.model.synchro.cache"]
         actual_model = self.name
         vals = {}
         if rec:
-            for ext_field in cache.get_model_attr(
+            for ext_field in Cache.get_model_attr(
                 self.synchro_channel_id.id, ext_model, "EXT_FIELDS"
             ):
                 if not hasattr(rec, ext_field):
                     continue
-                loc_name = cache.get_model_field_attr(
+                loc_name = Cache.get_model_field_attr(
                     self.synchro_channel_id.id,
                     ext_model,
                     ext_field,
@@ -548,14 +551,14 @@ class SynchroChannelModel(models.Model):
                 if isinstance(rec[ext_field], (bool, int, long)):
                     vals[ext_field] = rec[ext_field]
                 elif (
-                    cache.get_struct_model_field_attr(actual_model, loc_name, "ttype")
+                    Cache.get_struct_model_field_attr(actual_model, loc_name, "ttype")
                     == "many2one"
                 ):
                     try:
                         vals[ext_field] = rec[ext_field].id
                     except BaseException:
                         vals[ext_field] = rec[ext_field]
-                elif cache.get_struct_model_field_attr(
+                elif Cache.get_struct_model_field_attr(
                     actual_model, loc_name, "ttype"
                 ) in ("one2many", "many2many"):
                     vals = expand_many(rec, ext_field, vals)

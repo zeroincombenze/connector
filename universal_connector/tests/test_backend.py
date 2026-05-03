@@ -14,6 +14,7 @@ In order to run full test on the same host MUST be active follow instance:
 import os
 import os.path as pth
 import logging
+import csv
 from python_plus import _u
 from .testenv import MainTest as SingleTransactionCase
 
@@ -46,7 +47,6 @@ TEST_SYNCHRO_CHANNEL = {
         "name": "vg7",
         "identity": "vg7",
         "method": "CSV",
-        # "exchange_path": self.get_exchange_path(backend.prefix),
         "prefix": "vg7",
         "ignore_child_lines": False,
         # "renum_lines": True,
@@ -80,6 +80,63 @@ class MyTest(SingleTransactionCase):
             if not pth.isdir(root):
                 os.makedirs(root)
         return root
+
+    def load_csv_file(self, fqn, billing_fqn=None, shipping_fqn=None, only_merge=False):
+        billing_data = self.load_csv_file(
+            billing_fqn, only_merge=True) if billing_fqn else []
+        shipping_data = self.load_csv_file(shipping_fqn) if shipping_fqn else []
+        datas = []
+        if not pth.isfile(fqn):
+            raise IOError("File %s not found!" % fqn)
+        with open(fqn, "r") as fd:
+            header = False
+            id_ix = 0
+            reader = csv.reader(fd)
+            for row in reader:
+                if not header:
+                    header = row
+                    if "id" in row:
+                        id_ix = row.index("id")
+                    if billing_data:
+                        header.append("billing")
+                    if shipping_data:
+                        header.append("shipping")
+                    continue
+                if billing_data:
+                    for billing in billing_data:
+                        if billing.get("customer_id", 0) == row[id_ix]:
+                            del billing["customer_id"]
+                            row.append(billing)
+                            break
+                if shipping_data:
+                    for shipping in shipping_data:
+                        if shipping["customer_id"] == row[id_ix]:
+                            row.append(shipping)
+                            break
+                datas.append(dict(zip(header, row)))
+        if not only_merge:
+            new_fqn = os.path.join(os.path.dirname(os.path.dirname(fqn)),
+                                   os.path.basename(fqn))
+            with open(new_fqn, "wb") as fd:
+                writer = csv.DictWriter(fd, fieldnames=header)
+                writer.writeheader()
+                for vals in datas:
+                    writer.writerow(vals)
+        return datas
+
+    def prepare_env_regresion(self):
+        xref = "z0bug.csv-vg7"
+        backend = self.resource_browse(xref)
+        root = self.get_exchange_path(backend)
+        fqn = os.path.join(root, "customers.csv")
+        billing_fqn = os.path.join(root, "customers_billing_addresses.csv")
+        shipping_fqn = os.path.join(root, "customers_shipping_addresses.csv")
+        self.load_csv_file(fqn, billing_fqn=billing_fqn, shipping_fqn=shipping_fqn)
+        fqn = os.path.join(root, "banks.csv")
+        self.load_csv_file(fqn)
+        backend.button_reset_to_draft()
+        backend.write({"exchange_path": os.path.dirname(root)})
+        backend.button_check_connection()
 
     def _test_assign_backend(self, xref):
         backend = self.resource_browse(xref)
@@ -210,6 +267,21 @@ class MyTest(SingleTransactionCase):
             rec_id = Synchro.trigger_one_record(model, backend.prefix, 233)
             # self.assertEqual(235, rec_id)
 
+    def _test_import_country_state(self, xref):
+        Synchro = self.env["ir.model.synchro"]
+        backend = self.resource_browse(xref)
+        model = "res.country.state"
+        _logger.info(u"🎺 Import country state from %s" % _u(xref))
+        if backend.identity == "vg7":
+            rec_id = Synchro.trigger_one_record("regions", backend.prefix, 2)
+            self.assertTrue(rec_id > 0)
+            country = self.env[model].browse(rec_id)
+            self.assertEqual("MI", country.code)
+            self.assertEqual(2, country.vg7_id)
+        # else:
+        #     rec_id = Synchro.trigger_one_record(model, backend.prefix, 233)
+        #     self.assertEqual(235, rec_id)
+
     def _test_import_partner(self, xref):
         Synchro = self.env["ir.model.synchro"]
         backend = self.resource_browse(xref)
@@ -303,10 +375,50 @@ class MyTest(SingleTransactionCase):
         #     rec_id = Synchro.trigger_one_record(model, backend.prefix, 233)
         #     self.assertEqual(235, rec_id
 
+    def _test_import_uom(self, xref):
+        Synchro = self.env["ir.model.synchro"]
+        backend = self.resource_browse(xref)
+        model = "product.uom"
+        _logger.info(u"🎺 Import uom from %s" % _u(xref))
+        if backend.identity == "vg7":
+            rec_id = Synchro.trigger_one_record("ums", backend.prefix, 3)
+            self.assertTrue(rec_id > 0)
+            uom = self.env[model].browse(rec_id)
+            self.assertEqual("Unit(s)", uom.name)
+            self.assertEqual(3, uom.vg7_id)
+        # else:
+        #     rec_id = Synchro.trigger_one_record(model, backend.prefix, 233)
+        #     self.assertEqual(235, rec_id
+
+    def _test_regression_partner(self, delete_before=False):
+        Synchro = self.env["ir.model.synchro"]
+        xref = "z0bug.csv-vg7"
+        backend = self.resource_browse(xref)
+        model = "res.partner"
+        _logger.info(u"🎺 Import partner from %s" % _u(xref))
+        if delete_before:
+            self.env["res.partner.bank"].search([("vg7_id", "=", 111)]).unlink()
+            self.env["account.payment.term"].search([("vg7_id", "=", 311)]).unlink()
+            self.env["res.partner"].search([("vg7_id", "=", 101)]).unlink()
+        rec_id = Synchro.trigger_one_record("customers", backend.prefix, 101)
+        self.assertTrue(rec_id > 0)
+        partner = self.env[model].browse(rec_id)
+        self.assertEqual("Prima Alpha S.p.A.", partner.name)
+        self.assertEqual(101, partner.vg7_id)
+        self.assertEqual("contact", partner.type)
+        self.assertTrue(partner.child_ids)
+        self.assertTrue(partner.bank_ids)
+        self.assertTrue(partner.property_payment_term_id)
+        delivery = self.env[model].search([("parent_id", "=", rec_id)])
+        self.assertTrue(delivery)
+        self.assertTrue(len(delivery) == 1)
+        self.assertEqual("delivery", delivery.type)
+        self.assertEqual(100000001, delivery.vg7_id)
+
     def test_connection(self):
         # This test requires external Odoo instance active. See header
         _logger.info(
-            "🎺🎺 Starting connection test on ports 8270 (db=oca10) and 8272 (db=oca12)"
+            "🎺🎺 Starting connection test on 8172 (db=demo12)"
         )
         self._test_misc()
         for xref in self.get_resource_data_list("synchro.channel"):
@@ -316,10 +428,23 @@ class MyTest(SingleTransactionCase):
             self._test_counterpart_model_response(xref)
             self._test_import_currency(xref)
             self._test_import_country(xref)
+            self._test_import_country_state(xref)
             self._test_import_partner(xref)
             self._test_import_partner_bank(xref)
             self._test_import_payment(xref)
             self._test_import_tax_code(xref)
             self._test_import_partner_supplier(xref)
+            self._test_import_uom(xref)
             self._test_import_product(xref)
         self._test_purge()
+
+        ###################################################################
+        # FUNCTIONAL TESTS
+        ###################################################################
+        _logger.info(
+            "🎺🎺 Starting Regression test"
+        )
+
+        self.prepare_env_regresion()
+        self._test_regression_partner()
+        self._test_regression_partner(delete_before=True)

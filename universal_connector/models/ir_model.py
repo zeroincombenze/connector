@@ -347,6 +347,7 @@ class IrModelSynchro(models.Model):
     LOGLEVEL = "debug"
     DEF_INCL_FLDS = [
         "action",
+        "bank_ids",
         "category_id",
         "code",
         # "company_ids",
@@ -1415,8 +1416,12 @@ class IrModelSynchro(models.Model):
                 and name == "partner_shipping_id"
         ):
             spec = "delivery"
-        if relation == actual_model and ttype == "one2many":
+        if relation.startswith(actual_model) and ttype == "one2many":
             # Avoid recursive request, i.e. res.partner
+            if isinstance(value, int):
+                queue = Cache.get_attr(backend.id, "IN_QUEUE")
+                queue.append((relation, value))
+                Cache.set_attr(backend.id, "IN_QUEUE", queue)
             return []
         if not Cache.is_manageable(relation):
             return []
@@ -1961,44 +1966,42 @@ class IrModelSynchro(models.Model):
                     # local and external values, just process local value
                     vals = rm_ext_value(vals, loc_name, ext_name, ext_ref, is_foreign)
                     continue
-
-                if ext_ref in vals and struct[loc_name]["type"] in (
-                        "many2one",
-                        "one2many",
-                        "many2many",
+            if (
+                (is_foreign or isinstance(vals.get(ext_ref), basestring))
+                and struct[loc_name]["type"] in ("many2one", "one2many", "many2many")
+            ):
+                if (
+                    isinstance(no_deep_fields, (list, tuple))
+                    and len(no_deep_fields)
+                    and "*" in no_deep_fields
                 ):
-                    if (
-                        isinstance(no_deep_fields, (list, tuple))
-                        and len(no_deep_fields)
-                        and "*" in no_deep_fields
-                    ):
-                        condition = "include"
-                    else:
-                        condition = "exclude"
-                    if (
-                        (condition == "include" and loc_name not in no_deep_fields)
-                        or (condition == "exclude" and loc_name in no_deep_fields)
-                    ):
-                        if ext_ref in vals:
-                            del vals[ext_ref]
-                        continue
-                    loc_id = self.get_foreign_value(
-                        backend,
-                        vmodel,
-                        vals[ext_ref],
-                        loc_name,
-                        is_foreign,
-                        struct,
-                        ctx=ctx,
-                        spec=spec,
-                        fmt="cmd",
-                    )
-                    if isinstance(loc_id, (tuple, list)):
-                        vals[loc_name] = loc_id
-                    elif loc_id > 0:
-                        vals[loc_name] = loc_id
-                    elif loc_name:
-                        vals[loc_name] = False
+                    condition = "include"
+                else:
+                    condition = "exclude"
+                if (
+                    (condition == "include" and loc_name not in no_deep_fields)
+                    or (condition == "exclude" and loc_name in no_deep_fields)
+                ):
+                    if ext_ref in vals:
+                        del vals[ext_ref]
+                    continue
+                loc_id = self.get_foreign_value(
+                    backend,
+                    vmodel,
+                    vals[ext_ref],
+                    loc_name,
+                    is_foreign,
+                    struct,
+                    ctx=ctx,
+                    spec=spec,
+                    fmt="cmd",
+                )
+                if isinstance(loc_id, (tuple, list)):
+                    vals[loc_name] = loc_id
+                elif loc_id > 0:
+                    vals[loc_name] = loc_id
+                elif loc_name:
+                    vals[loc_name] = False
             if ext_ref in vals and struct[loc_name]["type"] == "selection":
                 selection = [x[0] if isinstance(x, (list, tuple)) else x
                              for x in struct[loc_name].get("selection", [])]
@@ -2513,9 +2516,6 @@ class IrModelSynchro(models.Model):
                     continue
                 row_id += 1
                 row_res = {counterpart_pk: row_id}
-                # row_billing = {}
-                # row_shipping = {}
-                # row_contact = {}
                 for ix, value in enumerate(row):
                     if (
                         isinstance(value, basestring)
@@ -2527,28 +2527,6 @@ class IrModelSynchro(models.Model):
                         if not value:
                             continue
                         row_id = value
-                    # if hdr[ix].startswith("billing_"):
-                    #     row_billing[hdr[ix]] = value
-                    # elif hdr[ix].startswith("shipping_"):
-                    #     row_shipping[hdr[ix]] = value
-                    # elif hdr[ix].startswith("contact_"):
-                    #     row_contact[hdr[ix]] = value
-                    # else:
-                    #     row_res[hdr[ix]] = value
-                # if row_billing:
-                #     if vmodel == "res.partner.invoice":
-                #         row_res = row_billing
-                #     else:
-                #         row_res["billing"] = row_billing
-                # if row_shipping:
-                #     if vmodel == "res.partner.shipping":
-                #         for nm in ("customer_shipping_id", "customer_id"):
-                #             row_shipping[nm] = row_res[nm]
-                #         row_res = row_shipping
-                #     else:
-                #         row_res["shipping"] = row_shipping
-                # if row_contact:
-                #     row_res["contact"] = row_contact
                 if ext_id and row_res[counterpart_pk] != ext_id:
                     continue
                 if ext_id:
@@ -3181,31 +3159,32 @@ class IrModelSynchro(models.Model):
     @api.model
     def synchro_queue(self, backend):
         self.logmsg("warning", "synchro_queue()")
-        cache = self.env["ir.model.synchro.cache"]
+        Cache = self.env["ir.model.synchro.cache"]
         max_ctr = 16
-        queue = cache.get_attr(backend.id, "IN_QUEUE")
+        queue = Cache.get_attr(backend.id, "IN_QUEUE")
         while queue:
             if max_ctr == 0:
                 break
             max_ctr -= 1
             item = queue.pop(0)
             vmodel = item[0]
-            loc_id = item[1]
-            if not loc_id or loc_id < 1:
+            ext_id = item[1]
+            if not ext_id or ext_id < 1:
                 self.logmsg(
-                    "warning", "### invalid %s.synchro_queue[%s]" % (vmodel, loc_id)
+                    "warning", "### invalid %s.synchro_queue[%s]" % (vmodel, ext_id)
                 )
                 return
-            self.logmsg("debug", "queued_pull(%s,%s)?" % (vmodel, loc_id))
+            self.logmsg("debug", "queued_pull(%s,%s)?" % (vmodel, ext_id))
             # rec = self.get_actual_model(vmodel).browse(loc_id)
-            rec = (
-                self.get_actual_model(vmodel)
-                .with_context({"lang": self.env.user.lang})
-                .browse(loc_id)
-            )
-            loc_ext_id_name = self.get_loc_ext_id_name(backend, vmodel)
-            if loc_ext_id_name and hasattr(rec, loc_ext_id_name):
-                self.pull_1_record(backend.id, vmodel, getattr(rec, loc_ext_id_name))
+            # rec = (
+            #     self.get_actual_model(vmodel)
+            #     .with_context({"lang": self.env.user.lang})
+            #     .browse(loc_id)
+            # )
+            # loc_ext_id_name = self.get_loc_ext_id_name(backend, vmodel)
+            # if loc_ext_id_name and hasattr(rec, loc_ext_id_name):
+            #     self.pull_1_record(backend.id, vmodel, getattr(rec, loc_ext_id_name))
+            self.sync_rec_from_counterparty(backend, vmodel, ext_id)
 
     @api.model
     def vals_or_id(self, item, ext_key_id):
