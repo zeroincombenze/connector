@@ -56,6 +56,7 @@
         "views/synchro_channel_view.xml",
         "views/model_view.xml",
         "data/synchro_channel.xml",
+        "data/synchro_account_payment.xml",
         "data/synchro_partner.xml",
         "data/synchro_partner_bank.xml",
         "data/synchro_country.xml",

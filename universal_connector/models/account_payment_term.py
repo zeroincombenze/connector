@@ -61,10 +61,7 @@ class AccountPaymentTerm(models.Model):
         return text
 
     @api.model
-    def preprocess(self, backend, vals):
-        self.env["ir.model.synchro"].logmsg(
-            "debug", ">>> account.payment.term.preprocess()"
-        )
+    def preprocess(self, backend_id, vals):
         if "vg7:date_scadenza" in vals:
             num_dues = len(vals["vg7:date_scadenza"])
             if num_dues:
@@ -87,11 +84,6 @@ class AccountPaymentTerm(models.Model):
                 child_vals.append(line_vals)
             vals["vg7:date_scadenza"] = child_vals
         return vals, ""
-
-    def postprocess(self, backend_id, parent_id, vals):
-        # _logger.info(
-        #     '> postprocess(%d,%s)' % (parent_id, vals))  # debug
-        return False
 
     @api.model
     def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,

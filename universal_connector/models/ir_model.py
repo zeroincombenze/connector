@@ -157,7 +157,7 @@ Return code:
 import logging
 import os
 from datetime import date, datetime, timedelta
-import time
+# import time
 import csv
 
 import json
@@ -567,9 +567,13 @@ class IrModelSynchro(models.Model):
                 del vals[name]
         return vals
 
-    def drop_invalid_fields(self, vmodel, vals):
+    def drop_invalid_fields(self, backend, vmodel, vals):
         Cache = self.env["ir.model.synchro.cache"]
         saved_ext_id = None
+        if backend.id:
+            ext_id_name = self.get_loc_ext_id_name(backend, vmodel)
+            if ext_id_name in vals:
+                saved_ext_id = vals[ext_id_name]
         actual_model = self.get_actual_model(vmodel, only_name=True)
         if isinstance(vals, (list, tuple)):     # pragma: no cover
             to_delete = list(
@@ -1004,11 +1008,9 @@ class IrModelSynchro(models.Model):
         #         return self.manage_module({"name": rec.name})
         return rec.id
 
-    def get_model_of_channel(self, backend_id, model):
-        channel_model = self.env["synchro.channel.model"].search(
-            [("synchro_channel_id", "=", backend_id), ("name", "=", model)]
-        )
-        return channel_model[0] if channel_model else self.env["synchro.channel.model"]
+    def get_dirmap(self, backend_id, model):
+        return fields.first(self.env["synchro.channel.model"].search(
+            [("synchro_channel_id", "=", backend_id), ("name", "=", model)]))
 
     def sync_rec_from_counterparty(self, backend, model, vg7_id, only_minimal=True):
         if not vg7_id:
@@ -1022,7 +1024,7 @@ class IrModelSynchro(models.Model):
             model=model,
             ctx={"xid": vg7_id},
         )
-        vals = self.get_model_of_channel(backend.id, model).get_counterpart_response(
+        vals = self.get_dirmap(backend.id, model).get_counterpart_response(
             self.get_actual_ext_id_value(backend.id, model, vg7_id)
         )
         if not vals:
@@ -1670,14 +1672,15 @@ class IrModelSynchro(models.Model):
             ir_apply = self.env["ir.model.synchro.apply"]
             for fct in apply4.split(","):
                 if fct == "apply_odoo_migrate":
-                    ext_odoo_ver = self.get_ext_odoo_ver(ext_ref.split(":")[0])
-                    tnldict = self.get_tnldict(backend.id)
-                    if ext_odoo_ver:
-                        vals[loc_name] = self.translate_from_to(
-                            tnldict, vmodel, vals[ext_ref], ext_odoo_ver,
-                            fld_name=loc_name)
-                    else:
-                        vals[loc_name] = vals[ext_ref]
+                    if ext_ref in vals:
+                        ext_odoo_ver = self.get_ext_odoo_ver(ext_ref.split(":")[0])
+                        tnldict = self.get_tnldict(backend.id)
+                        if ext_odoo_ver:
+                            vals[loc_name] = self.translate_from_to(
+                                tnldict, vmodel, vals[ext_ref], ext_odoo_ver,
+                                fld_name=loc_name)
+                        else:
+                            vals[loc_name] = vals[ext_ref]
                 elif hasattr(ir_apply, fct):
                     vals = getattr(ir_apply, fct)(
                         backend,
@@ -1850,7 +1853,6 @@ class IrModelSynchro(models.Model):
 
         ctx = Cache.get_attr(backend.id, "CTX") or {}
         ctx["ext_key_id"] = counterpart_pk
-        # ref_in_queue = False
         for ext_ref in field_list:
             if not Cache.is_struct(ext_ref):
                 continue
@@ -1986,6 +1988,11 @@ class IrModelSynchro(models.Model):
                         vals[loc_name] = loc_id
                     elif loc_name:
                         vals[loc_name] = False
+            if ext_ref in vals and struct[loc_name]["type"] == "selection":
+                selection = [x[0] if isinstance(x, (list, tuple)) else x
+                             for x in struct[loc_name].get("selection", [])]
+                if vals[ext_ref] not in selection:
+                    vals[ext_ref] = selection[0]
             vals = rm_ext_value(
                 vals, loc_name, ext_name, ext_ref, is_foreign)
 
@@ -2850,7 +2857,7 @@ class IrModelSynchro(models.Model):
                 return erc
         if has_2delete:
             vals["to_delete"] = False
-        self.drop_invalid_fields(vmodel, vals)
+        self.drop_invalid_fields(backend, vmodel, vals)
         do_write = True
         if loc_id < 1:
             if has_state or has_2delete or not ext_id:
@@ -3273,7 +3280,7 @@ class IrModelSynchro(models.Model):
                 actual_model = self.get_actual_model(vmodel, only_name=True)
                 self.logmsg("info", "### Checking %s for unlink" % vmodel)
                 cls = self.env[vmodel]
-                datas = self.get_model_of_channel(
+                datas = self.get_dirmap(
                     backend.id, vmodel
                 ).get_counterpart_response()
                 if not datas:
@@ -3305,7 +3312,7 @@ class IrModelSynchro(models.Model):
                             backend.id, vmodel, "2PULL", default=True
                         ):
                             if isinstance(datas[ext_ix], (int, long)):
-                                vals = self.get_model_of_channel(
+                                vals = self.get_dirmap(
                                     backend.id, vmodel
                                 ).get_counterpart_response(id=ext_id)
                             else:
@@ -3518,7 +3525,7 @@ class IrModelSynchro(models.Model):
                 if remote_ids:
                     datas = evaluate_remote_ids(remote_ids)
                 else:
-                    datas = self.get_model_of_channel(
+                    datas = self.get_dirmap(
                         backend.id, vmodel
                     ).get_counterpart_response()
                 if not datas:
@@ -3668,14 +3675,14 @@ class IrModelSynchro(models.Model):
             backend_id, vmodel, "KEY_ID", default="id")
         ext_id, vals = self.vals_or_id(item, counterpart_pk)
         if not vals and ext_id:
-            Backend = self.get_model_of_channel(backend_id, vmodel)
-            if not Backend:
+            Dirmap = self.get_dirmap(backend_id, vmodel)
+            if not Dirmap:    # pragma: no cover
                 self.env["ir.model.synchro"].logmsg(
                     "error", "Model %(model)s not managed by external partner!",
                     model=vmodel
                 )
                 return -8
-            vals = Backend.get_counterpart_response(ext_id)
+            vals = Dirmap.get_counterpart_response(ext_id)
         if not vals:
             return -7
         ext_id, vals = self.vals_or_id(vals, counterpart_pk)
@@ -3692,7 +3699,7 @@ class IrModelSynchro(models.Model):
             only_minimal=only_minimal,
             no_deep_fields=no_deep_fields,
         )
-        if id < 0:
+        if id < 0:    # pragma: no cover
             self.logmsg(
                 "warning", "External id %s error pulling from %s" % (ext_id, vmodel)
             )
@@ -3759,21 +3766,19 @@ class IrModelSynchro(models.Model):
             "trigger_one_record(%(xm)s,%(xid)s,%(pfx)s)",
             ctx={"xm": ext_model, "xid": ext_id, "pfx": prefix},
         )
-        backend_id = backend.id
-        if not backend_id:
-            # Cache.clean_cache()
+        if not backend:    # pragma: no cover
             _logger.error("!-6! No channel found!")
             return -6
         self.logmsg(
-            "debug", "### assigned channel is %(chid)s", ctx={"chid": backend_id}
+            "debug", "### assigned channel is %(chid)s", ctx={"chid": backend.id}
         )
         Cache.open(backend=backend, ext_model=ext_model)
-        for model in Cache.get_channel_models(backend_id):
+        for model in Cache.get_channel_models(backend.id):
             if not Cache.is_struct(model):
                 continue
-            if ext_model != Cache.get_model_attr(backend_id, model, "BIND"):
+            if ext_model != Cache.get_model_attr(backend.id, model, "BIND"):
                 continue
-            return self.pull_1_record(backend_id, model, ext_id)
+            return self.pull_1_record(backend.id, model, ext_id)
         return -8
 
     # def manage_module(self, vals):
@@ -3821,7 +3826,8 @@ class IrModelSynchro(models.Model):
     #     languages = self.env["res.lang"].search([("code", "=", vals["code"])])
     #     if not languages:
     #         lang_model = self.env["base.language.install"]
-    #         lang_model.create({"code": vals["code"], "overwrite": True}).lang_install()
+    #         lang_model.create(
+    #           {"code": vals["code"], "overwrite": True}).lang_install()
     #         languages = self.env["res.lang"].search([("code", "=", vals["code"])])
     #     return languages[0].id
 

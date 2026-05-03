@@ -104,8 +104,9 @@ class MyTest(SingleTransactionCase):
         ext_id = IrModelSynchro.get_loc_ext_id_value(backend, model, 1)
         self.assertEqual(1, ext_id)
         if backend.identity == "vg7":
-            ext_id = IrModelSynchro.get_loc_ext_id_value(backend, model, 1, spec="delivery")
-            self.assertEqual(100000001 , ext_id)
+            ext_id = IrModelSynchro.get_loc_ext_id_value(
+                backend, model, 1, spec="delivery")
+            self.assertEqual(100000001, ext_id)
 
         if backend.identity == "odoo":
             self.env["synchro.channel.model"].build_odoo_synchro_model(
@@ -186,6 +187,70 @@ class MyTest(SingleTransactionCase):
             self.env["ir.model.synchro.cache"].setup_model_in_backends(
                 backend, model="res.partner.shipping")
 
+    def _test_import_currency(self, xref):
+        Synchro = self.env["ir.model.synchro"]
+        backend = self.resource_browse(xref)
+        if backend.identity != "vg7":
+            _logger.info(u"🎺 Import currency from %s" % _u(xref))
+            rec_id = Synchro.trigger_one_record("res.currency", backend.prefix, 1)
+            self.assertEqual(1, rec_id)
+
+    def _test_import_country(self, xref):
+        Synchro = self.env["ir.model.synchro"]
+        backend = self.resource_browse(xref)
+        model = "res.country"
+        _logger.info(u"🎺 Import country from %s" % _u(xref))
+        if backend.identity == "vg7":
+            rec_id = Synchro.trigger_one_record("countries", backend.prefix, 39)
+            self.assertTrue(rec_id > 0)
+            country = self.env[model].browse(rec_id)
+            self.assertEqual("IT", country.code)
+        else:
+            rec_id = Synchro.trigger_one_record(model, backend.prefix, 233)
+            # self.assertEqual(235, rec_id)
+
+    def _test_import_partner(self, xref):
+        Synchro = self.env["ir.model.synchro"]
+        backend = self.resource_browse(xref)
+        model = "res.partner"
+        _logger.info(u"🎺 Import partner from %s" % _u(xref))
+        if backend.identity == "vg7":
+            rec_id = Synchro.trigger_one_record("customers", backend.prefix, 101)
+            self.assertTrue(rec_id > 0)
+            partner = self.env[model].browse(rec_id)
+            self.assertEqual("Prima Alpha S.p.A.", partner.name)
+        else:
+            rec_id = Synchro.trigger_one_record(model, backend.prefix, 1)
+            # self.assertEqual(235, rec_id)
+
+    def _test_import_partner_bank(self, xref):
+        Synchro = self.env["ir.model.synchro"]
+        backend = self.resource_browse(xref)
+        model = "res.partner.bank"
+        _logger.info(u"🎺 Import bank from %s" % _u(xref))
+        if backend.identity == "vg7":
+            rec_id = Synchro.trigger_one_record("banks", backend.prefix, 111)
+            self.assertTrue(rec_id > 0)
+            bank = self.env[model].browse(rec_id)
+            self.assertEqual("IT73C0102001011010101987654", bank.acc_number)
+        # else:
+        #     rec_id = Synchro.trigger_one_record(model, backend.prefix, 233)
+        #     self.assertEqual(235, rec_id)
+
+    def _test_import_payment(self, xref):
+        Synchro = self.env["ir.model.synchro"]
+        backend = self.resource_browse(xref)
+        model = "account.payment.term"
+        _logger.info(u"🎺 Import payment from %s" % _u(xref))
+        if backend.identity == "vg7":
+            rec_id = Synchro.trigger_one_record("payments", backend.prefix, 31)
+            self.assertTrue(rec_id > 0)
+            payment = self.env[model].browse(rec_id)
+            self.assertEqual("BB 30GG/FM+10", payment.name)
+        # else:
+        #     rec_id = Synchro.trigger_one_record(model, backend.prefix, 233)
+        #     self.assertEqual(235, rec_id
+
     def test_connection(self):
         # This test requires external Odoo instance active. See header
         _logger.info(
@@ -197,4 +262,9 @@ class MyTest(SingleTransactionCase):
             self._test_assign_backend(xref)
             self._test_backend_misc(xref)
             self._test_counterpart_model_response(xref)
+            self._test_import_currency(xref)
+            self._test_import_country(xref)
+            self._test_import_partner(xref)
+            self._test_import_partner_bank(xref)
+            self._test_import_payment(xref)
         self._test_purge()

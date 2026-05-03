@@ -1,2 +1,2 @@
-id,description
-3,Banca del Software
+"id","description","IBAN","customer_id"
+111,"Intesa San Paolo","IT73C0102001011010101987654",101

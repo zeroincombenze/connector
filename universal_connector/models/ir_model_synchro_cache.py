@@ -997,7 +997,7 @@ class IrModelSynchroCache(models.Model):
         """Read model value from all active channel model table and store
         them into memory"""
         self.setup_1_backend(backend)
-        Backend = self.env["synchro.channel.model"]
+        Dirmap = self.env["synchro.channel.model"]
         if model:
             domain = [("name", "=", model)]
         elif ext_model:
@@ -1005,13 +1005,13 @@ class IrModelSynchroCache(models.Model):
         else:
             return
         domain.append(("synchro_channel_id", "=", backend.id))
-        recs = Backend.search(domain)
+        recs = Dirmap.search(domain)
         if not recs and backend and backend.identity == "odoo":
             if ext_model:
-                Backend.build_odoo_synchro_model(backend, ext_model)
+                Dirmap.build_odoo_synchro_model(backend, ext_model)
             elif model:
-                Backend.build_odoo_synchro_model(backend, None, model=model)
-        for rec in Backend.search(domain):
+                Dirmap.build_odoo_synchro_model(backend, None, model=model)
+        for rec in Dirmap.search(domain):
             self.setup_backend_ext_model(backend, rec)
 
     @api.model_cr_context
@@ -1019,9 +1019,9 @@ class IrModelSynchroCache(models.Model):
         """Setup cache if needed, setup model cache if required and needed"""
         IrSynchroModel = self.env["ir.model.synchro"]
         if backend and backend.identity == "odoo":
-            if ext_model in ("ir.model", "ir.module.module") and not model:
+            if ext_model and not model:
                 model = ext_model
-            elif model in ("ir.model", "ir.module.module") and not ext_model:
+            elif model and not ext_model:
                 ext_model = model
         actual_model = model
         if backend and ext_model and not model and backend.identity == "odoo":

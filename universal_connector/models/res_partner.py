@@ -156,7 +156,7 @@ class ResPartner(models.Model):
     def assure_values(self, vals, rec):
         actual_model = "res.partner"
         actual_cls = self.env[actual_model]
-        vals["lang"] = "it_IT"
+        # vals["lang"] = "it_IT"
         if rec:
             for nm in ("type", "individual"):
                 if nm not in vals:

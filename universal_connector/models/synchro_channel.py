@@ -699,7 +699,7 @@ class SynchroChannelModel(models.Model):
             vals = new_vals
 
         if not isinstance(vals, dict) and not isinstance(
-                vals, (list, tuple)): # pragma: no cover
+                vals, (list, tuple)):   # pragma: no cover
             self.env["ir.model.synchro"].logmsg(
                 "error",
                 "Response error %(sts)s (%(chid)s,%(url)s,%(pfx)s)",
