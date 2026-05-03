@@ -205,6 +205,7 @@ class MyTest(SingleTransactionCase):
             self.assertTrue(rec_id > 0)
             country = self.env[model].browse(rec_id)
             self.assertEqual("IT", country.code)
+            self.assertEqual(39, country.vg7_id)
         else:
             rec_id = Synchro.trigger_one_record(model, backend.prefix, 233)
             # self.assertEqual(235, rec_id)
@@ -219,6 +220,7 @@ class MyTest(SingleTransactionCase):
             self.assertTrue(rec_id > 0)
             partner = self.env[model].browse(rec_id)
             self.assertEqual("Prima Alpha S.p.A.", partner.name)
+            self.assertEqual(101, partner.vg7_id)
         else:
             rec_id = Synchro.trigger_one_record(model, backend.prefix, 1)
             # self.assertEqual(235, rec_id)
@@ -233,6 +235,7 @@ class MyTest(SingleTransactionCase):
             self.assertTrue(rec_id > 0)
             bank = self.env[model].browse(rec_id)
             self.assertEqual("IT73C0102001011010101987654", bank.acc_number)
+            self.assertEqual(111, bank.vg7_id)
         # else:
         #     rec_id = Synchro.trigger_one_record(model, backend.prefix, 233)
         #     self.assertEqual(235, rec_id)
@@ -247,6 +250,55 @@ class MyTest(SingleTransactionCase):
             self.assertTrue(rec_id > 0)
             payment = self.env[model].browse(rec_id)
             self.assertEqual("BB 30GG/FM+10", payment.name)
+            self.assertEqual(31, payment.vg7_id)
+        # else:
+        #     rec_id = Synchro.trigger_one_record(model, backend.prefix, 233)
+        #     self.assertEqual(235, rec_id
+
+    def _test_import_tax_code(self, xref):
+        Synchro = self.env["ir.model.synchro"]
+        backend = self.resource_browse(xref)
+        model = "account.tax"
+        _logger.info(u"🎺 Import payment from %s" % _u(xref))
+        if backend.identity == "vg7":
+            rec_id = Synchro.trigger_one_record("tax_codes", backend.prefix, 15)
+            self.assertTrue(rec_id > 0)
+            tax = self.env[model].browse(rec_id)
+            self.assertEqual(15, tax.amount)
+            self.assertEqual("sale", tax.type_tax_use)
+            self.assertEqual(15, tax.vg7_id)
+        # else:
+        #     rec_id = Synchro.trigger_one_record(model, backend.prefix, 233)
+        #     self.assertEqual(235, rec_id
+
+    def _test_import_partner_supplier(self, xref):
+        Synchro = self.env["ir.model.synchro"]
+        backend = self.resource_browse(xref)
+        model = "res.partner"
+        _logger.info(u"🎺 Import partner supplier from %s" % _u(xref))
+        if backend.identity == "vg7":
+            rec_id = Synchro.trigger_one_record("suppliers", backend.prefix, 101)
+            self.assertTrue(rec_id > 0)
+            partner = self.env[model].browse(rec_id)
+            self.assertEqual("Import Export Trifoglio s.r.l.", partner.name)
+            self.assertEqual("IT01234560017", partner.vat)
+            self.assertEqual(101, partner.vg72_id)
+        # else:
+        #     rec_id = Synchro.trigger_one_record(model, backend.prefix, 233)
+        #     self.assertEqual(235, rec_id
+
+    def _test_import_product(self, xref):
+        Synchro = self.env["ir.model.synchro"]
+        backend = self.resource_browse(xref)
+        model = "product.product"
+        _logger.info(u"🎺 Import product from %s" % _u(xref))
+        if backend.identity == "vg7":
+            rec_id = Synchro.trigger_one_record("products", backend.prefix, 11)
+            self.assertTrue(rec_id > 0)
+            product = self.env[model].browse(rec_id)
+            self.assertEqual("Prodotto Alpha", product.name)
+            self.assertEqual("AA", product.default_code)
+            self.assertEqual(11, product.vg7_id)
         # else:
         #     rec_id = Synchro.trigger_one_record(model, backend.prefix, 233)
         #     self.assertEqual(235, rec_id
@@ -267,4 +319,7 @@ class MyTest(SingleTransactionCase):
             self._test_import_partner(xref)
             self._test_import_partner_bank(xref)
             self._test_import_payment(xref)
+            self._test_import_tax_code(xref)
+            self._test_import_partner_supplier(xref)
+            self._test_import_product(xref)
         self._test_purge()

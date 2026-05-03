@@ -349,7 +349,7 @@ class IrModelSynchro(models.Model):
         "action",
         "category_id",
         "code",
-        "company_ids",
+        # "company_ids",
         "country_id",
         "description",
         "default_code",
@@ -366,7 +366,13 @@ class IrModelSynchro(models.Model):
         "type",
         "user_type_id",
     ]
-    DEF_EXCL_FLDS = ["user_ids", "sale_order_ids", "meeting_ids"]
+    DEF_EXCL_FLDS = [
+        "user_ids",
+        "sale_order_ids",
+        "meeting_ids",
+        "journal_ids",
+        "holiday_ids"
+    ]
 
     def _build_unique_index(self, model, prefix):
         """Build unique index on table to <vg7>_id for performance"""
@@ -536,6 +542,10 @@ class IrModelSynchro(models.Model):
         if ext_id > offset:
             return ext_id - offset
         return ext_id
+
+    @api.model
+    def get_sequence_offset(self, model):
+        return 9 if model.startswith("account.payment.term") else 1
 
     def get_tnldict(self, backend_id):
         Cache = self.env["ir.model.synchro.cache"]
@@ -1918,9 +1928,10 @@ class IrModelSynchro(models.Model):
                 continue
 
             if loc_name == child_ids:
+                offset = self.get_sequence_offset(actual_model)
                 lines = []
                 for num, item in enumerate(vals[ext_ref]):
-                    sequence = num + 1
+                    sequence = num + offset
                     if backend.renum_lines:
                         item[":sequence"] = sequence
                     lines.append(item)
@@ -2781,7 +2792,7 @@ class IrModelSynchro(models.Model):
         )
         model_child = Cache.get_struct_model_attr(actual_model, "MODEL_CHILD")
         if no_del_child:
-            sequence = 0
+            sequence = self.get_sequence_offset(actual_model) - 1
         else:
             last_model = Cache.get_attr(backend.id, "LAST_MODEL")
             sequence = Cache.get_attr(
@@ -2877,7 +2888,7 @@ class IrModelSynchro(models.Model):
                 if hasattr(actual_cls, "assure_values"):
                     vals = actual_cls.assure_values(vals, rec)
                 if actual_model == "account.payment.term":
-                    vals[child_ids] = {"sequence": 1, "value": "balance"}
+                    vals[child_ids] = {"sequence": 10, "value": "balance"}
                 rec = self.create_n_commit(actual_model, min_vals, logrec=self.logrec)
                 if not rec and min_vals != vals:
                     rec = self.create_n_commit(actual_model, vals, logrec=self.logrec)
@@ -2950,8 +2961,9 @@ class IrModelSynchro(models.Model):
                     and Cache.get_struct_model_attr(model_child, "sequence")
                     and backend.renum_lines
                 ):
+                    offset = self.get_sequence_offset(actual_model)
                     for num, line in enumerate(rec[child_ids]):
-                        sequence = num + 1
+                        sequence = num + offset
                         child_vals = {"sequence": sequence}
                         try:
                             line.write(child_vals)
