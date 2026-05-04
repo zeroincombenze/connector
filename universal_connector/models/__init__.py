@@ -18,6 +18,7 @@ from . import (
     package_preparation,
     purchase_order,
     product,
+    res_lang,
     res_country,
     res_partner,
     res_partner_bank,

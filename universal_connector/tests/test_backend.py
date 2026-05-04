@@ -69,8 +69,8 @@ class MyTest(SingleTransactionCase):
         self.declare_all_data(data)
         self.setup_env()
 
-    def tearDown(self):
-        super(MyTest, self).tearDown()
+    # def tearDown(self):
+    #     super(MyTest, self).tearDown()
 
     def get_exchange_path(self, backend):
         testdir = pth.join(pth.dirname(__file__))
@@ -96,6 +96,7 @@ class MyTest(SingleTransactionCase):
         pk = (
             "order_id" if "orders" in ext_model
             else "customer_shipping_id" if "shipping" in ext_model
+            else "ddt_id" if "ddt" in ext_model
             else "id")
         partner_key = "customer_id"
         datas = []
@@ -195,6 +196,10 @@ class MyTest(SingleTransactionCase):
                            billing_fqn=billing_fqn,
                            shipping_fqn=shipping_fqn,
                            lines_fqn=lines_fqn)
+
+        fqn = os.path.join(root, "ddt.csv")
+        lines_fqn = os.path.join(root, "ddt.line.csv")
+        self.load_csv_file(fqn, lines_fqn=lines_fqn)
 
         backend.button_reset_to_draft()
         backend.write({"exchange_path": os.path.dirname(root)})
@@ -486,10 +491,8 @@ class MyTest(SingleTransactionCase):
         backend = self.resource_browse(xref)
         model = "sale.order"
         _logger.info(u"🎺 Import order from %s" % _u(xref))
-        # if delete_before:
-        #     self.env["res.partner.bank"].search([("vg7_id", "=", 111)]).unlink()
-        #     self.env["account.payment.term"].search([("vg7_id", "=", 311)]).unlink()
-        #     self.env["res.partner"].search([("vg7_id", "=", 101)]).unlink()
+        if delete_before:
+            self.env[model].search([("vg7_id", "=", 101)]).unlink()
         rec_id = Synchro.trigger_one_record("orders", backend.prefix, 131)
         self.assertTrue(rec_id > 0)
         order = self.env[model].browse(rec_id)
@@ -499,6 +502,22 @@ class MyTest(SingleTransactionCase):
         self.assertEqual(101, order.partner_id.vg7_id)
         self.assertEqual(order.partner_id, order.partner_invoice_id)
         self.assertEqual(100000001, order.partner_shipping_id.vg7_id)
+
+    def _test_regression_ddt(self, delete_before=False):
+        Synchro = self.env["ir.model.synchro"]
+        xref = "z0bug.csv-vg7"
+        backend = self.resource_browse(xref)
+        model = "stock.picking.package.preparation"
+        _logger.info(u"🎺 Import ddt from %s" % _u(xref))
+        if delete_before:
+            self.env[model].search([("vg7_id", "=", 101)]).unlink()
+        rec_id = Synchro.trigger_one_record("ddt", backend.prefix, 231)
+        self.assertTrue(rec_id > 0)
+        ddt = self.env[model].browse(rec_id)
+        self.assertEqual("24/231", ddt.ddt_number)
+        self.assertTrue(len(ddt.line_ids) > 0)
+        self.assertEqual(101, ddt.partner_id.vg7_id)
+        self.assertEqual(100000001, ddt.partner_shipping_id.vg7_id)
 
     def test_connection(self):
         # This test requires external Odoo instance active. See header
@@ -534,3 +553,5 @@ class MyTest(SingleTransactionCase):
         self._test_regression_partner()
         self._test_regression_partner(delete_before=True)
         self._test_regression_order()
+        self._test_regression_ddt()
+        # self.env.cr.commit()

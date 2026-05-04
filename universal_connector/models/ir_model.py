@@ -157,7 +157,7 @@ Return code:
 import logging
 import os
 from datetime import date, datetime, timedelta
-# import time
+import time
 import csv
 
 import json
@@ -2988,13 +2988,13 @@ class IrModelSynchro(models.Model):
                     cls, child_vals, channel_id=backend.id,
                     jacket=True, only_minimal=True)
 
-        # if loc_id > 0 and not chk_in_queue and vmodel == actual_model:
-        #     if actual_model == "res.lang":
-        #         self.manage_language(vals)
-        #     elif actual_model == "ir.module.module":
-        #         loc_id = self.set_actual_state(struct, actual_model, rec)
-        #         if loc_id < 0:
-        #             return loc_id
+        if loc_id > 0 and not chk_in_queue and vmodel == actual_model:
+            if actual_model == "res.lang":
+                self.manage_language(vals)
+            elif actual_model == "ir.module.module":
+                loc_id = self.set_actual_state(struct, actual_model, rec)
+                if loc_id < 0:
+                    return loc_id
 
         parent_id_name = Cache.get_struct_model_attr(actual_model, "PARENT_ID")
         if model_child and rec and hasattr(rec, "fiscal_position_id"):
@@ -3774,55 +3774,55 @@ class IrModelSynchro(models.Model):
             return self.pull_1_record(backend.id, model, ext_id)
         return -8
 
-    # def manage_module(self, vals):
-    #     if "name" not in vals:
-    #         self.logmsg("error", "Invalid module name")
-    #         return -7
-    #     module_model = self.env["ir.module.module"]
-    #     modules = module_model.search([("name", "=", vals["name"])])
-    #     if not modules:
-    #         self.logmsg("error", "Module %s does not exist" % vals["name"])
-    #         return -3
-    #     module = modules[0]
-    #     if module.state == "uninstalled":
-    #         try:
-    #             modules.button_immediate_install()
-    #         except BaseException as e:  # pragma: no cover
-    #             self.env.cr.rollback()  # pylint: disable=invalid-commit
-    #             self.logmsg("error",
-    #                         "Module %s not installable\n%s" % (vals["name"], e))
-    #             return -4
-    #         max_ctr = len(module.dependencies_id) + 3
-    #         query = ("SELECT id FROM ir_module_module WHERE"
-    #                  " name='%s' AND state='installed'" % module.name)
-    #         # Check for state by sql to avoid cache trouble
-    #         while max_ctr > 0:
-    #             self.env.cr.execute(query)
-    #             res = self.env.cr.fetchall()
-    #             if res:
-    #                 module.state = "installed"
-    #                 break
-    #             max_ctr -= 1
-    #             time.sleep(0.5)
-    #         time.sleep(1)
-    #     if module.state != "installed":
-    #         self.logmsg("error", "Module %s not installed" % vals["name"])
-    #         return -4
-    #     self.logmsg("info",
-    #                 "%s.install(%s)" % ("ir.module.module", module.name))
-    #     return module.id
-    #
-    # def manage_language(self, vals):
-    #     if "code" not in vals:
-    #         self.logmsg("error", "Invalid language code")
-    #         return -7
-    #     languages = self.env["res.lang"].search([("code", "=", vals["code"])])
-    #     if not languages:
-    #         lang_model = self.env["base.language.install"]
-    #         lang_model.create(
-    #           {"code": vals["code"], "overwrite": True}).lang_install()
-    #         languages = self.env["res.lang"].search([("code", "=", vals["code"])])
-    #     return languages[0].id
+    def manage_module(self, vals):
+        if "name" not in vals:
+            self.logmsg("error", "Invalid module name")
+            return -7
+        module_model = self.env["ir.module.module"]
+        modules = module_model.search([("name", "=", vals["name"])])
+        if not modules:
+            self.logmsg("error", "Module %s does not exist" % vals["name"])
+            return -3
+        module = modules[0]
+        if module.state == "uninstalled":
+            try:
+                modules.button_immediate_install()
+            except BaseException as e:  # pragma: no cover
+                self.env.cr.rollback()  # pylint: disable=invalid-commit
+                self.logmsg("error",
+                            "Module %s not installable\n%s" % (vals["name"], e))
+                return -4
+            max_ctr = len(module.dependencies_id) + 3
+            query = ("SELECT id FROM ir_module_module WHERE"
+                     " name='%s' AND state='installed'" % module.name)
+            # Check for state by sql to avoid cache trouble
+            while max_ctr > 0:
+                self.env.cr.execute(query)
+                res = self.env.cr.fetchall()
+                if res:
+                    module.state = "installed"
+                    break
+                max_ctr -= 1
+                time.sleep(0.5)
+            time.sleep(1)
+        if module.state != "installed":
+            self.logmsg("error", "Module %s not installed" % vals["name"])
+            return -4
+        self.logmsg("info",
+                    "%s.install(%s)" % ("ir.module.module", module.name))
+        return module.id
+
+    def manage_language(self, vals):
+        if "code" not in vals:
+            self.logmsg("error", "Invalid language code")
+            return -7
+        languages = self.env["res.lang"].search([("code", "=", vals["code"])])
+        if not languages:
+            lang_model = self.env["base.language.install"]
+            lang_model.create(
+                {"code": vals["code"], "overwrite": True}).lang_install()
+            languages = self.env["res.lang"].search([("code", "=", vals["code"])])
+        return languages[0].id
 
 
 class IrModelField(models.Model):

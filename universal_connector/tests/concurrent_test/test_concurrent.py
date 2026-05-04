@@ -245,21 +245,21 @@ TNL_OE8_TABLES = {}
 SETUP_MODEL_LIST = (
     # "account.account.type",
     "res.country",
-    "res.country.state",
-    "res.partner",
-    "res.partner.supplier",
-    "res.users",
+    # "res.country.state",
+    # "res.partner",
+    # "res.partner.supplier",
+    # "res.users",
     # "res.company",
     # "account.account",
     # "account.journal",
-    "account.tax",
-    "account.payment.term",
-    "product.template",
-    "product.uom",
-    "stock.picking.transportation_reason",
-    "stock.picking.carriage_condition",
-    "stock.picking.goods_description",
-    "stock.picking.transportation_method",
+    # "account.tax",
+    # "account.payment.term",
+    # "product.template",
+    # "product.uom",
+    # "stock.picking.transportation_reason",
+    # "stock.picking.carriage_condition",
+    # "stock.picking.goods_description",
+    # "stock.picking.transportation_method",
     # "stock.picking.package.preparation",
 )
 TNL_VG7_DICT = {
@@ -400,13 +400,13 @@ COA_MODULE = "l10n_it_coa"
 MODULE_LIST = [
     # "mk_test_env",
     THIS_MODULE,
-    # COA_MODULE,
+    COA_MODULE,
     "account",
     # "account_payment_term_extension",
-    "purchase",
-    "sale",
-    "stock",
-    "l10n_it_fiscalcode",
+    # "purchase",
+    # "sale",
+    # "stock",
+    # "l10n_it_fiscalcode",
     "l10n_it_conai",
     # "l10n_it_einvoice_base",
     "connector_vg7_conai",
@@ -1722,57 +1722,57 @@ class ExtTestEnv(object):
         else:
             fqn = pth.join(self.get_csv_path(identity), ext_model + ".csv")
         ext_recs_image = self.load_csv_file(model, fqn, keep_none=keep_none)
-        if model == "res.partner" and identity.startswith("vg7"):
-            self.merge_supplemetal_vals(
-                identity,
-                model,
-                "res.partner",
-                "customers_shipping_addresses.csv",
-                "customer_id",
-                "shipping",
-                ext_recs_image)
-            self.merge_supplemetal_vals(
-                identity,
-                model,
-                "res.partner",
-                "customers_billing_addresses.csv",
-                "customer_id",
-                "billing",
-                ext_recs_image)
-        elif model == "sale.order" and identity.startswith("vg7"):
-            self.merge_supplemetal_vals(
-                identity,
-                model,
-                "res.partner",
-                "customers_shipping_addresses.csv",
-                "customer_id",
-                "shipping",
-                ext_recs_image,
-                rec_id="customer_id",
-                uncheck=True)
-            self.merge_supplemetal_vals(
-                identity,
-                model,
-                "res.partner",
-                "customers_billing_addresses.csv",
-                "customer_id",
-                "billing",
-                ext_recs_image,
-                rec_id="customer_id",
-                uncheck=True)
-            for ext_rec in ext_recs_image:
-                if "customer_shipping_id" in ext_rec:
-                    del ext_rec["customer_shipping_id"]
-        if model in MODEL_WITH_CHILD and identity in MODEL_WITH_CHILD[model]:
-            self.merge_supplemetal_vals(
-                identity,
-                model,
-                MODEL_WITH_CHILD[model]["child_model"],
-                MODEL_WITH_CHILD[model][identity]["fqn"],
-                MODEL_WITH_CHILD[model][identity]["parent_field"],
-                MODEL_WITH_CHILD[model][identity]["child_field"],
-                ext_recs_image,
-                multi=True)
+        # if model == "res.partner" and identity.startswith("vg7"):
+        #     self.merge_supplemetal_vals(
+        #         identity,
+        #         model,
+        #         "res.partner",
+        #         "customers_shipping_addresses.csv",
+        #         "customer_id",
+        #         "shipping",
+        #         ext_recs_image)
+        #     self.merge_supplemetal_vals(
+        #         identity,
+        #         model,
+        #         "res.partner",
+        #         "customers_billing_addresses.csv",
+        #         "customer_id",
+        #         "billing",
+        #         ext_recs_image)
+        # elif model == "sale.order" and identity.startswith("vg7"):
+        #     self.merge_supplemetal_vals(
+        #         identity,
+        #         model,
+        #         "res.partner",
+        #         "customers_shipping_addresses.csv",
+        #         "customer_id",
+        #         "shipping",
+        #         ext_recs_image,
+        #         rec_id="customer_id",
+        #         uncheck=True)
+        #     self.merge_supplemetal_vals(
+        #         identity,
+        #         model,
+        #         "res.partner",
+        #         "customers_billing_addresses.csv",
+        #         "customer_id",
+        #         "billing",
+        #         ext_recs_image,
+        #         rec_id="customer_id",
+        #         uncheck=True)
+        #     for ext_rec in ext_recs_image:
+        #         if "customer_shipping_id" in ext_rec:
+        #             del ext_rec["customer_shipping_id"]
+        # if model in MODEL_WITH_CHILD and identity in MODEL_WITH_CHILD[model]:
+        #     self.merge_supplemetal_vals(
+        #         identity,
+        #         model,
+        #         MODEL_WITH_CHILD[model]["child_model"],
+        #         MODEL_WITH_CHILD[model][identity]["fqn"],
+        #         MODEL_WITH_CHILD[model][identity]["parent_field"],
+        #         MODEL_WITH_CHILD[model][identity]["child_field"],
+        #         ext_recs_image,
+        #         multi=True)
         return ext_recs_image
 
     def _add_xref(self, xref, xid, resource):
@@ -2018,17 +2018,17 @@ def main(cli_args=[]):
         "*** Starting %s test ***" % identity.upper(), echo=True, bb=3)
     MODELS = (
         "res.country",
-        "res.country.state",
-        "account.tax",
-        "account.payment.term",
-        "res.partner",
+        # "res.country.state",
+        # "account.tax",
+        # "account.payment.term",
+        # "res.partner",
         # "res.partner.supplier",
-        "product.uom",
-        "product.product",
-        "stock.picking.transportation_reason",
-        "sale.order",
+        # "product.uom",
+        # "product.product",
+        # "stock.picking.transportation_reason",
+        # "sale.order",
         # "purchase.order",
-        "stock.picking.package.preparation",
+        # "stock.picking.package.preparation",
     )
     ext_test_env.store_csv_response(identity, MODELS)
     test_prio = "synchro"
