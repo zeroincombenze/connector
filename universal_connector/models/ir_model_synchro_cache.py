@@ -809,6 +809,8 @@ class IrModelSynchroCache(models.Model):
             self.set_model_attr(backend.id, model, "MODEL_SPEC", rec.model_spec)
         if backend.identity == "vg7" and model == "res.partner.shipping":
             self.set_model_attr(backend.id, model, "KEY_ID", "customer_shipping_id")
+        elif backend.identity == "vg7" and model == "sale.order":
+            self.set_model_attr(backend.id, model, "KEY_ID", "order_id")
         else:
             self.set_model_attr(backend.id, model, "KEY_ID", "id")
         if backend.identity == "vg7" and model == "res.partner.supplier":

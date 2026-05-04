@@ -81,38 +81,78 @@ class MyTest(SingleTransactionCase):
                 os.makedirs(root)
         return root
 
-    def load_csv_file(self, fqn, billing_fqn=None, shipping_fqn=None, only_merge=False):
+    def load_csv_file(self, fqn,
+                      billing_fqn=None, shipping_fqn=None,
+                      lines_fqn=None, only_merge=False):
+        ext_model = os.path.basename(fqn).rsplit(".", 1)[0]
+        partner_purge = "partner" in ext_model
+        partner_only_merge = "orders" in ext_model
         billing_data = self.load_csv_file(
             billing_fqn, only_merge=True) if billing_fqn else []
-        shipping_data = self.load_csv_file(shipping_fqn) if shipping_fqn else []
+        shipping_data = self.load_csv_file(
+            shipping_fqn, only_merge=partner_only_merge) if shipping_fqn else []
+        lines_data = self.load_csv_file(
+            lines_fqn, only_merge=True) if lines_fqn else []
+        pk = (
+            "order_id" if "orders" in ext_model
+            else "customer_shipping_id" if "shipping" in ext_model
+            else "id")
+        partner_key = "customer_id"
         datas = []
         if not pth.isfile(fqn):
             raise IOError("File %s not found!" % fqn)
         with open(fqn, "r") as fd:
             header = False
             id_ix = 0
+            partner_ix = 0
+            merge_items = []
             reader = csv.reader(fd)
+            # row is a list, *_data are dict
             for row in reader:
                 if not header:
-                    header = row
-                    if "id" in row:
-                        id_ix = row.index("id")
+                    if pk in row:
+                        id_ix = row.index(pk)
+                    if partner_key in row:
+                        partner_ix = row.index(partner_key)
+                    if partner_only_merge:
+                        header = []
+                        for i, name in enumerate(row):
+                            if not name.startswith("billing_"):
+                                header.append(name)
+                            else:
+                                # Store index in descending key in order to delete
+                                merge_items.insert(0, ((name, i)))
+                    else:
+                        header = row
                     if billing_data:
                         header.append("billing")
                     if shipping_data:
                         header.append("shipping")
+                    if lines_data:
+                        header.append("order_rows")
                     continue
                 if billing_data:
                     for billing in billing_data:
-                        if billing.get("customer_id", 0) == row[id_ix]:
-                            del billing["customer_id"]
+                        if billing.get(partner_key, 0) == row[partner_ix]:
+                            if partner_only_merge:
+                                for (name, i) in merge_items:
+                                    billing[name] = row[i]
+                                    del row[i]
+                            if partner_purge:
+                                del billing[partner_key]
                             row.append(billing)
                             break
                 if shipping_data:
                     for shipping in shipping_data:
-                        if shipping["customer_id"] == row[id_ix]:
+                        if shipping[partner_key] == row[partner_ix]:
                             row.append(shipping)
                             break
+                if lines_data:
+                    lines = []
+                    for line in lines_data:
+                        if line[pk] == row[id_ix]:
+                            lines.append(line)
+                    row.append(lines)
                 datas.append(dict(zip(header, row)))
         if not only_merge:
             new_fqn = os.path.join(os.path.dirname(os.path.dirname(fqn)),
@@ -128,12 +168,34 @@ class MyTest(SingleTransactionCase):
         xref = "z0bug.csv-vg7"
         backend = self.resource_browse(xref)
         root = self.get_exchange_path(backend)
+
+        for fn in (
+                "banks",
+                "causals",
+                "countries",
+                "payments",
+                "products",
+                "regions",
+                "tax_codes",
+                "ums"
+        ):
+            fqn = os.path.join(root, fn + ".csv")
+            self.load_csv_file(fqn)
+
         fqn = os.path.join(root, "customers.csv")
         billing_fqn = os.path.join(root, "customers_billing_addresses.csv")
         shipping_fqn = os.path.join(root, "customers_shipping_addresses.csv")
         self.load_csv_file(fqn, billing_fqn=billing_fqn, shipping_fqn=shipping_fqn)
-        fqn = os.path.join(root, "banks.csv")
-        self.load_csv_file(fqn)
+
+        fqn = os.path.join(root, "orders.csv")
+        billing_fqn = os.path.join(root, "customers_billing_addresses.csv")
+        shipping_fqn = os.path.join(root, "customers_shipping_addresses.csv")
+        lines_fqn = os.path.join(root, "orders.line.csv")
+        self.load_csv_file(fqn,
+                           billing_fqn=billing_fqn,
+                           shipping_fqn=shipping_fqn,
+                           lines_fqn=lines_fqn)
+
         backend.button_reset_to_draft()
         backend.write({"exchange_path": os.path.dirname(root)})
         backend.button_check_connection()
@@ -399,7 +461,7 @@ class MyTest(SingleTransactionCase):
         if delete_before:
             self.env["res.partner.bank"].search([("vg7_id", "=", 111)]).unlink()
             self.env["account.payment.term"].search([("vg7_id", "=", 311)]).unlink()
-            self.env["res.partner"].search([("vg7_id", "=", 101)]).unlink()
+            self.env[model].search([("vg7_id", "=", 101)]).unlink()
         rec_id = Synchro.trigger_one_record("customers", backend.prefix, 101)
         self.assertTrue(rec_id > 0)
         partner = self.env[model].browse(rec_id)
@@ -408,12 +470,35 @@ class MyTest(SingleTransactionCase):
         self.assertEqual("contact", partner.type)
         self.assertTrue(partner.child_ids)
         self.assertTrue(partner.bank_ids)
+        self.assertEqual("IT73C0102001011010101987654",
+                         partner.bank_ids[0].acc_number)
         self.assertTrue(partner.property_payment_term_id)
+        self.assertEqual("BB 30GG/FM+10", partner.property_payment_term_id.name)
         delivery = self.env[model].search([("parent_id", "=", rec_id)])
         self.assertTrue(delivery)
         self.assertTrue(len(delivery) == 1)
         self.assertEqual("delivery", delivery.type)
         self.assertEqual(100000001, delivery.vg7_id)
+
+    def _test_regression_order(self, delete_before=False):
+        Synchro = self.env["ir.model.synchro"]
+        xref = "z0bug.csv-vg7"
+        backend = self.resource_browse(xref)
+        model = "sale.order"
+        _logger.info(u"🎺 Import order from %s" % _u(xref))
+        # if delete_before:
+        #     self.env["res.partner.bank"].search([("vg7_id", "=", 111)]).unlink()
+        #     self.env["account.payment.term"].search([("vg7_id", "=", 311)]).unlink()
+        #     self.env["res.partner"].search([("vg7_id", "=", 101)]).unlink()
+        rec_id = Synchro.trigger_one_record("orders", backend.prefix, 131)
+        self.assertTrue(rec_id > 0)
+        order = self.env[model].browse(rec_id)
+        self.assertEqual("240131", order.name)
+        self.assertEqual("sale", order.state)
+        self.assertTrue(len(order.order_line) > 0)
+        self.assertEqual(101, order.partner_id.vg7_id)
+        self.assertEqual(order.partner_id, order.partner_invoice_id)
+        self.assertEqual(100000001, order.partner_shipping_id.vg7_id)
 
     def test_connection(self):
         # This test requires external Odoo instance active. See header
@@ -448,3 +533,4 @@ class MyTest(SingleTransactionCase):
         self.prepare_env_regresion()
         self._test_regression_partner()
         self._test_regression_partner(delete_before=True)
+        self._test_regression_order()

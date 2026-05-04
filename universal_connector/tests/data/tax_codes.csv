@@ -1,0 +1,6 @@
+id,code,aliquota,description,_why
+22,22%,22,Iva 22%,This matches by VAT rate (loss description)
+4,4%,4,,This matches by VAT rate
+101,A1,0,Forfettario art. 101,New record on Odoo
+115,a15,0,Art. 15,This matches by code
+15,15%,15,,Only for internal regression test

@@ -1711,12 +1711,14 @@ class IrModelSynchro(models.Model):
         def priority_fields(struct, backend, vals, loc_ext_id, vmodel):
             Cache = self.env["ir.model.synchro.cache"]
             ctx = Cache.get_attr(backend.id, "CTX") or {}
+            counterpart_pk = Cache.get_model_attr(
+                backend.id, vmodel, "KEY_ID", default="id")
             child_ids = Cache.get_struct_model_attr(
                 actual_model, "CHILD_IDS", default=False
             )
             fields = vals.keys()
             for k, v in Cache.get_model_attr(backend.id, vmodel, "LOC_FIELDS").items():
-                if v == "id" or k == "id":
+                if v in (counterpart_pk, "id") or k in (counterpart_pk, "id"):
                     continue
                 key = backend.prefix + ":" + v if v and not v.startswith(
                     ".") else ":" + k

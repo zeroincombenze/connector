@@ -547,8 +547,8 @@ class IrModelSynchroApply(models.Model):
             ship_vals = {"type": "delivery"}
             item = (get_item_val("name") + " "
                     + get_item_val("surename")).strip() or False
-            if item:
-                domain.append(("name", "=", item))
+            # if item:
+            #     domain.append(("name", "=", item))
             ship_vals["name"] = item
             if (
                     get_item_val("street")
