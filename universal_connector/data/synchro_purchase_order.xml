@@ -26,14 +26,12 @@
         <field name="model_id" ref="purchase_order"/>
     </record>
 
-    <!--
     <record forcecreate="1" id="purchase_order_state" model="synchro.channel.model.fields">
         <field name="name">state</field>
         <field name="counterpart_name">order_state_id</field>
-        <field name="apply">set_order_state()</field>
+        <field name="apply">set_purchase_order_state()</field>
         <field name="model_id" ref="purchase_order"/>
     </record>
-    -->
 
     <record forcecreate="1" id="purchase_order_date_order" model="synchro.channel.model.fields">
         <field name="name">date_order</field>

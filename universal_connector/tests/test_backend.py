@@ -601,7 +601,7 @@ class MyTest(SingleTransactionCase):
         order = self.env[model].browse(rec_id)
         self.assertEqual("111", order.name)
         self.assertEqual("PO-24517", order.partner_ref)
-        # self.assertEqual("purchase", order.state)
+        self.assertEqual("purchase", order.state)
         self.assertTrue(len(order.order_line) > 0)
         self.assertEqual(101, order.partner_id.vg72_id)
 
@@ -650,5 +650,5 @@ class MyTest(SingleTransactionCase):
         # Delete dirty record and import
         self._test_regression_purchase_order(delete_before=True)
         # Try again to reimport order
-        # self._test_regression_purchase_order()
-        self.env.cr.commit()
+        self._test_regression_purchase_order()
+        # self.env.cr.commit()

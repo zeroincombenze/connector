@@ -846,6 +846,27 @@ class IrModelSynchroApply(models.Model):
                 state = vals[ext_ref]
             if state in ("draft", "cancel", "sale"):
                 vals[loc_name] = state
+        elif not vals.get(loc_name):
+            vals[loc_name] = "sale"
+        return vals
+
+    def apply_set_purchase_order_state(
+        self,
+        backend,
+        vals,
+        loc_name,
+        ext_ref,
+        loc_ext_id_name,
+        vmodel,
+        default=None,
+        ctx=None,
+    ):
+        if vals.get(ext_ref):
+            state = vals[ext_ref]
+            if state in ("draft", "cancel", "purchase"):
+                vals[loc_name] = state
+        elif not vals.get(loc_name):
+            vals[loc_name] = "purchase"
         return vals
 
     # def apply_set_weight_vg7(
