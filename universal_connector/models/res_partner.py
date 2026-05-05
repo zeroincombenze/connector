@@ -20,7 +20,8 @@ except ImportError as err:
 
 
 class ResPartner(models.Model):
-    _inherit = "res.partner"
+    _name = "res.partner"
+    _inherit = ["res.partner", "abstract.db.key"]
 
     @api.multi
     @api.depends("name")
@@ -33,16 +34,10 @@ class ResPartner(models.Model):
                     partner.parent_id.name
                 )
 
-    vg7_id = fields.Integer("VG7 ID", copy=False)
     vg72_id = fields.Integer("VG7 ID (2.nd)", copy=False)
-    oe7_id = fields.Integer("Odoo7 ID", copy=False)
-    oe8_id = fields.Integer("Odoo8 ID", copy=False)
-    oe10_id = fields.Integer("Odoo10 ID", copy=False)
     dim_name = fields.Char(
         "Search Key", compute=_set_dim_name, store=True, readonly=True
     )
-    timestamp = fields.Datetime("Timestamp", copy=False, readonly=True)
-    errmsg = fields.Char("Error message", copy=False, readonly=True)
 
     CONTRAINTS = [["id", "!=", "parent_id"]]
 
@@ -258,20 +253,6 @@ class ResPartner(models.Model):
                     del vals["rea_code"]
         return vals
 
-    @api.model
-    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,
-                no_del_child=False):
-        if not chk_in_queue:
-            vals[":type"] = "contact"
-        return self.env["ir.model.synchro"].synchro(
-            self,
-            vals,
-            chk_in_queue=chk_in_queue,
-            only_minimal=only_minimal,
-            no_deep_fields=no_deep_fields,
-            no_del_child=no_del_child,
-        )
-
     @api.multi
     def pull_record(self):
         self.env["ir.model.synchro"].pull_record(self)
@@ -281,58 +262,58 @@ class ResPartnerShipping(models.Model):
     _name = "res.partner.shipping"
     _inherit = "res.partner"
 
-    CONTRAINTS = ["id", "!=", "parent_id"]
+    # CONTRAINTS = ["id", "!=", "parent_id"]
 
-    @api.model
-    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,
-                no_del_child=False):
-        # vals = self.env["res.partner"].shirt_vals(vals, "vg7:shipping")
-        vals[":type"] = "delivery"
-        return self.env["ir.model.synchro"].synchro(
-            self,
-            vals,
-            chk_in_queue=chk_in_queue,
-            only_minimal=only_minimal,
-            no_deep_fields=no_deep_fields,
-            no_del_child=no_del_child,
-        )
+    # @api.model
+    # def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,
+    #             no_del_child=False):
+    #     # vals = self.env["res.partner"].shirt_vals(vals, "vg7:shipping")
+    #     vals[":type"] = "delivery"
+    #     return self.env["ir.model.synchro"].synchro(
+    #         self,
+    #         vals,
+    #         chk_in_queue=chk_in_queue,
+    #         only_minimal=only_minimal,
+    #         no_deep_fields=no_deep_fields,
+    #         no_del_child=no_del_child,
+    #     )
 
 
 class ResPartnerInvoice(models.Model):
     _name = "res.partner.invoice"
     _inherit = "res.partner"
 
-    CONTRAINTS = ["id", "!=", "parent_id"]
+    # CONTRAINTS = ["id", "!=", "parent_id"]
 
-    @api.model
-    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,
-                no_del_child=False):
-        # vals = self.env["res.partner"].shirt_vals(vals, "vg7:billing")
-        vals[":type"] = "invoice"
-        return self.env["ir.model.synchro"].synchro(
-            self,
-            vals,
-            chk_in_queue=chk_in_queue,
-            only_minimal=only_minimal,
-            no_deep_fields=no_deep_fields,
-            no_del_child=no_del_child,
-        )
+    # @api.model
+    # def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,
+    #             no_del_child=False):
+    #     # vals = self.env["res.partner"].shirt_vals(vals, "vg7:billing")
+    #     vals[":type"] = "invoice"
+    #     return self.env["ir.model.synchro"].synchro(
+    #         self,
+    #         vals,
+    #         chk_in_queue=chk_in_queue,
+    #         only_minimal=only_minimal,
+    #         no_deep_fields=no_deep_fields,
+    #         no_del_child=no_del_child,
+    #     )
 
 
 class ResPartnerSupplier(models.Model):
     _name = "res.partner.supplier"
     _inherit = "res.partner"
 
-    @api.model
-    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,
-                no_del_child=False):
-        vals["supplier"] = True
-        vals[":type"] = "contact"
-        return self.env["ir.model.synchro"].synchro(
-            self,
-            vals,
-            chk_in_queue=chk_in_queue,
-            only_minimal=only_minimal,
-            no_deep_fields=no_deep_fields,
-            no_del_child=no_del_child,
-        )
+    # @api.model
+    # def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,
+    #             no_del_child=False):
+    #     vals["supplier"] = True
+    #     vals[":type"] = "contact"
+    #     return self.env["ir.model.synchro"].synchro(
+    #         self,
+    #         vals,
+    #         chk_in_queue=chk_in_queue,
+    #         only_minimal=only_minimal,
+    #         no_deep_fields=no_deep_fields,
+    #         no_del_child=no_del_child,
+    #     )

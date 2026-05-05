@@ -8,6 +8,7 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 #
 from . import (
+    abstract_db_key,
     account_payment_term,
     account_tax,
     ir_model,
@@ -23,6 +24,6 @@ from . import (
     res_partner,
     res_partner_bank,
     sale_order,
-    stock,
+    # stock,
     synchro_channel,
 )

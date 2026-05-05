@@ -15,15 +15,10 @@ _logger = logging.getLogger(__name__)
 
 
 class PurchaseOrder(models.Model):
-    _inherit = "purchase.order"
+    _name = "purchase.order"
+    _inherit = ["purchase.order", "abstract.db.key"]
 
-    vg7_id = fields.Integer("VG7 ID", copy=False)
-    oe7_id = fields.Integer("Odoo7 ID", copy=False)
-    oe8_id = fields.Integer("Odoo8 ID", copy=False)
-    oe10_id = fields.Integer("Odoo10 ID", copy=False)
     original_state = fields.Char("Original Status", copy=False)
-    timestamp = fields.Datetime("Timestamp", copy=False, readonly=True)
-    errmsg = fields.Char("Error message", copy=False, readonly=True)
 
     @api.model_cr_context
     def _auto_init(self):
@@ -44,30 +39,15 @@ class PurchaseOrder(models.Model):
     def commit(self, id):
         return self.env["ir.model.synchro"].commit(self, id)
 
-    @api.model
-    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,
-                no_del_child=False):
-        return self.env["ir.model.synchro"].synchro(
-            self,
-            vals,
-            chk_in_queue=chk_in_queue,
-            only_minimal=only_minimal,
-            no_deep_fields=no_deep_fields,
-            no_del_child=no_del_child,
-        )
-
     @api.multi
     def pull_record(self):
         self.env["ir.model.synchro"].pull_record(self)
 
 
 class PurchaseOrderLine(models.Model):
-    _inherit = "purchase.order.line"
+    _name = "purchase.order.line"
+    _inherit = ["purchase.order.line", "abstract.db.key"]
 
-    vg7_id = fields.Integer("VG7 ID", copy=False)
-    oe7_id = fields.Integer("Odoo7 ID", copy=False)
-    oe8_id = fields.Integer("Odoo8 ID", copy=False)
-    oe10_id = fields.Integer("Odoo10 ID", copy=False)
     to_delete = fields.Boolean("Record to delete")
 
     @api.model_cr_context
@@ -87,47 +67,35 @@ class PurchaseOrderLine(models.Model):
             vals["price_unit"] = 0.0
         return vals
 
-    @api.model
-    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,
-                no_del_child=False):
-        return self.env["ir.model.synchro"].synchro(
-            self,
-            vals,
-            chk_in_queue=chk_in_queue,
-            only_minimal=only_minimal,
-            no_deep_fields=no_deep_fields,
-            no_del_child=no_del_child,
-        )
 
-
-class ProcurementRule(models.Model):
-    _inherit = "procurement.rule"
-
-    vg7_id = fields.Integer("VG7 ID", copy=False)
-    oe7_id = fields.Integer("Odoo7 ID", copy=False)
-    oe8_id = fields.Integer("Odoo8 ID", copy=False)
-    oe10_id = fields.Integer("Odoo10 ID", copy=False)
-
-    @api.model_cr_context
-    def _auto_init(self):
-        res = super(ProcurementRule, self)._auto_init()
-        for prefix in ("vg7", "oe7", "oe8", "oe10"):
-            self.env["ir.model.synchro"]._build_unique_index(self._inherit, prefix)
-        return res
-
-    def assure_values(self, vals, rec):
-        if "action" not in vals and not rec:
-            vals["action"] = "buy"
-        return vals
-
-    @api.model
-    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,
-                no_del_child=False):
-        return self.env["ir.model.synchro"].synchro(
-            self,
-            vals,
-            chk_in_queue=chk_in_queue,
-            only_minimal=only_minimal,
-            no_deep_fields=no_deep_fields,
-            no_del_child=no_del_child,
-        )
+# class ProcurementRule(models.Model):
+#     _inherit = "procurement.rule"
+#
+#     vg7_id = fields.Integer("VG7 ID", copy=False)
+#     oe7_id = fields.Integer("Odoo7 ID", copy=False)
+#     oe8_id = fields.Integer("Odoo8 ID", copy=False)
+#     oe10_id = fields.Integer("Odoo10 ID", copy=False)
+#
+#     @api.model_cr_context
+#     def _auto_init(self):
+#         res = super(ProcurementRule, self)._auto_init()
+#         for prefix in ("vg7", "oe7", "oe8", "oe10"):
+#             self.env["ir.model.synchro"]._build_unique_index(self._inherit, prefix)
+#         return res
+#
+#     def assure_values(self, vals, rec):
+#         if "action" not in vals and not rec:
+#             vals["action"] = "buy"
+#         return vals
+#
+#     @api.model
+#     def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,
+#                 no_del_child=False):
+#         return self.env["ir.model.synchro"].synchro(
+#             self,
+#             vals,
+#             chk_in_queue=chk_in_queue,
+#             only_minimal=only_minimal,
+#             no_deep_fields=no_deep_fields,
+#             no_del_child=no_del_child,
+#         )

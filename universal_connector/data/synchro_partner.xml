@@ -515,7 +515,7 @@
 
     <record forcecreate="1" id="res_partner_invoice_type" model="synchro.channel.model.fields">
         <field name="name">type</field>
-        <field name="apply">delivery</field>
+        <field name="apply">invoice</field>
         <field name="model_id" ref="res_partner_invoice"/>
     </record>
 

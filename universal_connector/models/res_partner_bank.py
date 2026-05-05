@@ -15,13 +15,10 @@ _logger = logging.getLogger(__name__)
 
 
 class ResPartnerBank(models.Model):
-    _inherit = "res.partner.bank"
+    _name = "res.partner.bank"
+    _inherit = ["res.partner.bank", "abstract.db.key"]
 
-    vg7_id = fields.Integer("VG7 ID", copy=False)
     vg72_id = fields.Integer("VG7 ID (2.nd)", copy=False)
-    oe7_id = fields.Integer("Odoo7 ID", copy=False)
-    oe8_id = fields.Integer("Odoo8 ID", copy=False)
-    oe10_id = fields.Integer("Odoo10 ID", copy=False)
 
     @api.model_cr_context
     def _auto_init(self):
@@ -41,18 +38,6 @@ class ResPartnerBank(models.Model):
             return vals, "company"
         return vals, ""
 
-    @api.model
-    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,
-                no_del_child=False):
-        return self.env["ir.model.synchro"].synchro(
-            self,
-            vals,
-            chk_in_queue=chk_in_queue,
-            only_minimal=only_minimal,
-            no_deep_fields=no_deep_fields,
-            no_del_child=no_del_child,
-        )
-
     @api.multi
     def pull_record(self):
         self.env["ir.model.synchro"].pull_record(self)
@@ -62,19 +47,19 @@ class ResPartnerBankCompany(models.Model):
     _name = "res.partner.bank.company"
     _inherit = "res.partner.bank"
 
-    @api.model
-    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,
-                no_del_child=False):
-        if not chk_in_queue:
-            vals[":type"] = "company"
-        return self.env["ir.model.synchro"].synchro(
-            self,
-            vals,
-            chk_in_queue=chk_in_queue,
-            only_minimal=only_minimal,
-            no_deep_fields=no_deep_fields,
-            no_del_child=no_del_child,
-        )
+    # @api.model
+    # def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,
+    #             no_del_child=False):
+    #     if not chk_in_queue:
+    #         vals[":type"] = "company"
+    #     return self.env["ir.model.synchro"].synchro(
+    #         self,
+    #         vals,
+    #         chk_in_queue=chk_in_queue,
+    #         only_minimal=only_minimal,
+    #         no_deep_fields=no_deep_fields,
+    #         no_del_child=no_del_child,
+    #     )
 
     @api.multi
     def pull_record(self):

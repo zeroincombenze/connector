@@ -46,7 +46,7 @@
         "views/country_view.xml",
         "views/partner_view.xml",
         "views/product_view.xml",
-        "views/stock_view.xml",
+        # "views/stock_view.xml",
         "views/sale_order_view.xml",
         "views/purchase_order_view.xml",
         "views/account_tax_view.xml",

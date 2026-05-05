@@ -6,21 +6,17 @@
 #
 import logging
 
-from odoo import api, fields, models
+from odoo import api, models
 
 # from odoo.exceptions import UserError
 _logger = logging.getLogger(__name__)
 
 
 class ItalyConaiProductCategory(models.Model):
-    _inherit = "italy.conai.product.category"
+    _name = "italy.conai.product.category"
+    _inherit = ["italy.conai.product.category", "abstract.db.key"]
 
-    vg7_id = fields.Integer("VG7 ID", copy=False)
-    oe7_id = fields.Integer("Odoo7 ID", copy=False)
-    oe8_id = fields.Integer("Odoo7 ID", copy=False)
-    oe10_id = fields.Integer("Odoo7 ID", copy=False)
-
-    CONTRAINTS = []
+    # CONTRAINTS = []
 
     @api.model_cr_context
     def _auto_init(self):
@@ -29,22 +25,18 @@ class ItalyConaiProductCategory(models.Model):
             self.env["ir.model.synchro"]._build_unique_index(self._inherit, prefix)
         return res
 
-    @api.model
-    def synchro(self, vals, disable_post=None):
-        return self.env["ir.model.synchro"].synchro(
-            self, vals, chk_in_queue=disable_post
-        )
+    # @api.model
+    # def synchro(self, vals, disable_post=None):
+    #     return self.env["ir.model.synchro"].synchro(
+    #         self, vals, chk_in_queue=disable_post
+    #     )
 
 
 class ItalyConaiPartnerCategory(models.Model):
-    _inherit = "italy.conai.partner.category"
+    _name = "italy.conai.partner.category"
+    _inherit = ["italy.conai.partner.category", "abstract.db.key"]
 
-    vg7_id = fields.Integer("VG7 ID", copy=False)
-    oe7_id = fields.Integer("Odoo7 ID", copy=False)
-    oe8_id = fields.Integer("Odoo7 ID", copy=False)
-    oe10_id = fields.Integer("Odoo7 ID", copy=False)
-
-    CONTRAINTS = []
+    # CONTRAINTS = []
 
     @api.model_cr_context
     def _auto_init(self):
@@ -53,8 +45,8 @@ class ItalyConaiPartnerCategory(models.Model):
             self.env["ir.model.synchro"]._build_unique_index(self._inherit, prefix)
         return res
 
-    @api.model
-    def synchro(self, vals, disable_post=None):
-        return self.env["ir.model.synchro"].synchro(
-            self, vals, chk_in_queue=disable_post
-        )
+    # @api.model
+    # def synchro(self, vals, disable_post=None):
+    #     return self.env["ir.model.synchro"].synchro(
+    #         self, vals, chk_in_queue=disable_post
+    #     )

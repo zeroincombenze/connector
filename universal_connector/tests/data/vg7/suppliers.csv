@@ -1,2 +1,2 @@
-id,name,surename,piva
-101,Import Export Trifoglio s.r.l.,,01234560017
+id,name,surename,piva,street,street_number
+101,Import Export Trifoglio s.r.l.,,"01234560017",Via Nettuno,1/bis

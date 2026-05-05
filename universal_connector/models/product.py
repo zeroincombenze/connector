@@ -20,7 +20,8 @@ except ImportError as err:
 
 
 class ProductTemplate(models.Model):
-    _inherit = "product.template"
+    _name = "product.template"
+    _inherit = ["product.template", "abstract.db.key"]
 
     @api.multi
     @api.depends("name")
@@ -28,15 +29,9 @@ class ProductTemplate(models.Model):
         for product in self:
             product.dim_name = self.env["ir.model.synchro"].dim_text(product.name)
 
-    vg7_id = fields.Integer("VG7 ID", copy=False)
-    oe7_id = fields.Integer("Odoo7 ID", copy=False)
-    oe8_id = fields.Integer("Odoo8 ID", copy=False)
-    oe10_id = fields.Integer("Odoo10 ID", copy=False)
     dim_name = fields.Char(
         "Search Key", compute=_set_dim_name, store=True, readonly=True
     )
-    timestamp = fields.Datetime("Timestamp", copy=False, readonly=True)
-    errmsg = fields.Char("Error message", copy=False, readonly=True)
 
     CONTRAINTS = ()
     LINES_OF_REC = False
@@ -64,18 +59,6 @@ class ProductTemplate(models.Model):
             text = res
         return text
 
-    @api.model
-    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,
-                no_del_child=False):
-        return self.env["ir.model.synchro"].synchro(
-            self,
-            vals,
-            chk_in_queue=chk_in_queue,
-            only_minimal=only_minimal,
-            no_deep_fields=no_deep_fields,
-            no_del_child=no_del_child,
-        )
-
     @api.multi
     def pull_record(self):
         for product in self.product_variant_ids:
@@ -83,7 +66,8 @@ class ProductTemplate(models.Model):
 
 
 class ProductProduct(models.Model):
-    _inherit = "product.product"
+    _name = "product.product"
+    _inherit = ["product.product", "abstract.db.key"]
 
     @api.multi
     @api.depends("name")
@@ -91,15 +75,9 @@ class ProductProduct(models.Model):
         for product in self:
             product.dim_name = self.env["ir.model.synchro"].dim_text(product.name)
 
-    vg7_id = fields.Integer("VG7 ID", copy=False)
-    oe7_id = fields.Integer("Odoo7 ID", copy=False)
-    oe8_id = fields.Integer("Odoo8 ID", copy=False)
-    oe10_id = fields.Integer("Odoo10 ID", copy=False)
     dim_name = fields.Char(
         "Search Key", compute=_set_dim_name, store=True, readonly=True
     )
-    timestamp = fields.Datetime("Timestamp", copy=False, readonly=True)
-    errmsg = fields.Char("Error message", copy=False, readonly=True)
 
     @api.model_cr_context
     def _auto_init(self):
@@ -137,26 +115,10 @@ class ProductProduct(models.Model):
                 vals["product_tmpl_id"] = id
         return vals, ""
 
-    @api.model
-    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,
-                no_del_child=False):
-        return self.env["ir.model.synchro"].synchro(
-            self,
-            vals,
-            chk_in_queue=chk_in_queue,
-            only_minimal=only_minimal,
-            no_deep_fields=no_deep_fields,
-            no_del_child=no_del_child,
-        )
-
 
 class ProductUom(models.Model):
-    _inherit = "product.uom"
-
-    vg7_id = fields.Integer("VG7 ID", copy=False)
-    oe7_id = fields.Integer("Odoo7 ID", copy=False)
-    oe8_id = fields.Integer("Odoo8 ID", copy=False)
-    oe10_id = fields.Integer("Odoo10 ID", copy=False)
+    _name = "product.uom"
+    _inherit = ["product.uom", "abstract.db.key"]
 
     @api.model_cr_context
     def _auto_init(self):
@@ -165,30 +127,14 @@ class ProductUom(models.Model):
             self.env["ir.model.synchro"]._build_unique_index(self._inherit, prefix)
         return res
 
-    @api.model
-    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,
-                no_del_child=False):
-        return self.env["ir.model.synchro"].synchro(
-            self,
-            vals,
-            chk_in_queue=chk_in_queue,
-            only_minimal=only_minimal,
-            no_deep_fields=no_deep_fields,
-            no_del_child=no_del_child,
-        )
-
     @api.multi
     def pull_record(self):
         return self.env["ir.model.synchro"].pull_record(self)
 
 
 class ProductCategory(models.Model):
-    _inherit = "product.category"
-
-    vg7_id = fields.Integer("VG7 ID", copy=False)
-    oe7_id = fields.Integer("Odoo7 ID", copy=False)
-    oe8_id = fields.Integer("Odoo8 ID", copy=False)
-    oe10_id = fields.Integer("Odoo10 ID", copy=False)
+    _name = "product.category"
+    _inherit = ["product.category", "abstract.db.key"]
 
     @api.model_cr_context
     def _auto_init(self):
@@ -197,42 +143,30 @@ class ProductCategory(models.Model):
             self.env["ir.model.synchro"]._build_unique_index(self._inherit, prefix)
         return res
 
-    @api.model
-    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,
-                no_del_child=False):
-        return self.env["ir.model.synchro"].synchro(
-            self,
-            vals,
-            chk_in_queue=chk_in_queue,
-            only_minimal=only_minimal,
-            no_deep_fields=no_deep_fields,
-            no_del_child=no_del_child,
-        )
 
-
-class ProductPricelist(models.Model):
-    _inherit = "product.pricelist"
-
-    vg7_id = fields.Integer("VG7 ID", copy=False)
-    oe7_id = fields.Integer("Odoo7 ID", copy=False)
-    oe8_id = fields.Integer("Odoo8 ID", copy=False)
-    oe10_id = fields.Integer("Odoo10 ID", copy=False)
-
-    @api.model_cr_context
-    def _auto_init(self):
-        res = super(ProductPricelist, self)._auto_init()
-        for prefix in ("vg7", "oe7", "oe8", "oe10"):
-            self.env["ir.model.synchro"]._build_unique_index(self._inherit, prefix)
-        return res
-
-    @api.model
-    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,
-                no_del_child=False):
-        return self.env["ir.model.synchro"].synchro(
-            self,
-            vals,
-            chk_in_queue=chk_in_queue,
-            only_minimal=only_minimal,
-            no_deep_fields=no_deep_fields,
-            no_del_child=no_del_child,
-        )
+# class ProductPricelist(models.Model):
+#     _inherit = "product.pricelist"
+#
+#     vg7_id = fields.Integer("VG7 ID", copy=False)
+#     oe7_id = fields.Integer("Odoo7 ID", copy=False)
+#     oe8_id = fields.Integer("Odoo8 ID", copy=False)
+#     oe10_id = fields.Integer("Odoo10 ID", copy=False)
+#
+#     @api.model_cr_context
+#     def _auto_init(self):
+#         res = super(ProductPricelist, self)._auto_init()
+#         for prefix in ("vg7", "oe7", "oe8", "oe10"):
+#             self.env["ir.model.synchro"]._build_unique_index(self._inherit, prefix)
+#         return res
+#
+#     @api.model
+#     def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,
+#                 no_del_child=False):
+#         return self.env["ir.model.synchro"].synchro(
+#             self,
+#             vals,
+#             chk_in_queue=chk_in_queue,
+#             only_minimal=only_minimal,
+#             no_deep_fields=no_deep_fields,
+#             no_del_child=no_del_child,
+#         )

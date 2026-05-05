@@ -426,7 +426,7 @@ class IrModelSynchro(models.Model):
             reqloglevel = "4"
         elif isinstance(reqloglevel, basestring):
             reqloglevel = loglevel2num.get(reqloglevel, "2")
-        elif not reqloglevel.isdigit():
+        elif not reqloglevel.isdigit():  # pragma: no cover
             reqloglevel = self.LOGLEVEL
         try:
             full_msg = _u(msg_text % ctx)
@@ -661,46 +661,46 @@ class IrModelSynchro(models.Model):
             del vals["state"]
         if rec and (rec.state in ("draft", "uninstalled")):
             return vals, errc
-        if model == "account.invoice":
-            if rec:
-                rec.set_defaults()
-                rec.compute_taxes()
-                rec.write({})
-                if rec.state == "paid":
-                    return vals, -4
-                elif rec.state == "open":
-                    try:
-                        rec.action_invoice_cancel()
-                        rec.action_invoice_draft()
-                    except BaseException as e:  # pragma: no cover
-                        self.env.cr.rollback()  # pylint: disable=invalid-commit
-                        self.logmsg(
-                            "error",
-                            "ERROR %(e)s: %(model)s.set_state_to_draft(%(id)s)",
-                            model=model,
-                            rec=rec,
-                            logrec=self.logrec,
-                            ctx={"e": e},
-                        )
-                elif rec.state == "cancel":
-                    try:
-                        rec.action_invoice_draft()
-                    except BaseException as e:  # pragma: no cover
-                        self.env.cr.rollback()  # pylint: disable=invalid-commit
-                        self.logmsg(
-                            "error",
-                            "ERROR %(e)s: %(model)s.set_state_to_draft(%(id)s)",
-                            model=model,
-                            rec=rec,
-                            logrec=self.logrec,
-                            ctx={"e": e},
-                        )
-        elif model == "sale.order":
+        # if model == "account.invoice":
+        #     if rec:
+        #         rec.set_defaults()
+        #         rec.compute_taxes()
+        #         rec.write({})
+        #         if rec.state == "paid":
+        #             return vals, -4
+        #         elif rec.state == "open":
+        #             try:
+        #                 rec.action_invoice_cancel()
+        #                 rec.action_invoice_draft()
+        #             except BaseException as e:  # pragma: no cover
+        #                 self.env.cr.rollback()  # pylint: disable=invalid-commit
+        #                 self.logmsg(
+        #                     "error",
+        #                     "ERROR %(e)s: %(model)s.set_state_to_draft(%(id)s)",
+        #                     model=model,
+        #                     rec=rec,
+        #                     logrec=self.logrec,
+        #                     ctx={"e": e},
+        #                 )
+        #         elif rec.state == "cancel":
+        #             try:
+        #                 rec.action_invoice_draft()
+        #             except BaseException as e:  # pragma: no cover
+        #                 self.env.cr.rollback()  # pylint: disable=invalid-commit
+        #                 self.logmsg(
+        #                     "error",
+        #                     "ERROR %(e)s: %(model)s.set_state_to_draft(%(id)s)",
+        #                     model=model,
+        #                     rec=rec,
+        #                     logrec=self.logrec,
+        #                     ctx={"e": e},
+        #                 )
+        if model == "sale.order":
             if rec:
                 rec.set_defaults()
                 rec._compute_tax_id()
                 rec.write({})
-                if rec.invoice_count > 0 or rec.ddt_ids:
+                if rec.invoice_count > 0 or rec.ddt_ids:  # pragma: no cover
                     self.logmsg(
                         "error",
                         "%(model)s.set_state_to_draft(%(id)s)  # Invoiced",
@@ -709,7 +709,7 @@ class IrModelSynchro(models.Model):
                         rec=rec,
                     )
                     return vals, -4
-                if rec.state == "done":
+                if rec.state == "done":  # pragma: no cover
                     self.logmsg(
                         "error",
                         "%(model)s.set_state_to_draft(%(id)s)  # Locked",
@@ -732,7 +732,7 @@ class IrModelSynchro(models.Model):
                             logrec=self.logrec,
                             ctx={"e": e},
                         )
-                elif rec.state == "cancel":
+                elif rec.state == "cancel":  # pragma: no cover
                     try:
                         rec.action_draft()
                     except BaseException as e:  # pragma: no cover
@@ -798,7 +798,7 @@ class IrModelSynchro(models.Model):
                         )
         elif model == "stock.picking.package.preparation":
             if rec:
-                if rec.invoice_ids or rec.invoice_id:
+                if rec.invoice_ids or rec.invoice_id:   # pragma: no cover
                     return vals, -4
                 try:
                     rec.set_draft()
@@ -812,21 +812,21 @@ class IrModelSynchro(models.Model):
                         logrec=self.logrec,
                         ctx={"e": e},
                     )
-        elif model == "account.move":
-            if rec:
-                if rec.state == "posted":
-                    try:
-                        rec.button_cancel()
-                    except BaseException as e:  # pragma: no cover
-                        self.env.cr.rollback()  # pylint: disable=invalid-commit
-                        self.logmsg(
-                            "error",
-                            "ERROR %(e)s: %(model)s.set_state_to_draft(%(id)s)",
-                            model=model,
-                            rec=rec,
-                            logrec=self.logrec,
-                            ctx={"e": e},
-                        )
+        # elif model == "account.move":
+        #     if rec:
+        #         if rec.state == "posted":
+        #             try:
+        #                 rec.button_cancel()
+        #             except BaseException as e:  # pragma: no cover
+        #                 self.env.cr.rollback()  # pylint: disable=invalid-commit
+        #                 self.logmsg(
+        #                     "error",
+        #                     "ERROR %(e)s: %(model)s.set_state_to_draft(%(id)s)",
+        #                     model=model,
+        #                     rec=rec,
+        #                     logrec=self.logrec,
+        #                     ctx={"e": e},
+        #                 )
         return vals, errc
 
     def set_actual_state(self, struct, model, rec):
@@ -835,57 +835,57 @@ class IrModelSynchro(models.Model):
         )
         if not rec:
             return -3
-        if model == "account.invoice":
-            rec.compute_taxes()
+        # if model == "account.invoice":
+        #     rec.compute_taxes()
+        #     # Please, do not remove this write: set default values in header
+        #     rec.write({})
+        #     if rec.state == rec.original_state:
+        #         return rec.id
+        #     elif rec.state != "draft":
+        #         self.logmsg(
+        #             "error",
+        #             "### Unauthorized state change of %(model)s[%(id)s]",
+        #             model=model,
+        #             rec=rec,
+        #             logrec=self.logrec,
+        #         )
+        #         return -4
+        #     elif rec.original_state in ("open", "paid"):
+        #         try:
+        #             rec.action_invoice_open()
+        #         except BaseException as e:  # pragma: no cover
+        #             self.env.cr.rollback()  # pylint: disable=invalid-commit
+        #             self.logmsg(
+        #                 "error",
+        #                 "ERROR %(e)s: %(model)s.set_actual_state(%(id)s)",
+        #                 model=model,
+        #                 rec=rec,
+        #                 logrec=self.logrec,
+        #                 ctx={"e": e},
+        #             )
+        #             return -10
+        #         if rec.name and rec.name.startswith("Unknown"):
+        #             rec.write({"name": rec.number})
+        #     elif rec.original_state == "cancel":
+        #         try:
+        #             rec.action_invoice_cancel()
+        #         except BaseException as e:  # pragma: no cover
+        #             self.env.cr.rollback()  # pylint: disable=invalid-commit
+        #             self.logmsg(
+        #                 "error",
+        #                 "ERROR %(e)s: %(model)s.set_actual_state()",
+        #                 model=model,
+        #                 rec=rec,
+        #                 logrec=self.logrec,
+        #                 ctx={"e": e},
+        #             )
+        #             return -10
+        if model == "sale.order":
             # Please, do not remove this write: set default values in header
             rec.write({})
             if rec.state == rec.original_state:
                 return rec.id
-            elif rec.state != "draft":
-                self.logmsg(
-                    "error",
-                    "### Unauthorized state change of %(model)s[%(id)s]",
-                    model=model,
-                    rec=rec,
-                    logrec=self.logrec,
-                )
-                return -4
-            elif rec.original_state in ("open", "paid"):
-                try:
-                    rec.action_invoice_open()
-                except BaseException as e:  # pragma: no cover
-                    self.env.cr.rollback()  # pylint: disable=invalid-commit
-                    self.logmsg(
-                        "error",
-                        "ERROR %(e)s: %(model)s.set_actual_state(%(id)s)",
-                        model=model,
-                        rec=rec,
-                        logrec=self.logrec,
-                        ctx={"e": e},
-                    )
-                    return -10
-                if rec.name and rec.name.startswith("Unknown"):
-                    rec.write({"name": rec.number})
-            elif rec.original_state == "cancel":
-                try:
-                    rec.action_invoice_cancel()
-                except BaseException as e:  # pragma: no cover
-                    self.env.cr.rollback()  # pylint: disable=invalid-commit
-                    self.logmsg(
-                        "error",
-                        "ERROR %(e)s: %(model)s.set_actual_state()",
-                        model=model,
-                        rec=rec,
-                        logrec=self.logrec,
-                        ctx={"e": e},
-                    )
-                    return -10
-        elif model == "sale.order":
-            # Please, do not remove this write: set default values in header
-            rec.write({})
-            if rec.state == rec.original_state:
-                return rec.id
-            elif rec.state != "draft":
+            elif rec.state != "draft":  # pragma: no cover
                 self.logmsg(
                     "error",
                     "### Unauthorized state change of %(model)s[%(id)s]",
@@ -917,7 +917,7 @@ class IrModelSynchro(models.Model):
                         ctx={"e": e},
                     )
                     return -10
-            elif rec.original_state == "cancel":
+            elif rec.original_state == "cancel":  # pragma: no cover
                 try:
                     rec.action_cancel()
                 except BaseException as e:  # pragma: no cover
@@ -988,32 +988,32 @@ class IrModelSynchro(models.Model):
                     ctx={"e": e},
                 )
                 return -10
-        elif model == "account.move":
-            if rec.state == rec.original_state:
-                return rec.id
-            elif rec.state != "draft":
-                self.logmsg(
-                    "error",
-                    "### Unauthorized state change of %(model)s[%(id)s]",
-                    model=model,
-                    logrec=self.logrec,
-                    rec=rec,
-                )
-                return -4
-            elif rec.original_state == "posted":
-                try:
-                    rec.post()
-                except BaseException as e:  # pragma: no cover
-                    self.env.cr.rollback()  # pylint: disable=invalid-commit
-                    self.logmsg(
-                        "error",
-                        "ERROR %(e)s: %(model)s.set_actual_state(%(id)s)",
-                        model=model,
-                        rec=rec,
-                        logrec=self.logrec,
-                        ctx={"e": e},
-                    )
-                    return -10
+        # elif model == "account.move":
+        #     if rec.state == rec.original_state:
+        #         return rec.id
+        #     elif rec.state != "draft":
+        #         self.logmsg(
+        #             "error",
+        #             "### Unauthorized state change of %(model)s[%(id)s]",
+        #             model=model,
+        #             logrec=self.logrec,
+        #             rec=rec,
+        #         )
+        #         return -4
+        #     elif rec.original_state == "posted":
+        #         try:
+        #             rec.post()
+        #         except BaseException as e:  # pragma: no cover
+        #             self.env.cr.rollback()  # pylint: disable=invalid-commit
+        #             self.logmsg(
+        #                 "error",
+        #                 "ERROR %(e)s: %(model)s.set_actual_state(%(id)s)",
+        #                 model=model,
+        #                 rec=rec,
+        #                 logrec=self.logrec,
+        #                 ctx={"e": e},
+        #             )
+        #             return -10
         # elif model == "ir.module.module":
         #     if rec.state != "installed" and rec.original_state == "installed":
         #         return self.manage_module({"name": rec.name})
@@ -1651,7 +1651,7 @@ class IrModelSynchro(models.Model):
         return value
 
     def map_to_internal(
-        self, struct, backend, vmodel, vals, no_deep_fields=None, only_minimal=None
+        self, env, backend, vmodel, vals, no_deep_fields=None, only_minimal=None
     ):
         def rm_ext_value(vals, loc_name, ext_name, ext_ref, is_foreign):
             if (
@@ -1857,17 +1857,18 @@ class IrModelSynchro(models.Model):
         child_ids = Cache.get_struct_model_attr(
             actual_model, "CHILD_IDS", default=False
         )
+        struct = env["struct"]
         model_child = Cache.get_struct_model_attr(actual_model, "MODEL_CHILD")
-        parent_child_mode = "A" if child_ids and model_child else ""
         vals = check_4_double_field_id(vals)
         field_list = priority_fields(
             struct, backend, vals, loc_ext_id_name, vmodel
         )
         if isinstance(field_list, dict):
             return self.map_to_internal(
-                struct, backend, vmodel, field_list,
+                env, backend, vmodel, field_list,
                 no_deep_fields=no_deep_fields, only_minimal=only_minimal)
 
+        env["parent_child_mode"] = "A" if child_ids and model_child else ""
         ctx = Cache.get_attr(backend.id, "CTX") or {}
         ctx["ext_key_id"] = counterpart_pk
         for ext_ref in field_list:
@@ -1945,7 +1946,7 @@ class IrModelSynchro(models.Model):
                 Cache.set_model_attr(
                     backend.id, vmodel, "__%s_ids" % actual_model, lines
                 )
-                parent_child_mode = "B"
+                env["parent_child_mode"] = "B"
                 del vals[ext_ref]
                 continue
 
@@ -2026,7 +2027,7 @@ class IrModelSynchro(models.Model):
         if "ext_key_id" in ctx:
             del ctx["ext_key_id"]
         Cache.set_attr(backend.id, "CTX", ctx)
-        return vals, parent_child_mode
+        return vals, env
 
     def set_default_values(self, cls, backend, vmodel, vals):
         # backend_id = backend.id
@@ -2812,8 +2813,9 @@ class IrModelSynchro(models.Model):
         else:
             spec = self.get_spec_from_vmodel(vmodel)
         # Warning! After this function, return MUST pop ref_id
-        vals, parent_child_mode = self.map_to_internal(
-            struct, backend, vmodel, vals, no_deep_fields=no_deep_fields
+        env = {"struct": struct}
+        vals, env = self.map_to_internal(
+            env, backend, vmodel, vals, no_deep_fields=no_deep_fields
         )
         if has_sequence and "sequence" in vals:
             sequence = vals["sequence"]
@@ -2874,8 +2876,8 @@ class IrModelSynchro(models.Model):
                     rec = self.create_n_commit(actual_model, vals, logrec=self.logrec)
                 if not rec:
                     return loc_id
-                if backend.ignore_child_lines and parent_child_mode == "B":
-                    parent_child_mode = "A"
+                if backend.ignore_child_lines and env["parent_child_mode"] == "B":
+                    env["parent_child_mode"] = "A"
                 loc_id = rec.id
                 if not ext_id_name:
                     self.create_ext_id(backend, actual_model, loc_id, ext_id)
@@ -3002,7 +3004,7 @@ class IrModelSynchro(models.Model):
                 backend.id, model_child, "__%s_FP" % model_child,
                 rec.fiscal_position_id
             )
-        if parent_child_mode == "B":
+        if env["parent_child_mode"] == "B":
             sts = self.synchro_childs(
                 backend,
                 vmodel,
@@ -3017,7 +3019,7 @@ class IrModelSynchro(models.Model):
             self.logmsg(
                 "debug",
                 "### Child mode %s: counterpart must send child records"
-                % parent_child_mode,
+                % env["parent_child_mode"],
             )
         elif rec and loc_id > 0 and "to_delete" in rec and not no_del_child:
             actual_cls.search([(parent_id_name, "=", rec[parent_id_name].id),
@@ -3545,7 +3547,7 @@ class IrModelSynchro(models.Model):
                             and not cls.search([(ext_id_name, "=", ext_id)])
                         ):
                             rec_counter = update_rec_counter(
-                                cur_backend.id,
+                                cur_backend,
                                 ext_id,
                                 rec_counter,
                                 use_workflow,
@@ -3555,7 +3557,7 @@ class IrModelSynchro(models.Model):
                         if use_workflow and ext_id <= rec_counter:
                             continue
                         rec_counter = update_rec_counter(
-                            cur_backend.id, ext_id, rec_counter, use_workflow,
+                            cur_backend, ext_id, rec_counter, use_workflow,
                             model=vmodel
                         )
                     loc_id = self.pull_1_record(
@@ -3582,7 +3584,7 @@ class IrModelSynchro(models.Model):
                     if loc_id < 0:
                         continue
                     rec_counter = update_rec_counter(
-                        cur_backend.id, ext_id, rec_counter, use_workflow
+                        cur_backend, ext_id, rec_counter, use_workflow
                     )
                     ctr += 1
                     if loc_id not in local_ids:

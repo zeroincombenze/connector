@@ -85,7 +85,7 @@ class MyTest(SingleTransactionCase):
                       billing_fqn=None, shipping_fqn=None,
                       lines_fqn=None, only_merge=False):
         ext_model = os.path.basename(fqn).rsplit(".", 1)[0]
-        partner_purge = "partner" in ext_model
+        partner_purge = "partner" in ext_model or "purchase" in ext_model
         partner_only_merge = "orders" in ext_model
         billing_data = self.load_csv_file(
             billing_fqn, only_merge=True) if billing_fqn else []
@@ -98,7 +98,8 @@ class MyTest(SingleTransactionCase):
             else "customer_shipping_id" if "shipping" in ext_model
             else "ddt_id" if "ddt" in ext_model
             else "id")
-        partner_key = "customer_id"
+        partner_key = "supplier_id" if ("purchase" in ext_model
+                                        or "supplier" in ext_model) else "customer_id"
         datas = []
         if not pth.isfile(fqn):
             raise IOError("File %s not found!" % fqn)
@@ -141,11 +142,15 @@ class MyTest(SingleTransactionCase):
                                     del row[i]
                             if partner_purge:
                                 del billing[partner_key]
+                            if partner_key == "supplier_id":
+                                del billing["billing_payment_id"]
                             row.append(billing)
                             break
                 if shipping_data:
                     for shipping in shipping_data:
                         if shipping[partner_key] == row[partner_ix]:
+                            if partner_key == "supplier_id":
+                                del shipping[partner_key]
                             row.append(shipping)
                             break
                 if lines_data:
@@ -200,6 +205,15 @@ class MyTest(SingleTransactionCase):
         fqn = os.path.join(root, "ddt.csv")
         lines_fqn = os.path.join(root, "ddt.line.csv")
         self.load_csv_file(fqn, lines_fqn=lines_fqn)
+
+        fqn = os.path.join(root, "purchase_orders.csv")
+        billing_fqn = os.path.join(root, "supplier_billing_addresses.csv")
+        shipping_fqn = os.path.join(root, "supplier_shipping_addresses.csv")
+        lines_fqn = os.path.join(root, "purchase_orders.line.csv")
+        self.load_csv_file(fqn,
+                           billing_fqn=billing_fqn,
+                           shipping_fqn=shipping_fqn,
+                           lines_fqn=lines_fqn)
 
         backend.button_reset_to_draft()
         backend.write({"exchange_path": os.path.dirname(root)})
@@ -492,7 +506,9 @@ class MyTest(SingleTransactionCase):
         model = "sale.order"
         _logger.info(u"🎺 Import order from %s" % _u(xref))
         if delete_before:
-            self.env[model].search([("vg7_id", "=", 101)]).unlink()
+            for order in self.env[model].search([("vg7_id", "=", 101)]):
+                order.action_cancel()
+                order.unlink()
         rec_id = Synchro.trigger_one_record("orders", backend.prefix, 131)
         self.assertTrue(rec_id > 0)
         order = self.env[model].browse(rec_id)
@@ -510,7 +526,9 @@ class MyTest(SingleTransactionCase):
         model = "stock.picking.package.preparation"
         _logger.info(u"🎺 Import ddt from %s" % _u(xref))
         if delete_before:
-            self.env[model].search([("vg7_id", "=", 101)]).unlink()
+            for ddt in self.env[model].search([("vg7_id", "=", 101)]):
+                ddt.set_draft()
+                ddt.unlink()
         rec_id = Synchro.trigger_one_record("ddt", backend.prefix, 231)
         self.assertTrue(rec_id > 0)
         ddt = self.env[model].browse(rec_id)
@@ -518,6 +536,24 @@ class MyTest(SingleTransactionCase):
         self.assertTrue(len(ddt.line_ids) > 0)
         self.assertEqual(101, ddt.partner_id.vg7_id)
         self.assertEqual(100000001, ddt.partner_shipping_id.vg7_id)
+
+    def _test_regression_purchase_order(self, delete_before=False):
+        Synchro = self.env["ir.model.synchro"]
+        xref = "z0bug.csv-vg7"
+        backend = self.resource_browse(xref)
+        model = "purchase.order"
+        _logger.info(u"🎺 Import purchase order from %s" % _u(xref))
+        if delete_before:
+            for order in self.env[model].search([("vg7_id", "=", 101)]):
+                order.action_cancel()
+                order.unlink()
+        rec_id = Synchro.trigger_one_record("purchae_orders", backend.prefix, 111)
+        self.assertTrue(rec_id > 0)
+        order = self.env[model].browse(rec_id)
+        self.assertEqual("PO-24517", order.name)
+        # self.assertEqual("sale", order.state)
+        self.assertTrue(len(order.order_line) > 0)
+        self.assertEqual(101, order.partner_id.vg7_id)
 
     def test_connection(self):
         # This test requires external Odoo instance active. See header
@@ -548,10 +584,18 @@ class MyTest(SingleTransactionCase):
         _logger.info(
             "🎺🎺 Starting Regression test"
         )
-
         self.prepare_env_regresion()
+        # Test on record already in DB by previous tests
         self._test_regression_partner()
+        # Delete all record and try again
         self._test_regression_partner(delete_before=True)
+        # Delete dirty record and import
+        self._test_regression_order(delete_before=True)
+        # Try again to reimport order
         self._test_regression_order()
+        # Delete dirty record and import
+        self._test_regression_ddt(delete_before=True)
+        # Try again to reimport order
         self._test_regression_ddt()
+        # self._test_regression_purchase_order()
         # self.env.cr.commit()

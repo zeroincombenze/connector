@@ -20,7 +20,8 @@ except ImportError as err:
 
 
 class AccountPaymentTerm(models.Model):
-    _inherit = "account.payment.term"
+    _name = "account.payment.term"
+    _inherit = ["account.payment.term", "abstract.db.key"]
 
     @api.multi
     @api.depends("name")
@@ -28,15 +29,9 @@ class AccountPaymentTerm(models.Model):
         for partner in self:
             partner.dim_name = self.env["ir.model.synchro"].dim_text(partner.name)
 
-    vg7_id = fields.Integer("VG7 ID", copy=False)
-    oe7_id = fields.Integer("Odoo7 ID", copy=False)
-    oe8_id = fields.Integer("Odoo8 ID", copy=False)
-    oe10_id = fields.Integer("Odoo10 ID", copy=False)
     dim_name = fields.Char(
         "Search Key", compute=_set_dim_name, store=True, readonly=True
     )
-    timestamp = fields.Datetime("Timestamp", copy=False, readonly=True)
-    errmsg = fields.Char("Error message", copy=False, readonly=True)
 
     @api.model_cr_context
     def _auto_init(self):
@@ -85,18 +80,6 @@ class AccountPaymentTerm(models.Model):
             vals["vg7:date_scadenza"] = child_vals
         return vals, ""
 
-    @api.model
-    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,
-                no_del_child=False):
-        return self.env["ir.model.synchro"].synchro(
-            self,
-            vals,
-            chk_in_queue=chk_in_queue,
-            only_minimal=only_minimal,
-            no_deep_fields=no_deep_fields,
-            no_del_child=no_del_child,
-        )
-
 
 class AccountPaymentTermLine(models.Model):
     _inherit = "account.payment.term.line"
@@ -116,15 +99,3 @@ class AccountPaymentTermLine(models.Model):
         for prefix in ("vg7", "oe7", "oe8", "oe10"):
             self.env["ir.model.synchro"]._build_unique_index(self._inherit, prefix)
         return res
-
-    @api.model
-    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,
-                no_del_child=False):
-        return self.env["ir.model.synchro"].synchro(
-            self,
-            vals,
-            chk_in_queue=chk_in_queue,
-            only_minimal=only_minimal,
-            no_deep_fields=no_deep_fields,
-            no_del_child=no_del_child,
-        )

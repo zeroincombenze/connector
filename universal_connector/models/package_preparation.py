@@ -20,15 +20,10 @@ except ImportError as err:
 
 
 class StockPickingPackagePreparation(models.Model):
-    _inherit = "stock.picking.package.preparation"
+    _name = "stock.picking.package.preparation"
+    _inherit = ["stock.picking.package.preparation", "abstract.db.key"]
 
-    vg7_id = fields.Integer("VG7 ID", copy=False)
-    oe7_id = fields.Integer("Odoo7 ID", copy=False)
-    oe8_id = fields.Integer("Odoo8 ID", copy=False)
-    oe10_id = fields.Integer("Odoo10 ID", copy=False)
     original_state = fields.Char("Original Status", copy=False)
-    timestamp = fields.Datetime("Timestamp", copy=False, readonly=True)
-    errmsg = fields.Char("Error message", copy=False, readonly=True)
 
     @api.model_cr_context
     def _auto_init(self):
@@ -37,28 +32,28 @@ class StockPickingPackagePreparation(models.Model):
             self.env["ir.model.synchro"]._build_unique_index(self._inherit, prefix)
         return res
 
-    @api.model
-    def synchro(self, vals, chk_in_queue=None, no_deep_fields=None, only_minimal=None,
-                no_del_child=False):
-        # TODO: correct workaround!!
-        do_rewrite = False
-        if "vg7:ddt_number" in vals:
-            do_rewrite = True
-            saved_vals = vals.copy()
-        id = self.env["ir.model.synchro"].synchro(
-            self,
-            vals,
-            chk_in_queue=chk_in_queue,
-            only_minimal=only_minimal,
-            no_deep_fields=no_deep_fields,
-            no_del_child=no_del_child,
-        )
-        if id > 0 and do_rewrite:
-            saved_vals["id"] = id
-            id = self.env["ir.model.synchro"].synchro(
-                self, saved_vals, chk_in_queue=True, no_del_child=no_del_child,
-            )
-        return id
+    # @api.model
+    # def synchro(self, vals, chk_in_queue=None, no_deep_fields=None, only_minimal=None,
+    #             no_del_child=False):
+    #     # TODO: correct workaround!!
+    #     do_rewrite = False
+    #     if "vg7:ddt_number" in vals:
+    #         do_rewrite = True
+    #         saved_vals = vals.copy()
+    #     id = self.env["ir.model.synchro"].synchro(
+    #         self,
+    #         vals,
+    #         chk_in_queue=chk_in_queue,
+    #         only_minimal=only_minimal,
+    #         no_deep_fields=no_deep_fields,
+    #         no_del_child=no_del_child,
+    #     )
+    #     if id > 0 and do_rewrite:
+    #         saved_vals["id"] = id
+    #         id = self.env["ir.model.synchro"].synchro(
+    #             self, saved_vals, chk_in_queue=True, no_del_child=no_del_child,
+    #         )
+    #     return id
 
     @api.model
     def commit(self, id):
@@ -70,12 +65,9 @@ class StockPickingPackagePreparation(models.Model):
 
 
 class StockPickingPackagePreparationLine(models.Model):
-    _inherit = "stock.picking.package.preparation.line"
+    _name = "stock.picking.package.preparation.line"
+    _inherit = ["stock.picking.package.preparation.line", "abstract.db.key"]
 
-    vg7_id = fields.Integer("VG7 ID", copy=False)
-    oe7_id = fields.Integer("Odoo7 ID", copy=False)
-    oe8_id = fields.Integer("Odoo8 ID", copy=False)
-    oe10_id = fields.Integer("Odoo10 ID", copy=False)
     to_delete = fields.Boolean("Record to delete")
 
     @api.model_cr_context
@@ -85,36 +77,37 @@ class StockPickingPackagePreparationLine(models.Model):
             self.env["ir.model.synchro"]._build_unique_index(self._inherit, prefix)
         return res
 
-    @api.model
-    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,
-                no_del_child=False):
-        # TODO: correct workaround!!
-        do_rewrite = False
-        if "vg7:order_row_id" in vals:
-            do_rewrite = True
-            saved_vals = vals.copy()
-        id = self.env["ir.model.synchro"].synchro(
-            self,
-            vals,
-            chk_in_queue=chk_in_queue,
-            only_minimal=only_minimal,
-            no_deep_fields=no_deep_fields,
-            no_del_child=no_del_child
-        )
-        if id > 0 and do_rewrite:
-            id = self.env["ir.model.synchro"].synchro(
-                self,
-                saved_vals,
-                chk_in_queue=chk_in_queue,
-                only_minimal=only_minimal,
-                no_deep_fields=no_deep_fields,
-                no_del_child=no_del_child,
-            )
-        return id
+    # @api.model
+    # def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,
+    #             no_del_child=False):
+    #     # TODO: correct workaround!!
+    #     do_rewrite = False
+    #     if "vg7:order_row_id" in vals:
+    #         do_rewrite = True
+    #         saved_vals = vals.copy()
+    #     id = self.env["ir.model.synchro"].synchro(
+    #         self,
+    #         vals,
+    #         chk_in_queue=chk_in_queue,
+    #         only_minimal=only_minimal,
+    #         no_deep_fields=no_deep_fields,
+    #         no_del_child=no_del_child
+    #     )
+    #     if id > 0 and do_rewrite:
+    #         id = self.env["ir.model.synchro"].synchro(
+    #             self,
+    #             saved_vals,
+    #             chk_in_queue=chk_in_queue,
+    #             only_minimal=only_minimal,
+    #             no_deep_fields=no_deep_fields,
+    #             no_del_child=no_del_child,
+    #         )
+    #     return id
 
 
 class StockPickingGoods_description(models.Model):
-    _inherit = "stock.picking.goods_description"
+    _name = "stock.picking.goods_description"
+    _inherit = ["stock.picking.goods_description", "abstract.db.key"]
 
     @api.multi
     @api.depends("name")
@@ -122,10 +115,6 @@ class StockPickingGoods_description(models.Model):
         for rec in self:
             rec.dim_name = self.env["ir.model.synchro"].dim_text(rec.name)
 
-    vg7_id = fields.Integer("VG7 ID", copy=False)
-    oe7_id = fields.Integer("Odoo7 ID", copy=False)
-    oe8_id = fields.Integer("Odoo8 ID", copy=False)
-    oe10_id = fields.Integer("Odoo10 ID", copy=False)
     dim_name = fields.Char(
         "Search Key", compute=_set_dim_name, store=True, readonly=True
     )
@@ -152,22 +141,10 @@ class StockPickingGoods_description(models.Model):
             text = res
         return text
 
-    @api.model
-    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,
-                no_del_child=False):
-        return self.env["ir.model.synchro"].synchro(
-            self,
-            vals,
-            chk_in_queue=chk_in_queue,
-            only_minimal=only_minimal,
-            no_deep_fields=no_deep_fields,
-            no_del_child=no_del_child,
-        )
-
 
 class StockPickingCarriageCondition(models.Model):
-
-    _inherit = "stock.picking.carriage_condition"
+    _name = "stock.picking.carriage_condition"
+    _inherit = ["stock.picking.carriage_condition", "abstract.db.key"]
 
     @api.multi
     @api.depends("name")
@@ -175,10 +152,6 @@ class StockPickingCarriageCondition(models.Model):
         for rec in self:
             rec.dim_name = self.env["ir.model.synchro"].dim_text(rec.name)
 
-    vg7_id = fields.Integer("VG7 ID", copy=False)
-    oe7_id = fields.Integer("Odoo7 ID", copy=False)
-    oe8_id = fields.Integer("Odoo8 ID", copy=False)
-    oe10_id = fields.Integer("Odoo10 ID", copy=False)
     dim_name = fields.Char(
         "Search Key", compute=_set_dim_name, store=True, readonly=True
     )
@@ -205,22 +178,10 @@ class StockPickingCarriageCondition(models.Model):
             text = res
         return text
 
-    @api.model
-    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,
-                no_del_child=False):
-        return self.env["ir.model.synchro"].synchro(
-            self,
-            vals,
-            chk_in_queue=chk_in_queue,
-            only_minimal=only_minimal,
-            no_deep_fields=no_deep_fields,
-            no_del_child=no_del_child
-        )
-
 
 class StockPickingTransportationReason(models.Model):
-
-    _inherit = "stock.picking.transportation_reason"
+    _name = "stock.picking.transportation_reason"
+    _inherit = ["stock.picking.transportation_reason", "abstract.db.key"]
 
     @api.multi
     @api.depends("name")
@@ -228,10 +189,6 @@ class StockPickingTransportationReason(models.Model):
         for rec in self:
             rec.dim_name = self.env["ir.model.synchro"].dim_text(rec.name)
 
-    vg7_id = fields.Integer("VG7 ID", copy=False)
-    oe7_id = fields.Integer("Odoo7 ID", copy=False)
-    oe8_id = fields.Integer("Odoo8 ID", copy=False)
-    oe10_id = fields.Integer("Odoo10 ID", copy=False)
     dim_name = fields.Char(
         "Search Key", compute=_set_dim_name, store=True, readonly=True
     )
@@ -258,22 +215,10 @@ class StockPickingTransportationReason(models.Model):
             text = res
         return text
 
-    @api.model
-    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,
-                no_del_child=False):
-        return self.env["ir.model.synchro"].synchro(
-            self,
-            vals,
-            chk_in_queue=chk_in_queue,
-            only_minimal=only_minimal,
-            no_deep_fields=no_deep_fields,
-            no_del_child=no_del_child
-        )
-
 
 class StockPickingTransportationMethod(models.Model):
-
-    _inherit = "stock.picking.transportation_method"
+    _name = "stock.picking.transportation_method"
+    _inherit = ["stock.picking.transportation_method", "abstract.db.key"]
 
     @api.multi
     @api.depends("name")
@@ -281,10 +226,6 @@ class StockPickingTransportationMethod(models.Model):
         for rec in self:
             rec.dim_name = self.env["ir.model.synchro"].dim_text(rec.name)
 
-    vg7_id = fields.Integer("VG7 ID", copy=False)
-    oe7_id = fields.Integer("Odoo7 ID", copy=False)
-    oe8_id = fields.Integer("Odoo8 ID", copy=False)
-    oe10_id = fields.Integer("Odoo10 ID", copy=False)
     dim_name = fields.Char(
         "Search Key", compute=_set_dim_name, store=True, readonly=True
     )
@@ -310,15 +251,3 @@ class StockPickingTransportationMethod(models.Model):
                     res += ch.lower()
             text = res
         return text
-
-    @api.model
-    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,
-                no_del_child=False):
-        return self.env["ir.model.synchro"].synchro(
-            self,
-            vals,
-            chk_in_queue=chk_in_queue,
-            only_minimal=only_minimal,
-            no_deep_fields=no_deep_fields,
-            no_del_child=no_del_child
-        )

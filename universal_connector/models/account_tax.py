@@ -20,7 +20,8 @@ except ImportError as err:
 
 
 class AccountTax(models.Model):
-    _inherit = "account.tax"
+    _name = "account.tax"
+    _inherit = ["account.tax", "abstract.db.key"]
 
     @api.multi
     @api.depends("name")
@@ -28,15 +29,9 @@ class AccountTax(models.Model):
         for tax in self:
             tax.dim_name = self.env["ir.model.synchro"].dim_text(tax.name)
 
-    vg7_id = fields.Integer("VG7 ID", copy=False)
-    oe7_id = fields.Integer("Odoo7 ID", copy=False)
-    oe8_id = fields.Integer("Odoo8 ID", copy=False)
-    oe10_id = fields.Integer("Odoo10 ID", copy=False)
     dim_name = fields.Char(
         "Search Key", compute=_set_dim_name, store=True, readonly=True
     )
-    timestamp = fields.Datetime("Timestamp", copy=False, readonly=True)
-    errmsg = fields.Char("Error message", copy=False, readonly=True)
 
     @api.model_cr_context
     def _auto_init(self):
@@ -76,15 +71,3 @@ class AccountTax(models.Model):
             else:
                 vals["amount"] = 0
         return vals
-
-    @api.model
-    def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,
-                no_del_child=False):
-        return self.env["ir.model.synchro"].synchro(
-            self,
-            vals,
-            chk_in_queue=chk_in_queue,
-            only_minimal=only_minimal,
-            no_deep_fields=no_deep_fields,
-            no_del_child=no_del_child,
-        )

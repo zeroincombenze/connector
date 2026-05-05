@@ -1,0 +1,2 @@
+"supplier_id","billing_name","billing_surename","billing_street","billing_street_number","billing_country_id","billing_region_id","billing_postal_code","billing_city","billing_piva","billing_cf","billing_bank_id","billing_payment_id"
+101,"Import Export Trifoglio s.r.l.","\N","Via Nettuno",1/bis,39,6,"00048","Nettuno","01234560017",,111,31

@@ -302,7 +302,7 @@ class SynchroChannel(models.Model):
     def csv_session(self):
         """In CSV: dirname -> session"""
         endpoint = self.get_endpoint()
-        return True if os.path.isdir(endpoint) else False, endpoint
+        return True if endpoint and os.path.isdir(endpoint) else False, endpoint
 
     def vg7_json_session(self):
         """In JSON: headers -> cnx, endpoint -> session"""

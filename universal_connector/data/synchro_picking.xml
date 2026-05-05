@@ -6,6 +6,7 @@
         <field name="field_uname">ddt_number</field>
         <field name="search_keys">(['ddt_number',],)</field>
         <field name="counterpart_name">ddt</field>
+        <field name="cron_sync" eval="True"/>
         <field name="synchro_channel_id" ref="channel_vg7"/>
     </record>
 
