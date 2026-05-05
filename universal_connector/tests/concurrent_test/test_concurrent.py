@@ -934,7 +934,7 @@ class ExtTestEnv(object):
                     "method": "CSV",
                     "exchange_path": self.get_exchange_path(backend.prefix),
                     "tracelevel": "4",
-                    "ignore_child_lines": False,
+                    "child_lines_mode": "",
                     # "renum_lines": True,
                 },
             )

@@ -55,7 +55,7 @@
                     <field name="company_id"/>
                     <field name="exchange_path"/>
                     <field name="tax_id"/>
-                    <field name="ignore_child_lines"/>
+                    <field name="child_lines_mode"/>
                     <field name="renum_lines"/>
                     <field name="sequence"/>
                     <field name="import_workflow"/>

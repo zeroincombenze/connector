@@ -8,7 +8,7 @@
         <field name="product_without_variants" eval="True"/>
         <field name="tracelevel">2</field>
         <field name="active" eval="True"/>
-        <field name="ignore_child_lines" eval="True"/>
+        <field name="child_lines_mode"></field>
         <field name="renum_lines" eval="False"/>
         <field name="sequence">12</field>
     </record>

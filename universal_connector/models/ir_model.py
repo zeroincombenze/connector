@@ -1869,7 +1869,8 @@ class IrModelSynchro(models.Model):
                 env, backend, vmodel, field_list,
                 no_deep_fields=no_deep_fields, only_minimal=only_minimal)
 
-        env["parent_child_mode"] = "A" if child_ids and model_child else ""
+        env["child_lines_mode"] = backend.child_lines_mode or "N" if (
+            child_ids and model_child) else ""
         ctx = Cache.get_attr(backend.id, "CTX") or {}
         ctx["ext_key_id"] = counterpart_pk
         for ext_ref in field_list:
@@ -1947,7 +1948,7 @@ class IrModelSynchro(models.Model):
                 Cache.set_model_attr(
                     backend.id, vmodel, "__%s_ids" % actual_model, lines
                 )
-                env["parent_child_mode"] = "B"
+                env["child_lines_mode"] = "I"
                 del vals[ext_ref]
                 continue
 
@@ -2726,8 +2727,13 @@ class IrModelSynchro(models.Model):
 
         vals = unicodes(vals)
         jvals = vals.copy()
-        vmodel = cls._name
-        actual_model = self.get_actual_model(vmodel, only_name=True)
+        if isinstance(cls, basestring):
+            vmodel = cls
+            actual_model = self.get_actual_model(vmodel, only_name=True)
+            cls = self.env[actual_model]
+        else:
+            vmodel = cls._name
+            actual_model = self.get_actual_model(vmodel, only_name=True)
         struct = self.env[actual_model].fields_get()
         actual_cls = self.get_actual_model(vmodel)
         Cache = self.env["ir.model.synchro.cache"]
@@ -2877,8 +2883,8 @@ class IrModelSynchro(models.Model):
                     rec = self.create_n_commit(actual_model, vals, logrec=self.logrec)
                 if not rec:
                     return loc_id
-                if backend.ignore_child_lines and env["parent_child_mode"] == "B":
-                    env["parent_child_mode"] = "A"
+                if backend.child_lines_mode == "N" and env["child_lines_mode"] == "I":
+                    env["child_lines_mode"] = "N"
                 loc_id = rec.id
                 if not ext_id_name:
                     self.create_ext_id(backend, actual_model, loc_id, ext_id)
@@ -3005,7 +3011,7 @@ class IrModelSynchro(models.Model):
                 backend.id, model_child, "__%s_FP" % model_child,
                 rec.fiscal_position_id
             )
-        if env["parent_child_mode"] == "B":
+        if env["child_lines_mode"] == "I":
             sts = self.synchro_childs(
                 backend,
                 vmodel,
@@ -3020,7 +3026,7 @@ class IrModelSynchro(models.Model):
             self.logmsg(
                 "debug",
                 "### Child mode %s: counterpart must send child records"
-                % env["parent_child_mode"],
+                % env["child_lines_mode"],
             )
         elif rec and loc_id > 0 and "to_delete" in rec and not no_del_child:
             actual_cls.search([(parent_id_name, "=", rec[parent_id_name].id),
@@ -3039,8 +3045,13 @@ class IrModelSynchro(models.Model):
 
     @api.model
     def commit(self, cls, loc_id, ext_id=None, backend=None):
-        vmodel = cls._name
-        actual_model = self.get_actual_model(vmodel, only_name=True)
+        if isinstance(cls, basestring):
+            vmodel = cls
+            actual_model = self.get_actual_model(vmodel, only_name=True)
+            cls = self.env[actual_model]
+        else:
+            vmodel = cls._name
+            actual_model = self.get_actual_model(vmodel, only_name=True)
         self.logmsg(
             "warning",
             "%(model)s[%(id)s].commit(%(x)s)",

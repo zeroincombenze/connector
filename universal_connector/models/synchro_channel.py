@@ -145,7 +145,11 @@ class SynchroChannel(models.Model):
             ("18.0", "Odoo 18.0 - Python3"),
         ], "External Odoo version"
     )
-    ignore_child_lines = fields.Boolean(
+    child_lines_mode = fields.Selection(
+        [
+            ("N", "Lines in next transaction"),
+            ("I", "Lines inside header")
+        ],
         "Ignore child lines",
         default=False,
         help="Ignore child lines because counterparty send lines after header",

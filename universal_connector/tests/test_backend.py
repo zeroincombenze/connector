@@ -48,7 +48,7 @@ TEST_SYNCHRO_CHANNEL = {
         "identity": "vg7",
         "method": "CSV",
         "prefix": "vg7",
-        "ignore_child_lines": False,
+        "child_lines_mode": "N",
         # "renum_lines": True,
         "tracelevel": "4",
         "sequence": 10,
@@ -216,7 +216,7 @@ class MyTest(SingleTransactionCase):
                            lines_fqn=lines_fqn)
 
         backend.button_reset_to_draft()
-        backend.write({"exchange_path": os.path.dirname(root)})
+        backend.write({"exchange_path": os.path.dirname(root), "child_lines_mode": ""})
         backend.button_check_connection()
 
     def _test_assign_backend(self, xref):
@@ -504,12 +504,13 @@ class MyTest(SingleTransactionCase):
         xref = "z0bug.csv-vg7"
         backend = self.resource_browse(xref)
         model = "sale.order"
+        order_id = 131
         _logger.info(u"🎺 Import order from %s" % _u(xref))
         if delete_before:
             for order in self.env[model].search([("vg7_id", "=", 101)]):
                 order.action_cancel()
                 order.unlink()
-        rec_id = Synchro.trigger_one_record("orders", backend.prefix, 131)
+        rec_id = Synchro.trigger_one_record("orders", backend.prefix, order_id)
         self.assertTrue(rec_id > 0)
         order = self.env[model].browse(rec_id)
         self.assertEqual("240131", order.name)
@@ -518,6 +519,54 @@ class MyTest(SingleTransactionCase):
         self.assertEqual(101, order.partner_id.vg7_id)
         self.assertEqual(order.partner_id, order.partner_invoice_id)
         self.assertEqual(100000001, order.partner_shipping_id.vg7_id)
+        # Now simulate the VG7 behavior
+        fqn = os.path.join(backend.exchange_path, "orders.csv")
+        orders_data = self.load_csv_file(fqn)
+        for order_data in orders_data:
+            if int(order_data["order_id"]) != order_id:
+                continue
+            for nm in (
+                    "iva", "order_id", "order_state",
+                    "customer_id", "customer_shipping_id"
+            ):
+                if order_data[nm]:
+                    order_data[nm] = int(order_data[nm])
+            order_data["order_rows"] = eval(order_data["order_rows"])
+            del order_data["billing"]
+            del order_data["shipping"]
+            order_lines = order_data["order_rows"]
+            del order_data["order_rows"]
+            vals = {
+                "vg7:%s" % k: v for k, v in order_data.items()
+            }
+            rec_id = Synchro.synchro("sale.order", vals)
+            self.assertTrue(rec_id > 0)
+            order = self.env[model].browse(rec_id)
+            self.assertEqual("240131", order.name)
+            self.assertEqual("draft", order.state)
+            for order_line in order_lines:
+                order_line["job_name"] = (
+                    order_line["job_name"] + "\nCustomized work " + order_line["id"])
+                for nm in ("id", "order_id"):
+                    if order_line[nm]:
+                        order_line[nm] = int(order_line[nm])
+                for nm in ("quantity", "unitary_price", "weight"):
+                    if order_line[nm]:
+                        order_line[nm] = eval(order_line[nm])
+                vals = {
+                    "vg7:%s" % k: v for k, v in order_line.items()
+                }
+                Synchro.synchro("sale.order.line", vals)
+                errcode = Synchro.commit("sale.order", rec_id)
+                self.assertEqual(errcode, rec_id)
+                order = self.env[model].browse(rec_id)
+                self.assertEqual("240131", order.name)
+                self.assertEqual("sale", order.state)
+                self.assertTrue(len(order.order_line) > 0)
+                self.assertEqual(101, order.partner_id.vg7_id)
+                self.assertEqual(order.partner_id, order.partner_invoice_id)
+                self.assertEqual(100000001, order.partner_shipping_id.vg7_id)
+                break
 
     def _test_regression_ddt(self, delete_before=False):
         Synchro = self.env["ir.model.synchro"]
@@ -552,7 +601,7 @@ class MyTest(SingleTransactionCase):
         order = self.env[model].browse(rec_id)
         self.assertEqual("111", order.name)
         self.assertEqual("PO-24517", order.partner_ref)
-        # self.assertEqual("sale", order.state)
+        # self.assertEqual("purchase", order.state)
         self.assertTrue(len(order.order_line) > 0)
         self.assertEqual(101, order.partner_id.vg72_id)
 
@@ -601,5 +650,5 @@ class MyTest(SingleTransactionCase):
         # Delete dirty record and import
         self._test_regression_purchase_order(delete_before=True)
         # Try again to reimport order
-        self._test_regression_purchase_order()
-        # self.env.cr.commit()
+        # self._test_regression_purchase_order()
+        self.env.cr.commit()
