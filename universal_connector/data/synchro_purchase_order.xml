@@ -60,11 +60,13 @@
         <field name="model_id" ref="purchase_order"/>
     </record>
 
+    <!--
     <record forcecreate="1" id="purchase_order_company_id" model="synchro.channel.model.fields">
         <field name="name">company_id</field>
         <field name="apply">set_global()</field>
         <field name="model_id" ref="purchase_order"/>
     </record>
+    -->
 
     <record forcecreate="1" id="purchase_order_partner_id" model="synchro.channel.model.fields">
         <field name="name">partner_id</field>
@@ -77,6 +79,19 @@
         <field name="name">fiscal_position_id</field>
         <field name="apply">partner_info()</field>
         <field name="required" eval="True"/>
+        <field name="model_id" ref="purchase_order"/>
+    </record>
+
+    <record forcecreate="1" id="purchase_order_payment_term_id" model="synchro.channel.model.fields">
+        <field name="name">payment_term_id</field>
+        <field name="counterpart_name">payment_id</field>
+        <field name="apply">partner_info()</field>
+        <field name="model_id" ref="purchase_order"/>
+    </record>
+
+    <record forcecreate="1" id="purchase_order_billing" model="synchro.channel.model.fields">
+        <field name="counterpart_name">billing</field>
+        <field name="apply">merge_invoice_address()</field>
         <field name="model_id" ref="purchase_order"/>
     </record>
 

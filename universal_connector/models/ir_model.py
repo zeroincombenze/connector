@@ -1407,15 +1407,16 @@ class IrModelSynchro(models.Model):
                 "spec": spec,
             },
         )
-        if not spec and relation == "res.partner" and actual_model == "purchase.order":
-            spec = "supplier"
-        if (
-                not spec
-                and relation == "res.partner"
-                and actual_model == "sale.order"
-                and name == "partner_shipping_id"
-        ):
-            spec = "delivery"
+        # if (not spec and relation == "res.partner"
+        #           and actual_model == "purchase.order"):
+        #     spec = "supplier"
+        # if (
+        #         not spec
+        #         and relation == "res.partner"
+        #         and actual_model == "sale.order"
+        #         and name == "partner_shipping_id"
+        # ):
+        #     spec = "delivery"
         if relation.startswith(actual_model) and ttype == "one2many":
             # Avoid recursive request, i.e. res.partner
             if isinstance(value, int):

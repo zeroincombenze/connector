@@ -545,15 +545,16 @@ class MyTest(SingleTransactionCase):
         _logger.info(u"🎺 Import purchase order from %s" % _u(xref))
         if delete_before:
             for order in self.env[model].search([("vg7_id", "=", 101)]):
-                order.action_cancel()
+                order.button_cancel()
                 order.unlink()
-        rec_id = Synchro.trigger_one_record("purchae_orders", backend.prefix, 111)
+        rec_id = Synchro.trigger_one_record("purchase_orders", backend.prefix, 111)
         self.assertTrue(rec_id > 0)
         order = self.env[model].browse(rec_id)
-        self.assertEqual("PO-24517", order.name)
+        self.assertEqual("111", order.name)
+        self.assertEqual("PO-24517", order.partner_ref)
         # self.assertEqual("sale", order.state)
         self.assertTrue(len(order.order_line) > 0)
-        self.assertEqual(101, order.partner_id.vg7_id)
+        self.assertEqual(101, order.partner_id.vg72_id)
 
     def test_connection(self):
         # This test requires external Odoo instance active. See header
@@ -597,5 +598,8 @@ class MyTest(SingleTransactionCase):
         self._test_regression_ddt(delete_before=True)
         # Try again to reimport order
         self._test_regression_ddt()
-        # self._test_regression_purchase_order()
+        # Delete dirty record and import
+        self._test_regression_purchase_order(delete_before=True)
+        # Try again to reimport order
+        self._test_regression_purchase_order()
         # self.env.cr.commit()
