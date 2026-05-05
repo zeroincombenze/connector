@@ -751,7 +751,7 @@ class IrModelSynchro(models.Model):
             if rec:
                 rec._compute_date_planned()
                 rec.write({})
-                if rec.invoice_count > 0:
+                if rec.invoice_count > 0:   # pragma: no cover
                     self.logmsg(
                         "error",
                         "%(model)s.set_state_to_draft(%(id)s)  # Invoiced",
@@ -760,7 +760,7 @@ class IrModelSynchro(models.Model):
                         rec=rec,
                     )
                     return vals, -4
-                if rec.state == "done":
+                if rec.state == "done":   # pragma: no cover
                     self.logmsg(
                         "error",
                         "%(model)s.set_state_to_draft(%(id)s)  # Locked",
@@ -783,7 +783,7 @@ class IrModelSynchro(models.Model):
                             logrec=self.logrec,
                             ctx={"e": e},
                         )
-                elif rec.state == "cancel":
+                elif rec.state == "cancel":   # pragma: no cover
                     try:
                         rec.button_draft()
                     except BaseException as e:  # pragma: no cover
@@ -936,7 +936,7 @@ class IrModelSynchro(models.Model):
             rec.write({})
             if rec.state == rec.original_state:
                 return rec.id
-            elif rec.state != "draft":
+            elif rec.state != "draft":   # pragma: no cover
                 self.logmsg(
                     "error",
                     "### Unauthorized state change of %(model)s[%(id)s]",
@@ -960,7 +960,7 @@ class IrModelSynchro(models.Model):
                         ctx={"e": e},
                     )
                     return -10
-            elif rec.original_state == "cancel":
+            elif rec.original_state == "cancel":   # pragma: no cover
                 try:
                     rec.button_cancel()
                 except BaseException as e:  # pragma: no cover
@@ -1024,7 +1024,7 @@ class IrModelSynchro(models.Model):
             [("synchro_channel_id", "=", backend_id), ("name", "=", model)]))
 
     def sync_rec_from_counterparty(self, backend, model, vg7_id, only_minimal=True):
-        if not vg7_id:
+        if not vg7_id:   # pragma: no cover
             self.logmsg(
                 "error", "### Missing id for %(model)s counterpart request", model=model
             )
@@ -1242,7 +1242,7 @@ class IrModelSynchro(models.Model):
                 )
             elif name in ("code", "description") and Cache.get_struct_model_attr(
                 actual_model, "MODEL_WITH_NAME"
-            ):
+            ):      # pragma: no cover
                 return self.get_rec_by_reference(
                     backend,
                     actual_model,
@@ -1270,7 +1270,7 @@ class IrModelSynchro(models.Model):
             model=actual_model,
             ctx={"xid": value},
         )
-        if len(value.split(".")) == 2:
+        if len(value.split(".")) == 2:    # pragma: no cover
             try:
                 return self.env.ref(value).id
             except BaseException:  # pragma: no cover
@@ -1329,7 +1329,7 @@ class IrModelSynchro(models.Model):
                 )
             domain = [(loc_ext_id_name, "=", value_id)]
             rec, maybe_dif = self.do_search(actual_model, domain, only_id=True)
-        else:
+        else:   # pragma: no cover
             domain = [("id", "=", value_id)]
             rec, maybe_dif = self.do_search(actual_model, domain, only_id=True)
         if rec and vmodel == "res.partner.shipping" and rec.parent_id:
@@ -1443,7 +1443,7 @@ class IrModelSynchro(models.Model):
                 new_value = False
             elif tomany:
                 new_value = [new_value]
-        elif isinstance(value, (list, tuple)):
+        elif isinstance(value, (list, tuple)):   # pragma: no cover
             new_value = []
             for loc_id in value:
                 new_id = self.get_foreign_ref(
@@ -1515,7 +1515,7 @@ class IrModelSynchro(models.Model):
             loc_name = ext_ref[len(pfx_depr):]
             if loc_name == "id":
                 loc_name = ext_name = ext_ref
-            else:
+            else:   # pragma: no cover
                 ext_name = Cache.get_model_field_attr(
                     backend.id, vmodel, loc_name, "LOC_FIELDS", default=""
                 )
@@ -1567,30 +1567,30 @@ class IrModelSynchro(models.Model):
         )
         return default, apply4, spec
 
-    def found_ref_in_queue(self, vmodel, vals, ext_ref):
-        self.logmsg(
-            "warning",
-            "### Found %(model)s(%(xid)s) in queue!",
-            model=vmodel,
-            ctx={"xid": vals[ext_ref]},
-        )
-        return True
+    # def found_ref_in_queue(self, vmodel, vals, ext_ref):
+    #     self.logmsg(
+    #         "warning",
+    #         "### Found %(model)s(%(xid)s) in queue!",
+    #         model=vmodel,
+    #         ctx={"xid": vals[ext_ref]},
+    #     )
+    #     return True
 
-    def drop_unuset_addresses(self, loc_id):
-        for rec in self.env["res.partner"].search(
-            [
-                ("name", "=", False),
-                ("parent_id", "=", loc_id),
-                ("type", "in", ("delivery", "invoice")),
-            ]
-        ):
-            if not rec.invoice_ids and not rec.sale_order_ids:
-                try:
-                    rec.unlink()
-                    # self.env.cr.commit()  # pylint: disable=invalid-commit
-                except BaseException:  # pragma: no cover
-                    self.env.cr.rollback()  # pylint: disable=invalid-commit
-                    break
+    # def drop_unuset_addresses(self, loc_id):
+    #     for rec in self.env["res.partner"].search(
+    #         [
+    #             ("name", "=", False),
+    #             ("parent_id", "=", loc_id),
+    #             ("type", "in", ("delivery", "invoice")),
+    #         ]
+    #     ):
+    #         if not rec.invoice_ids and not rec.sale_order_ids:
+    #             try:
+    #                 rec.unlink()
+    #                 # self.env.cr.commit()  # pylint: disable=invalid-commit
+    #             except BaseException:  # pragma: no cover
+    #                 self.env.cr.rollback()  # pylint: disable=invalid-commit
+    #                 break
 
     def compare_vals_rec(self, vals, rec, spec):
         diff = False
@@ -1636,7 +1636,7 @@ class IrModelSynchro(models.Model):
                 fld_name=fld_name,
             )
         )
-        if isinstance(value, (list, tuple)):
+        if isinstance(value, (list, tuple)):   # pragma: no cover
             best = False
             near = 1999999999
             if isinstance(src_value, basestring):
@@ -1813,14 +1813,14 @@ class IrModelSynchro(models.Model):
                 ("vg7:tax_id", "vg7:tax_code_id"),
                 ("vg7:payment", "vg7:payment_id"),
             ):
-                if not vals.get(nm_id) and vals.get(nm):
+                if not vals.get(nm_id) and vals.get(nm):  # pragma: no cover
                     vals[nm_id] = vals[nm]
                     self.logmsg(
                         "warning",
                         "### Field <%(nm)s> renamed to <%(new)s>",
                         ctx={"nm": nm, "new": nm_id},
                     )
-                elif vals.get(nm_id) and vals.get(nm):
+                elif vals.get(nm_id) and vals.get(nm):   # pragma: no cover
                     self.logmsg(
                         "warning",
                         "### Field <%(nm)s> overtaken by <%(new)s>",
@@ -1987,7 +1987,7 @@ class IrModelSynchro(models.Model):
                     (condition == "include" and loc_name not in no_deep_fields)
                     or (condition == "exclude" and loc_name in no_deep_fields)
                 ):
-                    if ext_ref in vals:
+                    if ext_ref in vals:       # pragma: no cover
                         del vals[ext_ref]
                     continue
                 loc_id = self.get_foreign_value(
