@@ -598,13 +598,24 @@ class MyTest(SingleTransactionCase):
             for ddt in self.env[model].search([("vg7_id", "=", 101)]):
                 ddt.set_draft()
                 ddt.unlink()
-        rec_id = Synchro.trigger_one_record("ddt", backend.prefix, 231)
+
+        ddt_id = 231
+        rec_id = Synchro.trigger_one_record("ddt", backend.prefix, ddt_id)
         self.assertTrue(rec_id > 0)
         ddt = self.env[model].browse(rec_id)
         self.assertEqual("24/231", ddt.ddt_number)
         self.assertTrue(len(ddt.line_ids) > 0)
         self.assertEqual(101, ddt.partner_id.vg7_id)
         self.assertEqual(100000001, ddt.partner_shipping_id.vg7_id)
+
+        ddt_id = 232
+        rec_id = Synchro.trigger_one_record("ddt", backend.prefix, ddt_id)
+        self.assertTrue(rec_id > 0)
+        ddt = self.env[model].browse(rec_id)
+        self.assertEqual("24/232", ddt.ddt_number)
+        self.assertTrue(len(ddt.line_ids) > 0)
+        self.assertEqual(109, ddt.partner_id.vg7_id)
+        self.assertEqual(109, ddt.partner_shipping_id.vg7_id)
 
     def _test_regression_purchase_order(self, delete_before=False):
         Synchro = self.env["ir.model.synchro"]
@@ -671,4 +682,4 @@ class MyTest(SingleTransactionCase):
         self._test_regression_purchase_order(delete_before=True)
         # Try again to reimport order
         self._test_regression_purchase_order()
-        self.env.cr.commit()
+        # self.env.cr.commit()

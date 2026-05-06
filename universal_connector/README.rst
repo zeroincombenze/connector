@@ -188,6 +188,12 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 ChangeLog History | Cronologia modifiche
 ----------------------------------------
 
+10.0.0.3.17 (2026-04-26)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [FIX] Minor fixes
+* [QUA] Test coverage 61% (4903: 1903+3000) [564 TestPoints]
+
 10.0.0.3.16 (2026-04-06)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -265,13 +271,6 @@ ChangeLog History | Cronologia modifiche
 * [IMP] Imported cvs/Excel: fields with None or \N are ignored
 * [IMP] Double product description and name / Descrizione prodotto doppia
 * [QUA] Test coverage 42% (5031: 2908+2123) [1051 TestPoints] - quality rating 59 (target 100)
-
-10.0.0.3.5 (2024-06-20)
-~~~~~~~~~~~~~~~~~~~~~~~
-
-* [IMP] This is the 1.st application with 1000+ test points!
-* [FIX] No price with VAT from VF7 order / Prezzo ordine VG7 senza scorporo IVA
-* [QUA] Test coverage 33% (4993: 3342+1651) [1037 TestPoints] - quality rating 54 (target 100)
 
 
 
