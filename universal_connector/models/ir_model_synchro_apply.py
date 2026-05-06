@@ -577,6 +577,12 @@ class IrModelSynchroApply(models.Model):
                         ship_vals, partner, "delivery"):
                     partner_shipping = fields.first(
                         self.env["res.partner"].search(domain))
+                    if not partner_shipping:
+                        partner_shipping = fields.first(
+                            self.env["res.partner"].search(
+                                domain + [("active", "=", False)]))
+                        if partner_shipping:
+                            partner_shipping = partner
                 else:
                     partner_shipping = partner
                 if not partner_shipping:

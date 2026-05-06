@@ -512,12 +512,13 @@ class MyTest(SingleTransactionCase):
         xref = "z0bug.csv-vg7"
         backend = self.resource_browse(xref)
         model = "sale.order"
-        order_id = 131
         _logger.info(u"🎺 Import order from %s" % _u(xref))
         if delete_before:
             for order in self.env[model].search([("vg7_id", "=", 101)]):
                 order.action_cancel()
                 order.unlink()
+
+        order_id = 131
         rec_id = Synchro.trigger_one_record("orders", backend.prefix, order_id)
         self.assertTrue(rec_id > 0)
         order = self.env[model].browse(rec_id)
@@ -575,6 +576,17 @@ class MyTest(SingleTransactionCase):
                 self.assertEqual(order.partner_id, order.partner_invoice_id)
                 self.assertEqual(100000001, order.partner_shipping_id.vg7_id)
                 break
+
+        order_id = 132
+        rec_id = Synchro.trigger_one_record("orders", backend.prefix, order_id)
+        self.assertTrue(rec_id > 0)
+        order = self.env[model].browse(rec_id)
+        self.assertEqual("240132", order.name)
+        self.assertEqual("sale", order.state)
+        self.assertTrue(len(order.order_line) > 0)
+        self.assertEqual(109, order.partner_id.vg7_id)
+        self.assertEqual(order.partner_id, order.partner_invoice_id)
+        self.assertEqual(109, order.partner_shipping_id.vg7_id)
 
     def _test_regression_ddt(self, delete_before=False):
         Synchro = self.env["ir.model.synchro"]
