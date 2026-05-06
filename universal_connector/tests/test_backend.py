@@ -481,6 +481,7 @@ class MyTest(SingleTransactionCase):
             self.env["res.partner.bank"].search([("vg7_id", "=", 111)]).unlink()
             self.env["account.payment.term"].search([("vg7_id", "=", 311)]).unlink()
             self.env[model].search([("vg7_id", "=", 101)]).unlink()
+
         rec_id = Synchro.trigger_one_record("customers", backend.prefix, 101)
         self.assertTrue(rec_id > 0)
         partner = self.env[model].browse(rec_id)
@@ -498,6 +499,13 @@ class MyTest(SingleTransactionCase):
         self.assertTrue(len(delivery) == 1)
         self.assertEqual("delivery", delivery.type)
         self.assertEqual(100000001, delivery.vg7_id)
+
+        rec_id = Synchro.trigger_one_record("customers", backend.prefix, 109)
+        self.assertTrue(rec_id > 0)
+        partner = self.env[model].browse(rec_id)
+        self.assertEqual("Rossi Mario", partner.name)
+        self.assertEqual(109, partner.vg7_id)
+        self.assertEqual("contact", partner.type)
 
     def _test_regression_order(self, delete_before=False):
         Synchro = self.env["ir.model.synchro"]
@@ -651,4 +659,4 @@ class MyTest(SingleTransactionCase):
         self._test_regression_purchase_order(delete_before=True)
         # Try again to reimport order
         self._test_regression_purchase_order()
-        # self.env.cr.commit()
+        self.env.cr.commit()

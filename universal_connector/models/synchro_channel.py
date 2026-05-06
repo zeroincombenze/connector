@@ -405,6 +405,33 @@ class SynchroChannelModel(models.Model):
         "Import Counter", default=0, help="Last imported record number"
     )
 
+    def cast_csv_value(self, value, is_int=False):
+        if isinstance(value, basestring):
+            if (
+                is_int
+                and value.isdigit()
+                and not value.startswith("0")
+            ):
+                value = int(value)
+            elif value.startswith("[") and value.endswith("]"):
+                new_value = []
+                for v in eval(value):
+                    new_value.append(self.cast_csv_value(v))
+                value = new_value
+            elif value.startswith("{") and value.endswith("}"):
+                new_value = {
+                    k: self.cast_csv_value(v, is_int=k.endswith("id"))
+                    for k, v in eval(value).items()
+                }
+                value = {
+                    k: v for k, v in new_value.items() if v is not None
+                }
+            elif value == "False":
+                value = False
+            elif value in ("None", r"\N"):
+                value = None
+        return value
+
     def get_csv_response(self, cnx, session, ext_id=False, domain=None, mode=None):
         """In CSV session is the dirname"""
         dirname = session
@@ -439,24 +466,10 @@ class SynchroChannelModel(models.Model):
                 row_shipping = {}
                 row_contact = {}
                 for ix, value in enumerate(row):
-                    if isinstance(value, basestring):
-                        if (
-                                value.isdigit()
-                                and not value.startswith("0")
-                                and hdr[ix] != "iva"
-                        ):
-                            value = int(value)
-                        elif value.startswith("[") and value.endswith("]"):
-                            value = eval(value)
-                        elif value.startswith("{") and value.endswith("}"):
-                            value = eval(value)
-                        elif value == "False":
-                            value = False
-                        elif value in ("None", r"\N"):
-                            value = None
-                    if hdr[ix] == counterpart_pk:
-                        if not value:
-                            continue
+                    value = self.cast_csv_value(value, is_int=hdr[ix].endswith("id"))
+                    if value is None:
+                        continue
+                    if hdr[ix] == counterpart_pk and value:
                         row_id = value
                     if hdr[ix].startswith("billing_"):
                         row_billing[hdr[ix]] = value
@@ -464,7 +477,7 @@ class SynchroChannelModel(models.Model):
                         row_shipping[hdr[ix]] = value
                     elif hdr[ix].startswith("contact_"):
                         row_contact[hdr[ix]] = value
-                    elif value is not None:
+                    else:
                         row_res[hdr[ix]] = value
                 if row_billing:
                     if model == "res.partner.invoice":

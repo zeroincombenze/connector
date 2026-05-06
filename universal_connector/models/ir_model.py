@@ -1598,6 +1598,7 @@ class IrModelSynchro(models.Model):
             "street",
             "zip",
             "city",
+            "state_id",
         ) if spec == "delivery" else (
             "street",
             "zip",
@@ -2845,11 +2846,8 @@ class IrModelSynchro(models.Model):
                         "### No values passed(%s.%s)" % (vmodel, actual_model),
                         logrec=self.logrec, id=loc_id)
             return loc_id
-        if (
-            vmodel in ("res.partner.shipping", "res.partner.invoice")
-            and not self.diff_parent(vals, spec)
-        ):
-            vals["active"] = False
+        if vmodel in ("res.partner.shipping", "res.partner.invoice"):
+            vals["active"] = self.diff_parent(vals, spec)
         if has_state:
             vals, erc = self.set_state_to_draft(struct, vmodel, rec, vals)
             if erc < 0:
@@ -2910,7 +2908,7 @@ class IrModelSynchro(models.Model):
                 if hasattr(cls, "assure_values"):
                     vals = actual_cls.assure_values(vals, rec)
                 if vals:
-                    if has_active and not rec.active:
+                    if has_active and "active" not in vals and not rec.active:
                         vals["active"] = True
                     vals = self.drop_protected_fields(
                         backend, vmodel, vals, rec, no_del_child=no_del_child)
@@ -2976,7 +2974,7 @@ class IrModelSynchro(models.Model):
 
         if (
             rec and vmodel in ("res.partner.shipping", "res.partner.invoice")
-            and "active" in vals and vals["active"] != rec.active
+            and "active" in vals
         ):
             rec.write({"active": vals["active"]})
         # commit to avoid lost data in recursive write
