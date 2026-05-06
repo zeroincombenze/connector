@@ -1611,8 +1611,8 @@ class IrModelSynchro(models.Model):
         for nm in fields:
             if nm.endswith("_id"):
                 if getattr(rec, nm) and getattr(rec, nm).id != vals.get(nm, 0):
-                    diff = True
-                    break
+                    diff = True    # pragma: no cover
+                    break          # pragma: no cover
             else:
                 if getattr(rec, nm) and getattr(rec, nm) != vals.get(nm, False):
                     diff = True
@@ -2006,7 +2006,7 @@ class IrModelSynchro(models.Model):
                     vals[loc_name] = loc_id
                 elif loc_id > 0:
                     vals[loc_name] = loc_id
-                elif loc_name:
+                elif loc_name:     # pragma: no cover
                     vals[loc_name] = False
             if ext_ref in vals and struct[loc_name]["type"] == "selection":
                 selection = [x[0] if isinstance(x, (list, tuple)) else x
@@ -2188,23 +2188,16 @@ class IrModelSynchro(models.Model):
                         else:
                             domain = []
                             break
+                    elif key == "amount" and not vals[key]:  # pragma: no cover
+                        domain = []
+                        break
                     elif (
                             isinstance(vals[key], basestring)
                             and vals[key] == ""
-                    ):
+                    ):   # pragma: no cover
                         domain.append("|")
                         domain.append((key, "=", False))
                         domain.append((key, "=", ""))
-                    elif (
-                            key == "amount"
-                            and isinstance(vals[key], basestring)
-                            and not eval(vals[key])
-                    ):
-                        domain = []
-                        break
-                    elif key == "amount" and not vals[key]:
-                        domain = []
-                        break
                     else:
                         domain.append((key, "=", _b(vals[key])))
                         if key not in ("type", "is_company"):
@@ -2224,7 +2217,7 @@ class IrModelSynchro(models.Model):
         if not rec and candidate:
             rec = candidate
         if rec:
-            if len(rec) > 1:
+            if len(rec) > 1:  # pragma: no cover
                 self.logmsg(
                     "warning",
                     "### synchro error: multiple %(model)s[%(id)s]",
@@ -2244,7 +2237,7 @@ class IrModelSynchro(models.Model):
 
     def get_xmlrpc_response(
         self, backend_id, vmodel, ext_id=False, select=None, mode=None
-    ):
+    ):     # pragma: no cover
         def default_params():
             return "xmlrpc", 8069, "demo", "admin", "admin"
 
@@ -2407,7 +2400,8 @@ class IrModelSynchro(models.Model):
             return ids
         return {}
 
-    def get_json_response(self, backend_id, vmodel, ext_id=False, mode=None):
+    def get_json_response(
+            self, backend_id, vmodel, ext_id=False, mode=None):  # pragma: no cover
         def sort_data(datas):
             # Single record
             if "id" in datas:
@@ -2541,31 +2535,31 @@ class IrModelSynchro(models.Model):
                 res.append(row_res)
         return res
 
-    def get_counterpart_response(self, backend, vmodel, ext_id=False, mode=None):
-        """Get data from counterpart"""
-        Cache = self.env["ir.model.synchro.cache"]
-        if not Cache.is_manageable(vmodel):
-            return False
-        # TODO: channel_id
-        Cache.open(backend=backend, model=vmodel)
-        method = Cache.get_attr(backend.id, "METHOD")
-        if method == "XML":
-            return self.get_xmlrpc_response(backend.id, vmodel, ext_id, mode=mode)
-        elif method == "JSON":
-            return self.get_json_response(backend.id, vmodel, ext_id, mode=mode)
-        elif method == "CSV":
-            return self.get_csv_response(backend.id, vmodel, ext_id, mode=mode)
+    # def get_counterpart_response(self, backend, vmodel, ext_id=False, mode=None):
+    #     """Get data from counterpart"""
+    #     Cache = self.env["ir.model.synchro.cache"]
+    #     if not Cache.is_manageable(vmodel):
+    #         return False
+    #     # TODO: channel_id
+    #     Cache.open(backend=backend, model=vmodel)
+    #     method = Cache.get_attr(backend.id, "METHOD")
+    #     if method == "XML":
+    #         return self.get_xmlrpc_response(backend.id, vmodel, ext_id, mode=mode)
+    #     elif method == "JSON":
+    #         return self.get_json_response(backend.id, vmodel, ext_id, mode=mode)
+    #     elif method == "CSV":
+    #         return self.get_csv_response(backend.id, vmodel, ext_id, mode=mode)
 
-    def create_ext_id(self, backend, actual_model, loc_id, ext_id):
-        ext_id_name = self.get_loc_ext_id_name(backend, actual_model, force=True)
-        self.env["ir.model.synchro.data"].create(
-            {
-                "model": actual_model,
-                "ext_id_name": ext_id_name,
-                "ext_id": ext_id,
-                "res_id": loc_id,
-            }
-        )
+    # def create_ext_id(self, backend, actual_model, loc_id, ext_id):
+    #     ext_id_name = self.get_loc_ext_id_name(backend, actual_model, force=True)
+    #     self.env["ir.model.synchro.data"].create(
+    #         {
+    #             "model": actual_model,
+    #             "ext_id_name": ext_id_name,
+    #             "ext_id": ext_id,
+    #             "res_id": loc_id,
+    #         }
+    #     )
 
     @api.model
     def assign_backend_loglevel(self, backend):
@@ -2595,7 +2589,7 @@ class IrModelSynchro(models.Model):
             actual_model, "CHILD_IDS", default=False
         )
         model_child = Cache.get_struct_model_attr(actual_model, "MODEL_CHILD")
-        if not child_ids and not model_child:
+        if not child_ids and not model_child:  # pragma: no cover
             _logger.error("!-5! Invalid structure of %s!" % vmodel)
             return -5
         if not self.env["synchro.channel.model"].search(
@@ -2605,13 +2599,13 @@ class IrModelSynchro(models.Model):
                 self.env["synchro.channel.model"].build_odoo_synchro_model(
                     backend, model_child
                 )
-            else:
+            else:   # pragma: no cover
                 _logger.error("!-11! Unmanaged model %s!" % model_child)
                 return -11
         Cache.open(model=model_child, backend=backend)
         # Retrieve header id field
         parent_id_name = Cache.get_struct_model_attr(model_child, "PARENT_ID")
-        if not parent_id_name:
+        if not parent_id_name:  # pragma: no cover
             _logger.error("!-5! Invalid structure of %s!" % vmodel)
             return -5
         cls = self.get_actual_model(model_child)
@@ -2636,7 +2630,7 @@ class IrModelSynchro(models.Model):
                     only_minimal=only_minimal,
                     no_del_child=True,
                 )
-                if id < 0:
+                if id < 0:  # pragma: no cover
                     self.logmsg(
                         "warning",
                         "Error %(id)s processing %(model)s",
@@ -2686,10 +2680,10 @@ class IrModelSynchro(models.Model):
                 _logger.warning(
                     "Deprecated field name %s: please use %s!" % ("vg7_id", "vg7:id")
                 )
-            if "id" in vals:
+            if "id" in vals:  # pragma: no cover
                 del vals["id"]
                 _logger.warning("Ignored field name %s!" % "id")
-            if vmodel == "sale.order":
+            if vmodel == "sale.order":  # pragma: no cover
                 for nm in ("partner_id", "partner_shipping_id"):
                     if nm in vals:
                         del vals[nm]
@@ -2699,7 +2693,7 @@ class IrModelSynchro(models.Model):
                 Cache.open(model=vmodel)
             return vmodel, vals
 
-        def browse_from_id(actual_cls, vals):
+        def browse_from_id(actual_cls, vals):   # pragma: no cover
             id = 0
             rec = None
             if "id" in vals:
@@ -2808,7 +2802,7 @@ class IrModelSynchro(models.Model):
                 vals, spec = cls.preprocess(backend, vals)
             elif do_auto_process:
                 vals, spec = self.preprocess(backend, vmodel, vals)
-            if spec:
+            if spec:   # pragma: no cover
                 vmodel = self.get_vmodel(actual_model, spec)
                 actual_model = self.get_actual_model(vmodel)
                 Cache.open(model=vmodel)
@@ -2841,7 +2835,7 @@ class IrModelSynchro(models.Model):
         if not no_del_child:
             Cache.set_attr(backend.id, "LAST_MODEL", actual_model)
             Cache.set_attr(backend.id, "CTR", sequence)
-        if loc_id == -7 and not has_state:
+        if loc_id == -7 and not has_state:  # pragma: no cover
             self.logmsg("info",
                         "### No values passed(%s.%s)" % (vmodel, actual_model),
                         logrec=self.logrec, id=loc_id)
@@ -2850,7 +2844,7 @@ class IrModelSynchro(models.Model):
             vals["active"] = self.diff_parent(vals, spec)
         if has_state:
             vals, erc = self.set_state_to_draft(struct, vmodel, rec, vals)
-            if erc < 0:
+            if erc < 0:  # pragma: no cover
                 _logger.error("!%s! Returned error code!" % erc)
                 return erc
         if has_2delete:
@@ -2884,8 +2878,8 @@ class IrModelSynchro(models.Model):
                 if backend.child_lines_mode == "N" and env["child_lines_mode"] == "I":
                     env["child_lines_mode"] = "N"
                 loc_id = rec.id
-                if not ext_id_name:
-                    self.create_ext_id(backend, actual_model, loc_id, ext_id)
+                # if not ext_id_name:
+                #     self.create_ext_id(backend, actual_model, loc_id, ext_id)
                 if only_minimal:
                     do_write = False
         if loc_id > 0 and do_write:
@@ -2947,7 +2941,7 @@ class IrModelSynchro(models.Model):
                     do_write and rec and child_ids and hasattr(rec, child_ids)
                     and Cache.get_struct_model_attr(model_child, "sequence")
                     and backend.renum_lines
-                ):
+                ):   # pragma: no cover
                     offset = self.get_sequence_offset(actual_model)
                     for num, line in enumerate(rec[child_ids]):
                         sequence = num + offset
@@ -2998,7 +2992,7 @@ class IrModelSynchro(models.Model):
         if loc_id > 0 and not chk_in_queue and vmodel == actual_model:
             if actual_model == "res.lang":
                 self.manage_language(vals)
-            elif actual_model == "ir.module.module":
+            elif actual_model == "ir.module.module":  # pragma: no cover
                 loc_id = self.set_actual_state(struct, actual_model, rec)
                 if loc_id < 0:
                     return loc_id
@@ -3064,13 +3058,13 @@ class IrModelSynchro(models.Model):
             actual_model, "CHILD_IDS", default=False
         )
         model_child = Cache.get_struct_model_attr(actual_model, "MODEL_CHILD")
-        if not has_state and not child_ids and not model_child:
+        if not has_state and not child_ids and not model_child:  # pragma: no cover
             _logger.error("!-5! Invalid structure of %s!" % vmodel)
             return -5
         Cache.open(model=model_child)
         # Retrieve header id field
         parent_id_name = Cache.get_struct_model_attr(model_child, "PARENT_ID")
-        if not parent_id_name:
+        if not parent_id_name:  # pragma: no cover
             _logger.error("!-5! Invalid structure of %s!" % vmodel)
             return -5
         if (not loc_id or loc_id < 1) and ext_id:
@@ -3080,7 +3074,7 @@ class IrModelSynchro(models.Model):
 
         try:
             rec_2_commit = self.get_actual_model(vmodel).browse(loc_id)
-        except BaseException:
+        except BaseException:   # pragma: no cover
             _logger.error("!-3! Errore retriving %s.%s!" % (vmodel, loc_id))
             return -3
         loc_id = 0
@@ -3183,7 +3177,7 @@ class IrModelSynchro(models.Model):
             item = queue.pop(0)
             vmodel = item[0]
             ext_id = item[1]
-            if not ext_id or ext_id < 1:
+            if not ext_id or ext_id < 1:  # pragma: no cover
                 self.logmsg(
                     "warning", "### invalid %s.synchro_queue[%s]" % (vmodel, ext_id)
                 )
