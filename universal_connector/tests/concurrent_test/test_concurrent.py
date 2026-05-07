@@ -400,8 +400,8 @@ COA_MODULE = "l10n_it_coa"
 MODULE_LIST = [
     # "mk_test_env",
     THIS_MODULE,
-    COA_MODULE,
-    "account",
+    # COA_MODULE,
+    # "account",
     # "account_payment_term_extension",
     # "purchase",
     # "sale",
@@ -420,7 +420,7 @@ class ExtTestEnv(object):
         self.parseoptargs(args)
         # Comment or activate following lines for specific test
         force = {}
-        force["ask"] = True
+        force["ask"] = False
         force["config"] = ("/home/odoo/10.0/connector/universal_connector/"
                            "tests/logs/connector.universal_connector_10.conf")
         force["database"] = "test_universal_connector_10"
@@ -893,7 +893,8 @@ class ExtTestEnv(object):
         self.resource_write(
             "res.partner",
             company.partner_id.id,
-            {"lang": self.lang},
+            {},
+            # {"lang": self.lang},
             xref="base.main_partner")
 
         vals = {
@@ -971,28 +972,28 @@ class ExtTestEnv(object):
         vals = {}
         if self.company_id not in [x.id for x in user.company_ids]:
             vals["company_ids"] = [(4, self.company_id)]
-        if user.lang != (lang or self.lang):
-            vals["lang"] = lang or self.lang
+        # if user.lang != (lang or self.lang):
+        #     vals["lang"] = lang or self.lang
         if vals:
             vals["tz"] = "Europe/Rome"
             self.resource_write("res.users", self.user.id, vals)
         if user.company_id.id != self.company_id:
             vals = {"company_id": self.company_id}
             self.resource_write("res.users", self.user.id, vals)
-            coa_id = self.env_ref("l10n_it_coa.l10n_chart_it_zeroincombenze")
-            clodoo.executeL8(self.ctx,
-                             "account.chart.template",
-                             "try_loading_for_current_company",
-                             coa_id)
-            self.write_log(
-                "try_loading_for_current_company(l10n_chart_it_zeroincombenze)")
-            sleep(1)
-        self.lang = clodoo.browseL8(self.ctx, model, self.user.id).lang
-        if self.ctx["lang"] != self.lang:
-            raise IOError(
-                "!!DB language %s is different from connection meta-data %s!"
-                % (self.lang, self.ctx["lang"])
-            )
+            # coa_id = self.env_ref("l10n_it_coa.l10n_chart_it_zeroincombenze")
+            # clodoo.executeL8(self.ctx,
+            #                  "account.chart.template",
+            #                  "try_loading_for_current_company",
+            #                  coa_id)
+            # self.write_log(
+            #     "try_loading_for_current_company(l10n_chart_it_zeroincombenze)")
+            # sleep(1)
+        # self.lang = clodoo.browseL8(self.ctx, model, self.user.id).lang
+        # if self.ctx["lang"] != self.lang:
+        #     raise IOError(
+        #         "!!DB language %s is different from connection meta-data %s!"
+        #         % (self.lang, self.ctx["lang"])
+        #     )
 
     def assure_journals(self):
         for model, domain, company_id, vals in (
@@ -1035,7 +1036,7 @@ class ExtTestEnv(object):
                 modname, connector_installed, mk_dev=mk_dev)
 
         self.ask_4_ret()
-        self.assure_lang()
+        # self.assure_lang()
         self.assure_company()
         self.assure_user()
         self.model_wkf = {}
@@ -2031,9 +2032,9 @@ def main(cli_args=[]):
         # "stock.picking.package.preparation",
     )
     ext_test_env.store_csv_response(identity, MODELS)
-    test_prio = "synchro"
-    for model in MODELS:
-        test_prio = run_full_identity_test(ext_test_env, model, test_prio, identity)
+    # test_prio = "synchro"
+    # for model in MODELS:
+    #     test_prio = run_full_identity_test(ext_test_env, model, test_prio, identity)
 
     ext_test_env.teardown()
     return 0

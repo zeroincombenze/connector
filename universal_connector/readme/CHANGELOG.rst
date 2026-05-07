@@ -1,8 +1,13 @@
-10.0.0.3.17 (2026-04-26)
+10.0.0.3.17 (2026-05-06)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-* [FIX] Minor fixes
-* [QUA] Test coverage 61% (4903: 1903+3000) [564 TestPoints]
+* [FIX] Interface fixes
+* [FIX] More regression tests
+* [IMP] When shipping equal partner, use partner in documents
+* [IMP] Import purchase order from VG7 / Importa ordini fornitore da VG7
+* [IMP] Import banks when import partner / Importa banca di appoggio quando importa cliente
+* [IMP] Internal improvements
+* [QUA] Test coverage 70% (3668: 1107+2561) [176 TestPoints]
 
 10.0.0.3.16 (2026-04-06)
 ~~~~~~~~~~~~~~~~~~~~~~~~

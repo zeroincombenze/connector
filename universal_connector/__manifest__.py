@@ -9,7 +9,7 @@
 #
 {
     "name": "Universal Connector",
-    "version": "10.0.0.3.16",
+    "version": "10.0.0.3.17",
     "category": "Generic Modules",
     "summary": "Universal Connector",
     "author": "SHS-AV s.r.l.",
@@ -54,9 +54,11 @@
         "views/picking_view.xml",
         "views/partner_bank_view.xml",
         "views/synchro_channel_view.xml",
+        "views/synchro_log_view.xml",
         "views/model_view.xml",
         "data/synchro_channel.xml",
         "data/synchro_account_payment.xml",
+        "data/synchro_lang.xml",
         "data/synchro_partner.xml",
         "data/synchro_partner_bank.xml",
         "data/synchro_country.xml",

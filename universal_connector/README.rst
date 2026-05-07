@@ -1,5 +1,5 @@
 ============================================================
-|icon| Universal Connector/Connettore universale 10.0.0.3.16
+|icon| Universal Connector/Connettore universale 10.0.0.3.17
 ============================================================
 
 .. |icon| image:: https://raw.githubusercontent.com/zeroincombenze/connector/10.0/universal_connector/static/description/icon.png
@@ -188,11 +188,16 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 ChangeLog History | Cronologia modifiche
 ----------------------------------------
 
-10.0.0.3.17 (2026-04-26)
+10.0.0.3.17 (2026-05-06)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-* [FIX] Minor fixes
-* [QUA] Test coverage 61% (4903: 1903+3000) [564 TestPoints]
+* [FIX] Interface fixes
+* [FIX] More regression tests
+* [IMP] When shipping equal partner, use partner in documents
+* [IMP] Import purchase order from VG7 / Importa ordini fornitore da VG7
+* [IMP] Import banks when import partner / Importa banca di appoggio quando importa cliente
+* [IMP] Internal improvements
+* [QUA] Test coverage 70% (3668: 1107+2561) [176 TestPoints]
 
 10.0.0.3.16 (2026-04-06)
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -321,7 +326,7 @@ La distribuzione `Zeroincombenze® <https://www.zeroincombenze.it/>`__ è proget
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2026-05-06
+Last Update / Ultimo aggiornamento: 2026-05-07
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status

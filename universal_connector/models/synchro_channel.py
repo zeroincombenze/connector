@@ -88,20 +88,19 @@ class SynchroChannel(models.Model):
         help="3th Party Sender URL to connect;\n" "format is [username@]url[:port]",
     )
     product_without_variants = fields.Boolean("Products without variants")
-
     tracelevel = fields.Selection(
         [
             ("0", "No Trace"),
-            ("1", "Main functions"),
-            ("2", "Main + Inner functions"),
-            ("3", "Statements"),
-            ("4", "All"),
+            ("1", "Error (Only error messages)"),
+            ("2", "Warning (Main functions)"),
+            ("3", "Info (All functions)"),
+            ("4", "Debug (Trace all)"),
         ],
         string="Trace Level",
-        default=False,
-        help="Trace data in log. Warning! Use this feature with caution; "
-        "all sent data will be recorded in the log file."
-        "This feature must be used only to debug handshake",
+        default="2",
+        help="Trace data in log.\nWarning! Use this feature with caution; "
+        "all data records will be recorded in the log file,"
+        " so this feature can slow data interchange.",
     )
     method = fields.Selection(
         [
@@ -284,7 +283,7 @@ class SynchroChannel(models.Model):
                 if hasattr(self, fct):
                     self.env["ir.model.synchro"].logmsg(
                         "debug",
-                        ">>> %(model)s.%(fct)s(%(ep)s):",
+                        "%(model)s.%(fct)s(%(ep)s)",
                         model=self.name,
                         ctx={"fct": fct, "ep": endpoint},
                     )
@@ -442,7 +441,8 @@ class SynchroChannelModel(models.Model):
             "warning",
             "%(model)s.get_csv_response(cnx,session,id=%(xid)s,%(csv)s)",
             model=model,
-            ctx={"xid": ext_id, "csv": file_csv},
+            xid=ext_id,
+            ctx={"csv": file_csv},
         )
         Cache = self.env["ir.model.synchro.cache"]
         counterpart_pk = Cache.get_model_attr(
@@ -654,8 +654,8 @@ class SynchroChannelModel(models.Model):
         if not endpoint:  # pragma: no cover
             self.env["ir.model.synchro"].logmsg(
                 "error",
-                "Channel %(chid)s without connection parameters!",
-                ctx={"chid": backend.id},
+                "Backend %(chid)s without connection parameters!",
+                ctx={"chid": backend.prefix},
             )
             return {}
         cnx = Cache.get_attr(backend.id, "CNX")
@@ -672,7 +672,7 @@ class SynchroChannelModel(models.Model):
                 if hasattr(backend, fct):
                     self.env["ir.model.synchro"].logmsg(
                         "debug",
-                        ">>> %(model)s.%(fct)s(%(ep)s):",
+                        "%(model)s.%(fct)s(%(ep)s):",
                         model=self.name,
                         ctx={"fct": fct, "ep": endpoint},
                     )
@@ -690,9 +690,10 @@ class SynchroChannelModel(models.Model):
             if hasattr(self, fct):
                 self.env["ir.model.synchro"].logmsg(
                     "debug",
-                    ">>> %(model)s.%(fct)s(cnx,session,%(xid)s):",
+                    "%(model)s.%(fct)s(cnx,session,%(xid)s):",
                     model=self.name,
-                    ctx={"fct": fct, "xid": ext_id},
+                    xid=ext_id,
+                    ctx={"fct": fct},
                 )
                 vals = getattr(self, fct)(
                     cnx, session, ext_id=ext_id, domain=domain, mode=mode
@@ -722,10 +723,10 @@ class SynchroChannelModel(models.Model):
                 vals, (list, tuple)):   # pragma: no cover
             self.env["ir.model.synchro"].logmsg(
                 "error",
-                "Response error %(sts)s (%(chid)s,%(url)s,%(pfx)s)",
+                "Response error %(vals)s (%(chid)s,%(url)s,%(pfx)s)",
                 model=self.name,
+                values=vals,
                 ctx={
-                    "sts": vals,
                     "url": backend.counterpart_url,
                     "pfx": backend.prefix,
                 },

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_synchro_log_tree" model="ir.ui.view">
+        <field name="name">view.synchro.log.tree</field>
+        <field name="model">ir.model.synchro.log</field>
+        <field name="arch" type="xml">
+            <tree string="Synchonization Log">
+                <field name="timestamp"/>
+                <field name="model"/>
+                <field name="res_id"/>
+                <field name="ext_id"/>
+                <field name="hdrmsg"/>
+                <field name="digest"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_synchro_log_form" model="ir.ui.view">
+        <field name="name">view.synchro.log.form</field>
+        <field name="model">ir.model.synchro.log</field>
+        <field name="arch" type="xml">
+            <form string="Synchonization Log">
+                <group>
+                    <field name="timestamp"/>
+                    <field name="model"/>
+                    <field name="res_id"/>
+                    <field name="ext_id"/>
+                    <field name="hdrmsg"/>
+                    <field name="errmsg"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_synchro_log" model="ir.actions.act_window">
+        <field name="name">Synchronization log</field>
+        <field name="res_model">ir.model.synchro.log</field>
+        <field name="view_id" ref="view_synchro_log_tree"/>
+    </record>
+
+
+    <menuitem id="menu_synchro_log" name="Synchonization Log"
+              action="action_synchro_log" parent="base.next_id_9"
+              groups="base.group_no_one"/>
+
+</odoo>

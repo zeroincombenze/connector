@@ -233,7 +233,7 @@ class MyTest(SingleTransactionCase):
         IrModelSynchro = self.env["ir.model.synchro"]
         backend = self.resource_browse(xref)
         model = "res.partner"
-        ext_id_name = IrModelSynchro.get_loc_ext_id_name(backend, model)
+        ext_id_name = IrModelSynchro.get_ext_id_name(backend, model)
         if backend.identity == "vg7":
             self.assertEqual("vg7_id", ext_id_name)
         else:

@@ -11,7 +11,7 @@ class AbstractDBKey(models.AbstractModel):
     oe10_id = fields.Integer("Odoo10 ID", copy=False)
     oe12_id = fields.Integer("Odoo12 ID", copy=False)
     timestamp = fields.Datetime("Timestamp", copy=False, readonly=True)
-    errmsg = fields.Char("Error message", copy=False, readonly=True)
+    errmsg = fields.Text("Error message", copy=False, readonly=True)
 
     @api.model
     def synchro(

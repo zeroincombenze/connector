@@ -16,6 +16,8 @@ from . import (
     ir_model_synchro_cache,
     ir_model_synchro_data,
     ir_module_module,
+    synchro_channel,
+    synchro_log,
     package_preparation,
     purchase_order,
     product,
@@ -24,6 +26,4 @@ from . import (
     res_partner,
     res_partner_bank,
     sale_order,
-    # stock,
-    synchro_channel,
 )
