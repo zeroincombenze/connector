@@ -1084,9 +1084,9 @@ class IrModelSynchro(models.Model):
         mode = mode or "="
         logrec = self.logmsg(
             "debug",
-            "%(model)s.get_rec_by_reference(%(name)s,%(m)s,%(xid)s)",
+            "%(model)s.get_rec_by_reference(%(name)s,%(m)s,%(vals)s)",
             model=actual_model,
-            xid=value,
+            values=value,
             ctx={"name": name, "m": mode},
         )
         ctx = ctx or {}
@@ -1152,9 +1152,9 @@ class IrModelSynchro(models.Model):
     ):
         logrec = self.logmsg(
             "debug",
-            "%(model)s.get_foreign_text(%(xid)s)",
+            "%(model)s.get_foreign_text(%(vals)s)",
             model=actual_model,
-            xid=value,
+            values=value,
         )
         if len(value.split(".")) == 2:    # pragma: no cover
             try:
@@ -1273,8 +1273,9 @@ class IrModelSynchro(models.Model):
             raise RuntimeError(_("No relation for field %s of %s" % (name, vmodel)))
         logrec = self.logmsg(
             "debug",
-            "%(model)s%(spec)s.get_foreign_value(%(name)s,%(xid)s)",
+            "%(model)s%(spec)s.get_foreign_value(%(name)s,%(vals)s)",
             model=relation,
+            values=value,
             xid=value,
             ctx={
                 "name": name,
@@ -1380,7 +1381,7 @@ class IrModelSynchro(models.Model):
                 if ext_name.startswith("."):
                     ext_name = ""
             self.logmsg(
-                "warning", "### Deprecated field name %(id)s!", ctx={"id": ext_ref}
+                "debug", "### Deprecated field name %(id)s!", ctx={"id": ext_ref}
             )
 
         else:
@@ -1650,13 +1651,13 @@ class IrModelSynchro(models.Model):
                 if not vals.get(nm_id) and vals.get(nm):  # pragma: no cover
                     vals[nm_id] = vals[nm]
                     self.logmsg(
-                        "warning",
+                        "debug",
                         "### Field <%(nm)s> renamed to <%(new)s>",
                         ctx={"nm": nm, "new": nm_id},
                     )
                 elif vals.get(nm_id) and vals.get(nm):   # pragma: no cover
                     self.logmsg(
-                        "warning",
+                        "debug",
                         "### Field <%(nm)s> overtaken by <%(new)s>",
                         ctx={"nm": nm, "new": nm_id},
                     )
@@ -2651,7 +2652,7 @@ class IrModelSynchro(models.Model):
             Cache.set_attr(backend.id, "LAST_MODEL", actual_model)
             Cache.set_attr(backend.id, "CTR", sequence)
         if loc_id == -7 and not has_state:  # pragma: no cover
-            self.logmsg("info",
+            self.logmsg("warning",
                         "### No values passed(%s.%s)" % (vmodel, actual_model),
                         logrec=logrec, id=loc_id)
             return loc_id
@@ -2845,7 +2846,7 @@ class IrModelSynchro(models.Model):
             and not no_del_child
         ):
             self.synchro_queue(backend)
-        self.logmsg("debug", "", logrec=logrec, id=loc_id)
+        self.logmsg("debug", "", logrec=logrec, id=loc_id, rec=rec, xid=ext_id)
         return loc_id
 
     @api.model
@@ -2991,7 +2992,7 @@ class IrModelSynchro(models.Model):
 
     @api.model
     def synchro_queue(self, backend):
-        self.logmsg("warning", "synchro_queue()")
+        self.logmsg("debug", "synchro_queue()")
         Cache = self.env["ir.model.synchro.cache"]
         max_ctr = 16
         queue = Cache.get_attr(backend.id, "IN_QUEUE")
@@ -3526,13 +3527,12 @@ class IrModelSynchro(models.Model):
     @api.multi
     def pull_record(self, cls, backend_id=None):
         """Button synchronize at record UI page"""
-        self.logmsg("debug", "pull_record()")
         cache = self.env["ir.model.synchro.cache"]
         for rec in cls:
-            model = cls.__class__.__name__
-            self.logmsg("info", "%s.pull_record()" % model)
+            model = cls._name
             if not cache.is_struct(model):
                 continue
+            logrec = self.logmsg("warning", "%(model)s.pull_record()", rec=rec)
             cache.setup_channels(all=True)
             for backend in cache.get_channel_list():
                 cache.open(model=model, cls=cls, backend=backend)
@@ -3554,7 +3554,9 @@ class IrModelSynchro(models.Model):
                     if ext_id and (
                         identity != "vg7" or vmodel != "res.partner.invoice"
                     ):
-                        self.pull_1_record(backend.id, vmodel, ext_id)
+                        loc_id = self.pull_1_record(backend.id, vmodel, ext_id)
+                        if loc_id < 0:
+                            self.logmsg("debug", "", id=loc_id, logrec=logrec)
                     if identity == "vg7" and model == "res.partner":
                         vmodel = "res.partner.supplier"
                         ext_id_name = self.get_ext_id_name(backend, vmodel)
@@ -3567,7 +3569,9 @@ class IrModelSynchro(models.Model):
                             )
                             if ext_id:
                                 cache.open(model=vmodel)
-                                self.pull_1_record(backend.id, vmodel, ext_id)
+                                loc_id = self.pull_1_record(backend.id, vmodel, ext_id)
+                                if loc_id < 0:
+                                    self.logmsg("debug", "", id=loc_id, logrec=logrec)
 
     @api.model
     def trigger_one_record(self, ext_model, prefix, ext_id):

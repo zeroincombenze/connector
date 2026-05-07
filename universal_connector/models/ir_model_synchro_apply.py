@@ -825,35 +825,7 @@ class IrModelSynchroApply(models.Model):
         default=None,
         ctx=None,
     ):
-        if vals.get(ext_ref):
-            if vals.get(ext_ref) and (
-                isinstance(vals[ext_ref], int)
-                or (isinstance(vals[ext_ref], basestring) and vals[ext_ref].isdigit())
-            ):
-                state = {
-                    1: "draft",
-                    2: "sale",
-                    3: "sale",
-                    4: "sale",
-                    5: "cancel",
-                    6: "cancel",
-                    7: "sale",
-                    8: "sale",
-                    9: "sale",
-                    10: "sale",
-                    11: "sale",
-                    12: "draft",
-                    13: "sale",
-                    14: "sale",
-                    15: "sale",
-                    16: "sale",
-                }.get(int(vals[ext_ref]), "")
-            else:
-                state = vals[ext_ref]
-            if state in ("draft", "cancel", "sale"):
-                vals[loc_name] = state
-        elif not vals.get(loc_name):
-            vals[loc_name] = "sale"
+        vals[loc_name] = "sale"
         return vals
 
     def apply_set_purchase_order_state(

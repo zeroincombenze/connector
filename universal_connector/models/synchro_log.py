@@ -70,12 +70,9 @@ class IrModelSynchroLog(models.Model):
         if logrec:
             try:
                 if not logrec.exists() or not logrec.id:
-                    logrec = self.env["ir.model.synchro.log"]
-                else:
-                    errmsg = errmsg or logrec.errmsg
-                    hdrmsg = logrec.hdrmsg
+                    return self.env["ir.model.synchro.log"]
             except BaseException:   # pragma: no cover
-                logrec = self.env["ir.model.synchro.log"]
+                return self.env["ir.model.synchro.log"]
         ctx = _u(ctx or {})
         errmsg = _u(errmsg or "")
         id = id if isinstance(id, (int, long)) else False
@@ -89,7 +86,8 @@ class IrModelSynchroLog(models.Model):
         if not model and ctx["rec"]:
             model = ctx["rec"]
         if model:
-            ctx["model"] = model if isinstance(model, str) else model._name if hasattr(
+            ctx["model"] = model if isinstance(
+                model, basestring) else model._name if hasattr(
                 model, "_name") else ""
         else:
             ctx["model"] = ""
@@ -102,45 +100,57 @@ class IrModelSynchroLog(models.Model):
         ctx["xid"] = xid
         ctx["vals"] = values
         ctx = _u(ctx)
-        try:
-            if isinstance(ctx["vals"], dict) and len(str(ctx["vals"])) > 40:
-                hdrmsg = _(hdrmsg.replace(
-                    "%(vals)s", "%(vals)-.40s[...] ")) % ctx
-            else:
-                hdrmsg = hdrmsg % ctx
-        except BaseException:  # pragma: no cover
-            pass
-        ctx["vals"] = self.pretty_print(values)
-        try:
-            errmsg = errmsg % ctx
-        except BaseException:   # pragma: no cover
-            pass
-
-        now = datetime.today().strftime("%Y-%m-%d %H:%M:%S")
-        vals = {"hdrmsg": hdrmsg}
-        if not logrec:
-            vals["timestamp"] = now,
-            vals["errmsg"] = errmsg
-            vals["res_id"] = ctx["id"]
-            vals["ext_id"] = ctx["xid"]
-            vals["model"] = ctx["model"]
+        if values or not logrec or hdrmsg != logrec.hdrmsg:
+            try:
+                if isinstance(ctx["vals"], dict) and len(str(ctx["vals"])) > 40:
+                    hdrmsg = _(hdrmsg.replace(
+                        "%(vals)s", "%(vals)-.40s[...] ")) % ctx
+                else:
+                    hdrmsg = hdrmsg % ctx
+            except BaseException:  # pragma: no cover
+                pass
+            ctx["vals"] = self.pretty_print(values)
+            try:
+                errmsg = errmsg % ctx
+            except BaseException:   # pragma: no cover
+                pass
         else:
-            vals["errmsg"] = (logrec.errmsg or "") + "\n\n" + errmsg
+            hdrmsg = errmsg = ""
+
+        if hdrmsg:
+            _logger.info(hdrmsg)
+        now = datetime.today().strftime("%Y-%m-%d %H:%M:%S")
+        if not logrec:
+            vals = {
+                "hdrmsg": hdrmsg,
+                "timestamp": now,
+                "errmsg": errmsg,
+                "res_id": ctx["id"],
+                "ext_id": ctx["xid"],
+                "model": ctx["model"],
+            }
+            logrec = self.create(vals)
+        else:
+            vals = {}
+            if hdrmsg and (ctx["id"] < 0 or hdrmsg != logrec.hdrmsg):
+                vals["hdrmsg"] = hdrmsg
+            if errmsg:
+                vals["errmsg"] = (logrec.errmsg or "") + "\n\n" + errmsg
             if ctx["id"]:
                 vals["res_id"] = ctx["id"]
             if ctx["xid"]:
                 vals["ext_id"] = ctx["xid"]
             if not logrec.model:
                 vals["model"] = ctx["model"]
-        _logger.info(hdrmsg)
-        if logrec:
             logrec.write(vals)
-        else:
-            logrec = self.create(vals)
+
         if rec and hasattr(rec, "timestamp") and hasattr(rec, "errmsg"):
             vals = {"timestamp": now}
-            vals["errmsg"] = "\n".join(
-                (errmsg + u"\n" + (rec.errmsg or u"")).split("\n")[0:3])
+            errmsg_list = (rec.errmsg or "").split("\n")
+            if errmsg_list[0].startswith(str(datetime.now())[:16]):
+                del errmsg_list[0]
+            errmsg_list.insert(0, str(now) + " - " + (hdrmsg or logrec.hdrmsg))
+            vals["errmsg"] = "\n".join(errmsg_list)
             rec.write(vals)
         return logrec
 
