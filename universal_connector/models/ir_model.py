@@ -1773,6 +1773,12 @@ class IrModelSynchro(models.Model):
                 continue
 
             if loc_name == child_ids:
+                self.logmsg(
+                    "debug",
+                    "%(n)s child lines stored to next managements",
+                    model=vmodel,
+                    ctx={"n": len(vals[ext_ref])}
+                )
                 offset = self.get_sequence_offset(actual_model)
                 lines = []
                 for num, item in enumerate(vals[ext_ref]):
@@ -2696,6 +2702,11 @@ class IrModelSynchro(models.Model):
                     and env_meta["child_lines_mode"] == "I"
                 ):
                     env_meta["child_lines_mode"] = "N"
+                    self.logmsg(
+                        "debug",
+                        "child lines mode set to 'N' as per backend",
+                        model=vmodel,
+                    )
                 loc_id = rec.id
                 if only_minimal:
                     do_write = False
@@ -2817,7 +2828,7 @@ class IrModelSynchro(models.Model):
                 backend.id, model_child, "__%s_FP" % model_child,
                 rec.fiscal_position_id
             )
-        if env_meta["child_lines_mode"] == "I":
+        if env_meta["child_lines_mode"] != "N":
             sts = self.synchro_childs(
                 backend,
                 vmodel,
