@@ -1704,8 +1704,8 @@ class IrModelSynchro(models.Model):
                 env, backend, vmodel, field_list,
                 no_deep_fields=no_deep_fields, only_minimal=only_minimal)
 
-        env["child_lines_mode"] = backend.child_lines_mode or "N" if (
-            child_ids and model_child) else ""
+        env["child_lines_mode"] = backend.child_lines_mode or ("I" if (
+            child_ids and model_child) else "")
         ctx = Cache.get_attr(backend.id, "CTX") or {}
         ctx["ext_key_id"] = counterpart_pk
         for ext_ref in field_list:
@@ -2841,8 +2841,8 @@ class IrModelSynchro(models.Model):
                 return sts - 100
         elif model_child:
             self.logmsg(
-                "debug",
-                "### Child mode %s: counterpart must send child records"
+                "warning",
+                "Child mode is %s, counterpart must send child records"
                 % env_meta["child_lines_mode"],
             )
         elif rec and loc_id > 0 and "to_delete" in rec and not no_del_child:
