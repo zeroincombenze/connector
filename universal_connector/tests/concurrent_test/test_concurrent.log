@@ -1,25 +1,25 @@
-2026-05-11 11:27:27 ** self.setup() **
-2026-05-11 11:27:27 init_new_db(test_universal_connector_10, /home/odoo/10.0/connector/universal_connector/tests/logs/connector.universal_connector_10.conf)
-2026-05-11 11:27:29 check_if_module_installed(universal_connector, 1/3)
-2026-05-11 11:27:34 check_if_module_installed(l10n_it_conai, 2/3)
-2026-05-11 11:27:36 check_if_module_installed(connector_vg7_conai, 3/3)
+2026-05-12 12:38:50 ** self.setup() **
+2026-05-12 12:38:50 init_new_db(test_universal_connector_10, /home/odoo/10.0/connector/universal_connector/tests/logs/connector.universal_connector_10.conf)
+2026-05-12 12:38:50 check_if_module_installed(universal_connector, 1/3)
+2026-05-12 12:38:53 check_if_module_installed(l10n_it_conai, 2/3)
+2026-05-12 12:38:55 check_if_module_installed(connector_vg7_conai, 3/3)
 
-2026-05-11 11:27:38 assure_company()
-2026-05-11 11:27:38 resource_browse(res.company, 1, xref=1)
-2026-05-11 11:27:38 resource_write(res.company, 1, {u'sale_note': u'Si prega di controllare i dati entro le 24h.', u'name': u'Test Company'}, xref=None)  ##<> -> [1]
+2026-05-12 12:38:57 assure_company()
+2026-05-12 12:38:57 resource_browse(res.company, 1, xref=1)
+2026-05-12 12:38:57 resource_write(res.company, 1, {u'sale_note': u'Si prega di controllare i dati entro le 24h.', u'name': u'Test Company'}, xref=None)  ##<> -> [1]
 
-2026-05-11 11:27:42 assure_user(lang=None)
-2026-05-11 11:27:42 resource_browse(res.users, 1, xref=1)
-2026-05-11 11:27:42 # setup(res.country)
-2026-05-11 11:27:42 resource_write(res.country, 58, {'name': 'Germania'}, xref=58)  ##<> -> [58]
-2026-05-11 11:27:42 resource_write(res.country, 233, {'name': 'Regno Unito'}, xref=233)  ##<> -> [233]
-2026-05-11 11:27:42 resource_write(res.country, 110, {'name': 'Italia'}, xref=110)  ##<> -> [110]
-
-
-
-2026-05-11 11:27:42 *** Starting VG7: test ***
-2026-05-11 11:27:42 store_csv_response(vg7:, (u'res.country',))
-2026-05-11 11:27:42 os.unlink(/home/odoo/10.0/connector/universal_connector/tests/res/vg7/countries.csv)
+2026-05-12 12:38:59 assure_user(lang=None)
+2026-05-12 12:38:59 resource_browse(res.users, 1, xref=1)
+2026-05-12 12:38:59 # setup(res.country)
+2026-05-12 12:38:59 resource_write(res.country, 58, {'name': 'Germania'}, xref=58)  ##<> -> [58]
+2026-05-12 12:38:59 resource_write(res.country, 233, {'name': 'Regno Unito'}, xref=233)  ##<> -> [233]
+2026-05-12 12:38:59 resource_write(res.country, 110, {'name': 'Italia'}, xref=110)  ##<> -> [110]
 
 
-2026-05-11 11:27:42 2 tests universal_connector SUCCESSFULLY completed
+
+2026-05-12 12:39:00 *** Starting VG7: test ***
+2026-05-12 12:39:00 store_csv_response(vg7:, (u'res.country',))
+2026-05-12 12:39:00 os.unlink(/home/odoo/10.0/connector/universal_connector/tests/res/vg7/countries.csv)
+
+
+2026-05-12 12:39:00 2 tests universal_connector SUCCESSFULLY completed

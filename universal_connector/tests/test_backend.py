@@ -565,17 +565,18 @@ class MyTest(SingleTransactionCase):
                 vals = {
                     "vg7:%s" % k: v for k, v in order_line.items()
                 }
-                Synchro.synchro("sale.order.line", vals)
-                errcode = Synchro.commit("sale.order", rec_id)
-                self.assertEqual(errcode, rec_id)
-                order = self.env[model].browse(rec_id)
-                self.assertEqual("240131", order.name)
-                self.assertEqual("sale", order.state)
-                self.assertTrue(len(order.order_line) > 0)
-                self.assertEqual(101, order.partner_id.vg7_id)
-                self.assertEqual(order.partner_id, order.partner_invoice_id)
-                self.assertEqual(100000001, order.partner_shipping_id.vg7_id)
-                break
+                line_id = Synchro.synchro("sale.order.line", vals)
+                self.assertTrue(line_id > 0)
+            errcode = Synchro.commit("sale.order", rec_id)
+            self.assertEqual(errcode, rec_id)
+            order = self.env[model].browse(rec_id)
+            self.assertEqual("240131", order.name)
+            self.assertEqual("sale", order.state)
+            self.assertTrue(len(order.order_line) > 0)
+            self.assertEqual(101, order.partner_id.vg7_id)
+            self.assertEqual(order.partner_id, order.partner_invoice_id)
+            self.assertEqual(100000001, order.partner_shipping_id.vg7_id)
+            break
 
         order_id = 132
         rec_id = Synchro.trigger_one_record("orders", backend.prefix, order_id)

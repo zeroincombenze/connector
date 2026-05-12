@@ -941,8 +941,12 @@ class IrModelSynchroCache(models.Model):
             global_def = self.TABLE_DEF.get("base", {}).get(field.name, {})
             field_def = self.TABLE_DEF.get(model, {}).get(field.name, {})
             attrs = {}
+            if not self.is_manageable(model):
+                attrs["readonly"] = True
             for attr in ("required", "readonly", "protect_update"):
-                if attr in field_def:
+                if attr in attrs:
+                    pass
+                elif attr in field_def:
                     attrs[attr] = field_def[attr]
                 elif attr in global_def:
                     attrs[attr] = global_def[attr]
@@ -953,10 +957,10 @@ class IrModelSynchroCache(models.Model):
                     attrs["readonly"] = True
                 else:
                     attrs[attr] = field[attr]
-            if attrs["required"]:
-                attrs["readonly"] = False
-            if not self.is_manageable(model):
-                attrs["readonly"] = True
+                if attr == "readonly" and attrs["readonly"]:
+                    attrs["protect_update"] = "3"
+                if attrs["required"]:
+                    attrs["readonly"] = False
             self.set_struct_model_attr(
                 actual_model,
                 field.name,
@@ -969,13 +973,16 @@ class IrModelSynchroCache(models.Model):
                 },
             )
             if field.relation and field.relation != actual_model:
-                if field.relation and field.relation == ("%s.line" % actual_model):
+                if (
+                        field.relation.startswith(actual_model)
+                        and field.relation.endswith((".line", ".rate"))
+                ):
                     self.set_struct_model_attr(actual_model, "CHILD_IDS", field.name)
                     self.set_struct_model_attr(
                         actual_model, "MODEL_CHILD", field.relation
                     )
                 elif (
-                    actual_model.endswith(".line")
+                    actual_model.endswith((".line", ".rate"))
                     and field.relation
                     and actual_model.startswith(field.relation)
                 ):

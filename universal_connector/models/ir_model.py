@@ -1487,7 +1487,8 @@ class IrModelSynchro(models.Model):
         return value
 
     def map_to_internal(
-        self, env, backend, vmodel, vals, no_deep_fields=None, only_minimal=None
+        self, env_meta, backend, vmodel,
+            vals, no_deep_fields=None, only_minimal=None
     ):
         def rm_ext_value(vals, loc_name, ext_name, ext_ref, is_foreign):
             if (
@@ -1544,7 +1545,7 @@ class IrModelSynchro(models.Model):
                     )
             return vals
 
-        def priority_fields(struct, backend, vals, ext_id_name, vmodel):
+        def priority_fields(env_meta, backend, vals, ext_id_name, vmodel):
             Cache = self.env["ir.model.synchro.cache"]
             ctx = Cache.get_attr(backend.id, "CTX") or {}
             counterpart_pk = Cache.get_model_attr(
@@ -1654,12 +1655,14 @@ class IrModelSynchro(models.Model):
                         "debug",
                         "### Field <%(nm)s> renamed to <%(new)s>",
                         ctx={"nm": nm, "new": nm_id},
+                        logrec=env_meta["logrec"],
                     )
                 elif vals.get(nm_id) and vals.get(nm):   # pragma: no cover
                     self.logmsg(
                         "debug",
                         "### Field <%(nm)s> overtaken by <%(new)s>",
                         ctx={"nm": nm, "new": nm_id},
+                        logrec=env_meta["logrec"],
                     )
                     del vals[nm]
             return vals
@@ -1693,19 +1696,18 @@ class IrModelSynchro(models.Model):
         child_ids = Cache.get_struct_model_attr(
             actual_model, "CHILD_IDS", default=False
         )
-        struct = env["struct"]
-        model_child = Cache.get_struct_model_attr(actual_model, "MODEL_CHILD")
+        struct = env_meta["struct"]
+        # model_child = Cache.get_struct_model_attr(actual_model, "MODEL_CHILD")
         vals = check_4_double_field_id(vals)
         field_list = priority_fields(
-            struct, backend, vals, ext_id_name, vmodel
+            env_meta, backend, vals, ext_id_name, vmodel
         )
         if isinstance(field_list, dict):
             return self.map_to_internal(
-                env, backend, vmodel, field_list,
+                env_meta, backend, vmodel, field_list,
                 no_deep_fields=no_deep_fields, only_minimal=only_minimal)
 
-        env["child_lines_mode"] = backend.child_lines_mode or ("I" if (
-            child_ids and model_child) else "")
+        env_meta["child_lines_mode"] = False
         ctx = Cache.get_attr(backend.id, "CTX") or {}
         ctx["ext_key_id"] = counterpart_pk
         for ext_ref in field_list:
@@ -1773,11 +1775,13 @@ class IrModelSynchro(models.Model):
                 continue
 
             if loc_name == child_ids:
+                env_meta["child_lines_mode"] = backend.child_lines_mode or "I"
                 self.logmsg(
                     "debug",
-                    "%(n)s child lines stored to next managements",
+                    "Found %(n)s child lines to manage '%(m)s'",
                     model=vmodel,
-                    ctx={"n": len(vals[ext_ref])}
+                    ctx={"n": len(vals[ext_ref]), "m": env_meta["child_lines_mode"]},
+                    logrec=env_meta["logrec"],
                 )
                 offset = self.get_sequence_offset(actual_model)
                 lines = []
@@ -1789,7 +1793,6 @@ class IrModelSynchro(models.Model):
                 Cache.set_model_attr(
                     backend.id, vmodel, "__%s_ids" % actual_model, lines
                 )
-                env["child_lines_mode"] = "I"
                 del vals[ext_ref]
                 continue
 
@@ -1856,6 +1859,15 @@ class IrModelSynchro(models.Model):
             vals = rm_ext_value(
                 vals, loc_name, ext_name, ext_ref, is_foreign)
 
+        if not env_meta["child_lines_mode"] and child_ids:
+            env_meta["child_lines_mode"] = "N"
+            self.logmsg(
+                "debug",
+                "No childs found, counterparty must send them (mode=%(m)s)",
+                model=vmodel,
+                ctx={"m": env_meta["child_lines_mode"]},
+                logrec=env_meta["logrec"],
+            )
         prefix = self.env["ir.model.synchro.cache"].get_attr(backend.id, "PREFIX")
         for loc_name in vals.copy().keys():
             if loc_name.startswith(":"):
@@ -1870,7 +1882,7 @@ class IrModelSynchro(models.Model):
         if "ext_key_id" in ctx:
             del ctx["ext_key_id"]
         Cache.set_attr(backend.id, "CTX", ctx)
-        return vals, env
+        return vals, env_meta
 
     def set_default_values(self, cls, backend, vmodel, vals):
         # backend_id = backend.id
@@ -2413,14 +2425,16 @@ class IrModelSynchro(models.Model):
 
     @api.model
     def synchro_childs(
-        self, backend, vmodel, actual_model, parent_id, ext_id, only_minimal=None,
+            self, env_meta,
+            backend, vmodel, actual_model, parent_id, ext_id, only_minimal=None,
     ):
         logrec = self.logmsg(
             "debug",
-            "%(model)s.synchro_childs(%(id)s,%(xid)s)",
+            "%(model)s.synchro_childs(%(id)s,xid=%(xid)s)",
             model=vmodel,
             id=parent_id,
             xid=ext_id,
+            logrec=env_meta["logrec"]
         )
 
         Cache = self.env["ir.model.synchro.cache"]
@@ -2468,39 +2482,67 @@ class IrModelSynchro(models.Model):
         if "to_delete" in cls._fields:
             cls.search([(parent_id_name, "=", parent_id),
                         ("to_delete", "=", False)]).write({"to_delete": True})
-        for vals in rec_ids:
-            vals[":%s" % parent_id_name] = parent_id
-            if "to_delete" in cls._fields:
-                vals[":to_delete"] = False
-            try:
-                id = self.generic_synchro(
-                    cls,
-                    vals,
-                    channel_id=backend.id,
-                    jacket=True,
-                    only_minimal=only_minimal,
-                    no_del_child=True,
-                )
-                if id < 0:  # pragma: no cover
-                    self.logmsg(
-                        "warning",
-                        "Error %(id)s processing %(model)s",
-                        model=model_child,
-                        id=id,
+        processed_line_ctr = 0
+        for item in rec_ids:
+            if isinstance(item, dict):
+                vals = item
+                vals[":%s" % parent_id_name] = parent_id
+                if "to_delete" in cls._fields:
+                    vals[":to_delete"] = False
+                try:
+                    id = self.generic_synchro(
+                        cls,
+                        vals,
+                        channel_id=backend.id,
+                        chk_in_queue=True,
+                        jacket=True,
+                        only_minimal=only_minimal,
+                        no_del_child=True,
                     )
-                    return id
-                # commit every table to avoid too big transaction
-                # self.env.cr.commit()  # pylint: disable=invalid-commit
-            except BaseException as e:  # pragma: no cover
-                self.env.cr.rollback()  # pylint: disable=invalid-commit
+                except BaseException as e:  # pragma: no cover
+                    self.env.cr.rollback()  # pylint: disable=invalid-commit
+                    self.logmsg(
+                        "error",
+                        "Error %(e)s processing %(model)s(%(vals)s)",
+                        model=model_child,
+                        values=vals,
+                        logrec=logrec,
+                        ctx={"e": e},
+                    )
+                    return -12
+            elif isinstance(item, (int, long)):
+                try:
+                    id = self.trigger_one_record(
+                        actual_model, backend.prefix, item, chk_in_queue=True
+                    )
+                except BaseException as e:  # pragma: no cover
+                    self.env.cr.rollback()  # pylint: disable=invalid-commit
+                    self.logmsg(
+                        "error",
+                        "Error %(e)s processing %(model)s[%(vals)s]",
+                        model=model_child,
+                        values=item,
+                        logrec=logrec,
+                        ctx={"e": e},
+                    )
+                    return -12
+            else:
+                id = -12
                 self.logmsg(
-                    "error",
-                    "Error %(e)s processing %(model)s(%(vals)s)",
+                    "warning",
+                    "Error %(id)s processing %(model)s",
                     model=model_child,
-                    values=vals,
-                    ctx={"e": e},
+                    id=id,
+                    logrec=logrec,
                 )
-                return -12
+                return id
+            processed_line_ctr += 1
+            self.logmsg(
+                "debug",
+                "Child line %(id)s processed",
+                model=model_child,
+                id=id,
+            )
 
         if "to_delete" in cls._fields:
             recs = cls.search(
@@ -2512,7 +2554,12 @@ class IrModelSynchro(models.Model):
                     logrec=logrec,
                 )
                 recs.unlink()
-
+        if not processed_line_ctr:
+            self.logmsg(
+                "error",
+                "No child lines processed",
+                logrec=logrec,
+            )
         self.commit(self.env[actual_model], parent_id)
         return ext_id
 
@@ -2658,16 +2705,24 @@ class IrModelSynchro(models.Model):
             Cache.set_attr(backend.id, "LAST_MODEL", actual_model)
             Cache.set_attr(backend.id, "CTR", sequence)
         if loc_id == -7 and not has_state:  # pragma: no cover
-            self.logmsg("warning",
-                        "### No values passed(%s.%s)" % (vmodel, actual_model),
-                        logrec=logrec, id=loc_id)
+            self.logmsg(
+                "error",
+                "No values issued for (%s.%s)" % (vmodel, actual_model),
+                id=loc_id,
+                logrec=logrec
+            )
             return loc_id
         if vmodel in ("res.partner.shipping", "res.partner.invoice"):
             vals["active"] = self.diff_parent(vals, spec)
         if has_state:
             vals, erc = self.set_state_to_draft(env_meta, vmodel, rec, vals)
             if erc < 0:  # pragma: no cover
-                _logger.error("!%s! Returned error code!" % erc)
+                self.logmsg(
+                    "debug",
+                    "Cannot set state to draft",
+                    id=erc,
+                    logrec=logrec,
+                )
                 return erc
         if has_2delete:
             vals["to_delete"] = False
@@ -2706,6 +2761,7 @@ class IrModelSynchro(models.Model):
                         "debug",
                         "child lines mode set to 'N' as per backend",
                         model=vmodel,
+                        logrec=logrec,
                     )
                 loc_id = rec.id
                 if only_minimal:
@@ -2796,8 +2852,6 @@ class IrModelSynchro(models.Model):
             and "active" in vals
         ):
             rec.write({"active": vals["active"]})
-        # commit to avoid lost data in recursive write
-        # self.env.cr.commit()  # pylint: disable=invalid-commit
 
         if loc_id > 0 and not chk_in_queue and vmodel == "res.partner":
             child_vals = Cache.get_model_attr(
@@ -2828,8 +2882,9 @@ class IrModelSynchro(models.Model):
                 backend.id, model_child, "__%s_FP" % model_child,
                 rec.fiscal_position_id
             )
-        if env_meta["child_lines_mode"] != "N":
+        if not chk_in_queue and child_ids and env_meta["child_lines_mode"] != "N":
             sts = self.synchro_childs(
+                env_meta,
                 backend,
                 vmodel,
                 actual_model,
@@ -2839,12 +2894,6 @@ class IrModelSynchro(models.Model):
             )
             if sts < 1:
                 return sts - 100
-        elif model_child:
-            self.logmsg(
-                "warning",
-                "Child mode is %s, counterpart must send child records"
-                % env_meta["child_lines_mode"],
-            )
         elif rec and loc_id > 0 and "to_delete" in rec and not no_del_child:
             actual_cls.search([(parent_id_name, "=", rec[parent_id_name].id),
                                ("to_delete", "=", True)]).unlink()
@@ -2868,6 +2917,7 @@ class IrModelSynchro(models.Model):
             "%(model)s.commit([%(id)s])",
             model=vmodel,
             id=loc_id,
+            # logrec=env_meta["logrec"],
         )
         struct = self.env[actual_model].fields_get()
         Cache = self.env["ir.model.synchro.cache"]
@@ -3585,7 +3635,7 @@ class IrModelSynchro(models.Model):
                                     self.logmsg("debug", "", id=loc_id, logrec=logrec)
 
     @api.model
-    def trigger_one_record(self, ext_model, prefix, ext_id):
+    def trigger_one_record(self, ext_model, prefix, ext_id, chk_in_queue=False):
         if not prefix:
             return -7
         Cache = self.env["ir.model.synchro.cache"]
@@ -3609,7 +3659,8 @@ class IrModelSynchro(models.Model):
                 continue
             if ext_model != Cache.get_model_attr(backend.id, model, "BIND"):
                 continue
-            return self.pull_1_record(backend.id, model, ext_id)
+            return self.pull_1_record(
+                backend.id, model, ext_id, chk_in_queue=chk_in_queue)
         return -8
 
     def manage_module(self, vals):
