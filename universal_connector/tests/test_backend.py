@@ -548,6 +548,7 @@ class MyTest(SingleTransactionCase):
             vals = {
                 "vg7:%s" % k: v for k, v in order_data.items()
             }
+            vals[":origin"] = "test_backend"
             rec_id = Synchro.synchro("sale.order", vals)
             self.assertTrue(rec_id > 0)
             order = self.env[model].browse(rec_id)

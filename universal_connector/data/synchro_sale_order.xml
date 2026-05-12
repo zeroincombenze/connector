@@ -38,14 +38,6 @@
         <field name="model_id" ref="sale_order"/>
     </record>
 
-    <!--
-    <record forcecreate="1" id="sale_order_company_id" model="synchro.channel.model.fields">
-        <field name="name">company_id</field>
-        <field name="apply">set_global()</field>
-        <field name="model_id" ref="sale_order"/>
-    </record>
-    -->
-
     <record forcecreate="1" id="sale_order_carriage_condition_id" model="synchro.channel.model.fields">
         <field name="name">carriage_condition_id</field>
         <field name="apply">partner_info()</field>
@@ -61,6 +53,11 @@
     <record forcecreate="1" id="sale_order_client_order_ref" model="synchro.channel.model.fields">
         <field name="name">client_order_ref</field>
         <field name="counterpart_name">name</field>
+        <field name="model_id" ref="sale_order"/>
+    </record>
+
+    <record forcecreate="1" id="sale_order_origin" model="synchro.channel.model.fields">
+        <field name="name">origin</field>
         <field name="model_id" ref="sale_order"/>
     </record>
 

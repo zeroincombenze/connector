@@ -39,7 +39,7 @@ class ResPartner(models.Model):
         "Search Key", compute=_set_dim_name, store=True, readonly=True
     )
 
-    CONTRAINTS = [["id", "!=", "parent_id"]]
+    # CONTRAINTS = [["id", "!=", "parent_id"]]
 
     @api.model_cr_context
     def _auto_init(self):
@@ -92,16 +92,16 @@ class ResPartner(models.Model):
 
     @api.model
     def preprocess(self, backend, vals):
-        def set_vg7_id(vals):
-            for nm in ("customer_shipping_id", "vg7:id", "vg7_id"):
-                if vals.get(nm):
-                    if isinstance(vals[nm], basestring):
-                        vals[nm] = int(vals[nm])
-                    if vals.get("type"):
-                        vals[nm] = self.env["ir.model.synchro"].get_loc_ext_id_value(
-                            backend, "res.partner", vals[nm], spec=vals["type"]
-                        )
-            return vals
+        # def set_vg7_id(vals):
+        #     for nm in ("customer_shipping_id", "vg7:id", "vg7_id"):
+        #         if vals.get(nm):
+        #             if isinstance(vals[nm], basestring):
+        #                 vals[nm] = int(vals[nm])
+        #             if vals.get("type"):
+        #                 vals[nm] = self.env["ir.model.synchro"].get_loc_ext_id_value(
+        #                     backend, "res.partner", vals[nm], spec=vals["type"]
+        #                 )
+        #     return vals
 
         _logger.info(">>> preprocess(%s)" % vals)  # debug
         cache = self.env["ir.model.synchro.cache"]
@@ -109,7 +109,7 @@ class ResPartner(models.Model):
         spec = ""
         if cache.get_attr(backend.id, "PREFIX") == "vg7":
             if vals.get("type") == "delivery":
-                vals = set_vg7_id(vals)
+                # vals = set_vg7_id(vals)
                 for ext_ref in (
                     "vg7:piva",
                     "vg7:cf",
@@ -121,7 +121,7 @@ class ResPartner(models.Model):
                         del vals[ext_ref]
                 spec = vals["type"]
             elif vals.get("type") == "invoice":
-                vals = set_vg7_id(vals)
+                # vals = set_vg7_id(vals)
                 spec = vals["type"]
             else:
                 for ext_ref in ("parent_id", "type_inv_addr"):

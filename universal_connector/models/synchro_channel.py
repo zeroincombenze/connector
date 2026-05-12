@@ -35,9 +35,9 @@ class SynchroChannel(models.Model):
     _order = "sequence, id"
 
     name = fields.Char(
-        "Backend Name",
+        "Datasource Name",
         required=True,
-        help="Give a unique name for Backend",
+        help="Give a unique name for Datasource",
     )
     sequence = fields.Integer("Priority", default=16)
     active = fields.Boolean(string="Active", default=True)

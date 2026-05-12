@@ -158,7 +158,7 @@ import logging
 import os
 from datetime import datetime, timedelta
 import time
-import csv
+# import csv
 
 import requests
 import Levenshtein as lev
@@ -425,8 +425,8 @@ class IrModelSynchro(models.Model):
             else:
                 reqloglevel = int(loglevel2num.get(reqloglevel, "2"))
 
-        if isinstance(self.LOGLEVEL, basestring):
-            if self.LOGLEVEL.isdigit():  # pragma: no cover
+        if isinstance(self.LOGLEVEL, basestring):   # pragma: no cover
+            if self.LOGLEVEL.isdigit():
                 curloglevel = int(self.LOGLEVEL)
             else:
                 curloglevel = int(loglevel2num.get(self.LOGLEVEL, "2"))
@@ -1959,18 +1959,18 @@ class IrModelSynchro(models.Model):
         return min_vals
 
     def bind_record(self, struct, backend, vmodel, vals, constraints, ctx=None):
-        def add_constraints(domain, constraints):
-            for constr in constraints:
-                add_domain = False
-                if constr[0] in vals:
-                    constr[0] = vals[constr[0]]
-                    add_domain = True
-                if constr[-1] in vals:
-                    constr[-1] = vals[constr[-1]]
-                    add_domain = True
-                if add_domain:
-                    domain.append(constr)
-            return domain
+        # def add_constraints(domain, constraints):
+        #     for constr in constraints:
+        #         add_domain = False
+        #         if constr[0] in vals:
+        #             constr[0] = vals[constr[0]]
+        #             add_domain = True
+        #         if constr[-1] in vals:
+        #             constr[-1] = vals[constr[-1]]
+        #             add_domain = True
+        #         if add_domain:
+        #             domain.append(constr)
+        #     return domain
 
         Cache = self.env["ir.model.synchro.cache"]
         ctx = ctx or {}
@@ -2056,7 +2056,7 @@ class IrModelSynchro(models.Model):
                             valid_domain = True
                 if domain and valid_domain:
                     found_valid_key = True
-                    domain = add_constraints(domain, constraints)
+                    # domain = add_constraints(domain, constraints)
                     if ext_id_name and ext_id_name in vals and use_sync:
                         domain.append("|")
                         domain.append((ext_id_name, "=", False))
@@ -2319,68 +2319,68 @@ class IrModelSynchro(models.Model):
         )
         return {}
 
-    def get_csv_response(self, backend_id, vmodel, ext_id=False, mode=None):
-        self.logmsg(
-            "debug",
-            "%(model)s.get_csv_response(%(chid)s,%(xid)s):",
-            model=vmodel,
-            xid=ext_id,
-            ctx={"chid": backend_id},
-        )
-        Cache = self.env["ir.model.synchro.cache"]
-        endpoint = Cache.get_attr(backend_id, "EXCHANGE_PATH")
-        if not endpoint:
-            self.logmsg(
-                "error",
-                "Channel %(chid)s without connection parameters!",
-                ctx={"chid": backend_id},
-            )
-            return False
-        ext_model = Cache.get_model_attr(backend_id, vmodel, "BIND")
-        counterpart_pk = Cache.get_model_attr(
-            backend_id, vmodel, "KEY_ID", default="id")
-        if not ext_model:
-            _logger.error("Model %s not managed by external partner!" % vmodel)
-            return False
-        file_csv = os.path.expanduser(os.path.join(endpoint, ext_model + ".csv"))
-        self.logmsg(
-            "warning",
-            "%(model)s.csv_requests(%(csv)s)",
-            model=vmodel,
-            ctx={"csv": file_csv},
-        )
-        res = []
-        if not os.path.isfile(file_csv):
-            return res
-        with open(file_csv, "rb") as fd:
-            hdr = False
-            reader = csv.DictReader(fd, fieldnames=[], restkey="undef_name")
-            for line in reader:
-                row = line["undef_name"]
-                if not hdr:
-                    row_id = 0
-                    hdr = row
-                    continue
-                row_id += 1
-                row_res = {counterpart_pk: row_id}
-                for ix, value in enumerate(row):
-                    if (
-                        isinstance(value, basestring)
-                        and value.startswith("[")
-                        and value.endswith("]")
-                    ):
-                        value = eval(value)
-                    if hdr[ix] == counterpart_pk:
-                        if not value:
-                            continue
-                        row_id = value
-                if ext_id and row_res[counterpart_pk] != ext_id:
-                    continue
-                if ext_id:
-                    res = row_res
-                    break
-                res.append(row_res)
-        return res
+    # def get_csv_response(self, backend_id, vmodel, ext_id=False, mode=None):
+    #     self.logmsg(
+    #         "debug",
+    #         "%(model)s.get_csv_response(%(chid)s,%(xid)s):",
+    #         model=vmodel,
+    #         xid=ext_id,
+    #         ctx={"chid": backend_id},
+    #     )
+    #     Cache = self.env["ir.model.synchro.cache"]
+    #     endpoint = Cache.get_attr(backend_id, "EXCHANGE_PATH")
+    #     if not endpoint:
+    #         self.logmsg(
+    #             "error",
+    #             "Channel %(chid)s without connection parameters!",
+    #             ctx={"chid": backend_id},
+    #         )
+    #         return False
+    #     ext_model = Cache.get_model_attr(backend_id, vmodel, "BIND")
+    #     counterpart_pk = Cache.get_model_attr(
+    #         backend_id, vmodel, "KEY_ID", default="id")
+    #     if not ext_model:
+    #         _logger.error("Model %s not managed by external partner!" % vmodel)
+    #         return False
+    #     file_csv = os.path.expanduser(os.path.join(endpoint, ext_model + ".csv"))
+    #     self.logmsg(
+    #         "warning",
+    #         "%(model)s.csv_requests(%(csv)s)",
+    #         model=vmodel,
+    #         ctx={"csv": file_csv},
+    #     )
+    #     res = []
+    #     if not os.path.isfile(file_csv):
+    #         return res
+    #     with open(file_csv, "rb") as fd:
+    #         hdr = False
+    #         reader = csv.DictReader(fd, fieldnames=[], restkey="undef_name")
+    #         for line in reader:
+    #             row = line["undef_name"]
+    #             if not hdr:
+    #                 row_id = 0
+    #                 hdr = row
+    #                 continue
+    #             row_id += 1
+    #             row_res = {counterpart_pk: row_id}
+    #             for ix, value in enumerate(row):
+    #                 if (
+    #                     isinstance(value, basestring)
+    #                     and value.startswith("[")
+    #                     and value.endswith("]")
+    #                 ):
+    #                     value = eval(value)
+    #                 if hdr[ix] == counterpart_pk:
+    #                     if not value:
+    #                         continue
+    #                     row_id = value
+    #             if ext_id and row_res[counterpart_pk] != ext_id:
+    #                 continue
+    #             if ext_id:
+    #                 res = row_res
+    #                 break
+    #             res.append(row_res)
+    #     return res
 
     @api.model
     def model_env(self, cls):
@@ -2526,7 +2526,7 @@ class IrModelSynchro(models.Model):
                         ctx={"e": e},
                     )
                     return -12
-            else:
+            else:   # pragma: no cover
                 id = -12
                 self.logmsg(
                     "warning",
@@ -2610,7 +2610,7 @@ class IrModelSynchro(models.Model):
         self.assign_backend_loglevel(backend)
         env_meta["logrec"] = logrec = self.logmsg(
             "info",
-            "%(model)s.synchro(%(vals)s,%(x)s,%(y)s)",
+            "%(model)s.synchro(%(vals)s,%(x)s,%(y)s)  # 0.3.18",
             model=vmodel,
             values=vals,
             ctx={
@@ -3651,7 +3651,7 @@ class IrModelSynchro(models.Model):
             _logger.error("!-6! No channel found!")
             return -6
         self.logmsg(
-            "debug", "### assigned channel is %(chid)s", ctx={"chid": backend.id}
+            "debug", "Assigned backend is %(chid)s", ctx={"chid": backend.id}
         )
         Cache.open(backend=backend, ext_model=ext_model)
         for model in Cache.get_channel_models(backend.id):

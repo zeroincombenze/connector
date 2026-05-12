@@ -1,5 +1,5 @@
 ============================================================
-|icon| Universal Connector/Connettore universale 10.0.0.3.17
+|icon| Universal Connector/Connettore universale 10.0.0.3.18
 ============================================================
 
 .. |icon| image:: https://raw.githubusercontent.com/zeroincombenze/connector/10.0/universal_connector/static/description/icon.png
@@ -188,7 +188,12 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 ChangeLog History | Cronologia modifiche
 ----------------------------------------
 
-10.0.0.3.17 (2026-05-06)
+10.0.0.3.18 (2026-05-06)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [QUA] Test coverage 70% (3668: 1107+2561) [176 TestPoints]
+
+10.0.0.3.17 (2026-05-05)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 * [FIX] Interface fixes
@@ -266,16 +271,6 @@ ChangeLog History | Cronologia modifiche
 * [FIX] Purchase orders
 * [IMP] Test on vg7 suppliers
 * [QUA] Test coverage 43% (5092: 2879+2213) [1189 TestPoints] - quality rating 64 (target 100)
-
-10.0.0.3.6 (2024-06-24)
-~~~~~~~~~~~~~~~~~~~~~~~
-
-* [FIX] Double function after import
-* [FIX] No reset search keys
-* [FIX] Many2one fields from old Odoo with multiple matches
-* [IMP] Imported cvs/Excel: fields with None or \N are ignored
-* [IMP] Double product description and name / Descrizione prodotto doppia
-* [QUA] Test coverage 42% (5031: 2908+2123) [1051 TestPoints] - quality rating 59 (target 100)
 
 
 
