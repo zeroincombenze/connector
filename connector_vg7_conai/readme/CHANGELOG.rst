@@ -1,3 +1,9 @@
+10.0.0.1.16 (2026-05-23)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] Interface upgrade after VG7 updates
+* [IMP] Delivery document import / Importazione DdT
+
 10.0.0.1.11 (2019-12-03)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
