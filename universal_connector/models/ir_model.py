@@ -1566,6 +1566,7 @@ class IrModelSynchro(models.Model):
             list6 = []
             list8 = []
             list9 = []
+            high_prio = ["country_id", "company_id"]
 
             for ext_ref in fields:
                 if not Cache.is_struct(ext_ref):
@@ -1601,6 +1602,8 @@ class IrModelSynchro(models.Model):
                     if ext_ref in vals:
                         del vals[ext_ref]
                     return vals
+                if "apply_prod_by_name" in (apply4 or ""):
+                    high_prio.append("name")
 
             for ext_ref in fields:
                 ext_name, loc_name, is_foreign = self.name_from_ref(
@@ -1608,10 +1611,11 @@ class IrModelSynchro(models.Model):
                 )
                 if loc_name in (ext_id_name, "id"):
                     list1.append(ext_ref)
-                elif loc_name in ("country_id", "company_id"):
+                elif loc_name in high_prio:
                     list2.append(ext_ref)
                 elif loc_name in (
                         "partner_id",
+                        "product_id",
                         "street",
                 ):
                     list3.append(ext_ref)

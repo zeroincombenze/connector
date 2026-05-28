@@ -182,7 +182,7 @@
 
     <record forcecreate="1" id="stock_picking_package_preparation_line_to_delete" model="synchro.channel.model.fields">
         <field name="name">to_delete</field>
-        <field name="apply">false</field>
+        <field name="apply">False</field>
         <field name="model_id" ref="stock_picking_package_preparation_line"/>
     </record>
 
