@@ -26,6 +26,7 @@
         "data/synchro_picking.xml",
         "data/synchro_partner.xml",
         "data/synchro_product.xml",
+        "data/synchro_sale_order.xml",
     ],
     "external_dependencies": {"python": ["python_plus", "os0", "unidecode"]},
     "installable": True,

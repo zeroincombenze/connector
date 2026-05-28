@@ -337,9 +337,9 @@ class IrModelSynchroApply(models.Model):
             if product or "product_id" in vals:
                 product = product or self.env["product.product"].browse(
                     vals["product_id"])
-                vals[ext_ref] = product.uom_id.id
+                vals[loc_name] = product.uom_id.id
             else:
-                vals[ext_ref] = self.env.ref("product.product_uom_unit").id
+                vals[loc_name] = self.env.ref("product.product_uom_unit").id
         return vals
 
     def apply_category_uom(

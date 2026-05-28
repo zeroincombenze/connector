@@ -5,3 +5,4 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 #
 from . import conai
+from . import ir_model_synchro_apply
