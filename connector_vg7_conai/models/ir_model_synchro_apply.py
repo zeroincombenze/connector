@@ -30,5 +30,11 @@ class IrModelSynchroApply(models.Model):
         if (loc_name not in vals or not vals.get(loc_name)) and not vals.get(ext_ref):
             if "product_id" in vals:
                 product = self.env["product.product"].browse(vals["product_id"])
-                vals[loc_name] = product.conai_category_id.id
+                if product.conai_category_id:
+                    vals[ext_ref] = product.conai_category_id.id
+                elif product.vg7_id:
+                    prod_vals = self.env["ir.model.synchro"].get_dirmap(
+                        backend.id, "product.product").get_counterpart_response(
+                        ext_id=product.vg7_id)
+                    vals[ext_ref] = int(prod_vals.get("conai_id", "0"))
         return vals
