@@ -284,42 +284,6 @@ class IrModelSynchroApply(models.Model):
         if ext_ref in vals and isinstance(vals[ext_ref], basestring):
             vals[ext_ref] = vals[ext_ref].replace("\r", "")
         return vals
-    #
-    # def apply_account(
-    #     self,
-    #     backend,
-    #     vals,
-    #     loc_name,
-    #     ext_ref,
-    #     loc_ext_id_name,
-    #     vmodel,
-    #     default=None,
-    #     ctx=None,
-    #     product=None,
-    # ):
-    #     if (
-    #             (loc_name not in vals or not vals.get(loc_name))
-    #             and (product or "product_id" in vals)
-    #     ):
-    #         product = product or self.env["product.product"].browse(
-    #           vals["product_id"])
-    #         accounts = product.product_tmpl_id._get_product_accounts()
-    #         if accounts:
-    #             if self.is_purchase(vals, vmodel):
-    #                 vals[loc_name] = accounts["expense"].id
-    #             else:
-    #                 vals[loc_name] = accounts["income"].id
-    #         else:
-    #             if "journal_id" in vals:
-    #                 journal_id = vals["journal_id"]
-    #             else:
-    #                 journal_id = self.env["account.invoice"]._default_journal()
-    #             journal = self.env["account.journal"].browse(journal_id)
-    #             if self.is_purchase(vals, vmodel):
-    #                 vals[loc_name] = journal.default_debit_account_id.id
-    #             else:
-    #                 vals[loc_name] = journal.default_credit_account_id.id
-    #     return vals
 
     def apply_uom(
         self,
@@ -892,7 +856,11 @@ class IrModelSynchroApply(models.Model):
         default=None,
         ctx=None,
     ):
-        if loc_name == "product_id" and "name" in vals:
+        if (
+                loc_name == "product_id"
+                and "name" in vals
+                and not isinstance(vals.get(ext_ref), (int, long))
+        ):
             Product = self.env["product.product"]
             fragments = split_fragments(vals["name"])
             if len(fragments) == 0:
@@ -913,6 +881,21 @@ class IrModelSynchroApply(models.Model):
                 prods = Product.search([("default_code", "=", "MISC")])
             if prods:
                 vals[loc_name] = fields.first(prods).id
+        return vals
+
+    def apply_job_name(
+        self,
+        backend,
+        vals,
+        loc_name,
+        ext_ref,
+        loc_ext_id_name,
+        vmodel,
+        default=None,
+        ctx=None,
+    ):
+        if "name" in vals and vals.get(ext_ref):
+            vals["name"] = vals["name"] + "\n" + vals[ext_ref]
         return vals
 
     def apply_line_vals_from_prod(

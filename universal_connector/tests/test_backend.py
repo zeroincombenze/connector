@@ -446,12 +446,12 @@ class MyTest(SingleTransactionCase):
         model = "product.product"
         _logger.info(u"🎺 Import product from %s" % _u(xref))
         if backend.identity == "vg7":
-            rec_id = Synchro.trigger_one_record("products", backend.prefix, 11)
+            rec_id = Synchro.trigger_one_record("products", backend.prefix, 3000011)
             self.assertTrue(rec_id > 0)
             product = self.env[model].browse(rec_id)
             self.assertEqual("Prodotto Alpha", product.name)
             self.assertEqual("AA", product.default_code)
-            self.assertEqual(11, product.vg7_id)
+            self.assertEqual(3000011, product.vg7_id)
         # else:
         #     rec_id = Synchro.trigger_one_record(model, backend.prefix, 233)
         #     self.assertEqual(235, rec_id
