@@ -31,7 +31,7 @@ class IrModelSynchroApply(models.Model):
             if "product_id" in vals:
                 product = self.env["product.product"].browse(vals["product_id"])
                 if product.conai_category_id:
-                    vals[ext_ref] = product.conai_category_id.id
+                    vals[loc_name] = product.conai_category_id.id
                 elif product.vg7_id:
                     prod_vals = self.env["ir.model.synchro"].get_dirmap(
                         backend.id, "product.product").get_counterpart_response(
