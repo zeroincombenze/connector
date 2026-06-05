@@ -337,9 +337,9 @@ class IrModelSynchroApply(models.Model):
             if product or "product_id" in vals:
                 product = product or self.env["product.product"].browse(
                     vals["product_id"])
-                vals[ext_ref] = product.uom_id.id
+                vals[loc_name] = product.uom_id.id
             else:
-                vals[ext_ref] = self.env.ref("product.product_uom_unit").id
+                vals[loc_name] = self.env.ref("product.product_uom_unit").id
         return vals
 
     def apply_category_uom(
@@ -892,27 +892,46 @@ class IrModelSynchroApply(models.Model):
         default=None,
         ctx=None,
     ):
-        Product = self.env["product.product"]
-        field = ext_ref if vals.get(ext_ref) else "name"
-        fragments = split_fragments(vals[field])
-        if len(fragments) == 0:
-            prods = Product.search([("default_code", "=", "MISC")])
-        elif len(fragments) == 1:
-            prods = Product.search([("name", "ilike", fragments[0])])
-        else:
-            domain = []
-            for perms in itertools.permutations(fragments, len(fragments) - 1):
-                text = "%"
-                for perm in perms:
-                    text += (perm + "%")
-                domain.append(("name", "ilike", text))
-            for i in range(len(domain) - 1):
-                domain.insert(0, "|")
-            prods = Product.search(domain)
-        if not prods:
-            prods = Product.search([("default_code", "=", "MISC")])
-        if prods:
-            vals[ext_ref] = fields.first(prods).id
+        if (
+                loc_name == "product_id"
+                and "name" in vals
+                and not isinstance(vals.get(ext_ref), (int, long))
+        ):
+            Product = self.env["product.product"]
+            fragments = split_fragments(vals["name"])
+            if len(fragments) == 0:
+                prods = Product.search([("default_code", "=", "MISC")])
+            elif len(fragments) == 1:
+                prods = Product.search([("name", "ilike", fragments[0])])
+            else:
+                domain = []
+                for perms in itertools.permutations(fragments, len(fragments) - 1):
+                    text = "%"
+                    for perm in perms:
+                        text += (perm + "%")
+                    domain.append(("name", "ilike", text))
+                for i in range(len(domain) - 1):
+                    domain.insert(0, "|")
+                prods = Product.search(domain)
+            if not prods:
+                prods = Product.search([("default_code", "=", "MISC")])
+            if prods:
+                vals[loc_name] = fields.first(prods).id
+        return vals
+
+    def apply_job_name(
+        self,
+        backend,
+        vals,
+        loc_name,
+        ext_ref,
+        loc_ext_id_name,
+        vmodel,
+        default=None,
+        ctx=None,
+    ):
+        if "name" in vals and vals.get(ext_ref):
+            vals["name"] = vals["name"] + "\n" + vals[ext_ref]
         return vals
 
     def apply_line_vals_from_prod(
@@ -927,60 +946,61 @@ class IrModelSynchroApply(models.Model):
         ctx=None,
     ):
         if vals.get("product_id"):
-            Product = self.env["product.product"]
-            product = Product.browse(vals["product_id"])
-            if not vals.get("product_uom"):
-                vals = self.apply_uom(backend,
-                                      vals,
-                                      "product_uom",
-                                      None,
-                                      None,
-                                      vmodel,
-                                      product=product)
-            if (
-                    vmodel == "purchase.order.line"
-                    and not vals.get("taxes_id")
-            ):
-                vals = self.apply_tax(backend,
-                                      vals,
-                                      "taxes_id",
-                                      None,
-                                      None,
-                                      vmodel,
-                                      product=product)
-            elif (
-                    vmodel == "sale.order.line"
-                    and not vals.get("tax_id")
-            ):
-                vals = self.apply_tax(backend,
-                                      vals,
-                                      "tax_id",
-                                      None,
-                                      None,
-                                      vmodel,
-                                      product=product)
-            elif (
-                    vmodel == "account.invoice.line"
-                    and not vals.get("invoice_line_tax_ids")
-            ):
-                vals = self.apply_tax(backend,
-                                      vals,
-                                      "invoice_line_tax_ids",
-                                      None,
-                                      None,
-                                      vmodel,
-                                      product=product)
-            elif (
-                    vmodel == "stock.picking.package.preparation.line"
-                    and not vals.get("tax_ids")
-            ):
-                vals = self.apply_tax(backend,
-                                      vals,
-                                      "tax_ids",
-                                      None,
-                                      None,
-                                      vmodel,
-                                      product=product)
+            # Product = self.env["product.product"]
+            # product = Product.browse(vals["product_id"])
+            # if not vals.get("product_uom"):
+            #     vals = self.apply_uom(backend,
+            #                           vals,
+            #                           "product_uom",
+            #                           None,
+            #                           None,
+            #                           vmodel,
+            #                           product=product)
+            # if (
+            #         vmodel == "purchase.order.line"
+            #         and not vals.get("taxes_id")
+            # ):
+            #     vals = self.apply_tax(backend,
+            #                           vals,
+            #                           "taxes_id",
+            #                           None,
+            #                           None,
+            #                           vmodel,
+            #                           product=product)
+            # elif (
+            #         vmodel == "sale.order.line"
+            #         and not vals.get("tax_id")
+            # ):
+            #     vals = self.apply_tax(backend,
+            #                           vals,
+            #                           "tax_id",
+            #                           None,
+            #                           None,
+            #                           vmodel,
+            #                           product=product)
+            # elif (
+            #         vmodel == "account.invoice.line"
+            #         and not vals.get("invoice_line_tax_ids")
+            # ):
+            #     vals = self.apply_tax(backend,
+            #                           vals,
+            #                           "invoice_line_tax_ids",
+            #                           None,
+            #                           None,
+            #                           vmodel,
+            #                           product=product)
+            # elif (
+            #         vmodel == "stock.picking.package.preparation.line"
+            #         and not vals.get("tax_ids")
+            # ):
+            #     vals = self.apply_tax(backend,
+            #                           vals,
+            #                           "tax_ids",
+            #                           None,
+            #                           None,
+            #                           vmodel,
+            #                           product=product)
+            pass
         return vals
 
     def apply_product_vg7_naming(
