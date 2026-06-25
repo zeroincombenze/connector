@@ -92,16 +92,16 @@ class SynchroChannel(models.Model):
     tracelevel = fields.Selection(
         [
             ("0", "No Trace"),
-            ("1", "Main functions"),
-            ("2", "Main + Inner functions"),
-            ("3", "Statements"),
-            ("4", "All"),
+            ("1", "Error (Only error messages)"),
+            ("2", "Warning (Main functions)"),
+            ("3", "Info (All functions)"),
+            ("4", "Debug (Trace all)"),
         ],
         string="Trace Level",
-        default=False,
-        help="Trace data in log. Warning! Use this feature with caution; "
-        "all sent data will be recorded in the log file."
-        "This feature must be used only to debug handshake",
+        default="2",
+        help="Trace data in log.\nWarning! Use this feature with caution; "
+        "all data records will be recorded in the log file,"
+        " so this feature can slow data interchange.",
     )
     method = fields.Selection(
         [

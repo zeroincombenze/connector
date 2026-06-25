@@ -495,25 +495,28 @@ class IrModelSynchro(models.Model):
         return ""
 
     @api.model
-    def get_loc_ext_id_name(self, backend_id, model, spec=None, force=None):
+    def get_ext_id_name(self, backend_id, model, spec=None, force=None):
         """Get local name for external reference
         """
         Cache = self.env["ir.model.synchro.cache"]
         vmodel = self.get_vmodel(model, spec)
         Cache.open(model=vmodel)
+        prefix = Cache.get_attr(
+            backend_id, "PREFIX") or self.env["synchro.channel"].browse(
+            backend_id).prefix
         if vmodel in ("res.partner.supplier", "res.partner.bank.company"):
             loc_ext_id_name = Cache.get_model_attr(
                 backend_id,
                 vmodel,
                 "EXT_ID",
-                default="%s2_id" % Cache.get_attr(backend_id, "PREFIX"),
+                default="%s2_id" % prefix,
             )
         else:
             loc_ext_id_name = Cache.get_model_attr(
                 backend_id,
                 vmodel,
                 "EXT_ID",
-                default="%s_id" % Cache.get_attr(backend_id, "PREFIX"),
+                default="%s_id" % prefix,
             )
         return loc_ext_id_name
 
@@ -523,6 +526,9 @@ class IrModelSynchro(models.Model):
         vmodel = self.get_vmodel(model, spec)
         Cache.open(model=vmodel)
         offset = Cache.get_model_attr(backend_id, vmodel, "ID_OFFSET", default=0)
+        # Workaround
+        if not offset and vmodel == "res.partner.shipping":
+            offset = 100000000
         if ext_id < offset:
             return ext_id + offset
         return ext_id
@@ -571,7 +577,7 @@ class IrModelSynchro(models.Model):
         Cache = self.env["ir.model.synchro.cache"]
         saved_ext_id = None
         if backend_id:
-            ext_id_name = self.get_loc_ext_id_name(backend_id, vmodel)
+            ext_id_name = self.get_ext_id_name(backend_id, vmodel)
             if ext_id_name in vals:
                 saved_ext_id = vals[ext_id_name]
         actual_model = self.get_actual_model(vmodel, only_name=True)
@@ -591,7 +597,7 @@ class IrModelSynchro(models.Model):
         backend_id = backend.id
         Cache = self.env["ir.model.synchro.cache"]
         actual_model = self.get_actual_model(vmodel, only_name=True)
-        loc_ext_id_name = self.get_loc_ext_id_name(backend_id, vmodel)
+        loc_ext_id_name = self.get_ext_id_name(backend_id, vmodel)
         for field in vals.copy():
             if field not in rec:    # pragma: no cover
                 del vals[field]
@@ -1065,7 +1071,7 @@ class IrModelSynchro(models.Model):
         ctx = ctx or {}
         Cache = self.env["ir.model.synchro.cache"]
         vmodel = self.get_vmodel(actual_model, spec)
-        loc_ext_id_name = self.get_loc_ext_id_name(backend_id, vmodel)
+        loc_ext_id_name = self.get_ext_id_name(backend_id, vmodel)
         suppl_key = Cache.get_struct_model_attr(actual_model, "SUPPL_KEY")
         cls = self.env[vmodel]
         vals = {key_name: value}
@@ -1213,7 +1219,7 @@ class IrModelSynchro(models.Model):
             return False
         suppl_key = Cache.get_struct_model_attr(actual_model, "SUPPL_KEY")
         vmodel = self.get_vmodel(actual_model, spec)
-        loc_ext_id_name = self.get_loc_ext_id_name(backend_id, vmodel)
+        loc_ext_id_name = self.get_ext_id_name(backend_id, vmodel)
         domain = [(name, mode, value)]
         if name not in (counterpart_pk, loc_ext_id_name):
             if Cache.get_struct_model_attr(
@@ -1302,7 +1308,7 @@ class IrModelSynchro(models.Model):
     ):
         """Value is a local ID or an external ID (is_foreign=True)"""
         Cache = self.env["ir.model.synchro.cache"]
-        loc_ext_id_name = self.get_loc_ext_id_name(
+        loc_ext_id_name = self.get_ext_id_name(
             backend.id, actual_model, spec=spec, force=True
         )
         new_value = False
@@ -1475,7 +1481,7 @@ class IrModelSynchro(models.Model):
         Cache = self.env["ir.model.synchro.cache"]
         pfx_depr = "%s_" % Cache.get_attr(backend_id, "PREFIX")
         pfx_ext = "%s:" % Cache.get_attr(backend_id, "PREFIX")
-        loc_ext_id_name = self.get_loc_ext_id_name(backend_id, vmodel, force=True)
+        loc_ext_id_name = self.get_ext_id_name(backend_id, vmodel, force=True)
         counterpart_pk = Cache.get_model_attr(
             backend_id, vmodel, "KEY_ID", default="id")
         if ext_ref == loc_ext_id_name:
@@ -1854,7 +1860,7 @@ class IrModelSynchro(models.Model):
         backend_id = backend.id
         Cache = self.env["ir.model.synchro.cache"]
         actual_model = self.get_actual_model(vmodel, only_name=True)
-        loc_ext_id_name = self.get_loc_ext_id_name(backend_id, vmodel)
+        loc_ext_id_name = self.get_ext_id_name(backend_id, vmodel)
         counterpart_pk = Cache.get_model_attr(
             backend_id, vmodel, "KEY_ID", default="id")
         child_ids = Cache.get_struct_model_attr(
@@ -2105,7 +2111,7 @@ class IrModelSynchro(models.Model):
         actual_model = self.get_actual_model(vmodel, only_name=True)
         IrApply = self.env["ir.model.synchro.apply"]
         Cache = self.env["ir.model.synchro.cache"]
-        loc_ext_id_name = self.get_loc_ext_id_name(backend.id, vmodel)
+        loc_ext_id_name = self.get_ext_id_name(backend.id, vmodel)
         suppl_key = Cache.get_struct_model_attr(actual_model, "SUPPL_KEY")
         for field in Cache.get_struct_attr(actual_model).keys():
             if not Cache.is_struct(field):
@@ -2202,7 +2208,7 @@ class IrModelSynchro(models.Model):
             model=vmodel,
             ctx={"x": Cache.get_struct_model_attr(actual_model, "SKEYS") or []},
         )
-        loc_ext_id_name = self.get_loc_ext_id_name(backend_id, vmodel)
+        loc_ext_id_name = self.get_ext_id_name(backend_id, vmodel)
         if loc_ext_id_name:
             use_sync = Cache.get_struct_model_attr(actual_model, loc_ext_id_name)
         else:
@@ -2654,7 +2660,7 @@ class IrModelSynchro(models.Model):
             return self.get_csv_response(backend_id, vmodel, ext_id, mode=mode)
 
     def create_ext_id(self, backend, actual_model, loc_id, ext_id):
-        ext_id_name = self.get_loc_ext_id_name(backend.id, actual_model, force=True)
+        ext_id_name = self.get_ext_id_name(backend.id, actual_model, force=True)
         self.env["ir.model.synchro.data"].create(
             {
                 "model": actual_model,
@@ -2922,7 +2928,7 @@ class IrModelSynchro(models.Model):
         )
         if has_sequence and "sequence" in vals:
             sequence = vals["sequence"]
-        ext_id_name = self.get_loc_ext_id_name(backend_id, vmodel)
+        ext_id_name = self.get_ext_id_name(backend_id, vmodel)
         ext_id = vals.get(ext_id_name)
 
         loc_id, rec = browse_from_id(actual_cls, vals)
@@ -3293,7 +3299,7 @@ class IrModelSynchro(models.Model):
                 .with_context({"lang": self.env.user.lang})
                 .browse(loc_id)
             )
-            loc_ext_id_name = self.get_loc_ext_id_name(backend_id, vmodel)
+            loc_ext_id_name = self.get_ext_id_name(backend_id, vmodel)
             if loc_ext_id_name and hasattr(rec, loc_ext_id_name):
                 self.pull_1_record(backend_id, vmodel, getattr(rec, loc_ext_id_name))
 
@@ -3379,7 +3385,7 @@ class IrModelSynchro(models.Model):
                     channel_id, vmodel, "BIND"
                 ):
                     continue
-                loc_ext_id_name = self.get_loc_ext_id_name(channel_id, vmodel)
+                loc_ext_id_name = self.get_ext_id_name(channel_id, vmodel)
                 actual_model = self.get_actual_model(vmodel, only_name=True)
                 self.logmsg("info", "### Checking %s for unlink" % vmodel)
                 cls = self.env[vmodel]
@@ -3637,7 +3643,7 @@ class IrModelSynchro(models.Model):
                     datas = [datas]
                 if len(datas) and isinstance(datas[0], (int, long)):
                     datas.sort()
-                ext_id_name = self.get_loc_ext_id_name(channel_id, vmodel)
+                ext_id_name = self.get_ext_id_name(channel_id, vmodel)
                 for item in datas:
                     if datetime.now() > datetime_stop:
                         break
@@ -3826,7 +3832,7 @@ class IrModelSynchro(models.Model):
                 channel = self.env["synchro.channel"].browse(backend_id)
                 cache.open(model=model, cls=cls, backend=channel)
                 identity = cache.get_attr(backend_id, "IDENTITY")
-                loc_ext_id_name = self.get_loc_ext_id_name(backend_id, model)
+                loc_ext_id_name = self.get_ext_id_name(backend_id, model)
                 if loc_ext_id_name and hasattr(rec, loc_ext_id_name):
                     vmodel = model
                     ext_id = getattr(rec, loc_ext_id_name)
@@ -3846,7 +3852,7 @@ class IrModelSynchro(models.Model):
                         self.pull_1_record(backend_id, vmodel, ext_id)
                     if identity == "vg7" and model == "res.partner":
                         vmodel = "res.partner.supplier"
-                        loc_ext_id_name = self.get_loc_ext_id_name(backend_id, vmodel)
+                        loc_ext_id_name = self.get_ext_id_name(backend_id, vmodel)
                         if loc_ext_id_name and cache.get_struct_model_attr(
                             model, loc_ext_id_name
                         ):

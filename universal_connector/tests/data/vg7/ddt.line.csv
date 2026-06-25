@@ -1,3 +1,3 @@
-id,ddt_id,descrizione,product_id,quantita,prezzo_unitario,_why
-2311,231,Prodotto Alpha - Azalea,11,50.0,1.05,Price with tax amount
-3101,310,Prodotto Beta - Begonia,12,60.0,5.35,Price with tax amount
+id,ddt_id,descrizione,product_id,quantita,prezzo_unitario,order_row_id,_why
+2311,231,Prodotto Alpha - Azalea,11,50.0,1.05,1311,Price with tax amount
+2312,232,Prodotto Beta - Begonia,12,100.0,5.36,1321,Price with tax amount

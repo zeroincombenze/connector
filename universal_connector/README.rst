@@ -239,40 +239,6 @@ ChangeLog History | Cronologia modifiche
 * [IMP] Some internal field renamed
 * [QUA] Test coverage 64% (5068: 1832+3236) [1376 TestPoints] - quality rating 82 (target 100)
 
-10.0.0.3.8 (2024-07-01)
-~~~~~~~~~~~~~~~~~~~~~~~
-
-* [FIX] Search for shipping and invoice addresses / Migliorie ricerca indirizzi di spedizione e fatturazione
-* [FIX] Tax, account, uom in order lines / IVA, conto e um nelle righe ordini
-* [FIX] Flag is_company in res.partner / Indicatore azienda in nominativi
-* [IMP] uom from vg7 purchase orders
-* [QUA] Test coverage 64% (5084: 1855+3229) [1253 TestPoints] - quality rating 78 (target 100)
-
-10.0.0.3.7 (2024-06-27)
-~~~~~~~~~~~~~~~~~~~~~~~
-
-* [FIX] apply date/time functions
-* [FIX] Purchase orders
-* [IMP] Test on vg7 suppliers
-* [QUA] Test coverage 43% (5092: 2879+2213) [1189 TestPoints] - quality rating 64 (target 100)
-
-10.0.0.3.6 (2024-06-24)
-~~~~~~~~~~~~~~~~~~~~~~~
-
-* [FIX] Double function after import
-* [FIX] No reset search keys
-* [FIX] Many2one fields from old Odoo with multiple matches
-* [IMP] Imported cvs/Excel: fields with None or \N are ignored
-* [IMP] Double product description and name / Descrizione prodotto doppia
-* [QUA] Test coverage 42% (5031: 2908+2123) [1051 TestPoints] - quality rating 59 (target 100)
-
-10.0.0.3.5 (2024-06-20)
-~~~~~~~~~~~~~~~~~~~~~~~
-
-* [IMP] This is the 1.st application with 1000+ test points!
-* [FIX] No price with VAT from VF7 order / Prezzo ordine VG7 senza scorporo IVA
-* [QUA] Test coverage 33% (4993: 3342+1651) [1037 TestPoints] - quality rating 54 (target 100)
-
 
 
 Credits | Ringraziamenti
@@ -322,7 +288,7 @@ La distribuzione `Zeroincombenze® <https://www.zeroincombenze.it/>`__ è proget
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2026-04-22
+Last Update / Ultimo aggiornamento: 2026-06-25
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status

@@ -1,3 +1,4 @@
-id,order_number,customer_id,customer_shipping_id,date,order_state,payment_id,iva,name
-131,240131,101,101,2024-05-15,2,31,22,telefonico
-210,240210,101,101,2024-05-31,2,30,22,website
+order_id,order_number,customer_id,customer_shipping_id,date,order_state,billing_payment_id,iva,billing_name
+131,240131,101,1,2024-05-15,2,31,22,website
+132,240132,109,9,2024-05-31,2,31,22,website
+210,240210,101,1,2024-05-31,2,30,22,website

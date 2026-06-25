@@ -514,11 +514,13 @@
         <field name="model_id" ref="res_partner_invoice"/>
     </record>
 
+    <!--
     <record forcecreate="1" id="res_partner_invoice_lang" model="synchro.channel.model.fields">
         <field name="name">lang</field>
         <field name="apply">it_IT</field>
         <field name="model_id" ref="res_partner_invoice"/>
     </record>
+    -->
 
     <record forcecreate="1" id="res_partner_supplier_city" model="synchro.channel.model.fields">
         <field name="name">city</field>
