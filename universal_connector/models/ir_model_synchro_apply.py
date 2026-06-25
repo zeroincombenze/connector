@@ -355,8 +355,8 @@ class IrModelSynchroApply(models.Model):
                 ("description", "=", value),
                 ("type_tax_use", "=", "sale")], limit=1)
 
+        tax = False
         if loc_name not in vals or not vals.get(loc_name):
-            tax = False
             if (
                     ext_ref.startswith("vg7")
                     and ext_ref in vals
