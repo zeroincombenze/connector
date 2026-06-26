@@ -862,7 +862,13 @@ class IrModelSynchroApply(models.Model):
                 and not isinstance(vals.get(ext_ref), (int, long))
         ):
             Product = self.env["product.product"]
-            fragments = split_fragments(vals["name"])
+            fragments = False
+            for ln in vals["name"].split("\n"):
+                if "Nome prodotto:" in ln:
+                    fragments = split_fragments(ln.split(":", 1))
+                    break
+            if not fragments:
+                fragments = split_fragments(vals["name"])
             if len(fragments) == 0:
                 prods = Product.search([("default_code", "=", "MISC")])
             elif len(fragments) == 1:

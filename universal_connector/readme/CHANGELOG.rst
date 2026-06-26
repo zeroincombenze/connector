@@ -1,3 +1,10 @@
+10.0.0.3.18 (2026-06-26)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [FIX] Sometimes wrong shipping address
+* [FIX] Sometimes cannot search for product
+* [QUA] Test coverage 70% (3668: 1107+2561) [176 TestPoints]
+
 10.0.0.3.17 (2026-05-06)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 

@@ -1198,19 +1198,19 @@ class IrModelSynchro(models.Model):
         new_value = False
         if not value_id or value_id < 1:
             return new_value
+        vmodel = self.get_vmodel(actual_model, spec)
         logrec = self.logmsg(
             "debug",
             "%(model)s%(spec)s.get_foreign_ref(%(xid)s)",
-            model=actual_model,
+            model=vmodel,
             xid=value_id,
             ctx={"spec": "." + spec if spec else ""},
         )
-        vmodel = self.get_vmodel(actual_model, spec)
         ext_value = value_id
         if is_foreign:
             if spec:
                 value_id = self.get_loc_ext_id_value(
-                    backend, actual_model, value_id, spec=spec
+                    backend, vmodel, value_id, spec=spec
                 )
             domain = [(ext_id_name, "=", value_id)]
             rec, maybe_dif = self.do_search(actual_model, domain, only_id=True)
@@ -1271,10 +1271,11 @@ class IrModelSynchro(models.Model):
         relation = struct[name]["relation"]
         if not relation:
             raise RuntimeError(_("No relation for field %s of %s" % (name, vmodel)))
+        vrelation = self.get_vmodel(relation, spec)
         logrec = self.logmsg(
             "debug",
             "%(model)s%(spec)s.get_foreign_value(%(name)s,%(vals)s)",
-            model=relation,
+            model=vrelation,
             values=value,
             xid=value,
             ctx={
@@ -1286,7 +1287,7 @@ class IrModelSynchro(models.Model):
             # Avoid recursive request, i.e. res.partner
             if isinstance(value, int):
                 queue = Cache.get_attr(backend.id, "IN_QUEUE")
-                queue.append((relation, value))
+                queue.append((vrelation, value))
                 Cache.set_attr(backend.id, "IN_QUEUE", queue)
             return []
         if not Cache.is_manageable(relation):
