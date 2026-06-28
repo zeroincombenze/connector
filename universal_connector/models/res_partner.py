@@ -13,11 +13,6 @@ from odoo import api, fields, models
 
 _logger = logging.getLogger(__name__)
 
-try:
-    from unidecode import unidecode
-except ImportError as err:
-    _logger.debug(err)
-
 
 class ResPartner(models.Model):
     _name = "res.partner"
@@ -28,11 +23,11 @@ class ResPartner(models.Model):
     def _set_dim_name(self):
         for partner in self:
             if partner.name:
-                partner.dim_name = self.env["ir.model.synchro"].dim_text(partner.name)
+                partner.dim_name = self.env["ir.model.synchro.cache"].hashname(
+                    partner.name)
             elif partner.parent_id:
-                partner.dim_name = self.env["ir.model.synchro"].dim_text(
-                    partner.parent_id.name
-                )
+                partner.dim_name = self.env["ir.model.synchro.cache"].hashname(
+                    partner.parent_id.name)
 
     vg72_id = fields.Integer("VG7 ID (2.nd)", copy=False)
     dim_name = fields.Char(
@@ -47,21 +42,6 @@ class ResPartner(models.Model):
         for prefix in ("vg7", "vg72", "oe7", "oe8", "oe10"):
             self.env["ir.model.synchro"]._build_unique_index(self._inherit, prefix)
         return res
-
-    def wep_text(self, text):
-        if text:
-            return unidecode(text).strip()
-        return text
-
-    def dim_text(self, text):
-        text = self.wep_text(text)
-        if text:
-            res = ""
-            for ch in text:
-                if ch.isalnum():
-                    res += ch.lower()
-            text = res
-        return text
 
     @api.model
     def shirt_vals(self, vals, ext_ref):
@@ -262,58 +242,12 @@ class ResPartnerShipping(models.Model):
     _name = "res.partner.shipping"
     _inherit = "res.partner"
 
-    # CONTRAINTS = ["id", "!=", "parent_id"]
-
-    # @api.model
-    # def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,
-    #             no_del_child=False):
-    #     # vals = self.env["res.partner"].shirt_vals(vals, "vg7:shipping")
-    #     vals[":type"] = "delivery"
-    #     return self.env["ir.model.synchro"].synchro(
-    #         self,
-    #         vals,
-    #         chk_in_queue=chk_in_queue,
-    #         only_minimal=only_minimal,
-    #         no_deep_fields=no_deep_fields,
-    #         no_del_child=no_del_child,
-    #     )
-
 
 class ResPartnerInvoice(models.Model):
     _name = "res.partner.invoice"
     _inherit = "res.partner"
 
-    # CONTRAINTS = ["id", "!=", "parent_id"]
-
-    # @api.model
-    # def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,
-    #             no_del_child=False):
-    #     # vals = self.env["res.partner"].shirt_vals(vals, "vg7:billing")
-    #     vals[":type"] = "invoice"
-    #     return self.env["ir.model.synchro"].synchro(
-    #         self,
-    #         vals,
-    #         chk_in_queue=chk_in_queue,
-    #         only_minimal=only_minimal,
-    #         no_deep_fields=no_deep_fields,
-    #         no_del_child=no_del_child,
-    #     )
-
 
 class ResPartnerSupplier(models.Model):
     _name = "res.partner.supplier"
     _inherit = "res.partner"
-
-    # @api.model
-    # def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,
-    #             no_del_child=False):
-    #     vals["supplier"] = True
-    #     vals[":type"] = "contact"
-    #     return self.env["ir.model.synchro"].synchro(
-    #         self,
-    #         vals,
-    #         chk_in_queue=chk_in_queue,
-    #         only_minimal=only_minimal,
-    #         no_deep_fields=no_deep_fields,
-    #         no_del_child=no_del_child,
-    #     )

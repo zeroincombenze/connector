@@ -13,11 +13,6 @@ from odoo import api, fields, models
 
 _logger = logging.getLogger(__name__)
 
-try:
-    from unidecode import unidecode
-except ImportError as err:
-    _logger.debug(err)
-
 
 class ProductTemplate(models.Model):
     _name = "product.template"
@@ -27,7 +22,7 @@ class ProductTemplate(models.Model):
     @api.depends("name")
     def _set_dim_name(self):
         for product in self:
-            product.dim_name = self.env["ir.model.synchro"].dim_text(product.name)
+            product.dim_name = self.env["ir.model.synchro.cache"].hashname(product.name)
 
     dim_name = fields.Char(
         "Search Key", compute=_set_dim_name, store=True, readonly=True
@@ -44,21 +39,6 @@ class ProductTemplate(models.Model):
             self.env["ir.model.synchro"]._build_unique_index(self._inherit, prefix)
         return res
 
-    def wep_text(self, text):
-        if text:
-            return unidecode(text).strip()
-        return text
-
-    def dim_text(self, text):
-        text = self.wep_text(text)
-        if text:
-            res = ""
-            for ch in text:
-                if ch.isalnum():
-                    res += ch.lower()
-            text = res
-        return text
-
     @api.multi
     def pull_record(self):
         for product in self.product_variant_ids:
@@ -73,7 +53,7 @@ class ProductProduct(models.Model):
     @api.depends("name")
     def _set_dim_name(self):
         for product in self:
-            product.dim_name = self.env["ir.model.synchro"].dim_text(product.name)
+            product.dim_name = self.env["ir.model.synchro.cache"].hashname(product.name)
 
     dim_name = fields.Char(
         "Search Key", compute=_set_dim_name, store=True, readonly=True
@@ -85,21 +65,6 @@ class ProductProduct(models.Model):
         for prefix in ("vg7", "oe7", "oe8", "oe10"):
             self.env["ir.model.synchro"]._build_unique_index(self._inherit, prefix)
         return res
-
-    def wep_text(self, text):
-        if text:
-            return unidecode(text).strip()
-        return text
-
-    def dim_text(self, text):
-        text = self.wep_text(text)
-        if text:
-            res = ""
-            for ch in text:
-                if ch.isalnum():
-                    res += ch.lower()
-            text = res
-        return text
 
     @api.model
     def preprocess(self, backend, vals):

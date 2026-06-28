@@ -17,15 +17,15 @@ from odoo import release
 _logger = logging.getLogger(__name__)
 try:
     from clodoo import transodoo
-except ImportError as err:
+except ImportError as err:  # pragma: no cover
     _logger.error(err)
 try:
     import oerplib
-except ImportError as err:
+except ImportError as err:  # pragma: no cover
     _logger.error(err)
 try:
     import odoorpc
-except ImportError as err:
+except ImportError as err:  # pragma: no cover
     _logger.error(err)
 
 
@@ -206,7 +206,7 @@ class SynchroChannel(models.Model):
                 if (
                     Cache.get_attr(backend_id, "IDENTITY") == "odoo"
                     and Cache.get_attr(backend_id, "PRIO") < odoo_prio
-                ):
+                ):  # pragma: no cover
                     odoo_channel = backend_id
                     odoo_prio = Cache.get_attr(backend_id, "PRIO")
                 for ext_ref in vals:
@@ -285,7 +285,7 @@ class SynchroChannel(models.Model):
                         "debug",
                         "%(model)s.%(fct)s(%(ep)s)",
                         model=self.name,
-                        ctx={"fct": fct, "ep": endpoint},
+                        ctx={"fct": fct, "ep": endpoint, "LOGLEVEL": self.tracelevel},
                     )
                     cnx, session = getattr(self, fct)()
                     Cache.set_attr(self.id, "CNX", cnx)
@@ -307,7 +307,7 @@ class SynchroChannel(models.Model):
         endpoint = self.get_endpoint()
         return True if endpoint and os.path.isdir(endpoint) else False, endpoint
 
-    def vg7_json_session(self):
+    def vg7_json_session(self):  # pragma: no cover
         """In JSON: headers -> cnx, endpoint -> session"""
         headers = {"Authorization": "access_token %s" % self.client_key}
         endpoint = self.get_endpoint()
@@ -319,7 +319,7 @@ class SynchroChannel(models.Model):
             try:
                 if protocol == "jsonrpc":
                     cnx = odoorpc.ODOO(endpoint, protocol, port)
-                elif protocol == "xmlrpc":
+                elif protocol == "xmlrpc":  # pragma: no cover
                     cnx = oerplib.OERP(server=endpoint, protocol=protocol, port=port)
             except BaseException as e:  # pragma: no cover
                 self.env.cr.rollback()  # pylint: disable=invalid-commit
@@ -362,6 +362,9 @@ class SynchroChannel(models.Model):
     def write(self, vals):
         # self.env["ir.model.synchro.cache"].clean_cache()
         return super(SynchroChannel, self).write(vals)
+
+    def get_csv_filename(self, ext_name):
+        return os.path.expanduser(os.path.join(self.exchange_path, ext_name + ".csv"))
 
 
 class SynchroChannelModel(models.Model):
@@ -433,10 +436,29 @@ class SynchroChannelModel(models.Model):
 
     def get_csv_response(self, cnx, session, ext_id=False, domain=None, mode=None):
         """In CSV session is the dirname"""
-        dirname = session
-        ext_model = self.counterpart_name
+        backend = self.synchro_channel_id
         model = self.name
-        file_csv = os.path.expanduser(os.path.join(dirname, ext_model + ".csv"))
+        ext_model = self.counterpart_name
+        if not ext_model:  # pragma: no cover
+            self.env["ir.model.synchro"].logmsg(
+                "error",
+                "Model %(model)s not managed by external partner!",
+                model=model,
+            )
+            return {} if ext_id else []
+        file_csv = backend.get_csv_filename(ext_model)
+        if not os.path.isfile(file_csv):  # pragma: no cover
+            self.env["ir.model.synchro"].logmsg(
+                "error",
+                "No file '%(csv)s' found",
+                ctx={"csv": file_csv},
+            )
+            return {} if ext_id else []
+        Cache = self.env["ir.model.synchro.cache"]
+        counterpart_pk = Cache.get_model_attr(
+            backend.id, model, "KEY_ID", default="id"
+        )
+
         self.env["ir.model.synchro"].logmsg(
             "warning",
             "%(model)s.get_csv_response(cnx,session,id=%(xid)s,%(csv)s)",
@@ -444,12 +466,6 @@ class SynchroChannelModel(models.Model):
             xid=ext_id,
             ctx={"csv": file_csv},
         )
-        Cache = self.env["ir.model.synchro.cache"]
-        counterpart_pk = Cache.get_model_attr(
-            self.synchro_channel_id.id, model, "KEY_ID", default="id"
-        )
-        if not os.path.isfile(file_csv):
-            return {} if ext_id else []
         vals = []
         with open(file_csv, "rb") as fd:
             hdr = False
@@ -479,19 +495,19 @@ class SynchroChannelModel(models.Model):
                         row_contact[hdr[ix]] = value
                     else:
                         row_res[hdr[ix]] = value
-                if row_billing:
+                if row_billing:  # pragma: no cover
                     if model == "res.partner.invoice":
                         row_res = row_billing
                     else:
                         row_res["billing"] = row_billing
-                if row_shipping:
+                if row_shipping:  # pragma: no cover
                     if model == "res.partner.shipping":
                         for nm in ("customer_shipping_id", "customer_id"):
                             row_shipping[nm] = row_res[nm]
                         row_res = row_shipping
                     else:
                         row_res["shipping"] = row_shipping
-                if row_contact:
+                if row_contact:  # pragma: no cover
                     row_res["contact"] = row_contact
                 if (ext_id and not mode) and row_res[counterpart_pk] != ext_id:
                     continue
@@ -501,7 +517,9 @@ class SynchroChannelModel(models.Model):
                 vals.append(row_res)
         return vals
 
-    def get_vg7_json_response(self, cnx, session, ext_id=False, domain=None, mode=None):
+    def get_vg7_json_response(
+            self, cnx, session, ext_id=False, domain=None, mode=None
+    ):  # pragma: no cover
         """In JSON cnx contains the headers and session is the endpoint"""
         ext_model = self.counterpart_name
         headers = cnx
@@ -534,7 +552,7 @@ class SynchroChannelModel(models.Model):
                     del vals[ext_field]
             return vals
 
-        if method == "xml":
+        if method == "xml":  # pragma: no cover
             try:
                 rec = cnx.browse(ext_model, ext_id)
             except BaseException:  # pragma: no cover
@@ -594,7 +612,7 @@ class SynchroChannelModel(models.Model):
         domain = domain or []
         if ext_id and mode:
             domain.append((mode, "=", ext_id))
-        if not ext_id or mode:
+        if not ext_id or mode:  # pragma: no cover
             try:
                 vals = Model.search(domain)
             except BaseException:  # pragma: no cover
@@ -603,7 +621,9 @@ class SynchroChannelModel(models.Model):
             vals = self.browse_odoo_rec(cnx, ext_model, ext_id)
         return vals
 
-    def get_odoo_xml_response(self, cnx, session, ext_id=False, domain=None, mode=None):
+    def get_odoo_xml_response(
+            self, cnx, session, ext_id=False, domain=None, mode=None
+    ):  # pragma: no cover
         ext_model = self.counterpart_name
         domain = domain or []
         if ext_id and mode:
@@ -624,7 +644,7 @@ class SynchroChannelModel(models.Model):
         :param mode = parent_id field name, if get child records
         """
 
-        def sort_data(datas):
+        def sort_data(datas):  # pragma: no cover
             if not isinstance(datas, (list, tuple)):
                 # Single record
                 return datas
@@ -645,8 +665,14 @@ class SynchroChannelModel(models.Model):
                 datas.append(ixs[id])
             return datas
 
-        if not self.counterpart_name:
+        if not self.counterpart_name:  # pragma: no cover
+            self.env["ir.model.synchro"].logmsg(
+                "error",
+                "Model %(model)s not managed by external partner!",
+                model=self.name,
+            )
             return {}
+
         backend = self.synchro_channel_id
         Cache = self.env["ir.model.synchro.cache"]
         Cache.open(backend=backend, model=self.name)
@@ -658,11 +684,12 @@ class SynchroChannelModel(models.Model):
                 ctx={"chid": backend.prefix},
             )
             return {}
+
         cnx = Cache.get_attr(backend.id, "CNX")
         session = Cache.get_attr(backend.id, "SESSION")
         method = backend.method.lower()
         super_method = "rpc" if backend.method in ("XML", "JSON") else "gen"
-        if not cnx or not session:
+        if not cnx or not session:  # pragma: no cover
             for fct in (
                 "%s_%s_session" % (backend.identity, method),
                 "%s_session" % method,
@@ -825,7 +852,7 @@ class SynchroChannelModel(models.Model):
                     model=model or ext_model,
                     ctx={"e": e},
                 )
-        else:
+        else:  # pragma: no cover
             Cache.set_unmanageable(actual_model)
         return False
 

@@ -9,6 +9,7 @@
 #
 import logging
 from datetime import datetime, timedelta
+import re
 import itertools
 
 from odoo import api, models
@@ -17,13 +18,16 @@ from odoo import release
 _logger = logging.getLogger(__name__)
 try:
     from clodoo import transodoo
-except ImportError as err:
+except ImportError as err:  # pragma: no cover
     _logger.error(err)
 try:
     from odoo_score import odoo_score
-except ImportError as err:
+except ImportError as err:  # pragma: no cover
     _logger.error(err)
-
+try:
+    from unidecode import unidecode
+except ImportError as err:  # pragma: no cover
+    _logger.debug(err)
 
 DEF_SKEYS = {
     "res.partner": [
@@ -1055,3 +1059,29 @@ class IrModelSynchroCache(models.Model):
             self.setup_model_structure(model, actual_model)
         if backend:
             self.setup_model_in_backends(backend, model=model, ext_model=ext_model)
+
+    def hashname(self, text, maxctr=3, minlen=0, like=False):
+        # Generate an hash name from text
+        text = unidecode(text).strip()
+        items = []
+        while True:
+            x = re.search(r"[^\w]+", text)
+            if not x:
+                if len(text) > minlen:
+                    items.append(text.lower())
+                break
+            item = text[: x.start()].lower()
+            if len(item) > minlen:
+                items.append(item)
+            text = text[x.end():]
+        fragments = []
+        for item in items:
+            if len(fragments) < maxctr:
+                fragments.append(item)
+                continue
+            for i in range(len(fragments) - 1, -1, -1):
+                if len(fragments[i]) < len(item):
+                    del fragments[i]
+                    fragments.append(item)
+                    break
+        return ("%" if like else "").join(fragments)

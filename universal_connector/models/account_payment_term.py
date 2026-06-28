@@ -13,11 +13,6 @@ from odoo import api, fields, models
 
 _logger = logging.getLogger(__name__)
 
-try:
-    from unidecode import unidecode
-except ImportError as err:
-    _logger.debug(err)
-
 
 class AccountPaymentTerm(models.Model):
     _name = "account.payment.term"
@@ -26,8 +21,8 @@ class AccountPaymentTerm(models.Model):
     @api.multi
     @api.depends("name")
     def _set_dim_name(self):
-        for partner in self:
-            partner.dim_name = self.env["ir.model.synchro"].dim_text(partner.name)
+        for payment in self:
+            payment.dim_name = self.env["ir.model.synchro.cache"].hashname(payment.name)
 
     dim_name = fields.Char(
         "Search Key", compute=_set_dim_name, store=True, readonly=True
@@ -39,21 +34,6 @@ class AccountPaymentTerm(models.Model):
         for prefix in ("vg7", "oe7", "oe8", "oe10"):
             self.env["ir.model.synchro"]._build_unique_index(self._inherit, prefix)
         return res
-
-    def wep_text(self, text):
-        if text:
-            return unidecode(text).strip()
-        return text
-
-    def dim_text(self, text):
-        text = self.wep_text(text)
-        if text:
-            res = ""
-            for ch in text:
-                if ch.isalnum():
-                    res += ch.lower()
-            text = res
-        return text
 
     @api.model
     def preprocess(self, backend_id, vals):

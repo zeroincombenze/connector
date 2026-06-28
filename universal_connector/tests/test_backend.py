@@ -412,15 +412,14 @@ class MyTest(SingleTransactionCase):
         Synchro = self.env["ir.model.synchro"]
         backend = self.resource_browse(xref)
         model = "account.tax"
-        _logger.info(u"🎺 Import payment from %s" % _u(xref))
+        _logger.info(u"🎺 Import tax from %s" % _u(xref))
         if backend.identity == "vg7":
-            rec_id = Synchro.trigger_one_record("tax_codes", backend.prefix, 15)
+            rec_id = Synchro.trigger_one_record("tax_codes", backend.prefix, 6)
             self.assertTrue(rec_id > 0)
             tax = self.env[model].browse(rec_id)
             self.assertEqual(15, tax.amount)
             self.assertEqual("sale", tax.type_tax_use)
-            self.assertEqual(15, tax.vg7_id)
-        # else:
+            self.assertEqual(6, tax.vg7_id)
         #     rec_id = Synchro.trigger_one_record(model, backend.prefix, 233)
         #     self.assertEqual(235, rec_id
 
@@ -470,6 +469,31 @@ class MyTest(SingleTransactionCase):
         # else:
         #     rec_id = Synchro.trigger_one_record(model, backend.prefix, 233)
         #     self.assertEqual(235, rec_id
+
+    def _test_hashname(self):
+        Cache = self.env["ir.model.synchro.cache"]
+        self.assertEqual("abc", Cache.hashname("ABC"))
+        self.assertEqual("abcdef", Cache.hashname("ABC DEF"))
+        self.assertEqual("abcdefghi", Cache.hashname("ABC DEF GHI"))
+        self.assertEqual("abcdefghi", Cache.hashname("ABC DEF GHI JKL"))
+        self.assertEqual("abcdefjklm", Cache.hashname("ABC DEF GHI JKLM"))
+        self.assertEqual("abcdefghij", Cache.hashname("ABCD EFG HIJ KLM"))
+        self.assertEqual("abfoo", Cache.hashname("A.B. FOO"))
+        self.assertEqual("abfoo", Cache.hashname("A.B.C. FOO"))
+        self.assertEqual("foolt", Cache.hashname("FOO L.T.D."))
+
+        self.assertEqual("abc", Cache.hashname("ABC", like=True))
+        self.assertEqual("abc%def", Cache.hashname("ABC DEF", like=True))
+        self.assertEqual("abc%def%ghi", Cache.hashname("ABC DEF GHI", like=True))
+        self.assertEqual("abc%def%ghi",
+                         Cache.hashname("ABC DEF GHI JKL", like=True))
+        self.assertEqual("abc%def%jklm",
+                         Cache.hashname("ABC DEF GHI JKLM", like=True))
+        self.assertEqual("abcd%efg%hij",
+                         Cache.hashname("ABCD EFG HIJ KLM", like=True))
+        self.assertEqual("a%b%foo", Cache.hashname("A.B. FOO", like=True))
+        self.assertEqual("a%b%foo", Cache.hashname("A.B.C. FOO", like=True))
+        self.assertEqual("foo%l%t", Cache.hashname("FOO L.T.D.", like=True))
 
     def _test_regression_partner(self, delete_before=False):
         Synchro = self.env["ir.model.synchro"]
@@ -666,6 +690,7 @@ class MyTest(SingleTransactionCase):
             "🎺🎺 Starting Regression test"
         )
         self.prepare_env_regresion()
+        self._test_hashname()
         # Test on record already in DB by previous tests
         self._test_regression_partner()
         # Delete all record and try again

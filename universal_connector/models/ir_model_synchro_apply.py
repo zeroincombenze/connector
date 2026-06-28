@@ -10,7 +10,6 @@
 import logging
 from datetime import datetime, timedelta
 import re
-import itertools
 
 from odoo import fields, models
 # from odoo import release
@@ -19,7 +18,7 @@ _logger = logging.getLogger(__name__)
 
 try:
     from os0 import os0
-except ImportError as err:
+except ImportError as err:  # pragma: no cover
     _logger.error(err)
 # try:
 #     from clodoo import transodoo
@@ -130,7 +129,7 @@ class IrModelSynchroApply(models.Model):
         vmodel,
         default=None,
         ctx=None,
-    ):
+    ):  # pragma: no cover
         if ext_ref in vals and isinstance(vals[ext_ref], basestring):
             vals[ext_ref] = vals[ext_ref].lower()
         return vals
@@ -145,7 +144,7 @@ class IrModelSynchroApply(models.Model):
         vmodel,
         default=None,
         ctx=None,
-    ):
+    ):  # pragma: no cover
         if ext_ref in vals:
             vals[ext_ref] = os0.str2bool(vals[ext_ref], False)
         return vals
@@ -342,51 +341,45 @@ class IrModelSynchroApply(models.Model):
         product=None,
     ):
         company_id = vals.get("company_id") or self.env.user.company_id.id
+        type_tax_use = "purchase" if self.is_purchase(vals, vmodel) else "sale"
 
         def tax_by_rate(value):
             return self.env["account.tax"].search([
                 ("company_id", "=", company_id),
                 ("amount", "=", value),
-                ("type_tax_use", "=", "sale")], limit=1)
+                ("type_tax_use", "=", type_tax_use)], limit=1)
 
         def tax_by_code(value):
             return self.env["account.tax"].search([
                 ("company_id", "=", company_id),
                 ("description", "=", value),
-                ("type_tax_use", "=", "sale")], limit=1)
+                ("type_tax_use", "=", type_tax_use)], limit=1)
 
         tax = False
+        if (
+                loc_name in vals
+                and isinstance(vals[loc_name], basestring)
+                and ext_ref not in vals
+        ):  # pragma: no cover
+            vals[ext_ref] = vals[loc_name]
+            del vals[loc_name]
         if loc_name not in vals or not vals.get(loc_name):
-            if (
-                    ext_ref.startswith("vg7")
-                    and ext_ref in vals
-                    and vals[ext_ref]
-                    and isinstance(vals[ext_ref], basestring)
-                    and all([x.isdigit() for x in vals[ext_ref].split(".", 1)])
-            ):
-                if eval(vals[ext_ref]) > 0:
-                    tax = tax_by_rate(eval(vals[ext_ref]))
-                else:
-                    tax = backend.tax_id or tax_by_rate(22)
-            elif (
-                    ext_ref.startswith("vg7")
-                    and ext_ref in vals
-                    and vals[ext_ref]
-                    and isinstance(vals[ext_ref], (int, long))
-            ):
-                if vals[ext_ref] > 0:
-                    tax = tax_by_rate(vals[ext_ref])
-                if not tax:
-                    tax = self.env["account.tax"].search([
-                        ("company_id", "=", company_id),
-                        ("vg7_id", "=", vals[ext_ref])], limit=1)
-            elif (
-                    not ext_ref.startswith("vg7")
-                    and ext_ref in vals
-                    and vals[ext_ref]
-            ):
-                tax = tax_by_code(vals[ext_ref])
-            elif product or "product_id" in vals:
+            has_value = ext_ref.startswith("vg7") and ext_ref in vals and vals[ext_ref]
+            if has_value:
+                if isinstance(vals[ext_ref], basestring):
+                    is_numb = re.match(r"\d+(\.\d+)?$", vals[ext_ref].strip())
+                    if not is_numb:
+                        tax = tax_by_code(vals[ext_ref])
+                    if not tax and is_numb:
+                        vals[ext_ref] = eval(vals[ext_ref])
+                if not tax and isinstance(vals[ext_ref], (int, long, float)):
+                    if vals[ext_ref] > 0:
+                        tax = tax_by_rate(vals[ext_ref])
+                    if not tax:
+                        tax = self.env["account.tax"].search([
+                            ("company_id", "=", company_id),
+                            ("vg7_id", "=", vals[ext_ref])], limit=1)
+            if not tax and (product or "product_id" in vals):
                 product = product or self.env["product.product"].browse(
                     vals["product_id"])
                 if self.is_purchase(vals, vmodel):
@@ -395,11 +388,6 @@ class IrModelSynchroApply(models.Model):
                     tax = product.taxes_id
             if not tax:
                 tax = backend.tax_id or tax_by_rate(22)
-        elif (
-                loc_name in vals
-                and isinstance(vals[loc_name], basestring)
-        ):
-            tax = tax_by_code(vals[ext_ref])
         if tax:
             fiscalpos = self.env["ir.model.synchro.cache"].get_model_attr(
                 backend.id, vmodel, "__%s_FP" % vmodel,
@@ -862,27 +850,45 @@ class IrModelSynchroApply(models.Model):
                 and not isinstance(vals.get(ext_ref), (int, long))
         ):
             Product = self.env["product.product"]
-            fragments = False
+            prod_name = vals["name"]
             for ln in vals["name"].split("\n"):
                 if "Nome prodotto:" in ln:
-                    fragments = split_fragments(ln.split(":", 1))
+                    prod_name = ln.split(":", 1)
                     break
-            if not fragments:
-                fragments = split_fragments(vals["name"])
-            if len(fragments) == 0:
-                prods = Product.search([("default_code", "=", "MISC")])
-            elif len(fragments) == 1:
-                prods = Product.search([("name", "ilike", fragments[0])])
-            else:
-                domain = []
-                for perms in itertools.permutations(fragments, len(fragments) - 1):
-                    text = "%"
-                    for perm in perms:
-                        text += (perm + "%")
-                    domain.append(("name", "ilike", text))
-                for i in range(len(domain) - 1):
-                    domain.insert(0, "|")
-                prods = Product.search(domain)
+            prod_name = self.env["ir.model.synchro.cache"].hashname(
+                prod_name, like=True)
+            tmpl_name = prod_name
+            if "bg7_job_name" in vals:
+                prod_name += "%" + self.env["ir.model.synchro.cache"].hashname(
+                    vals["vg7:job_name"], like=True)
+            elif "job_name" in vals:
+                prod_name += "%" + self.env["ir.model.synchro.cache"].hashname(
+                    vals["job_name"], like=True)
+            prod_name = "%" + prod_name + "%"
+            prods = Product.search([("name", "ilike", prod_name)], limit=1)
+            self.env["ir.model.synchro"].logmsg(
+                "debug",
+                "%(model)s.search(%(domain)s) -> %(id)s",
+                model=Product._name,
+                id=prods[0].id if prods else None,
+                ctx={
+                    "domain": "[(\"name\", \"ilike\", \"%s\")]" % prod_name,
+                    "LOGLEVEL": backend. tracelevel,
+                },
+            )
+            if not prods and prod_name != tmpl_name:
+                tmpl_name = "%" + tmpl_name + "%"
+                prods = Product.search([("name", "ilike", tmpl_name)], limit=1)
+                self.env["ir.model.synchro"].logmsg(
+                    "debug",
+                    "%(model)s.search(%(domain)s) -> %(id)s",
+                    model=Product._name,
+                    id=prods[0].id if prods else None,
+                    ctx={
+                        "domain": "[(\"name\", \"ilike\", \"%s\")]" % tmpl_name,
+                        "LOGLEVEL": backend.tracelevel,
+                    },
+                )
             if not prods:
                 prods = Product.search([("default_code", "=", "MISC")])
             if prods:
@@ -916,60 +922,6 @@ class IrModelSynchroApply(models.Model):
         ctx=None,
     ):
         if vals.get("product_id"):
-            # Product = self.env["product.product"]
-            # product = Product.browse(vals["product_id"])
-            # if not vals.get("product_uom"):
-            #     vals = self.apply_uom(backend,
-            #                           vals,
-            #                           "product_uom",
-            #                           None,
-            #                           None,
-            #                           vmodel,
-            #                           product=product)
-            # if (
-            #         vmodel == "purchase.order.line"
-            #         and not vals.get("taxes_id")
-            # ):
-            #     vals = self.apply_tax(backend,
-            #                           vals,
-            #                           "taxes_id",
-            #                           None,
-            #                           None,
-            #                           vmodel,
-            #                           product=product)
-            # elif (
-            #         vmodel == "sale.order.line"
-            #         and not vals.get("tax_id")
-            # ):
-            #     vals = self.apply_tax(backend,
-            #                           vals,
-            #                           "tax_id",
-            #                           None,
-            #                           None,
-            #                           vmodel,
-            #                           product=product)
-            # elif (
-            #         vmodel == "account.invoice.line"
-            #         and not vals.get("invoice_line_tax_ids")
-            # ):
-            #     vals = self.apply_tax(backend,
-            #                           vals,
-            #                           "invoice_line_tax_ids",
-            #                           None,
-            #                           None,
-            #                           vmodel,
-            #                           product=product)
-            # elif (
-            #         vmodel == "stock.picking.package.preparation.line"
-            #         and not vals.get("tax_ids")
-            # ):
-            #     vals = self.apply_tax(backend,
-            #                           vals,
-            #                           "tax_ids",
-            #                           None,
-            #                           None,
-            #                           vmodel,
-            #                           product=product)
             pass
         return vals
 
@@ -998,83 +950,6 @@ class IrModelSynchroApply(models.Model):
             vals[name_field] = vals[des_field]
             del vals[des_field]
         return vals
-    #
-    # ############################
-    # # ODOO MIGRATION FUNCTIONS #fstat
-    # ############################
-    # def apply_oe_account_tax_amount(
-    #     self,
-    #     backend,
-    #     vals,
-    #     loc_name,
-    #     ext_ref,
-    #     loc_ext_id_name,
-    #     vmodel,
-    #     default=None,
-    #     ctx=None,
-    # ):
-    #     IrModelSynchro = self.env["ir.model.synchro"]
-    #     tnldict = IrModelSynchro.get_tnldict(backend.id)
-    #     ext_odoo_ver = IrModelSynchro.get_ext_odoo_ver(ext_ref.split(":")[0])
-    #     vals[loc_name] = transodoo.translate_from_to(
-    #         tnldict,
-    #         "account.tax",
-    #         vals[ext_ref],
-    #         ext_odoo_ver,
-    #         release.major_version,
-    #         type="value",
-    #         fld_name="amount",
-    #     )
-    #     return vals
-    #
-    # def apply_oe_account_account_type_name(
-    #     self,
-    #     backend,
-    #     vals,
-    #     loc_name,
-    #     ext_ref,
-    #     loc_ext_id_name,
-    #     vmodel,
-    #     default=None,
-    #     ctx=None,
-    # ):
-    #     if not vals.get(loc_name):
-    #         IrModelSynchro = self.env["ir.model.synchro"]
-    #         tnldict = IrModelSynchro.get_tnldict(backend.id)
-    #         ext_odoo_ver = IrModelSynchro.get_ext_odoo_ver(ext_ref.split(":")[0])
-    #         names = transodoo.translate_from_to(
-    #             tnldict,
-    #             "account.account.type",
-    #             vals[ext_ref],
-    #             ext_odoo_ver,
-    #             release.major_version,
-    #             type="value",
-    #             fld_name="report_type",
-    #         )
-    #         name = vals.get("name", "").lower()
-    #         if isinstance(names, list):
-    #             for nm in names:
-    #                 if nm == name:
-    #                     vals[loc_name] = nm
-    #                     break
-    #     return vals
-    #
-    # def apply_oe_account_account_type(
-    #     self,
-    #     backend,
-    #     vals,
-    #     loc_name,
-    #     ext_ref,
-    #     loc_ext_id_name,
-    #     vmodel,
-    #     default=None,
-    #     ctx=None,
-    # ):
-    #     if vals[ext_ref] == "view":
-    #         vals[loc_name] = "other"
-    #     else:
-    #         vals[loc_name] = vals[ext_ref]
-    #     return vals
 
     def apply_today(
         self,

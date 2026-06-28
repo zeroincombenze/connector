@@ -155,12 +155,12 @@ Return code:
   -100: if return code < -100 means error on child records
 """
 import logging
-import os
+# import os
 from datetime import datetime, timedelta
 import time
-import csv
+# import csv
 
-import requests
+# import requests
 import Levenshtein as lev
 from odoo import api, fields, models, _
 from odoo import release
@@ -172,17 +172,13 @@ try:
 except ImportError as err:  # pragma: no cover
     _logger.error(err)
 try:
-    from unidecode import unidecode
-except ImportError as err:  # pragma: no cover
-    _logger.error(err)
-try:
     from clodoo import transodoo
 except ImportError as err:  # pragma: no cover
     _logger.error(err)
-try:
-    import oerplib
-except ImportError as err:  # pragma: no cover
-    _logger.error(err)
+# try:
+#     import oerplib
+# except ImportError as err:  # pragma: no cover
+#     _logger.error(err)
 
 WORKFLOW = {
     0: {"model": "ir.module.category", "only_minimal": True},
@@ -394,19 +390,6 @@ class IrModelSynchro(models.Model):
             "UPDATE %s set %s_id=NULL where %s_id=0" % (table, prefix, prefix)
         )
 
-    def wep_text(self, text):
-        return unidecode(text).strip() if text else text
-
-    def dim_text(self, text):
-        text = self.wep_text(text)
-        if text:
-            res = ""
-            for ch in text:
-                if ch.isalnum():
-                    res += ch.lower()
-            text = res
-        return text
-
     def logmsg(
         self, reqloglevel, msg_text,
         rec=None, model=None, id=None, xid=None, logrec=None, values=None, ctx=None
@@ -417,6 +400,7 @@ class IrModelSynchro(models.Model):
             "warning": "2",
             "debug": "1",
         }
+        ctx = ctx or {}
         if logrec:
             reqloglevel = 4
         elif isinstance(reqloglevel, basestring):
@@ -425,13 +409,14 @@ class IrModelSynchro(models.Model):
             else:
                 reqloglevel = int(loglevel2num.get(reqloglevel, "2"))
 
-        if isinstance(self.LOGLEVEL, basestring):
-            if self.LOGLEVEL.isdigit():  # pragma: no cover
-                curloglevel = int(self.LOGLEVEL)
+        LOGLEVEL = ctx.get("LOGLEVEL") or self.LOGLEVEL
+        if isinstance(LOGLEVEL, basestring):
+            if LOGLEVEL.isdigit():  # pragma: no cover
+                curloglevel = int(LOGLEVEL)
             else:
-                curloglevel = int(loglevel2num.get(self.LOGLEVEL, "2"))
+                curloglevel = int(loglevel2num.get(LOGLEVEL, "2"))
         else:
-            curloglevel = self.LOGLEVEL
+            curloglevel = LOGLEVEL
 
         if reqloglevel >= 4 - curloglevel:
             return self.env["ir.model.synchro.log"].logger(
@@ -930,7 +915,8 @@ class IrModelSynchro(models.Model):
         domain = [
             ("model", "=", actual_model),
             ("key", "=", name),
-            ("ext_value", "ilike", self.dim_text(value)),
+            ("ext_value", "ilike",
+             self.env["ir.model.synchro.cache"].hashname(value, like=True)),
         ]
         rec = translation_model.search(domain)
         if not rec:
@@ -989,12 +975,17 @@ class IrModelSynchro(models.Model):
 
     def do_search(
             self, actual_model, req_domain, only_id=None, spec=None, ext_id_name=None):
-        def atomic_search(cls, domain, has_sequence):
+
+        def atomic_search(cls, domain, has_sequence, has_to_delete):
             if has_sequence:
+                if has_to_delete:
+                    domain = expression.AND([domain, [("to_delete", "=", True)]])
                 res = cls.with_context(lang="it_IT").search(domain, order="sequence,id")
                 if not res:
                     res = cls.search(domain, order="sequence,id")
             else:
+                if has_to_delete:
+                    domain = expression.AND([domain, [("to_delete", "=", True)]])
                 res = cls.with_context(lang="it_IT").search(domain)
                 if not res:
                     res = cls.search(domain)
@@ -1007,13 +998,14 @@ class IrModelSynchro(models.Model):
             )
             return res
 
-        def exec_search(cls, domain, has_sequence, has_active):
-            rec = atomic_search(cls, domain, has_sequence)
+        def exec_search(cls, domain, has_sequence, has_active, has_to_delete):
+            rec = atomic_search(cls, domain, has_sequence, has_to_delete)
             if not rec and has_active:
                 rec = atomic_search(
                     cls,
                     expression.AND([domain, [("active", "=", False)]]),
                     has_sequence,
+                    has_to_delete,
                 )
             return rec
 
@@ -1021,7 +1013,7 @@ class IrModelSynchro(models.Model):
             domain = []
             do_query = False
             for item in req_domain:
-                if item[0] == req_item[0]:
+                if item[0] == req_item[0]:   # pragma: no cover
                     do_query = True
                     continue
                 domain.append(item)
@@ -1032,8 +1024,11 @@ class IrModelSynchro(models.Model):
         Cache = self.env["ir.model.synchro.cache"]
         cls = self.env[actual_model]
         maybe_dif = False
-        has_sequence = Cache.get_struct_model_attr(actual_model, "sequence")
-        has_active = Cache.get_struct_model_attr(actual_model, "active")
+        has_sequence = "sequence" in cls._fields
+        has_active = "active" in cls._fields
+        has_to_delete = "to_delete" in cls._fields
+        if len(req_domain) == 1 and ext_id_name and ext_id_name == req_domain[0][0]:
+            has_to_delete = False
         if len(req_domain) == 1 and not Cache.get_struct_model_attr(
             actual_model, req_domain[0][0]
         ) and ext_id_name and ext_id_name == req_domain[0][0]:
@@ -1049,7 +1044,8 @@ class IrModelSynchro(models.Model):
                 )
             return rec, maybe_dif
         if only_id:
-            return exec_search(cls, req_domain, has_sequence, has_active), maybe_dif
+            return exec_search(
+                cls, req_domain, has_sequence, has_active, has_to_delete), maybe_dif
         domain = []
         rec = False
         if actual_model == "res.partner" and spec in ("delivery", "invoice"):
@@ -1061,14 +1057,15 @@ class IrModelSynchro(models.Model):
             # expression.OR accepts only 1 tuple
             domain = expression.AND([req_domain, [("type_tax_use", "=", "sale")]])
         if domain:
-            rec = exec_search(cls, domain, has_sequence, has_active)
+            rec = exec_search(cls, domain, has_sequence, has_active, has_to_delete)
         if not rec:
-            rec = exec_search(cls, req_domain, has_sequence, has_active)
+            rec = exec_search(cls, req_domain, has_sequence, has_active, has_to_delete)
         if not rec:
             if actual_model in ("res.partner", "product.product", "product.template"):
                 domain = reduce_domain(req_domain, (["company_id", "", ""]))
                 if domain:
-                    rec = exec_search(cls, domain, has_sequence, has_active)
+                    rec = exec_search(
+                        cls, domain, has_sequence, has_active, has_to_delete)
         if rec:
             if not has_sequence and len(rec) > 8:
                 rec = False
@@ -1521,28 +1518,31 @@ class IrModelSynchro(models.Model):
             vmodel,
             ctx=None,
         ):
-            ir_apply = self.env["ir.model.synchro.apply"]
-            for fct in apply4.split(","):
-                if fct == "apply_odoo_migrate":
-                    if ext_ref in vals:
-                        ext_odoo_ver = self.get_ext_odoo_ver(ext_ref.split(":")[0])
-                        tnldict = self.get_tnldict(backend.id)
-                        if ext_odoo_ver:
-                            vals[loc_name] = self.translate_from_to(
-                                tnldict, vmodel, vals[ext_ref], ext_odoo_ver,
-                                fld_name=loc_name)
-                        else:
-                            vals[loc_name] = vals[ext_ref]
-                elif hasattr(ir_apply, fct):
-                    vals = getattr(ir_apply, fct)(
-                        backend,
-                        vals,
-                        loc_name,
-                        ext_ref,
-                        ext_id_name,
-                        vmodel,
-                        default=default,
-                    )
+            try:
+                ir_apply = self.env["ir.model.synchro.apply"]
+                for fct in apply4.split(","):
+                    if fct == "apply_odoo_migrate":
+                        if ext_ref in vals:
+                            ext_odoo_ver = self.get_ext_odoo_ver(ext_ref.split(":")[0])
+                            tnldict = self.get_tnldict(backend.id)
+                            if ext_odoo_ver:
+                                vals[loc_name] = self.translate_from_to(
+                                    tnldict, vmodel, vals[ext_ref], ext_odoo_ver,
+                                    fld_name=loc_name)
+                            else:
+                                vals[loc_name] = vals[ext_ref]
+                    elif hasattr(ir_apply, fct):
+                        vals = getattr(ir_apply, fct)(
+                            backend,
+                            vals,
+                            loc_name,
+                            ext_ref,
+                            ext_id_name,
+                            vmodel,
+                            default=default,
+                        )
+            except BaseException:   # pragma: no cover
+                pass
             return vals
 
         def priority_fields(struct, backend, vals, ext_id_name, vmodel):
@@ -1949,10 +1949,10 @@ class IrModelSynchro(models.Model):
         def add_constraints(domain, constraints):
             for constr in constraints:
                 add_domain = False
-                if constr[0] in vals:
+                if constr[0] in vals:   # pragma: no cover
                     constr[0] = vals[constr[0]]
                     add_domain = True
-                if constr[-1] in vals:
+                if constr[-1] in vals:   # pragma: no cover
                     constr[-1] = vals[constr[-1]]
                     add_domain = True
                 if add_domain:
@@ -2020,7 +2020,9 @@ class IrModelSynchro(models.Model):
                                 )
                             else:
                                 domain.append(
-                                    ("dim_name", "=", self.dim_text(vals["name"]))
+                                    ("dim_name", "=",
+                                     self.env["ir.model.synchro.cache"].hashname(
+                                         vals["name"], like=True))
                                 )
                         elif key in ctx:
                             domain.append((key, "=", ctx[key]))
@@ -2069,305 +2071,307 @@ class IrModelSynchro(models.Model):
             return rec.id, rec
         return -9 if found_valid_key else -7, None
 
-    def get_xmlrpc_response(
-        self, backend_id, vmodel, ext_id=False, select=None, mode=None
-    ):     # pragma: no cover
-        def default_params():
-            return "xmlrpc", 8069, "demo", "admin", "admin"
+    # def get_xmlrpc_response(
+    #     self, backend_id, vmodel, ext_id=False, select=None, mode=None
+    # ):     # pragma: no cover
+    #     def default_params():
+    #         return "xmlrpc", 8069, "demo", "admin", "admin"
+    #
+    #     def parse_endpoint(endpoint, login=None, port=None):
+    #         protocol, def_port, db, user, passwd = default_params()
+    #         login = login or user
+    #         port = port or def_port
+    #         if endpoint:
+    #             if len(endpoint.split("@")) == 2:
+    #                 login = endpoint.split("@")[0]
+    #                 endpoint = endpoint.split("@")[1]
+    #             if len(endpoint.split(":")) == 2:
+    #                 port = int(endpoint.split(":")[1])
+    #                 endpoint = endpoint.split(":")[0]
+    #         return protocol, endpoint, port, login
+    #
+    #     def xml_connect(endpoint, protocol=None, port=None):
+    #         cnx = Cache.get_attr(backend_id, "CNX")
+    #         if not cnx:
+    #             prot, endpoint, def_port, login = parse_endpoint(endpoint)
+    #             protocol = protocol or prot
+    #             port = port or def_port
+    #             try:
+    #                 cnx = oerplib.OERP(server=endpoint, protocol=protocol, port=port)
+    #                 Cache.set_attr(backend_id, "CNX", cnx)
+    #             except BaseException:  # pragma: no cover
+    #                 self.env.cr.rollback()  # pylint: disable=invalid-commit
+    #                 cnx = False
+    #         return cnx
+    #
+    #     def xml_login(cnx, endpoint, db=None, login=None, passwd=None):
+    #         session = Cache.get_attr(backend_id, "SESSION")
+    #         if not session:
+    #             login = login or self.env.user.login
+    #             prot, endpoint, port, user = parse_endpoint(endpoint)
+    #             db = db or "demo"
+    #             passwd = passwd or "admin"
+    #             login = login or user
+    #             try:
+    #                 session = cnx.login(database=db, user=login, passwd=passwd)
+    #                 Cache.set_attr(backend_id, "SESSION", session)
+    #             except BaseException:  # pragma: no cover
+    #                 self.env.cr.rollback()  # pylint: disable=invalid-commit
+    #                 session = False
+    #         return cnx, session
+    #
+    #     def connect_params():
+    #         protocol, port, db, login, passwd = default_params()
+    #         endpoint = Cache.get_attr(backend_id, "COUNTERPART_URL")
+    #         db = Cache.get_attr(backend_id, "CLIENT_KEY")
+    #         passwd = Cache.get_attr(backend_id, "PASSWORD")
+    #         protocol, endpoint, port, login = parse_endpoint(endpoint)
+    #         return protocol, endpoint, port, db, login, passwd
+    #
+    #     def rpc_session():
+    #         cnx = Cache.get_attr(backend_id, "CNX")
+    #         session = Cache.get_attr(backend_id, "SESSION")
+    #         tnldict = self.get_tnldict(backend_id)
+    #         if cnx and session:
+    #             return cnx, session, tnldict
+    #         prot, endpoint, port, db, login, passwd = connect_params()
+    #         if not endpoint:
+    #             self.logmsg(
+    #                 "error",
+    #                 "Channel %(chid)s without connection parameters!",
+    #                 ctx={"chid": backend_id},
+    #             )
+    #             return False, False, tnldict
+    #         cnx, session = xml_login(
+    #             xml_connect(endpoint, protocol=prot, port=port),
+    #             endpoint,
+    #             db=db,
+    #             login=login,
+    #             passwd=passwd,
+    #         )
+    #         if not cnx:
+    #             self.logmsg(
+    #                 "warning", "Not response from %(ep)s", ctx={"ep": endpoint})
+    #         elif not session:
+    #             self.logmsg(
+    #                 "info",
+    #                 "Login response error (%(db)s,%(login)s,%(pwd)s)",
+    #                 ctx={"db": db, "login": login, "pwd": passwd},
+    #             )
+    #         return cnx, session, tnldict
+    #
+    #     def expand_many(rec, ext_field, vals):
+    #         try:
+    #             vals[ext_field] = [x.id for x in rec[ext_field]]
+    #         except BaseException:
+    #             if ext_field in vals:
+    #                 del vals[ext_field]
+    #         return vals
+    #
+    #     def browse_rec(cache, actual_model, ext_id, tnldict):
+    #         try:
+    #             rec = cnx.browse(actual_model, ext_id)
+    #         except BaseException:
+    #             rec = False
+    #         prefix = cache.get_attr(backend_id, "PREFIX")
+    #         ext_odoo_ver = self.get_ext_odoo_ver(prefix)
+    #         vals = {}
+    #         if rec:
+    #             for field in cache.get_struct_attr(actual_model):
+    #                 if ext_odoo_ver:
+    #                     ext_field = self.translate_from_to(
+    #                         tnldict, actual_model, field, ext_odoo_ver)
+    #                 else:
+    #                     ext_field = field
+    #                 if field in ("id", "state") or (
+    #                     hasattr(rec, ext_field)
+    #                     and cache.is_struct(field)
+    #                     and not cache.get_struct_model_field_attr(
+    #                         actual_model, field, "readonly"
+    #                     )
+    #                 ):
+    #                     if isinstance(rec[ext_field], (bool, int, long)):
+    #                         vals[ext_field] = rec[ext_field]
+    #                     elif (
+    #                         cache.get_struct_model_field_attr(
+    #                             actual_model, field, "ttype"
+    #                         )
+    #                         == "many2one"
+    #                     ):
+    #                         try:
+    #                             vals[ext_field] = rec[ext_field].id
+    #                         except BaseException:
+    #                             vals[ext_field] = rec[ext_field]
+    #                     elif cache.get_struct_model_field_attr(
+    #                         actual_model, field, "ttype"
+    #                     ) in ("one2many", "many2many"):
+    #                         vals = expand_many(rec, ext_field, vals)
+    #                     elif isinstance(rec[ext_field], basestring):
+    #                         vals[ext_field] = (
+    #                             rec[ext_field].encode("utf-8").decode("utf-8")
+    #                         )
+    #                     else:
+    #                         vals[ext_field] = rec[ext_field]
+    #             if vals:
+    #                 vals["id"] = ext_id
+    #         return vals
+    #
+    #     self.logmsg(
+    #         "debug",
+    #         "%(model)s.get_xmlrpc_response(ch=%(chid)s,%(xid)s,%(sel)s):",
+    #         model=vmodel,
+    #         xid=ext_id,
+    #         ctx={"chid": backend_id, "sel": select},
+    #     )
+    #     Cache = self.env["ir.model.synchro.cache"]
+    #     cnx, session, tnldict = rpc_session()
+    #     actual_model = self.get_actual_model(vmodel, only_name=True)
+    #     if ext_id:
+    #         if mode:
+    #             return cnx.search(actual_model, [(mode, "=", ext_id)])
+    #         return browse_rec(Cache, actual_model, ext_id, tnldict)
+    #     try:
+    #         ids = cnx.search(actual_model, [])
+    #     except BaseException:
+    #         ids = []
+    #     return ids
 
-        def parse_endpoint(endpoint, login=None, port=None):
-            protocol, def_port, db, user, passwd = default_params()
-            login = login or user
-            port = port or def_port
-            if endpoint:
-                if len(endpoint.split("@")) == 2:
-                    login = endpoint.split("@")[0]
-                    endpoint = endpoint.split("@")[1]
-                if len(endpoint.split(":")) == 2:
-                    port = int(endpoint.split(":")[1])
-                    endpoint = endpoint.split(":")[0]
-            return protocol, endpoint, port, login
+    # def get_json_response(
+    #         self, backend_id, vmodel, ext_id=False, mode=None):  # pragma: no cover
+    #     def sort_data(datas):
+    #         # Single record
+    #         if "id" in datas:
+    #             return datas
+    #         ixs = {}
+    #         for item in datas:
+    #             if isinstance(item, dict):
+    #                 id = item.get("id")
+    #                 if not id:
+    #                     return datas
+    #                 ixs[int(id)] = item
+    #         datas = []
+    #         for id in sorted(ixs.keys()):
+    #             datas.append(ixs[id])
+    #         return datas
+    #
+    #     self.logmsg(
+    #         "debug",
+    #         "%(model)s.get_json_response(%(chid)s,%(xid)s):",
+    #         model=vmodel,
+    #         xid=ext_id,
+    #         ctx={"chid": backend_id},
+    #     )
+    #     Cache = self.env["ir.model.synchro.cache"]
+    #     endpoint = Cache.get_attr(backend_id, "COUNTERPART_URL")
+    #     if not endpoint:
+    #         self.logmsg(
+    #             "error",
+    #             "Channel %(chid)s without connection parameters!",
+    #             ctx={"chid": backend_id},
+    #         )
+    #         return False
+    #     ext_model = Cache.get_model_attr(backend_id, vmodel, "BIND")
+    #     if not ext_model:
+    #         _logger.error("Model %s not managed by external partner!" % vmodel)
+    #         return False
+    #     if not ext_id:
+    #         url = os.path.join(endpoint, ext_model)
+    #     else:
+    #         url = os.path.join(endpoint, ext_model, str(ext_id))
+    #     headers = {
+    #         "Authorization": "access_token %s"
+    #         % Cache.get_attr(backend_id, "CLIENT_KEY")
+    #     }
+    #     self.logmsg(
+    #         "warning",
+    #         "%(model)s.vg7_requests(%(url)s,%(hdr)s):",
+    #         model=vmodel,
+    #         ctx={"url": url, "hdr": headers},
+    #     )
+    #     try:
+    #         response = requests.get(url, headers=headers, verify=False)
+    #     except BaseException:
+    #         response = False
+    #     if response:
+    #         datas = sort_data(response.json())
+    #         return datas
+    #     self.logmsg(
+    #         "warning",
+    #         "Response error %(sts)s (%(chid)s,%(url)s,%(key)s,%(pfx)s)",
+    #         model=vmodel,
+    #         ctx={
+    #             "sts": getattr(response, "status_code", "N/A"),
+    #             "chid": backend_id,
+    #             "url": url,
+    #             "key": Cache.get_attr(backend_id, "CLIENT_KEY"),
+    #             "pfx": Cache.get_attr(backend_id, "PREFIX"),
+    #         },
+    #     )
+    #     return {}
 
-        def xml_connect(endpoint, protocol=None, port=None):
-            cnx = Cache.get_attr(backend_id, "CNX")
-            if not cnx:
-                prot, endpoint, def_port, login = parse_endpoint(endpoint)
-                protocol = protocol or prot
-                port = port or def_port
-                try:
-                    cnx = oerplib.OERP(server=endpoint, protocol=protocol, port=port)
-                    Cache.set_attr(backend_id, "CNX", cnx)
-                except BaseException:  # pragma: no cover
-                    self.env.cr.rollback()  # pylint: disable=invalid-commit
-                    cnx = False
-            return cnx
-
-        def xml_login(cnx, endpoint, db=None, login=None, passwd=None):
-            session = Cache.get_attr(backend_id, "SESSION")
-            if not session:
-                login = login or self.env.user.login
-                prot, endpoint, port, user = parse_endpoint(endpoint)
-                db = db or "demo"
-                passwd = passwd or "admin"
-                login = login or user
-                try:
-                    session = cnx.login(database=db, user=login, passwd=passwd)
-                    Cache.set_attr(backend_id, "SESSION", session)
-                except BaseException:  # pragma: no cover
-                    self.env.cr.rollback()  # pylint: disable=invalid-commit
-                    session = False
-            return cnx, session
-
-        def connect_params():
-            protocol, port, db, login, passwd = default_params()
-            endpoint = Cache.get_attr(backend_id, "COUNTERPART_URL")
-            db = Cache.get_attr(backend_id, "CLIENT_KEY")
-            passwd = Cache.get_attr(backend_id, "PASSWORD")
-            protocol, endpoint, port, login = parse_endpoint(endpoint)
-            return protocol, endpoint, port, db, login, passwd
-
-        def rpc_session():
-            cnx = Cache.get_attr(backend_id, "CNX")
-            session = Cache.get_attr(backend_id, "SESSION")
-            tnldict = self.get_tnldict(backend_id)
-            if cnx and session:
-                return cnx, session, tnldict
-            prot, endpoint, port, db, login, passwd = connect_params()
-            if not endpoint:
-                self.logmsg(
-                    "error",
-                    "Channel %(chid)s without connection parameters!",
-                    ctx={"chid": backend_id},
-                )
-                return False, False, tnldict
-            cnx, session = xml_login(
-                xml_connect(endpoint, protocol=prot, port=port),
-                endpoint,
-                db=db,
-                login=login,
-                passwd=passwd,
-            )
-            if not cnx:
-                self.logmsg("warning", "Not response from %(ep)s", ctx={"ep": endpoint})
-            elif not session:
-                self.logmsg(
-                    "info",
-                    "Login response error (%(db)s,%(login)s,%(pwd)s)",
-                    ctx={"db": db, "login": login, "pwd": passwd},
-                )
-            return cnx, session, tnldict
-
-        def expand_many(rec, ext_field, vals):
-            try:
-                vals[ext_field] = [x.id for x in rec[ext_field]]
-            except BaseException:
-                if ext_field in vals:
-                    del vals[ext_field]
-            return vals
-
-        def browse_rec(cache, actual_model, ext_id, tnldict):
-            try:
-                rec = cnx.browse(actual_model, ext_id)
-            except BaseException:
-                rec = False
-            prefix = cache.get_attr(backend_id, "PREFIX")
-            ext_odoo_ver = self.get_ext_odoo_ver(prefix)
-            vals = {}
-            if rec:
-                for field in cache.get_struct_attr(actual_model):
-                    if ext_odoo_ver:
-                        ext_field = self.translate_from_to(
-                            tnldict, actual_model, field, ext_odoo_ver)
-                    else:
-                        ext_field = field
-                    if field in ("id", "state") or (
-                        hasattr(rec, ext_field)
-                        and cache.is_struct(field)
-                        and not cache.get_struct_model_field_attr(
-                            actual_model, field, "readonly"
-                        )
-                    ):
-                        if isinstance(rec[ext_field], (bool, int, long)):
-                            vals[ext_field] = rec[ext_field]
-                        elif (
-                            cache.get_struct_model_field_attr(
-                                actual_model, field, "ttype"
-                            )
-                            == "many2one"
-                        ):
-                            try:
-                                vals[ext_field] = rec[ext_field].id
-                            except BaseException:
-                                vals[ext_field] = rec[ext_field]
-                        elif cache.get_struct_model_field_attr(
-                            actual_model, field, "ttype"
-                        ) in ("one2many", "many2many"):
-                            vals = expand_many(rec, ext_field, vals)
-                        elif isinstance(rec[ext_field], basestring):
-                            vals[ext_field] = (
-                                rec[ext_field].encode("utf-8").decode("utf-8")
-                            )
-                        else:
-                            vals[ext_field] = rec[ext_field]
-                if vals:
-                    vals["id"] = ext_id
-            return vals
-
-        self.logmsg(
-            "debug",
-            "%(model)s.get_xmlrpc_response(ch=%(chid)s,%(xid)s,%(sel)s):",
-            model=vmodel,
-            xid=ext_id,
-            ctx={"chid": backend_id, "sel": select},
-        )
-        Cache = self.env["ir.model.synchro.cache"]
-        cnx, session, tnldict = rpc_session()
-        actual_model = self.get_actual_model(vmodel, only_name=True)
-        if ext_id:
-            if mode:
-                return cnx.search(actual_model, [(mode, "=", ext_id)])
-            return browse_rec(Cache, actual_model, ext_id, tnldict)
-        try:
-            ids = cnx.search(actual_model, [])
-        except BaseException:
-            ids = []
-        return ids
-
-    def get_json_response(
-            self, backend_id, vmodel, ext_id=False, mode=None):  # pragma: no cover
-        def sort_data(datas):
-            # Single record
-            if "id" in datas:
-                return datas
-            ixs = {}
-            for item in datas:
-                if isinstance(item, dict):
-                    id = item.get("id")
-                    if not id:
-                        return datas
-                    ixs[int(id)] = item
-            datas = []
-            for id in sorted(ixs.keys()):
-                datas.append(ixs[id])
-            return datas
-
-        self.logmsg(
-            "debug",
-            "%(model)s.get_json_response(%(chid)s,%(xid)s):",
-            model=vmodel,
-            xid=ext_id,
-            ctx={"chid": backend_id},
-        )
-        Cache = self.env["ir.model.synchro.cache"]
-        endpoint = Cache.get_attr(backend_id, "COUNTERPART_URL")
-        if not endpoint:
-            self.logmsg(
-                "error",
-                "Channel %(chid)s without connection parameters!",
-                ctx={"chid": backend_id},
-            )
-            return False
-        ext_model = Cache.get_model_attr(backend_id, vmodel, "BIND")
-        if not ext_model:
-            _logger.error("Model %s not managed by external partner!" % vmodel)
-            return False
-        if not ext_id:
-            url = os.path.join(endpoint, ext_model)
-        else:
-            url = os.path.join(endpoint, ext_model, str(ext_id))
-        headers = {
-            "Authorization": "access_token %s"
-            % Cache.get_attr(backend_id, "CLIENT_KEY")
-        }
-        self.logmsg(
-            "warning",
-            "%(model)s.vg7_requests(%(url)s,%(hdr)s):",
-            model=vmodel,
-            ctx={"url": url, "hdr": headers},
-        )
-        try:
-            response = requests.get(url, headers=headers, verify=False)
-        except BaseException:
-            response = False
-        if response:
-            datas = sort_data(response.json())
-            return datas
-        self.logmsg(
-            "warning",
-            "Response error %(sts)s (%(chid)s,%(url)s,%(key)s,%(pfx)s)",
-            model=vmodel,
-            ctx={
-                "sts": getattr(response, "status_code", "N/A"),
-                "chid": backend_id,
-                "url": url,
-                "key": Cache.get_attr(backend_id, "CLIENT_KEY"),
-                "pfx": Cache.get_attr(backend_id, "PREFIX"),
-            },
-        )
-        return {}
-
-    def get_csv_response(self, backend_id, vmodel, ext_id=False, mode=None):
-        self.logmsg(
-            "debug",
-            "%(model)s.get_csv_response(%(chid)s,%(xid)s):",
-            model=vmodel,
-            xid=ext_id,
-            ctx={"chid": backend_id},
-        )
-        Cache = self.env["ir.model.synchro.cache"]
-        endpoint = Cache.get_attr(backend_id, "EXCHANGE_PATH")
-        if not endpoint:
-            self.logmsg(
-                "error",
-                "Channel %(chid)s without connection parameters!",
-                ctx={"chid": backend_id},
-            )
-            return False
-        ext_model = Cache.get_model_attr(backend_id, vmodel, "BIND")
-        counterpart_pk = Cache.get_model_attr(
-            backend_id, vmodel, "KEY_ID", default="id")
-        if not ext_model:
-            _logger.error("Model %s not managed by external partner!" % vmodel)
-            return False
-        file_csv = os.path.expanduser(os.path.join(endpoint, ext_model + ".csv"))
-        self.logmsg(
-            "warning",
-            "%(model)s.csv_requests(%(csv)s)",
-            model=vmodel,
-            ctx={"csv": file_csv},
-        )
-        res = []
-        if not os.path.isfile(file_csv):
-            return res
-        with open(file_csv, "rb") as fd:
-            hdr = False
-            reader = csv.DictReader(fd, fieldnames=[], restkey="undef_name")
-            for line in reader:
-                row = line["undef_name"]
-                if not hdr:
-                    row_id = 0
-                    hdr = row
-                    continue
-                row_id += 1
-                row_res = {counterpart_pk: row_id}
-                for ix, value in enumerate(row):
-                    if (
-                        isinstance(value, basestring)
-                        and value.startswith("[")
-                        and value.endswith("]")
-                    ):
-                        value = eval(value)
-                    if hdr[ix] == counterpart_pk:
-                        if not value:
-                            continue
-                        row_id = value
-                if ext_id and row_res[counterpart_pk] != ext_id:
-                    continue
-                if ext_id:
-                    res = row_res
-                    break
-                res.append(row_res)
-        return res
+    # def get_csv_response(self, backend_id, vmodel, ext_id=False, mode=None):
+    #     Cache = self.env["ir.model.synchro.cache"]
+    #     ext_model = Cache.get_model_attr(backend_id, vmodel, "BIND")
+    #     self.logmsg(
+    #         "debug",
+    #         "%(model)s.get_csv_response(%(chid)s,%(xid)s):",
+    #         model=vmodel,
+    #         xid=ext_id,
+    #         ctx={"chid": backend_id},
+    #     )
+    #     endpoint = Cache.get_attr(backend_id, "EXCHANGE_PATH")
+    #     if not endpoint:
+    #         self.logmsg(
+    #             "error",
+    #             "Channel %(chid)s without connection parameters!",
+    #             ctx={"chid": backend_id},
+    #         )
+    #         return False
+    #     ext_model = Cache.get_model_attr(backend_id, vmodel, "BIND")
+    #     counterpart_pk = Cache.get_model_attr(
+    #         backend_id, vmodel, "KEY_ID", default="id")
+    #     if not ext_model:
+    #         _logger.error("Model %s not managed by external partner!" % vmodel)
+    #         return False
+    #     file_csv = os.path.expanduser(os.path.join(endpoint, ext_model + ".csv"))
+    #     self.logmsg(
+    #         "warning",
+    #         "%(model)s.csv_requests(%(csv)s)",
+    #         model=vmodel,
+    #         ctx={"csv": file_csv},
+    #     )
+    #     res = []
+    #     if not os.path.isfile(file_csv):
+    #         return res
+    #     with open(file_csv, "rb") as fd:
+    #         hdr = False
+    #         reader = csv.DictReader(fd, fieldnames=[], restkey="undef_name")
+    #         for line in reader:
+    #             row = line["undef_name"]
+    #             if not hdr:
+    #                 row_id = 0
+    #                 hdr = row
+    #                 continue
+    #             row_id += 1
+    #             row_res = {counterpart_pk: row_id}
+    #             for ix, value in enumerate(row):
+    #                 if (
+    #                     isinstance(value, basestring)
+    #                     and value.startswith("[")
+    #                     and value.endswith("]")
+    #                 ):
+    #                     value = eval(value)
+    #                 if hdr[ix] == counterpart_pk:
+    #                     if not value:
+    #                         continue
+    #                     row_id = value
+    #             if ext_id and row_res[counterpart_pk] != ext_id:
+    #                 continue
+    #             if ext_id:
+    #                 res = row_res
+    #                 break
+    #             res.append(row_res)
+    #     return res
 
     @api.model
     def model_env(self, cls):

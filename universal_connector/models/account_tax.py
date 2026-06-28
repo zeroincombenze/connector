@@ -13,11 +13,6 @@ from odoo import api, fields, models
 
 _logger = logging.getLogger(__name__)
 
-try:
-    from unidecode import unidecode
-except ImportError as err:
-    _logger.debug(err)
-
 
 class AccountTax(models.Model):
     _name = "account.tax"
@@ -27,7 +22,7 @@ class AccountTax(models.Model):
     @api.depends("name")
     def _set_dim_name(self):
         for tax in self:
-            tax.dim_name = self.env["ir.model.synchro"].dim_text(tax.name)
+            tax.dim_name = self.env["ir.model.synchro.cache"].hashname(tax.name)
 
     dim_name = fields.Char(
         "Search Key", compute=_set_dim_name, store=True, readonly=True
@@ -40,21 +35,6 @@ class AccountTax(models.Model):
             self.env["ir.model.synchro"]._build_unique_index(self._inherit, prefix)
         return res
 
-    def wep_text(self, text):
-        if text:
-            return unidecode(text).strip()
-        return text
-
-    def dim_text(self, text):
-        text = self.wep_text(text)
-        if text:
-            res = ""
-            for ch in text:
-                if ch.isalnum():
-                    res += ch.lower()
-            text = res
-        return text
-
     @api.model
     def preprocess(self, backend, vals):
         if (
@@ -66,8 +46,5 @@ class AccountTax(models.Model):
 
     def assure_values(self, vals, rec):
         if not vals.get("amount"):
-            if rec:
-                vals["amount"] = rec.amount
-            else:
-                vals["amount"] = 0
+            vals["amount"] = rec.amount if rec else 0
         return vals

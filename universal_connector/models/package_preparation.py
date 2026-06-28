@@ -13,11 +13,6 @@ from odoo import api, fields, models
 
 _logger = logging.getLogger(__name__)
 
-try:
-    from unidecode import unidecode
-except ImportError as err:
-    _logger.debug(err)
-
 
 class StockPickingPackagePreparation(models.Model):
     _name = "stock.picking.package.preparation"
@@ -31,29 +26,6 @@ class StockPickingPackagePreparation(models.Model):
         for prefix in ("vg7", "oe7", "oe8", "oe10"):
             self.env["ir.model.synchro"]._build_unique_index(self._inherit, prefix)
         return res
-
-    # @api.model
-    # def synchro(self, vals, chk_in_queue=None, no_deep_fields=None, only_minimal=None,
-    #             no_del_child=False):
-    #     # TODO: correct workaround!!
-    #     do_rewrite = False
-    #     if "vg7:ddt_number" in vals:
-    #         do_rewrite = True
-    #         saved_vals = vals.copy()
-    #     id = self.env["ir.model.synchro"].synchro(
-    #         self,
-    #         vals,
-    #         chk_in_queue=chk_in_queue,
-    #         only_minimal=only_minimal,
-    #         no_deep_fields=no_deep_fields,
-    #         no_del_child=no_del_child,
-    #     )
-    #     if id > 0 and do_rewrite:
-    #         saved_vals["id"] = id
-    #         id = self.env["ir.model.synchro"].synchro(
-    #             self, saved_vals, chk_in_queue=True, no_del_child=no_del_child,
-    #         )
-    #     return id
 
     @api.model
     def commit(self, id):
@@ -77,33 +49,6 @@ class StockPickingPackagePreparationLine(models.Model):
             self.env["ir.model.synchro"]._build_unique_index(self._inherit, prefix)
         return res
 
-    # @api.model
-    # def synchro(self, vals, chk_in_queue=None, only_minimal=None, no_deep_fields=None,
-    #             no_del_child=False):
-    #     # TODO: correct workaround!!
-    #     do_rewrite = False
-    #     if "vg7:order_row_id" in vals:
-    #         do_rewrite = True
-    #         saved_vals = vals.copy()
-    #     id = self.env["ir.model.synchro"].synchro(
-    #         self,
-    #         vals,
-    #         chk_in_queue=chk_in_queue,
-    #         only_minimal=only_minimal,
-    #         no_deep_fields=no_deep_fields,
-    #         no_del_child=no_del_child
-    #     )
-    #     if id > 0 and do_rewrite:
-    #         id = self.env["ir.model.synchro"].synchro(
-    #             self,
-    #             saved_vals,
-    #             chk_in_queue=chk_in_queue,
-    #             only_minimal=only_minimal,
-    #             no_deep_fields=no_deep_fields,
-    #             no_del_child=no_del_child,
-    #         )
-    #     return id
-
 
 class StockPickingGoods_description(models.Model):
     _name = "stock.picking.goods_description"
@@ -112,8 +57,8 @@ class StockPickingGoods_description(models.Model):
     @api.multi
     @api.depends("name")
     def _set_dim_name(self):
-        for rec in self:
-            rec.dim_name = self.env["ir.model.synchro"].dim_text(rec.name)
+        for ddt in self:
+            ddt.dim_name = self.env["ir.model.synchro.cache"].hashname(ddt.name)
 
     dim_name = fields.Char(
         "Search Key", compute=_set_dim_name, store=True, readonly=True
@@ -126,21 +71,6 @@ class StockPickingGoods_description(models.Model):
             self.env["ir.model.synchro"]._build_unique_index(self._inherit, prefix)
         return res
 
-    def wep_text(self, text):
-        if text:
-            return unidecode(text).strip()
-        return text
-
-    def dim_text(self, text):
-        text = self.wep_text(text)
-        if text:
-            res = ""
-            for ch in text:
-                if ch.isalnum():
-                    res += ch.lower()
-            text = res
-        return text
-
 
 class StockPickingCarriageCondition(models.Model):
     _name = "stock.picking.carriage_condition"
@@ -150,7 +80,7 @@ class StockPickingCarriageCondition(models.Model):
     @api.depends("name")
     def _set_dim_name(self):
         for rec in self:
-            rec.dim_name = self.env["ir.model.synchro"].dim_text(rec.name)
+            rec.dim_name = self.env["ir.model.synchro.cache"].hashname(rec.name)
 
     dim_name = fields.Char(
         "Search Key", compute=_set_dim_name, store=True, readonly=True
@@ -163,21 +93,6 @@ class StockPickingCarriageCondition(models.Model):
             self.env["ir.model.synchro"]._build_unique_index(self._inherit, prefix)
         return res
 
-    def wep_text(self, text):
-        if text:
-            return unidecode(text).strip()
-        return text
-
-    def dim_text(self, text):
-        text = self.wep_text(text)
-        if text:
-            res = ""
-            for ch in text:
-                if ch.isalnum():
-                    res += ch.lower()
-            text = res
-        return text
-
 
 class StockPickingTransportationReason(models.Model):
     _name = "stock.picking.transportation_reason"
@@ -187,7 +102,7 @@ class StockPickingTransportationReason(models.Model):
     @api.depends("name")
     def _set_dim_name(self):
         for rec in self:
-            rec.dim_name = self.env["ir.model.synchro"].dim_text(rec.name)
+            rec.dim_name = self.env["ir.model.synchro.cache"].hashname(rec.name)
 
     dim_name = fields.Char(
         "Search Key", compute=_set_dim_name, store=True, readonly=True
@@ -200,21 +115,6 @@ class StockPickingTransportationReason(models.Model):
             self.env["ir.model.synchro"]._build_unique_index(self._inherit, prefix)
         return res
 
-    def wep_text(self, text):
-        if text:
-            return unidecode(text).strip()
-        return text
-
-    def dim_text(self, text):
-        text = self.wep_text(text)
-        if text:
-            res = ""
-            for ch in text:
-                if ch.isalnum():
-                    res += ch.lower()
-            text = res
-        return text
-
 
 class StockPickingTransportationMethod(models.Model):
     _name = "stock.picking.transportation_method"
@@ -224,7 +124,7 @@ class StockPickingTransportationMethod(models.Model):
     @api.depends("name")
     def _set_dim_name(self):
         for rec in self:
-            rec.dim_name = self.env["ir.model.synchro"].dim_text(rec.name)
+            rec.dim_name = self.env["ir.model.synchro.cache"].hashname(rec.name)
 
     dim_name = fields.Char(
         "Search Key", compute=_set_dim_name, store=True, readonly=True
@@ -236,18 +136,3 @@ class StockPickingTransportationMethod(models.Model):
         for prefix in ("vg7", "oe7", "oe8", "oe10"):
             self.env["ir.model.synchro"]._build_unique_index(self._inherit, prefix)
         return res
-
-    def wep_text(self, text):
-        if text:
-            return unidecode(text).strip()
-        return text
-
-    def dim_text(self, text):
-        text = self.wep_text(text)
-        if text:
-            res = ""
-            for ch in text:
-                if ch.isalnum():
-                    res += ch.lower()
-            text = res
-        return text
