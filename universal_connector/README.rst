@@ -193,7 +193,7 @@ ChangeLog History | Cronologia modifiche
 
 * [FIX] Sometimes wrong shipping address
 * [FIX] Sometimes cannot search for product
-* [FIX] Wrong search for sle line with similar names
+* [FIX] Wrong search for sale line with similar names
 * [IMP] New search by clue
 * [QUA] Test coverage 70% (3668: 1107+2561) [176 TestPoints]
 
@@ -308,7 +308,7 @@ La distribuzione `Zeroincombenze® <https://www.zeroincombenze.it/>`__ è proget
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2026-06-28
+Last Update / Ultimo aggiornamento: 2026-06-30
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status

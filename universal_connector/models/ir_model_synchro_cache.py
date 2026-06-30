@@ -440,6 +440,12 @@ class IrModelSynchroCache(models.Model):
     @api.model_cr_context
     def get_model_attr(self, backend_id, model, attrib, default=None):
         # self.set_model(backend_id, model)
+        # Workaround
+        if attrib == "ID_OFFSET":
+            if model == "res.partner.invoice":
+                return 200000000
+            elif model == "res.partner.shipping":
+                return 100000000
         return self.CACHE.get_model_attr(
             self._cr.dbname, backend_id, model, attrib, default=default
         )
