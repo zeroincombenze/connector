@@ -461,6 +461,8 @@ class IrModelSynchroApply(models.Model):
             return vals
         if loc_name == "fiscal_position_id":
             partner_nm = "property_account_position_id"
+        elif loc_name == "carrier_id":
+            partner_nm = "property_delivery_carrier_id"
         elif loc_name in ("pricelist_id", "payment_term_id"):
             partner_nm = "property_%s" % loc_name
         else:
@@ -846,6 +848,7 @@ class IrModelSynchroApply(models.Model):
     ):
         if (
                 loc_name == "product_id"
+                and loc_name not in vals
                 and "name" in vals
                 and not isinstance(vals.get(ext_ref), (int, long))
         ):
@@ -865,7 +868,7 @@ class IrModelSynchroApply(models.Model):
                 prod_name += "%" + self.env["ir.model.synchro.cache"].hashname(
                     vals["job_name"], like=True)
             prod_name = "%" + prod_name + "%"
-            prods = Product.search([("name", "ilike", prod_name)], limit=1)
+            prods = Product.search([("name", "ilike", prod_name)], limit=2)
             self.env["ir.model.synchro"].logmsg(
                 "debug",
                 "%(model)s.search(%(domain)s) -> %(id)s",
@@ -878,7 +881,7 @@ class IrModelSynchroApply(models.Model):
             )
             if not prods and prod_name != tmpl_name:
                 tmpl_name = "%" + tmpl_name + "%"
-                prods = Product.search([("name", "ilike", tmpl_name)], limit=1)
+                prods = Product.search([("name", "ilike", tmpl_name)], limit=2)
                 self.env["ir.model.synchro"].logmsg(
                     "debug",
                     "%(model)s.search(%(domain)s) -> %(id)s",
@@ -889,9 +892,9 @@ class IrModelSynchroApply(models.Model):
                         "LOGLEVEL": backend.tracelevel,
                     },
                 )
-            if not prods:
+            if not prods or len(prods) != 1:
                 prods = Product.search([("default_code", "=", "MISC")])
-            if prods:
+            if prods and len(prods) == 1:
                 vals[loc_name] = fields.first(prods).id
         return vals
 

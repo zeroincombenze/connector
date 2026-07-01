@@ -158,9 +158,7 @@ import logging
 # import os
 from datetime import datetime, timedelta
 import time
-# import csv
 
-# import requests
 import Levenshtein as lev
 from odoo import api, fields, models, _
 from odoo import release
@@ -175,10 +173,6 @@ try:
     from clodoo import transodoo
 except ImportError as err:  # pragma: no cover
     _logger.error(err)
-# try:
-#     import oerplib
-# except ImportError as err:  # pragma: no cover
-#     _logger.error(err)
 
 WORKFLOW = {
     0: {"model": "ir.module.category", "only_minimal": True},
@@ -798,7 +792,14 @@ class IrModelSynchro(models.Model):
                     and hasattr(rec, "carrier_id")
                     and rec.carrier_id
                 ):
-                    rec.delivery_set()
+                    eval_delivery = True
+                    for ln in rec.order_line:
+                        if ln.product_id and ln.product_id.is_delivery:
+                            if ln.unit_price:
+                                eval_delivery = False
+                                break
+                    if eval_delivery:
+                        rec.delivery_set()
                 try:
                     rec.action_confirm()
                 except BaseException as e:  # pragma: no cover
@@ -1379,7 +1380,7 @@ class IrModelSynchro(models.Model):
                 if ext_name.startswith("."):
                     ext_name = ""
             self.logmsg(
-                "debug", "### Deprecated field name %(id)s!", ctx={"id": ext_ref}
+                "debug", "### Deprecated field name %(xid)s!", ctx={"xid": ext_ref}
             )
 
         else:
