@@ -795,7 +795,7 @@ class IrModelSynchro(models.Model):
                     eval_delivery = True
                     for ln in rec.order_line:
                         if ln.product_id and ln.product_id.is_delivery:
-                            if ln.unit_price:
+                            if ln.price_unit:
                                 eval_delivery = False
                                 break
                     if eval_delivery:
