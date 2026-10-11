@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright 2018-19 - SHS-AV s.r.l. <https://www.zeroincombenze.it>
+# Copyright 2018-26 Zeroincombenze srls <https://www.zeroincombenze.it>
 #
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 #
 {
     "name": "connector_vg7_conai",
     "summary": "Bidirectional connector to/from VG7 software (CONAI plug-in)",
-    "version": "10.0.0.1.16",
+    "version": "10.0.0.1.17",
     "category": "Generic Modules",
-    "author": "SHS-AV s.r.l.",
+    "author": "Zeroincombenze srls",
     "website": "https://www.zeroincombenze.it/",
     "depends": [
         "base",

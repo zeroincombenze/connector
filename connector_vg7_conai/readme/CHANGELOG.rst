@@ -1,3 +1,8 @@
+10.0.0.1.17 (2026-10-11)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [FIX] CONAI channel models: field_2complete renamed cron_sync / Modelli canale CONAI: field_2complete rinominato cron_sync
+
 10.0.0.1.16 (2026-05-23)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
