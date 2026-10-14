@@ -1068,6 +1068,8 @@ class IrModelSynchroCache(models.Model):
 
     def hashname(self, text, maxctr=3, minlen=0, like=False):
         # Generate an hash name from text
+        if not text:
+            return ""
         text = unidecode(text).strip()
         items = []
         while True:
