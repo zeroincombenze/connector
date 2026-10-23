@@ -1511,3 +1511,15 @@ msgstr "res.partner.shipping"
 #: model:ir.model,name:universal_connector.model_res_partner_supplier
 msgid "res.partner.supplier"
 msgstr "res.partner.supplier"
+
+#. module: universal_connector
+#: model:ir.model.fields,field_description:universal_connector.field_synchro_channel_delivery_cost_eval
+msgid "Evaluate delivery cost"
+msgstr "Calcola spese di spedizione"
+
+#. module: universal_connector
+#: model:ir.model.fields,help:universal_connector.field_synchro_channel_delivery_cost_eval
+msgid "After a sale order is imported, evaluate the delivery cost\n"
+"from the carrier, if order has no delivery line with price"
+msgstr "Dopo l'importazione di un ordine di vendita, calcola le spese di spedizione\n"
+"dal vettore, se l'ordine non ha già una riga di spedizione valorizzata"

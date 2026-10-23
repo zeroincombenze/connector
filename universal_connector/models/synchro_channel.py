@@ -154,6 +154,12 @@ class SynchroChannel(models.Model):
         help="Ignore child lines because counterparty send lines after header",
     )
     renum_lines = fields.Boolean("Renumber lines", default=False)
+    delivery_cost_eval = fields.Boolean(
+        "Evaluate delivery cost",
+        default=False,
+        help="After a sale order is imported, evaluate the delivery cost\n"
+        "from the carrier, if order has no delivery line with price",
+    )
     tax_id = fields.Many2one("account.tax", "Default Tax code")
 
     @api.multi

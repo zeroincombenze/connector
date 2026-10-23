@@ -123,10 +123,50 @@ Questo modulo pu&#242; essere usato per:
 
 <section>
     <div class="oe_row oe_spaced">
+        <h3 align="center" style="color:#162832;font-size: 26px;font-weight: 300;">Configuration | Configurazione</h3>
+        <div class="oe_span6">
+            <p align="center">
+                <img src="l10n_uk.png" alt="English" style="width:28px;height:16px;"/>
+                <img src="l10n_us.png" alt="English" style="width:28px;height:16px;"/>
+            </p>
+            <p class="oe_mt16" align="justify">Channel parameters:
+<p align="justify">
+<ul>
+<li><b>Evaluate delivery cost</b>: when enabled, after a sale order is imported
+  the delivery cost is evaluated from the order carrier, unless the order
+  already has a delivery line with a price. Default: disabled.</li>
+</ul>
+</p></p>
+        </div>
+        <div class="oe_span6">
+            <p align="center">
+                <img src="l10n_it.png" alt="Italiano" style="width:28px;height:16px;"/>
+            </p>
+            <p class="oe_mt16" align="justify">Parametri del canale:
+<p align="justify">
+<ul>
+<li><b>Calcola spese di spedizione</b>: se attivo, dopo l'importazione di un ordine
+  di vendita le spese di spedizione sono calcolate dal vettore dell'ordine,
+  a meno che l'ordine non abbia gi&#224; una riga di spedizione valorizzata.
+  Predefinito: disattivo.</li>
+</ul>
+</p></p>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="oe_row oe_spaced">
         <h3 align="center" style="color:#162832;font-size: 26px;font-weight: 300;">ChangeLog History | Cronologia modifiche</h3>
         <div class="oe_span12">
-<h4>10.0.0.3.19 (2026-07-01)</h4>
+<h4>10.0.0.3.20 (2026-10-23)</h4>
 <p align="justify">
+<ul>
+<li>[IMP] Delivery cost evaluation after sale order import depends on channel flag (default: no evaluation)</li>
+</ul>
+</p><p align="justify">
+<h4>10.0.0.3.19 (2026-07-01)</h4>
+</p><p align="justify">
 <ul>
 <li>[FIX] Delivery cost</li>
 <li>[QUA] Test coverage 70% (3668: 1107+2561) [176 TestPoints]</li>
@@ -204,14 +244,6 @@ Questo modulo pu&#242; essere usato per:
 <li>[IMP] Minor aesthetic update</li>
 <li>[QUA] Test coverage 64% (5068: 1832+3236) [1376 TestPoints] - quality rating 82 (target 100)</li>
 </ul>
-</p><p align="justify">
-<h4>10.0.0.3.9 (2024-08-10)</h4>
-</p><p align="justify">
-<ul>
-<li>[FIX] Import person from vg7</li>
-<li>[IMP] Some internal field renamed</li>
-<li>[QUA] Test coverage 64% (5068: 1832+3236) [1376 TestPoints] - quality rating 82 (target 100)</li>
-</ul>
 </p>
         </div>
     </div>
@@ -240,6 +272,6 @@ Questo modulo pu&#242; essere usato per:
     </div>
     <div class="oe_row oe_spaced">
         <p>This module is part of <a href="https://github.com/zeroincombenze/connector">connector</a> project.</p>
-        <p>Published information on | Informazioni pubblicate: 2026-07-02</p>
+        <p>Published information on | Informazioni pubblicate: 2026-10-23</p>
     </div>
 </section>

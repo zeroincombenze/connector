@@ -1,3 +1,8 @@
+10.0.0.3.20 (2026-10-23)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] Delivery cost evaluation after sale order import depends on channel flag (default: no evaluation)
+
 10.0.0.3.19 (2026-07-01)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 

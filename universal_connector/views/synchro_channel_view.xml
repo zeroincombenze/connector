@@ -57,6 +57,7 @@
                     <field name="tax_id"/>
                     <field name="child_lines_mode"/>
                     <field name="renum_lines"/>
+                    <field name="delivery_cost_eval"/>
                     <field name="sequence"/>
                     <field name="import_workflow"/>
                     <field name="rec_counter"/>

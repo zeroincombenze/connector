@@ -764,6 +764,17 @@ class IrModelSynchro(models.Model):
                     )
         return vals, errc
 
+    def get_backend_from_rec(self, env_meta, rec):
+        """Return backend (synchro.channel) which record comes from"""
+        backend = env_meta.get("backend") if isinstance(env_meta, dict) else None
+        if backend:
+            return backend
+        for channel in self.env["synchro.channel"].search([], order="sequence"):
+            ext_id_name = "%s_id" % channel.prefix
+            if ext_id_name in rec._fields and rec[ext_id_name]:
+                return channel
+        return False
+
     def set_actual_state(self, env_meta, model, rec):
         errmsg = "%(model)s.set_actual_state(%(id)s)"
         logrec = self.logmsg("debug", errmsg, model=model, rec=rec or -3)
@@ -787,8 +798,11 @@ class IrModelSynchro(models.Model):
                 rec._amount_all()
                 if "agents" in self.env["sale.order.line"]._fields:
                     rec._compute_commission_total()
+                backend = self.get_backend_from_rec(env_meta, rec)
                 if (
-                    hasattr(rec, "delivery_set")
+                    backend
+                    and backend.delivery_cost_eval
+                    and hasattr(rec, "delivery_set")
                     and hasattr(rec, "carrier_id")
                     and rec.carrier_id
                 ):
@@ -2560,7 +2574,7 @@ class IrModelSynchro(models.Model):
 
         cls, vmodel, actual_model = self.model_env(cls)
         struct = self.env[actual_model].fields_get()
-        env_meta = {"struct": struct}
+        env_meta = {"struct": struct, "backend": backend}
         actual_cls = self.get_actual_model(vmodel)
         Cache = self.env["ir.model.synchro.cache"]
 

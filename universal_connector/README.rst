@@ -1,5 +1,5 @@
 ============================================================
-|icon| Universal Connector/Connettore universale 10.0.0.3.19
+|icon| Universal Connector/Connettore universale 10.0.0.3.20
 ============================================================
 
 .. |icon| image:: https://raw.githubusercontent.com/zeroincombenze/connector/10.0/universal_connector/static/description/icon.png
@@ -91,6 +91,17 @@ Questo modulo può essere usato per:
 |thumbnail|
 
 .. |thumbnail| image:: https://raw.githubusercontent.com/zeroincombenze/connector/10.0/universal_connector/static/description/
+
+
+Configuration | Configurazione
+------------------------------
+
+Channel parameters:
+
+* **Evaluate delivery cost**: when enabled, after a sale order is imported
+  the delivery cost is evaluated from the order carrier, unless the order
+  already has a delivery line with a price. Default: disabled.
+
 
 
 Getting started | Primi passi
@@ -188,6 +199,11 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 ChangeLog History | Cronologia modifiche
 ----------------------------------------
 
+10.0.0.3.20 (2026-10-23)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] Delivery cost evaluation after sale order import depends on channel flag (default: no evaluation)
+
 10.0.0.3.19 (2026-07-01)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -258,13 +274,6 @@ ChangeLog History | Cronologia modifiche
 * [IMP] Minor aesthetic update
 * [QUA] Test coverage 64% (5068: 1832+3236) [1376 TestPoints] - quality rating 82 (target 100)
 
-10.0.0.3.9 (2024-08-10)
-~~~~~~~~~~~~~~~~~~~~~~~
-
-* [FIX] Import person from vg7
-* [IMP] Some internal field renamed
-* [QUA] Test coverage 64% (5068: 1832+3236) [1376 TestPoints] - quality rating 82 (target 100)
-
 
 
 Credits | Ringraziamenti
@@ -314,7 +323,7 @@ La distribuzione `Zeroincombenze® <https://www.zeroincombenze.it/>`__ è proget
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2026-07-02
+Last Update / Ultimo aggiornamento: 2026-10-23
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status
