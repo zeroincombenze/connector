@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright 2019-26 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
+# Copyright 2019-26 Zeroincombenze srls <https://www.zeroincombenze.it>
 #
 # Contributions to development, thanks to:
 # * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
@@ -449,7 +449,7 @@ class IrModelSynchro(models.Model):
         if model == "res.partner":
             if spec == "delivery":
                 vmodel = "res.partner.shipping"
-            elif spec in ("invoice", "supplier"):
+            elif spec in ("invoice", "supplier", "agent"):
                 vmodel = "%s.%s" % (model, spec)
         elif model == "res.partner.bank":
             if spec == "company":
@@ -463,6 +463,7 @@ class IrModelSynchro(models.Model):
             "res.partner.shipping",
             "res.partner.invoice",
             "res.partner.supplier",
+            "res.partner.agent",
             "res.partner.bank.company",
         ):
             actual_model = model.rsplit(".", 1)[0]
@@ -477,6 +478,7 @@ class IrModelSynchro(models.Model):
         elif vmodel in (
             "res.partner.invoice",
             "res.partner.supplier",
+            "res.partner.agent",
             "res.partner.bank.company",
         ):
             return vmodel.split(".")[-1]
@@ -495,6 +497,7 @@ class IrModelSynchro(models.Model):
             "EXT_ID",
             default=("%s2_id"
                      if vmodel in ("res.partner.supplier", "res.partner.bank.company")
+                     else "%s3_id" if vmodel == "res.partner.agent"
                      else "%s_id") % backend.prefix,
         )
 
@@ -605,6 +608,22 @@ class IrModelSynchro(models.Model):
                     and vals[field] is not False)
             ):
                 del vals[field]
+            elif field == "agents" and isinstance(vals[field], list):
+                # Do not add agents already linked: UNIQUE(object_id, agent)
+                cur_agents = [x.agent.id for x in rec[field]]
+                cmds = [
+                    cmd for cmd in vals[field]
+                    if not (
+                        isinstance(cmd, (list, tuple))
+                        and cmd[0] == 0
+                        and isinstance(cmd[2], dict)
+                        and cmd[2].get("agent") in cur_agents
+                    )
+                ]
+                if cmds:
+                    vals[field] = cmds
+                else:
+                    del vals[field]
             elif isinstance(vals[field], (basestring, int, long, float, bool)):
                 if (
                     Cache.get_struct_model_field_attr(actual_model, field, "ttype")
@@ -1978,7 +1997,7 @@ class IrModelSynchro(models.Model):
         ctx = ctx or {}
         actual_model = self.get_actual_model(vmodel, only_name=True)
         spec = self.get_spec_from_vmodel(vmodel)
-        spec = spec if spec != "supplier" else ""
+        spec = spec if spec not in ("supplier", "agent") else ""
         if actual_model == "res.partner" and spec in ("delivery", "invoice"):
             ctx["type"] = spec
         logrec = self.logmsg(
@@ -3582,11 +3601,12 @@ class IrModelSynchro(models.Model):
                         if loc_id < 0:
                             self.logmsg("debug", "", id=loc_id, logrec=logrec)
                     if identity == "vg7" and model == "res.partner":
-                        vmodel = "res.partner.supplier"
-                        ext_id_name = self.get_ext_id_name(backend, vmodel)
-                        if ext_id_name and cache.get_struct_model_attr(
-                            model, ext_id_name
-                        ):
+                        for vmodel in ("res.partner.supplier", "res.partner.agent"):
+                            ext_id_name = self.get_ext_id_name(backend, vmodel)
+                            if not ext_id_name or not cache.get_struct_model_attr(
+                                model, ext_id_name
+                            ):
+                                continue
                             ext_id = getattr(rec, ext_id_name)
                             ext_id = self.get_actual_ext_id_value(
                                 backend.id, vmodel, ext_id

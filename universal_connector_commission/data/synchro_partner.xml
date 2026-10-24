@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+
+    <record forcecreate="1" id="res_partner_agent_rec" model="synchro.channel.model">
+        <field name="name">res.partner.agent</field>
+        <field name="field_uname">name</field>
+        <field name="counterpart_name">agents</field>
+        <field name="model_spec">agent</field>
+        <field name="synchro_channel_id" ref="universal_connector.channel_vg7"/>
+        <field name="search_keys">(['name', 'is_company'],
+                        ['email'],
+                        ['name'],
+                        ['dim_name', 'type'])</field>
+        <field name="cron_sync" eval="True"/>
+        <field name="sequence">15</field>
+    </record>
+
+    <record forcecreate="1" id="res_partner_agent_city" model="synchro.channel.model.fields">
+        <field name="name">city</field>
+        <field name="counterpart_name">city</field>
+        <field name="model_id" ref="res_partner_agent_rec"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_agent_company_id" model="synchro.channel.model.fields">
+        <field name="name">company_id</field>
+        <field name="model_id" ref="res_partner_agent_rec"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_agent_country_id" model="synchro.channel.model.fields">
+        <field name="name">country_id</field>
+        <field name="counterpart_name">country_id</field>
+        <field name="model_id" ref="res_partner_agent_rec"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_agent_email" model="synchro.channel.model.fields">
+        <field name="name">email</field>
+        <field name="counterpart_name">email</field>
+        <field name="model_id" ref="res_partner_agent_rec"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_agent_firstname" model="synchro.channel.model.fields">
+        <field name="name">firstname</field>
+        <field name="counterpart_name">name</field>
+        <field name="apply">person()</field>
+        <field name="model_id" ref="res_partner_agent_rec"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_agent_lastname" model="synchro.channel.model.fields">
+        <field name="name">lastname</field>
+        <field name="counterpart_name">surename</field>
+        <field name="apply">person()</field>
+        <field name="model_id" ref="res_partner_agent_rec"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_agent_is_company" model="synchro.channel.model.fields">
+        <field name="name">is_company</field>
+        <field name="apply">True</field>
+        <field name="model_id" ref="res_partner_agent_rec"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_agent_agent" model="synchro.channel.model.fields">
+        <field name="name">agent</field>
+        <field name="apply">True</field>
+        <field name="model_id" ref="res_partner_agent_rec"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_agent_phone" model="synchro.channel.model.fields">
+        <field name="name">phone</field>
+        <field name="counterpart_name">telephone</field>
+        <field name="model_id" ref="res_partner_agent_rec"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_agent_street" model="synchro.channel.model.fields">
+        <field name="name">street</field>
+        <field name="counterpart_name">street</field>
+        <field name="model_id" ref="res_partner_agent_rec"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_agent_street2" model="synchro.channel.model.fields">
+        <field name="name"></field>
+        <field name="counterpart_name">street_number</field>
+        <field name="apply">street_number()</field>
+        <field name="model_id" ref="res_partner_agent_rec"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_agent_type" model="synchro.channel.model.fields">
+        <field name="name">type</field>
+        <field name="apply">contact</field>
+        <field name="model_id" ref="res_partner_agent_rec"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_agent_zip" model="synchro.channel.model.fields">
+        <field name="name">zip</field>
+        <field name="counterpart_name">postal_code</field>
+        <field name="model_id" ref="res_partner_agent_rec"/>
+    </record>
+
+    <record forcecreate="1" id="res_partner_agent_lang" model="synchro.channel.model.fields">
+        <field name="name">lang</field>
+        <field name="apply">it_IT</field>
+        <field name="model_id" ref="res_partner_agent_rec"/>
+    </record>
+
+</odoo>

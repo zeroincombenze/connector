@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright 2019-26 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
+# Copyright 2019-26 Zeroincombenze srls <https://www.zeroincombenze.it>
 #
 # Contributions to development, thanks to:
 # * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
@@ -9,7 +9,7 @@
 #
 {
     "name": "Universal Connector",
-    "version": "10.0.0.3.20",
+    "version": "10.0.0.3.21",
     "category": "Generic Modules",
     "summary": "Universal Connector",
     "author": "SHS-AV s.r.l.",

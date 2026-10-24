@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright 2019-26 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
+# Copyright 2019-26 Zeroincombenze srls <https://www.zeroincombenze.it>
 #
 # Contributions to development, thanks to:
 # * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
@@ -829,6 +829,13 @@ class IrModelSynchroCache(models.Model):
                 model,
                 "EXT_ID",
                 "%s2_id" % self.get_attr(backend.id, "PREFIX"),
+            )
+        elif backend.identity == "vg7" and model == "res.partner.agent":
+            self.set_model_attr(
+                backend.id,
+                model,
+                "EXT_ID",
+                "%s3_id" % self.get_attr(backend.id, "PREFIX"),
             )
         elif backend.identity == "vg7" and model == "res.partner.bank.company":
             self.set_model_attr(

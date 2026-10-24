@@ -1,5 +1,5 @@
 ============================================================
-|icon| Universal Connector/Connettore universale 10.0.0.3.20
+|icon| Universal Connector/Connettore universale 10.0.0.3.21
 ============================================================
 
 .. |icon| image:: https://raw.githubusercontent.com/zeroincombenze/connector/10.0/universal_connector/static/description/icon.png
@@ -199,6 +199,13 @@ An Enhancement Proposal may be submitted if your idea gains ground.
 ChangeLog History | Cronologia modifiche
 ----------------------------------------
 
+10.0.0.3.21 (2026-10-24)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [FIX] Sale order line lost on import: duplicate agent (unique_agent constraint)
+* [IMP] Partner sub-model res.partner.agent with key vg73_id, also by Synchronize button
+* [REF] Agent mappings, apply_agent_user() and vg73_id on partner form moved to new module universal_connector_commission
+
 10.0.0.3.20 (2026-10-23)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -323,7 +330,7 @@ La distribuzione `Zeroincombenze® <https://www.zeroincombenze.it/>`__ è proget
 
 This module is part of connector project.
 
-Last Update / Ultimo aggiornamento: 2026-10-23
+Last Update / Ultimo aggiornamento: 2026-10-24
 
 .. |Maturity| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status

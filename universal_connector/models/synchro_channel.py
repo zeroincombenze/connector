@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright 2019-26 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
+# Copyright 2019-26 Zeroincombenze srls <https://www.zeroincombenze.it>
 #
 # Contributions to development, thanks to:
 # * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
@@ -396,6 +396,7 @@ class SynchroChannelModel(models.Model):
             ("address", "Generic Address"),
             ("customer", "Customer"),
             ("supplier", "Supplier"),
+            ("agent", "Agent"),
             ("company", "Company"),
         ],
         string="Specific search domain",
@@ -884,6 +885,7 @@ class SynchroChannelModelFields(models.Model):
             ("invoice", "Invoice Address"),
             ("customer", "Customer"),
             ("supplier", "Suplier"),
+            ("agent", "Agent"),
             ("company", "Company"),
         ],
         string="Specific search",

@@ -1,3 +1,10 @@
+10.0.0.3.21 (2026-10-24)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* [FIX] Sale order line lost on import: duplicate agent (unique_agent constraint)
+* [IMP] Partner sub-model res.partner.agent with key vg73_id, also by Synchronize button
+* [REF] Agent mappings, apply_agent_user() and vg73_id on partner form moved to new module universal_connector_commission
+
 10.0.0.3.20 (2026-10-23)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 

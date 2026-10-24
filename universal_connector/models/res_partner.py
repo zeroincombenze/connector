@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright 2019-26 - SHS-AV s.r.l. <https://www.zeroincombenze.it/>
+# Copyright 2019-26 Zeroincombenze srls <https://www.zeroincombenze.it>
 #
 # Contributions to development, thanks to:
 # * Antonio Maria Vigliotti <antoniomaria.vigliotti@gmail.com>
@@ -29,7 +29,8 @@ class ResPartner(models.Model):
                 partner.dim_name = self.env["ir.model.synchro.cache"].hashname(
                     partner.parent_id.name)
 
-    vg72_id = fields.Integer("VG7 ID (2.nd)", copy=False)
+    vg72_id = fields.Integer("VG7 ID (supplier)", copy=False)
+    vg73_id = fields.Integer("VG7 ID (agent)", copy=False)
     dim_name = fields.Char(
         "Search Key", compute=_set_dim_name, store=True, readonly=True
     )
@@ -39,7 +40,7 @@ class ResPartner(models.Model):
     @api.model_cr_context
     def _auto_init(self):
         res = super(ResPartner, self)._auto_init()
-        for prefix in ("vg7", "vg72", "oe7", "oe8", "oe10"):
+        for prefix in ("vg7", "vg72", "vg73", "oe7", "oe8", "oe10"):
             self.env["ir.model.synchro"]._build_unique_index(self._inherit, prefix)
         return res
 
@@ -250,4 +251,9 @@ class ResPartnerInvoice(models.Model):
 
 class ResPartnerSupplier(models.Model):
     _name = "res.partner.supplier"
+    _inherit = "res.partner"
+
+
+class ResPartnerAgent(models.Model):
+    _name = "res.partner.agent"
     _inherit = "res.partner"
