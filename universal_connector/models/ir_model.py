@@ -1975,7 +1975,10 @@ class IrModelSynchro(models.Model):
                 ) or Cache.get_model_field_attr(
                     backend.id, vmodel, loc_name, "REQUIRED"
                 )
-                if required or loc_name in self.DEF_INCL_FLDS and loc_name in vals:
+                if (
+                    (required or loc_name in self.DEF_INCL_FLDS)
+                    and loc_name in vals
+                ):
                     min_vals[loc_name] = vals[loc_name]
         return min_vals
 
